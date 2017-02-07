@@ -1,2 +1,2 @@
 # L-shop
-Modern trading system for Minecraft
+## Modern trading system for Minecraft
