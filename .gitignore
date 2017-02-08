@@ -6,7 +6,6 @@
 /.idea
 Homestead.json
 Homestead.yaml
-.env
 /.gulp-scss-cache/
 /npm
 /gulp
