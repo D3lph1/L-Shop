@@ -38,7 +38,7 @@ function Message() {
      */
     this.info = function (text, duration) {
         var id = genId();
-        append('<div class="alert alert-info ' + id + '"><i class="fa fa-exclamation fa-lg fa-left"></i> ' + text + '</div>');
+        append('<div class="message message-info ' + id + '"><i class="fa fa-exclamation fa-lg fa-left"></i> ' + text + '</div>');
         timeout(id, duration);
     };
 
@@ -50,7 +50,7 @@ function Message() {
      */
     this.success = function (text, duration) {
         var id = genId();
-        append('<div class="alert alert-success ' + id + '"><i class="fa fa-check fa-lg fa-left"></i> ' + text + '</div>');
+        append('<div class="message message-success ' + id + '"><i class="fa fa-check fa-lg fa-left"></i> ' + text + '</div>');
         timeout(id, duration);
     };
 
@@ -62,7 +62,7 @@ function Message() {
      */
     this.warning = function (text, duration) {
         var id = genId();
-        append('<div class="alert alert-warning ' + id + '"><i class="fa fa-exclamation-triangle fa-lg fa-left"></i> ' + text + '</div>');
+        append('<div class="message message-warning ' + id + '"><i class="fa fa-exclamation-triangle fa-lg fa-left"></i> ' + text + '</div>');
         timeout(id, duration);
     };
 
@@ -74,7 +74,7 @@ function Message() {
      */
     this.danger = function (text, duration) {
         var id = genId();
-        append('<div class="alert alert-danger ' + id + '"><i class="fa fa-times fa-lg fa-left"></i> ' + text + '</div>');
+        append('<div class="message message-danger ' + id + '"><i class="fa fa-times fa-lg fa-left"></i> ' + text + '</div>');
         timeout(id, duration);
     };
 
@@ -120,6 +120,7 @@ function Message() {
     this.flash = function () {
         var cookie = getFromCookie();
         if (cookie) {
+            cookie = cookie.split('+').join(' ');
             self[getMsgType(cookie)](getMsgText(cookie));
             // Since flash message should be displayed once, clean the cookie in which it is stored
             deleteCookie(this.cookie);
@@ -172,7 +173,7 @@ function Message() {
      * @param {string} content
      */
     function append(content) {
-        $('.alerts').append(content);
+        $('.messages').append(content);
     }
 
     /**

@@ -34,40 +34,44 @@ class Message
      * Set the blue message
      *
      * @param string $text
+     * @return \Symfony\Component\HttpFoundation\Cookie
      */
     public function info($text)
     {
-        $this->set('info', $text);
+        return $this->set('info', $text);
     }
 
     /**
      * Set the green message
      *
      * @param string $text
+     * @return \Symfony\Component\HttpFoundation\Cookie
      */
     public function success($text)
     {
-        $this->set('success', $text);
+        return $this->set('success', $text);
     }
 
     /**
      * Set the yellow message
      *
      * @param string $text
+     * @return \Symfony\Component\HttpFoundation\Cookie
      */
     public function warning($text)
     {
-        $this->set('warning', $text);
+        return $this->set('warning', $text);
     }
 
     /**
      * Set the red message
      *
      * @param string $text
+     * @return \Symfony\Component\HttpFoundation\Cookie
      */
     public function danger($text)
     {
-        $this->set('danger', $text);
+        return $this->set('danger', $text);
     }
 
     /**
@@ -115,10 +119,11 @@ class Message
      *
      * @param string $type
      * @param string $text
+     * @return \Symfony\Component\HttpFoundation\Cookie
      */
     private function set($type, $text)
     {
-        \Cookie::make($this->cookieName, $type . $this->delimiter . $text, $this->lifetime, null, null, false, false);
+        return \Cookie::make($this->cookieName, $type . $this->delimiter . $text, $this->lifetime, null, null, false, false);
     }
 
     /**

@@ -19,4 +19,9 @@ class User extends EloquentUser
         'username',
         'email'
     ];
+
+    public function getBalance()
+    {
+        return $this->balance;
+    }
 }

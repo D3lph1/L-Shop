@@ -8,15 +8,16 @@
     <meta name="_token" content="{{ csrf_token() }}">
     <title>@yield('title') | {{ s_get('shop.name', 'L-shop') }}</title>
 
-    <link rel="stylesheet" href="css/app.min.css">
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
+    <link rel="stylesheet" href="/css/app.min.css">
 </head>
 
 <body>
-<div class="alerts"></div>
+<div class="messages"></div>
 
 @yield('content_global')
 
-<script src="js/app.min.js" type="text/javascript"></script>
+<script src="/js/app.min.js" type="text/javascript"></script>
 </body>
 
 </html>

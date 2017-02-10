@@ -5,10 +5,236 @@ body
     font-size: 18px
     color: #333
 
-button:hover
-    cursor: pointer
-
 /* Main styles */
+
+#side-content
+    overflow: hidden
+    height: 100%
+    position: fixed
+    p
+        word-wrap: break-word
+
+#sidebar
+    overflow-y: scroll
+    overflow-x: hidden
+    position: relative
+    width: 280px
+    height: 100%
+    padding: 1rem
+    background-color: #666
+    text-align: center
+    color: #fff
+    #name
+        padding-bottom: .5rem
+        margin-bottom: 0
+        border-bottom: 1px solid #999
+    #profile-block
+        padding: 1rem 1rem 2rem 1rem
+        border-bottom: 1px solid #999
+        text-align: left
+    #server-block
+        padding: 1rem
+        #server-list
+            margin-bottom: 0
+        #chose-server i
+            transition: 0.3s
+    #image-block
+        text-align: center
+        width: 100%
+        margin-bottom: 2rem
+        img
+            max-width: 130px
+    #balance
+        width: 100%
+
+#content
+    min-height: 100vh
+    background-color: #f5f5f5
+    #topbar
+        width: 100%
+        padding: .7rem 1rem
+        background-color: #888
+        p
+            margin-bottom: 0
+        #topbar-server
+            margin-bottom: 0
+            padding: .3rem .5rem
+            color: #fff
+            background-color: #666
+            border-radius: 2px
+            transition: .3s
+            &:hover
+                cursor: default
+    #content-container
+        padding: 1rem
+        #cart-header
+            padding: 1rem
+            border-radius: 2px
+            text-align: center
+            margin: 1rem .5rem
+            color: #333
+        #total
+            padding: .5rem
+            margin: 1rem
+            border-bottom: 1px solid #ccc
+            border-top: 1px solid #ccc
+            #total-p
+                display: -webkit-flex
+                display: -ms-flex
+                display: flex
+                margin-bottom: 0
+                align-items: center
+                #total-money
+                    margin: 0 1rem
+            button
+                font-size: 15px
+        #cart-products
+            display: -webkit-flex
+            display: -ms-flex
+            display: flex
+            flex-wrap: wrap
+            justify-content: center
+            .c-product
+                display: -webkit-inline-flex
+                display: -ms-inline-flex
+                display: inline-flex
+                flex-basis: 320px
+                padding: .5rem
+                margin: .5rem
+                text-align: center
+                justify-content: center
+                flex-grow: 1
+                max-width: 500px
+                p
+                    margin-bottom: .5rem
+                button
+                    font-size: 12px
+                .c-1-info
+                    flex-grow: 1
+                    padding: .5rem
+                    flex-basis: 150px
+                    justify-content: center
+                    text-align: center
+                    .c-p-name
+                        max-width: 150px
+                        margin: 0 auto .5rem auto
+                        word-wrap: break-word
+                    img
+                        max-width: 150px
+                        margin-bottom: 1rem
+                .c-2-info
+                    flex-grow: 1
+                    padding: .5rem
+                    flex-basis: 150px
+                    .md-form
+                        margin-bottom: 0
+                    input
+                        padding: 0
+                        margin-bottom: 0
+                    .c-p-cbuttons
+                        button
+                            width: 2rem
+                            padding: .5rem
+                    .c-p-pay-money
+                        text-decoration: underline
+                    .c-p-pay-for
+                        span
+                            text-decoration: underline
+        #logo-block
+            padding: 1rem
+            display: -webkit-flex
+            display: -ms-flex
+            display: flex
+            margin-bottom: 1rem
+            justify-content: center
+            .c-logo
+                max-width: 200px
+                margin-right: 1rem
+            .logo-text
+                justify-content: center
+                align-self: center
+                margin-left: 1rem
+                h1
+                    color: #444
+                    font-size: 5rem
+        #categories
+            display: -webkit-flex
+            display: -ms-flex
+            display: flex
+            padding: .0 .25rem
+            margin-bottom: 1rem
+            background-color: transparent
+            border-radius: 2px
+            justify-content: space-between
+            flex-wrap: wrap
+            .cat-btn
+                padding: .5rem
+                background-color: #ffbb33
+                border-radius: 2px
+                color: #fff
+                margin: .25rem
+                margin-bottom: .25rem
+                flex-basis: 200px
+                text-align: center
+                align-self: stretch
+                flex-grow: 1
+                &:hover
+                    cursor: pointer
+                    background-color: #ffcc80
+        .product-container
+            display: -webkit-flex
+            display: -ms-flex
+            display: flex
+            flex-wrap: wrap
+            justify-content: center
+            .product-block
+                padding: .5rem
+                margin: .5rem
+                text-align: center
+                flex-basis: 200px
+                flex-grow: 1
+                max-width: 450px
+                .product-image
+                    max-width: 150px
+                    margin-bottom: .5rem
+                .product-name
+                    word-wrap: break-word
+                    margin-bottom: .25rem
+                .product-price
+                    margin-bottom: 0
+                .product-count
+                    margin-bottom: .25rem
+                button
+                    font-size: 12px
+                    margin-left: 0
+    #footer
+        width: 100%
+        #f-first, #f-second
+            padding: .5rem
+            text-align: center
+            color: #333
+            p
+                margin-bottom: 0
+        #f-first
+            background-color: #DDD
+        #f-second
+            background-color: #888
+
+
+.servers
+    margin-top: .5rem
+    transition: .3s
+    overflow: hidden
+    li
+        padding: .5rem
+        background-color: #777
+        border-radius: 2px
+        margin-bottom: .5rem
+        transition: inherit
+        &:hover
+            cursor: pointer
+            background-color: #ccc
+            color: #333
 
 .card-header
     h1, h2, h3, h4, h5
@@ -34,27 +260,29 @@ button:hover
         &:hover
             background-color: #eee
 
-.alerts
+.messages
     position: fixed
     top: 1rem
     right: 1rem
     z-index: 100
-    .alert
+    font-size: 17px
+    .message
         position: relative
-        padding: .5rem 1.5rem
+        padding: .5rem 1.5rem .5rem 1rem
         color: #fff
-        max-width: 300px
+        max-width: 320px
         margin-bottom: .5rem
-    .alert-info
+        border-radius: 2px
+    .message-info
         background-color: rgba(0,153,204,0.7)
 
-    .alert-success
-        background-color: rgba(0,200,81,0.7)
+    .message-success
+        background-color: rgba(71,164,71,0.7)
 
-    .alert-warning
+    .message-warning
         background-color: rgba(255,187,51,0.7)
 
-    .alert-danger
+    .message-danger
         background-color: rgba(255,68,68,0.7)
 
 /* Helpers */
@@ -64,6 +292,12 @@ button:hover
 
 .fa-right
     margin-left: .5rem
+
+.fa-left-big
+    margin-right: 1.5rem
+
+.fa-right-big
+    margin-left: 1.5rem
 
 .prefix
     margin-top: 1rem
@@ -95,6 +329,12 @@ button:hover
     padding-top: 5rem
     padding-bottom: 3rem
 
+.right
+    float: right
+
+.left
+    float: left
+
 .no-shadow
     -webkit-box-shadow: none
     -moz-box-shadow: none
@@ -104,3 +344,6 @@ button:hover
     -webkit-box-shadow: inset 0px 0px 10px -2px rgba(0,0,0,0.75)
     -moz-box-shadow: inset 0px 0px 10px -2px rgba(0,0,0,0.75)
     box-shadow: inset 0px 0px 10px -2px rgba(0,0,0,0.75)
+
+.text-depth
+    text-shadow: 0px 4px 5px rgba(122, 124, 126, 1)

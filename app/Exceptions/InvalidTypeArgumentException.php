@@ -11,8 +11,6 @@ namespace App\Exceptions;
 class InvalidTypeArgumentException extends \InvalidArgumentException
 {
     /**
-     * InvalidArgumentException constructor.
-     *
      * @param string $expected
      * @param mixed $given
      * @internal param array|string $excpected

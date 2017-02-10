@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Services\Message;
 use Illuminate\Http\Request;
 use App\Http\Requests\SignInRequest;
 use App\Http\Controllers\Controller;
@@ -71,8 +72,10 @@ class SignInController extends Controller
         //
     }
 
-    public function logout()
+    public function logout(Message $msg)
     {
         \Sentinel::logout();
+
+        return response()->redirectToRoute('signin')->withCookie($msg->info('Вы вышли из аккаунта'));
     }
 }

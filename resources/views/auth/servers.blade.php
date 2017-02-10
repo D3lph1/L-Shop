@@ -15,14 +15,14 @@
                 </div>
                 <div class="list-group no-shadow">
                     @foreach($servers as $server)
-                        <a href="server/{{ $server->id }}" class="list-group-item waves-effect">{{ $server->title }}</a>
+                        <a href="server/{{ $server->id }}" class="list-group-item waves-effect">{{ $server->name }}</a>
                     @endforeach
                 </div>
             </div>
             <div class="card-footer text-center">
-                @if($can_exit)
+                @if($canExit)
                     <button class="btn btn-primary btn-lg" v-on:click="logout()">Выйти<i class="fa fa-sign-out fa-right"></i></button>
-                @elseif($can_enter)
+                @elseif($canEnter)
                     <button class="btn btn-primary btn-lg" v-on:click="logout()">Войти<i class="fa fa-sign-out fa-right"></i></button>
                 @endif
             </div>

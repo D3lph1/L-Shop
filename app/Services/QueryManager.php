@@ -2,6 +2,9 @@
 
 namespace App\Services;
 
+use App\Models\Category;
+use App\Models\Goods;
+use App\Models\Item;
 use App\Models\Server;
 use App\Exceptions\InvalidTypeArgumentException;
 
@@ -26,13 +29,29 @@ class QueryManager
      * Get server or drop 404
      *
      * @param int $id
-     * @param null $columns
+     * @param null|string|array $columns
      * @return mixed
      */
     public function serverOrFail($id, $columns = null)
     {
         $columns = $this->prepareColumns($columns);
         return Server::select($columns)->where('enabled', 1)->findOrFail($id);
+    }
+
+    /**
+     * Get the categories list for the current server
+     *
+     * @param $serverId
+     * @return mixed
+     */
+    public function serverCategories($serverId)
+    {
+        return Category::select('id', 'name')->where('server_id', $serverId)->get();
+    }
+
+    public function goods($serverId)
+    {
+        return Goods::where('server_id', $serverId)->join('items', 'goods.item_id', '=', 'items.id')->get();
     }
 
     /**

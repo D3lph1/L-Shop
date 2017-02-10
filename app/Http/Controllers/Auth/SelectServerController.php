@@ -12,7 +12,7 @@ class SelectServerController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function render()
+    public function render(Request $request)
     {
         if ((access_mode_auth()) and !is_auth()) {
             return redirect()->route('signin');
@@ -20,9 +20,9 @@ class SelectServerController extends Controller
 
         $qm = \App::make('qm');
         $data = [
-            'servers' => $qm->listOfEnabledServers(['id', 'title']),
-            'can_exit' => (access_mode_auth() or access_mode_any()) and is_auth(),
-            'can_enter' => (access_mode_free() or access_mode_any()) and !is_auth()
+            'servers' => $qm->listOfEnabledServers(['id', 'name']),
+            'canExit' => (access_mode_auth() or access_mode_any()) and is_auth(),
+            'canEnter' => (access_mode_free() or access_mode_any()) and !is_auth()
         ];
 
         return view('auth.servers', $data);
