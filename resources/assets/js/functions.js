@@ -1,5 +1,5 @@
 /**
- * JavaScript file with function declarations
+ * JavaScript file with function - helpers declarations
  */
 
 /**
@@ -64,6 +64,39 @@ function getToken() {
 
 function setToken(token) {
     $('meta[name="_token"]').attr('content', token);
+}
+
+/**
+ * Get the page url
+ *
+ * @returns {string|undefined}
+ */
+function url(url) {
+    if (url == undefined) {
+        return document.location.href;
+    }
+
+    document.location.href = url
+}
+
+/**
+ * Make element disabled
+ *
+ * @param target
+ */
+function disable(target) {
+    $(target).attr('disabled', 'disabled');
+    $(target).addClass('disabled');
+}
+
+/**
+ * Make element enabled
+ *
+ * @param target
+ */
+function enable(target) {
+    $(target).prop('disabled', false);
+    $(target).removeClass('disabled');
 }
 
 /**
@@ -133,4 +166,17 @@ function getUrlParams() {
     });
 
     return vars;
+}
+
+/**
+ * Display request error message
+ *
+ * @param {string|undefined} more
+ */
+function requestError(more) {
+    if (more == undefined) {
+        msg.danger('Во время выполнения запроса произошла ошибка');
+    }else {
+        msg.danger('Во время выполнения запроса произошла ошибка. Подробности: ' + more);
+    }
 }

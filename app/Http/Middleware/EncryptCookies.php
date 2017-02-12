@@ -12,7 +12,6 @@ class EncryptCookies extends BaseEncrypter
      * @var array
      */
     protected $except = [
-        'message',
-        'cart'
+        'message'
     ];
 }

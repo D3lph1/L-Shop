@@ -11,26 +11,27 @@
                 <img src="/img/logo_small.png" alt="logo" class="c-logo">
             </div>
             <div class="logo-text text-depth">
-                <h1>{{ $shopName }}</h1>
+                <h1>{{ s_get('shop.name', 'L - Shop') }}</h1>
             </div>
         </div>
         <div id="categories" class="col-12">
             @foreach($categories as $category)
-                <div id="{{ $loop->iteration }}-cat" class="cat-btn waves-effect z-depth-1">
+                <a href="{{ route('catalog', ['server' => $currentServer, 'category' => $category->id]) }}"
+                   @if($category->id == $currentCategory) style="background-color: #FF8800"
+                   @endif class="cat-btn waves-effect z-depth-1">
                     <span>{{ $category->name }}</span>
-                </div>
+                </a>
             @endforeach
         </div>
         <div id="p-containers">
-            @foreach($categories as $category)
-                <div class="product-container" id="{{ $loop->iteration }}-con">
-                    @foreach($goods as $good)
-                        @if ($good->category_id == $category->id)
-                            @include('shop.blocks.catalog_item')
-                        @endif
+            <div class="product-container">
+                <div class="m-products">
+                    @foreach($goods as $product)
+                        @include('shop.blocks.catalog_item')
                     @endforeach
                 </div>
-            @endforeach
+                {{ $goods->links('components.pagination') }}
+            </div>
         </div>
     </div>
 @endsection

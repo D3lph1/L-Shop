@@ -1,26 +1,26 @@
 @if ($paginator->hasPages())
-    <ul class="pagination">
+    <div class="pagination">
         {{-- Previous Page Link --}}
         @if ($paginator->onFirstPage())
-            <li class="disabled"><span>&laquo;</span></li>
+            <a class="btn btn-warning disabled"><i class="fa fa-chevron-left"></i></a>
         @else
-            <li><a href="{{ $paginator->previousPageUrl() }}" rel="prev">&laquo;</a></li>
+            <a class="btn btn-warning" href="{{ $paginator->previousPageUrl() }}"><i class="fa fa-chevron-left"></i></a>
         @endif
 
         {{-- Pagination Elements --}}
         @foreach ($elements as $element)
             {{-- "Three Dots" Separator --}}
             @if (is_string($element))
-                <li class="disabled"><span>{{ $element }}</span></li>
+                <a class="btn btn-warning disabled"><i class="fa fa-ellipsis-h"></i></a>
             @endif
 
             {{-- Array Of Links --}}
             @if (is_array($element))
                 @foreach ($element as $page => $url)
                     @if ($page == $paginator->currentPage())
-                        <li class="active"><span>{{ $page }}</span></li>
+                        <a class="btn btn-warning disabled">{{ $page }}</a>
                     @else
-                        <li><a href="{{ $url }}">{{ $page }}</a></li>
+                        <a class="btn btn-warning" href="{{ $url }}">{{ $page }}</a>
                     @endif
                 @endforeach
             @endif
@@ -28,9 +28,9 @@
 
         {{-- Next Page Link --}}
         @if ($paginator->hasMorePages())
-            <li><a href="{{ $paginator->nextPageUrl() }}" rel="next">&raquo;</a></li>
+            <a class="btn btn-warning" href="{{ $paginator->nextPageUrl() }}"><i class="fa fa-chevron-right"></i></a>
         @else
-            <li class="disabled"><span>&raquo;</span></li>
+            <a class="btn btn-warning disabled"><i class="fa fa-chevron-right"></i></a>
         @endif
-    </ul>
+    </div>
 @endif

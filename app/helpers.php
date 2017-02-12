@@ -108,3 +108,15 @@ if (!function_exists('is_enable')) {
         return (bool)s_get($action);
     }
 }
+
+if (!function_exists('img_path')) {
+    /**
+     * Return path to images folder
+     *
+     * @return bool
+     */
+    function img_path($url)
+    {
+        return public_path("img/$url");
+    }
+}

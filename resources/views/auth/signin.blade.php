@@ -15,16 +15,16 @@
                 </div>
                 <div class="md-form">
                     <i class="fa fa-user fa-lg prefix"></i>
-                    <input type="text" id="login" class="form-control" v-model="username">
-                    <label for="login">Имя пользователя</label>
+                    <input type="text" id="si-username" class="form-control">
+                    <label for="si-username">Имя пользователя</label>
                 </div>
                 <div class="md-form">
                     <i class="fa fa-unlock-alt fa-lg prefix"></i>
-                    <input type="password" id="pass" class="form-control" v-model="password">
-                    <label for="pass">Пароль</label>
+                    <input type="password" id="si-password" class="form-control">
+                    <label for="si-password">Пароль</label>
                 </div>
                 <div class="col-12 text-center">
-                    <button class="btn btn-warning btn-lg" v-on:click="login()">Войти</button>
+                    <button class="btn btn-warning btn-lg" onclick="signin()">Войти</button>
                 </div>
             </div>
             <div class="card-footer">

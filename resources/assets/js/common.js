@@ -2,113 +2,277 @@
  * JavaScript file with main logic
  */
 
-if ($('#sign-in').length > 0) {
-    new Vue({
-        el: '#sign-in',
-        data: {
-            username: '',
-            password: ''
-        },
-        methods: {
-            login: function () {
-                if (this.username.length > 2) {
-                    if (this.password.length > 3) {
-                        this.$http.post('signin', {
-                            '_token': getToken(),
-                            'username': this.username,
-                            'password': this.password
-                        }).then(function (response) {
-                            // Success response
-                            var body = response.body;
-                            var status = body['status'];
-                            var self = this;
+/**
+ * Perform user authentication attempts by pressing the enter key
+ */
+$('#si-username, #si-password').keyup(function (event) {
+    if (event.keyCode == 13) {
+        signin();
+    }
+});
 
-                            if (status == 'success') {
-                                var to = getUrlParams()['to'];
-                                msg.setSuccess('Добро пожаловать, ' + self.username + '!');
+/**
+ * Attempt to auth user
+ */
+function signin() {
+    var self = this;
+    var username = $('#si-username').val();
+    var password = $('#si-password').val();
 
-                                if (to) {
-                                    document.location.href = to;
-                                } else {
-                                    document.location.href = 'servers';
-                                }
-                            } else if (status == 'invalid_credentials') {
-                                msg.danger('Пользователь с такими данными не найден');
-                            } else if (status == 'frozen') {
-                                msg.danger('Вы произвели слишком большое количество попыток входа. ' +
-                                    'Возможность авторизации будет недоступна последующие ' +
-                                    body.delay + ' секунд.');
-                            }
-                        }, function (response) {
-                            // Error response
-                            msg.danger('Во время выполнения запроса произошла ошибка');
-                        })
-                    } else {
-                        msg.danger('Пароль слишком короткий');
+    if (username.length > 2) {
+        if (password.length > 3) {
+            $.ajax({
+                url: 'signin',
+                method: 'POST',
+                data: ({
+                    username: username,
+                    password: password,
+                    _token: getToken()
+                }),
+                dataType: 'json',
+                beforeSend: function () {
+                    disable(self);
+                },
+                success: function (response) {
+                    enable(self);
+                    var status = response.status;
+
+                    if (status == 'success') {
+                        var to = getUrlParams()['to'];
+                        msg.setSuccess('Добро пожаловать, ' + username + '!');
+
+                        if (to) {
+                            document.location.href = to;
+                        } else {
+                            document.location.href = 'servers';
+                        }
+                    } else if (status == 'invalid_credentials') {
+                        msg.danger('Пользователь с такими данными не найден');
+                    } else if (status == 'frozen') {
+                        msg.danger('Вы произвели слишком большое количество попыток входа. ' +
+                            'Возможность авторизации будет недоступна последующие ' +
+                            response.delay + ' секунд.');
                     }
-                } else {
-                    msg.danger('Имя пользователя слишком короткое');
+                },
+                error: function () {
+                    enable(self);
+                    requestError();
                 }
-            }
+            });
+        } else {
+            msg.danger('Пароль слишком короткий');
         }
-    });
+    } else {
+        msg.danger('Имя пользователя слишком короткое');
+    }
 }
 
-if ($('#servers-list').length > 0) {
-    new Vue({
-        el: '#servers-list',
-        methods: {
-            logout: function () {
-                this.$http.get('logout').then(function (response) {
-                    document.location.href = 'signin';
-                })
-            }
-        }
-    });
+/**
+ * Attempt to loaout user
+ */
+function logout() {
+    $.get('logout')
+        .done(function () {
+            url('signin');
+        })
+        .fail(function () {
+            requestError();
+        });
 }
 
 /**
  * Catalog section
  */
-if ($('#content').length > 0) {
-    var servVisible = true;
-    var cart = new Cart(document.getElementById('server-id').innerText);
+var servVisible = true;
 
-    document.getElementById('content').style.width = 'calc(100% - ' + document.getElementById('sidebar').clientWidth + 'px)';
-    document.getElementById('content').style.marginLeft = document.getElementById('sidebar').clientWidth + 'px';
+byId('content').style.width = 'calc(100% - ' + byId('sidebar').clientWidth + 'px)';
+byId('content').style.marginLeft = byId('sidebar').clientWidth + 'px';
 
-    var badHeight = Math.floor(document.getElementById('topbar').clientHeight + document.getElementById('footer').clientHeight);
-    document.getElementById('content-container').style.minHeight = 'calc(100vh - ' + badHeight + 'px)';
+var badHeight = Math.floor(byId('topbar').clientHeight + byId('footer').clientHeight);
+byId('content-container').style.minHeight = 'calc(100vh - ' + badHeight + 'px)';
 
-    document.getElementById('side-content').style.width = document.getElementById('sidebar').clientWidth + 'px';
+byId('side-content').style.width = byId('sidebar').clientWidth + 'px';
 
-    document.getElementById('chose-server').onclick = function () {
-        switch (servVisible) {
-            case true:
-                document.getElementById('server-list').style.transform = 'translateX(-150%)';
-                document.getElementById('chose-server').getElementsByTagName('I')[0].style.transform = 'rotateZ(180deg)';
-                servVisible = false;
-                break;
-            case false:
-                document.getElementById('server-list').style.transform = 'translateX(0)';
-                document.getElementById('chose-server').getElementsByTagName('I')[0].style.transform = 'rotateZ(0deg)';
-                servVisible = true;
+byId('chose-server').onclick = function () {
+    switch (servVisible) {
+        case true:
+            byId('server-list').style.transform = 'translateX(-150%)';
+            byId('chose-server').getElementsByTagName('I')[0].style.transform = 'rotateZ(180deg)';
+            servVisible = false;
+            break;
+        case false:
+            byId('server-list').style.transform = 'translateX(0)';
+            byId('chose-server').getElementsByTagName('I')[0].style.transform = 'rotateZ(0deg)';
+            servVisible = true;
+    }
+};
+
+/**
+ * Sidebar on mobile
+ */
+byId('btn-menu').onclick = function () {
+    byId('side-content').style.transform = 'translateX(0)';
+};
+
+byId('btn-menu-c').onclick = function () {
+    byId('side-content').style.transform = 'translateX(-100%)';
+};
+/**
+ * End
+ */
+
+/**
+ * Put product in cart
+ */
+$('.catalog-to-cart').click(function () {
+    var url = $(this).attr('data-url');
+    var self = this;
+
+    $.ajax({
+        url: url,
+        method: 'POST',
+        data: ({
+            _token: getToken()
+        }),
+        dataType: 'json',
+        beforeSend: function () {
+            disable(self);
+        },
+        success: function (response) {
+            enable(self);
+            var status = response.status;
+
+            if (status == 'success') {
+                msg.success('Товар добавлен в корзину');
+                disable(self);
+                $(self).children('span').text('Уже в корзине');
+            } else if (status == 'already in cart') {
+                msg.warning('Товар уже есть в корзине');
+            } else {
+                msg.danger('Неудалось положить товар в корзину');
+            }
+        },
+        error: function () {
+            enable(self);
+            requestError();
         }
-    };
+    })
+});
 
-    $('.product-container').hide().eq(0).show();
-    $('.cat-btn').eq(0).css({'background-color': '#FF8800'});
+/**
+ * End
+ */
 
-    $('.cat-btn').click(function () {
-        var tabNumber = $(this).index();
-        if ($('.product-container').eq(tabNumber).css('display') == 'none') {
-            $('.product-container').eq(tabNumber).siblings().hide();
-            $(this).siblings().css({'background-color': '#ffbb33'});
-            $(this).css({'background-color': '#FF8800'});
-            $('.product-container').eq(tabNumber).fadeIn();
+/**
+ * Cart section
+ */
+
+/**
+ * Remove product from cart
+ */
+$('.cart-remove').click(function () {
+    var url = $(this).attr('data-url');
+    var self = this;
+
+    $.ajax({
+        url: url,
+        method: 'POST',
+        data: ({
+            _token: getToken()
+        }),
+        dataType: 'json',
+        beforeSend: function () {
+            disable(self);
+        },
+        success: function (response) {
+            enable(self);
+            var status = response.status;
+
+            if (status == 'success') {
+                msg.info('Товар убран из корзины');
+
+                // Change total cost
+                var cost = Number($(self).parents('.c-product').find('.c-p-pay-money>span').text());
+                var total = Number($('#total-money>span').text());
+                $('#total-money>span').text(total - cost);
+                $(self).parents('.c-product').remove();
+
+                // If there are no more elements
+                if ($('.c-product').length == 0) {
+                    $('#total').remove();
+                    $('#cart-products').html('<h3>Корзина пуста</h3>');
+                }
+            }else if(status == 'product not found') {
+                msg.warning('Товар в корзине не найден');
+            }else {
+                msg.danger('Неудалось убрать товар из корзины');
+            }
+        },
+        error: function () {
+            enable(self);
+            requestError();
         }
     });
-}
+});
+
+/**
+ * Increase the number of goods in a cart
+ */
+$('.cart-minus-btn').click(function () {
+    var stack = Number($(this).parent().attr('data-stack'));
+    var price = Number($(this).parent().attr('data-price'));
+    var input = $(this).parent().parent().find('.c-p-count-input');
+    var val = Number(input.val());
+    if (val - stack > 0) {
+        var result = val - stack;
+        input.val(result);
+        $(this).parent().parent().find('.c-p-pay-money>span').text(result / stack * price);
+
+        var total = Number($('#total-money>span').text());
+        $('#total-money>span').text(total - price);
+    }
+});
+
+/**
+ * Reduce the quantity of goods in a cart
+ */
+$('.cart-plus-btn').click(function () {
+    var stack = Number($(this).parent().attr('data-stack'));
+    var price = Number($(this).parent().attr('data-price'));
+    var input = $(this).parent().parent().find('.c-p-count-input');
+    var val = Number(input.val());
+    var result = val + stack;
+    input.val(result);
+    $(this).parent().parent().find('.c-p-pay-money>span').text(result / stack * price);
+
+    var total = Number($('#total-money>span').text());
+    $('#total-money>span').text(total + price);
+});
+
+/**
+ * Normalize the input value on input blur
+ */
+$('.c-p-count-input').blur(function () {
+    var stack = Number($(this).parents('.c-2-info').find('.c-p-cbuttons').attr('data-stack'));
+    var val = Number($(this).val());
+
+    if (val % stack != 0) {
+        // Normalize input value
+        var result = Math.round(val / stack) * stack;
+
+        if (result != 0) {
+            $(this).val(result);
+        }else {
+            $(this).val(stack);
+        }
+    }
+
+    // If input was empty
+    if (val == 0) {
+        $(this).val(stack);
+    }
+});
+
 /**
  * End
  */

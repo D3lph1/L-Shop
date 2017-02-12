@@ -21,9 +21,9 @@
             </div>
             <div class="card-footer text-center">
                 @if($canExit)
-                    <button class="btn btn-primary btn-lg" v-on:click="logout()">Выйти<i class="fa fa-sign-out fa-right"></i></button>
+                    <button class="btn btn-primary btn-lg" onclick="logout()">Выйти<i class="fa fa-sign-out fa-right"></i></button>
                 @elseif($canEnter)
-                    <button class="btn btn-primary btn-lg" v-on:click="logout()">Войти<i class="fa fa-sign-out fa-right"></i></button>
+                    <a href="signin" class="btn btn-primary btn-lg">Войти<i class="fa fa-sign-out fa-right"></i></a>
                 @endif
             </div>
         </div>

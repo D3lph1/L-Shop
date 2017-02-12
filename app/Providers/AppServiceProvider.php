@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\Cart;
 use App\Services\Message;
 use App\Services\QueryManager;
 use Illuminate\Support\Facades\Schema;
@@ -32,6 +33,10 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->bind('msg', function () {
             return new Message();
+        });
+
+        $this->app->singleton('cart', function () {
+            return new Cart();
         });
     }
 }

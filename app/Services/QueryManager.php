@@ -2,10 +2,9 @@
 
 namespace App\Services;
 
-use App\Models\Category;
 use App\Models\Goods;
-use App\Models\Item;
 use App\Models\Server;
+use App\Models\Category;
 use App\Exceptions\InvalidTypeArgumentException;
 
 /**
@@ -49,9 +48,34 @@ class QueryManager
         return Category::select('id', 'name')->where('server_id', $serverId)->get();
     }
 
-    public function goods($serverId)
+    /**
+     * Get goods joined with items for current server
+     *
+     * @param $serverId
+     * @return mixed
+     */
+    public function goods($serverId, $category)
     {
-        return Goods::where('server_id', $serverId)->join('items', 'goods.item_id', '=', 'items.id')->get();
+        return Goods::select('goods.id as id', 'items.name', 'items.image', 'goods.price', 'goods.stack')
+            ->join('items', 'items.id', '=', 'goods.item_id')
+            ->where('server_id', $serverId)
+            ->where('category_id', $category)
+            ->orderBy('items.name')
+            ->paginate(s_get('catalog.items_per_page', 10));
+    }
+
+    /**
+     * Get product by id
+     *
+     * @param int|string $id
+     * @return mixed
+     */
+    public function product($id)
+    {
+        return Goods::select('goods.id as id', 'items.name', 'items.image', 'goods.price', 'goods.stack')
+            ->join('items', 'items.id', '=', 'goods.item_id')
+            ->where('goods.id', $id)
+            ->get();
     }
 
     /**

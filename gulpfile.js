@@ -22,7 +22,6 @@ gulp.task('sass', function () {
 gulp.task('scripts', function () {
     return gulp.src([
         'resources/assets/js/jquery-3.1.1.min.js',
-        'resources/assets/js/vue.js',
         'resources/assets/js/components/*.js',
         'resources/assets/js/functions.js',
         'resources/assets/js/on-load.js',

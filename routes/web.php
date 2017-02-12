@@ -2,10 +2,9 @@
 
 Route::group(['namespace' => 'Auth'], function () {
     // Render sign in page
-    Route::get('/signin', 'SignInController@render')->name('signin')->middleware('guest');
-
-    // Authorize user by GET-request (with redirect)
-    Route::get('/signin_get', 'SignInController@get')->middleware('guest');
+    Route::get('/signin', 'SignInController@render')
+        ->name('signin')
+        ->middleware('guest');
 
     // Authorize user by POST-request
     Route::post('/signin', 'SignInController@signin')->middleware('guest');
@@ -25,5 +24,31 @@ Route::group(['namespace' => 'Auth'], function () {
 
 Route::group(['namespace' => 'Shop'], function () {
     // Route of main shop page
-    Route::get('/server/{server}', 'CatalogController@render')->where('server', '\d+');
+    Route::get('/server/{server}/{category?}', 'CatalogController@render')
+        ->name('catalog')
+        ->where([
+            'server' => '\d+',
+            'category' => '\d+'
+        ]);
 });
+
+Route::group(['namespace' => 'Components'], function () {
+    Route::get('/cart/{server}', 'CartController@render')
+        ->name('cart')
+        ->where('server', '\d+');
+
+    Route::post('/cart/put/{server}/product/{product}', 'CartController@put')
+        ->name('cart.put')
+        ->where([
+            'server' => '\d+',
+            'product' => '\d+'
+        ]);
+
+    Route::post('/cart/remove/{server}/product/{product}', 'CartController@remove')
+        ->name('cart.remove')
+        ->where([
+            'server' => '\d+',
+            'product' => '\d+'
+        ]);
+});
+
