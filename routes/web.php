@@ -10,7 +10,9 @@ Route::group(['namespace' => 'Auth'], function () {
     Route::post('/signin', 'SignInController@signin')->middleware('guest');
 
     // Logout user
-    Route::get('/logout', 'SignInController@logout')->middleware('auth');
+    Route::get('/logout', 'SignInController@logout')
+        ->name('logout')
+        ->middleware('auth');
 
     // Render sign up page
     Route::get('/signup', 'SignUpController@render');
@@ -33,22 +35,29 @@ Route::group(['namespace' => 'Shop'], function () {
 });
 
 Route::group(['namespace' => 'Components'], function () {
-    Route::get('/cart/{server}', 'CartController@render')
+    Route::get('/server/{server}/cart', 'CartController@render')
         ->name('cart')
         ->where('server', '\d+');
 
-    Route::post('/cart/put/{server}/product/{product}', 'CartController@put')
+    Route::post('/server/{server}/cart', 'CartController@pay')
+        ->name('cart.pay')
+        ->where('server', '\d+');;
+
+    Route::post('/server/{server}/cart/put/{product}', 'CartController@put')
         ->name('cart.put')
         ->where([
             'server' => '\d+',
             'product' => '\d+'
         ]);
 
-    Route::post('/cart/remove/{server}/product/{product}', 'CartController@remove')
+    Route::post('/server/{server}/cart/remove/{product}', 'CartController@remove')
         ->name('cart.remove')
         ->where([
             'server' => '\d+',
             'product' => '\d+'
         ]);
-});
 
+    Route::get('/server/{server}/payment/cart', 'PaymentController@render')
+        ->name('payment.cart')
+        ->where('server', '\d+');
+});

@@ -123,7 +123,7 @@ function Message() {
             cookie = cookie.split('+').join(' ');
             self[getMsgType(cookie)](getMsgText(cookie));
             // Since flash message should be displayed once, clean the cookie in which it is stored
-            deleteCookie(this.cookie);
+            deleteCookie(self.cookie);
         }
     };
 

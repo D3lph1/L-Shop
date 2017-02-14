@@ -12,7 +12,7 @@
                     <p id="balance"><i class="fa fa-database fa-left"></i>Баланс:
                         <span>
                             {{ \Sentinel::getUser()->getBalance() }}
-                            <i class="fa fa-dollar"></i>
+                            {!! s_get('shop.currency_html', 'руб.') !!}
                         </span>
                     </p>
                     <!--<p id="rank"><i class="fa fa-star fa-left"></i>Ранг: <span>Beginner</span></p>-->
@@ -28,7 +28,10 @@
                         <i class="fa fa-credit-card fa-left fa-lg"></i>
                         <a class="white-text" href="">Пополнить</a>
                     </button>
-                    <a href="/logout" class="btn danger-color btn-block"><i class="fa fa-times fa-left fa-lg"></i>Выйти</a>
+                    <a href="{{ route('logout') }}" class="btn danger-color btn-block">
+                        <i class="fa fa-times fa-left fa-lg"></i>
+                        Выйти
+                    </a>
                 </div>
             @endif
             @if(!is_auth())
@@ -37,9 +40,18 @@
                         <i class="fa fa-cube fa-left"></i>
                         Корзина: <span>7</span>
                     </p>
-                    <button class="btn btn-warning btn-block"><i class="fa fa-shopping-cart fa-left fa-lg"></i>
+                    <a href="{{ route('catalog', ['server' => $currentServer->id]) }}" class="btn info-color btn-block">
+                        <i class="fa fa-list fa-lg fa-left"></i>
+                        Каталог
+                    </a>
+                    <a href="{{ route('cart', ['server' => $currentServer->id]) }}" class="btn info-color btn-block">
+                        <i class="fa fa-shopping-cart fa-left fa-lg"></i>
                         Корзина
-                    </button>
+                    </a>
+                    <a href="{{ route('signin') }}" class="btn btn-warning btn-block">
+                        <i class="fa fa-key fa-left fa-lg"></i>
+                        Войти
+                    </a>
                 </div>
             @endif
             <div id="server-block">
@@ -58,7 +70,9 @@
     <div id="content">
         <div id="topbar" class="z-depth-1">
             <button id="btn-menu" class="btn"><i class="fa fa-bars"></i></button>
-            <span id="topbar-server">Текущий сервер: <span id="tbs-name">{{ $currentServer->name }}</span></span>
+            <a href="{{ route('servers') }}">
+                <span id="topbar-server">Текущий сервер: <span id="tbs-name">{{ $currentServer->name }}</span></span>
+            </a>
         </div>
 
         @yield('content')

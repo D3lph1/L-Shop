@@ -11,8 +11,10 @@
         </div>
         @if(!$cart->isEmpty($currentServer->id))
             <div id="total">
-                <p id="total-p">Итого: <span id="total-money"><span>{{ $cost }}</span><i class="fa fa-dollar fa-right"></i></span>
-                    <button class="btn btn-warning btn-sm">Перейти к оплате<i class="fa fa-arrow-right fa-right"></i>
+                <p id="total-p">Итого: <span id="total-money"><span>{{ $cost }}</span> {!! s_get('shop.currency_html', 'руб.') !!}</span>
+                    <button class="btn btn-warning btn-sm" id="btn-cart-go-pay" data-url="{{ route('cart.pay', ['server' => $currentServer]) }}">
+                        Перейти к оплате
+                        <i class="fa fa-arrow-right fa-right"></i>
                     </button>
                 </p>
             </div>

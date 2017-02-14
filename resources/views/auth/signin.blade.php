@@ -9,7 +9,7 @@
     <div class="full-h flex-center pd-v-form">
         <div class="card no-pdh z-depth-4 col-xl-4 col-md-6 col-11">
 
-            <div class="card-block" id="sign-in">
+            <div class="card-block" id="sign-in" data-url="{{ route('signin') }}" data-redirect="{{ route('servers') }}">
                 <div class="card-header d_orange text-center white-text z-depth-2">
                     <h1>Вход<i class="fa fa-sign-in fa-lg fa-right"></i></h1>
                 </div>
@@ -24,7 +24,7 @@
                     <label for="si-password">Пароль</label>
                 </div>
                 <div class="col-12 text-center">
-                    <button class="btn btn-warning btn-lg" onclick="signin()">Войти</button>
+                    <button class="btn btn-warning btn-lg" id="btn-sign-in">Войти</button>
                 </div>
             </div>
             <div class="card-footer">

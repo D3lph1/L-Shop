@@ -1,15 +1,16 @@
 <div class="product-block z-depth-1">
     <p class="product-name full-w">{{ $product->name }}</p>
     @if(is_file('img/items/' . $product->image) && file_exists('img/items/' . $product->image))
-        <img src="/img/items/{{ $product->image }}" alt="prod" class="product-image image-fluid">
+        <img src="{{ asset('img/items/' . $product->image) }}" alt="prod" class="product-image image-fluid">
     @else
-        <img src="/img/empty.png" alt="prod" class="product-image image-fluid">
+        <img src="{{ asset('img/empty.png') }}" alt="prod" class="product-image image-fluid">
     @endif
-    <p class="product-price"><span>{{ $product->price }}</span><i class="fa fa-dollar fa-right"></i></p>
+
+    <p class="product-price">{{ $product->price }} {!! s_get('shop.currency_html', 'руб.') !!}</p>
     <p class="product-count">за <span>{{ $product->stack }}</span> шт.</p>
+
     @if($cart->has($currentServer->id, $product->id))
-        <button class="btn btn-info btn-block btn-sm catalog-to-cart disabled" disabled="disabled"
-                data-url="{{ route('cart.put', ['server' => $currentServer->id, 'product' => $product->id ]) }}">
+        <button class="btn btn-info btn-block btn-sm catalog-to-cart disabled" disabled="disabled" data-url="{{ route('cart.put', ['server' => $currentServer->id, 'product' => $product->id ]) }}">
             <i class="fa fa-cart-arrow-down fa-left"></i>
             <span>
                 Уже в корзине
@@ -24,6 +25,7 @@
             </span>
         </button>
     @endif
+
     <button class="btn btn-warning btn-block btn-sm catalog-to-buy">
         <i class="fa fa-money fa-left"></i>
         Быстрая покупка

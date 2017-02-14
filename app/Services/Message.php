@@ -21,7 +21,7 @@ class Message
     /**
      * @var int
      */
-    private $lifetime = 1337;
+    private $lifetime = 1;
 
     /**
      * Cookie type and text delimiter

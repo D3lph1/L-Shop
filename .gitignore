@@ -13,5 +13,6 @@ Homestead.yaml
 /.phpstorm.meta.php
 /yarn.lock
 /composer.lock
+/workbench/
 
 !.gitignore

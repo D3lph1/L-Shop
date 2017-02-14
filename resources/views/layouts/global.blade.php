@@ -9,7 +9,7 @@
     <title>@yield('title') | {{ s_get('shop.name', 'L-shop') }}</title>
 
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="/css/app.min.css">
+    <link rel="stylesheet" href="{{ asset('css/app.min.css') }}">
 </head>
 
 <body>
@@ -17,7 +17,7 @@
 
 @yield('content_global')
 
-<script src="/js/app.min.js" type="text/javascript"></script>
+<script src="{{ asset('js/app.min.js') }}" type="text/javascript"></script>
 </body>
 
 </html>

@@ -24,7 +24,8 @@
         ],
         "psr-4": {
             "App\\": "app/",
-            "Models\\": "app/Models"
+            "Models\\": "app/Models",
+            "D3lph1\\PaymentAssistant\\": "workbench/payment-assistant/src"
         },
         "files": [
             "app/helpers.php"

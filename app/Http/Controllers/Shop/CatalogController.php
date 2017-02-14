@@ -3,15 +3,15 @@
 namespace App\Http\Controllers\Shop;
 
 use App\Services\Cart;
+use App\Services\QueryManager;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 class CatalogController extends Controller
 {
-    public function render(Request $request, Cart $cart)
+    public function render(Request $request, QueryManager $qm, Cart $cart)
     {
         $id = (int)$request->route('server');
-        $qm = \App::make('qm');
         $server = $qm->serverOrFail($id, ['id', 'name']);
         $servers = $qm->listOfEnabledServers(['id', 'name']);
         $categories = $qm->serverCategories($server->id);

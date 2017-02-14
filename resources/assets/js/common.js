@@ -14,109 +14,108 @@ $('#si-username, #si-password').keyup(function (event) {
 /**
  * Attempt to auth user
  */
-function signin() {
+$('#btn-sign-in').click(function () {
     var self = this;
     var username = $('#si-username').val();
     var password = $('#si-password').val();
 
-    if (username.length > 2) {
-        if (password.length > 3) {
-            $.ajax({
-                url: 'signin',
-                method: 'POST',
-                data: ({
-                    username: username,
-                    password: password,
-                    _token: getToken()
-                }),
-                dataType: 'json',
-                beforeSend: function () {
-                    disable(self);
-                },
-                success: function (response) {
-                    enable(self);
-                    var status = response.status;
-
-                    if (status == 'success') {
-                        var to = getUrlParams()['to'];
-                        msg.setSuccess('Добро пожаловать, ' + username + '!');
-
-                        if (to) {
-                            document.location.href = to;
-                        } else {
-                            document.location.href = 'servers';
-                        }
-                    } else if (status == 'invalid_credentials') {
-                        msg.danger('Пользователь с такими данными не найден');
-                    } else if (status == 'frozen') {
-                        msg.danger('Вы произвели слишком большое количество попыток входа. ' +
-                            'Возможность авторизации будет недоступна последующие ' +
-                            response.delay + ' секунд.');
-                    }
-                },
-                error: function () {
-                    enable(self);
-                    requestError();
-                }
-            });
-        } else {
-            msg.danger('Пароль слишком короткий');
-        }
-    } else {
+    if (username.length < 3) {
         msg.danger('Имя пользователя слишком короткое');
-    }
-}
 
-/**
- * Attempt to loaout user
- */
-function logout() {
-    $.get('logout')
-        .done(function () {
-            url('signin');
-        })
-        .fail(function () {
+        return;
+    }
+
+    if (password.length < 4) {
+        msg.danger('Пароль слишком короткий');
+
+        return;
+    }
+
+    // Request
+    $.ajax({
+        url: $('#sign-in').attr('data-url'),
+        method: 'POST',
+        data: ({
+            username: username,
+            password: password,
+            _token: getToken()
+        }),
+        dataType: 'json',
+        beforeSend: function () {
+            disable(self);
+        },
+        success: function (response) {
+            enable(self);
+            var status = response.status;
+
+            if (status == 'success') {
+                // If a user has successfully logged in
+                var to = getUrlParams()['to'];
+                msg.setSuccess('Добро пожаловать, ' + username + '!');
+
+                if (to) {
+                    // If the GET parameters "to" exist, then forwards it to the address specified in the parameter
+                    document.location.href = to;
+                } else {
+                    // Otherwise, it forwards the link established with the page rendering
+                    document.location.href = $('#sign-in').attr('data-redirect');
+                }
+            } else if (status == 'invalid_credentials') {
+                msg.danger('Пользователь с такими данными не найден');
+            } else if (status == 'frozen') {
+                msg.danger('Вы произвели слишком большое количество попыток входа. ' +
+                    'Возможность авторизации будет недоступна последующие ' +
+                    response.delay + ' секунд.');
+            }
+        },
+
+        // Request error
+        error: function () {
+            enable(self);
             requestError();
-        });
-}
+        }
+    });
+});
 
 /**
  * Catalog section
  */
-var servVisible = true;
+if ($('#content').length) {
+    var servVisible = true;
 
-byId('content').style.width = 'calc(100% - ' + byId('sidebar').clientWidth + 'px)';
-byId('content').style.marginLeft = byId('sidebar').clientWidth + 'px';
+    byId('content').style.width = 'calc(100% - ' + byId('sidebar').clientWidth + 'px)';
+    byId('content').style.marginLeft = byId('sidebar').clientWidth + 'px';
 
-var badHeight = Math.floor(byId('topbar').clientHeight + byId('footer').clientHeight);
-byId('content-container').style.minHeight = 'calc(100vh - ' + badHeight + 'px)';
+    var badHeight = Math.floor(byId('topbar').clientHeight + byId('footer').clientHeight);
+    byId('content-container').style.minHeight = 'calc(100vh - ' + badHeight + 'px)';
 
-byId('side-content').style.width = byId('sidebar').clientWidth + 'px';
+    byId('side-content').style.width = byId('sidebar').clientWidth + 'px';
 
-byId('chose-server').onclick = function () {
-    switch (servVisible) {
-        case true:
-            byId('server-list').style.transform = 'translateX(-150%)';
-            byId('chose-server').getElementsByTagName('I')[0].style.transform = 'rotateZ(180deg)';
-            servVisible = false;
-            break;
-        case false:
-            byId('server-list').style.transform = 'translateX(0)';
-            byId('chose-server').getElementsByTagName('I')[0].style.transform = 'rotateZ(0deg)';
-            servVisible = true;
-    }
-};
+    byId('chose-server').onclick = function () {
+        switch (servVisible) {
+            case true:
+                byId('server-list').style.transform = 'translateX(-150%)';
+                byId('chose-server').getElementsByTagName('I')[0].style.transform = 'rotateZ(180deg)';
+                servVisible = false;
+                break;
+            case false:
+                byId('server-list').style.transform = 'translateX(0)';
+                byId('chose-server').getElementsByTagName('I')[0].style.transform = 'rotateZ(0deg)';
+                servVisible = true;
+        }
+    };
 
-/**
- * Sidebar on mobile
- */
-byId('btn-menu').onclick = function () {
-    byId('side-content').style.transform = 'translateX(0)';
-};
+    /**
+     * Sidebar on mobile
+     */
+    byId('btn-menu').onclick = function () {
+        byId('side-content').style.transform = 'translateX(0)';
+    };
 
-byId('btn-menu-c').onclick = function () {
-    byId('side-content').style.transform = 'translateX(-100%)';
-};
+    byId('btn-menu-c').onclick = function () {
+        byId('side-content').style.transform = 'translateX(-100%)';
+    };
+}
 /**
  * End
  */
@@ -128,6 +127,7 @@ $('.catalog-to-cart').click(function () {
     var url = $(this).attr('data-url');
     var self = this;
 
+    // Request
     $.ajax({
         url: url,
         method: 'POST',
@@ -146,12 +146,17 @@ $('.catalog-to-cart').click(function () {
                 msg.success('Товар добавлен в корзину');
                 disable(self);
                 $(self).children('span').text('Уже в корзине');
+
+            } else if (status == 'cart is full') {
+                msg.warning('Невозможно добавить товар. Корзина переполнена.');
             } else if (status == 'already in cart') {
                 msg.warning('Товар уже есть в корзине');
             } else {
                 msg.danger('Неудалось положить товар в корзину');
             }
         },
+
+        // Request error
         error: function () {
             enable(self);
             requestError();
@@ -174,6 +179,7 @@ $('.cart-remove').click(function () {
     var url = $(this).attr('data-url');
     var self = this;
 
+    // Request
     $.ajax({
         url: url,
         method: 'POST',
@@ -202,12 +208,14 @@ $('.cart-remove').click(function () {
                     $('#total').remove();
                     $('#cart-products').html('<h3>Корзина пуста</h3>');
                 }
-            }else if(status == 'product not found') {
+            } else if (status == 'product not found') {
                 msg.warning('Товар в корзине не найден');
-            }else {
+            } else {
                 msg.danger('Неудалось убрать товар из корзины');
             }
         },
+
+        // Request error
         error: function () {
             enable(self);
             requestError();
@@ -219,8 +227,11 @@ $('.cart-remove').click(function () {
  * Increase the number of goods in a cart
  */
 $('.cart-minus-btn').click(function () {
+    // Number of items in one stack
     var stack = Number($(this).parent().attr('data-stack'));
+    // Price for one stack
     var price = Number($(this).parent().attr('data-price'));
+    // Current number of goods
     var input = $(this).parent().parent().find('.c-p-count-input');
     var val = Number(input.val());
     if (val - stack > 0) {
@@ -237,8 +248,11 @@ $('.cart-minus-btn').click(function () {
  * Reduce the quantity of goods in a cart
  */
 $('.cart-plus-btn').click(function () {
+    // Number of items in one stack
     var stack = Number($(this).parent().attr('data-stack'));
+    // Price for one stack
     var price = Number($(this).parent().attr('data-price'));
+    // Current number of goods
     var input = $(this).parent().parent().find('.c-p-count-input');
     var val = Number(input.val());
     var result = val + stack;
@@ -250,7 +264,7 @@ $('.cart-plus-btn').click(function () {
 });
 
 /**
- * Normalize the input value on input blur
+ * Normalize the input value on input blur event
  */
 $('.c-p-count-input').blur(function () {
     var stack = Number($(this).parents('.c-2-info').find('.c-p-cbuttons').attr('data-stack'));
@@ -262,7 +276,7 @@ $('.c-p-count-input').blur(function () {
 
         if (result != 0) {
             $(this).val(result);
-        }else {
+        } else {
             $(this).val(stack);
         }
     }
@@ -271,6 +285,49 @@ $('.c-p-count-input').blur(function () {
     if (val == 0) {
         $(this).val(stack);
     }
+});
+
+$('#btn-cart-go-pay').click(function () {
+    var url = $(this).attr('data-url');
+    var self = this;
+    var goods = new Object(null);
+
+    $.each($('.c-product'), function(index, value) {
+        goods[index] = new Object(null);
+        goods[index].id = $(value).find('.c-p-name').attr('data-id');
+        goods[index].count = $(value).find('.c-p-count-input').val();
+    });
+
+    $.ajax({
+        url: url,
+        method: 'POST',
+        data: ({
+            goods: goods,
+            _token: getToken()
+        }),
+        dataType: 'json',
+        beforeSend: function () {
+            disable(self);
+        },
+        success: function (response) {
+            enable(self);
+            var status = response.status;
+
+            if (status == 'success') {
+                document.location.href = response.redirect;
+            }else if (status == 'invalid product id') {
+                msg.danger('Один или несколько идентификаторов товаров не совпадают. Перезагрузите страницу и попробуйте снова.');
+            }else if (status == 'invalid count') {
+                msg.danger('Указано неверное количество товара.');
+            }
+        },
+
+        // Request error
+        error: function () {
+            enable(self);
+            requestError();
+        }
+    })
 });
 
 /**

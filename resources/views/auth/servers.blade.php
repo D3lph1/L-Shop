@@ -21,7 +21,7 @@
             </div>
             <div class="card-footer text-center">
                 @if($canExit)
-                    <button class="btn btn-primary btn-lg" onclick="logout()">Выйти<i class="fa fa-sign-out fa-right"></i></button>
+                    <a href="{{ route('logout', []) }}" class="btn btn-primary btn-lg">Выйти<i class="fa fa-sign-out fa-right"></i></a>
                 @elseif($canEnter)
                     <a href="signin" class="btn btn-primary btn-lg">Войти<i class="fa fa-sign-out fa-right"></i></a>
                 @endif

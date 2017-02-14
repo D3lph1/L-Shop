@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Models\Goods;
+use App\Models\Product;
 use App\Models\Server;
 use App\Models\Category;
 use App\Exceptions\InvalidTypeArgumentException;
@@ -56,12 +56,12 @@ class QueryManager
      */
     public function goods($serverId, $category)
     {
-        return Goods::select('goods.id as id', 'items.name', 'items.image', 'goods.price', 'goods.stack')
+        return Product::select('goods.id as id', 'items.name', 'items.image', 'goods.price', 'goods.stack')
             ->join('items', 'items.id', '=', 'goods.item_id')
             ->where('server_id', $serverId)
             ->where('category_id', $category)
             ->orderBy('items.name')
-            ->paginate(s_get('catalog.items_per_page', 10));
+            ->paginate(s_get('catalog.products_per_page', 10));
     }
 
     /**
@@ -72,7 +72,7 @@ class QueryManager
      */
     public function product($id)
     {
-        return Goods::select('goods.id as id', 'items.name', 'items.image', 'goods.price', 'goods.stack')
+        return Product::select('goods.id as id', 'items.name', 'items.image', 'goods.price', 'goods.stack')
             ->join('items', 'items.id', '=', 'goods.item_id')
             ->where('goods.id', $id)
             ->get();

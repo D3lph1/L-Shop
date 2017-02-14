@@ -8,7 +8,7 @@
     <div id="content-container">
         <div id="logo-block">
             <div class="logo-img">
-                <img src="/img/logo_small.png" alt="logo" class="c-logo">
+                <img src="{{ asset('img/logo_small.png') }}" alt="logo" class="c-logo">
             </div>
             <div class="logo-text text-depth">
                 <h1>{{ s_get('shop.name', 'L - Shop') }}</h1>
