@@ -1,12 +1,19 @@
 <?php
 
+/**
+ *  File with declaration helpers-functions
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ */
+
 if (!function_exists('s_get')) {
     /**
      * Get the setting value
      *
-     * @param $key
+     * @param      $key
      * @param null $default
      * @param bool $lower
+     *
      * @return string
      */
     function s_get($key, $default = null, $lower = false)
@@ -118,5 +125,28 @@ if (!function_exists('img_path')) {
     function img_path($url)
     {
         return public_path("img/$url");
+    }
+}
+
+if (!function_exists('json_response')) {
+    /**
+     * Return filled json response object
+     *
+     * @param       $status
+     * @param array $data
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    function json_response($status, $data = [])
+    {
+        $response = [
+            'status' => $status
+        ];
+
+        if (count($data) > 0) {
+            return response()->json(array_merge($response, $data));
+        }
+
+        return response()->json($response);
     }
 }

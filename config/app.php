@@ -25,7 +25,7 @@ return [
     |
     */
 
-    'env' => 'production',
+    'env' => 'debug',
 
     /*
     |--------------------------------------------------------------------------
@@ -180,7 +180,8 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        \App\Providers\PaymentProvider::class
+        \App\Providers\PaymentProvider::class,
+        \App\Providers\ComposerServiceProvider::class
 
     ],
 

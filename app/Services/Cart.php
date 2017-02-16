@@ -2,6 +2,13 @@
 
 namespace App\Services;
 
+/**
+ * Class Cart
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Services
+ */
 class Cart
 {
     /**
@@ -19,6 +26,23 @@ class Cart
     }
 
     /**
+     * Get property value of product in cart
+     *
+     * @param int|string $server
+     * @param int|string $product
+     * @param int|string $property
+     * @return mixed|null
+     */
+    public function get($server, $product, $property)
+    {
+        if ($this->has($server, $product)) {
+            return \Session::get("cart.$server.$product.$property");
+        }
+
+        return null;
+    }
+
+    /**
      * Set product in cart stacks count
      *
      * @param int|string $server
@@ -30,6 +54,22 @@ class Cart
         if ($this->has($server, $product)) {
             \Session::put("cart.$server.$product.count", $count);
         }
+    }
+
+    /**
+     * Get count of current products in cart
+     *
+     * @param $server
+     * @param $product
+     * @return int
+     */
+    public function getCount($server, $product)
+    {
+        if ($this->has($server, $product)) {
+            return (int)\Session::get("cart.$server.$product.count");
+        }
+
+        return 0;
     }
 
     /**
@@ -69,7 +109,7 @@ class Cart
      * @param int|string $server
      * @return int
      */
-    public function count($server)
+    public function productsCount($server)
     {
         return count(\Session::get("cart.$server"));
     }
@@ -82,7 +122,7 @@ class Cart
      */
     public function isEmpty($server)
     {
-        return $this->count($server) === 0 ? true : false;
+        return $this->productsCount($server) === 0 ? true : false;
     }
 
     /**
@@ -91,7 +131,7 @@ class Cart
      */
     public function isFull($server)
     {
-        if ($this->count($server) >= s_get('cart.capacity', 12)) {
+        if ($this->productsCount($server) >= s_get('cart.capacity', 12)) {
             return true;
         }
 

@@ -7,6 +7,8 @@ use App\Exceptions\InvalidTypeArgumentException;
 /**
  * Responsible for working with alerts
  *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ *
  * @package App\Services
  */
 class Message

@@ -6,7 +6,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class Product extends Model
 {
-    protected $table = 'goods';
+    protected $table = 'products';
 
     public function item()
     {

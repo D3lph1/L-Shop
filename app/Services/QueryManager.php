@@ -2,13 +2,19 @@
 
 namespace App\Services;
 
+use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Server;
 use App\Models\Category;
 use App\Exceptions\InvalidTypeArgumentException;
 
 /**
+ * Class QueryManager
  * Service in charge of working with ORM
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Services
  */
 class QueryManager
 {
@@ -16,24 +22,28 @@ class QueryManager
      * Gets a list of activated servers
      *
      * @param null|string|array $columns
+     *
      * @return mixed
      */
     public function listOfEnabledServers($columns = null)
     {
         $columns = $this->prepareColumns($columns);
+
         return Server::select($columns)->where('enabled', 1)->get();
     }
 
     /**
      * Get server or drop 404
      *
-     * @param int $id
+     * @param int               $id
      * @param null|string|array $columns
+     *
      * @return mixed
      */
     public function serverOrFail($id, $columns = null)
     {
         $columns = $this->prepareColumns($columns);
+
         return Server::select($columns)->where('enabled', 1)->findOrFail($id);
     }
 
@@ -41,6 +51,7 @@ class QueryManager
      * Get the categories list for the current server
      *
      * @param $serverId
+     *
      * @return mixed
      */
     public function serverCategories($serverId)
@@ -52,12 +63,14 @@ class QueryManager
      * Get goods joined with items for current server
      *
      * @param $serverId
+     * @param $category
+     *
      * @return mixed
      */
-    public function goods($serverId, $category)
+    public function products($serverId, $category)
     {
-        return Product::select('goods.id as id', 'items.name', 'items.image', 'goods.price', 'goods.stack')
-            ->join('items', 'items.id', '=', 'goods.item_id')
+        return Product::select('products.id as id', 'items.name', 'items.image', 'products.price', 'products.stack')
+            ->join('items', 'items.id', '=', 'products.item_id')
             ->where('server_id', $serverId)
             ->where('category_id', $category)
             ->orderBy('items.name')
@@ -68,22 +81,51 @@ class QueryManager
      * Get product by id
      *
      * @param int|string $id
+     *
      * @return mixed
      */
     public function product($id)
     {
-        return Product::select('goods.id as id', 'items.name', 'items.image', 'goods.price', 'goods.stack')
-            ->join('items', 'items.id', '=', 'goods.item_id')
-            ->where('goods.id', $id)
+        return Product::select('products.id as id', 'items.name', 'items.image', 'products.price', 'products.stack')
+            ->join('items', 'items.id', '=', 'products.item_id')
+            ->where('products.id', $id)
             ->get();
+    }
+
+    /**
+     * Create a new payment
+     *
+     * @param string     $service
+     * @param string     $products
+     * @param            $cost
+     * @param int|string $user_id
+     * @param string     $username
+     * @param int|string $server_id
+     * @param string     $ip
+     *
+     * @return mixed
+     */
+    public function newPayment($service, $products, $cost, $user_id, $username, $server_id, $ip)
+    {
+        return Payment::insertGetId([
+            'service' => $service,
+            'products' => $products,
+            'cost' => $cost,
+            'user_id' => $user_id,
+            'username' => $username,
+            'server_id' => $server_id,
+            'ip' => $ip
+        ]);
     }
 
     /**
      * Checking argument on a valid type
      *
-     * @param null|string|array $columns
-     * @return mixed
      * @throws InvalidTypeArgumentException
+     *
+     * @param null|string|array $columns
+     *
+     * @return mixed
      */
     private function prepareColumns($columns = null)
     {

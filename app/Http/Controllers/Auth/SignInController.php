@@ -8,6 +8,13 @@ use App\Http\Requests\SignInRequest;
 use App\Http\Controllers\Controller;
 use Cartalyst\Sentinel\Checkpoints\ThrottlingException;
 
+/**
+ * Class SignInController
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Http\Controllers\Auth
+ */
 class SignInController extends Controller
 {
     /**

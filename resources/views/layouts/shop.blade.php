@@ -6,17 +6,18 @@
             <p id="s-btn-c">
                 <button id="btn-menu-c" class="btn waves-effect"><i class="fa fa-arrow-left"></i></button>
             </p>
-            @if(is_auth())
-                <p id="name">{{ \Sentinel::getUser()->getUserLogin() }}</p>
+            @if($isAuth)
+                <p id="name">{{ $username }}</p>
                 <div id="profile-block">
-                    <p id="balance"><i class="fa fa-database fa-left"></i>Баланс:
+                    <p id="balance"><i class="fa fa-database fa-left"></i>
+                        Баланс:
                         <span>
-                            {{ \Sentinel::getUser()->getBalance() }}
-                            {!! s_get('shop.currency_html', 'руб.') !!}
+                            {{ $balance }}
+                            {!! $currency !!}
                         </span>
                     </p>
                     <!--<p id="rank"><i class="fa fa-star fa-left"></i>Ранг: <span>Beginner</span></p>-->
-                    <a href="{{ route('catalog', ['server' => $currentServer->id]) }}" class="btn info-color btn-block">
+                    <a href="{{ $catalogUrl }}" class="btn info-color btn-block">
                         <i class="fa fa-list fa-lg fa-left"></i>
                         Каталог
                     </a>
@@ -28,27 +29,27 @@
                         <i class="fa fa-credit-card fa-left fa-lg"></i>
                         <a class="white-text" href="">Пополнить</a>
                     </button>
-                    <a href="{{ route('logout') }}" class="btn danger-color btn-block">
+                    <a href="{{ $logoutUrl }}" class="btn danger-color btn-block">
                         <i class="fa fa-times fa-left fa-lg"></i>
                         Выйти
                     </a>
                 </div>
             @endif
-            @if(!is_auth())
+            @if(!$isAuth)
                 <div id="profile-block">
                     <p id="cart">
                         <i class="fa fa-cube fa-left"></i>
                         Корзина: <span>7</span>
                     </p>
-                    <a href="{{ route('catalog', ['server' => $currentServer->id]) }}" class="btn info-color btn-block">
+                    <a href="{{ $catalogUrl }}" class="btn info-color btn-block">
                         <i class="fa fa-list fa-lg fa-left"></i>
                         Каталог
                     </a>
-                    <a href="{{ route('cart', ['server' => $currentServer->id]) }}" class="btn info-color btn-block">
+                    <a href="{{ $cartUrl }}" class="btn info-color btn-block">
                         <i class="fa fa-shopping-cart fa-left fa-lg"></i>
                         Корзина
                     </a>
-                    <a href="{{ route('signin') }}" class="btn btn-warning btn-block">
+                    <a href="{{ $signinUrl }}" class="btn btn-warning btn-block">
                         <i class="fa fa-key fa-left fa-lg"></i>
                         Войти
                     </a>
@@ -79,7 +80,7 @@
 
         <div id="footer">
             <div id="f-first">
-                <p>2017<i class="fa fa-copyright fa-left fa-right"></i>Copyright : {{ s_get('shop.name', 'L - Shop') }}</p>
+                <p>2017<i class="fa fa-copyright fa-left fa-right"></i>Copyright : {{ $shopName }}</p>
             </div>
             <div id="f-second">
                 <button class="btn unique-color"><i class="fa fa-vk fa-lg fa-left"></i>Vkontakte</button>

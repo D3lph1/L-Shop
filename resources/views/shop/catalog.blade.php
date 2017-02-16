@@ -11,7 +11,7 @@
                 <img src="{{ asset('img/logo_small.png') }}" alt="logo" class="c-logo">
             </div>
             <div class="logo-text text-depth">
-                <h1>{{ s_get('shop.name', 'L - Shop') }}</h1>
+                <h1>{{ $shopName }}</h1>
             </div>
         </div>
         <div id="categories" class="col-12">

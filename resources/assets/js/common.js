@@ -291,18 +291,27 @@ $('#btn-cart-go-pay').click(function () {
     var url = $(this).attr('data-url');
     var self = this;
     var goods = new Object(null);
+    var username;
 
-    $.each($('.c-product'), function(index, value) {
+    $.each($('.c-product'), function (index, value) {
         goods[index] = new Object(null);
         goods[index].id = $(value).find('.c-p-name').attr('data-id');
         goods[index].count = $(value).find('.c-p-count-input').val();
     });
 
+    if ($('#c-login').length != 0) {
+        username = $('#c-login').val();
+        if (username.length < 4) {
+            msg.warning('Вы должны указать имя того пользователя, которому хотите приобрести товары.');
+            return;
+        }
+    }
     $.ajax({
         url: url,
         method: 'POST',
         data: ({
             goods: goods,
+            username: username,
             _token: getToken()
         }),
         dataType: 'json',
@@ -315,9 +324,9 @@ $('#btn-cart-go-pay').click(function () {
 
             if (status == 'success') {
                 document.location.href = response.redirect;
-            }else if (status == 'invalid product id') {
+            } else if (status == 'invalid product id') {
                 msg.danger('Один или несколько идентификаторов товаров не совпадают. Перезагрузите страницу и попробуйте снова.');
-            }else if (status == 'invalid count') {
+            } else if (status == 'invalid count') {
                 msg.danger('Указано неверное количество товара.');
             }
         },

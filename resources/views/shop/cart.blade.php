@@ -11,12 +11,23 @@
         </div>
         @if(!$cart->isEmpty($currentServer->id))
             <div id="total">
-                <p id="total-p">Итого: <span id="total-money"><span>{{ $cost }}</span> {!! s_get('shop.currency_html', 'руб.') !!}</span>
+                <div id="total-p">
+                    @if(!is_auth())
+                        <div class="md-form inline">
+                            <i class="fa fa-user prefix"></i>
+                            <input type="text" id="c-login" class="form-control">
+                            <label for="c-login">Имя пользователя</label>
+                        </div>
+                    @endif
+                    <div class="inline">
+                        Итого:
+                        <span id="total-money"><span>{{ $cost }}</span> {!! s_get('shop.currency_html', 'руб.') !!}</span>
+                    </div>
                     <button class="btn btn-warning btn-sm" id="btn-cart-go-pay" data-url="{{ route('cart.pay', ['server' => $currentServer]) }}">
                         Перейти к оплате
                         <i class="fa fa-arrow-right fa-right"></i>
                     </button>
-                </p>
+                </div>
             </div>
         @endif
         <div id="cart-products">

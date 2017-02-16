@@ -7,8 +7,20 @@ use App\Services\QueryManager;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+/**
+ * Class CartController
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Http\Controllers\Components
+ */
 class CartController extends Controller
 {
+    /**
+     * @var int
+     */
+    private $server;
+
     /**
      * @var QueryManager
      */
@@ -19,6 +31,10 @@ class CartController extends Controller
      */
     private $cart;
 
+    /**
+     * @param QueryManager $qm
+     * @param Cart $cart
+     */
     public function __construct(QueryManager $qm, Cart $cart)
     {
         $this->qm = $qm;
@@ -33,8 +49,8 @@ class CartController extends Controller
      */
     public function render(Request $request)
     {
-        $id = (int)$request->route('server');
-        $server = $this->qm->serverOrFail($id, ['id', 'name']);
+        $this->server = (int)$request->route('server');
+        $server = $this->qm->serverOrFail($this->server, ['id', 'name']);
         $servers = $this->qm->listOfEnabledServers(['id', 'name']);
         $products = [];
         $cost = 0;
@@ -46,9 +62,6 @@ class CartController extends Controller
         }
 
         $data = [
-            'currentServer' => $server,
-            'servers' => $servers,
-
             'cart' => $this->cart,
             'productsCollection' => $products,
             'cost' => $cost
@@ -58,38 +71,83 @@ class CartController extends Controller
     }
 
     /**
-     * Sets the number of goods in a cart, and send the user redirect to the payment page data
+     * Sets the number of goods in a cart, create new payment and send the user redirect to the payment page data
      *
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
      */
     public function pay(Request $request)
     {
-        $id = (int)$request->route('server');
+        $this->server = (int)$request->route('server');
         $goods = $request->get('goods');
-        $server = $this->qm->serverOrFail($id, ['id', 'name']);
-        $servers = $this->qm->listOfEnabledServers(['id', 'name']);
+        $username = $request->get('username');
+        $server = $this->qm->serverOrFail($this->server, ['id', 'name']);
 
         foreach ($goods as $one) {
             $product = $this->qm->product($one['id']);
 
             // Check on valid product id
             if ($product->count() === 0) {
-                return response()->json(['status' => 'invalid product id']);
+                return json_response('invalid product id');
             }
 
             // Check on valid stacks count
             if ($one['count'] % $product[0]->stack !== 0) {
-                return response()->json(['status' => 'invalid count']);
+                return json_response('invalid count');
             }
 
-            $this->cart->setCount($id, $one['id'], $one['count'] / $product[0]->stack);
+            $this->cart->setCount($this->server, $one['id'], $one['count'] / $product[0]->stack);
         }
 
-        return response()->json([
-            'status' => 'success',
-            'redirect' => route('payment.cart', ['server' => $server])
-        ]);
+        $productsAndCost = $this->getProductsAndCost();
+        $products = $productsAndCost['products'];
+        $cost = $productsAndCost['cost'];
+        $user = $this->getUsernameOrId($username);
+        $user_id = null;
+        $username = null;
+        if (is_int($user)) {
+            $user_id = $user;
+        }else{
+            $username = $user;
+        }
+
+        $payment = $this->qm->newPayment(null, $products, $cost, $user_id, $username, $this->server, $request->ip());
+
+        return json_response(
+            'success',
+            [
+                'redirect' => route('payment.cart', [
+                    'server' => $server,
+                    'payment' => $payment
+                ])
+            ]
+        );
+    }
+
+    private function getProductsAndCost()
+    {
+        $cost = 0;
+        $storage = [];
+        $fromCart = $this->cart->getAll($this->server);
+        foreach ($fromCart as $key => $value) {
+            $product = $this->qm->product($key)[0];
+            $storage[$key] = $this->cart->getCount($this->server, $key);
+            $cost += $product->price * $storage[$key];
+        }
+
+        return [
+            'products' => serialize($storage),
+            'cost' => $cost
+        ];
+    }
+
+    private function getUsernameOrId($username)
+    {
+        if (is_auth()) {
+            return (int)\Sentinel::getUser()->getUserId();
+        }
+
+        return (string)$username;
     }
 
     /**
@@ -104,14 +162,14 @@ class CartController extends Controller
         $product = $request->route('product');
 
         if ($this->cart->isFull($server)) {
-            return response()->json(['status' => 'cart is full']);
+            return json_response('cart is full');
         }
         if ($this->cart->has($server, $product)) {
-            return response()->json(['status' => 'already in cart']);
+            return json_response('already in cart');
         }
         $this->cart->put($server, $product);
 
-        return response()->json(['status' => 'success']);
+        return json_response('success');
     }
 
     /**
@@ -128,9 +186,9 @@ class CartController extends Controller
         if ($this->cart->has($server, $product)) {
             $this->cart->remove($server, $product);
 
-            return response()->json(['status' => 'success']);
+            return json_response('success');
         }
 
-        return response()->json(['status' => 'product not found']);
+        return json_response('product not found');
     }
 }
