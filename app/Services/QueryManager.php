@@ -102,10 +102,11 @@ class QueryManager
      * @param string     $username
      * @param int|string $server_id
      * @param string     $ip
+     * @param bool       $complete
      *
      * @return mixed
      */
-    public function newPayment($service, $products, $cost, $user_id, $username, $server_id, $ip)
+    public function newPayment($service, $products, $cost, $user_id, $username, $server_id, $ip, $complete = false)
     {
         return Payment::insertGetId([
             'service' => $service,
@@ -114,7 +115,8 @@ class QueryManager
             'user_id' => $user_id,
             'username' => $username,
             'server_id' => $server_id,
-            'ip' => $ip
+            'ip' => $ip,
+            'complete' => true
         ]);
     }
 

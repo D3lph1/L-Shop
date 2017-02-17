@@ -7,7 +7,7 @@
  */
 $('#si-username, #si-password').keyup(function (event) {
     if (event.keyCode == 13) {
-        signin();
+        signin(this);
     }
 });
 
@@ -15,7 +15,10 @@ $('#si-username, #si-password').keyup(function (event) {
  * Attempt to auth user
  */
 $('#btn-sign-in').click(function () {
-    var self = this;
+    signin(this);
+});
+
+function signin(self) {
     var username = $('#si-username').val();
     var password = $('#si-password').val();
 
@@ -75,7 +78,7 @@ $('#btn-sign-in').click(function () {
             requestError();
         }
     });
-});
+}
 
 /**
  * Catalog section
@@ -323,7 +326,15 @@ $('#btn-cart-go-pay').click(function () {
             var status = response.status;
 
             if (status == 'success') {
-                document.location.href = response.redirect;
+                if (response.quick) {
+                    msg.success('Покупка совершена успешно!');
+                    $('#balance-span').text(response.new_balance);
+                    $('#cart-products').empty();
+                    $('#total').remove();
+                    $('#cart-products').html('<h3>Корзина пуста</h3>');
+                }else {
+                    document.location.href = response.redirect;
+                }
             } else if (status == 'invalid product id') {
                 msg.danger('Один или несколько идентификаторов товаров не совпадают. Перезагрузите страницу и попробуйте снова.');
             } else if (status == 'invalid count') {

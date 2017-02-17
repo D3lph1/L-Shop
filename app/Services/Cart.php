@@ -150,4 +150,14 @@ class Cart
             \Session::forget("cart.$server.$product");
         }
     }
+
+    /**
+     * Remove all products from cart
+     *
+     * @param $server
+     */
+    public function clear($server)
+    {
+        \Session::forget("cart.$server");
+    }
 }

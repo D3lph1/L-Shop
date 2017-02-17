@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
 /**
  * Class CartController
  *
- * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
  *
  * @package App\Http\Controllers\Components
  */
@@ -33,7 +33,7 @@ class CartController extends Controller
 
     /**
      * @param QueryManager $qm
-     * @param Cart $cart
+     * @param Cart         $cart
      */
     public function __construct(QueryManager $qm, Cart $cart)
     {
@@ -45,13 +45,13 @@ class CartController extends Controller
      * Render the cart page
      *
      * @param Request $request
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function render(Request $request)
     {
         $this->server = (int)$request->route('server');
-        $server = $this->qm->serverOrFail($this->server, ['id', 'name']);
-        $servers = $this->qm->listOfEnabledServers(['id', 'name']);
+        $server = $request->get('currentServer');
         $products = [];
         $cost = 0;
 
@@ -71,17 +71,18 @@ class CartController extends Controller
     }
 
     /**
-     * Sets the number of goods in a cart, create new payment and send the user redirect to the payment page data
+     * To perform all the necessary checks and, if the user has sufficient funds to make
+     * payments otherwise redirects the user to select a payment aggregator page.
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function pay(Request $request)
     {
         $this->server = (int)$request->route('server');
         $goods = $request->get('goods');
-        $username = $request->get('username');
-        $server = $this->qm->serverOrFail($this->server, ['id', 'name']);
+        $this->qm->serverOrFail($this->server, ['id', 'name']);
 
         foreach ($goods as $one) {
             $product = $this->qm->product($one['id']);
@@ -99,31 +100,94 @@ class CartController extends Controller
             $this->cart->setCount($this->server, $one['id'], $one['count'] / $product[0]->stack);
         }
 
+        $result = $this->buildPayment($request);
+
+        if ($result['quick']) {
+            // If the user has enough money in the account to make quick payment
+            if (is_int($result['result'])) {
+                $this->cart->clear($this->server);
+                return json_response(
+                    'success',
+                    [
+                        'quick' => true,    // A sign that the payment is a "quick"
+                        'new_balance' => \Sentinel::getUser()->getBalance()     // New user balance for replace old balance by JavaScript
+                    ]
+                );
+            }
+        }
+
+        // If the user does not have enough money in the account, redirect it to the page select a payment aggregator
+        if (is_int($result['result'])) {
+            \App::make('msg')->info('На вашем счете недостаточно средств для совершения покупки.
+                Вы можете оплатить покупку любым удобным для вас способом прямо сейчас.');
+            return json_response(
+                'success',
+                [
+                    'quick' => false,   // A sign that the payment is not a "quick"
+                    // Redirect link
+                    'redirect' => route('payment.cart', [
+                        'server' => $this->server,
+                        'payment' => $result['result']
+                    ])
+                ]
+            );
+        }
+
+        return json_response('failed');
+    }
+
+    /**
+     * Collect data for create new payment
+     *
+     * @param Request $request
+     *
+     * @return array
+     */
+    private function buildPayment(Request $request)
+    {
         $productsAndCost = $this->getProductsAndCost();
         $products = $productsAndCost['products'];
         $cost = $productsAndCost['cost'];
-        $user = $this->getUsernameOrId($username);
+        try {
+            $user = $this->getUsernameOrId($request->get('username'));
+        } catch (\UnexpectedValueException $e) {
+            return json_response('invalid username');
+        }
         $user_id = null;
         $username = null;
         if (is_int($user)) {
             $user_id = $user;
-        }else{
+            $balance = \Sentinel::getUser()->getBalance() - $cost;
+            // If the user has enough money in the account to make quick payment
+            if ($balance >= 0) {
+                // Update user balance
+                \Sentinel::update(\Sentinel::getUser(), [
+                    'balance' => $balance
+                ]);
+
+                return [
+                    'quick' => true,    // A sign that the payment is a "quick"
+                    'result' => // Stores payment identifier in the case of successful query
+                        $this->qm->newPayment(null, $products, $cost, $user_id, null, $this->server, $request->ip(), true)
+                ];
+            }
+        } else {
             $username = $user;
         }
 
-        $payment = $this->qm->newPayment(null, $products, $cost, $user_id, $username, $this->server, $request->ip());
+        return [
+            'quick' => false,   // A sign that the payment is not a "quick"
 
-        return json_response(
-            'success',
-            [
-                'redirect' => route('payment.cart', [
-                    'server' => $server,
-                    'payment' => $payment
-                ])
-            ]
-        );
+            'result' => // Stores payment identifier in the case of successful query
+                $this->qm->newPayment(null, $products, $cost, $user_id, $username, $this->server, $request->ip())
+        ];
     }
 
+    /**
+     * Get products data [id => count] (in serialized form) and total products cost for payment
+     *
+     * @return array
+     */
     private function getProductsAndCost()
     {
         $cost = 0;
@@ -141,19 +205,32 @@ class CartController extends Controller
         ];
     }
 
+    /**
+     * Return the user name or ID, depending on whether there is a payment from an authorized user or not
+     *
+     * @param $username
+     *
+     * @return int|string
+     */
     private function getUsernameOrId($username)
     {
         if (is_auth()) {
             return (int)\Sentinel::getUser()->getUserId();
         }
 
-        return (string)$username;
+        // If user not auth
+        if (mb_strlen($username) > 3) {
+            return (string)$username;
+        }
+
+        throw new \UnexpectedValueException('username is short');
     }
 
     /**
      * Put item in cart
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function put(Request $request)
@@ -176,6 +253,7 @@ class CartController extends Controller
      * Remove item from cart
      *
      * @param Request $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function remove(Request $request)

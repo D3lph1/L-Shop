@@ -11,10 +11,10 @@
                 <div id="profile-block">
                     <p id="balance"><i class="fa fa-database fa-left"></i>
                         Баланс:
-                        <span>
+                        <span id="balance-span">
                             {{ $balance }}
-                            {!! $currency !!}
                         </span>
+                            {!! $currency !!}
                     </p>
                     <!--<p id="rank"><i class="fa fa-star fa-left"></i>Ранг: <span>Beginner</span></p>-->
                     <a href="{{ $catalogUrl }}" class="btn info-color btn-block">
