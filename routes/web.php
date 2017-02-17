@@ -1,5 +1,9 @@
 <?php
 
+/**
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ */
+
 Route::group(['namespace' => 'Auth'], function () {
     // Render sign in page
     Route::get('/signin', 'SignInController@render')
@@ -24,7 +28,7 @@ Route::group(['namespace' => 'Auth'], function () {
     Route::get('/servers', 'SelectServerController@render')->name('servers');
 });
 
-Route::group(['namespace' => 'Shop'], function () {
+Route::group(['namespace' => 'Shop', 'where' => ['server' => '\d+']], function () {
     // Route of main shop page
     Route::get('/server/{server}/{category?}', 'CatalogController@render')
         ->name('catalog')
@@ -35,20 +39,7 @@ Route::group(['namespace' => 'Shop'], function () {
         ]);
 
     Route::any('/server/{server}/{}');
-});
 
-Route::group(['namespace' => 'Payment'], function () {
-    Route::get('/server/{server}/pay/cart/{payment}', 'PaymentController@render')
-        ->name('payment.cart')
-        ->middleware('shop')
-        ->where('server', '\d+');
-
-    Route::any('/payment/result/robokassa', 'ResultController@robokassa');
-    Route::any('/payment/success/robokassa', 'SuccessController@robokassa');
-    Route::any('/payment/error/robokassa', 'ErrorController@robokassa');
-});
-
-Route::group(['namespace' => 'Components', 'where' => ['server' => '\d+']], function () {
     Route::get('/server/{server}/cart', 'CartController@render')
         ->middleware('shop')
         ->name('cart');
@@ -67,4 +58,21 @@ Route::group(['namespace' => 'Components', 'where' => ['server' => '\d+']], func
         ->where([
             'product' => '\d+'
         ]);
+});
+
+Route::group(['namespace' => 'Payment'], function () {
+    Route::get('/server/{server}/pay/cart/{payment}', 'PaymentController@render')
+        ->name('payment.cart')
+        ->middleware('shop')
+        ->where('server', '\d+');
+
+    Route::post('/server/{server}/buy/{product}', 'PaymentController@buy')
+        ->name('payment.buy')
+        ->where([
+            'product' => '\d+'
+        ]);
+
+    Route::any('/payment/result/robokassa', 'ResultController@robokassa');
+    Route::any('/payment/success/robokassa', 'SuccessController@robokassa');
+    Route::any('/payment/error/robokassa', 'ErrorController@robokassa');
 });

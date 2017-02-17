@@ -24,7 +24,7 @@
                         <span id="total-money"><span>{{ $cost }}</span> {!! s_get('shop.currency_html', 'руб.') !!}</span>
                     </div>
                     <button class="btn btn-warning btn-sm" id="btn-cart-go-pay" data-url="{{ route('cart.pay', ['server' => $currentServer]) }}">
-                        Перейти к оплате
+                        Сформировать и оплатить
                         <i class="fa fa-arrow-right fa-right"></i>
                     </button>
                 </div>

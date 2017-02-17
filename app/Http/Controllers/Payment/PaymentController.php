@@ -53,7 +53,6 @@ class PaymentController extends Controller
     public function render(Request $request)
     {
         $this->server = (int)$request->route('server');
-        $this->username = $request->get('username');
 
         $data = [
             'robokassa' => $this->robokassa() ?: null
@@ -62,8 +61,15 @@ class PaymentController extends Controller
         return view('payment.methods', $data);
     }
 
+    public function buy(Request $request)
+    {
+        $this->server = (int)$request->route('server');
+        $manager = \App::make('payment.manager.buy');
+        $manager->handle($request);
+    }
+
     private function robokassa()
     {
-
+        //
     }
 }

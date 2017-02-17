@@ -22,11 +22,13 @@ gulp.task('sass', function () {
 gulp.task('scripts', function () {
     return gulp.src([
         'resources/assets/js/jquery-3.1.1.min.js',
+        'resources/assets/js/tether.min.js',
+        'resources/assets/js/bootstrap.min.js',
+        'resources/assets/js/mdb.min.js',
         'resources/assets/js/components/*.js',
         'resources/assets/js/functions.js',
         'resources/assets/js/on-load.js',
         'resources/assets/js/common.js',
-        'resources/assets/js/*.js'
     ])
         .pipe(concat('app.min.js'))
         .pipe(uglify())

@@ -7,6 +7,7 @@ use App\Models\Product;
 use App\Models\Server;
 use App\Models\Category;
 use App\Exceptions\InvalidTypeArgumentException;
+use Carbon\Carbon;
 
 /**
  * Class QueryManager
@@ -116,7 +117,9 @@ class QueryManager
             'username' => $username,
             'server_id' => $server_id,
             'ip' => $ip,
-            'complete' => true
+            'complete' => true,
+            'created_at' => Carbon::now()->toDateTimeString(),
+            'updated_at' => Carbon::now()->toDateTimeString()
         ]);
     }
 

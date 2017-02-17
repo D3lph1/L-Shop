@@ -125,7 +125,7 @@ class Message
      */
     private function set($type, $text)
     {
-        return \Cookie::make($this->cookieName, $type . $this->delimiter . $text, $this->lifetime, null, null, false, false);
+        return \Cookie::make($this->cookieName, $type . $this->delimiter . $text, $this->lifetime, '/', null, false, false);
     }
 
     /**

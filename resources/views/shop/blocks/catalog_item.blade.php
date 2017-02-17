@@ -6,7 +6,7 @@
         <img src="{{ asset('img/empty.png') }}" alt="prod" class="product-image image-fluid">
     @endif
 
-    <p class="product-price">{{ $product->price }} {!! s_get('shop.currency_html', 'руб.') !!}</p>
+    <p class="product-price"><span class="catalog-price-span">{{ $product->price }}</span> {!! s_get('shop.currency_html', 'руб.') !!}</p>
     <p class="product-count">за <span>{{ $product->stack }}</span> шт.</p>
 
     @if($cart->has($currentServer->id, $product->id))
@@ -26,7 +26,8 @@
         </button>
     @endif
 
-    <button class="btn btn-warning btn-block btn-sm catalog-to-buy">
+    <button class="btn btn-warning btn-block btn-sm catalog-to-buy"
+                data-url="{{ route('payment.buy', ['server' => $currentServer, 'product' => $product->id]) }}">
         <i class="fa fa-money fa-left"></i>
         Быстрая покупка
     </button>

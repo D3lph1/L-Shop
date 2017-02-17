@@ -168,6 +168,83 @@ $('.catalog-to-cart').click(function () {
 });
 
 /**
+ * Buy product from catalog page
+ */
+
+var stack;
+var dataUrl;
+var price;
+
+$('.catalog-to-buy').click(function () {
+    stack = Number($(this).parent().find('.product-count>span').text());
+    dataUrl =  $(this).attr('data-url');
+    price = Number($(this).parent().find('.catalog-price-span').text());
+    $('#catalog-to-buy-count-input').val(stack);
+    $('#catalog-to-buy-modal').modal('show');
+    $('#catalog-to-buy-summ').text(price);
+});
+
+$('#catalog-to-buy-minus-btn').click(function () {
+    var input = $(this).parent().parent().find('#catalog-to-buy-count-input');
+    var val = Number(input.val());
+    if (val - stack > 0) {
+        var result = val - stack;
+        input.val(result);
+        $(this).parent().parent().parent().find('#catalog-to-buy-summ').text(result / stack * price);
+    }
+});
+
+$('#catalog-to-buy-plus-btn').click(function () {
+    var input = $(this).parent().parent().find('#catalog-to-buy-count-input');
+    var val = Number(input.val());
+    var result = val + stack;
+    input.val(result);
+    $(this).parent().parent().parent().find('#catalog-to-buy-summ').text(result / stack * price);
+});
+
+$('#catalog-to-buy-count-input').blur(function () {
+    var val = Number($(this).val());
+
+    if (val % stack != 0) {
+        // Normalize input value
+        var result = Math.round(val / stack) * stack;
+        if (isNaN(result)) {
+            result = 0;
+        }
+
+        if (result != 0) {
+            $(this).val(result);
+            $(this).parent().parent().find('#catalog-to-buy-summ').text(result / stack * price);
+        } else {
+            $(this).val(stack);
+            $(this).parent().parent().parent().find('#catalog-to-buy-summ').text(price);
+        }
+    }
+
+    // If input was empty
+    if (val <= 0) {
+        $(this).val(stack);
+    }
+});
+
+$('#catalog-to-buy-accept').click(function () {
+    $.ajax({
+        url: url,
+        method: 'POST',
+        data: ({
+            _token: getToken()
+        }),
+        dataType: 'json',
+        beforeSend: function () {
+            disable(self);
+        },
+        success: function (response) {
+
+        }
+    })
+});
+
+/**
  * End
  */
 
@@ -271,21 +348,27 @@ $('.cart-plus-btn').click(function () {
  */
 $('.c-p-count-input').blur(function () {
     var stack = Number($(this).parents('.c-2-info').find('.c-p-cbuttons').attr('data-stack'));
+    var price = Number($(this).parent().parent().find('.c-p-cbuttons').attr('data-price'));
     var val = Number($(this).val());
-
+    console.log(price);
     if (val % stack != 0) {
         // Normalize input value
         var result = Math.round(val / stack) * stack;
+        if (isNaN(result)) {
+            result = 0;
+        }
 
         if (result != 0) {
             $(this).val(result);
+            $('#total-money>span').text(result / stack * price);
         } else {
             $(this).val(stack);
+            $('#total-money>span').text(price);
         }
     }
 
     // If input was empty
-    if (val == 0) {
+    if (val <= 0) {
         $(this).val(stack);
     }
 });
@@ -293,13 +376,13 @@ $('.c-p-count-input').blur(function () {
 $('#btn-cart-go-pay').click(function () {
     var url = $(this).attr('data-url');
     var self = this;
-    var goods = new Object(null);
+    var products = new Object(null);
     var username;
 
     $.each($('.c-product'), function (index, value) {
-        goods[index] = new Object(null);
-        goods[index].id = $(value).find('.c-p-name').attr('data-id');
-        goods[index].count = $(value).find('.c-p-count-input').val();
+        products[index] = new Object(null);
+        products[index].id = $(value).find('.c-p-name').attr('data-id');
+        products[index].count = $(value).find('.c-p-count-input').val();
     });
 
     if ($('#c-login').length != 0) {
@@ -313,7 +396,7 @@ $('#btn-cart-go-pay').click(function () {
         url: url,
         method: 'POST',
         data: ({
-            goods: goods,
+            products: products,
             username: username,
             _token: getToken()
         }),

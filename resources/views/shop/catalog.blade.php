@@ -34,4 +34,38 @@
             </div>
         </div>
     </div>
+    @component('components.modal')
+        @slot('id')
+            catalog-to-buy-modal
+        @endslot
+        @slot('title')
+            Быстрая покупка
+        @endslot
+        @slot('buttons')
+            <button type="button" class="btn btn-danger" id="catalog-to-buy-accept">Продолжить</button>
+            <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Отменить</button>
+        @endslot
+        <div class="md-form">
+            @if(!$isAuth)
+                <input type="text" class="form-control text-center" id="catalog-to-buy-username" placeholder="Имя пользователя">
+            @endif
+            <input type="text" class="form-control text-center" id="catalog-to-buy-count-input">
+
+            <div class="text-center" id="catalog-to-buy-cbuttons">
+                <button class="btn btn-warning btn-sm" id="catalog-to-buy-minus-btn"><i class="fa fa-minus"></i></button>
+                <button class="btn btn-warning btn-sm" id="catalog-to-buy-plus-btn"><i class="fa fa-plus"></i></button>
+            </div>
+        </div>
+        <div class="alert alert-info">
+            @if($isAuth)
+                С вашего счёта будет списана сумма в размере <span id="catalog-to-buy-summ"></span> {!! $currency !!}
+                Если же средств недостаточно, вы будете автоматически перенаправлены на страницу оплаты.
+            @else
+                Вы будете перенаправлены на страницу выбора способа оплаты. Сумма заказа:
+                <span id="catalog-to-buy-summ"></span> {!! $currency !!}
+            @endif
+        </div>
+
+
+    @endcomponent
 @endsection

@@ -155,7 +155,7 @@ function getCookie(name) {
  */
 function deleteCookie(name) {
     setCookie(name, '', {
-        expires: -1
+        expires: -10000
     })
 }
 
