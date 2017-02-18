@@ -24,6 +24,11 @@ class PaymentController extends Controller
     private $server;
 
     /**
+     * @var
+     */
+    private $payment;
+
+    /**
      * @var Cart
      */
     private $cart;
@@ -53,6 +58,26 @@ class PaymentController extends Controller
     public function render(Request $request)
     {
         $this->server = (int)$request->route('server');
+        $this->payment = (int)$request->route('payment');
+        $this->payment = $this->qm->payment($this->payment, ['id', 'cost', 'user_id', 'username']);
+
+        // If payment with this ID does not exist, exit
+        if (!$this->payment) {
+            \App::abort(404);
+        }
+
+        // Verification of whether the payment the user belongs
+        if (is_null($this->payment->username)) {
+            if (!is_auth()) {
+                // If it is not, deny access
+                \App::abort(403);
+            }
+
+            if ($this->payment->user_id != \Sentinel::getUser()->getUserId()) {
+                // If it is not, deny access
+                \App::abort(403);
+            }
+        }
 
         $data = [
             'robokassa' => $this->robokassa() ?: null
@@ -61,15 +86,14 @@ class PaymentController extends Controller
         return view('payment.methods', $data);
     }
 
-    public function buy(Request $request)
-    {
-        $this->server = (int)$request->route('server');
-        $manager = \App::make('payment.manager.buy');
-        $manager->handle($request);
-    }
-
     private function robokassa()
     {
-        //
+        $robokassa = \App::make('payment.robokassa');
+        $robokassa
+            ->setInvoiceId($this->payment->id)
+            ->setSum($this->payment->cost)
+            ->setDescription(s_get('shop.name'));
+
+        return $robokassa->getPaymentUrl();
     }
 }

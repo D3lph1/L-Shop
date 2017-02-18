@@ -10,18 +10,21 @@ use App\Http\Controllers\Controller;
 /**
  * Class CatalogController
  *
- * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
  *
  * @package App\Http\Controllers\Shop
  */
 class CatalogController extends Controller
 {
+    private $server;
+
     /**
      * Render the catalog page
      *
-     * @param Request $request
+     * @param Request      $request
      * @param QueryManager $qm
-     * @param Cart $cart
+     * @param Cart         $cart
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function render(Request $request, QueryManager $qm, Cart $cart)
@@ -57,5 +60,12 @@ class CatalogController extends Controller
         ];
 
         return view('shop.catalog', $data);
+    }
+
+    public function buy(Request $request)
+    {
+        $this->server = (int)$request->route('server');
+        $manager = \App::make('payment.manager.catalog');
+        return $manager->handle($request);
     }
 }

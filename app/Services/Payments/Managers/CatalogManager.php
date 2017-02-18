@@ -6,30 +6,27 @@ use App\Services\Payments\Manager;
 use Illuminate\Http\Request;
 
 /**
- * Class CartManager
- *
- * Execution of payment, when the user presses the corresponding button on the cart page.
- * Notice:
- *      In the context of the this class is called the "quick" delivery of such payment,
- *      which is produced when the user has enough money on the balance sheet and
- *      "not quick" one that leads to redirect the user to select a payment
- *      aggregator page to make a payment.
+ * Class BuyManager
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  *
  * @package App\Services\Payments\Managers
  */
-class CartManager extends Manager
+class CatalogManager extends Manager
 {
     /**
      * @param Request $request
      *
-     * @return array|\Illuminate\Http\JsonResponse
+     * @return array|bool|\Illuminate\Http\JsonResponse
      */
     public function handle(Request $request)
     {
         $this->server = $request->route('server');
+
         $result = $this->buildPayment($request);
+        if (!is_array($result)) {
+            return $result;
+        }
 
         if ($result['quick']) {
             // If the user has enough money in the account to make quick payment
@@ -48,22 +45,23 @@ class CartManager extends Manager
     }
 
     /**
-     * Collect data for create new payment
-     *
      * @param Request $request
      *
-     * @return array
+     * @return array|\Illuminate\Http\JsonResponse
      */
     private function buildPayment(Request $request)
     {
-        $productsAndCost = $this->getProductsAndCost();
-        $products = $productsAndCost['products'];
-        $cost = $productsAndCost['cost'];
+        $product = null;
+        $user = null;
+        $cost = null;
 
         try {
             $user = $this->getUsernameOrId($request->get('username'));
+            $productsAndCost = $this->getProductAndCost($request->get('product'), $request->get('count'));
+            $product = $productsAndCost['product'];
+            $cost = $productsAndCost['cost'];
         } catch (\UnexpectedValueException $e) {
-            return json_response('invalid username');
+            return json_response($e->getMessage());
         }
 
         $user_id = null;
@@ -84,7 +82,7 @@ class CartManager extends Manager
                     'quick' => true,    // A sign that the payment is a "quick"
 
                     'result' => // Stores payment identifier in the case of successful query
-                        $this->qm->newPayment(null, $products, $cost, $user_id, null, $this->server, $request->ip(), true)
+                        $this->qm->newPayment(null, $product, $cost, $user_id, null, $this->server, $request->ip(), true)
                 ];
             }
         } else {
@@ -96,29 +94,32 @@ class CartManager extends Manager
             'quick' => false,   // A sign that the payment is not a "quick"
 
             'result' => // Stores payment identifier in the case of successful query
-                $this->qm->newPayment(null, $products, $cost, $user_id, $username, $this->server, $request->ip())
+                $this->qm->newPayment(null, $product, $cost, $user_id, $username, $this->server, $request->ip())
         ];
     }
 
     /**
-     * Get products data [id => count] (in serialized form) and total products cost for payment
+     * @param int|string $product
+     * @param int|string $count
      *
      * @return array
      */
-    private function getProductsAndCost()
+    private function getProductAndCost($product, $count)
     {
-        $cost = 0;
-        $storage = [];
-        $fromCart = $this->cart->getAll($this->server);
-        foreach ($fromCart as $key => $value) {
-            $product = $this->qm->product($key)[0];
-            $storage[$key] = $this->cart->getCount($this->server, $key);
-            $cost += $product->price * $storage[$key];
+        $product = $this->qm->product($product);
+        if ($product->isEmpty()) {
+            throw new \UnexpectedValueException('invalid item id');
         }
 
+        $product= $product[0];
+        if ($count % $product->stack !== 0) {
+            throw new \UnexpectedValueException('invalid items count');
+        }
+        $count = $count / $product->stack;
+
         return [
-            'products' => serialize($storage),
-            'cost' => $cost
+            'product' => serialize([$product->id => $count]),
+            'cost' => $product->price * $count
         ];
     }
 }

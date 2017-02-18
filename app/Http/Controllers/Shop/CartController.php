@@ -78,7 +78,7 @@ class CartController extends Controller
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function pay(Request $request)
+    public function buy(Request $request)
     {
         $this->server = (int)$request->route('server');
         $products = $request->get('products');

@@ -27,7 +27,7 @@
     @endif
 
     <button class="btn btn-warning btn-block btn-sm catalog-to-buy"
-                data-url="{{ route('payment.buy', ['server' => $currentServer, 'product' => $product->id]) }}">
+                data-url="{{ route('catalog.buy', ['server' => $currentServer, 'product' => $product->id]) }}">
         <i class="fa fa-money fa-left"></i>
         Быстрая покупка
     </button>

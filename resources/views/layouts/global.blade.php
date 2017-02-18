@@ -13,6 +13,11 @@
 </head>
 
 <body>
+<div id="pre-loader">
+    <div id="pre-animation">
+        <span><i class="fa fa-spin fa-cog"></i></span>
+    </div>
+</div>
 <div class="messages"></div>
 
 @yield('content_global')

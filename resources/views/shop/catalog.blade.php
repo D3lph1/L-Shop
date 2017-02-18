@@ -39,11 +39,11 @@
             catalog-to-buy-modal
         @endslot
         @slot('title')
-            Быстрая покупка
+            Быстрая покупка (<span id="catalog-to-buy-name"></span>)
         @endslot
         @slot('buttons')
-            <button type="button" class="btn btn-danger" id="catalog-to-buy-accept">Продолжить</button>
-            <button type="button" class="btn btn-outline-danger" data-dismiss="modal">Отменить</button>
+            <button type="button" class="btn btn-warning" id="catalog-to-buy-accept">Продолжить</button>
+            <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Отменить</button>
         @endslot
         <div class="md-form">
             @if(!$isAuth)
@@ -65,7 +65,5 @@
                 <span id="catalog-to-buy-summ"></span> {!! $currency !!}
             @endif
         </div>
-
-
     @endcomponent
 @endsection

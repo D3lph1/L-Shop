@@ -8,6 +8,7 @@ use App\Models\Server;
 use App\Models\Category;
 use App\Exceptions\InvalidTypeArgumentException;
 use Carbon\Carbon;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class QueryManager
@@ -99,9 +100,9 @@ class QueryManager
      * @param string     $service
      * @param string     $products
      * @param            $cost
-     * @param int|string $user_id
+     * @param int        $user_id
      * @param string     $username
-     * @param int|string $server_id
+     * @param int        $server_id
      * @param string     $ip
      * @param bool       $complete
      *
@@ -121,6 +122,20 @@ class QueryManager
             'created_at' => Carbon::now()->toDateTimeString(),
             'updated_at' => Carbon::now()->toDateTimeString()
         ]);
+    }
+
+    /**
+     * @param     $columns
+     * @param int $id
+     *
+     * @return \Eloquent|Collection
+     */
+    public function payment($id, $columns = null)
+    {
+        $this->prepareColumns($columns);
+        return Payment::select($columns)
+            ->where('id', $id)
+            ->first();
     }
 
     /**

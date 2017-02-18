@@ -170,83 +170,107 @@ $('.catalog-to-cart').click(function () {
 /**
  * Buy product from catalog page
  */
+(function () {
+    var stack;
+    var url;
+    var price;
 
-var stack;
-var dataUrl;
-var price;
+    $('.catalog-to-buy').click(function () {
+        stack = Number($(this).parent().find('.product-count>span').text());
+        url =  $(this).attr('data-url');
+        price = Number($(this).parent().find('.catalog-price-span').text());
+        $('#catalog-to-buy-name').html($(this).parent().find('.product-name').html());
+        $('#catalog-to-buy-count-input').val(stack);
+        $('#catalog-to-buy-modal').modal('show');
+        $('#catalog-to-buy-summ').text(price);
+    });
 
-$('.catalog-to-buy').click(function () {
-    stack = Number($(this).parent().find('.product-count>span').text());
-    dataUrl =  $(this).attr('data-url');
-    price = Number($(this).parent().find('.catalog-price-span').text());
-    $('#catalog-to-buy-count-input').val(stack);
-    $('#catalog-to-buy-modal').modal('show');
-    $('#catalog-to-buy-summ').text(price);
-});
+    $('#catalog-to-buy-minus-btn').click(function () {
+        var input = $(this).parent().parent().find('#catalog-to-buy-count-input');
+        var val = Number(input.val());
+        if (val - stack > 0) {
+            var result = val - stack;
+            input.val(result);
+            $(this).parent().parent().parent().find('#catalog-to-buy-summ').text(result / stack * price);
+        }
+    });
 
-$('#catalog-to-buy-minus-btn').click(function () {
-    var input = $(this).parent().parent().find('#catalog-to-buy-count-input');
-    var val = Number(input.val());
-    if (val - stack > 0) {
-        var result = val - stack;
+    $('#catalog-to-buy-plus-btn').click(function () {
+        var input = $(this).parent().parent().find('#catalog-to-buy-count-input');
+        var val = Number(input.val());
+        var result = val + stack;
         input.val(result);
         $(this).parent().parent().parent().find('#catalog-to-buy-summ').text(result / stack * price);
-    }
-});
+    });
 
-$('#catalog-to-buy-plus-btn').click(function () {
-    var input = $(this).parent().parent().find('#catalog-to-buy-count-input');
-    var val = Number(input.val());
-    var result = val + stack;
-    input.val(result);
-    $(this).parent().parent().parent().find('#catalog-to-buy-summ').text(result / stack * price);
-});
+    $('#catalog-to-buy-count-input').blur(function () {
+        var val = Number($(this).val());
 
-$('#catalog-to-buy-count-input').blur(function () {
-    var val = Number($(this).val());
+        if (val % stack != 0) {
+            // Normalize input value
+            var result = Math.round(val / stack) * stack;
+            if (isNaN(result)) {
+                result = 0;
+            }
 
-    if (val % stack != 0) {
-        // Normalize input value
-        var result = Math.round(val / stack) * stack;
-        if (isNaN(result)) {
-            result = 0;
+            if (result != 0) {
+                $(this).val(result);
+                $(this).parent().parent().find('#catalog-to-buy-summ').text(result / stack * price);
+            } else {
+                $(this).val(stack);
+                $(this).parent().parent().parent().find('#catalog-to-buy-summ').text(price);
+            }
         }
 
-        if (result != 0) {
-            $(this).val(result);
-            $(this).parent().parent().find('#catalog-to-buy-summ').text(result / stack * price);
-        } else {
+        // If input was empty
+        if (val <= 0) {
             $(this).val(stack);
-            $(this).parent().parent().parent().find('#catalog-to-buy-summ').text(price);
         }
-    }
+    });
 
-    // If input was empty
-    if (val <= 0) {
-        $(this).val(stack);
-    }
-});
+    $('#catalog-to-buy-accept').click(function () {
+        var self = this;
 
-$('#catalog-to-buy-accept').click(function () {
-    $.ajax({
-        url: url,
-        method: 'POST',
-        data: ({
-            _token: getToken()
-        }),
-        dataType: 'json',
-        beforeSend: function () {
-            disable(self);
-        },
-        success: function (response) {
+        // Request
+        $.ajax({
+            url: url,
+            method: 'GET',
+            data: ({
+                username: $('#catalog-to-buy-username').val(),
+                count: $('#catalog-to-buy-count-input').val(),
+                _token: getToken()
+            }),
+            dataType: 'json',
+            beforeSend: function () {
+                disable(self);
+            },
+            success: function (response) {
+                enable(self);
 
-        }
-    })
-});
+                var status = response.status;
+                if (status == 'success') {
+                    if (response.quick) {
+                        msg.success('Покупка успешно совершена!');
+                        $('#catalog-to-buy-modal').modal('hide');
+                        $('#balance-span').text(response.new_balance);
+                    }else {
+                        document.location.href = response.redirect;
+                    }
+                }else if (status == 'invalid item id') {
+                    msg.danger('Идентификатор товара не валиден');
+                }else if (status == 'invalid items count') {
+                    msg.danger('Неверное количество товара');
+                }
+            },
 
-/**
- * End
- */
+            // Request error
+            error: function () {
+                enable(self);
+                requestError();
+            }
+        })
+    });
+})();
 
 /**
  * Cart section

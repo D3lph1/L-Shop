@@ -9,7 +9,7 @@ function Message() {
      *
      * @type {number}
      */
-    this.duration = 4;
+    this.duration = 5;
 
     /**
      * Name of cookie with flash message

@@ -6,6 +6,20 @@ body
     color: #333
 
 /* Main styles */
+#pre-loader
+    position: absolute
+    display: -webkit-flex
+    display: -ms-flex
+    display: flex
+    width: 100vw
+    height: 100vh
+    background-color: #fff
+    z-index: 101
+    justify-content: center
+    align-items: center
+    #pre-animation
+        span
+            font-size: 10rem
 
 #side-content
     overflow: hidden
@@ -89,10 +103,22 @@ body
         text-align: center
         h1
             margin: 0
+    .pay-block
+        margin: 1rem
+    #p-login
+        display: -webkit-flex
+        display: -ms-flex
+        display: flex
+        justify-content: center
+        width: 100%
+        padding: 1rem
+        .md-form
+            max-width: 300px
+            margin-bottom: 0
+            label
+                margin-top: .5rem
     #content-container
         padding: 1rem
-        .pay-block
-            margin: 1rem
         #cart-header
             padding: 1rem
             border-radius: 2px

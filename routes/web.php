@@ -38,14 +38,15 @@ Route::group(['namespace' => 'Shop', 'where' => ['server' => '\d+']], function (
             'category' => '\d+'
         ]);
 
-    Route::any('/server/{server}/{}');
-
     Route::get('/server/{server}/cart', 'CartController@render')
         ->middleware('shop')
         ->name('cart');
 
-    Route::post('/server/{server}/cart', 'CartController@pay')
-        ->name('cart.pay');
+    Route::post('/server/{server}/cart', 'CartController@buy')
+        ->name('cart.buy');
+
+    Route::get('/server/{server}/buy', 'CatalogController@buy')
+        ->name('catalog.buy');
 
     Route::post('/server/{server}/cart/put/{product}', 'CartController@put')
         ->name('cart.put')
@@ -65,12 +66,6 @@ Route::group(['namespace' => 'Payment'], function () {
         ->name('payment.cart')
         ->middleware('shop')
         ->where('server', '\d+');
-
-    Route::post('/server/{server}/buy/{product}', 'PaymentController@buy')
-        ->name('payment.buy')
-        ->where([
-            'product' => '\d+'
-        ]);
 
     Route::any('/payment/result/robokassa', 'ResultController@robokassa');
     Route::any('/payment/success/robokassa', 'SuccessController@robokassa');

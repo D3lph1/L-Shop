@@ -7,4 +7,7 @@ msg = new Message();
 $(document).ready(function () {
     // Show the flash message
     msg.flash();
+
+    // Hide preloader when the page is ready
+    $('#pre-loader').fadeOut();
 });

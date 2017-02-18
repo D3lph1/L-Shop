@@ -10,7 +10,7 @@
     </div>
     <div id="content-container" class="flex-first flex">
         @if($robokassa)
-            <a href="{{ $robokassa }}" class="btn btn-dark-green btn-lg btn-block">ROBOKASSA</a>
+            <a href="{{ $robokassa }}" class="btn btn-warning btn-lg btn-block">ROBOKASSA</a>
         @else
             <div class="flex-center flex">
                 <h3>Нет ни одного доступного способа оплаты</h3>
