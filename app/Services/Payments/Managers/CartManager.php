@@ -96,7 +96,7 @@ class CartManager extends Manager
             'quick' => false,   // A sign that the payment is not a "quick"
 
             'result' => // Stores payment identifier in the case of successful query
-                $this->qm->newPayment(null, $products, $cost, $user_id, $username, $this->server, $request->ip())
+                $this->qm->newPayment(null, $products, $cost, $user_id, $username, $this->server, $request->ip(), false)
         ];
     }
 
@@ -110,10 +110,18 @@ class CartManager extends Manager
         $cost = 0;
         $storage = [];
         $fromCart = $this->cart->getAll($this->server);
+        $ids = array_keys($fromCart);
+        $products = $this->qm->product(
+            $ids,
+            ['products.id as id', 'items.name', 'items.image', 'products.price', 'products.stack']
+        );
         foreach ($fromCart as $key => $value) {
-            $product = $this->qm->product($key)[0];
-            $storage[$key] = $this->cart->getCount($this->server, $key);
-            $cost += $product->price * $storage[$key];
+            foreach ($products as $product) {
+                if ($key == $product->id) {
+                    $storage[$key] = $this->cart->getCount($this->server, $key);
+                    $cost += $product->price * $storage[$key];
+                }
+            }
         }
 
         return [

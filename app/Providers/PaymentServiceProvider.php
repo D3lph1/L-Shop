@@ -7,7 +7,7 @@ use App\Services\Payments\Robokassa\Payment;
 use App\Services\Payments\Managers\CatalogManager;
 use App\Services\Payments\Managers\CartManager;
 
-class PaymentProvider extends ServiceProvider
+class PaymentServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.

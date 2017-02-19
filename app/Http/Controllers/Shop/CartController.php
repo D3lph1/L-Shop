@@ -52,18 +52,23 @@ class CartController extends Controller
     {
         $this->server = (int)$request->route('server');
         $server = $request->get('currentServer');
+
         $products = [];
         $cost = 0;
+        $fromCart = $this->cart->getAll($server->id);
+        $ids = array_keys($fromCart);
 
-        foreach ($this->cart->getAll($server->id) as $key => $value) {
-            $product = $this->qm->product($key);
-            $products[] = $product;
-            $cost += $product[0]->price;
+        $products = $this->qm->product(
+            $ids,
+            ['products.id as id', 'items.name', 'items.image', 'products.price', 'products.stack']
+        );
+        foreach ($products as $product) {
+            $cost += $product->price;
         }
 
         $data = [
             'cart' => $this->cart,
-            'productsCollection' => $products,
+            'products' => $products,
             'cost' => $cost
         ];
 
@@ -103,19 +108,22 @@ class CartController extends Controller
     private function putCount($products)
     {
         foreach ($products as $one) {
-            $product = $this->qm->product($one['id']);
+            $product = $this->qm->product(
+                $one['id'],
+                ['products.id as id', 'items.name', 'items.image', 'products.price', 'products.stack']
+            );
 
             // Check on valid product id
-            if ($product->count() === 0) {
+            if (!$product) {
                 return json_response('invalid product id');
             }
 
             // Check on valid stacks count
-            if ($one['count'] % $product[0]->stack !== 0) {
+            if ($one['count'] % $product->stack !== 0) {
                 return json_response('invalid count');
             }
 
-            $this->cart->setCount($this->server, $one['id'], $one['count'] / $product[0]->stack);
+            $this->cart->setCount($this->server, $one['id'], $one['count'] / $product->stack);
         }
 
         return true;

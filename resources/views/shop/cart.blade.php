@@ -32,11 +32,9 @@
         @endif
         <div id="cart-products">
             @if(!$cart->isEmpty($currentServer->id))
-                @foreach($productsCollection as $products)
                     @foreach($products as $product)
                         @include('shop.blocks.cart_item')
                     @endforeach
-                @endforeach
             @else
                 <h3>Корзина пуста</h3>
             @endif

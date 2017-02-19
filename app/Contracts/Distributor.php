@@ -2,6 +2,8 @@
 
 namespace App\Contracts;
 
+use App\Models\Payment;
+
 /**
  * Interface Distributor
  * This interface must implement all of the classes, the issue of producing goods player
@@ -12,5 +14,5 @@ namespace App\Contracts;
  */
 interface Distributor
 {
-    //
+    public function give(Payment $payment);
 }

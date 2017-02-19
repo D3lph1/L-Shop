@@ -1,13 +1,14 @@
 <?php
-/**
- * @link
- * @copyright
- * @license
- */
 
 namespace App\Exceptions;
 
-
+/**
+ * Class InvalidTypeArgumentException
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Exceptions
+ */
 class InvalidTypeArgumentException extends \InvalidArgumentException
 {
     /**

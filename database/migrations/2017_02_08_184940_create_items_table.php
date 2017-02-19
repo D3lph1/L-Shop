@@ -17,6 +17,7 @@ class CreateItemsTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->text('description')->nullable()->default(null);
+            $table->string('type', 16);
             $table->string('item');
             $table->string('image')->nullable()->default(null);
             $table->text('extra')->nullable()->default(null);

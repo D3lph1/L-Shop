@@ -15,7 +15,6 @@ class CreateGoodsTable extends Migration
     {
         Schema::create('goods', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('type', 16);
             $table->boolean('price')->unsigned();
             $table->integer('item_id');
             $table->integer('server_id');

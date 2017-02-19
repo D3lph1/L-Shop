@@ -94,8 +94,6 @@ abstract class Manager
     {
         // Clear the cart
         $this->cart->clear($this->server);
-        $message = \App::make('msg')->info('На вашем счету недостаточно средств для совершения покупки.
-                Вы можете оплатить покупку любым удобным для вас способом прямо сейчас.');
 
         return json_response(
             'success',
@@ -107,16 +105,6 @@ abstract class Manager
                     'payment' => $result['result']
                 ])
             ]
-        )->withCookie($message);
-    }
-
-    public function refillBalance()
-    {
-        //
-    }
-
-    public function quickPay()
-    {
-        //
+        );
     }
 }

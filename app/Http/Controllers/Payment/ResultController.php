@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Payment;
 
-use App\Services\PaymentAssistant\Payments\Robokassa;
+use App\Exceptions\FailedToUpdateTableException;
 use App\Services\QueryManager;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -16,6 +16,11 @@ use App\Http\Controllers\Controller;
  */
 class ResultController extends Controller
 {
+    /**
+     * @var string
+     */
+    private $service;
+
     /**
      * @var QueryManager
      */
@@ -43,12 +48,17 @@ class ResultController extends Controller
      */
     public function robokassa(Request $request)
     {
+        $this->service = 'robokassa';
         $robokassa = \App::make('payment.robokassa');
-        //if ($robokassa->validateResult($request->all())) {
+        if ($robokassa->validateResult($request->all())) {
             $this->payment = $this->qm->payment(
-                68,
-                ['id', 'products', 'cost', 'user_id', 'username']
+                $robokassa->getInvoiceId(),
+                ['id', 'products', 'cost', 'user_id', 'username', 'complete']
             );
+
+            if ($this->payment->complete) {
+                return response()->make('Already complete', 400);
+            }
 
             // If payment with this ID does not exist, exit
             if (!$this->payment) {
@@ -57,11 +67,19 @@ class ResultController extends Controller
             $this->give();
 
             return response()->make($robokassa->getSuccessAnswer());
-        //}
+        }
 
-        //return response()->make('Failed', 400);
+        return response()->make('Failed', 400);
     }
 
+    /**
+     * Outstanding product or money player
+     *
+     *
+     * @throws \UnexpectedValueException
+     *
+     * @return bool
+     */
     private function give()
     {
         if ($this->payment->products) {
@@ -75,11 +93,32 @@ class ResultController extends Controller
         );
     }
 
+    /**
+     * Outstanding product player
+     */
     private function giveProducts()
     {
-        //
+        $distributor = \App::make('distributor');
+        $distributor->setQm($this->qm);
+        if ($this->payment->user_id || $this->payment->username) {
+            $distributor->give($this->payment);
+            $this->completePayment($this->payment->id);
+
+            return;
+        }
+
+        throw new \UnexpectedValueException(
+            "Columns `user_id` and `username` is empty in row with id {$this->payment->id}"
+        );
     }
 
+    /**
+     * Outstanding money player
+     *
+     * @throws \UnexpectedValueException
+     *
+     * @return bool
+     */
     private function giveMoney()
     {
         if ($this->payment->user_id) {
@@ -89,21 +128,29 @@ class ResultController extends Controller
                     "User with id {$this->payment->user_id} not found in row with id {$this->payment->id}"
                 );
             }
-
             $user->update([
                 'balance' => $user->getBalance() + $this->payment->cost
             ]);
 
+            $this->completePayment($this->payment->id);
             return true;
         }
-
         throw new \UnexpectedValueException(
             "Column `user_id` is empty in row with id {$this->payment->id}"
         );
     }
 
-    private function completePayment()
+    /**
+     * @param int $id
+     *
+     * @throws FailedToUpdateTableException
+     */
+    private function completePayment($id)
     {
-        //
+        if (!$this->qm->completePayment($id, $this->service)) {
+            throw new FailedToUpdateTableException(
+                "Unable to complete the payment with id $id"
+            );
+        }
     }
 }

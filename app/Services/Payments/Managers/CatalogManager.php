@@ -94,7 +94,7 @@ class CatalogManager extends Manager
             'quick' => false,   // A sign that the payment is not a "quick"
 
             'result' => // Stores payment identifier in the case of successful query
-                $this->qm->newPayment(null, $product, $cost, $user_id, $username, $this->server, $request->ip())
+                $this->qm->newPayment(null, $product, $cost, $user_id, $username, $this->server, $request->ip(), false)
         ];
     }
 
@@ -106,12 +106,15 @@ class CatalogManager extends Manager
      */
     private function getProductAndCost($product, $count)
     {
-        $product = $this->qm->product($product);
-        if ($product->isEmpty()) {
+        $product = $this->qm->product(
+            $product,
+            ['products.id as id', 'items.name', 'items.image', 'products.price', 'products.stack']
+        );
+        if (!$product) {
             throw new \UnexpectedValueException('invalid item id');
         }
 
-        $product= $product[0];
+        $product= $product;
         if ($count % $product->stack !== 0) {
             throw new \UnexpectedValueException('invalid items count');
         }

@@ -80,18 +80,32 @@ class QueryManager
     }
 
     /**
-     * Get product by id
+     * @throws InvalidTypeArgumentException
      *
      * @param int|string $id
+     * @param null       $columns
      *
      * @return mixed
      */
-    public function product($id)
+    public function product($id, $columns = null)
     {
-        return Product::select('products.id as id', 'items.name', 'items.image', 'products.price', 'products.stack')
-            ->join('items', 'items.id', '=', 'products.item_id')
-            ->where('products.id', $id)
-            ->get();
+        $columns = $this->prepareColumns($columns);
+
+        if (is_int($id) or is_string($id)) {
+            return Product::select($columns)
+                ->join('items', 'items.id', '=', 'products.item_id')
+                ->where('products.id', $id)
+                ->first();
+        }
+
+        if (is_array($id)) {
+            return Product::select($columns)
+                ->join('items', 'items.id', '=', 'products.item_id')
+                ->whereIn('products.id', $id)
+                ->get();
+        }
+
+        throw new InvalidTypeArgumentException(['integer', 'string', 'array'], $id);
     }
 
     /**
@@ -118,7 +132,7 @@ class QueryManager
             'username' => $username,
             'server_id' => $server_id,
             'ip' => $ip,
-            'complete' => true,
+            'complete' => (bool)$complete,
             'created_at' => Carbon::now()->toDateTimeString(),
             'updated_at' => Carbon::now()->toDateTimeString()
         ]);
@@ -132,10 +146,31 @@ class QueryManager
      */
     public function payment($id, $columns = null)
     {
-        $this->prepareColumns($columns);
+        $columns = $this->prepareColumns($columns);
+
         return Payment::select($columns)
             ->where('id', $id)
             ->first();
+    }
+
+    /**
+     * @param int $id
+     * @param     $service
+     *
+     * @return bool
+     */
+    public function completePayment($id, $service)
+    {
+        return Payment::where('id', $id)->update([
+            'service' => $service,
+            'complete' => true,
+            'updated_at' => Carbon::now()->toDateTimeString()
+        ]);
+    }
+
+    public function putInShoppingCart(array $credentials)
+    {
+        return \App\Models\Cart::insert($credentials);
     }
 
     /**
@@ -153,7 +188,15 @@ class QueryManager
             return '*';
         }
 
-        if (is_string($columns) or is_array($columns)) {
+        if (is_string($columns)) {
+            return $columns;
+        }
+
+        if (is_array($columns)) {
+            if (count($columns) === 0) {
+                return '*';
+            }
+
             return $columns;
         }
 
