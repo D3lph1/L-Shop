@@ -7,7 +7,9 @@ body
 
 /* Main styles */
 #pre-loader
-    position: absolute
+    position: fixed
+    top: 0
+    left: 0
     display: -webkit-flex
     display: -ms-flex
     display: flex
@@ -134,14 +136,19 @@ body
                 display: -webkit-flex
                 display: -ms-flex
                 display: flex
+                flex-wrap: wrap
                 margin-bottom: 0
                 align-items: center
                 .md-form
+                    flex-grow: 1
+                    max-width: 300px
                     margin: 0 1rem 0 0
                     input
                         margin-bottom: 0
                     label
                         margin-top: .5rem
+                .inline
+                    margin: .5rem
                 #total-money
                     margin: 0 1rem
             button

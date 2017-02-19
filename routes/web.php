@@ -67,6 +67,15 @@ Route::group(['namespace' => 'Payment'], function () {
         ->middleware('shop')
         ->where('server', '\d+');
 
+    Route::get('/server/{server}/fillupbalance', 'PaymentController@renderFillUpBalancePage')
+        ->name('fillupbalance')
+        ->middleware(['auth', 'shop']);
+
+    Route::post('/server/{server}/fillupbalance', 'PaymentController@fillUpBalance')
+        ->name('payment.fillupbalance')
+        ->middleware('shop');
+
+
     Route::any('/payment/result/robokassa', 'ResultController@robokassa');
     Route::any('/payment/success/robokassa', 'SuccessController@robokassa');
     Route::any('/payment/error/robokassa', 'ErrorController@robokassa');

@@ -1,7 +1,7 @@
 @extends('layouts.shop')
 
 @section('title')
-    Корзина
+    Выбор способа оплаты
 @endsection
 
 @section('content')

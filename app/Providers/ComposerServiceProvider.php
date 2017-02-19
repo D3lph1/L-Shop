@@ -24,7 +24,8 @@ class ComposerServiceProvider extends ServiceProvider
         view()->composer([
             'layouts.shop',
             'shop.catalog',
-            'shop.cart'
+            'shop.cart',
+            'payment.fillupbalance'
         ], ShopLayoutComposer::class);
     }
 

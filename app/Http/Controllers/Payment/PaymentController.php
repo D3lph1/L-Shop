@@ -59,7 +59,12 @@ class PaymentController extends Controller
     {
         $this->server = (int)$request->route('server');
         $this->payment = (int)$request->route('payment');
-        $this->payment = $this->qm->payment($this->payment, ['id', 'cost', 'user_id', 'username']);
+        $this->payment = $this->qm->payment($this->payment, ['id', 'cost', 'user_id', 'username', 'complete']);
+
+        // If the payment is completed, deny access
+        if ($this->payment->complete) {
+            \App::abort(403);
+        }
 
         // If payment with this ID does not exist, exit
         if (!$this->payment) {
@@ -84,6 +89,37 @@ class PaymentController extends Controller
         ];
 
         return view('payment.methods', $data);
+    }
+
+    public function renderFillUpBalancePage()
+    {
+        return view('payment.fillupbalance');
+    }
+
+    public function fillUpBalance(Request $request)
+    {
+        if (!is_auth()) {
+            return json_response('not auth');
+        }
+        $server = (int)$request->route('server');
+        $summ = (int)$request->get('summ');
+
+        if ($summ <= 0) {
+            return json_response('the summ of negative');
+        }
+
+        if ($summ < s_get('payment.fillupbalance.minsumm')) {
+            return json_response('summ less min');
+        }
+
+        $payment = $this->qm->newPayment(
+            null, null, $summ, \Sentinel::getUser()->getUserId(), null, $server, $request->ip(), false
+        );
+
+        return json_response('success', ['redirect' => route('payment.cart', [
+            'server' => $server,
+            'payment' => $payment
+        ])]);
     }
 
     private function robokassa()

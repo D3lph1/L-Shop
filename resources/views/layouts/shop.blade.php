@@ -27,7 +27,7 @@
                     </a>
                     <button class="btn btn-warning btn-block">
                         <i class="fa fa-credit-card fa-left fa-lg"></i>
-                        <a class="white-text" href="">Пополнить</a>
+                        <a href="{{ route('fillupbalance', ['server' => $currentServer->id]) }}" class="white-text" href="">Пополнить</a>
                     </button>
                     <a href="{{ $logoutUrl }}" class="btn danger-color btn-block">
                         <i class="fa fa-times fa-left fa-lg"></i>

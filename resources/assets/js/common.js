@@ -460,3 +460,61 @@ $('#btn-cart-go-pay').click(function () {
 /**
  * End
  */
+
+/**
+ * FillUpBalance
+ */
+$('#fub-btn').click(function () {
+    var summ = Number($('#fub-input').val());
+    var minsumm = Number($(this).attr('data-minsumm'));
+    var self = this;
+
+    if (isNaN(summ)) {
+        msg.warning('Сумма должна иметь числовое значение');
+        return;
+    }
+
+    if (summ <= 0) {
+        msg.warning('Сумма должна быть положительным числом');
+        return;
+    }
+
+    if (summ < minsumm) {
+        msg.warning('Сумма не должна быть меньше ' + minsumm);
+        return;
+    }
+
+    // Request
+    $.ajax({
+        url: '',
+        method: 'POST',
+        data: ({
+            summ: summ,
+            _token: getToken()
+        }),
+        dataType: 'json',
+        beforeSend: function () {
+            disable(self);
+        },
+        success: function (response) {
+            status = response.status;
+
+            if (status == 'success') {
+                document.location.href = response.redirect;
+            }else {
+                enable(self);
+                if (status == 'the summ of negative') {
+                    msg.warning('Сумма должна быть положительным числом');
+                }else if (status == 'summ less min') {
+                    msg.warning('Сумма не должна быть меньше ' + minsumm);
+                }
+            }
+        },
+
+        // Request error
+        error: function () {
+            enable(self);
+            requestError();
+        }
+    })
+});
