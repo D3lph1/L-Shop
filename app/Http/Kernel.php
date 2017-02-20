@@ -2,6 +2,9 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\Captcha;
+use App\Http\Middleware\Server;
+use App\Http\Middleware\Servers;
 use App\Http\Middleware\Shop;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -54,6 +57,8 @@ class Kernel extends HttpKernel
         'auth' => \App\Http\Middleware\Auth::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'shop' => Shop::class
+        'servers' => Servers::class,
+        'server' => Server::class,
+        'captcha' => Captcha::class
     ];
 }

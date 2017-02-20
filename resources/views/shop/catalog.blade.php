@@ -65,5 +65,6 @@
                 <span id="catalog-to-buy-summ"></span> {!! $currency !!}
             @endif
         </div>
+        {!! \ReCaptcha::render() !!}
     @endcomponent
 @endsection

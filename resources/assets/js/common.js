@@ -142,7 +142,6 @@ $('.catalog-to-cart').click(function () {
             disable(self);
         },
         success: function (response) {
-            enable(self);
             var status = response.status;
 
             if (status == 'success') {
@@ -151,10 +150,13 @@ $('.catalog-to-cart').click(function () {
                 $(self).children('span').text('Уже в корзине');
 
             } else if (status == 'cart is full') {
+                enable(self);
                 msg.warning('Невозможно добавить товар. Корзина переполнена.');
             } else if (status == 'already in cart') {
+                enable(self);
                 msg.warning('Товар уже есть в корзине');
             } else {
+                enable(self);
                 msg.danger('Неудалось положить товар в корзину');
             }
         },
@@ -230,14 +232,21 @@ $('.catalog-to-cart').click(function () {
 
     $('#catalog-to-buy-accept').click(function () {
         var self = this;
+        var captcha = getCaptcha();
+
+        if (captcha == '') {
+            msg.warning('Вы должны подтвердить то, что не являетесь роботом!');
+            return;
+        }
 
         // Request
         $.ajax({
             url: url,
-            method: 'GET',
+            method: 'POST',
             data: ({
                 username: $('#catalog-to-buy-username').val(),
                 count: $('#catalog-to-buy-count-input').val(),
+                captcha: captcha,
                 _token: getToken()
             }),
             dataType: 'json',
@@ -245,9 +254,8 @@ $('.catalog-to-cart').click(function () {
                 disable(self);
             },
             success: function (response) {
-                enable(self);
-
                 var status = response.status;
+
                 if (status == 'success') {
                     if (response.quick) {
                         msg.success('Покупка успешно совершена!');
@@ -257,8 +265,10 @@ $('.catalog-to-cart').click(function () {
                         document.location.href = response.redirect;
                     }
                 }else if (status == 'invalid item id') {
+                    enable(self);
                     msg.danger('Идентификатор товара не валиден');
                 }else if (status == 'invalid items count') {
+                    enable(self);
                     msg.danger('Неверное количество товара');
                 }
             },
@@ -295,7 +305,6 @@ $('.cart-remove').click(function () {
             disable(self);
         },
         success: function (response) {
-            enable(self);
             var status = response.status;
 
             if (status == 'success') {
@@ -429,7 +438,6 @@ $('#btn-cart-go-pay').click(function () {
             disable(self);
         },
         success: function (response) {
-            enable(self);
             var status = response.status;
 
             if (status == 'success') {
@@ -442,10 +450,14 @@ $('#btn-cart-go-pay').click(function () {
                 }else {
                     document.location.href = response.redirect;
                 }
-            } else if (status == 'invalid product id') {
-                msg.danger('Один или несколько идентификаторов товаров не совпадают. Перезагрузите страницу и попробуйте снова.');
-            } else if (status == 'invalid count') {
-                msg.danger('Указано неверное количество товара.');
+            } else {
+                enable(self);
+
+                if (status == 'invalid product id') {
+                    msg.danger('Один или несколько идентификаторов товаров не совпадают. Перезагрузите страницу и попробуйте снова.');
+                } else if (status == 'invalid count') {
+                    msg.danger('Указано неверное количество товара.');
+                }
             }
         },
 
@@ -467,6 +479,7 @@ $('#btn-cart-go-pay').click(function () {
 $('#fub-btn').click(function () {
     var summ = Number($('#fub-input').val());
     var minsumm = Number($(this).attr('data-minsumm'));
+    var captcha = getCaptcha();
     var self = this;
 
     if (isNaN(summ)) {
@@ -484,12 +497,18 @@ $('#fub-btn').click(function () {
         return;
     }
 
+    if (captcha == '') {
+        msg.warning('Вы должны подтвердить то, что не являетесь роботом!');
+        return;
+    }
+
     // Request
     $.ajax({
         url: '',
         method: 'POST',
         data: ({
             summ: summ,
+            captcha: getCaptcha(),
             _token: getToken()
         }),
         dataType: 'json',
@@ -503,10 +522,13 @@ $('#fub-btn').click(function () {
                 document.location.href = response.redirect;
             }else {
                 enable(self);
+                grecaptcha.reset();
                 if (status == 'the summ of negative') {
                     msg.warning('Сумма должна быть положительным числом');
                 }else if (status == 'summ less min') {
                     msg.warning('Сумма не должна быть меньше ' + minsumm);
+                }else if (status == 'invalid captcha') {
+                    msg.danger('Каптча не верна!');
                 }
             }
         },

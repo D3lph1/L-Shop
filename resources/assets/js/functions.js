@@ -180,3 +180,12 @@ function requestError(more) {
         msg.danger('Во время выполнения запроса произошла ошибка. Подробности: ' + more);
     }
 }
+
+/**
+ * Get ReCaptcha response
+ *
+ * @returns {string}
+ */
+function getCaptcha() {
+    return $('#captcha-form').serialize().split('=')[1];
+}

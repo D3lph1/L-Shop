@@ -64,7 +64,6 @@ class CatalogController extends Controller
 
     public function buy(Request $request)
     {
-        $this->server = (int)$request->route('server');
         $manager = \App::make('payment.manager.catalog');
         return $manager->handle($request);
     }

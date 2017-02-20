@@ -5,6 +5,7 @@ namespace App\Providers;
 use App\Services\Cart;
 use App\Services\Message;
 use App\Services\QueryManager;
+use App\Services\ReCaptcha;
 use Illuminate\Support\Facades\Schema;
 use Illuminate\Support\ServiceProvider;
 
@@ -37,6 +38,13 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton('cart', function () {
             return new Cart();
+        });
+
+        $this->app->bind('recaptcha', function () {
+            return new ReCaptcha(
+                s_get('recaptcha.public_key'),
+                s_get('recaptcha.secret_key')
+            );
         });
     }
 }

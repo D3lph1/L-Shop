@@ -57,7 +57,7 @@ class CatalogManager extends Manager
 
         try {
             $user = $this->getUsernameOrId($request->get('username'));
-            $productsAndCost = $this->getProductAndCost($request->get('product'), $request->get('count'));
+            $productsAndCost = $this->getProductAndCost($request->route('product'), $request->get('count'));
             $product = $productsAndCost['product'];
             $cost = $productsAndCost['cost'];
         } catch (\UnexpectedValueException $e) {

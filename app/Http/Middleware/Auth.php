@@ -31,8 +31,6 @@ class Auth
             return redirect()->route('signin');
         }
 
-        return response()->json([
-            'status' => 'not_auth'
-        ]);
+        return json_response('not_auth');
     }
 }

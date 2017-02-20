@@ -14,7 +14,7 @@ use App\Services\QueryManager;
  *
  * @package App\Http\Middleware
  */
-class Shop
+class Servers
 {
     /**
      * @var QueryManager
@@ -39,21 +39,11 @@ class Shop
     public function handle(Request $request, Closure $next)
     {
         $data = [
-            'currentServer' => $this->getCurrentServer($request->route('server')),
             'servers' => $this->getServers(),
         ];
         $request->merge($data);
 
         return $next($request);
-    }
-
-    /**
-     * @param $server
-     * @return mixed
-     */
-    private function getCurrentServer($server)
-    {
-        return $this->qm->serverOrFail($server, ['id', 'name']);
     }
 
     /**

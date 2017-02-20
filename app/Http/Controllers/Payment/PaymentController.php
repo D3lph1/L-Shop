@@ -98,9 +98,6 @@ class PaymentController extends Controller
 
     public function fillUpBalance(Request $request)
     {
-        if (!is_auth()) {
-            return json_response('not auth');
-        }
         $server = (int)$request->route('server');
         $summ = (int)$request->get('summ');
 

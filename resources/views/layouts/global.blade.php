@@ -10,6 +10,8 @@
 
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('css/app.min.css') }}">
+
+    <script src='https://www.google.com/recaptcha/api.js' type="text/javascript"></script>
 </head>
 
 <body>

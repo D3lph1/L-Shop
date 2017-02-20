@@ -32,51 +32,82 @@ Route::group(['namespace' => 'Shop', 'where' => ['server' => '\d+']], function (
     // Route of main shop page
     Route::get('/server/{server}/{category?}', 'CatalogController@render')
         ->name('catalog')
-        ->middleware('shop')
         ->where([
-            'server' => '\d+',
             'category' => '\d+'
+        ])
+        ->middleware([
+            'servers',
+            'server'
         ]);
 
     Route::get('/server/{server}/cart', 'CartController@render')
-        ->middleware('shop')
-        ->name('cart');
+        ->name('cart')
+        ->middleware([
+            'servers',
+            'server'
+        ]);
 
     Route::post('/server/{server}/cart', 'CartController@buy')
-        ->name('cart.buy');
+        ->name('cart.buy')
+        ->middleware('server');
 
-    Route::get('/server/{server}/buy', 'CatalogController@buy')
-        ->name('catalog.buy');
+    Route::post('/server/{server}/buy/{product}', 'CatalogController@buy')
+        ->name('catalog.buy')
+        ->middleware([
+            'captcha',
+            'server'
+        ]);
 
     Route::post('/server/{server}/cart/put/{product}', 'CartController@put')
         ->name('cart.put')
         ->where([
             'product' => '\d+'
-        ]);
+        ])
+        ->middleware('server');
 
     Route::post('/server/{server}/cart/remove/{product}', 'CartController@remove')
         ->name('cart.remove')
         ->where([
             'product' => '\d+'
-        ]);
+        ])
+        ->middleware('server');
 });
 
 Route::group(['namespace' => 'Payment'], function () {
     Route::get('/server/{server}/pay/cart/{payment}', 'PaymentController@render')
         ->name('payment.cart')
-        ->middleware('shop')
-        ->where('server', '\d+');
+        ->middleware([
+            'servers',
+            'server'
+        ]);
 
     Route::get('/server/{server}/fillupbalance', 'PaymentController@renderFillUpBalancePage')
         ->name('fillupbalance')
-        ->middleware(['auth', 'shop']);
+        ->middleware([
+            'servers',
+            'server',
+            'auth'
+        ]);
 
     Route::post('/server/{server}/fillupbalance', 'PaymentController@fillUpBalance')
         ->name('payment.fillupbalance')
-        ->middleware('shop');
+        ->middleware([
+            'captcha',
+            'server',
+            'auth'
+        ]);
 
 
     Route::any('/payment/result/robokassa', 'ResultController@robokassa');
     Route::any('/payment/success/robokassa', 'SuccessController@robokassa');
     Route::any('/payment/error/robokassa', 'ErrorController@robokassa');
+});
+
+Route::group(['namespace' => 'Profile', 'where' => ['server' => '\d+']], function () {
+    Route::get('/server/{server}/profile/payments_story', 'PaymentsStoryController@render')
+        ->name('profile.payments_story')
+        ->middleware([
+            'servers',
+            'server'
+        ]);
 });

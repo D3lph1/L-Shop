@@ -25,7 +25,7 @@ return [
     |
     */
 
-    'env' => 'debug',
+    'env' => 'local',
 
     /*
     |--------------------------------------------------------------------------
@@ -240,7 +240,12 @@ return [
         'Debugbar' => Barryvdh\Debugbar\Facade::class,
         'Activation' => Cartalyst\Sentinel\Laravel\Facades\Activation::class,
         'Reminder'   => Cartalyst\Sentinel\Laravel\Facades\Reminder::class,
-        'Sentinel'   => Cartalyst\Sentinel\Laravel\Facades\Sentinel::class
+        'Sentinel'   => Cartalyst\Sentinel\Laravel\Facades\Sentinel::class,
+
+        /**
+         * Application Facades...
+         */
+        'ReCaptcha' => \App\Facades\ReCaptcha::class
     ],
 
 ];
