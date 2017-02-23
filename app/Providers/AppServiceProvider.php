@@ -36,7 +36,7 @@ class AppServiceProvider extends ServiceProvider
             return new Message();
         });
 
-        $this->app->singleton('cart', function () {
+        $this->app->bind('cart', function () {
             return new Cart();
         });
 

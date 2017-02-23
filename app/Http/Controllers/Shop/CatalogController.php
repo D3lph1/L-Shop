@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Shop;
 
 use App\Services\Cart;
-use App\Services\QueryManager;
 use Illuminate\Http\Request;
+use App\Services\QueryManager;
+use App\Services\Payments\Manager;
 use App\Http\Controllers\Controller;
+use App\Services\Payments\Responsible;
 
 /**
  * Class CatalogController
@@ -16,7 +18,7 @@ use App\Http\Controllers\Controller;
  */
 class CatalogController extends Controller
 {
-    private $server;
+    use Responsible;
 
     /**
      * Render the catalog page
@@ -29,7 +31,6 @@ class CatalogController extends Controller
      */
     public function render(Request $request, QueryManager $qm, Cart $cart)
     {
-        $id = (int)$request->route('server');
         $categories = $qm->serverCategories($request->get('currentServer')->id);
         $category = $request->route('category');
         $f = false;
@@ -62,9 +63,37 @@ class CatalogController extends Controller
         return view('shop.catalog', $data);
     }
 
-    public function buy(Request $request)
+    /**
+     * @param Request      $request
+     * @param Manager      $manager
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function buy(Request $request, Manager $manager)
     {
-        $manager = \App::make('payment.manager.catalog');
-        return $manager->handle($request);
+        $distributor = \App::make('distributor');
+        $server = (int)$request->route('server');
+        $username = $request->get('username');
+
+        $validated = $this->checkUsername($username, false);
+        if ($validated !== true) {
+            return $validated;
+        }
+
+        $productId = [$request->route('product')];
+        $productCount = [$request->get('count')];
+        $manager
+            ->setServer($server)
+            ->setIp($request->ip());
+
+        if (!is_auth() and $username) {
+            $manager->setUsername($username);
+        }
+        $payment = $manager->createPayment($productId, $productCount, Manager::COUNT_TYPE_NUMBER);
+        if ($payment->complete) {
+            $distributor->give($payment);
+        }
+
+        return $this->buildResponse($server, $payment);
     }
 }

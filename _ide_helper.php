@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.4.11 on 2017-02-17.
+ * Generated for Laravel 5.4.11 on 2017-02-23.
  *
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
@@ -13478,6 +13478,34 @@ namespace {
          */
         public static function disableDispatcher(){
             return \Cartalyst\Sentinel\Sentinel::disableDispatcher();
+        }
+        
+    }
+
+
+    class ReCaptcha extends \App\Facades\ReCaptcha{
+        
+        /**
+         * Render the ReCaptcha HTML in at the call site
+         *
+         * @param bool $clear Return the captcha without wrappers in a leveling div
+         * @return string 
+         * @static 
+         */
+        public static function render($clear = false){
+            return \App\Services\ReCaptcha::render($clear);
+        }
+        
+        /**
+         * It checks the validity of a response from the ReCaptcha and returns the result
+         *
+         * @param string $reCaptchaResponse
+         * @param string $ip
+         * @return bool 
+         * @static 
+         */
+        public static function verify($reCaptchaResponse, $ip){
+            return \App\Services\ReCaptcha::verify($reCaptchaResponse, $ip);
         }
         
     }

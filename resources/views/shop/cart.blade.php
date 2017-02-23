@@ -9,7 +9,7 @@
         <div id="cart-header" class="z-depth-1">
             <h1><i class="fa fa-shopping-cart fa-lg fa-left-big"></i>Корзина</h1>
         </div>
-        @if(!$cart->isEmpty($currentServer->id))
+        @if(!$cart->isEmpty())
             <div id="total">
                 <div id="total-p">
                     @if(!is_auth())
@@ -23,6 +23,9 @@
                         Итого:
                         <span id="total-money"><span>{{ $cost }}</span> {!! s_get('shop.currency_html', 'руб.') !!}</span>
                     </div>
+                        <div class="mr-2 ml-2">
+                            {!! \ReCaptcha::render(true) !!}
+                        </div>
                     <button class="btn btn-warning btn-sm" id="btn-cart-go-pay" data-url="{{ route('cart.buy', ['server' => $currentServer]) }}">
                         Сформировать и оплатить
                         <i class="fa fa-arrow-right fa-right"></i>
@@ -31,7 +34,7 @@
             </div>
         @endif
         <div id="cart-products">
-            @if(!$cart->isEmpty($currentServer->id))
+            @if(!$cart->isEmpty())
                     @foreach($products as $product)
                         @include('shop.blocks.cart_item')
                     @endforeach

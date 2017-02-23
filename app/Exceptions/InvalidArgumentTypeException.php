@@ -9,7 +9,7 @@ namespace App\Exceptions;
  *
  * @package App\Exceptions
  */
-class InvalidTypeArgumentException extends \InvalidArgumentException
+class InvalidArgumentTypeException extends \InvalidArgumentException
 {
     /**
      * @param string $expected
@@ -22,7 +22,7 @@ class InvalidTypeArgumentException extends \InvalidArgumentException
         parent::__construct(sprintf(
             'Expected argument type(s): %s, %s given',
             $expected,
-            '"' . gettype($given) . '"'
+            '`' . gettype($given) . '`'
         ));
     }
     /**
@@ -32,18 +32,9 @@ class InvalidTypeArgumentException extends \InvalidArgumentException
     private function biuldExpected($data)
     {
         if (is_array($data)) {
-            $count = count($data);
-            $i = 0;
-            $content = '';
-            foreach ($data as $item) {
-                if ($i == $count - 1)
-                    $content .= '"' . $item . '"';
-                else
-                    $content .= '"' . $item . '" or ';
-                $i++;
-            }
+            $content = '`' . implode('`, ', $data). '`';
             return $content;
         }
-        return '"' . $data . '"';
+        return '`' . $data . '`';
     }
 }

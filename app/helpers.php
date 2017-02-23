@@ -150,3 +150,31 @@ if (!function_exists('json_response')) {
         return response()->json($response);
     }
 }
+
+if (!function_exists('refill_user_balance')) {
+    /**
+     * Adds an given sum to the user's account
+     *
+     * @param int  $sum
+     * @param null $userId
+     */
+    function refill_user_balance($sum, $userId = null)
+    {
+        if (is_null($userId)) {
+            if (is_auth()) {
+                $balance = \Sentinel::getUser()->getBalance();
+                \Sentinel::update(\Sentinel::getUser(), [
+                    'balance' => $balance + $sum
+                ]);
+            } else {
+                throw new LogicException('User not auth');
+            }
+        } else {
+            $user = \Sentinel::getUserRepository()->findById($userId);
+            $balance = $user->getBalance();
+            \Sentinel::update($user, [
+                'balance' => $balance + $sum
+            ]);
+        }
+    }
+}

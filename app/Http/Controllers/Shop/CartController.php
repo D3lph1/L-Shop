@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Shop;
 
-use App\Services\Cart;
-use App\Services\QueryManager;
 use Illuminate\Http\Request;
+use App\Services\Payments\Manager;
 use App\Http\Controllers\Controller;
+use App\Services\Payments\Responsible;
 
 /**
  * Class CartController
@@ -16,30 +16,17 @@ use App\Http\Controllers\Controller;
  */
 class CartController extends Controller
 {
-    /**
-     * @var int
-     */
-    private $server;
+    use Responsible;
 
     /**
-     * @var QueryManager
+     * @var array
      */
-    private $qm;
+    private $productsId = [];
 
     /**
-     * @var Cart
+     * @var array
      */
-    private $cart;
-
-    /**
-     * @param QueryManager $qm
-     * @param Cart         $cart
-     */
-    public function __construct(QueryManager $qm, Cart $cart)
-    {
-        $this->qm = $qm;
-        $this->cart = $cart;
-    }
+    private $productsCount = [];
 
     /**
      * Render the cart page
@@ -55,15 +42,18 @@ class CartController extends Controller
 
         $products = [];
         $cost = 0;
-        $fromCart = $this->cart->getAll($server->id);
-        $ids = array_keys($fromCart);
+        $fromCart = $this->cart->products();
 
-        $products = $this->qm->product(
-            $ids,
-            ['products.id as id', 'items.name', 'items.image', 'products.price', 'products.stack']
-        );
-        foreach ($products as $product) {
-            $cost += $product->price;
+        if ($fromCart) {
+            $ids = array_keys($fromCart);
+
+            $products = $this->qm->product(
+                $ids,
+                ['products.id as id', 'items.name', 'items.image', 'products.price', 'products.stack']
+            );
+            foreach ($products as $product) {
+                $cost += $product->price;
+            }
         }
 
         $data = [
@@ -76,54 +66,87 @@ class CartController extends Controller
     }
 
     /**
-     * To perform all the necessary checks and, if the user has sufficient funds to make
-     * payments otherwise redirects the user to select a payment aggregator page.
-     *
-     * @param Request $request
+     * @param Request      $request
+     * @param Manager      $manager
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function buy(Request $request)
+    public function buy(Request $request, Manager $manager)
     {
-        $this->server = (int)$request->route('server');
-        $products = $request->get('products');
-        $this->qm->serverOrFail($this->server, ['id', 'name']);
-        $manager = \App::make('payment.manager.cart');
+        $distributor = \App::make('distributor');
+        $server = (int)$request->route('server');
+        $username = $request->get('username');
 
-        $putResult = $this->putCount($products);
-        if ($putResult !== true) {
-            return $putResult;
+        $validated = $this->checkUsername($username, false);
+        if ($validated !== true) {
+            return $validated;
         }
 
-        return $manager->handle($request);
+        $this->setProductsIdAndCount($request->get('products'));
+        $manager
+            ->setServer($server)
+            ->setIp($request->ip());
+
+        if (!is_auth() and $username) {
+            $manager->setUsername($username);
+        }
+        $payment = $manager->createPayment($this->productsId, $this->productsCount, Manager::COUNT_TYPE_NUMBER);
+        if ($payment->complete) {
+            $distributor->give($payment);
+        }
+        $this->cart->flush();
+
+        return $this->buildResponse($server, $payment);
+    }
+
+    private function setProductsIdAndCount($products)
+    {
+        foreach ($products as $product) {
+            $this->productsId[] = $product['id'];
+            $this->productsCount[] = $product['count'];
+        }
     }
 
     /**
      * Put information on the number of products in the cart
      *
-     * @param $products
+     * @param array $products
      *
      * @return bool|\Illuminate\Http\JsonResponse
      */
     private function putCount($products)
     {
-        foreach ($products as $one) {
-            $product = $this->qm->product(
-                $one['id'],
-                ['products.id as id', 'items.name', 'items.image', 'products.price', 'products.stack']
-            );
+        $ids = [];
+        $count = [];
+        foreach ($products as $product) {
+            $ids[] = $product['id'];
+            $count[] = $product['count'];
+        }
 
-            // Check on valid product id
-            if (!$product) {
-                return json_response('invalid product id');
-            }
+        $products = $this->qm->product(
+            $ids,
+            [
+                'products.id',
+                'items.name',
+                'products.price',
+                'products.stack'
+            ]
+        );
 
+        // Check on valid products identifiers
+        if (count($ids) !== count($products)) {
+            return json_response('invalid product id');
+        }
+
+        $i = 0;
+        foreach ($products as $product) {
             // Check on valid stacks count
-            if ($one['count'] % $product->stack !== 0) {
+            if ($count[$i] % $product->stack !== 0) {
                 return json_response('invalid count');
             }
 
-            $this->cart->setCount($this->server, $one['id'], $one['count'] / $product->stack);
+            $this->cart->setProductCount((int)$product->id, $count[$i] / $product->stack);
+            $i++;
         }
 
         return true;
@@ -139,15 +162,15 @@ class CartController extends Controller
     public function put(Request $request)
     {
         $server = $request->route('server');
-        $product = $request->route('product');
+        $product = (int)$request->route('product');
 
-        if ($this->cart->isFull($server)) {
+        if ($this->cart->isFull()) {
             return json_response('cart is full');
         }
-        if ($this->cart->has($server, $product)) {
+        if ($this->cart->has($product)) {
             return json_response('already in cart');
         }
-        $this->cart->put($server, $product);
+        $this->cart->put($product);
 
         return json_response('success');
     }
@@ -162,10 +185,10 @@ class CartController extends Controller
     public function remove(Request $request)
     {
         $server = $request->route('server');
-        $product = $request->route('product');
+        $product = (int)$request->route('product');
 
-        if ($this->cart->has($server, $product)) {
-            $this->cart->remove($server, $product);
+        if ($this->cart->has($product)) {
+            $this->cart->remove($product);
 
             return json_response('success');
         }

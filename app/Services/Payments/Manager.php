@@ -2,8 +2,10 @@
 
 namespace App\Services\Payments;
 
-use App\Services\Cart;
+use App\Models\Payment;
 use App\Services\QueryManager;
+use App\Exceptions\LShopException;
+use App\Exceptions\InvalidArgumentTypeException;
 
 /**
  * Class Manager
@@ -12,99 +14,244 @@ use App\Services\QueryManager;
  *
  * @package App\Services\Payments
  */
-abstract class Manager
+class Manager
 {
-    /**
-     * Server id
-     *
-     * @var int
-     */
-    protected $server;
+    const COUNT_TYPE_STACKS = 0;
+
+    const COUNT_TYPE_NUMBER = 1;
 
     /**
      * @var QueryManager
      */
-    protected $qm;
+    private $qm;
 
     /**
-     * @var Cart
+     * @var null|int
      */
-    protected $cart;
+    private $server = null;
+
+    /**
+     * @var null|string
+     */
+    private $username = null;
+
+    /**
+     * @var double
+     */
+    private $userBalance;
+
+    /**
+     * Ip Address the computer from which the payment was created
+     *
+     * @var null|string
+     */
+    private $ip = null;
+
+    /**
+     * @var null|array
+     */
+    private $products = null;
+
+    private $productsCountType;
+
+    /**
+     * @var int
+     */
+    private $cost = 0;
 
     /**
      * @param QueryManager $qm
-     * @param Cart         $cart
      */
-    public function __construct(QueryManager $qm, Cart $cart)
+    public function __construct(QueryManager $qm)
     {
         $this->qm = $qm;
-        $this->cart = $cart;
     }
 
     /**
-     * Return the username or ID, depending on whether there is a payment from an authorized user or not
+     * @param array $productsId
+     * @param array $productsCount
      *
-     * @param $username
+     * @param int   $productsCountType
      *
-     * @return int|string
+     * @return mixed
+     *
      */
-    protected function getUsernameOrId($username)
+    public function createPayment(array $productsId, array $productsCount, $productsCountType = self::COUNT_TYPE_STACKS)
     {
-        if (is_auth()) {
-            return (int)\Sentinel::getUser()->getUserId();
+        $this->productsCountType = $productsCountType;
+        $this->setHandledProductsAndCost($productsId, $productsCount);
+        $isQuick = $this->checkOnQuick();
+        if ($isQuick) {
+            return $this->makeQuick();
+        }else {
+            return $this->makeNotQuick();
         }
-
-        // If user not auth
-        if (mb_strlen($username) > 3) {
-            return (string)$username;
-        }
-
-        throw new \UnexpectedValueException('invalid username');
     }
 
     /**
-     * @param $result
-     *
-     * @return bool|\Illuminate\Http\JsonResponse
+     * @return bool
+     * @throws LShopException
      */
-    protected function makeQuick($result)
+    private function checkOnQuick()
     {
-        if (is_int($result['result'])) {
-            // Clear the cart
-            $this->cart->clear($this->server);
-
-            return json_response(
-                'success',
-                [
-                    'quick' => true,    // A sign that the payment is a "quick"
-                    'new_balance' => \Sentinel::getUser()->getBalance()     // New user balance for replace old balance by JavaScript
-                ]
-            );
+        if (!is_null($this->username)) {
+            return false;
         }
 
-        return false;
+        if (!is_auth()) {
+            throw new LShopException('Username is not set and the user is not authorized');
+        }
+
+        $this->username = \Sentinel::getUser()->getUserId();
+        return $this->updateBalance();
     }
 
     /**
-     * @param $result
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * @return Payment
      */
-    protected function makeNotQuick($result)
+    private function makeQuick()
     {
-        // Clear the cart
-        $this->cart->clear($this->server);
+        return $this->insert(true);
+    }
 
-        return json_response(
-            'success',
-            [
-                'quick' => false,   // A sign that the payment is not a "quick"
-                // Redirect link
-                'redirect' => route('payment.cart', [
-                    'server' => $this->server,
-                    'payment' => $result['result']
-                ])
-            ]
+    /**
+     * @return Payment
+     */
+    private function makeNotQuick()
+    {
+        return $this->insert(false);
+    }
+
+    /**
+     * @param bool $isQuick
+     *
+     * @return Payment
+     */
+    private function insert($isQuick)
+    {
+        return $this->qm->createPayment(
+            null,
+            serialize($this->products),
+            $this->cost,
+            is_int($this->username) ? $this->username : null,
+            is_string($this->username) ? $this->username : null,
+            $this->server,
+            $this->ip,
+            $isQuick
         );
+    }
+
+    /**
+     * @param array $ids Array with product identifiers
+     * @param array $count Array with product counts
+     *
+     * @throws LShopException
+     */
+    private function setHandledProductsAndCost($ids, $count)
+    {
+        $products = $this->getProducts($ids);
+        $result = [];
+        $cost = 0;
+        $i = 0;
+
+        foreach ($products as $product) {
+            if ($this->productsCountType == self::COUNT_TYPE_STACKS) {
+                $result[$product->id] = $count[$i] * $product->stack;
+                $result[$product->id] = $count[$i] * $product->stack;
+                $cost += $product->price * $count[$i];
+            }else {
+                if ($count[$i] % $product->stack !== 0) {
+                    throw new LShopException('Invalid products count number');
+                }
+                $result[$product->id] = $count[$i];
+                $cost += $product->price * ($count[$i] / $product->stack);
+            }
+            $i++;
+        }
+
+        if (!$result) {
+            throw new LShopException('Products referred to arguments not found');
+        }
+
+        $this->products = $result;
+        $this->cost = round($cost, 2);
+    }
+
+    /**
+     * @return bool
+     */
+    private function updateBalance()
+    {
+        $this->userBalance = \Sentinel::getUser()->getBalance();
+        if ($this->userBalance - $this->cost < 0 ) {
+            return false;
+        }
+        \Sentinel::update(\Sentinel::getUser(), [
+            'balance' => $this->userBalance - $this->cost
+        ]);
+
+        return true;
+    }
+
+    /**
+     * @param array $ids Array with product identifiers
+     *
+     * @return mixed
+     */
+    private function getProducts($ids)
+    {
+        return $this->qm->product($ids, [
+            'products.id',
+            'products.price',
+            'products.stack'
+        ], false);
+    }
+
+    /**
+     * @param int $server
+     *
+     * @return Manager
+     * @throws InvalidArgumentTypeException
+     */
+    public function setServer($server)
+    {
+        if (!is_int($server)) {
+            throw new InvalidArgumentTypeException('string', $server);
+        }
+        $this->server = $server;
+
+        return $this;
+    }
+
+    /**
+     * @param string $username
+     *
+     * @return Manager
+     * @throws InvalidArgumentTypeException
+     */
+    public function setUsername($username)
+    {
+        if (!is_string($username)) {
+            throw new InvalidArgumentTypeException('string', $username);
+        }
+        $this->username = $username;
+
+        return $this;
+    }
+
+    /**
+     * @param string $ip
+     *
+     * @return Manager
+     * @throws InvalidArgumentTypeException
+     */
+    public function setIp($ip)
+    {
+        if (!is_string($ip)) {
+            throw new InvalidArgumentTypeException('string', $ip);
+        }
+        $this->ip = $ip;
+
+        return $this;
     }
 }

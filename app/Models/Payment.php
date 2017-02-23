@@ -14,4 +14,17 @@ use Illuminate\Database\Eloquent\Model;
 class Payment extends Model
 {
     protected $table = 'payments';
+
+    protected $fillable = [
+        'service',
+        'products',
+        'cost',
+        'user_id',
+        'username',
+        'server_id',
+        'ip',
+        'complete',
+        'created_at',
+        'updated_at'
+    ];
 }

@@ -49,7 +49,10 @@ Route::group(['namespace' => 'Shop', 'where' => ['server' => '\d+']], function (
 
     Route::post('/server/{server}/cart', 'CartController@buy')
         ->name('cart.buy')
-        ->middleware('server');
+        ->middleware([
+            'captcha',
+            'server'
+        ]);
 
     Route::post('/server/{server}/buy/{product}', 'CatalogController@buy')
         ->name('catalog.buy')
@@ -111,3 +114,6 @@ Route::group(['namespace' => 'Profile', 'where' => ['server' => '\d+']], functio
             'server'
         ]);
 });
+
+Route::get('/server/{server}/test', 'TestController@test')
+    ->middleware('server');

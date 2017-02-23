@@ -2,162 +2,256 @@
 
 namespace App\Services;
 
+use App\Exceptions\CartException;
+use App\Exceptions\InvalidArgumentTypeException;
+
 /**
  * Class Cart
  *
- * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
  *
  * @package App\Services
  */
 class Cart
 {
     /**
-     * Put product in a cart
+     * Name of cart - array in session
      *
-     * @param int|string $server
-     * @param $product
+     * @var string
      */
-    public function put($server, $product)
+    private $name = 'cart';
+
+    /**
+     * Server ID
+     *
+     * @var int
+     */
+    private $server;
+
+    public function __construct()
     {
-        if (!$this->has($server, $product)) {
-            \Session::push("cart.$server.$product", 1);
-            $this->setCount($server, $product, 1);
+        $this->server = \Request::route('server');
+
+        if (!\Session::has('cart')) {
+            $this->createNewSection($this->server);
         }
     }
 
     /**
-     * Get property value of product in cart
+     * Put the products in cart
      *
-     * @param int|string $server
-     * @param int|string $product
-     * @param int|string $property
-     * @return mixed|null
+     * @param int   $product Product identify
+     * @param int   $count Product count
+     * @param array $attributes Optional attributes
      */
-    public function get($server, $product, $property)
+    public function put($product, $count = 1, array $attributes = [])
     {
-        if ($this->has($server, $product)) {
-            return \Session::get("cart.$server.$product.$property");
-        }
+        $this->checkType($product);
+        $this->checkType($count);
 
-        return null;
+        $data = array_merge($attributes, [
+            'count' => $count
+        ]);
+
+        \Session::put($this->getProductSectionName($product), $data);
     }
 
     /**
-     * Set product in cart stacks count
-     *
-     * @param int|string $server
-     * @param int|string $product
-     * @param int $count
+     * @param int $product Product identify
+     * @param int $count Product count
      */
-    public function setCount($server, $product, $count)
+    public function setProductCount($product, $count)
     {
-        if ($this->has($server, $product)) {
-            \Session::put("cart.$server.$product.count", $count);
-        }
+        $this->checkType($product);
+        $this->checkType($count);
+
+        \Session::put($this->getProductSectionName($product), ['count' => $count]);
     }
 
     /**
-     * Get count of current products in cart
+     * Get given product from cart
      *
-     * @param $server
-     * @param $product
-     * @return int
+     * @param int $product Product identify
+     *
+     * @return array
+     * @throws CartException
      */
-    public function getCount($server, $product)
+    public function get($product)
     {
-        if ($this->has($server, $product)) {
-            return (int)\Session::get("cart.$server.$product.count");
+        $this->checkType($product);
+
+        if ($this->has($product)) {
+            return \Session::get($this->getProductSectionName($product));
         }
 
-        return 0;
+        throw new CartException("Product with id `$product` (server `{$this->server}`) not found");
     }
 
     /**
-     * Check product on existing in a cart
+     * Get given product from cart. Unlike App\Services\Cart::get this method will
+     * throw an exception if product does not exists in cart
      *
-     * @param int|string $server
-     * @param int|string $product
-     * @return bool
-     */
-    public function has($server, $product)
-    {
-        if (\Session::has("cart.$server.$product")) {
-            return true;
-        }
-
-        return false;
-    }
-
-    /**
-     * Get all products from cart by server id
+     * @deprecated It deprecated as it does not throw an CartException when product not found
      *
-     * @param int|string $server
+     * @param int $product Product identify
+     *
      * @return array
      */
-    public function getAll($server)
+    public function getSilent($product)
     {
-        if (\Session::has("cart.$server")) {
-            return \Session::get("cart.$server");
-        }
+        $this->checkType($product);
 
-        return [];
+        return \Session::get($this->getProductSectionName($product));
     }
 
     /**
-     * Get count of goods in cart
+     * Get attribute `count` value of given product
      *
-     * @param int|string $server
+     * @param int $product Product identify
+     *
      * @return int
      */
-    public function productsCount($server)
+    public function productCount($product)
     {
-        return count(\Session::get("cart.$server"));
+        return $this->get($product)['count'];
     }
 
     /**
-     * Return true if cart was empty
+     * @deprecated It deprecated as it does not throw an CartException when product not found
      *
-     * @param int|string $server
-     * @return bool
+     * @param int $product Product identify
+     *
+     * @return int
      */
-    public function isEmpty($server)
+    public function productCountSilent($product)
     {
-        return $this->productsCount($server) === 0 ? true : false;
+        return $this->getSilent($product)['count'];
     }
 
     /**
-     * @param int|string $server
-     * @return bool
+     * Calculate and return count of all products in cart for current server
+     *
+     * @return int
      */
-    public function isFull($server)
+    public function productsCount()
     {
-        if ($this->productsCount($server) >= s_get('cart.capacity', 12)) {
-            return true;
+        return count(\Session::get($this->getServerSectionName()));
+    }
+
+    /**
+     * Get value of given product attribute such as `count`
+     *
+     * @param int   $product Product identify
+     * @param mixed $attribute
+     */
+    public function attribute($product, $attribute)
+    {
+        $this->get($product)[$attribute];
+    }
+
+    /**
+     * Get all products from cart of current server
+     *
+     * @return array|null
+     */
+    public function products()
+    {
+        return \Session::get($this->getServerSectionName());
+    }
+
+    /**
+     * @return array
+     */
+    public function getIdentifiersAsArray()
+    {
+        return array_keys($this->products());
+    }
+
+    /**
+     * @return array
+     */
+    public function getCountAsArray()
+    {
+        $products = $this->products();
+        $result = [];
+
+        foreach ($products as $product) {
+            $result[] = $product['count'];
         }
 
-        return false;
+        return $result;
     }
 
     /**
-     * Remove product from a cart
+     * @param int $product Product identify
      *
-     * @param int|string $server
-     * @param int|string $product
+     * @return bool
      */
-    public function remove($server, $product)
+    public function has($product)
     {
-        if ($this->has($server, $product)) {
-            \Session::forget("cart.$server.$product");
-        }
+        $this->checkType($product);
+
+        return \Session::has($this->getProductSectionName($product));
     }
 
     /**
-     * Remove all products from cart
+     * Check cart on the absence of product
      *
-     * @param $server
+     * @return bool
      */
-    public function clear($server)
+    public function isEmpty()
     {
-        \Session::forget("cart.$server");
+        return $this->productsCount() === 0;
+    }
+
+    /**
+     * Check for completeness cart
+     *
+     * @return bool
+     */
+    public function isFull()
+    {
+        return $this->productsCount() >= s_get('cart.capacity', 12);
+    }
+
+    /**
+     * @param int $product
+     */
+    public function remove($product)
+    {
+        $this->checkType($product);
+
+        \Session::forget($this->getProductSectionName($product));
+    }
+
+    public function flush()
+    {
+        \Session::forget($this->getServerSectionName());
+    }
+
+    private function getServerSectionName()
+    {
+        return "{$this->name}.{$this->server}";
+    }
+
+    private function getProductSectionName($product)
+    {
+        return $this->getServerSectionName() . ".$product";
+    }
+
+    /**
+     * @param int $serverId
+     */
+    private function createNewSection($serverId)
+    {
+        \Session::put('cart', [$serverId => []]);
+    }
+
+    /**
+     * @param mixed  $target
+     */
+    private function checkType($target)
+    {
+        if (!(is_int($target))) throw new InvalidArgumentTypeException('integer', $target);
     }
 }

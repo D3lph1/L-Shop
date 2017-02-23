@@ -6,7 +6,7 @@ use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Server;
 use App\Models\Category;
-use App\Exceptions\InvalidTypeArgumentException;
+use App\Exceptions\InvalidArgumentTypeException;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -80,51 +80,55 @@ class QueryManager
     }
 
     /**
-     * @throws InvalidTypeArgumentException
+     * @throws InvalidArgumentTypeException
      *
-     * @param int|string $id
-     * @param null       $columns
+     * @param int|string|array $id
+     * @param null             $columns
      *
      * @return mixed
      */
-    public function product($id, $columns = null)
+    public function product($id, $columns = null, $joinItems = true)
     {
         $columns = $this->prepareColumns($columns);
 
+        if ($joinItems) {
+            $builder = Product::select($columns)->join('items', 'items.id', '=', 'products.item_id');
+        } else {
+            $builder = Product::select($columns);
+        }
+
         if (is_int($id) or is_string($id)) {
-            return Product::select($columns)
-                ->join('items', 'items.id', '=', 'products.item_id')
+            return $builder
                 ->where('products.id', $id)
                 ->first();
         }
 
         if (is_array($id)) {
-            return Product::select($columns)
-                ->join('items', 'items.id', '=', 'products.item_id')
+            return $builder
                 ->whereIn('products.id', $id)
                 ->get();
         }
 
-        throw new InvalidTypeArgumentException(['integer', 'string', 'array'], $id);
+        throw new InvalidArgumentTypeException(['integer', 'string', 'array'], $id);
     }
 
     /**
      * Create a new payment
      *
-     * @param string     $service
-     * @param string     $products
-     * @param            $cost
-     * @param int        $user_id
-     * @param string     $username
-     * @param int        $server_id
-     * @param string     $ip
-     * @param bool       $complete
+     * @param string $service
+     * @param string $products
+     * @param int    $cost
+     * @param int    $user_id
+     * @param string $username
+     * @param int    $server_id
+     * @param string $ip
+     * @param bool   $complete
      *
      * @return mixed
      */
-    public function newPayment($service, $products, $cost, $user_id, $username, $server_id, $ip, $complete = false)
+    public function createPayment($service, $products, $cost, $user_id, $username, $server_id, $ip, $complete = false)
     {
-        return Payment::insertGetId([
+        return Payment::create([
             'service' => $service,
             'products' => $products,
             'cost' => $cost,
@@ -132,9 +136,7 @@ class QueryManager
             'username' => $username,
             'server_id' => $server_id,
             'ip' => $ip,
-            'complete' => (bool)$complete,
-            'created_at' => Carbon::now()->toDateTimeString(),
-            'updated_at' => Carbon::now()->toDateTimeString()
+            'complete' => (bool)$complete
         ]);
     }
 
@@ -154,12 +156,12 @@ class QueryManager
     }
 
     /**
-     * @param int $id
-     * @param     $service
+     * @param int         $id
+     * @param null|string $service
      *
      * @return bool
      */
-    public function completePayment($id, $service)
+    public function completePayment($id, $service = null)
     {
         return Payment::where('id', $id)->update([
             'service' => $service,
@@ -176,7 +178,7 @@ class QueryManager
     /**
      * Checking argument on a valid type
      *
-     * @throws InvalidTypeArgumentException
+     * @throws InvalidArgumentTypeException
      *
      * @param null|string|array $columns
      *
@@ -200,6 +202,6 @@ class QueryManager
             return $columns;
         }
 
-        throw new InvalidTypeArgumentException(['string', 'array'], $columns);
+        throw new InvalidArgumentTypeException(['string', 'array'], $columns);
     }
 }

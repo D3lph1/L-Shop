@@ -9,7 +9,7 @@
     <p class="product-price"><span class="catalog-price-span">{{ $product->price }}</span> {!! s_get('shop.currency_html', 'руб.') !!}</p>
     <p class="product-count">за <span>{{ $product->stack }}</span> шт.</p>
 
-    @if($cart->has($currentServer->id, $product->id))
+    @if($cart->has($product->id))
         <button class="btn btn-info btn-block btn-sm catalog-to-cart disabled" disabled="disabled" data-url="{{ route('cart.put', ['server' => $currentServer->id, 'product' => $product->id ]) }}">
             <i class="fa fa-cart-arrow-down fa-left"></i>
             <span>

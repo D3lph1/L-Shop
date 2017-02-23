@@ -30,7 +30,7 @@ class DistributorServiceProvider extends ServiceProvider
                 $distributor = s_get('distributor.name');
                 $full = "App\\Services\\Distributors\\$distributor";
                 if (class_exists($full)) {
-                    return new $full();
+                    return new $full($this->app->make('qm'));
                 }
 
                 throw new DistributorNotFoundException($distributor);

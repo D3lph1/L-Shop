@@ -22,7 +22,7 @@ function signin(self) {
     var username = $('#si-username').val();
     var password = $('#si-password').val();
 
-    if (username.length < 3) {
+    if (username.length < 4) {
         msg.danger('Имя пользователя слишком короткое');
 
         return;
@@ -63,12 +63,14 @@ function signin(self) {
                     // Otherwise, it forwards the link established with the page rendering
                     document.location.href = $('#sign-in').attr('data-redirect');
                 }
-            } else if (status == 'invalid_credentials') {
-                msg.danger('Пользователь с такими данными не найден');
-            } else if (status == 'frozen') {
-                msg.danger('Вы произвели слишком большое количество попыток входа. ' +
-                    'Возможность авторизации будет недоступна последующие ' +
-                    response.delay + ' секунд.');
+            } else {
+                if (status == 'invalid_credentials') {
+                    msg.danger('Пользователь с такими данными не найден');
+                } else if (status == 'frozen') {
+                    msg.danger('Вы произвели слишком большое количество попыток входа. ' +
+                        'Возможность авторизации будет недоступна последующие ' +
+                        response.delay + ' секунд.');
+                }
             }
         },
 
@@ -233,7 +235,6 @@ $('.catalog-to-cart').click(function () {
     $('#catalog-to-buy-accept').click(function () {
         var self = this;
         var captcha = getCaptcha();
-
         if (captcha == '') {
             msg.warning('Вы должны подтвердить то, что не являетесь роботом!');
             return;
@@ -254,7 +255,9 @@ $('.catalog-to-cart').click(function () {
                 disable(self);
             },
             success: function (response) {
+                enable(self);
                 var status = response.status;
+                grecaptcha.reset();
 
                 if (status == 'success') {
                     if (response.quick) {
@@ -264,12 +267,10 @@ $('.catalog-to-cart').click(function () {
                     }else {
                         document.location.href = response.redirect;
                     }
-                }else if (status == 'invalid item id') {
-                    enable(self);
-                    msg.danger('Идентификатор товара не валиден');
-                }else if (status == 'invalid items count') {
-                    enable(self);
-                    msg.danger('Неверное количество товара');
+                }else {
+                    if (status == 'invalid username') {
+                        msg.danger('Имя пользователя слишком короткое или содержит недопустимые символы');
+                    }
                 }
             },
 
@@ -411,7 +412,9 @@ $('#btn-cart-go-pay').click(function () {
     var self = this;
     var products = new Object(null);
     var username;
+    var captcha = getCaptcha();
 
+    // Collect products from page
     $.each($('.c-product'), function (index, value) {
         products[index] = new Object(null);
         products[index].id = $(value).find('.c-p-name').attr('data-id');
@@ -421,16 +424,23 @@ $('#btn-cart-go-pay').click(function () {
     if ($('#c-login').length != 0) {
         username = $('#c-login').val();
         if (username.length < 4) {
-            msg.warning('Вы должны указать имя того пользователя, которому хотите приобрести товары.');
+            msg.warning('Вы должны указать имя того пользователя (не короче 4 символов), которому хотите приобрести товары.');
             return;
         }
     }
+
+    if (captcha == '') {
+        msg.warning('Вы должны подтвердить то, что не являетесь роботом!');
+        return;
+    }
+
     $.ajax({
         url: url,
         method: 'POST',
         data: ({
             products: products,
             username: username,
+            captcha: captcha,
             _token: getToken()
         }),
         dataType: 'json',
@@ -439,6 +449,7 @@ $('#btn-cart-go-pay').click(function () {
         },
         success: function (response) {
             var status = response.status;
+            grecaptcha.reset();
 
             if (status == 'success') {
                 if (response.quick) {
@@ -453,10 +464,8 @@ $('#btn-cart-go-pay').click(function () {
             } else {
                 enable(self);
 
-                if (status == 'invalid product id') {
-                    msg.danger('Один или несколько идентификаторов товаров не совпадают. Перезагрузите страницу и попробуйте снова.');
-                } else if (status == 'invalid count') {
-                    msg.danger('Указано неверное количество товара.');
+                if (status == 'invalid username') {
+                    msg.danger('Имя пользователя слишком короткое или содержит недопустимые символы');
                 }
             }
         },

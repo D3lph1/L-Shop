@@ -17,36 +17,9 @@ use App\Http\Controllers\Controller;
 class PaymentController extends Controller
 {
     /**
-     * Server id
-     *
-     * @var int
-     */
-    private $server;
-
-    /**
      * @var
      */
     private $payment;
-
-    /**
-     * @var Cart
-     */
-    private $cart;
-
-    /**
-     * @var QueryManager
-     */
-    private $qm;
-
-    /**
-     * @param Cart         $cart
-     * @param QueryManager $qm
-     */
-    public function __construct(Cart $cart, QueryManager $qm)
-    {
-        $this->cart = $cart;
-        $this->qm = $qm;
-    }
 
     /**
      * Render the payment methods page
@@ -61,14 +34,14 @@ class PaymentController extends Controller
         $this->payment = (int)$request->route('payment');
         $this->payment = $this->qm->payment($this->payment, ['id', 'cost', 'user_id', 'username', 'complete']);
 
-        // If the payment is completed, deny access
-        if ($this->payment->complete) {
-            \App::abort(403);
-        }
-
         // If payment with this ID does not exist, exit
         if (!$this->payment) {
             \App::abort(404);
+        }
+
+        // If the payment is completed, deny access
+        if ($this->payment->complete) {
+            \App::abort(403);
         }
 
         // Verification of whether the payment the user belongs

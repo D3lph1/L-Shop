@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\Exceptions\InvalidTypeArgumentException;
+use App\Exceptions\InvalidArgumentTypeException;
 
 /**
  * Responsible for working with alerts
@@ -145,7 +145,7 @@ class Message
             $this->cookieName = $cookieName;
         }
 
-        throw new InvalidTypeArgumentException('string', $cookieName);
+        throw new InvalidArgumentTypeException('string', $cookieName);
     }
 
     /**
@@ -165,7 +165,7 @@ class Message
             $this->lifetime = $lifetime;
         }
 
-        throw new InvalidTypeArgumentException('integer', $lifetime);
+        throw new InvalidArgumentTypeException('integer', $lifetime);
     }
 
     /**
@@ -185,6 +185,6 @@ class Message
             $this->delimiter = $delimiter;
         }
 
-        throw new InvalidTypeArgumentException('string', $delimiter);
+        throw new InvalidArgumentTypeException('string', $delimiter);
     }
 }

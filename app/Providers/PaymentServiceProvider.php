@@ -2,11 +2,18 @@
 
 namespace App\Providers;
 
+use App\Services\PaymentManager;
+use App\Services\Payments\Manager;
 use Illuminate\Support\ServiceProvider;
 use App\Services\Payments\Robokassa\Payment;
-use App\Services\Payments\Managers\CatalogManager;
-use App\Services\Payments\Managers\CartManager;
 
+/**
+ * Class PaymentServiceProvider
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Providers
+ */
 class PaymentServiceProvider extends ServiceProvider
 {
     /**
@@ -26,12 +33,8 @@ class PaymentServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('payment.manager.cart', function () {
-            return new CartManager($this->app->make('qm'), $this->app->make('cart'));
-        });
-
-        $this->app->bind('payment.manager.catalog', function () {
-            return new CatalogManager($this->app->make('qm'), $this->app->make('cart'));
+        $this->app->bind('payment.manager', function () {
+            return new Manager($this->app->make('qm'));
         });
 
         $this->app->bind('payment.robokassa', function () {
