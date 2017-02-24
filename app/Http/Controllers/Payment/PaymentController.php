@@ -84,7 +84,7 @@ class PaymentController extends Controller
         );
 
         return json_response('success',[
-                'redirect' => route('payment.cart', [
+                'redirect' => route('payment.methods', [
                 'server' => $server,
                 'payment' => $payment
             ])

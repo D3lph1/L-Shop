@@ -57,7 +57,7 @@ class PaymentsController extends Controller
                     $product->count = $value;
                     if ($product->image) {
                         $img = img_path("items/$product->image");
-                        if (file_exists($img)) {
+                        if (is_file($img)) {
                             $product->image = asset("img/items/{$product->image}");
                         }
                     }else {

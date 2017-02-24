@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Cart;
 use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Server;
@@ -177,9 +178,38 @@ class QueryManager
         ]);
     }
 
+    /**
+     * @param array $credentials
+     *
+     * @return bool
+     */
     public function putInShoppingCart(array $credentials)
     {
         return \App\Models\Cart::insert($credentials);
+    }
+
+    /**
+     * @param string $player
+     * @param null   $columns
+     *
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function cartHistory($player, $server = null, $columns = null)
+    {
+        $columns = $this->prepareColumns($columns);
+
+        if ($server) {
+            $builder = Cart::select($columns)
+                ->join('items', 'items.id', 'cart.item_id')
+                ->where('cart.server', $server);
+        }else{
+            $builder = Cart::select($columns)
+                ->join('items', 'items.id', 'cart.item_id');
+        }
+
+        return $builder
+            ->where('cart.player', $player)
+            ->paginate(s_get('profile.cart_items_per_page', 10));
     }
 
     /**

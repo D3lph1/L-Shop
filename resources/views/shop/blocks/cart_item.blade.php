@@ -1,3 +1,4 @@
+{{-- Layout and design by WhileD0S <https://vk.com/whiled0s>  --}}
 <div class="c-product z-depth-1">
     <div class="c-1-info">
         <p class="c-p-name" data-id="{{ $product->id }}">{{ $product->name }}</p>

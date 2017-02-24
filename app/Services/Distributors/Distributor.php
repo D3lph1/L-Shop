@@ -56,7 +56,8 @@ abstract class Distributor
             'items.item as item',
             'items.extra as extra',
             'items.type as type',
-            'products.stack as stack'
+            'products.stack as stack',
+            'products.item_id as item_id'
         ]);
 
         return $this->setCounts($counts, $products);

@@ -121,8 +121,16 @@ Route::group(['namespace' => 'Profile', 'where' => ['server' => '\d+']], functio
 
     Route::post('/server/{server}/profile/payments/{payment}', 'PaymentsController@info')
         ->name('profile.payments.info')
+        ->middleware([
+            'server',
+            'auth'
+        ]);
+
+    Route::get('/server/{server}/profile/cart', 'CartController@render')
+        ->name('profile.cart')
         ->where('payment', '\d+')
         ->middleware([
+            'servers',
             'server',
             'auth'
         ]);

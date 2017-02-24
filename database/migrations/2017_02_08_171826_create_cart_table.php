@@ -21,6 +21,7 @@ class CreateCartTable extends Migration
             $table->string('item');
             $table->integer('amount');
             $table->text('extra')->nullable()->default(null);
+            $table->integer('item_id');
             $table->timestamps();
 
             $table->engine = 'InnoDB';

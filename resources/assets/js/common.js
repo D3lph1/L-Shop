@@ -518,6 +518,9 @@ $('#fub-btn').click(function () {
         beforeSend: function () {
             disable(self);
         },
+        complete: function () {
+            grecaptcha.reset();
+        },
         success: function (response) {
             status = response.status;
 
@@ -525,7 +528,6 @@ $('#fub-btn').click(function () {
                 document.location.href = response.redirect;
             }else {
                 enable(self);
-                grecaptcha.reset();
                 if (status == 'invalid sum') {
                     msg.warning('Сумма должна быть положительным числом и быть не меньше ' + response.min);
                 }

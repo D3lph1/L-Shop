@@ -1,3 +1,4 @@
+{{-- Layout and design by WhileD0S <https://vk.com/whiled0s>  --}}
 <div class="product-block z-depth-1">
     <p class="product-name full-w">{{ $product->name }}</p>
     @if(is_file('img/items/' . $product->image) && file_exists('img/items/' . $product->image))

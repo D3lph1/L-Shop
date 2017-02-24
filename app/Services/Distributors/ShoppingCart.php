@@ -46,6 +46,7 @@ class ShoppingCart extends Distributor
                 'item' => $product->item,
                 'amount' => $product->count,
                 'extra' => $product->extra,
+                'item_id' => $product->item_id,
                 'created_at' => Carbon::now()->toDateTimeString()
             ];
         }
