@@ -1,7 +1,7 @@
 <?php
 
 /**
- * File with L-shop system configuration
+ * File with "technical" L-shop system configuration
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  */

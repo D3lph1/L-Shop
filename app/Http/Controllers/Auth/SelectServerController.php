@@ -29,7 +29,7 @@ class SelectServerController extends Controller
         $data = [
             'servers' => $qm->listOfEnabledServers(['id', 'name']),
             'canExit' => (access_mode_auth() or access_mode_any()) and is_auth(),
-            'canEnter' => (access_mode_free() or access_mode_any()) and !is_auth()
+            'canEnter' => access_mode_any() and !is_auth()
         ];
 
         return view('auth.servers', $data);

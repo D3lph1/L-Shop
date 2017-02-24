@@ -72,24 +72,23 @@ class PaymentController extends Controller
     public function fillUpBalance(Request $request)
     {
         $server = (int)$request->route('server');
-        $summ = (int)$request->get('summ');
+        $sum = $request->get('sum');
 
-        if ($summ <= 0) {
-            return json_response('the summ of negative');
+        $validated = $this->checkFillUpBalanceSum($sum, true);
+        if ($validated !== true) {
+            return $validated;
         }
 
-        if ($summ < s_get('payment.fillupbalance.minsumm')) {
-            return json_response('summ less min');
-        }
-
-        $payment = $this->qm->newPayment(
-            null, null, $summ, \Sentinel::getUser()->getUserId(), null, $server, $request->ip(), false
+        $payment = $this->qm->createPayment(
+            null, null, $sum, \Sentinel::getUser()->getUserId(), null, $server, $request->ip(), false
         );
 
-        return json_response('success', ['redirect' => route('payment.cart', [
-            'server' => $server,
-            'payment' => $payment
-        ])]);
+        return json_response('success',[
+                'redirect' => route('payment.cart', [
+                'server' => $server,
+                'payment' => $payment
+            ])
+        ]);
     }
 
     private function robokassa()

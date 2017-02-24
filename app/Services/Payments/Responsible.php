@@ -42,7 +42,7 @@ trait Responsible
     {
         return json_response('success', [
             'quick' => false,
-            'redirect' => route('payment.cart', [
+            'redirect' => route('payment.methods', [
                 'server' => $serverId,
                 'payment' => $paymentId
             ])

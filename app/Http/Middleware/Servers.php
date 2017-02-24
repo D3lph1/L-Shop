@@ -39,7 +39,7 @@ class Servers
     public function handle(Request $request, Closure $next)
     {
         $data = [
-            'servers' => $this->getServers(),
+            'servers' => $this->getServers()
         ];
         $request->merge($data);
 

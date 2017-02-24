@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\Captcha;
+use App\Http\Middleware\DenyIfModeAuth;
 use App\Http\Middleware\Server;
 use App\Http\Middleware\Servers;
 use App\Http\Middleware\Shop;
@@ -59,6 +60,7 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'servers' => Servers::class,
         'server' => Server::class,
-        'captcha' => Captcha::class
+        'captcha' => Captcha::class,
+        'mode.control' => DenyIfModeAuth::class
     ];
 }

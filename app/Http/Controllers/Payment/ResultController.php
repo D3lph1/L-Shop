@@ -21,6 +21,8 @@ class ResultController extends Controller
      */
     private $payment;
 
+    private $service;
+
     /**
      * Handle request payment request from robokassa service
      *
@@ -30,10 +32,14 @@ class ResultController extends Controller
      */
     public function robokassa(Request $request)
     {
+        $this->service = 'robokassa';
         $robokassa = \App::make('payment.robokassa');
         if ($robokassa->validateResult($request->all())) {
-            // Get payment with the specified identifier from the database
+            //Get payment with the specified identifier from the database
             $this->payment = $this->getPayment($robokassa->getInvoiceId());
+            if (!$this->payment) {
+                return response()->make('Payment not found', 404);
+            }
             $this->payment->service = 'robokassa';
 
             // If payment has already been completed
@@ -58,11 +64,15 @@ class ResultController extends Controller
      */
     private function give()
     {
-        if ($this->payment->products) {
-            $this->giveProducts();
-        } else {
-            $this->giveMoney();
-        }
+        \DB::transaction(function () {
+            if ($this->payment->products) {
+                $this->giveProducts();
+            } else {
+                $this->giveMoney();
+            }
+
+            $this->qm->completePayment($this->payment->id, $this->service);
+        });
     }
 
     /**

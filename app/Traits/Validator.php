@@ -20,23 +20,23 @@ trait Validator
     private $path = 'l-shop.validation';
 
     /**
-     * @param mixed $username
-     * @param bool  $required
+     * @param string $username
+     * @param bool   $required
      *
      * @return bool|\Illuminate\Http\JsonResponse
      *
      */
     public function checkUsername($username, $required = true)
     {
-        $min = $this->get('username.min', 4);
-        $max = $this->get('username.max', 32);
-        $rule = $this->get('username.rule', 'alpha_dash');
+        $min = $this->getOption('username.min', 4);
+        $max = $this->getOption('username.max', 32);
+        $rule = $this->getOption('username.rule', 'alpha_dash');
 
         $required = $required ? 'required|' : '';
 
         $validator = \Validator::make([
-            'username' => $username
-        ],
+                'username' => $username
+            ],
             [
                 'username' => "{$required}min:$min|max:$max|$rule"
             ]);
@@ -48,13 +48,35 @@ trait Validator
         return true;
     }
 
+    public function checkFillUpBalanceSum($sum, $required = true)
+    {
+
+        $required = $required ? 'required|' : '';
+        $min = s_get('payment.fillupbalance.minsum', 25);
+
+        $validator = \Validator::make([
+            'sum' => $sum
+        ],
+            [
+                'sum' => "{$required}numeric|between:$min,2147000"
+            ]);
+
+        if ($validator->fails()) {
+            return json_response('invalid sum', [
+                'min' => $min
+            ]);
+        }
+
+        return true;
+    }
+
     /**
      * @param string     $option
      * @param null|mixed $default
      *
      * @return mixed
      */
-    private function get($option, $default = null)
+    private function getOption($option, $default = null)
     {
         return config("{$this->path}.$option", $default);
     }

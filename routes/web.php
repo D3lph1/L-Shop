@@ -36,6 +36,7 @@ Route::group(['namespace' => 'Shop', 'where' => ['server' => '\d+']], function (
             'category' => '\d+'
         ])
         ->middleware([
+            'mode.control',
             'servers',
             'server'
         ]);
@@ -43,6 +44,7 @@ Route::group(['namespace' => 'Shop', 'where' => ['server' => '\d+']], function (
     Route::get('/server/{server}/cart', 'CartController@render')
         ->name('cart')
         ->middleware([
+            'mode.control',
             'servers',
             'server'
         ]);
@@ -50,6 +52,7 @@ Route::group(['namespace' => 'Shop', 'where' => ['server' => '\d+']], function (
     Route::post('/server/{server}/cart', 'CartController@buy')
         ->name('cart.buy')
         ->middleware([
+            'mode.control',
             'captcha',
             'server'
         ]);
@@ -57,6 +60,7 @@ Route::group(['namespace' => 'Shop', 'where' => ['server' => '\d+']], function (
     Route::post('/server/{server}/buy/{product}', 'CatalogController@buy')
         ->name('catalog.buy')
         ->middleware([
+            'mode.control',
             'captcha',
             'server'
         ]);
@@ -77,8 +81,8 @@ Route::group(['namespace' => 'Shop', 'where' => ['server' => '\d+']], function (
 });
 
 Route::group(['namespace' => 'Payment'], function () {
-    Route::get('/server/{server}/pay/cart/{payment}', 'PaymentController@render')
-        ->name('payment.cart')
+    Route::get('/server/{server}/pay/{payment}', 'PaymentController@render')
+        ->name('payment.methods')
         ->middleware([
             'servers',
             'server'
@@ -107,12 +111,25 @@ Route::group(['namespace' => 'Payment'], function () {
 });
 
 Route::group(['namespace' => 'Profile', 'where' => ['server' => '\d+']], function () {
-    Route::get('/server/{server}/profile/payments_story', 'PaymentsStoryController@render')
-        ->name('profile.payments_story')
+    Route::get('/server/{server}/profile/payments', 'PaymentsController@render')
+        ->name('profile.payments')
         ->middleware([
             'servers',
-            'server'
+            'server',
+            'auth'
         ]);
+
+    Route::post('/server/{server}/profile/payments/{payment}', 'PaymentsController@info')
+        ->name('profile.payments.info')
+        ->where('payment', '\d+')
+        ->middleware([
+            'server',
+            'auth'
+        ]);
+});
+
+Route::group(['namespace' => 'Api'], function () {
+    Route::get('/api/signin', 'SignInController@signin');
 });
 
 Route::get('/server/{server}/test', 'TestController@test')

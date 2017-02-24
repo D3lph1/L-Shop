@@ -25,10 +25,10 @@
                         <i class="fa fa-shopping-cart fa-left fa-lg"></i>
                         Корзина
                     </a>
-                    <button class="btn btn-warning btn-block">
+                    <a href="{{ route('fillupbalance', ['server' => $currentServer->id]) }}" class="btn btn-warning btn-block">
                         <i class="fa fa-credit-card fa-left fa-lg"></i>
-                        <a href="{{ route('fillupbalance', ['server' => $currentServer->id]) }}" class="white-text" href="">Пополнить</a>
-                    </button>
+                        Пополнить
+                    </a>
                     <a href="{{ $logoutUrl }}" class="btn danger-color btn-block">
                         <i class="fa fa-times fa-left fa-lg"></i>
                         Выйти
@@ -49,10 +49,12 @@
                         <i class="fa fa-shopping-cart fa-left fa-lg"></i>
                         Корзина
                     </a>
-                    <a href="{{ $signinUrl }}" class="btn btn-warning btn-block">
-                        <i class="fa fa-key fa-left fa-lg"></i>
-                        Войти
-                    </a>
+                    @if($canEnter)
+                        <a href="{{ $signinUrl }}" class="btn btn-warning btn-block">
+                            <i class="fa fa-key fa-left fa-lg"></i>
+                            Войти
+                        </a>
+                    @endif
                 </div>
             @endif
             <div id="server-block">

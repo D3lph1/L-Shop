@@ -486,23 +486,17 @@ $('#btn-cart-go-pay').click(function () {
  * FillUpBalance
  */
 $('#fub-btn').click(function () {
-    var summ = Number($('#fub-input').val());
-    var minsumm = Number($(this).attr('data-minsumm'));
+    var sum = Number($('#fub-input').val());
     var captcha = getCaptcha();
     var self = this;
 
-    if (isNaN(summ)) {
+    if (isNaN(sum)) {
         msg.warning('Сумма должна иметь числовое значение');
         return;
     }
 
-    if (summ <= 0) {
+    if (sum <= 0) {
         msg.warning('Сумма должна быть положительным числом');
-        return;
-    }
-
-    if (summ < minsumm) {
-        msg.warning('Сумма не должна быть меньше ' + minsumm);
         return;
     }
 
@@ -516,7 +510,7 @@ $('#fub-btn').click(function () {
         url: '',
         method: 'POST',
         data: ({
-            summ: summ,
+            sum: sum,
             captcha: getCaptcha(),
             _token: getToken()
         }),
@@ -532,12 +526,8 @@ $('#fub-btn').click(function () {
             }else {
                 enable(self);
                 grecaptcha.reset();
-                if (status == 'the summ of negative') {
-                    msg.warning('Сумма должна быть положительным числом');
-                }else if (status == 'summ less min') {
-                    msg.warning('Сумма не должна быть меньше ' + minsumm);
-                }else if (status == 'invalid captcha') {
-                    msg.danger('Каптча не верна!');
+                if (status == 'invalid sum') {
+                    msg.warning('Сумма должна быть положительным числом и быть не меньше ' + response.min);
                 }
             }
         },
@@ -545,6 +535,46 @@ $('#fub-btn').click(function () {
         // Request error
         error: function () {
             enable(self);
+            requestError();
+        }
+    })
+});
+
+$('.profile-payments-info').click(function () {
+    var url = $(this).attr('data-url');
+    var self = this;
+    
+    $.ajax({
+        url: url,
+        method: 'POST',
+        data: ({
+            _token: getToken()
+        }),
+        dataType: 'json',
+        complete: function () {
+            enable(self);
+            $('#pre-loader').fadeOut('fast');
+        },
+        beforeSend: function () {
+            disable(self);
+            $('#pre-loader').fadeIn('fast');
+        },
+        success: function (response) {
+            $('#profile-payments-modal').modal('show');
+            var status = response.status;
+
+            if (status == 'success') {
+                var result = '';
+                var products = response.products;
+
+                for(i = 0; i < products.length; i++) {
+                    result += '<tr><td><img height="35" width="35" src="' + products[i].image + '"></td><td>' + products[i].name + '</td><td>' + products[i].count + '</td></tr>';
+                }
+
+                $('#profile-payments-modal-products').html(result);
+            }
+        },
+        error: function () {
             requestError();
         }
     })

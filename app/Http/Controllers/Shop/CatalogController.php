@@ -75,9 +75,11 @@ class CatalogController extends Controller
         $server = (int)$request->route('server');
         $username = $request->get('username');
 
-        $validated = $this->checkUsername($username, false);
-        if ($validated !== true) {
-            return $validated;
+        if (!is_auth()) {
+            $validated = $this->checkUsername($username, false);
+            if ($validated !== true) {
+                return $validated;
+            }
         }
 
         $productId = [$request->route('product')];
@@ -89,10 +91,14 @@ class CatalogController extends Controller
         if (!is_auth() and $username) {
             $manager->setUsername($username);
         }
-        $payment = $manager->createPayment($productId, $productCount, Manager::COUNT_TYPE_NUMBER);
-        if ($payment->complete) {
-            $distributor->give($payment);
-        }
+
+        $payment = null;
+        \DB::transaction(function () use ($manager, $distributor, $productId, $productCount, &$payment) {
+            $payment = $manager->createPayment($productId, $productCount, Manager::COUNT_TYPE_NUMBER);
+            if ($payment->complete) {
+                $distributor->give($payment);
+            }
+        });
 
         return $this->buildResponse($server, $payment);
     }

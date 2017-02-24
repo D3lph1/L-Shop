@@ -25,7 +25,8 @@ class ComposerServiceProvider extends ServiceProvider
             'layouts.shop',
             'shop.catalog',
             'shop.cart',
-            'payment.fillupbalance'
+            'payment.fillupbalance',
+            'profile.payments'
         ], ShopLayoutComposer::class);
     }
 

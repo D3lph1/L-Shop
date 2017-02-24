@@ -155,6 +155,13 @@ class QueryManager
             ->first();
     }
 
+    public function paymentsHistory($user)
+    {
+        return Payment::select()
+            ->where('payments.user_id', $user)
+            ->paginate(s_get('profile.payments_per_page', 10));
+    }
+
     /**
      * @param int         $id
      * @param null|string $service

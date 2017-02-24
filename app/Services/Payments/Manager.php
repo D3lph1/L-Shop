@@ -150,23 +150,27 @@ class Manager
     private function setHandledProductsAndCost($ids, $count)
     {
         $products = $this->getProducts($ids);
+        $idsAndCount = array_combine($ids, $count);
         $result = [];
         $cost = 0;
-        $i = 0;
 
         foreach ($products as $product) {
-            if ($this->productsCountType == self::COUNT_TYPE_STACKS) {
-                $result[$product->id] = $count[$i] * $product->stack;
-                $result[$product->id] = $count[$i] * $product->stack;
-                $cost += $product->price * $count[$i];
-            }else {
-                if ($count[$i] % $product->stack !== 0) {
-                    throw new LShopException('Invalid products count number');
+            foreach ($idsAndCount as $key => $value) {
+                if ($product->id == $key) {
+                    if ($this->productsCountType == self::COUNT_TYPE_STACKS) {
+                        $result[$product->id] = $value * $product->stack;
+                        $result[$product->id] = $value * $product->stack;
+                        $cost += $product->price * $value;
+                    } else {
+                        \Debugbar::info($product->stack);
+                        if ($value % $product->stack !== 0) {
+                            throw new LShopException('Invalid products count number');
+                        }
+                        $result[$product->id] = $value;
+                        $cost += $product->price * ($value / $product->stack);
+                    }
                 }
-                $result[$product->id] = $count[$i];
-                $cost += $product->price * ($count[$i] / $product->stack);
             }
-            $i++;
         }
 
         if (!$result) {

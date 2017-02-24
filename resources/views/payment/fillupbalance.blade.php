@@ -17,7 +17,6 @@
     </div>
     <div id="content-container" class="flex-first flex">
         {!! \ReCaptcha::render() !!}
-        <a class="btn btn-warning btn-lg btn-block" id="fub-btn"
-           data-minsumm="{{ s_get('payment.fillupbalance.minsumm') }}">Перейти к оплате</a>
+        <a class="btn btn-warning btn-lg btn-block" id="fub-btn">Перейти к оплате</a>
     </div>
 @endsection

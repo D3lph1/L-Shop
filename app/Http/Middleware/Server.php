@@ -30,9 +30,22 @@ class Server
      */
     public function handle(Request $request, Closure $next)
     {
-        $data = [
-            'currentServer' => $this->getCurrentServer($request->route('server'))
-        ];
+        $servers = $request->get('servers');
+        $data = [];
+        // If request already exists servers list
+        if ($servers) {
+            foreach ($servers as $server) {
+                if ($server->id == $request->route('server')) {
+                    $data = [
+                        'currentServer' => $server
+                    ];
+                }
+            }
+        }else {
+            $data = [
+                'currentServer' => $this->getCurrentServer($request->route('server'))
+            ];
+        }
         $request->merge($data);
 
         return $next($request);

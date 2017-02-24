@@ -67,6 +67,7 @@ class ShopLayoutComposer
             'balance' => is_auth() ? \Sentinel::getUser()->getBalance() : null,
             'currency' => s_get('shop.currency_html', 'руб.'),
             'currentServer' => $this->currentServer,
+            'canEnter' => access_mode_any() and !is_auth(),
             'servers' => $this->servers,
             'catalogUrl' => route('catalog', [
                 'currentServer' => $this->currentServer

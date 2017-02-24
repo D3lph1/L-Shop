@@ -77,9 +77,11 @@ class CartController extends Controller
         $server = (int)$request->route('server');
         $username = $request->get('username');
 
-        $validated = $this->checkUsername($username, false);
-        if ($validated !== true) {
-            return $validated;
+        if (!is_auth()) {
+            $validated = $this->checkUsername($username, true);
+            if ($validated !== true) {
+                return $validated;
+            }
         }
 
         $this->setProductsIdAndCount($request->get('products'));
@@ -90,11 +92,15 @@ class CartController extends Controller
         if (!is_auth() and $username) {
             $manager->setUsername($username);
         }
-        $payment = $manager->createPayment($this->productsId, $this->productsCount, Manager::COUNT_TYPE_NUMBER);
-        if ($payment->complete) {
-            $distributor->give($payment);
-        }
-        $this->cart->flush();
+
+        $payment = null;
+        \DB::transaction(function () use ($manager, $distributor, &$payment) {
+            $payment = $manager->createPayment($this->productsId, $this->productsCount, Manager::COUNT_TYPE_NUMBER);
+            if ($payment->complete) {
+                $distributor->give($payment);
+            }
+            $this->cart->flush();
+        });
 
         return $this->buildResponse($server, $payment);
     }
