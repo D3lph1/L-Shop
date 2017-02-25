@@ -150,6 +150,22 @@ Route::group(['namespace' => 'Admin'], function () {
             'server',
             'auth'
         ]);
+
+    Route::get('/server/{server}/admin/servers/add', 'Servers\AddController@render')
+        ->name('admin.servers.add')
+        ->middleware([
+            'servers',
+            'server',
+            'auth'
+        ]);
+
+    Route::get('/server/{server}/admin/servers/edit', 'Servers\EditController@render')
+        ->name('admin.servers.edit')
+        ->middleware([
+            'servers',
+            'server',
+            'auth'
+        ]);
 });
 
 Route::get('/server/{server}/test', 'TestController@test')

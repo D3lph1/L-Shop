@@ -82,13 +82,14 @@ body
 
     #server-block
         padding: 1rem
+        overflow: hidden
         #server-list
             margin-bottom: 0
-            -webkit-transform: translateX(-100%)
-            -moz-transform: translateX(-100%)
-            -ms-transform: translateX(-100%)
-            -o-transform: translateX(-100%)
-            transform: translateX(-100%)
+            -webkit-transform: translateX(-150%)
+            -moz-transform: translateX(-150%)
+            -ms-transform: translateX(-150%)
+            -o-transform: translateX(-150%)
+            transform: translateX(-150%)
         #chose-server i
             transition: 0.3s
     #image-block
@@ -146,6 +147,12 @@ body
                 margin-top: .5rem
     #content-container
         padding: 1rem
+        .server-block-wrapper
+            display: flex
+            flex-wrap: wrap
+            justify-content: center
+            .server-block
+                margin-bottom: 1rem
         #cart-header
             padding: 1rem
             border-radius: 2px

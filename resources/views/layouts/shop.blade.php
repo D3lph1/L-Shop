@@ -72,43 +72,43 @@
                 <div class="l-shop-collapse">
                     <p class="a-b-header">Администрирование</p>
                     <div class="ad-btn-block">
-                        <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-plus left"></i>Настройки</button>
+                        <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-cogs left"></i>Управление</button>
                         <ul class="ad-btn-list">
-                            <a class="waves-effect">First</a>
-                            <a class="waves-effect">Second</a>
-                            <a class="waves-effect">Third</a>
+                            <a class="waves-effect">Основные настройки</a>
+                            <a class="waves-effect">Безопасность</a>
+                            <a class="waves-effect">Оптимизация</a>
                         </ul>
                     </div>
                     <div class="ad-btn-block">
-                        <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-plus left"></i>Серверы</button>
+                        <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-server left"></i>Серверы</button>
                         <ul class="ad-btn-list">
-                            <a class="waves-effect">Добавить</a>
-                            <a class="waves-effect">Редактировать</a>
+                            <a href="{{ route('admin.servers.add', ['server' => $currentServer]) }}" class="waves-effect">Добавить</a>
+                            <a href="{{ route('admin.servers.edit', ['server' => $currentServer]) }}" class="waves-effect">Редактировать</a>
                         </ul>
                     </div>
                     <div class="ad-btn-block">
-                        <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-plus left"></i>Товары</button>
-                        <ul class="ad-btn-list">
-                            <a class="waves-effect">Добавить</a>
-                            <a class="waves-effect">Редактировать</a>
-                        </ul>
-                    </div>
-                    <div class="ad-btn-block">
-                        <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-plus left"></i>Предметы</button>
+                        <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-cubes left"></i>Товары</button>
                         <ul class="ad-btn-list">
                             <a class="waves-effect">Добавить</a>
                             <a class="waves-effect">Редактировать</a>
                         </ul>
                     </div>
                     <div class="ad-btn-block">
-                        <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-plus left"></i>Пользователи</button>
+                        <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-cube left"></i>Предметы</button>
                         <ul class="ad-btn-list">
                             <a class="waves-effect">Добавить</a>
                             <a class="waves-effect">Редактировать</a>
                         </ul>
                     </div>
                     <div class="ad-btn-block">
-                        <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-plus left"></i>Статистика</button>
+                        <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-users left"></i>Пользователи</button>
+                        <ul class="ad-btn-list">
+                            <a class="waves-effect">Добавить</a>
+                            <a class="waves-effect">Редактировать</a>
+                        </ul>
+                    </div>
+                    <div class="ad-btn-block">
+                        <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-pencil left"></i>Статистика</button>
                         <ul class="ad-btn-list">
                             <a class="waves-effect">Платежи</a>
                         </ul>

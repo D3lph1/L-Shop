@@ -62,6 +62,25 @@ class QueryManager
         return Category::select('id', 'name')->where('server_id', $serverId)->get();
     }
 
+    public function serversWithCategories($columns = null)
+    {
+        $columns = $this->prepareColumns($columns);
+        $servers = Server::select($columns)->get();
+        $categories = Category::select()->get();
+        $servers = $servers->toArray();
+
+        foreach ($servers as &$server) {
+            foreach ($categories as $category) {
+                if ($category->server_id == $server['id']) {
+                    $server['categories'][] = $category->name;
+                }
+            }
+            $server = (object)$server;
+        }
+
+        return $servers;
+    }
+
     /**
      * Get goods joined with items for current server
      *
