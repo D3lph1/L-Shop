@@ -1,3 +1,4 @@
+{{-- Layout and design by WhileD0S <https://vk.com/whiled0s>  --}}
 @extends('layouts.auth')
 
 @section('title')

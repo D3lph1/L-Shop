@@ -14,6 +14,18 @@
             <div class="alert alert-info">
                 На этой странице вы можете просмотреть все товары, которые вы приобрели, но еще не забрали в игре.
             </div>
+            <div class="text-right">
+                <div class="btn-group mb-1 mr-5">
+                    <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Сервер</button>
+
+                    <div class="dropdown-menu">
+                        <a href="{{ route('profile.cart', ['server' => $currentServer]) }}" class="dropdown-item">Любой</a>
+                    @foreach($servers as $server)
+                            <a href="{{ route('profile.cart', ['server' => $currentServer, 'filter_server' => $server->id]) }}" class="dropdown-item">{{ $server->name }}</a>
+                        @endforeach
+                    </div>
+                </div>
+            </div>
             @if($items->count())
                 <div class="table-responsive">
                     <table class="table">

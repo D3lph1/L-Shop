@@ -5,6 +5,13 @@ namespace App\Http\Controllers\Profile;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+/**
+ * Class CartController
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Http\Controllers\Profile
+ */
 class CartController extends Controller
 {
     /**
@@ -16,7 +23,9 @@ class CartController extends Controller
      */
     public function render(Request $request)
     {
-        $items = $this->qm->cartHistory(\Sentinel::getUser()->getUserLogin(), null, [
+        $server = $request->get('filter_server');
+
+        $items = $this->qm->cartHistory(\Sentinel::getUser()->getUserLogin(), $server, [
             'cart.amount',
             'cart.created_at',
             'cart.server',
@@ -25,6 +34,7 @@ class CartController extends Controller
         ]);
 
         $data = [
+            'currentServer' => $request->get('currentServer'),
             'servers' => $request->get('servers'),
             'items' => $items
         ];

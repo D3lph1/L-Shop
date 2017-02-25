@@ -83,10 +83,30 @@ function signin(self) {
 }
 
 /**
+ * Perform user registration attempts by pressing the enter key
+ */
+$('#su-username, #su-email, #su-password, #su-password-confirm').keyup(function (event) {
+    if (event.keyCode == 13) {
+        signup(this);
+    }
+});
+
+/**
+ * Attempt to register user
+ */
+$('#btn-sign-up').click(function () {
+    signup(this);
+});
+
+function signup(self) {
+    
+}
+
+/**
  * Catalog section
  */
 if ($('#content').length) {
-    var servVisible = true;
+    var servVisible = false;
 
     byId('content').style.width = 'calc(100% - ' + byId('sidebar').clientWidth + 'px)';
     byId('content').style.marginLeft = byId('sidebar').clientWidth + 'px';
@@ -100,12 +120,12 @@ if ($('#content').length) {
         switch (servVisible) {
             case true:
                 byId('server-list').style.transform = 'translateX(-150%)';
-                byId('chose-server').getElementsByTagName('I')[0].style.transform = 'rotateZ(180deg)';
+                byId('chose-server').getElementsByTagName('I')[0].style.transform = 'rotateZ(0deg)';
                 servVisible = false;
                 break;
             case false:
                 byId('server-list').style.transform = 'translateX(0)';
-                byId('chose-server').getElementsByTagName('I')[0].style.transform = 'rotateZ(0deg)';
+                byId('chose-server').getElementsByTagName('I')[0].style.transform = 'rotateZ(180deg)';
                 servVisible = true;
         }
     };
@@ -120,6 +140,34 @@ if ($('#content').length) {
     byId('btn-menu-c').onclick = function () {
         byId('side-content').style.transform = 'translateX(-100%)';
     };
+
+
+    byId('btn-menu').onclick = function() {
+        byId('side-content').style.transform = 'translateX(0)';
+    };
+
+    byId('btn-menu-c').onclick = function() {
+        byId('side-content').style.transform = 'translateX(-100%)';
+    };
+
+    $('.product-container').hide().eq(0).show();
+    $('.cat-btn').eq(0).css({'background-color' : '#FF8800'});
+    $('.ad-btn-list').hide();
+
+    $('.admin-menu-btn').click(function() {
+        $(this).parent().siblings().find('.ad-btn-list').slideUp();
+        $(this).siblings().slideToggle();
+    });
+
+    $('.cat-btn').click(function() {
+        var tabNumber = $(this).index();
+        if ($('.product-container').eq(tabNumber).css('display') == 'none') {
+            $('.product-container').eq(tabNumber).siblings().hide();
+            $(this).siblings().css({'background-color' : '#ffbb33'});
+            $(this).css({'background-color' : '#FF8800'});
+            $('.product-container').eq(tabNumber).fadeIn();
+        }
+    });
 }
 /**
  * End

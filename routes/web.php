@@ -11,7 +11,9 @@ Route::group(['namespace' => 'Auth'], function () {
         ->middleware('guest');
 
     // Authorize user by POST-request
-    Route::post('/signin', 'SignInController@signin')->middleware('guest');
+    Route::post('/signin', 'SignInController@signin')
+        ->name('signup')
+        ->middleware('guest');
 
     // Logout user
     Route::get('/logout', 'SignInController@logout')
@@ -138,6 +140,16 @@ Route::group(['namespace' => 'Profile', 'where' => ['server' => '\d+']], functio
 
 Route::group(['namespace' => 'Api'], function () {
     Route::get('/api/signin', 'SignInController@signin');
+});
+
+Route::group(['namespace' => 'Admin'], function () {
+    Route::get('/server/{server}/admin/info/about', 'Info\AboutController@render')
+        ->name('admin.info.about')
+        ->middleware([
+            'servers',
+            'server',
+            'auth'
+        ]);
 });
 
 Route::get('/server/{server}/test', 'TestController@test')

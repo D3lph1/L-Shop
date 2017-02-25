@@ -58,9 +58,72 @@
                     @endif
                 </div>
             @endif
+            @if($isAuth)
+                <div class="l-shop-collapse">
+                    <p class="a-b-header">Профиль</p>
+                    <div class="ad-btn-block">
+                        <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-info left"></i>Информация</button>
+                        <ul class="ad-btn-list">
+                            <a href="{{ route('profile.payments', ['server' => $currentServer]) }}" class="waves-effect">Платежи</a>
+                            <a href="{{ route('profile.cart', ['server' => $currentServer]) }}" class="waves-effect">Внутриигровая корзина</a>
+                        </ul>
+                    </div>
+                </div>
+                <div class="l-shop-collapse">
+                    <p class="a-b-header">Администрирование</p>
+                    <div class="ad-btn-block">
+                        <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-plus left"></i>Настройки</button>
+                        <ul class="ad-btn-list">
+                            <a class="waves-effect">First</a>
+                            <a class="waves-effect">Second</a>
+                            <a class="waves-effect">Third</a>
+                        </ul>
+                    </div>
+                    <div class="ad-btn-block">
+                        <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-plus left"></i>Серверы</button>
+                        <ul class="ad-btn-list">
+                            <a class="waves-effect">Добавить</a>
+                            <a class="waves-effect">Редактировать</a>
+                        </ul>
+                    </div>
+                    <div class="ad-btn-block">
+                        <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-plus left"></i>Товары</button>
+                        <ul class="ad-btn-list">
+                            <a class="waves-effect">Добавить</a>
+                            <a class="waves-effect">Редактировать</a>
+                        </ul>
+                    </div>
+                    <div class="ad-btn-block">
+                        <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-plus left"></i>Предметы</button>
+                        <ul class="ad-btn-list">
+                            <a class="waves-effect">Добавить</a>
+                            <a class="waves-effect">Редактировать</a>
+                        </ul>
+                    </div>
+                    <div class="ad-btn-block">
+                        <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-plus left"></i>Пользователи</button>
+                        <ul class="ad-btn-list">
+                            <a class="waves-effect">Добавить</a>
+                            <a class="waves-effect">Редактировать</a>
+                        </ul>
+                    </div>
+                    <div class="ad-btn-block">
+                        <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-plus left"></i>Статистика</button>
+                        <ul class="ad-btn-list">
+                            <a class="waves-effect">Платежи</a>
+                        </ul>
+                    </div>
+                    <div class="ad-btn-block">
+                        <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-info left"></i>Информация</button>
+                        <ul class="ad-btn-list">
+                            <a href="{{ route('admin.info.about', ['server' => $currentServer]) }}" class="waves-effect">О системе L-Shop</a>
+                        </ul>
+                    </div>
+                </div>
+            @endif
             <div id="server-block">
                 <button id="chose-server" class="btn btn-warning btn-block">
-                    <i class="fa fa-chevron-left fa-left left"></i>Серверы
+                    <i class="fa fa-chevron-right fa-left left"></i>Серверы
                 </button>
                 <div id="server-list" class="servers text-left">
                     @foreach($servers as $server)

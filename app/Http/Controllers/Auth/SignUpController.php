@@ -23,6 +23,10 @@ class SignUpController extends Controller
      */
     public function render(Request $request)
     {
+        $data = [
+
+        ];
+
         return view('auth.signup');
     }
 

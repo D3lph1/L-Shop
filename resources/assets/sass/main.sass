@@ -1,5 +1,5 @@
 $d_green : #2ecc71
-$d_orange : #f39c12
+$d_orange : #ff961f
 
 body
     font-size: 18px
@@ -60,10 +60,35 @@ body
         padding: 1rem 1rem 2rem 1rem
         border-bottom: 1px solid #999
         text-align: left
+    .l-shop-collapse
+        padding: 1rem
+        border-bottom: 1px solid #999
+        .ad-btn-block
+            button
+                margin-bottom: .5rem
+            .ad-btn-list
+                a
+                    display: block
+                    color: #fff
+                    background-color: #888
+                    margin-bottom: .5rem
+                    border-radius: 2px
+                    padding: .3rem
+                    &:hover
+                        background-color: #777
+                        cursor: pointer
+                    &:last-child
+                        margin-bottom: 0
+
     #server-block
         padding: 1rem
         #server-list
             margin-bottom: 0
+            -webkit-transform: translateX(-100%)
+            -moz-transform: translateX(-100%)
+            -ms-transform: translateX(-100%)
+            -o-transform: translateX(-100%)
+            transform: translateX(-100%)
         #chose-server i
             transition: 0.3s
     #image-block
