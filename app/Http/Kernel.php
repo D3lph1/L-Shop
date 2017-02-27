@@ -3,6 +3,7 @@
 namespace App\Http;
 
 use App\Http\Middleware\Captcha;
+use App\Http\Middleware\CheckForMaintenanceMode;
 use App\Http\Middleware\DenyIfModeAuth;
 use App\Http\Middleware\Server;
 use App\Http\Middleware\Servers;
@@ -19,7 +20,6 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
-        \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
@@ -33,6 +33,7 @@ class Kernel extends HttpKernel
     protected $middlewareGroups = [
         'web' => [
             \App\Http\Middleware\EncryptCookies::class,
+            CheckForMaintenanceMode::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
@@ -59,8 +60,6 @@ class Kernel extends HttpKernel
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'servers' => Servers::class,
-        'server' => Server::class,
-        'captcha' => Captcha::class,
-        'mode.control' => DenyIfModeAuth::class
+        'captcha' => Captcha::class
     ];
 }

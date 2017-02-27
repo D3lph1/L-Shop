@@ -15,17 +15,8 @@ class Server extends Model
 {
     protected $table = 'servers';
 
-    protected $attributes = [
-        'cats' => []    // CaTegorieS but NOT CATS ^_^
-    ];
-
     public function categories()
     {
         return $this->hasMany(Category::class, 'server_id', 'id');
-    }
-
-    public function pushCategories($value)
-    {
-        $this->attributes['cats'][] = $value;
     }
 }

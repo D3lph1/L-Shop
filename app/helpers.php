@@ -60,11 +60,16 @@ if (!function_exists('is_auth')) {
     }
 }
 
-if (!function_exists('access_mode_auth')) {
+if (!function_exists('is_admin')) {
 
-    function access_mode_auth()
+    function is_admin()
     {
-        return s_get('shop.access_mode', 'auth', true) === 'auth' ? true : false;
+        if (is_auth()) {
+            $user = \Sentinel::getUser();
+            return $user->hasAccess(['user.admin']);
+        }
+
+        return false;
     }
 }
 
@@ -80,15 +85,15 @@ if (!function_exists('access_mode_auth')) {
     }
 }
 
-if (!function_exists('access_mode_free')) {
+if (!function_exists('access_mode_guest')) {
     /**
      * Checks shopping mode
      *
      * @return bool
      */
-    function access_mode_free()
+    function access_mode_guest()
     {
-        return s_get('shop.access_mode', 'auth', true) === 'free' ? true : false;
+        return s_get('shop.access_mode', 'auth', true) === 'guest' ? true : false;
     }
 }
 

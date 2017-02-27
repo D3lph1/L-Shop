@@ -22,7 +22,7 @@ class CreatePaymentsTable extends Migration
             $table->string('username')->nullable()->default(null);
             $table->integer('server_id')->nullable();
             $table->ipAddress('ip');
-            $table->boolean('complete')->default(0);
+            $table->boolean('completed')->default(0);
             $table->timestamps();
 
             $table->engine = 'InnoDB';

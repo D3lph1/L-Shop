@@ -2,10 +2,10 @@
 
 namespace App\Http\Controllers\Shop;
 
+use App\Traits\Responsible;
 use Illuminate\Http\Request;
 use App\Services\Payments\Manager;
 use App\Http\Controllers\Controller;
-use App\Services\Payments\Responsible;
 
 /**
  * Class CartController

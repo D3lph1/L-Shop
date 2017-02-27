@@ -245,7 +245,8 @@ return [
         /**
          * Application Facades...
          */
-        'ReCaptcha' => \App\Facades\ReCaptcha::class
+        'ReCaptcha' => \App\Facades\ReCaptcha::class,
+        'Message' => \App\Facades\Message::class
     ],
 
 ];

@@ -3,7 +3,7 @@
 namespace App\Traits;
 
 /**
- * Class Validator
+ * Trait Validator
  * Check data on valid
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>

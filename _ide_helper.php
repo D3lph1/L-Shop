@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.4.11 on 2017-02-23.
+ * Generated for Laravel 5.4.11 on 2017-02-27.
  *
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
@@ -13506,6 +13506,56 @@ namespace {
          */
         public static function verify($reCaptchaResponse, $ip){
             return \App\Services\ReCaptcha::verify($reCaptchaResponse, $ip);
+        }
+        
+    }
+
+
+    class Message extends \App\Facades\Message{
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function info($text){
+            return \App\Services\Message::info($text);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function success($text){
+            return \App\Services\Message::success($text);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function warning($text){
+            return \App\Services\Message::warning($text);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function danger($text){
+            return \App\Services\Message::danger($text);
+        }
+        
+        /**
+         * 
+         *
+         * @static 
+         */
+        public static function get(){
+            return \App\Services\Message::get();
         }
         
     }

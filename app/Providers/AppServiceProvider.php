@@ -32,7 +32,7 @@ class AppServiceProvider extends ServiceProvider
             return new QueryManager();
         });
 
-        $this->app->bind('msg', function () {
+        $this->app->bind('message', function () {
             return new Message();
         });
 

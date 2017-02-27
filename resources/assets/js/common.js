@@ -54,7 +54,6 @@ function signin(self) {
             if (status == 'success') {
                 // If a user has successfully logged in
                 var to = getUrlParams()['to'];
-                msg.setSuccess('Добро пожаловать, ' + username + '!');
 
                 if (to) {
                     // If the GET parameters "to" exist, then forwards it to the address specified in the parameter

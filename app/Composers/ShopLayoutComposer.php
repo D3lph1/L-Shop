@@ -63,6 +63,7 @@ class ShopLayoutComposer
     {
         return [
             'isAuth' => is_auth(),
+            'isAdmin' => is_admin(),
             'username' => is_auth() ? \Sentinel::getUser()->getUserLogin() : null,
             'balance' => is_auth() ? \Sentinel::getUser()->getBalance() : null,
             'currency' => s_get('shop.currency_html', 'руб.'),

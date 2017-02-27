@@ -69,14 +69,16 @@
                         </ul>
                     </div>
                 </div>
+            @endif
+            @if ($isAdmin)
                 <div class="l-shop-collapse">
                     <p class="a-b-header">Администрирование</p>
                     <div class="ad-btn-block">
                         <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-cogs left"></i>Управление</button>
                         <ul class="ad-btn-list">
-                            <a class="waves-effect">Основные настройки</a>
-                            <a class="waves-effect">Безопасность</a>
-                            <a class="waves-effect">Оптимизация</a>
+                            <a href="{{ route('admin.control.main_settings', ['server' => $currentServer]) }}" class="waves-effect">Основные настройки</a>
+                            <a href="{{ route('admin.control.security', ['server' => $currentServer]) }}" class="waves-effect">Безопасность</a>
+                            <a href="{{ route('admin.control.optimization', ['server' => $currentServer]) }}" class="waves-effect">Оптимизация</a>
                         </ul>
                     </div>
                     <div class="ad-btn-block">

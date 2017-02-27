@@ -23,7 +23,7 @@ class Payment extends Model
         'username',
         'server_id',
         'ip',
-        'complete',
+        'completed',
         'created_at',
         'updated_at'
     ];

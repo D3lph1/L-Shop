@@ -100,7 +100,7 @@ abstract class Distributor
      */
     protected function complete()
     {
-        if (!$this->payment->complete) {
+        if (!$this->payment->completed) {
             if (!$this->qm->completePayment($this->payment->id, $this->payment->service)) {
                 throw new FailedToUpdateTableException("Can not complete the payment with id {$this->payment->id}");
             }

@@ -8,17 +8,17 @@ Route::group(['namespace' => 'Auth'], function () {
     // Render sign in page
     Route::get('/signin', 'SignInController@render')
         ->name('signin')
-        ->middleware('guest');
+        ->middleware('auth:guest');
 
     // Authorize user by POST-request
     Route::post('/signin', 'SignInController@signin')
-        ->name('signup')
-        ->middleware('guest');
+        ->name('signin.post')
+        ->middleware('auth:guest');
 
     // Logout user
     Route::get('/logout', 'SignInController@logout')
         ->name('logout')
-        ->middleware('auth');
+        ->middleware('auth:hard');
 
     // Render sign up page
     Route::get('/signup', 'SignUpController@render');
@@ -38,33 +38,31 @@ Route::group(['namespace' => 'Shop', 'where' => ['server' => '\d+']], function (
             'category' => '\d+'
         ])
         ->middleware([
-            'mode.control',
-            'servers',
-            'server'
+            'servers:all',
+            'auth:soft'
         ]);
 
     Route::get('/server/{server}/cart', 'CartController@render')
         ->name('cart')
         ->middleware([
-            'mode.control',
-            'servers',
-            'server'
+            'servers:all',
+            'auth:soft'
         ]);
 
     Route::post('/server/{server}/cart', 'CartController@buy')
         ->name('cart.buy')
         ->middleware([
-            'mode.control',
-            'captcha',
-            'server'
+            'servers:one',
+            'auth:soft',
+            'captcha'
         ]);
 
     Route::post('/server/{server}/buy/{product}', 'CatalogController@buy')
         ->name('catalog.buy')
         ->middleware([
-            'mode.control',
+            'servers:one',
+            'auth:soft',
             'captcha',
-            'server'
         ]);
 
     Route::post('/server/{server}/cart/put/{product}', 'CartController@put')
@@ -72,38 +70,36 @@ Route::group(['namespace' => 'Shop', 'where' => ['server' => '\d+']], function (
         ->where([
             'product' => '\d+'
         ])
-        ->middleware('server');
+        ->middleware('servers:one');
 
     Route::post('/server/{server}/cart/remove/{product}', 'CartController@remove')
         ->name('cart.remove')
         ->where([
             'product' => '\d+'
         ])
-        ->middleware('server');
+        ->middleware('servers:one');
 });
 
 Route::group(['namespace' => 'Payment'], function () {
     Route::get('/server/{server}/pay/{payment}', 'PaymentController@render')
         ->name('payment.methods')
         ->middleware([
-            'servers',
-            'server'
+            'servers:all',
         ]);
 
     Route::get('/server/{server}/fillupbalance', 'PaymentController@renderFillUpBalancePage')
         ->name('fillupbalance')
         ->middleware([
-            'servers',
-            'server',
-            'auth'
+            'servers:all',
+            'auth:hard'
         ]);
 
     Route::post('/server/{server}/fillupbalance', 'PaymentController@fillUpBalance')
         ->name('payment.fillupbalance')
         ->middleware([
-            'captcha',
-            'server',
-            'auth'
+            'servers:one',
+            'auth:hard',
+            'captcha'
         ]);
 
 
@@ -116,57 +112,71 @@ Route::group(['namespace' => 'Profile', 'where' => ['server' => '\d+']], functio
     Route::get('/server/{server}/profile/payments', 'PaymentsController@render')
         ->name('profile.payments')
         ->middleware([
-            'servers',
-            'server',
-            'auth'
+            'servers:all',
+            'auth:hard'
         ]);
 
     Route::post('/server/{server}/profile/payments/{payment}', 'PaymentsController@info')
         ->name('profile.payments.info')
         ->middleware([
-            'server',
-            'auth'
+            'servers:one',
+            'auth:hard'
         ]);
 
     Route::get('/server/{server}/profile/cart', 'CartController@render')
         ->name('profile.cart')
         ->where('payment', '\d+')
         ->middleware([
-            'servers',
-            'server',
-            'auth'
+            'servers:all',
+            'auth:hard'
         ]);
 });
 
 Route::group(['namespace' => 'Api'], function () {
-    Route::get('/api/signin', 'SignInController@signin');
+    Route::get('/api/signin', 'SignInController@signin')
+        ->name('api.signin');
 });
 
-Route::group(['namespace' => 'Admin'], function () {
-    Route::get('/server/{server}/admin/info/about', 'Info\AboutController@render')
-        ->name('admin.info.about')
+/**
+ * Admin section
+ */
+Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middleware' => ['auth:admin']], function () {
+    Route::get('/server/{server}/admin/control/main_settings', 'Control\MainSettingsController@render')
+        ->name('admin.control.main_settings')
         ->middleware([
-            'servers',
-            'server',
-            'auth'
+            'servers:all'
+        ]);
+
+    Route::get('/server/{server}/admin/control/security', 'Control\SecurityController@render')
+        ->name('admin.control.security')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    Route::get('/server/{server}/admin/control/optimization', 'Control\OptimizationController@render')
+        ->name('admin.control.optimization')
+        ->middleware([
+            'servers:all'
         ]);
 
     Route::get('/server/{server}/admin/servers/add', 'Servers\AddController@render')
         ->name('admin.servers.add')
         ->middleware([
-            'servers',
-            'server',
-            'auth'
+            'servers:all'
         ]);
 
     Route::get('/server/{server}/admin/servers/edit', 'Servers\EditController@render')
         ->name('admin.servers.edit')
         ->middleware([
-            'servers',
-            'server',
-            'auth'
+            'servers:all'
+        ]);
+
+    Route::get('/server/{server}/admin/info/about', 'Info\AboutController@render')
+        ->name('admin.info.about')
+        ->middleware([
+            'servers:all'
         ]);
 });
 
 Route::get('/server/{server}/test', 'TestController@test')
-    ->middleware('server');
+    ->middleware('servers:one');

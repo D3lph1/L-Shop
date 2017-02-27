@@ -30,7 +30,7 @@
                         </thead>
                         <tbody>
                         @foreach($payments as $payment)
-                            <tr @if($payment->complete) class="table-success" @endif>
+                            <tr @if($payment->completed) class="table-success" @endif>
                                 <td>{{ $payment->id }}</td>
                                 <td>@if($payment->products) Покупка товаров @else Пополнение баланса @endif</td>
                                 <td>@if($payment->products)<a class="btn btn-info btn-sm profile-payments-info" data-url="{{ route('profile.payments.info', ['server' => $payment->server_id, 'payment' => $payment->id]) }}">Подробнее...</a> @endif</td>
@@ -40,11 +40,11 @@
                                         <td>{{ $server->name }}</td>
                                     @endif
                                 @endforeach
-                                <td>@if($payment->complete) Завершен @else Не завершен @endif</td>
+                                <td>@if($payment->completed) Завершен @else Не завершен @endif</td>
                                 <td>{{ $payment->created_at }}</td>
-                                <td>@if($payment->complete) {{ $payment->updated_at }} @endif</td>
+                                <td>@if($payment->completed) {{ $payment->updated_at }} @endif</td>
                                 <td>@if($payment->service) {{ $payment->service }} @endif</td>
-                                <td>@if(!$payment->complete) <a href="{{ route('payment.methods', ['server' => $payment->server_id, 'payment' => $payment->id]) }}" class="btn success-color btn-sm">Оплатить</a> @endif</td>
+                                <td>@if(!$payment->completed) <a href="{{ route('payment.methods', ['server' => $payment->server_id, 'payment' => $payment->id]) }}" class="btn success-color btn-sm">Оплатить</a> @endif</td>
                             </tr>
                         @endforeach
                         </tbody>

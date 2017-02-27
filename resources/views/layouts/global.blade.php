@@ -26,6 +26,8 @@
 @yield('content_global')
 
 <script src="{{ asset('js/app.min.js') }}" type="text/javascript"></script>
-</body>
 
+@include('components.messages')
+
+</body>
 </html>

@@ -25,7 +25,7 @@ class SignInController extends Controller
      */
     public function render(Request $request)
     {
-        if (access_mode_free()) {
+        if (access_mode_guest()) {
             return redirect()->route('servers');
         }
 
@@ -60,6 +60,8 @@ class SignInController extends Controller
         }
 
         if ($auth) {
+            \Message::success("Добро пожаловать, $credentials[username]!");
+
             return response()->json([
                 'status' => 'success'
             ]);
@@ -79,10 +81,11 @@ class SignInController extends Controller
         //
     }
 
-    public function logout(Message $msg)
+    public function logout()
     {
         \Sentinel::logout();
+        \Message::info('Вы вышли из аккаунта');
 
-        return response()->redirectToRoute('signin')->withCookie($msg->info('Вы вышли из аккаунта'));
+        return response()->redirectToRoute('signin');
     }
 }

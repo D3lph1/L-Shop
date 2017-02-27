@@ -142,11 +142,11 @@ class QueryManager
      * @param string $username
      * @param int    $server_id
      * @param string $ip
-     * @param bool   $complete
+     * @param bool   $completed
      *
      * @return mixed
      */
-    public function createPayment($service, $products, $cost, $user_id, $username, $server_id, $ip, $complete = false)
+    public function createPayment($service, $products, $cost, $user_id, $username, $server_id, $ip, $completed = false)
     {
         return Payment::create([
             'service' => $service,
@@ -156,7 +156,7 @@ class QueryManager
             'username' => $username,
             'server_id' => $server_id,
             'ip' => $ip,
-            'complete' => (bool)$complete
+            'completed' => (bool)$completed
         ]);
     }
 
@@ -192,7 +192,7 @@ class QueryManager
     {
         return Payment::where('id', $id)->update([
             'service' => $service,
-            'complete' => true,
+            'completed' => true,
             'updated_at' => Carbon::now()->toDateTimeString()
         ]);
     }

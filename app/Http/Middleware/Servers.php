@@ -6,14 +6,6 @@ use Closure;
 use Illuminate\Http\Request;
 use App\Services\QueryManager;
 
-/**
- * Class Shop
- * Middleware, called pages, working with a shop layout
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- *
- * @package App\Http\Middleware
- */
 class Servers
 {
     /**
@@ -32,18 +24,47 @@ class Servers
     /**
      * Handle an incoming request.
      *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Illuminate\Http\Request $request
+     * @param  \Closure                 $next
+     * @param  string                   $mode
+     *
      * @return mixed
      */
-    public function handle(Request $request, Closure $next)
+    public function handle(Request $request, Closure $next, $mode)
     {
-        $data = [
-            'servers' => $this->getServers()
-        ];
-        $request->merge($data);
+        if ($mode == 'one') {
+            $request->merge([
+                'currentServer' => $this->getCurrentServer($request->route('server'))
+            ]);
 
-        return $next($request);
+            return $next($request);
+        } elseif ($mode == 'all') {
+            $servers = $this->getServers();
+
+            foreach ($servers as $server) {
+                if ($server->id == $request->route('server')) {
+                    $request->merge([
+                        'servers' => $servers,
+                        'currentServer' => $server
+                    ]);
+                    break;
+                }
+            }
+
+            return $next($request);
+        }
+
+        \App::abort(404);
+    }
+
+    /**
+     * @param $server
+     *
+     * @return mixed
+     */
+    private function getCurrentServer($server)
+    {
+        return $this->qm->serverOrFail($server, ['id', 'name']);
     }
 
     /**
