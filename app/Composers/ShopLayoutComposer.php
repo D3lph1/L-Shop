@@ -3,9 +3,10 @@
 namespace App\Composers;
 
 use App\Models\Server;
-use App\Services\QueryManager;
-use Illuminate\Http\Request;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
+use App\Services\QueryManager;
+use App\Contracts\ComposerContract;
 
 /**
  * Class ShopLayoutComposer
@@ -14,7 +15,7 @@ use Illuminate\View\View;
  *
  * @package App\Composers
  */
-class ShopLayoutComposer
+class ShopLayoutComposer implements ComposerContract
 {
     /**
      * Data about current server
@@ -47,7 +48,7 @@ class ShopLayoutComposer
     }
 
     /**
-     * Compose view
+     * Compose the view
      *
      * @param View $view
      */

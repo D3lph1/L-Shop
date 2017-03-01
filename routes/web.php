@@ -27,7 +27,9 @@ Route::group(['namespace' => 'Auth'], function () {
     Route::post('/signup', 'SignUpController@signup');
 
     // Render select server page
-    Route::get('/servers', 'SelectServerController@render')->name('servers');
+    Route::get('/servers', 'SelectServerController@render')
+        ->name('servers')
+        ->middleware('servers:all');
 });
 
 Route::group(['namespace' => 'Shop', 'where' => ['server' => '\d+']], function () {
@@ -141,20 +143,58 @@ Route::group(['namespace' => 'Api'], function () {
  * Admin section
  */
 Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middleware' => ['auth:admin']], function () {
+    // Render main settings page
     Route::get('/server/{server}/admin/control/main_settings', 'Control\MainSettingsController@render')
         ->name('admin.control.main_settings')
         ->middleware([
             'servers:all'
         ]);
 
+    // Save main settings
+    Route::post('/server/{server}/admin/control/main_settings', 'Control\MainSettingsController@save')
+        ->name('admin.control.main_settings.save')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Render security settings page
     Route::get('/server/{server}/admin/control/security', 'Control\SecurityController@render')
         ->name('admin.control.security')
         ->middleware([
             'servers:all'
         ]);
 
+    // Save security settings
+    Route::post('/server/{server}/admin/control/security', 'Control\SecurityController@save')
+        ->name('admin.control.security.save')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Render optimization settings page
     Route::get('/server/{server}/admin/control/optimization', 'Control\OptimizationController@render')
         ->name('admin.control.optimization')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Update routes cache
+    Route::post('/server/{server}/admin/control/optimization/update_routes_cache', 'Control\OptimizationController@updateRoutesCache')
+        ->name('admin.control.optimization.update_routes_cache')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Update config cache
+    Route::post('/server/{server}/admin/control/optimization/update_config_cache', 'Control\OptimizationController@updateConfigCache')
+        ->name('admin.control.optimization.update_config_cache')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Update view cache
+    Route::post('/server/{server}/admin/control/optimization/clear_view_cache', 'Control\OptimizationController@clearViewCache')
+        ->name('admin.control.optimization.clear_view_cache')
         ->middleware([
             'servers:all'
         ]);
@@ -165,12 +205,33 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
             'servers:all'
         ]);
 
-    Route::get('/server/{server}/admin/servers/edit', 'Servers\EditController@render')
+    Route::get('/server/{server}/admin/servers/list', 'Servers\EditController@renderList')
+        ->name('admin.servers.list')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    Route::get('/server/{server}/admin/servers/edit/{edit}', 'Servers\EditController@renderEdit')
         ->name('admin.servers.edit')
         ->middleware([
             'servers:all'
         ]);
 
+    // Enable given server
+    Route::post('/server/{server}/admin/servers/enable/{enable}', 'Servers\EditController@enable')
+        ->name('admin.servers.enable')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Disable given server
+    Route::post('/server/{server}/admin/servers/disable/{disable}', 'Servers\EditController@disable')
+        ->name('admin.servers.disable')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Render about page
     Route::get('/server/{server}/admin/info/about', 'Info\AboutController@render')
         ->name('admin.info.about')
         ->middleware([

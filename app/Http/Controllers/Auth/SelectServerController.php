@@ -21,16 +21,13 @@ class SelectServerController extends Controller
      */
     public function render(Request $request)
     {
-        if ((access_mode_auth()) and !is_auth()) {
-            return redirect()->route('signin');
-        }
-
-        $qm = \App::make('qm');
         $data = [
-            'servers' => $qm->listOfEnabledServers(['id', 'name']),
+            'servers' => $request->get('servers'),
             'canExit' => (access_mode_auth() or access_mode_any()) and is_auth(),
             'canEnter' => access_mode_any() and !is_auth()
         ];
+
+        \Debugbar::info($request->all());
 
         return view('auth.servers', $data);
     }

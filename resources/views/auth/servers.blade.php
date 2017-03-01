@@ -15,7 +15,9 @@
                 </div>
                 <div class="list-group no-shadow">
                     @foreach($servers as $server)
-                        <a href="server/{{ $server->id }}" class="list-group-item waves-effect">{{ $server->name }}</a>
+                        @if($server->enabled or is_admin())
+                            <a href="server/{{ $server->id }}" class="list-group-item waves-effect"> @if(!$server->enabled) <i class="fa fa-power-off fa-left" title="Сервер отключен"></i> @endif {{ $server->name }}</a>
+                        @endif
                     @endforeach
                 </div>
             </div>

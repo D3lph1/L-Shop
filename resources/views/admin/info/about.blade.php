@@ -6,7 +6,7 @@
 
 @section('content')
     <div id="content-container">
-        <div id="cart-header" class="z-depth-1">
+        <div class="z-depth-1 content-header text-center">
             <h1><i class="fa fa-info fa-lg fa-left-big"></i>О системе L-Shop</h1>
         </div>
         <div id="logo-block">

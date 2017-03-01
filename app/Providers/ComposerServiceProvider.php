@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Composers\GlobalLayoutComposer;
 use App\Composers\ShopLayoutComposer;
 use Illuminate\Support\ServiceProvider;
 
@@ -27,7 +28,13 @@ class ComposerServiceProvider extends ServiceProvider
             'shop.cart',
             'payment.fillupbalance',
             'profile.payments'
-        ], ShopLayoutComposer::class);
+        ],
+            ShopLayoutComposer::class);
+
+        view()->composer([
+            'layouts.global'
+        ],
+            GlobalLayoutComposer::class);
     }
 
     /**

@@ -85,7 +85,7 @@
                         <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-server left"></i>Серверы</button>
                         <ul class="ad-btn-list">
                             <a href="{{ route('admin.servers.add', ['server' => $currentServer]) }}" class="waves-effect">Добавить</a>
-                            <a href="{{ route('admin.servers.edit', ['server' => $currentServer]) }}" class="waves-effect">Редактировать</a>
+                            <a href="{{ route('admin.servers.list', ['server' => $currentServer]) }}" class="waves-effect">Редактировать</a>
                         </ul>
                     </div>
                     <div class="ad-btn-block">
@@ -129,7 +129,9 @@
                 </button>
                 <div id="server-list" class="servers text-left">
                     @foreach($servers as $server)
-                        <a class="waves-effect white-text" href="{{ route('catalog', ['server' => $server->id]) }}">{{ $server->name }}</a>
+                        @if($server->enabled or is_admin())
+                            <a class="waves-effect white-text" href="{{ route('catalog', ['server' => $server->id]) }}"> @if(!$server->enabled) <i class="fa fa-power-off fa-left" title="Сервер отключен"></i> @endif {{ $server->name }}</a>
+                        @endif
                     @endforeach
                 </div>
             </div>

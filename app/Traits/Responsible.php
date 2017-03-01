@@ -21,7 +21,7 @@ trait Responsible
      */
     private function buildResponse($serverId, $payment)
     {
-        if ($payment->complete) {
+        if ($payment->completed) {
             return $this->buildQuickResponse();
         }
 

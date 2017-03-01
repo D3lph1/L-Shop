@@ -32,7 +32,7 @@ trait Validator
         $max = $this->getOption('username.max', 32);
         $rule = $this->getOption('username.rule', 'alpha_dash');
 
-        $required = $required ? 'required|' : '';
+        $required = $required ? 'required|' : 'sometimes|';
 
         $validator = \Validator::make([
                 'username' => $username
@@ -51,7 +51,7 @@ trait Validator
     public function checkFillUpBalanceSum($sum, $required = true)
     {
 
-        $required = $required ? 'required|' : '';
+        $required = $required ? 'required|' : 'sometimes|';
         $min = s_get('payment.fillupbalance.minsum', 25);
 
         $validator = \Validator::make([

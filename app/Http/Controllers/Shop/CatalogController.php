@@ -95,7 +95,7 @@ class CatalogController extends Controller
         $payment = null;
         \DB::transaction(function () use ($manager, $distributor, $productId, $productCount, &$payment) {
             $payment = $manager->createPayment($productId, $productCount, Manager::COUNT_TYPE_NUMBER);
-            if ($payment->complete) {
+            if ($payment->completed) {
                 $distributor->give($payment);
             }
         });

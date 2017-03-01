@@ -96,7 +96,7 @@ class CartController extends Controller
         $payment = null;
         \DB::transaction(function () use ($manager, $distributor, &$payment) {
             $payment = $manager->createPayment($this->productsId, $this->productsCount, Manager::COUNT_TYPE_NUMBER);
-            if ($payment->complete) {
+            if ($payment->completed) {
                 $distributor->give($payment);
             }
             $this->cart->flush();

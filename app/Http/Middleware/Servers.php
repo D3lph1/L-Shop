@@ -33,8 +33,13 @@ class Servers
     public function handle(Request $request, Closure $next, $mode)
     {
         if ($mode == 'one') {
+            $currentServer = $this->getCurrentServer($request->route('server'));
+
+            if (!$currentServer->enabled and !is_admin()) {
+                \App::abort(403);
+            }
             $request->merge([
-                'currentServer' => $this->getCurrentServer($request->route('server'))
+                'currentServer' => $currentServer
             ]);
 
             return $next($request);
@@ -43,18 +48,24 @@ class Servers
 
             foreach ($servers as $server) {
                 if ($server->id == $request->route('server')) {
+                    if (!$server->enabled and !is_admin()) {
+                        \App::abort(403);
+                    }
+
                     $request->merge([
-                        'servers' => $servers,
                         'currentServer' => $server
                     ]);
                     break;
                 }
             }
+            $request->merge([
+                'servers' => $servers
+            ]);
 
             return $next($request);
         }
 
-        \App::abort(404);
+        \App::abort(403);
     }
 
     /**
@@ -64,7 +75,7 @@ class Servers
      */
     private function getCurrentServer($server)
     {
-        return $this->qm->serverOrFail($server, ['id', 'name']);
+        return $this->qm->server($server, ['id', 'name', 'enabled']);
     }
 
     /**
@@ -74,6 +85,6 @@ class Servers
      */
     private function getServers()
     {
-        return $this->qm->listOfEnabledServers(['id', 'name']);
+        return $this->qm->listOfServers(['id', 'name', 'enabled']);
     }
 }

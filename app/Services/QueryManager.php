@@ -28,11 +28,11 @@ class QueryManager
      *
      * @return mixed
      */
-    public function listOfEnabledServers($columns = null)
+    public function listOfServers($columns = null)
     {
         $columns = $this->prepareColumns($columns);
 
-        return Server::select($columns)->where('enabled', 1)->get();
+        return Server::select($columns)->get();
     }
 
     /**
@@ -43,11 +43,11 @@ class QueryManager
      *
      * @return mixed
      */
-    public function serverOrFail($id, $columns = null)
+    public function server($id, $columns = null)
     {
         $columns = $this->prepareColumns($columns);
 
-        return Server::select($columns)->where('enabled', 1)->findOrFail($id);
+        return Server::select($columns)->find($id);
     }
 
     /**
@@ -228,7 +228,23 @@ class QueryManager
 
         return $builder
             ->where('cart.player', $player)
+            ->orderBy('cart.created_at', 'DESC')
             ->paginate(s_get('profile.cart_items_per_page', 10));
+    }
+
+    public function enableServer($server)
+    {
+        $this->changeServerEnabledMode($server, 1);
+    }
+
+    public function disableServer($server)
+    {
+        $this->changeServerEnabledMode($server, 0);
+    }
+
+    private function changeServerEnabledMode($id, $mode)
+    {
+        Server::where('id', $id)->update(['enabled' => $mode]);
     }
 
     /**

@@ -43,7 +43,7 @@ class ResultController extends Controller
             $this->payment->service = 'robokassa';
 
             // If payment has already been completed
-            if ($this->payment->complete) {
+            if ($this->payment->completed) {
                 return response()->make('Already complete', 400);
             }
             // If payment with this ID does not exist, exit
@@ -101,7 +101,7 @@ class ResultController extends Controller
     {
         return $this->qm->payment(
             $id,
-            ['id', 'products', 'cost', 'user_id', 'server_id', 'username', 'complete']
+            ['id', 'products', 'cost', 'user_id', 'server_id', 'username', 'completed']
         );
     }
 }

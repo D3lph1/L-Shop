@@ -28,13 +28,14 @@ if (!function_exists('s_get')) {
 
 if (!function_exists('s_set')) {
     /**
-     * Set the setting value
+     * Set the option value
      *
-     * @param $value
+     * @param string|array $option Option name or array `option` => `value`
+     * @param mixed  $value  Option value
      */
-    function s_set($value)
+    function s_set($option, $value = null)
     {
-        \Setting::set($value);
+        \Setting::set($option, $value);
     }
 }
 
@@ -66,6 +67,7 @@ if (!function_exists('is_admin')) {
     {
         if (is_auth()) {
             $user = \Sentinel::getUser();
+
             return $user->hasAccess(['user.admin']);
         }
 

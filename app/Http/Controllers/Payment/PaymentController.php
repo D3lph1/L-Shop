@@ -32,7 +32,7 @@ class PaymentController extends Controller
     {
         $this->server = (int)$request->route('server');
         $this->payment = (int)$request->route('payment');
-        $this->payment = $this->qm->payment($this->payment, ['id', 'cost', 'user_id', 'username', 'complete']);
+        $this->payment = $this->qm->payment($this->payment, ['id', 'cost', 'user_id', 'username', 'completed']);
 
         // If payment with this ID does not exist, exit
         if (!$this->payment) {
@@ -40,7 +40,7 @@ class PaymentController extends Controller
         }
 
         // If the payment is completed, deny access
-        if ($this->payment->complete) {
+        if ($this->payment->completed) {
             \App::abort(403);
         }
 
