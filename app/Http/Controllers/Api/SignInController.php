@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 class SignInController extends Controller
 {
     /**
-     * Authenticate user by api
+     * Authenticate user by request to API
      *
      * @param Request $request
      *
@@ -30,7 +30,7 @@ class SignInController extends Controller
         }
 
         // From settings
-        $secretKey = s_get('api.secret_key');
+        $secretKey = s_get('api.key');
         $algo = s_get('api.algo');
 
         $calculatedHash = hash($algo, $secretKey . $username);
@@ -47,7 +47,7 @@ class SignInController extends Controller
             return $this->redirectToSignin();
         }
 
-        if (\Sentinel::authenticate($user, (bool)s_get('api.remember_user'))) {
+        if (\Sentinel::authenticate($user, (bool)s_get('api.signin.remember_user'))) {
             return $this->redirectToServers();
         }
 

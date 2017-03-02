@@ -17,6 +17,7 @@ class CreateCategoriesTable extends Migration
             $table->increments('id');
             $table->string('name');
             $table->integer('server_id');
+            $table->timestamps();
 
             $table->engine = 'InnoDB';
             $table->index('server_id');

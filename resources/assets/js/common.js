@@ -628,3 +628,65 @@ $('.profile-payments-info').click(function () {
         }
     })
 });
+
+/**
+ * Admin panel section
+ */
+
+$('.api-algo-dropdown-item').click(function () {
+    $('#s-api-algo').val($(this).text());
+});
+
+$('.dropdown-item.change').click(function () {
+    $('#' + $(this).attr('data-parent')).html($(this).html());
+});
+
+$('#server-edit-add-category').click(function () {
+    var url = $(this).attr('data-url');
+    var category = $('#server-edit-add-category-input').val();
+    var self = this;
+    
+    $.ajax({
+        url: url,
+        method: 'POST',
+        data: ({
+            _token: getToken(),
+            category: category
+        }),
+        dataType: 'json',
+        beforeSend: function () {
+            disable(self);
+        },
+        success: function (response) {
+            location.reload();
+        },
+        error: function () {
+            location.reload();
+        }
+    })
+});
+
+$('.server-edit-remove-category').click(function () {
+    var url = $(this).attr('data-url');
+    var category = $(this).attr('data-category');
+    var self = this;
+    
+    $.ajax({
+        url: url,
+        method: 'POST',
+        data: ({
+            _token: getToken(),
+            category: category
+        }),
+        dataType: 'json',
+        beforeSend: function () {
+            disable(self);
+        },
+        success: function (response) {
+            location.reload();
+        },
+        error: function () {
+            location.reload();
+        }
+    })
+});

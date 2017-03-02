@@ -17,5 +17,15 @@ return [
             'min' => '4',
             'max' => '191'
         ]
+    ],
+    'api' => [
+        'available_algos' => [
+            'md5',
+            'sha224',
+            'sha256',
+            'sha384',
+            'sha512',
+            'whirlpool'
+        ]
     ]
 ];

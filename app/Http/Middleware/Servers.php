@@ -6,6 +6,13 @@ use Closure;
 use Illuminate\Http\Request;
 use App\Services\QueryManager;
 
+/**
+ * Class Servers
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Http\Middleware
+ */
 class Servers
 {
     /**

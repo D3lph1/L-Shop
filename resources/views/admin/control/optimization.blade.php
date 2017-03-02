@@ -18,7 +18,7 @@
                 самым, ускорить выполнение запросов.
             </p>
             <div class="flex-row">
-                <form method="post" action="{{ route('admin.control.optimization.update_routes_cache', ['server' => $currentServer]) }}">
+                <form method="post" action="{{ route('admin.control.optimization.update_routes_cache', ['server' => $currentServer->id]) }}">
                     {{ csrf_field() }}
                     <button class="btn btn-info">Обновить</button>
                 </form>
@@ -32,7 +32,7 @@
                 настроек в файлах конфигурации.
             </p>
             <div class="flex-row">
-                <form method="post" action="{{ route('admin.control.optimization.update_config_cache', ['server' => $currentServer]) }}">
+                <form method="post" action="{{ route('admin.control.optimization.update_config_cache', ['server' => $currentServer->id]) }}">
                     {{ csrf_field() }}
                     <button class="btn btn-info">Обновить</button>
                 </form>
@@ -46,7 +46,7 @@
                 этот кэш. Он будет воссоздан после обновления каждой страницы сайта.
             </p>
             <div class="flex-row">
-                <form method="post" action="{{ route('admin.control.optimization.clear_view_cache', ['server' => $currentServer]) }}">
+                <form method="post" action="{{ route('admin.control.optimization.clear_view_cache', ['server' => $currentServer->id]) }}">
                     {{ csrf_field() }}
                     <button class="btn btn-info">Очистить</button>
                 </form>

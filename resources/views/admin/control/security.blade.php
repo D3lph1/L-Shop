@@ -19,7 +19,7 @@
             </div>
         @endif
 
-        <form method="post" action="{{ route('admin.control.security.save', ['currentServer' => $currentServer]) }}">
+        <form method="post" action="{{ route('admin.control.security.save', ['currentServer' => $currentServer->id]) }}">
             <div class="card card-block">
                 <h4 class="card-title">Генератор ключей</h4>
                 <p class="card-text">

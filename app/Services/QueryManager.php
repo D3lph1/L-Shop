@@ -50,16 +50,93 @@ class QueryManager
         return Server::select($columns)->find($id);
     }
 
+    public function serverWithCategories($id, $columns = null)
+    {
+        $columns = $this->prepareColumns($columns);
+
+        return Server::select($columns)
+            ->join('categories', 'categories.server_id', 'server.id')
+            ->find($id);
+    }
+
+    /**
+     * @param int   $id
+     * @param array $credentials
+     *
+     * @return bool
+     */
+    public function updateServer($id, array $credentials)
+    {
+        return Server::where('id', $id)
+            ->update($credentials);
+    }
+
+    /**
+     * @param string $name
+     * @param int    $serverId
+     *
+     * @return bool
+     */
+    public function createCategory($name, $serverId)
+    {
+        return Category::insert([
+            'name' => $name,
+            'server_id' => $serverId
+        ]);
+    }
+
+    /**
+     * @param int   $id
+     * @param array $credentials
+     *
+     * @return bool
+     */
+    public function updateCategory($id, array $credentials)
+    {
+        return Category::where('id', $id)
+            ->update($credentials);
+    }
+
+    /**
+     * @param int $serverId
+     *
+     * @return int
+     */
+    public function categoryCount($serverId)
+    {
+        return Category::where('server_id', $serverId)
+            ->count();
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return bool|null
+     */
+    public function removeCategory($id)
+    {
+        return Category::where('id', $id)
+            ->delete();
+    }
+
     /**
      * Get the categories list for the current server
      *
-     * @param $serverId
+     * @param int|array $serverId
      *
      * @return mixed
      */
-    public function serverCategories($serverId)
+    public function serverCategories($serverId, $columns = null)
     {
-        return Category::select('id', 'name')->where('server_id', $serverId)->get();
+        $columns = $this->prepareColumns($columns);
+
+        if (is_array($serverId)) {
+            $builder = Category::select($columns)->whereIn('server_id', $serverId);
+        } else {
+            $builder = Category::select($columns)->where('server_id', $serverId);
+        }
+
+        return $builder->get();
     }
 
     public function serversWithCategories($columns = null)
@@ -79,6 +156,17 @@ class QueryManager
         }
 
         return $servers;
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return bool|null
+     */
+    public function removeServer($id)
+    {
+        return Server::where('id', $id)
+            ->delete();
     }
 
     /**
@@ -221,7 +309,7 @@ class QueryManager
             $builder = Cart::select($columns)
                 ->join('items', 'items.id', 'cart.item_id')
                 ->where('cart.server', $server);
-        }else{
+        } else {
             $builder = Cart::select($columns)
                 ->join('items', 'items.id', 'cart.item_id');
         }

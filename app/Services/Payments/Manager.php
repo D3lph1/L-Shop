@@ -162,7 +162,6 @@ class Manager
                         $result[$product->id] = $value * $product->stack;
                         $cost += $product->price * $value;
                     } else {
-                        \Debugbar::info($product->stack);
                         if ($value % $product->stack !== 0) {
                             throw new LShopException('Invalid products count number');
                         }

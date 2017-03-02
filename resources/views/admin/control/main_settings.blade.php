@@ -7,9 +7,9 @@
 @section('content')
     <div id="content-container">
         <div class="z-depth-1 content-header text-center">
-            <h1><i class="fa fa-gear fa-spin fa-left-big"></i>Основные настройки</h1>
+            <h1><i class="fa fa-wrench fa-left-big"></i>Основные настройки</h1>
         </div>
-        <form method="post" action="{{ route('admin.control.main_settings.save', ['currentServer' => $currentServer]) }}">
+        <form method="post" action="{{ route('admin.control.main_settings.save', ['server' => $currentServer->id]) }}">
             <div class="card card-block">
                 <h4 class="card-title">Магазин</h4>
                 <p class="card-text">

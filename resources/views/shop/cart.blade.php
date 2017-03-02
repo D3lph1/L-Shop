@@ -27,7 +27,7 @@
                         <div class="mr-2 ml-2">
                             {!! \ReCaptcha::render(true) !!}
                         </div>
-                    <button class="btn btn-warning btn-sm" id="btn-cart-go-pay" data-url="{{ route('cart.buy', ['server' => $currentServer]) }}">
+                    <button class="btn btn-warning btn-sm" id="btn-cart-go-pay" data-url="{{ route('cart.buy', ['server' => $currentServer->id]) }}">
                         Сформировать и оплатить
                         <i class="fa fa-arrow-right fa-right"></i>
                     </button>

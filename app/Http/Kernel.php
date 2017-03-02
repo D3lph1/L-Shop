@@ -2,6 +2,7 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\Api;
 use App\Http\Middleware\Captcha;
 use App\Http\Middleware\CheckForMaintenanceMode;
 use App\Http\Middleware\DenyIfModeAuth;
@@ -42,10 +43,11 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
+        /**
         'api' => [
             'throttle:60,1',
             'bindings',
-        ],
+        ],*/
     ];
 
     /**
@@ -60,6 +62,7 @@ class Kernel extends HttpKernel
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'servers' => Servers::class,
-        'captcha' => Captcha::class
+        'captcha' => Captcha::class,
+        'api' => Api::class
     ];
 }

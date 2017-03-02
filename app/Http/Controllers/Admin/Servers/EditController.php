@@ -2,47 +2,32 @@
 
 namespace App\Http\Controllers\Admin\Servers;
 
+use App\Http\Requests\Admin\SaveEditedServerRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+/**
+ * Class EditController
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Http\Controllers\Admin\Servers
+ */
 class EditController extends Controller
 {
     /**
-     * Render page with servers list
+     * Render edit server page
      *
      * @param Request $request
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function renderList(Request $request)
-    {
-        $servers = $this->qm->serversWithCategories([
-            'servers.id',
-            'servers.name',
-            'servers.enabled'
-        ]);
-
-        $data = [
-            'currentServer' => $request->get('currentServer'),
-            'servers' => $servers
-        ];
-
-        return view('admin.servers.list', $data);
-    }
-
-    /**
-     * Render edit given server page
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function renderEdit(Request $request)
+    public function render(Request $request)
     {
         $server = null;
         foreach ($request->get('servers') as $s) {
             if ($s->id == $request->route('edit')) {
-                $server = $s;
+                $server = collect([$s]);
                 break;
             }
         }
@@ -51,42 +36,102 @@ class EditController extends Controller
             \App::abort(404);
         }
 
+        $categories = $this->qm->serverCategories($server->first()->id, [
+            'id',
+            'name'
+        ]);
+
         $data = [
-            'server' => $server
+            'currentServer' => $request->get('currentServer'),
+            'server' => $server->first(),
+            'categories' => $categories
         ];
 
         return view('admin.servers.edit', $data);
     }
 
     /**
-     * Enable given server
-     *
      * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function addCategory(Request $request)
+    {
+        if (mb_strlen($request->get('category')) < 2) {
+            \Message::warning('Имя категории не может быть короче 2 символов');
+            return json_response('short category name');
+        }
+
+        \DB::transaction(function () use ($request) {
+            $this->qm->createCategory($request->get('category'), (int)$request->route('edit'));
+        });
+        \Message::success("Категория \"{$request->get('category')}\" создана");
+
+        return json_response('success');
+    }
+
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function removeCategory(Request $request)
+    {
+        $editedServer = (int)$request->route('edit');
+        $category = (int)$request->get('category');
+
+        if ($this->qm->categoryCount($editedServer) === 1) {
+            \Message::warning('Отказано в удалении категории. Должна остаться хотя бы одна категория для данного сервера.');
+            return json_response('must stay at least one category');
+        }
+
+        \DB::transaction(function () use ($category) {
+            $this->qm->removeCategory($category);
+        });
+        \Message::info('Категория удалена');
+
+        return json_response('success');
+    }
+
+    /**
+     * @param SaveEditedServerRequest $request
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function enable(Request $request)
+    public function save(SaveEditedServerRequest $request)
     {
-        $server = $request->route('enable');
-        $this->qm->enableServer($server);
-        \Message::info('Сервер включен');
+        $editedServer = $request->route('edit');
+        $categories = $request->get('categories');
+        \DB::transaction(function () use ($request, $categories, $editedServer) {
+            foreach ($categories as $key => $value) {
+                $this->qm->updateCategory($key, [
+                    'name' => $value[0]
+                ]);
+            }
+            $this->qm->updateServer($editedServer, [
+                'name' => $request->get('server_name'),
+                'enabled' => (bool)$request->get('enabled')
+            ]);
+        });
+        \Message::success('Изменения успешно сохранены');
 
         return back();
     }
 
     /**
-     * Disable given server
-     *
      * @param Request $request
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function disable(Request $request)
+    public function removeServer(Request $request)
     {
-        $server = $request->route('disable');
-        $this->qm->disableServer($server);
-        \Message::info('Сервер отключен');
+        $removeServerId = $request->route('remove');
 
-        return back();
+        \DB::transaction(function () use ($removeServerId) {
+            $this->qm->removeServer($removeServerId);
+        });
+        \Message::info('Сервер удален');
+
+        return redirect()->route('admin.servers.list', ['server' => $request->get('currentServer')->id]);
     }
 }

@@ -136,7 +136,8 @@ Route::group(['namespace' => 'Profile', 'where' => ['server' => '\d+']], functio
 
 Route::group(['namespace' => 'Api'], function () {
     Route::get('/api/signin', 'SignInController@signin')
-        ->name('api.signin');
+        ->name('api.signin')
+        ->middleware('api');
 });
 
 /**
@@ -153,6 +154,27 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
     // Save main settings
     Route::post('/server/{server}/admin/control/main_settings', 'Control\MainSettingsController@save')
         ->name('admin.control.main_settings.save')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Render payments agregators page
+    Route::get('/server/{server}/admin/control/payments', 'Control\PaymentsController@render')
+        ->name('admin.control.payments')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Render api settings page
+    Route::get('/server/{server}/admin/control/api', 'Control\ApiController@render')
+        ->name('admin.control.api')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Save api settings page
+    Route::post('/server/{server}/admin/control/api', 'Control\ApiController@save')
+        ->name('admin.control.api.save')
         ->middleware([
             'servers:all'
         ]);
@@ -205,28 +227,72 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
             'servers:all'
         ]);
 
-    Route::get('/server/{server}/admin/servers/list', 'Servers\EditController@renderList')
+    // Render page with servers list for edit
+    Route::get('/server/{server}/admin/servers/list', 'Servers\ListController@render')
         ->name('admin.servers.list')
         ->middleware([
             'servers:all'
         ]);
 
-    Route::get('/server/{server}/admin/servers/edit/{edit}', 'Servers\EditController@renderEdit')
+    // Render edit server page
+    Route::get('/server/{server}/admin/servers/edit/{edit}', 'Servers\EditController@render')
         ->name('admin.servers.edit')
         ->middleware([
             'servers:all'
         ]);
 
+    // Add category for given server
+    Route::post('/server/{server}/admin/servers/edit/{edit}/add_category', 'Servers\EditController@addCategory')
+        ->name('admin.servers.edit.add_category')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Add category for given server
+    Route::post('/server/{server}/admin/servers/edit/{edit}/remove_category', 'Servers\EditController@removeCategory')
+        ->name('admin.servers.edit.remove_category')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Save edited server
+    Route::post('/server/{server}/admin/servers/edit/{edit}', 'Servers\EditController@save')
+        ->name('admin.servers.edit.save')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Remove given server
+    Route::any('/server/{server}/admin/servers/remove/{remove}', 'Servers\EditController@removeServer')
+        ->name('admin.servers.remove')
+        ->middleware([
+            'servers:all'
+        ]);
+
     // Enable given server
-    Route::post('/server/{server}/admin/servers/enable/{enable}', 'Servers\EditController@enable')
+    Route::post('/server/{server}/admin/servers/enable/{enable}', 'Servers\ListController@enable')
         ->name('admin.servers.enable')
         ->middleware([
             'servers:all'
         ]);
 
     // Disable given server
-    Route::post('/server/{server}/admin/servers/disable/{disable}', 'Servers\EditController@disable')
+    Route::post('/server/{server}/admin/servers/disable/{disable}', 'Servers\ListController@disable')
         ->name('admin.servers.disable')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Render documentation page
+    Route::get('/server/{server}/admin/info/docs', 'Info\DocsController@render')
+        ->name('admin.info.docs')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Render documentation page
+    Route::get('/server/{server}/admin/info/docs/api', 'Info\DocsController@api')
+        ->name('admin.info.docs.api')
         ->middleware([
             'servers:all'
         ]);

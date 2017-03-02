@@ -19,9 +19,9 @@
                     <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Сервер</button>
 
                     <div class="dropdown-menu">
-                        <a href="{{ route('profile.cart', ['server' => $currentServer]) }}" class="dropdown-item">Любой</a>
+                        <a href="{{ route('profile.cart', ['server' => $currentServer->id]) }}" class="dropdown-item">Любой</a>
                     @foreach($servers as $server)
-                            <a href="{{ route('profile.cart', ['server' => $currentServer, 'filter_server' => $server->id]) }}" class="dropdown-item">{{ $server->name }}</a>
+                            <a href="{{ route('profile.cart', ['server' => $currentServer->id, 'filter_server' => $server->id]) }}" class="dropdown-item">{{ $server->name }}</a>
                         @endforeach
                     </div>
                 </div>

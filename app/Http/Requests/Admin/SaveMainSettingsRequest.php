@@ -34,9 +34,9 @@ class SaveMainSettingsRequest extends FormRequest
     public function messages()
     {
         return [
-            'shop_name.required' => 'Поле "Имя магазина" обязательно для заполнения',
-            'shop_name.min' => 'Значение поля "Имя магазина" слишком короткое',
-            'shop_name.max' => 'Значение поля "Имя магазина" слишком длинное'
+            'shop_name.required' => trans('validation.required', ['attribute' => 'Имя магазина']),
+            'shop_name.min' => trans('validation.min.string', ['attribute' => 'Имя магазина']),
+            'shop_name.max' => trans('validation.max.string', ['attribute' => 'Имя магазина'])
         ];
     }
 }

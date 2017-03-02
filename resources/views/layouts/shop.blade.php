@@ -64,8 +64,8 @@
                     <div class="ad-btn-block">
                         <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-info left"></i>Информация</button>
                         <ul class="ad-btn-list">
-                            <a href="{{ route('profile.payments', ['server' => $currentServer]) }}" class="waves-effect">Платежи</a>
-                            <a href="{{ route('profile.cart', ['server' => $currentServer]) }}" class="waves-effect">Внутриигровая корзина</a>
+                            <a href="{{ route('profile.payments', ['server' => $currentServer->id]) }}" class="waves-effect">Платежи</a>
+                            <a href="{{ route('profile.cart', ['server' => $currentServer->id]) }}" class="waves-effect">Внутриигровая корзина</a>
                         </ul>
                     </div>
                 </div>
@@ -76,16 +76,18 @@
                     <div class="ad-btn-block">
                         <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-cogs left"></i>Управление</button>
                         <ul class="ad-btn-list">
-                            <a href="{{ route('admin.control.main_settings', ['server' => $currentServer]) }}" class="waves-effect">Основные настройки</a>
-                            <a href="{{ route('admin.control.security', ['server' => $currentServer]) }}" class="waves-effect">Безопасность</a>
-                            <a href="{{ route('admin.control.optimization', ['server' => $currentServer]) }}" class="waves-effect">Оптимизация</a>
+                            <a href="{{ route('admin.control.main_settings', ['server' => $currentServer->id]) }}" class="waves-effect">Основные настройки</a>
+                            <a href="{{ route('admin.control.payments', ['server' => $currentServer->id]) }}" class="waves-effect">Платежные агрегаторы</a>
+                            <a href="{{ route('admin.control.api', ['server' => $currentServer->id]) }}" class="waves-effect">API</a>
+                            <a href="{{ route('admin.control.security', ['server' => $currentServer->id]) }}" class="waves-effect">Безопасность</a>
+                            <a href="{{ route('admin.control.optimization', ['server' => $currentServer->id]) }}" class="waves-effect">Оптимизация</a>
                         </ul>
                     </div>
                     <div class="ad-btn-block">
                         <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-server left"></i>Серверы</button>
                         <ul class="ad-btn-list">
-                            <a href="{{ route('admin.servers.add', ['server' => $currentServer]) }}" class="waves-effect">Добавить</a>
-                            <a href="{{ route('admin.servers.list', ['server' => $currentServer]) }}" class="waves-effect">Редактировать</a>
+                            <a href="{{ route('admin.servers.add', ['server' => $currentServer->id]) }}" class="waves-effect">Добавить</a>
+                            <a href="{{ route('admin.servers.list', ['server' => $currentServer->id]) }}" class="waves-effect">Редактировать</a>
                         </ul>
                     </div>
                     <div class="ad-btn-block">
@@ -118,7 +120,8 @@
                     <div class="ad-btn-block">
                         <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-info left"></i>Информация</button>
                         <ul class="ad-btn-list">
-                            <a href="{{ route('admin.info.about', ['server' => $currentServer]) }}" class="waves-effect">О системе L-Shop</a>
+                            <a href="{{ route('admin.info.docs', ['server' => $currentServer->id]) }}" class="waves-effect">Документация</a>
+                            <a href="{{ route('admin.info.about', ['server' => $currentServer->id]) }}" class="waves-effect">О системе L-Shop</a>
                         </ul>
                     </div>
                 </div>

@@ -27,8 +27,6 @@ class SelectServerController extends Controller
             'canEnter' => access_mode_any() and !is_auth()
         ];
 
-        \Debugbar::info($request->all());
-
         return view('auth.servers', $data);
     }
 }
