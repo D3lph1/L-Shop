@@ -98,10 +98,10 @@
                         </ul>
                     </div>
                     <div class="ad-btn-block">
-                        <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-cube left"></i>Предметы</button>
+                        <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-diamond left"></i>Предметы</button>
                         <ul class="ad-btn-list">
-                            <a class="waves-effect">Добавить</a>
-                            <a class="waves-effect">Редактировать</a>
+                            <a href="{{ route('admin.items.add', ['server' => $currentServer->id]) }}" class="waves-effect">Добавить</a>
+                            <a href="{{ route('admin.items.list', ['server' => $currentServer->id]) }}" class="waves-effect">Редактировать</a>
                         </ul>
                     </div>
                     <div class="ad-btn-block">

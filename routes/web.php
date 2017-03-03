@@ -176,7 +176,7 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
     Route::post('/server/{server}/admin/control/api', 'Control\ApiController@save')
         ->name('admin.control.api.save')
         ->middleware([
-            'servers:all'
+            'servers:one'
         ]);
 
     // Render security settings page
@@ -190,7 +190,7 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
     Route::post('/server/{server}/admin/control/security', 'Control\SecurityController@save')
         ->name('admin.control.security.save')
         ->middleware([
-            'servers:all'
+            'servers:one'
         ]);
 
     // Render optimization settings page
@@ -204,27 +204,35 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
     Route::post('/server/{server}/admin/control/optimization/update_routes_cache', 'Control\OptimizationController@updateRoutesCache')
         ->name('admin.control.optimization.update_routes_cache')
         ->middleware([
-            'servers:all'
+            'servers:one'
         ]);
 
     // Update config cache
     Route::post('/server/{server}/admin/control/optimization/update_config_cache', 'Control\OptimizationController@updateConfigCache')
         ->name('admin.control.optimization.update_config_cache')
         ->middleware([
-            'servers:all'
+            'servers:one'
         ]);
 
     // Update view cache
     Route::post('/server/{server}/admin/control/optimization/clear_view_cache', 'Control\OptimizationController@clearViewCache')
         ->name('admin.control.optimization.clear_view_cache')
         ->middleware([
-            'servers:all'
+            'servers:one'
         ]);
 
+    // Render add new server page
     Route::get('/server/{server}/admin/servers/add', 'Servers\AddController@render')
         ->name('admin.servers.add')
         ->middleware([
             'servers:all'
+        ]);
+
+    // Save new server
+    Route::post('/server/{server}/admin/servers/add', 'Servers\AddController@save')
+        ->name('admin.servers.add.save')
+        ->middleware([
+            'servers:one'
         ]);
 
     // Render page with servers list for edit
@@ -245,21 +253,21 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
     Route::post('/server/{server}/admin/servers/edit/{edit}/add_category', 'Servers\EditController@addCategory')
         ->name('admin.servers.edit.add_category')
         ->middleware([
-            'servers:all'
+            'servers:one'
         ]);
 
     // Add category for given server
     Route::post('/server/{server}/admin/servers/edit/{edit}/remove_category', 'Servers\EditController@removeCategory')
         ->name('admin.servers.edit.remove_category')
         ->middleware([
-            'servers:all'
+            'servers:one'
         ]);
 
     // Save edited server
     Route::post('/server/{server}/admin/servers/edit/{edit}', 'Servers\EditController@save')
         ->name('admin.servers.edit.save')
         ->middleware([
-            'servers:all'
+            'servers:one'
         ]);
 
     // Remove given server
@@ -273,12 +281,52 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
     Route::post('/server/{server}/admin/servers/enable/{enable}', 'Servers\ListController@enable')
         ->name('admin.servers.enable')
         ->middleware([
-            'servers:all'
+            'servers:one'
         ]);
 
     // Disable given server
     Route::post('/server/{server}/admin/servers/disable/{disable}', 'Servers\ListController@disable')
         ->name('admin.servers.disable')
+        ->middleware([
+            'servers:one'
+        ]);
+
+    // Render page with items list for edit
+    Route::get('/server/{server}/admin/items/list', 'Items\ListController@render')
+        ->name('admin.items.list')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Render page with items list for edit
+    Route::get('/server/{server}/admin/items/edit/{item}', 'Items\EditController@render')
+        ->name('admin.items.edit')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Save edited item
+    Route::post('/server/{server}/admin/items/edit/{item}', 'Items\EditController@save')
+        ->name('admin.items.edit.save')
+        ->middleware([
+            'servers:one'
+        ]);
+
+    // Remove edited item
+    Route::any('/server/{server}/admin/items/remove/{item}', 'Items\EditController@remove')
+        ->name('admin.items.edit.remove')
+        ->middleware([
+            'servers:one'
+        ]);
+
+    Route::get('/server/{server}/admin/items/add', 'Items\AddController@render')
+        ->name('admin.items.add')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    Route::post('/server/{server}/admin/items/add', 'Items\AddController@save')
+        ->name('admin.items.add.save')
         ->middleware([
             'servers:all'
         ]);

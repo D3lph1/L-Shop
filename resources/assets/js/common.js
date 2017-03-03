@@ -690,3 +690,24 @@ $('.server-edit-remove-category').click(function () {
         }
     })
 });
+
+(function () {
+    var categoryBlockHtml = $('#server-add-categories').html();
+
+    $('#server-add-add-category').click(function () {
+        var selector = $('#server-add-categories');
+        var a = $(categoryBlockHtml);
+        var id = rndStr(4);
+        a.find('.category-name').attr('id', id);
+        a.find('.category-name-label').attr('for', id);
+
+        selector.append(a);
+    });
+})();
+
+$(document).on('click', '.server-add-remove-category', function () {
+    if ($('.server-add-remove-category').length == 1) {
+        return;
+    }
+    $(this).parent().remove();
+});

@@ -20,6 +20,7 @@
 
                     <div class="dropdown-menu">
                         <a href="{{ route('profile.cart', ['server' => $currentServer->id]) }}" class="dropdown-item">Любой</a>
+                        <div class="dropdown-divider"></div>
                     @foreach($servers as $server)
                             <a href="{{ route('profile.cart', ['server' => $currentServer->id, 'filter_server' => $server->id]) }}" class="dropdown-item">{{ $server->name }}</a>
                         @endforeach

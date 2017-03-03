@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Models\Cart;
+use App\Models\Item;
 use App\Models\Payment;
 use App\Models\Product;
 use App\Models\Server;
@@ -50,6 +51,12 @@ class QueryManager
         return Server::select($columns)->find($id);
     }
 
+    /**
+     * @param int  $id
+     * @param null $columns
+     *
+     * @return mixed
+     */
     public function serverWithCategories($id, $columns = null)
     {
         $columns = $this->prepareColumns($columns);
@@ -57,6 +64,16 @@ class QueryManager
         return Server::select($columns)
             ->join('categories', 'categories.server_id', 'server.id')
             ->find($id);
+    }
+
+    /**
+     * @param array $credentials
+     *
+     * @return int
+     */
+    public function createServer(array $credentials)
+    {
+        return Server::insertGetId($credentials);
     }
 
     /**
@@ -83,6 +100,11 @@ class QueryManager
             'name' => $name,
             'server_id' => $serverId
         ]);
+    }
+
+    public function createCategories(array $credentials)
+    {
+        return Category::insert($credentials);
     }
 
     /**
@@ -139,6 +161,11 @@ class QueryManager
         return $builder->get();
     }
 
+    /**
+     * @param null|array $columns
+     *
+     * @return array|Collection|static[]
+     */
     public function serversWithCategories($columns = null)
     {
         $columns = $this->prepareColumns($columns);
@@ -170,7 +197,57 @@ class QueryManager
     }
 
     /**
-     * Get goods joined with items for current server
+     * @param null|array  $columns
+     * @param null|string $orderBy
+     * @param string      $orderType
+     * @param null|string $filter
+     *
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function items($columns = null, $orderBy = null, $orderType = 'ASC', $filter = null)
+    {
+        $columns = $this->prepareColumns($columns);
+        $builder = Item::select($columns);
+
+        if (!is_null($orderBy)) {
+            $builder->orderBy($orderBy, $orderType);
+        }
+
+        if (!is_null($filter)) {
+            $builder->where('name', 'like', $filter . '%');
+        }
+
+        return $builder->paginate(50);
+    }
+
+    /**
+     * @param int        $id
+     * @param null|array $columns
+     *
+     * @return \Illuminate\Database\Eloquent\Model|null
+     */
+    public function item($id, $columns = null)
+    {
+        $columns = $this->prepareColumns($columns);
+
+        return Item::select($columns)
+            ->where('id', $id)
+            ->first();
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return bool|null
+     */
+    public function removeItem($id)
+    {
+        return Item::where('id', $id)
+            ->delete();
+    }
+
+    /**
+     * Get goods joined with items for current server (paginated)
      *
      * @param $serverId
      * @param $category

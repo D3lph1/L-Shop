@@ -1,13 +1,16 @@
 @extends('layouts.shop')
 
 @section('title')
-    Редактировать сервер
+    Редактировать серверы
 @endsection
 
 @section('content')
     <div id="content-container">
         <div class="z-depth-1 content-header text-center">
             <h1><i class="fa fa-server fa-lg fa-left-big"></i>Редактировать серверы</h1>
+        </div>
+        <div class="mb-1">
+            <a href="{{ route('admin.servers.add', ['server' => $currentServer->id]) }}" class="btn btn-info btn-block">Создать сервер</a>
         </div>
         <div id="a-server-edit">
             @foreach($servers as $server)
