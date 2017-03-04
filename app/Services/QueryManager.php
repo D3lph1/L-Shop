@@ -62,7 +62,7 @@ class QueryManager
         $columns = $this->prepareColumns($columns);
 
         return Server::select($columns)
-            ->join('categories', 'categories.server_id', 'server.id')
+            ->join('categories', 'categories.server_id', 'servers.id')
             ->find($id);
     }
 
@@ -128,6 +128,20 @@ class QueryManager
     {
         return Category::where('server_id', $serverId)
             ->count();
+    }
+
+    /**
+     * @param null|array $columns
+     *
+     * @return Collection|static[]
+     */
+    public function allCategoriesWithServers($columns = null)
+    {
+        $columns = $this->prepareColumns($columns);
+
+        return Category::select($columns)
+            ->join('servers', 'servers.id', 'categories.server_id')
+            ->get();
     }
 
     /**
@@ -197,6 +211,28 @@ class QueryManager
     }
 
     /**
+     * @param array $credentials
+     *
+     * @return bool
+     */
+    public function createItem(array $credentials)
+    {
+        return Item::insert($credentials);
+    }
+
+    /**
+     * @param int   $id
+     * @param array $credentials
+     *
+     * @return bool
+     */
+    public function updateItem($id, array $credentials)
+    {
+        return Item::where('id', $id)
+            ->update($credentials);
+    }
+
+    /**
      * @param null|array  $columns
      * @param null|string $orderBy
      * @param string      $orderType
@@ -244,6 +280,56 @@ class QueryManager
     {
         return Item::where('id', $id)
             ->delete();
+    }
+
+    /**
+     * @param array $credentials
+     *
+     * @return bool
+     */
+    public function createProduct(array $credentials)
+    {
+        return Product::insert($credentials);
+    }
+
+    /**
+     * @param null|array    $columns
+     *
+     * @param null|string   $orderBy
+     * @param string|string $orderType
+     * @param null|string   $filter
+     *
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function productsForAdmin($columns = null, $orderBy = null, $orderType = 'ASC', $filter = null)
+    {
+        $columns = $this->prepareColumns($columns);
+
+        $builder = Product::select($columns)
+            ->join('items', 'items.id', 'products.item_id')
+            ->join('servers', 'servers.id', 'products.server_id')
+            ->join('categories', 'categories.id', 'products.category_id');
+
+        if (!is_null($orderBy)) {
+            $builder->orderBy($orderBy, $orderType);
+        }
+
+        if (!is_null($filter)) {
+            $builder->where('items.name', 'like', $filter . '%');
+        }
+
+        return $builder
+            ->paginate(50);
+    }
+
+    public function productForAdmin($id, $columns = null)
+    {
+        $columns = $this->prepareColumns($columns);
+
+        return Product::select($columns)
+            ->join('items', 'items.id', 'products.item_id')
+            ->where('products.id', $id)
+            ->first();
     }
 
     /**
@@ -295,6 +381,29 @@ class QueryManager
         }
 
         throw new InvalidArgumentTypeException(['integer', 'string', 'array'], $id);
+    }
+
+    /**
+     * @param int   $id
+     * @param array $credentials
+     *
+     * @return bool
+     */
+    public function updateProduct($id, array $credentials)
+    {
+        return Product::where('id', $id)
+            ->update($credentials);
+    }
+
+    /**
+     * @param int $id
+     *
+     * @return bool|null
+     */
+    public function removeProduct($id)
+    {
+        return Product::where('id', $id)
+            ->delete();
     }
 
     /**
@@ -373,8 +482,9 @@ class QueryManager
     }
 
     /**
-     * @param string $player
-     * @param null   $columns
+     * @param string     $player
+     * @param null|int   $server
+     * @param null|array $columns
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
@@ -397,16 +507,26 @@ class QueryManager
             ->paginate(s_get('profile.cart_items_per_page', 10));
     }
 
+    /**
+     * @param int $server
+     */
     public function enableServer($server)
     {
         $this->changeServerEnabledMode($server, 1);
     }
 
+    /**
+     * @param int $server
+     */
     public function disableServer($server)
     {
         $this->changeServerEnabledMode($server, 0);
     }
 
+    /**
+     * @param int $id
+     * @param int $mode
+     */
     private function changeServerEnabledMode($id, $mode)
     {
         Server::where('id', $id)->update(['enabled' => $mode]);

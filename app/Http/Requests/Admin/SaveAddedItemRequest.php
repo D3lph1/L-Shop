@@ -4,7 +4,7 @@ namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class SaveEditedItemRequest extends FormRequest
+class SaveAddedItemRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

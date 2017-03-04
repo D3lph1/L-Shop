@@ -93,8 +93,8 @@
                     <div class="ad-btn-block">
                         <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-cubes left"></i>Товары</button>
                         <ul class="ad-btn-list">
-                            <a class="waves-effect">Добавить</a>
-                            <a class="waves-effect">Редактировать</a>
+                            <a href="{{ route('admin.products.add', ['server' => $currentServer->id]) }}" class="waves-effect">Добавить</a>
+                            <a href="{{ route('admin.products.list', ['server' => $currentServer->id]) }}" class="waves-effect">Редактировать</a>
                         </ul>
                     </div>
                     <div class="ad-btn-block">

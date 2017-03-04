@@ -291,6 +291,57 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
             'servers:one'
         ]);
 
+    /**
+     * PRODUCTS SECTION
+     */
+    // Render page with items list for edit
+    Route::get('/server/{server}/admin/products/list', 'Products\ListController@render')
+        ->name('admin.products.list')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Render add new product page
+    Route::get('/server/{server}/admin/products/add', 'Products\AddController@render')
+        ->name('admin.products.add')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Render add new product page
+    Route::get('/server/{server}/admin/products/edit/{product}', 'Products\EditController@render')
+        ->name('admin.products.edit')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Save added product
+    Route::post('/server/{server}/admin/products/add', 'Products\AddController@save')
+        ->name('admin.products.add.save')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Save edited product
+    Route::post('/server/{server}/admin/products/edit/{product}', 'Products\EditController@save')
+        ->name('admin.products.edit.save')
+        ->middleware([
+            'servers:one'
+        ]);
+
+    // Remove edited product
+    Route::any('/server/{server}/admin/products/remove/{product}', 'Products\EditController@remove')
+        ->name('admin.products.edit.remove')
+        ->middleware([
+            'servers:one'
+        ]);
+    /**
+     * END PRODUCTS SECTION
+     */
+
+    /**
+     * ITEMS SECTION
+     */
     // Render page with items list for edit
     Route::get('/server/{server}/admin/items/list', 'Items\ListController@render')
         ->name('admin.items.list')
@@ -298,7 +349,7 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
             'servers:all'
         ]);
 
-    // Render page with items list for edit
+    // Render edited item item page
     Route::get('/server/{server}/admin/items/edit/{item}', 'Items\EditController@render')
         ->name('admin.items.edit')
         ->middleware([
@@ -319,17 +370,22 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
             'servers:one'
         ]);
 
+    // Render add item page
     Route::get('/server/{server}/admin/items/add', 'Items\AddController@render')
         ->name('admin.items.add')
         ->middleware([
             'servers:all'
         ]);
 
+    // Save added item
     Route::post('/server/{server}/admin/items/add', 'Items\AddController@save')
         ->name('admin.items.add.save')
         ->middleware([
             'servers:all'
         ]);
+    /**
+     * END OF ITEM SECTION
+     */
 
     // Render documentation page
     Route::get('/server/{server}/admin/info/docs', 'Info\DocsController@render')

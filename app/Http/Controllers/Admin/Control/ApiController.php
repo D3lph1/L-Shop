@@ -14,6 +14,8 @@ class ApiController extends Controller
             'currentServer' => $request->get('currentServer'),
             'enabled' => (bool)s_get('api.enabled'),
             'key' => s_get('api.key'),
+            'separator' => s_get('api.separator'),
+            'salt' => (bool)s_get('api.salt'),
             'algos' => config('l-shop.api.available_algos'),
             'algo' => s_get('api.algo'),
             'signinEnabeld' => (bool)s_get('api.signin.enabled'),
@@ -29,6 +31,8 @@ class ApiController extends Controller
             'api.enabled' => (bool)$request->get('enabled'),
             'api.key' => $request->get('key'),
             'api.algo' => $request->get('algo'),
+            'api.separator' => $request->get('separator'),
+            'api.salt' => (bool)$request->get('salt'),
             'api.signin.enabled' => (bool)$request->get('signin_enabled'),
             'api.signin.remember_user' => (bool)$request->get('signin_remember')
         ]);

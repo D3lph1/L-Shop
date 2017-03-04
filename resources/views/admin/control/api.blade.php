@@ -1,7 +1,7 @@
 @extends('layouts.shop')
 
 @section('title')
-    Api
+    API
 @endsection
 
 @section('content')
@@ -62,6 +62,37 @@
                 <div class="alert alert-warning">
                     Мы <strong>не рекомендуем</strong> использовать алгоритм <strong>md5</strong>, в силу его низкой устойчивости к перебору.
                 </div>
+                </p>
+                <div class="flex-row">
+
+                </div>
+            </div>
+
+            <div class="card card-block mt-2">
+                <h4 class="card-title">Разделитель аргументов</h4>
+                <p class="card-text">
+                    Этот символ будет разделять параметры в строке, из которой будет расчитываться контрольная сумма.
+                <div class="md-form mt-1">
+                    <i class="fa fa-link prefix"></i>
+                    <input type="text" name="separator" id="api-separator" class="form-control" value="{!! $separator !!}">
+                    <label for="api-separator">Разделитель</label>
+                </div>
+                </p>
+                <div class="flex-row">
+
+                </div>
+            </div>
+
+            <div class="card card-block mt-2">
+                <h4 class="card-title">Соль</h4>
+                <p class="card-text">
+                    <p>
+                        <input type="checkbox" name="salt" id="api-salt" @if($salt) checked="checked" @endif value="1">
+                        <label for="api-salt" class="ckeckbox-label">
+                            <span class='ui'></span>
+                            Использовать соль
+                        </label>
+                    </p>
                 </p>
                 <div class="flex-row">
 

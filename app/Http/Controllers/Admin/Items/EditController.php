@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Items;
 use App\Http\Requests\Admin\SaveEditedItemRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\UploadedFile;
 
 class EditController extends Controller
 {
@@ -18,6 +19,7 @@ class EditController extends Controller
         $item = $this->qm->item($request->route('item'), [
             'id',
             'name',
+            'item',
             'image',
             'extra'
         ]);
@@ -41,6 +43,20 @@ class EditController extends Controller
      */
     public function save(SaveEditedItemRequest $request)
     {
+        $image = $request->file('image');
+        $filename = null;
+        if ($image) {
+            $filename = $this->moveImageAndGetName($image);
+        }
+
+        \DB::transaction(function () use ($request, $filename) {
+            $this->qm->updateItem((int)$request->route('item'), [
+                'name' => $request->get('name'),
+                'item' => $request->get('item'),
+                'extra' => $request->get('extra'),
+                'image' => $filename
+            ]);
+        });
         \Message::success('Изменения успешно сохранены');
 
         return response()->redirectToRoute('admin.items.list', ['server' => $request->get('currentServer')->id]);
@@ -58,5 +74,19 @@ class EditController extends Controller
         \Message::info('Предмет удален');
 
         return response()->redirectToRoute('admin.items.list', ['server' => $request->get('currentServer')->id]);
+    }
+
+    /**
+     * @param UploadedFile $file
+     *
+     * @return string
+     */
+    private function moveImageAndGetName(UploadedFile $file)
+    {
+        $extension = $file->getClientOriginalExtension();
+        $md5 = md5_file(sys_get_temp_dir() . DIRECTORY_SEPARATOR . $file->getFilename());
+        $filename = $md5 . '.' . $extension;
+        $file->move(public_path('img/items'), $filename);
+        return $filename;
     }
 }

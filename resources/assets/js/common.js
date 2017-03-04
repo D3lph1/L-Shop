@@ -609,22 +609,27 @@ $('.profile-payments-info').click(function () {
             $('#pre-loader').fadeIn('fast');
         },
         success: function (response) {
-            $('#profile-payments-modal').modal('show');
             var status = response.status;
 
             if (status == 'success') {
                 var result = '';
                 var products = response.products;
 
-                for(i = 0; i < products.length; i++) {
-                    result += '<tr><td><img height="35" width="35" src="' + products[i].image + '"></td><td>' + products[i].name + '</td><td>' + products[i].count + '</td></tr>';
+                if (!products.length) {
+                    this.error();
+                }else {
+                    $('#profile-payments-modal').modal('show');
+
+                    for (i = 0; i < products.length; i++) {
+                        result += '<tr><td><img height="35" width="35" src="' + products[i].image + '"></td><td>' + products[i].name + '</td><td>' + products[i].count + '</td></tr>';
+                    }
                 }
 
                 $('#profile-payments-modal-products').html(result);
             }
         },
         error: function () {
-            requestError();
+            msg.danger('Подробная информация об этом платеже недоступна');
         }
     })
 });
@@ -710,4 +715,22 @@ $(document).on('click', '.server-add-remove-category', function () {
         return;
     }
     $(this).parent().remove();
+});
+
+$('.edit-products-clip-item').click(function () {
+    $('#item').val($(this).attr('data-item'));
+});
+
+$('.edit-categories-clip-item').click(function () {
+    $('#server').val($(this).attr('data-server'));
+    $('#category').val($(this).attr('data-category'));
+});
+
+$('#item-set-default-image').change(function () {
+    $('#item-load-image-block').fadeOut('fast');
+});
+
+$('#item-set-uploaded-image').change(function () {
+    console.log('fd');
+    $('#item-load-image-block').fadeIn('fast');
 });

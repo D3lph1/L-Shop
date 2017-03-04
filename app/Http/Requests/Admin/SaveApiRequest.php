@@ -27,6 +27,8 @@ class SaveApiRequest extends FormRequest
             'api_enabled' => 'boolean',
             'key' => 'required|min:32|max:1024',
             'algo' => 'required',
+            'separator' => 'required',
+            'salt' => 'boolean',
             'signin_enabled' => 'boolean',
             'signin_remember' => 'boolean'
         ];
@@ -35,10 +37,11 @@ class SaveApiRequest extends FormRequest
     public function messages()
     {
         return [
-            'key.required' => 'Поле "Ключ доступа" обязательно для заполнения',
-            'key.min' => 'Поле "Ключ доступа" не должно быть короче 32 символов',
-            'key.max' => 'Поле "Ключ доступа" не должно быть длиннее 1024 символов',
-            'key.algo' => 'Поле "Алгоритм хэширования" обязательно для заполнения'
+            'key.required' => trans('validation.required', ['attribute' => 'Ключ доступа']),
+            'key.min' => trans('validation.min', ['attribute' => 'Ключ доступа']),
+            'key.max' => trans('validation.max', ['attribute' => 'Ключ доступа']),
+            'key.algo' => trans('validation.required', ['attribute' => 'Алгоритм хэширования']),
+            'separator.required' => trans('validation.required', ['attribute' => 'Разделитель'])
         ];
     }
 }

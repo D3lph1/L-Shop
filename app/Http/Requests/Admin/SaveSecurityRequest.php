@@ -32,10 +32,10 @@ class SaveSecurityRequest extends FormRequest
     public function messages()
     {
         return [
-            'recaptcha_public_key.required' => 'Поле "Публичный ключ ReCAPTCHA" обязательно для заполнения',
-            'recaptcha_secret_key.required' => 'Поле "Секретный ключ ReCAPTCHA" обязательно для заполнения',
-            'recaptcha_public_key.size' => 'Поле "Секретный ключ ReCAPTCHA" должно содержать :size символов',
-            'recaptcha_secret_key.size' => 'Поле "Секретный ключ ReCAPTCHA" должно содержать :size символов',
+            'recaptcha_public_key.required' => trans('validation.required', ['attribute' => 'Публичный ключ ReCAPTCHA']),
+            'recaptcha_secret_key.required' => trans('validation.required', ['attribute' => 'Секретный ключ ReCAPTCHA']),
+            'recaptcha_public_key.size' => trans('validation.size.string', ['attribute' => 'Публичный ключ ReCAPTCHA']),
+            'recaptcha_secret_key.size' => trans('validation.size.string', ['attribute' => 'Публичный ключ ReCAPTCHA'])
         ];
     }
 }
