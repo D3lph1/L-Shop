@@ -5,6 +5,13 @@ namespace App\Http\Controllers\Api;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+/**
+ * Class SignInController
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Http\Controllers\Api
+ */
 class SignInController extends Controller
 {
     /**
@@ -32,8 +39,9 @@ class SignInController extends Controller
         // From settings
         $secretKey = s_get('api.key');
         $algo = s_get('api.algo');
+        $separator = s_get('api.separator');
 
-        $calculatedHash = hash($algo, $secretKey . $username);
+        $calculatedHash = hash($algo, $secretKey . $separator . $username);
         if ($hash !== $calculatedHash) {
             return $this->redirectToSignin();
         }

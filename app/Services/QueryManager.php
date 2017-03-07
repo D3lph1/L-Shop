@@ -9,6 +9,7 @@ use App\Models\Product;
 use App\Models\Server;
 use App\Models\Category;
 use App\Exceptions\InvalidArgumentTypeException;
+use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 
@@ -521,6 +522,21 @@ class QueryManager
     public function disableServer($server)
     {
         $this->changeServerEnabledMode($server, 0);
+    }
+
+    /**
+     * @param null|array $columns
+     *
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function usersWithRoles($columns = null)
+    {
+        $columns = $this->prepareColumns($columns);
+
+        return User::select($columns)
+            ->join('role_users', 'role_users.user_id', 'users.id')
+            ->join('roles', 'roles.id', 'role_users.role_id')
+            ->paginate(50);
     }
 
     /**

@@ -21,10 +21,24 @@ Route::group(['namespace' => 'Auth'], function () {
         ->middleware('auth:hard');
 
     // Render sign up page
-    Route::get('/signup', 'SignUpController@render');
+    Route::get('/signup', 'SignUpController@render')->name('signup');
 
     // Register user
-    Route::post('/signup', 'SignUpController@signup');
+    Route::post('/signup', 'SignUpController@signup')
+        ->name('signup.handle')
+        ->middleware('captcha');
+
+    // Render wait activate user page
+    Route::get('/activate', 'ActivationController@renderWaitPage')
+        ->name('activation.wait');
+
+    // Render wait activate user page
+    Route::post('/activate', 'ActivationController@repeatSend')
+        ->name('activation.repeat_send')
+        ->middleware('captcha');
+
+    // Render sign up page
+    Route::get('/activate/{user}/{code}', 'ActivationController@activate')->name('activate');
 
     // Render select server page
     Route::get('/servers', 'SelectServerController@render')
@@ -161,6 +175,13 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
     // Render payments agregators page
     Route::get('/server/{server}/admin/control/payments', 'Control\PaymentsController@render')
         ->name('admin.control.payments')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Save payments agregators settings
+    Route::post('/server/{server}/admin/control/payments', 'Control\PaymentsController@save')
+        ->name('admin.control.payments.save')
         ->middleware([
             'servers:all'
         ]);
@@ -385,6 +406,47 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
         ]);
     /**
      * END OF ITEM SECTION
+     */
+
+    /**
+     * USERS SECTION
+     */
+    // Render page with users list
+    Route::get('/server/{server}/admin/users/list', 'Users\ListController@render')
+        ->name('admin.users.list')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Render page with users list
+    Route::any('/server/{server}/admin/users/complete/{user}', 'Users\ListController@complete')
+        ->name('admin.users.complete')
+        ->middleware([
+            'servers:one'
+        ]);
+
+    // Render edit user page
+    Route::get('/server/{server}/admin/users/edit/{edit}', 'Users\EditController@render')
+        ->name('admin.users.edit')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Save edited user
+    Route::post('/server/{server}/admin/users/edit/{edit}', 'Users\EditController@save')
+        ->name('admin.users.edit.save')
+        ->middleware([
+            'servers:one'
+        ]);
+
+    // Remove given user
+    Route::any('/server/{server}/admin/users/remove/{user}', 'Users\EditController@remove')
+        ->name('admin.users.edit.remove')
+        ->middleware([
+            'servers:one'
+        ]);
+    /**
+     * END USERS SECTION
      */
 
     // Render documentation page

@@ -69,6 +69,8 @@ function signin(self) {
                     msg.danger('Вы произвели слишком большое количество попыток входа. ' +
                         'Возможность авторизации будет недоступна последующие ' +
                         response.delay + ' секунд.');
+                }else if (status == 'not activated') {
+                    msg.danger('Ваш аккаунт не активирован. Проверьте свою почту на наличие нашего письма.');
                 }
             }
         },
@@ -733,4 +735,8 @@ $('#item-set-default-image').change(function () {
 $('#item-set-uploaded-image').change(function () {
     console.log('fd');
     $('#item-load-image-block').fadeIn('fast');
+});
+
+$('.robokassa-algo-item').click(function () {
+    $('#robokassa-algo-input').val($(this).text());
 });

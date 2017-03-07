@@ -180,10 +180,9 @@ return [
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
-        \App\Providers\PaymentServiceProvider::class,
-        \App\Providers\ComposerServiceProvider::class,
-        \App\Providers\DistributorServiceProvider::class
-
+        App\Providers\PaymentServiceProvider::class,
+        App\Providers\ComposerServiceProvider::class,
+        App\Providers\DistributorServiceProvider::class,
     ],
 
     /*

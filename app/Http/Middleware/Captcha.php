@@ -23,12 +23,17 @@ class Captcha
      */
     public function handle($request, Closure $next)
     {
-        $reCaptchaResponse = $request->get('captcha');
+        $reCaptchaResponse = $request->get('g-recaptcha-response');
 
         if (ReCaptcha::verify($reCaptchaResponse, $request->ip())) {
             return $next($request);
         }
 
-        return json_response('invalid captcha');
+        if ($request->ajax()) {
+            return json_response('invalid captcha');
+        }
+        \Message::danger('Вы должны подтвердить то, что не являетесь роботом');
+
+        return back();
     }
 }

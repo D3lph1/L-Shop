@@ -2,6 +2,7 @@
 
 namespace App\Providers;
 
+use App\Services\Activator;
 use App\Services\Cart;
 use App\Services\Message;
 use App\Services\QueryManager;
@@ -45,6 +46,10 @@ class AppServiceProvider extends ServiceProvider
                 s_get('recaptcha.public_key'),
                 s_get('recaptcha.secret_key')
             );
+        });
+
+        $this->app->bind('activator', function () {
+            return new Activator();
         });
     }
 }

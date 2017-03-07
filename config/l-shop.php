@@ -14,8 +14,7 @@ return [
             'rule' => 'alpha_dash'
         ],
         'password' => [
-            'min' => '4',
-            'max' => '191'
+            'min' => '4'
         ]
     ],
     'api' => [

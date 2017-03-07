@@ -77,7 +77,7 @@
                         <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-cogs left"></i>Управление</button>
                         <ul class="ad-btn-list">
                             <a href="{{ route('admin.control.main_settings', ['server' => $currentServer->id]) }}" class="waves-effect">Основные настройки</a>
-                            <a href="{{ route('admin.control.payments', ['server' => $currentServer->id]) }}" class="waves-effect">Платежные агрегаторы</a>
+                            <a href="{{ route('admin.control.payments', ['server' => $currentServer->id]) }}" class="waves-effect">Платежи</a>
                             <a href="{{ route('admin.control.api', ['server' => $currentServer->id]) }}" class="waves-effect">API</a>
                             <a href="{{ route('admin.control.security', ['server' => $currentServer->id]) }}" class="waves-effect">Безопасность</a>
                             <a href="{{ route('admin.control.optimization', ['server' => $currentServer->id]) }}" class="waves-effect">Оптимизация</a>
@@ -107,8 +107,7 @@
                     <div class="ad-btn-block">
                         <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-users left"></i>Пользователи</button>
                         <ul class="ad-btn-list">
-                            <a class="waves-effect">Добавить</a>
-                            <a class="waves-effect">Редактировать</a>
+                            <a href="{{ route('admin.users.list', ['server' => $currentServer->id]) }}" class="waves-effect">Редактировать</a>
                         </ul>
                     </div>
                     <div class="ad-btn-block">

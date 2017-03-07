@@ -13,6 +13,7 @@
 
     <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon">
     <link rel="stylesheet" href="{{ asset('css/app.min.css') }}">
+    @yield('css')
 
     <script src='https://www.google.com/recaptcha/api.js' type="text/javascript"></script>
 </head>
@@ -28,8 +29,7 @@
 @yield('content_global')
 
 <script src="{{ asset('js/app.min.js') }}" type="text/javascript"></script>
-
 @include('components.messages')
-
+<script type="text/javascript">@yield('js')</script>
 </body>
 </html>

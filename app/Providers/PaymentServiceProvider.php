@@ -42,7 +42,7 @@ class PaymentServiceProvider extends ServiceProvider
                 s_get('payment.method.robokassa.login'),
                 s_get('payment.method.robokassa.password1'),
                 s_get('payment.method.robokassa.password2'),
-                s_get('payment.method.robokassa.hash'),
+                s_get('payment.method.robokassa.algo'),
                 (bool)s_get('payment.method.robokassa.test')
             );
         });

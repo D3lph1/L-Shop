@@ -9,15 +9,17 @@
     <div class="full-h flex-center pd-v-form">
         <div class="card no-pdh z-depth-4 col-xl-4 col-md-6 col-11">
 
-            <form method="post" action="{{ route('signup.handle') }}">
+            <form method="post" action="">
                 <div class="card-block" id="sign-up">
                     <div class="card-header d_orange text-center white-text z-depth-2">
-                        <h1>Регистрация<i class="fa fa-sign-in fa-lg fa-right"></i></h1>
+                        <h1>Активация<i class="fa fa-envelope-o fa-lg fa-right"></i></h1>
                     </div>
                     <div class="md-form">
-                        <i class="fa fa-user fa-lg prefix"></i>
-                        <input type="text" name="username" id="su-username" class="form-control">
-                        <label for="su-username">Имя пользователя</label>
+                        <div class="alert alert-info">
+                            На почтовый ящик, указанный вами при регистрации отправлено письмо с подтверждением регистрации.
+                            Проверьте почту и перейдите по ссылке в письме.<br>
+                            Если письмо не пришло, вы можете отправить его заного.
+                        </div>
                     </div>
                     <div class="md-form">
                         <i class="fa fa-envelope fa-lg prefix"></i>
@@ -25,21 +27,11 @@
                         <label for="su-email">Адрес электронной почты</label>
                     </div>
                     <div class="md-form">
-                        <i class="fa fa-unlock-alt fa-lg prefix"></i>
-                        <input type="password" name="password" id="su-password" class="form-control">
-                        <label for="su-password">Пароль</label>
-                    </div>
-                    <div class="md-form">
-                        <i class="fa fa-unlock-alt fa-lg prefix"></i>
-                        <input type="password" name="password_confirmation" id="su-password-confirm" class="form-control">
-                        <label for="su-password-confirm">Повторите пароль</label>
-                    </div>
-                    <div class="md-form">
                         {!! \ReCaptcha::render() !!}
                     </div>
                     <div class="col-12 text-center">
                         {{ csrf_field() }}
-                        <button class="btn btn-warning btn-lg" id="btn-sign-up">Зарегистрироваться</button>
+                        <button class="btn btn-warning btn-lg" id="btn-send">Отправить повторно</button>
                     </div>
                 </div>
                 <div class="card-footer">

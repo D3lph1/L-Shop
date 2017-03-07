@@ -25,8 +25,8 @@ class SaveEditedProductRequest extends FormRequest
     {
         return [
             'item' => 'required|numeric',
-            'stack' => 'required|numeric',
-            'price' => 'required|numeric',
+            'stack' => 'required|numeric|min:1',
+            'price' => 'required|numeric|min:0.01',
             'server' => 'required|numeric',
             'category' => 'required|numeric'
         ];
@@ -38,7 +38,9 @@ class SaveEditedProductRequest extends FormRequest
             'stack.required' => trans('validation.required', ['attribute' => 'Количество товара в 1 стаке']),
             'stack.numeric' => trans('validation.numeric', ['attribute' => 'Количество товара в 1 стаке']),
             'price.required' => trans('validation.required', ['attribute' => 'Цена за стак товара']),
-            'price.numeric' => trans('validation.numeric', ['attribute' => 'Цена за стак товара'])
+            'price.numeric' => trans('validation.numeric', ['attribute' => 'Цена за стак товара']),
+            'stack.min' => trans('validation.min.string', ['attribute' => 'Количество товара в 1 стаке']),
+            'price.min' => trans('validation.min.string', ['attribute' => 'Цена за стак товара'])
         ];
     }
 }

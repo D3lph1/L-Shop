@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Services\Message;
+use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
 use Illuminate\Http\Request;
 use App\Http\Requests\SignInRequest;
 use App\Http\Controllers\Controller;
@@ -56,6 +57,10 @@ class SignInController extends Controller
             return response()->json([
                 'status' => 'frozen',
                 'delay' => $e->getDelay()
+            ]);
+        } catch (NotActivatedException $e) {
+            return response()->json([
+                'status' => 'not activated'
             ]);
         }
 

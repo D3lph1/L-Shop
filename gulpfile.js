@@ -29,6 +29,7 @@ gulp.task('scripts', function () {
         'resources/assets/js/functions.js',
         'resources/assets/js/on-load.js',
         'resources/assets/js/common.js',
+        'resources/assets/js/highlight.pack.js'
     ])
         .pipe(concat('app.min.js'))
         .pipe(uglify())
