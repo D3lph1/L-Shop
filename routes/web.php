@@ -4,7 +4,7 @@
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  */
 
-Route::get('/', 'IndexController@index');
+Route::get('/', 'IndexController@index')->name('index');
 
 Route::group(['namespace' => 'Auth'], function () {
     // Render sign in page

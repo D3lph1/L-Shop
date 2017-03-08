@@ -6,6 +6,9 @@ use Illuminate\Http\Request;
 
 /**
  * Class IndexController
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ *
  * @package App\Http\Controllers
  */
 class IndexController extends Controller

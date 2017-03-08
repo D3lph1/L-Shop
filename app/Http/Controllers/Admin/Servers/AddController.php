@@ -7,6 +7,13 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+/**
+ * Class AddController
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Http\Controllers\Admin\Servers
+ */
 class AddController extends Controller
 {
     /**
@@ -23,6 +30,11 @@ class AddController extends Controller
         return view('admin.servers.add', $data);
     }
 
+    /**
+     * @param SaveAddedServerRequest $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function save(SaveAddedServerRequest $request)
     {
         \DB::transaction(function () use ($request) {

@@ -8,8 +8,20 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveAddedItemRequest;
 use Illuminate\Http\UploadedFile;
 
+/**
+ * Class AddController
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Http\Controllers\Admin\Items
+ */
 class AddController extends Controller
 {
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function render(Request $request)
     {
         $data = [
@@ -19,6 +31,11 @@ class AddController extends Controller
         return view('admin.items.add', $data);
     }
 
+    /**
+     * @param SaveAddedItemRequest $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function save(SaveAddedItemRequest $request)
     {
         $image = $request->file('image');

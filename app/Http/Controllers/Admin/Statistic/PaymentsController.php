@@ -5,6 +5,13 @@ namespace App\Http\Controllers\Admin\Statistic;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+/**
+ * Class PaymentsController
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Http\Controllers\Admin\Statistic
+ */
 class PaymentsController extends Controller
 {
     /**

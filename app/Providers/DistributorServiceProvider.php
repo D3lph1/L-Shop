@@ -7,6 +7,13 @@ use App\Exceptions\DistributorNotFoundException;
 use App\Exceptions\UnexpectedSettingsValueException;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Class DistributorServiceProvider
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Providers
+ */
 class DistributorServiceProvider extends ServiceProvider
 {
     /**

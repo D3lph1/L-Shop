@@ -13,8 +13,14 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Payment extends Model
 {
+    /**
+     * @var string
+     */
     protected $table = 'payments';
 
+    /**
+     * @var array
+     */
     protected $fillable = [
         'service',
         'products',

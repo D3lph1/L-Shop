@@ -1,3 +1,4 @@
+{{-- Layout and design by WhileD0S <https://vk.com/whiled0s>  --}}
 @if ($paginator->hasPages())
     <div class="pagination">
         {{-- Previous Page Link --}}

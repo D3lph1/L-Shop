@@ -62,7 +62,11 @@ if (!function_exists('is_auth')) {
 }
 
 if (!function_exists('is_admin')) {
-
+    /**
+     * Checks user for administrator rights
+     *
+     * @return bool
+     */
     function is_admin()
     {
         if (is_auth()) {

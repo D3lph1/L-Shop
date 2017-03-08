@@ -13,8 +13,14 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Server extends Model
 {
+    /**
+     * @var string
+     */
     protected $table = 'servers';
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
     public function categories()
     {
         return $this->hasMany(Category::class, 'server_id', 'id');

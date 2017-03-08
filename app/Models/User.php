@@ -13,6 +13,9 @@ use Cartalyst\Sentinel\Users\EloquentUser;
  */
 class User extends EloquentUser
 {
+    /**
+     * @var array
+     */
     protected $fillable = [
         'username',
         'email',
@@ -23,11 +26,17 @@ class User extends EloquentUser
         'balance'
     ];
 
+    /**
+     * @var array
+     */
     protected $loginNames = [
         'username',
         'email'
     ];
 
+    /**
+     * @return double
+     */
     public function getBalance()
     {
         return $this->balance;

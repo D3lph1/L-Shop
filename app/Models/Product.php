@@ -13,8 +13,14 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Product extends Model
 {
+    /**
+     * @var string
+     */
     protected $table = 'products';
 
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
     public function item()
     {
         return $this->hasOne(Item::class, 'id', 'item_id');

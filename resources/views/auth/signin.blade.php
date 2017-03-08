@@ -14,7 +14,7 @@
                 <div class="card-header d_orange text-center white-text z-depth-2">
                     <h1>Вход<i class="fa fa-sign-in fa-lg fa-right"></i></h1>
                 </div>
-                @if($onlyForAdmins)
+                @if($onlyForAdmins or $downForMaintenance)
                     <div class="alert alert-info text-center">
                         Вход только для администраторов
                     </div>

@@ -38,7 +38,7 @@ class PaymentsController extends Controller
      */
     public function info(Request $request)
     {
-        $payment = $this->qm->payment((int)$request->route('payment'), ['products']);
+        $payment = $this->qm->payment((int)$request->route('payment'), ['products', 'user_id']);
 
         if (!$payment or ($payment->user_id != \Sentinel::getUser()->getUserId())) {
             return json_response('payment not found');

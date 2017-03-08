@@ -155,8 +155,7 @@
                 <p>2017<i class="fa fa-copyright fa-left fa-right"></i>Copyright : {{ $shopName }}</p>
             </div>
             <div id="f-second">
-                <button class="btn unique-color"><i class="fa fa-vk fa-lg fa-left"></i>Vkontakte</button>
-                <button class="btn btn-info"><i class="fa fa-bug fa-lg fa-left"></i>Support</button>
+                <a href="https://github.com/D3lph1/L-shop" target="_blank" class="btn btn-info"><i class="fa fa-github fa-lg fa-left"></i>Github</a>
             </div>
         </div>
     </div>

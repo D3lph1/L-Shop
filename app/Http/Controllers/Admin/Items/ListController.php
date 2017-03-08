@@ -5,6 +5,13 @@ namespace App\Http\Controllers\Admin\Items;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\ListParent;
 
+/**
+ * Class ListController
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Http\Controllers\Admin\Items
+ */
 class ListController extends ListParent
 {
     /**

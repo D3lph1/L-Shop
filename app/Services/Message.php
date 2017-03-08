@@ -2,8 +2,6 @@
 
 namespace App\Services;
 
-use App\Exceptions\InvalidArgumentTypeException;
-
 /**
  * Responsible for working with alert messages
  *

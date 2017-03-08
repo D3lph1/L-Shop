@@ -7,8 +7,20 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+/**
+ * Class AddController
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Http\Controllers\Admin\Products
+ */
 class AddController extends Controller
 {
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function render(Request $request)
     {
         $items = $this->qm->items([
@@ -32,6 +44,11 @@ class AddController extends Controller
         return view('admin.products.add', $data);
     }
 
+    /**
+     * @param SaveAddedProductRequest $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function save(SaveAddedProductRequest $request)
     {
         \DB::transaction(function () use ($request) {

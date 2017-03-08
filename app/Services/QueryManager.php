@@ -2,16 +2,16 @@
 
 namespace App\Services;
 
+use Carbon\Carbon;
 use App\Models\Cart;
 use App\Models\Item;
+use App\Models\User;
+use App\Models\Server;
 use App\Models\Payment;
 use App\Models\Product;
-use App\Models\Server;
 use App\Models\Category;
-use App\Exceptions\InvalidArgumentTypeException;
-use App\Models\User;
-use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
+use App\Exceptions\InvalidArgumentTypeException;
 
 /**
  * Class QueryManager

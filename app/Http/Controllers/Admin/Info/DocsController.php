@@ -5,6 +5,13 @@ namespace App\Http\Controllers\Admin\Info;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+/**
+ * Class DocsController
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Http\Controllers\Admin\Info
+ */
 class DocsController extends Controller
 {
     /**

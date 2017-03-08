@@ -5,8 +5,20 @@ namespace App\Http\Controllers\Admin\Products;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\ListParent;
 
+/**
+ * Class ListController
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Http\Controllers\Admin\Products
+ */
 class ListController extends ListParent
 {
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function render(Request $request)
     {
         $orderBy = $this->checkOrderBy($request->get('orderBy'));

@@ -6,6 +6,13 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveEditedProductRequest;
 
+/**
+ * Class EditController
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Http\Controllers\Admin\Products
+ */
 class EditController extends Controller
 {
     /**

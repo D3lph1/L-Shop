@@ -7,6 +7,13 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RepeatSendActivationRequest;
 
+/**
+ * Class ActivationController
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Http\Controllers\Auth
+ */
 class ActivationController extends Controller
 {
     /**

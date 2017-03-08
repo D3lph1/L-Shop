@@ -6,7 +6,7 @@ var gulp = require('gulp'),
     imagemin = require('gulp-imagemin'),
     express = require('express');
 
-gulp.task('sass', function () {
+gulp.task('styles', function () {
     return gulp.src([
         'resources/assets/sass/*.sass',
         'resources/assets/css/*.css',
@@ -42,7 +42,7 @@ gulp.task('img', function () {
         .pipe(gulp.dest('public/img'));
 });
 
-gulp.task('watch', ['sass', 'scripts'], function () {
-    gulp.watch('resources/assets/sass/*.sass', ['sass']);
+gulp.task('watch', ['styles', 'scripts'], function () {
+    gulp.watch('resources/assets/sass/*.sass', ['styles']);
     gulp.watch('resources/assets/js/*.js', ['scripts']);
 });
