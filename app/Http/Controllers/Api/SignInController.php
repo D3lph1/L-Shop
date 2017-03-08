@@ -23,7 +23,7 @@ class SignInController extends Controller
      */
     public function signin(Request $request)
     {
-        if (is_auth()) {
+        if (is_auth() or !s_get('api.signin.enabled')) {
             return $this->redirectToServers();
         }
 
@@ -55,7 +55,13 @@ class SignInController extends Controller
             return $this->redirectToSignin();
         }
 
+        if (access_mode_guest() and !$user->hasAccess(['user.admin'])) {
+            return $this->redirectToServers();
+        }
+
         if (\Sentinel::authenticate($user, (bool)s_get('api.signin.remember_user'))) {
+            \Message::success("Добро пожаловать, $username");
+
             return $this->redirectToServers();
         }
 

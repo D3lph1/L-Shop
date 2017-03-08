@@ -52,6 +52,9 @@ class Manager
      */
     private $products = null;
 
+    /**
+     * @var int
+     */
     private $productsCountType;
 
     /**

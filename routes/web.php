@@ -4,6 +4,8 @@
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  */
 
+Route::get('/', 'IndexController@index');
+
 Route::group(['namespace' => 'Auth'], function () {
     // Render sign in page
     Route::get('/signin', 'SignInController@render')
@@ -26,18 +28,25 @@ Route::group(['namespace' => 'Auth'], function () {
     // Register user
     Route::post('/signup', 'SignUpController@signup')
         ->name('signup.handle')
-        ->middleware('captcha');
+        ->middleware([
+            'auth:guest',
+            'captcha'
+        ]);
 
     // Render wait activate user page
     Route::get('/activate', 'ActivationController@renderWaitPage')
-        ->name('activation.wait');
+        ->name('activation.wait')
+        ->middleware('auth:guest');
 
-    // Render wait activate user page
+    // Repeat sending activation mail
     Route::post('/activate', 'ActivationController@repeatSend')
         ->name('activation.repeat_send')
-        ->middleware('captcha');
+        ->middleware([
+            'auth:guest',
+            'captcha'
+        ]);
 
-    // Render sign up page
+    // Activate given user
     Route::get('/activate/{user}/{code}', 'ActivationController@activate')->name('activate');
 
     // Render select server page
@@ -449,6 +458,33 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
      * END USERS SECTION
      */
 
+    /**
+     * STATISTIC SECTION
+     */
+    Route::get('/server/{server}/admin/statistic/payments', 'Statistic\PaymentsController@render')
+        ->name('admin.statistic.payments')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    Route::post('/server/{server}/profile/statistic/payments/{payment}', 'Statistic\PaymentsController@info')
+        ->name('admin.statistic.payments.info')
+        ->middleware([
+            'servers:one',
+        ]);
+
+    Route::any('/server/{server}/profile/statistic/payments/complete/{payment}', 'Statistic\PaymentsController@complete')
+        ->name('admin.statistic.payments.complete')
+        ->middleware([
+            'servers:one',
+        ]);
+    /**
+     * END STATISTIC SECTION
+     */
+
+    /**
+     * INFORMATION SECTION
+     */
     // Render documentation page
     Route::get('/server/{server}/admin/info/docs', 'Info\DocsController@render')
         ->name('admin.info.docs')
@@ -456,9 +492,16 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
             'servers:all'
         ]);
 
-    // Render documentation page
+    // Render API documentation page
     Route::get('/server/{server}/admin/info/docs/api', 'Info\DocsController@api')
         ->name('admin.info.docs.api')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Render CLI documentation page
+    Route::get('/server/{server}/admin/info/docs/cli', 'Info\DocsController@cli')
+        ->name('admin.info.docs.cli')
         ->middleware([
             'servers:all'
         ]);
@@ -469,7 +512,7 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
         ->middleware([
             'servers:all'
         ]);
+    /**
+     * END INFORMATION SECTION
+     */
 });
-
-Route::get('/server/{server}/test', 'TestController@test')
-    ->middleware('servers:one');

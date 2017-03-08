@@ -450,6 +450,20 @@ class QueryManager
             ->first();
     }
 
+    /**
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function paymentsHistoryAll()
+    {
+        return Payment::select()
+            ->paginate(50);
+    }
+
+    /**
+     * @param string $user
+     *
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
     public function paymentsHistory($user)
     {
         return Payment::select()
@@ -537,6 +551,21 @@ class QueryManager
             ->join('role_users', 'role_users.user_id', 'users.id')
             ->join('roles', 'roles.id', 'role_users.role_id')
             ->paginate(50);
+    }
+
+    /**
+     * @param array $ids
+     * @param null  $columns
+     *
+     * @return Collection|static[]
+     */
+    public function users(array $ids, $columns = null)
+    {
+        $columns = $this->prepareColumns($columns);
+
+        return User::select($columns)
+            ->whereIn('id', $ids)
+            ->get();
     }
 
     /**

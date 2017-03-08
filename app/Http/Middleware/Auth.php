@@ -15,6 +15,17 @@ use Illuminate\Http\Request;
 class Auth
 {
     /**
+     * List of except routes
+     *
+     * @var array
+     */
+    protected $except = [
+        'signin.post',
+        'api.signin',
+        'signin'
+    ];
+
+    /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request $request
@@ -27,6 +38,13 @@ class Auth
         switch ($mode) {
             case 'guest':
                 if (access_mode_guest()) {
+                    foreach ($this->except as $except) {
+                        if ($except == \Route::currentRouteName()) {
+                            $request->merge(['onlyForAdmins' => true]);
+                            return $next($request);
+                        }
+                    }
+
                     return $this->response($request, 'servers', 'not allowed');
                 }
 

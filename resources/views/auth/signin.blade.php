@@ -14,6 +14,11 @@
                 <div class="card-header d_orange text-center white-text z-depth-2">
                     <h1>Вход<i class="fa fa-sign-in fa-lg fa-right"></i></h1>
                 </div>
+                @if($onlyForAdmins)
+                    <div class="alert alert-info text-center">
+                        Вход только для администраторов
+                    </div>
+                @endif
                 <div class="md-form">
                     <i class="fa fa-user fa-lg prefix"></i>
                     <input type="text" id="si-username" class="form-control">
@@ -30,14 +35,9 @@
             </div>
             <div class="card-footer">
                 <div class="row">
-                    @if($enable_signup)
+                    @if($enable_signup and !$onlyForAdmins)
                         <div class="col-12 text-center">
                             <a href="signup"><i class="fa fa-plus fa-left"></i> Регистрация</a>
-                        </div>
-                    @endif
-                    @if($enable_pr)
-                        <div class="col-12 text-center">
-                            <a href="forgot"><i class="fa fa-lock fa-left"></i> Забыли пароль?</a>
                         </div>
                     @endif
                     @if(access_mode_any())

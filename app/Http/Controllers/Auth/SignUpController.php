@@ -24,7 +24,12 @@ class SignUpController extends Controller
      */
     public function render(Request $request)
     {
-        return view('auth.signup');
+        if ((bool)s_get('shop.enable_signup')) {
+            return view('auth.signup');
+        }
+        \Message::warning('Функция регистрации отключена');
+
+        return response()->redirectToRoute('servers');
     }
 
     /**
@@ -35,6 +40,10 @@ class SignUpController extends Controller
      */
     public function signup(SignUpRequest $request, Activator $activator)
     {
+        if (!(bool)s_get('shop.enable_signup')) {
+            return view('auth.signup');
+        }
+
         $credentials = [
             'username' => $request->get('username'),
             'email' => $request->get('email'),

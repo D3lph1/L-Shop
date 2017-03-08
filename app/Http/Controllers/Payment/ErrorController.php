@@ -14,8 +14,15 @@ use App\Http\Controllers\Controller;
  */
 class ErrorController extends Controller
 {
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function robokassa(Request $request)
     {
-        print_r($request->all());
+        \Message::danger('Оплата не удалась');
+
+        return response()->redirectToRoute('servers');
     }
 }

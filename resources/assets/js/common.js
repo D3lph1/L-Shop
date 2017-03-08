@@ -71,6 +71,8 @@ function signin(self) {
                         response.delay + ' секунд.');
                 }else if (status == 'not activated') {
                     msg.danger('Ваш аккаунт не активирован. Проверьте свою почту на наличие нашего письма.');
+                }else if(status = 'only for admins') {
+                    msg.danger('Вход обычным пользователям запрещен');
                 }
             }
         },
@@ -740,3 +742,8 @@ $('#item-set-uploaded-image').change(function () {
 $('.robokassa-algo-item').click(function () {
     $('#robokassa-algo-input').val($(this).text());
 });
+
+$('.access-mode-item').click(function () {
+    $('#access-mode-input').val($(this).attr('data-value'));
+});
+

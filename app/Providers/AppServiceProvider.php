@@ -51,5 +51,9 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind('activator', function () {
             return new Activator();
         });
+
+        $this->app->bind('reminder', function () {
+            return new Activator();
+        });
     }
 }

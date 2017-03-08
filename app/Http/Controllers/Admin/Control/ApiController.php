@@ -6,6 +6,13 @@ use App\Http\Requests\Admin\SaveApiRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+/**
+ * Class ApiController
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Http\Controllers\Admin\Control
+ */
 class ApiController extends Controller
 {
     public function render(Request $request)

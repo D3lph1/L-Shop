@@ -1,34 +1,43 @@
 <?php
 
-namespace App\Http\Controllers\Profile;
+namespace App\Http\Controllers\Admin\Statistic;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
-/**
- * Class PaymentsController
- *
- * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
- * @package App\Http\Controllers\Profile
- */
 class PaymentsController extends Controller
 {
     /**
-     * Render the profile payments history page
-     *
      * @param Request $request
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function render(Request $request)
     {
+        $payments = $this->qm->paymentsHistoryAll();
+        foreach ($payments as $payment) {
+            if ($payment->user_id) {
+                $users[] = $payment->user_id;
+            }
+        }
+        $users = array_unique($users);
+        $users = $this->qm->users($users, ['id', 'username']);
+        foreach ($payments as &$payment) {
+            foreach ($users as $user) {
+                if ($user->id === $payment->user_id) {
+
+                    $payment->username = $user->username;
+                }
+            }
+        }
+
         $data = [
             'servers' => $request->get('servers'),
-            'payments' => $this->qm->paymentsHistory(\Sentinel::getUser()->getUserId())
+            'payments' => $payments,
+            'currency' => s_get('shop.currency_html')
         ];
 
-        return view('profile.payments', $data);
+        return view('admin.statistic.payments', $data, $data);
     }
 
     /**
@@ -40,7 +49,7 @@ class PaymentsController extends Controller
     {
         $payment = $this->qm->payment((int)$request->route('payment'), ['products']);
 
-        if (!$payment or ($payment->user_id != \Sentinel::getUser()->getUserId())) {
+        if (!$payment) {
             return json_response('payment not found');
         }
         $unserialized = unserialize($payment->products);
@@ -70,5 +79,20 @@ class PaymentsController extends Controller
         return json_response('success', [
             'products' => $products
         ]);
+    }
+
+    public function complete(Request $request)
+    {
+        $result = \Artisan::call('payment:complete', ['id' => $request->route('payment')]);
+
+        if ($result === 1) {
+            \Message::danger('Платеж не найден');
+        }elseif ($result === 2) {
+            \Message::warning('Платеж уже завершен');
+        }else {
+            \Message::success('Платеж успешно подтвержден');
+        }
+
+        return back();
     }
 }

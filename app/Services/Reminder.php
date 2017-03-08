@@ -5,14 +5,7 @@ namespace App\Services;
 use App\Mail\UserActivation;
 use Cartalyst\Sentinel\Users\UserInterface;
 
-/**
- * Class Activator
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- *
- * @package App\Services
- */
-class Activator
+class Reminder
 {
     /**
      * @param UserInterface $user

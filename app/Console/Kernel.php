@@ -2,9 +2,10 @@
 
 namespace App\Console;
 
-use App\Console\Commands\User\Activate;
 use App\Console\Commands\User\Create;
 use App\Console\Commands\User\Remove;
+use App\Console\Commands\User\Activate;
+use App\Console\Commands\Payment\Complete;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -18,7 +19,8 @@ class Kernel extends ConsoleKernel
     protected $commands = [
         Create::class,
         Remove::class,
-        Activate::class
+        Activate::class,
+        Complete::class
     ];
 
     /**

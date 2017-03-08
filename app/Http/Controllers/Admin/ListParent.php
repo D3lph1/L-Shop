@@ -4,6 +4,13 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 
+/**
+ * Class ListParent
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Http\Controllers\Admin
+ */
 class ListParent extends Controller
 {
     /**

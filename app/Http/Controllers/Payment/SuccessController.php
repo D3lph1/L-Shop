@@ -14,8 +14,15 @@ use App\Http\Controllers\Controller;
  */
 class SuccessController extends Controller
 {
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function robokassa(Request $request)
     {
-        print_r($request->all());
+        \Message::success('Оплата проведена успешна.');
+
+        return response()->redirectToRoute('servers');
     }
 }

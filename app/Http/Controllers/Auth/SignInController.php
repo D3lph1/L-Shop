@@ -26,11 +26,8 @@ class SignInController extends Controller
      */
     public function render(Request $request)
     {
-        if (access_mode_guest()) {
-            return redirect()->route('servers');
-        }
-
         $data = [
+            'onlyForAdmins' => $request->get('onlyForAdmins'),
             'enable_signup' => is_enable('shop.enable_signup'),
             'enable_pr' => is_enable('shop.enable_password_reset'),
         ];
@@ -52,7 +49,7 @@ class SignInController extends Controller
         ];
 
         try {
-            $auth = \Sentinel::authenticate($credentials, true);
+            $user = \Sentinel::authenticate($credentials, true);
         } catch (ThrottlingException $e) {
             return response()->json([
                 'status' => 'frozen',
@@ -64,7 +61,13 @@ class SignInController extends Controller
             ]);
         }
 
-        if ($auth) {
+        if ($user) {
+            if ($request->get('onlyForAdmins') and !$user->hasAccess(['user.admin'])) {
+                // If is not admin
+                return response()->json([
+                    'status' => 'only for admins'
+                ]);
+            }
             \Message::success("Добро пожаловать, $credentials[username]!");
 
             return response()->json([

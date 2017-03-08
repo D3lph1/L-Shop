@@ -20,9 +20,19 @@
                         <label for="min-sum">Сумма</label>
                     </div>
                 </p>
-                <div class="flex-row">
-
-                </div>
+                <h4 class="card-title">Валюта</h4>
+                <p class="card-text">
+                    <div class="md-form">
+                        <i class="fa fa-money prefix"></i>
+                        <input type="text" name="currency" id="currency" class="form-control" value="{{ $currency }}">
+                        <label for="currency">Название валюты</label>
+                    </div>
+                    <div class="md-form">
+                        <i class="fa fa-money prefix"></i>
+                        <input type="text" name="currency_html" id="currency-html" class="form-control" value="{{ $currencyHtml }}">
+                        <label for="currency-html">HTML представление валюты</label>
+                    </div>
+                </p>
             </div>
             <div class="card card-block mt-2">
                 <h3 class="card-title">Платежные агрегаторы</h3>

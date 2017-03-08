@@ -24,6 +24,9 @@ class Captcha
     public function handle($request, Closure $next)
     {
         $reCaptchaResponse = $request->get('g-recaptcha-response');
+        if (!$reCaptchaResponse) {
+            $reCaptchaResponse = $request->get('captcha');
+        }
 
         if (ReCaptcha::verify($reCaptchaResponse, $request->ip())) {
             return $next($request);

@@ -74,13 +74,14 @@ class CatalogController extends Controller
         $distributor = \App::make('distributor');
         $server = (int)$request->route('server');
         $username = $request->get('username');
-
+        \Debugbar::info('test');
         if (!is_auth()) {
             $validated = $this->checkUsername($username, false);
             if ($validated !== true) {
                 return $validated;
             }
         }
+
 
         $productId = [$request->route('product')];
         $productCount = [$request->get('count')];

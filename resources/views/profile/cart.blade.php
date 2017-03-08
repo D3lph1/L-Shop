@@ -57,7 +57,7 @@
                 {{ $items->links('components.pagination') }}
             @else
                 <div class="text-center">
-                    <h3>История платежей пуста</h3>
+                    <h3>Корзина пуста</h3>
                 </div>
             @endif
         </div>

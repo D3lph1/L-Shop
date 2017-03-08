@@ -35,6 +35,85 @@
             </div>
 
             <div class="card card-block mt-2">
+                <h4 class="card-title">Режим доступа</h4>
+                <p class="card-text">
+                    Этот параметр регулирует то, каким образом пользователи смогут получать доступ к магазину.<br>
+                    <strong>Только гости</strong>: авторизация в магазине отключена, пользователи будут приобретать товары без входа в аккаунт.<br>
+                    <strong>Только авторизованные пользователи</strong>: авторизация в магазине является обязательной, товары могут преобретать
+                    только пользователи, вошедшие в свой аккаунт.<br>
+                        <strong>И гости и авторизованные пользователи</strong>: Пользователи могут совершать покупки как войдя в аккаунт, так и
+                    без входа в него.
+                </p>
+                <div class="flex-row">
+                    <div class="btn-group mt-1 mb-1">
+                        <button class="btn btn-info dropdown-toggle" id="access-mode" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            @if($accessMode == 'guest')
+                                Только гости
+                            @elseif($accessMode == 'auth')
+                                Только авторизованные пользователи
+                            @else
+                                И гости и авторизованные пользователи
+                            @endif
+                        </button>
+
+                        <div class="dropdown-menu">
+                            <a class="dropdown-item access-mode-item change" data-parent="access-mode" data-value="guest">Только гости</a>
+                            <a class="dropdown-item access-mode-item change" data-parent="access-mode" data-value="auth">Только авторизованные пользователи</a>
+                            <a class="dropdown-item access-mode-item change" data-parent="access-mode" data-value="any">И гости и авторизованные пользователи</a>
+                        </div>
+                        <input type="hidden" name="access_mode" id="access-mode-input" value="{{ $accessMode }}">
+                    </div>
+                </div>
+            </div>
+
+            <div class="card card-block mt-2">
+                <h4 class="card-title">Регистрация</h4>
+                <p class="card-text"></p>
+                <div class="flex-row">
+                    <p>
+                        <p>
+                            <input type="checkbox" name="enable_signup" id="m-s-enable-signin" @if($enableSignup) checked="checked" @endif value="1">
+                            <label for="m-s-enable-signin" class="ckeckbox-label">
+                                <span class='ui'></span>
+                                Разрешить регистрацию новых пользователей
+                            </label>
+                        </p>
+                        <p>
+                            <input type="checkbox" name="enable_email_activation" id="m-s-enable-email-activation" @if($enableEmailActivation) checked="checked" @endif value="1">
+                            <label for="m-s-enable-email-activation" class="ckeckbox-label">
+                                <span class='ui'></span>
+                                Включить отправку писем на почту пользователям для подтверждения аккаунта
+                            </label>
+                        </p>
+                    </p>
+                </div>
+            </div>
+
+            <div class="card card-block mt-2">
+                <h4 class="card-title">Пагинация</h4>
+                <p class="card-text">
+
+                    <div class="md-form mt-1">
+                        <i class="fa fa-cubes prefix"></i>
+                        <input type="text" name="products_per_page" id="m-s-products-per-page" class="form-control" value="{{ $productsPerPage }}">
+                        <label for="m-s-products-per-page">Количество товаров на 1 странице магазина</label>
+                    </div>
+                </p>
+            </div>
+
+            <div class="card card-block mt-2">
+                <h4 class="card-title">Корзина</h4>
+                <p class="card-text">
+
+                <div class="md-form mt-1">
+                    <i class="fa fa-cubes prefix"></i>
+                    <input type="text" name="cart_capacity" id="m-s-cart-capacity" class="form-control" value="{{ $cartCapacity }}">
+                    <label for="m-s-cart-capacity">Максимальная вместимость корзины</label>
+                </div>
+                </p>
+            </div>
+
+            <div class="card card-block mt-2">
                 <h4 class="card-title">Режим обслуживания</h4>
                 <p class="card-text">
                     Включить / отключить режим обслуживания. Этот режим закрывает доступ к сайту.
