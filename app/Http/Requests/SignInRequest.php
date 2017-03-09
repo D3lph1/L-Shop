@@ -24,7 +24,7 @@ class SignInRequest extends FormRequest
     public function rules()
     {
         return [
-            'username' => 'required|min:3|max:191',
+            'username' => 'required|min:4|max:191|alpha_dash',
             'password' => 'required|min:4|max:256'
         ];
     }

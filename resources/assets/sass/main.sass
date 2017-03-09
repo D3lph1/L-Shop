@@ -1,14 +1,459 @@
 $d_green : #2ecc71
-$d_orange : #f39c12
+$d_orange : #ff961f
 
 body
     font-size: 18px
     color: #333
 
-button:hover
-    cursor: pointer
-
 /* Main styles */
+#pre-loader
+    position: fixed
+    top: 0
+    left: 0
+    display: -webkit-flex
+    display: -ms-flex
+    display: flex
+    width: 100vw
+    height: 100vh
+    background-color: #fff
+    z-index: 101
+    justify-content: center
+    align-items: center
+    #pre-animation
+        span
+            font-size: 10rem
+
+#side-content
+    overflow: hidden
+    height: 100%
+    position: fixed
+    z-index: 100
+    transition: 0.3s
+    p
+        word-wrap: break-word
+
+#sidebar
+    overflow-y: scroll
+    overflow-x: hidden
+    position: relative
+    width: 280px
+    height: 100%
+    padding: 1rem
+    background-color: #666
+    text-align: center
+    color: #fff
+    #s-btn-c
+        text-align: center
+        margin-top: -1rem
+        margin-bottom: 0
+        display: none
+        #btn-menu-c
+            width: 100%
+            padding: 1rem
+            margin: .5rem auto
+            background-color: #888
+    #name
+        padding-bottom: .5rem
+        margin-bottom: 0
+        border-bottom: 1px solid #999
+    #profile-block
+        padding: 1rem 1rem 2rem 1rem
+        border-bottom: 1px solid #999
+        text-align: left
+    .l-shop-collapse
+        padding: 1rem
+        border-bottom: 1px solid #999
+        .ad-btn-block
+            button
+                margin-bottom: .5rem
+            .ad-btn-list
+                a
+                    display: block
+                    color: #fff
+                    background-color: #888
+                    margin-bottom: .5rem
+                    border-radius: 2px
+                    padding: .3rem
+                    &:hover
+                        background-color: #777
+                        cursor: pointer
+                    &:last-child
+                        margin-bottom: 0
+
+    #server-block
+        padding: 1rem
+        overflow: hidden
+        #server-list
+            margin-bottom: 0
+            -webkit-transform: translateX(-150%)
+            -moz-transform: translateX(-150%)
+            -ms-transform: translateX(-150%)
+            -o-transform: translateX(-150%)
+            transform: translateX(-150%)
+        #chose-server i
+            transition: 0.3s
+    #image-block
+        text-align: center
+        width: 100%
+        margin-bottom: 2rem
+        img
+            max-width: 130px
+    #balance
+        width: 100%
+
+#content
+    min-height: 100vh
+    background-color: #f5f5f5
+    .content-header
+        padding: 1rem
+        margin-bottom: 1rem
+        border-radius: 2px
+        h1
+            margin: 0
+            color: #333
+    #topbar
+        width: 100%
+        padding: .7rem 1rem
+        background-color: #888
+        #btn-menu
+            padding: 1rem
+            border-radius: 50%
+            margin: 0 .5rem 0 0
+            background-color: #666
+            display: none
+        p
+            margin-bottom: 0
+        #topbar-server
+            margin-bottom: 0
+            padding: .3rem .5rem
+            color: #fff
+            background-color: #666
+            border-radius: 2px
+            transition: .3s
+            &:hover
+                cursor: default
+    #block-header
+        margin: 1rem
+        padding: 1rem
+        text-align: center
+        h1
+            margin: 0
+    .pay-block
+        margin: 1rem
+    #p-login
+        display: -webkit-flex
+        display: -ms-flex
+        display: flex
+        justify-content: center
+        width: 100%
+        padding: 1rem
+        .md-form
+            max-width: 300px
+            margin-bottom: 0
+            label
+                margin-top: .5rem
+    #content-container
+        padding: 1rem
+        .s-s-header
+            margin-bottom: .5rem
+        #s-change-name
+            .row
+                align-items: center
+                label
+                    margin-bottom: 0
+                    margin-top: .3rem
+        #s-settings-cat
+            .all-cat
+                margin-bottom: 1rem
+            .plus-category
+                .md-form
+                    label
+                        margin-bottom: 0
+                        margin-top: .3rem
+            .s-set-category
+                display: -webkit-flex
+                display: -moz-flex
+                display: -ms-flex
+                display: -o-flex
+                display: flex
+                margin-bottom: 1rem
+                align-items: flex-end
+                justify-content: center
+                flex-wrap: nowrap
+                .md-form
+                    margin-bottom: 0
+                input
+                    margin-bottom: 0
+                label
+                    margin-bottom: 0
+                    margin-top: .3rem
+                button
+                    padding: .7rem
+            .save-and-del
+                display: -webkit-flex
+                display: -moz-flex
+                display: -ms-flex
+                display: -o-flex
+                display: flex
+                flex-wrap: wrap
+                button
+                    flex-grow: 1
+        #a-server-edit
+            display: -webkit-flex
+            display: -moz-flex
+            display: -ms-flex
+            display: -o-flex
+            display: flex
+            flex-wrap: wrap
+            justify-content: center
+            margin: 0 -.5rem -1rem -.5rem
+            .a-s-e-block
+                padding: 1rem 1rem .5rem 1rem
+                margin: 0 .5rem 1rem .5rem
+                flex-grow: 1
+                flex-basis: 300px
+                border-radius: 2px
+                overflow: hidden
+                color: #333
+                .a-s-e-header
+                    border-bottom: 1px solid #CCC
+                    margin-bottom: .5rem    
+                .a-s-e-cat
+                    border-bottom: 1px solid #CCC
+                    p
+                        margin-bottom: .5rem
+                    ul
+                        margin-bottom: 0
+                        li
+                            background-color: #ddd
+                            border-radius: 2px
+                            margin-bottom: .5rem
+                            padding: 0 .5rem
+                            transition: .3s
+                            &:hover
+                                background-color: #777
+                                color: #fff
+                                cursor: pointer
+                            &:last-child
+                                margin-bottom: 1rem 
+                .a-s-e-btns
+                    display: -webkit-flex
+                    display: -moz-flex
+                    display: -ms-flex
+                    display: -o-flex
+                    display: flex
+                    flex-wrap: wrap
+                    padding: 1rem 0 0 0
+                    flex-grow: 1
+                    button, a
+                        flex-grow: 1
+
+        .server-block-wrapper
+            display: flex
+            flex-wrap: wrap
+            justify-content: center
+            .server-block
+                margin-bottom: 1rem
+        #cart-header
+            padding: 1rem
+            border-radius: 2px
+            text-align: center
+            margin: 1rem .5rem
+            color: #333
+        #total
+            padding: .5rem
+            margin: 1rem
+            border-bottom: 1px solid #ccc
+            border-top: 1px solid #ccc
+            #total-p
+                display: -webkit-flex
+                display: -ms-flex
+                display: flex
+                flex-wrap: wrap
+                margin-bottom: 0
+                align-items: center
+                .md-form
+                    flex-grow: 1
+                    max-width: 300px
+                    margin: 0 1rem 0 0
+                    input
+                        margin-bottom: 0
+                    label
+                        margin-top: .5rem
+                .inline
+                    margin: .5rem
+                #total-money
+                    margin: 0 1rem
+            button
+                font-size: 15px
+        #cart-products
+            display: -webkit-flex
+            display: -ms-flex
+            display: flex
+            flex-wrap: wrap
+            justify-content: center
+            .c-product
+                display: -webkit-inline-flex
+                display: -ms-inline-flex
+                display: inline-flex
+                flex-basis: 320px
+                padding: .5rem
+                margin: .5rem
+                text-align: center
+                justify-content: center
+                flex-grow: 1
+                max-width: 500px
+                p
+                    margin-bottom: .5rem
+                button
+                    font-size: 12px
+                .c-1-info
+                    flex-grow: 1
+                    padding: .5rem
+                    flex-basis: 150px
+                    justify-content: center
+                    text-align: center
+                    .c-p-name
+                        max-width: 150px
+                        margin: 0 auto .5rem auto
+                        word-wrap: break-word
+                    img
+                        max-width: 150px
+                        margin-bottom: 1rem
+                .c-2-info
+                    flex-grow: 1
+                    padding: .5rem
+                    flex-basis: 150px
+                    .md-form
+                        margin-bottom: 0
+                    input
+                        padding: 0
+                        margin-bottom: 0
+                    .c-p-cbuttons
+                        button
+                            width: 2rem
+                            padding: .5rem
+                    .c-p-pay-money
+                        text-decoration: underline
+                    .c-p-pay-for
+                        span
+                            text-decoration: underline
+        #logo-block
+            padding: 1rem
+            display: -webkit-flex
+            display: -ms-flex
+            display: flex
+            margin-bottom: 1rem
+            justify-content: center
+            flex-wrap: wrap
+            .c-logo
+                max-width: 200px
+                margin: 0 1rem
+            .logo-text
+                justify-content: center
+                align-self: center
+                margin: 0 1rem
+                h1
+                    color: #444
+                    font-size: 5rem
+        #categories
+            display: -webkit-flex
+            display: -ms-flex
+            display: flex
+            padding: .0 .25rem
+            margin-bottom: 1rem
+            background-color: transparent
+            border-radius: 2px
+            justify-content: space-between
+            flex-wrap: wrap
+            .cat-btn
+                padding: .5rem
+                background-color: #ffbb33
+                border-radius: 2px
+                color: #fff
+                margin: .25rem
+                margin-bottom: .25rem
+                flex-basis: 200px
+                text-align: center
+                align-self: stretch
+                flex-grow: 1
+                &:hover
+                    cursor: pointer
+                    background-color: #ffcc80
+        .product-container
+            display: -webkit-flex
+            display: -ms-flex
+            display: flex
+            flex-direction: column
+            flex-wrap: wrap
+            justify-content: center
+            .m-products
+                display: -webkit-flex
+                display: -ms-flex
+                display: flex
+                align-items: flex-start
+                flex-direction: row
+                justify-content: center
+                flex-wrap: wrap
+                .product-block
+                    padding: .5rem
+                    margin: .5rem
+                    text-align: center
+                    flex-basis: 200px
+                    flex-grow: 1
+                    max-width: 450px
+                    .product-image
+                        max-width: 150px
+                        margin-bottom: .5rem
+                    .product-name
+                        word-wrap: break-word
+                        margin-bottom: .25rem
+                    .product-price
+                        margin-bottom: 0
+                    .product-count
+                        margin-bottom: .25rem
+                    button
+                        font-size: 12px
+                        margin-left: 0
+            .pagination
+                justify-content: center
+                width: 100%
+                margin: .5rem
+                a
+                    padding: .8rem 1rem
+                    font-weight: bold
+                    font-size: 1rem
+                    margin: .5rem
+
+    #footer
+        width: 100%
+        #f-first, #f-second
+            padding: .5rem
+            text-align: center
+            color: #333
+            p
+                margin-bottom: 0
+        #f-first
+            background-color: #DDD
+        #f-second
+            background-color: #888
+
+
+.servers
+    margin-top: .5rem
+    transition: .3s
+    overflow: hidden
+    a
+        display: block
+        padding: .5rem
+        background-color: #777
+        border-radius: 2px
+        margin-bottom: .5rem
+        transition: inherit
+        &:hover
+            cursor: pointer
+            background-color: #ccc
+            color: #333
 
 .card-header
     h1, h2, h3, h4, h5
@@ -34,27 +479,29 @@ button:hover
         &:hover
             background-color: #eee
 
-.alerts
+.messages
     position: fixed
     top: 1rem
     right: 1rem
     z-index: 100
-    .alert
+    font-size: 17px
+    .message
         position: relative
-        padding: .5rem 1.5rem
+        padding: .5rem 1.5rem .5rem 1rem
         color: #fff
-        max-width: 300px
+        max-width: 320px
         margin-bottom: .5rem
-    .alert-info
+        border-radius: 2px
+    .message-info
         background-color: rgba(0,153,204,0.7)
 
-    .alert-success
-        background-color: rgba(0,200,81,0.7)
+    .message-success
+        background-color: rgba(71,164,71,0.7)
 
-    .alert-warning
+    .message-warning
         background-color: rgba(255,187,51,0.7)
 
-    .alert-danger
+    .message-danger
         background-color: rgba(255,68,68,0.7)
 
 /* Helpers */
@@ -64,6 +511,12 @@ button:hover
 
 .fa-right
     margin-left: .5rem
+
+.fa-left-big
+    margin-right: 1.5rem
+
+.fa-right-big
+    margin-left: 1.5rem
 
 .prefix
     margin-top: 1rem
@@ -95,6 +548,12 @@ button:hover
     padding-top: 5rem
     padding-bottom: 3rem
 
+.right
+    float: right
+
+.left
+    float: left
+
 .no-shadow
     -webkit-box-shadow: none
     -moz-box-shadow: none
@@ -104,3 +563,26 @@ button:hover
     -webkit-box-shadow: inset 0px 0px 10px -2px rgba(0,0,0,0.75)
     -moz-box-shadow: inset 0px 0px 10px -2px rgba(0,0,0,0.75)
     box-shadow: inset 0px 0px 10px -2px rgba(0,0,0,0.75)
+
+.text-depth
+    text-shadow: 0px 4px 5px rgba(122, 124, 126, 1)
+
+/* Media */
+
+@media only screen and (max-width: 992px)
+    #side-content
+        transform: translateX(-100%)
+    #content
+        width: 100% !important
+        margin-left: 0 !important
+    .logo-text
+        h1
+            font-size: 4rem !important
+    #s-btn-c
+        display: block !important
+    #btn-menu
+        display: inline-block !important
+
+@media only screen and (min-width: 993px)
+    #side-content
+        transform: translateX(0) !important

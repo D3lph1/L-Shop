@@ -1,3 +1,4 @@
+{{-- Layout and design by WhileD0S <https://vk.com/whiled0s>  --}}
 @extends('layouts.auth')
 
 @section('title')
@@ -15,15 +16,17 @@
                 </div>
                 <div class="list-group no-shadow">
                     @foreach($servers as $server)
-                        <a href="server/{{ $server->id }}" class="list-group-item waves-effect">{{ $server->title }}</a>
+                        @if($server->enabled or is_admin())
+                            <a href="server/{{ $server->id }}" class="list-group-item waves-effect"> @if(!$server->enabled) <i class="fa fa-power-off fa-left" title="Сервер отключен"></i> @endif {{ $server->name }}</a>
+                        @endif
                     @endforeach
                 </div>
             </div>
             <div class="card-footer text-center">
-                @if($can_exit)
-                    <button class="btn btn-primary btn-lg" v-on:click="logout()">Выйти<i class="fa fa-sign-out fa-right"></i></button>
-                @elseif($can_enter)
-                    <button class="btn btn-primary btn-lg" v-on:click="logout()">Войти<i class="fa fa-sign-out fa-right"></i></button>
+                @if($canExit)
+                    <a href="{{ route('logout', []) }}" class="btn btn-primary btn-lg">Выйти<i class="fa fa-sign-out fa-right"></i></a>
+                @elseif($canEnter)
+                    <a href="signin" class="btn btn-primary btn-lg">Войти<i class="fa fa-sign-out fa-right"></i></a>
                 @endif
             </div>
         </div>

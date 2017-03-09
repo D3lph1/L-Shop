@@ -2,36 +2,17 @@
 
 namespace App\Services;
 
-use App\Exceptions\InvalidTypeArgumentException;
-
 /**
- * Responsible for working with alerts
+ * Responsible for working with alert messages
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
  *
  * @package App\Services
  */
 class Message
 {
     /**
-     * Cookie name
-     *
-     * @var string
-     */
-    private $cookieName = 'message';
-
-    /**
-     * @var int
-     */
-    private $lifetime = 1337;
-
-    /**
-     * Cookie type and text delimiter
-     *
-     * @var string
-     */
-    private $delimiter = '::';
-
-    /**
-     * Set the blue message
+     * Set the informing(blue) message
      *
      * @param string $text
      */
@@ -41,7 +22,7 @@ class Message
     }
 
     /**
-     * Set the green message
+     * Set the success(green) message
      *
      * @param string $text
      */
@@ -51,7 +32,7 @@ class Message
     }
 
     /**
-     * Set the yellow message
+     * Set the warning(yellow) message
      *
      * @param string $text
      */
@@ -61,7 +42,7 @@ class Message
     }
 
     /**
-     * Set the red message
+     * Set the danger(red) message
      *
      * @param string $text
      */
@@ -71,113 +52,51 @@ class Message
     }
 
     /**
-     * Get message type from cookie
+     * Get all messages as array. And clear message storage.
+     * Result structure:
+     * [
+     *      0 => [
+     *              'type' => 'info',
+     *              'text' => 'Example text...'
+     *           ],
+     *      1 => [
+     *              'type' => 'success',
+     *              'text' => 'С нами лучше не балуй, лишь бы цел остался... (c) Золтан'
+     *           ],
+     *      ...
+     * ]
      *
-     * @return null|string
+     * @return array
      */
-    public function getType()
+    public function get()
     {
-        $cookie = $this->get();
+        $data = (array)\Session::get('message');
+        $this->clear();
 
-        return $cookie ? $cookie[0] : null;
+        return $data;
     }
 
     /**
-     * Get text message from cookie
-     *
-     * @return null|string
-     */
-    public function getText()
-    {
-        $cookie = $this->get();
-
-        return $cookie ? $cookie[1] : null;
-    }
-
-    /**
-     * Get and explode cookie value
-     *
-     * @return null|array
-     */
-    private function get()
-    {
-        $cookie = \Cookie::get($this->cookieName);
-
-        if ($cookie) {
-            return explode($this->delimiter, $cookie);
-        }
-
-        return null;
-    }
-
-    /**
-     * Set cookie with flash message
+     * Push the message in session
      *
      * @param string $type
      * @param string $text
      */
     private function set($type, $text)
     {
-        \Cookie::make($this->cookieName, $type . $this->delimiter . $text, $this->lifetime, null, null, false, false);
+        $data = [
+            'type' => $type,
+            'text' => $text
+        ];
+
+        \Session::push('message', $data);
     }
 
     /**
-     * @return string
+     * Clear all messages storage
      */
-    public function getCookieName()
+    private function clear()
     {
-        return $this->cookieName;
-    }
-
-    /**
-     * @param string $cookieName
-     */
-    public function setCookieName($cookieName)
-    {
-        if (is_string($cookieName)) {
-            $this->cookieName = $cookieName;
-        }
-
-        throw new InvalidTypeArgumentException('string', $cookieName);
-    }
-
-    /**
-     * @return int
-     */
-    public function getLifetime()
-    {
-        return $this->lifetime;
-    }
-
-    /**
-     * @param int $lifetime
-     */
-    public function setLifetime($lifetime)
-    {
-        if (is_int($lifetime)) {
-            $this->lifetime = $lifetime;
-        }
-
-        throw new InvalidTypeArgumentException('integer', $lifetime);
-    }
-
-    /**
-     * @return string
-     */
-    public function getDelimiter()
-    {
-        return $this->delimiter;
-    }
-
-    /**
-     * @param string $delimiter
-     */
-    public function setDelimiter($delimiter)
-    {
-        if (is_string($delimiter)) {
-            $this->delimiter = $delimiter;
-        }
-
-        throw new InvalidTypeArgumentException('string', $delimiter);
+        \Session::remove('message');
     }
 }

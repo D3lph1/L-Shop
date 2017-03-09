@@ -1,12 +1,19 @@
 <?php
 
+/**
+ *  File with declaration helpers-functions
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ */
+
 if (!function_exists('s_get')) {
     /**
      * Get the setting value
      *
-     * @param $key
+     * @param      $key
      * @param null $default
      * @param bool $lower
+     *
      * @return string
      */
     function s_get($key, $default = null, $lower = false)
@@ -21,13 +28,14 @@ if (!function_exists('s_get')) {
 
 if (!function_exists('s_set')) {
     /**
-     * Set the setting value
+     * Set the option value
      *
-     * @param $value
+     * @param string|array $option Option name or array `option` => `value`
+     * @param mixed  $value  Option value
      */
-    function s_set($value)
+    function s_set($option, $value = null)
     {
-        \Setting::set($value);
+        \Setting::set($option, $value);
     }
 }
 
@@ -53,11 +61,21 @@ if (!function_exists('is_auth')) {
     }
 }
 
-if (!function_exists('access_mode_auth')) {
-
-    function access_mode_auth()
+if (!function_exists('is_admin')) {
+    /**
+     * Checks user for administrator rights
+     *
+     * @return bool
+     */
+    function is_admin()
     {
-        return s_get('shop.access_mode', 'auth', true) === 'auth' ? true : false;
+        if (is_auth()) {
+            $user = \Sentinel::getUser();
+
+            return $user->hasAccess(['user.admin']);
+        }
+
+        return false;
     }
 }
 
@@ -73,15 +91,15 @@ if (!function_exists('access_mode_auth')) {
     }
 }
 
-if (!function_exists('access_mode_free')) {
+if (!function_exists('access_mode_guest')) {
     /**
      * Checks shopping mode
      *
      * @return bool
      */
-    function access_mode_free()
+    function access_mode_guest()
     {
-        return s_get('shop.access_mode', 'auth', true) === 'free' ? true : false;
+        return s_get('shop.access_mode', 'auth', true) === 'guest' ? true : false;
     }
 }
 
@@ -106,5 +124,68 @@ if (!function_exists('is_enable')) {
     function is_enable($action)
     {
         return (bool)s_get($action);
+    }
+}
+
+if (!function_exists('img_path')) {
+    /**
+     * Return path to images folder
+     *
+     * @return bool
+     */
+    function img_path($url)
+    {
+        return public_path("img/$url");
+    }
+}
+
+if (!function_exists('json_response')) {
+    /**
+     * Return filled json response object
+     *
+     * @param       $status
+     * @param array $data
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    function json_response($status, $data = [])
+    {
+        $response = [
+            'status' => $status
+        ];
+
+        if (count($data) > 0) {
+            return response()->json(array_merge($response, $data));
+        }
+
+        return response()->json($response);
+    }
+}
+
+if (!function_exists('refill_user_balance')) {
+    /**
+     * Adds an given sum to the user's account
+     *
+     * @param int  $sum
+     * @param null $userId
+     */
+    function refill_user_balance($sum, $userId = null)
+    {
+        if (is_null($userId)) {
+            if (is_auth()) {
+                $balance = \Sentinel::getUser()->getBalance();
+                \Sentinel::update(\Sentinel::getUser(), [
+                    'balance' => $balance + $sum
+                ]);
+            } else {
+                throw new LogicException('User not auth');
+            }
+        } else {
+            $user = \Sentinel::getUserRepository()->findById($userId);
+            $balance = $user->getBalance();
+            \Sentinel::update($user, [
+                'balance' => $balance + $sum
+            ]);
+        }
     }
 }

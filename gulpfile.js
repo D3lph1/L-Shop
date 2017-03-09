@@ -6,7 +6,7 @@ var gulp = require('gulp'),
     imagemin = require('gulp-imagemin'),
     express = require('express');
 
-gulp.task('sass', function () {
+gulp.task('styles', function () {
     return gulp.src([
         'resources/assets/sass/*.sass',
         'resources/assets/css/*.css',
@@ -22,12 +22,14 @@ gulp.task('sass', function () {
 gulp.task('scripts', function () {
     return gulp.src([
         'resources/assets/js/jquery-3.1.1.min.js',
-        'resources/assets/js/vue.js',
+        'resources/assets/js/tether.min.js',
+        'resources/assets/js/bootstrap.min.js',
+        'resources/assets/js/mdb.min.js',
         'resources/assets/js/components/*.js',
         'resources/assets/js/functions.js',
         'resources/assets/js/on-load.js',
         'resources/assets/js/common.js',
-        'resources/assets/js/*.js'
+        'resources/assets/js/highlight.pack.js'
     ])
         .pipe(concat('app.min.js'))
         .pipe(uglify())
@@ -40,7 +42,7 @@ gulp.task('img', function () {
         .pipe(gulp.dest('public/img'));
 });
 
-gulp.task('watch', ['sass', 'scripts'], function () {
-    gulp.watch('resources/assets/sass/*.sass', ['sass']);
+gulp.task('watch', ['styles', 'scripts'], function () {
+    gulp.watch('resources/assets/sass/*.sass', ['styles']);
     gulp.watch('resources/assets/js/*.js', ['scripts']);
 });

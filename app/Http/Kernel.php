@@ -2,6 +2,13 @@
 
 namespace App\Http;
 
+use App\Http\Middleware\Api;
+use App\Http\Middleware\Captcha;
+use App\Http\Middleware\CheckForMaintenanceMode;
+use App\Http\Middleware\DenyIfModeAuth;
+use App\Http\Middleware\Server;
+use App\Http\Middleware\Servers;
+use App\Http\Middleware\Shop;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -14,7 +21,6 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $middleware = [
-        \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode::class,
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
@@ -28,6 +34,7 @@ class Kernel extends HttpKernel
     protected $middlewareGroups = [
         'web' => [
             \App\Http\Middleware\EncryptCookies::class,
+            CheckForMaintenanceMode::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
@@ -36,10 +43,11 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
+        /**
         'api' => [
             'throttle:60,1',
             'bindings',
-        ],
+        ],*/
     ];
 
     /**
@@ -52,6 +60,9 @@ class Kernel extends HttpKernel
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Auth::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
-        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class
+        'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'servers' => Servers::class,
+        'captcha' => Captcha::class,
+        'api' => Api::class
     ];
 }

@@ -1,5 +1,5 @@
 /**
- * JavaScript file with function declarations
+ * JavaScript file with function - helpers declarations
  */
 
 /**
@@ -67,6 +67,39 @@ function setToken(token) {
 }
 
 /**
+ * Get the page url
+ *
+ * @returns {string|undefined}
+ */
+function url(url) {
+    if (url == undefined) {
+        return document.location.href;
+    }
+
+    document.location.href = url
+}
+
+/**
+ * Make element disabled
+ *
+ * @param target
+ */
+function disable(target) {
+    $(target).attr('disabled', 'disabled');
+    $(target).addClass('disabled');
+}
+
+/**
+ * Make element enabled
+ *
+ * @param target
+ */
+function enable(target) {
+    $(target).prop('disabled', false);
+    $(target).removeClass('disabled');
+}
+
+/**
  * Set the cookie
  *
  * @param name
@@ -122,7 +155,7 @@ function getCookie(name) {
  */
 function deleteCookie(name) {
     setCookie(name, '', {
-        expires: -1
+        expires: -10000
     })
 }
 
@@ -133,4 +166,26 @@ function getUrlParams() {
     });
 
     return vars;
+}
+
+/**
+ * Display request error message
+ *
+ * @param {string|undefined} more
+ */
+function requestError(more) {
+    if (more == undefined) {
+        msg.danger('Во время выполнения запроса произошла ошибка');
+    }else {
+        msg.danger('Во время выполнения запроса произошла ошибка. Подробности: ' + more);
+    }
+}
+
+/**
+ * Get ReCaptcha response
+ *
+ * @returns {string}
+ */
+function getCaptcha() {
+    return $('#captcha-form').serialize().split('=')[1];
 }

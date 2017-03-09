@@ -25,7 +25,7 @@ return [
     |
     */
 
-    'env' => env('APP_ENV', 'production'),
+    'env' => 'local',
 
     /*
     |--------------------------------------------------------------------------
@@ -38,7 +38,7 @@ return [
     |
     */
 
-    'debug' => env('APP_DEBUG', true),
+    'debug' => true,
 
     /*
     |--------------------------------------------------------------------------
@@ -51,7 +51,7 @@ return [
     |
     */
 
-    'url' => env('APP_URL', 'http://l-shop.ru'),
+    'url' => 'http://l-shop.ru',
 
     /*
     |--------------------------------------------------------------------------
@@ -103,7 +103,7 @@ return [
     |
     */
 
-    'key' => env('APP_KEY'),
+    'key' => 'base64:N4XUa3lRegJLlkxyVFahs9FgMgXuxRxSOgWUCjU8Ha8=',
 
     'cipher' => 'AES-256-CBC',
 
@@ -120,9 +120,9 @@ return [
     |
     */
 
-    'log' => env('APP_LOG', 'single'),
+    'log' => 'single',
 
-    'log_level' => env('APP_LOG_LEVEL', 'debug'),
+    'log_level' => 'debug',
 
     /*
     |--------------------------------------------------------------------------
@@ -179,8 +179,10 @@ return [
         App\Providers\AuthServiceProvider::class,
         // App\Providers\BroadcastServiceProvider::class,
         App\Providers\EventServiceProvider::class,
-        App\Providers\RouteServiceProvider::class
-
+        App\Providers\RouteServiceProvider::class,
+        App\Providers\PaymentServiceProvider::class,
+        App\Providers\ComposerServiceProvider::class,
+        App\Providers\DistributorServiceProvider::class,
     ],
 
     /*
@@ -238,6 +240,12 @@ return [
         'Activation' => Cartalyst\Sentinel\Laravel\Facades\Activation::class,
         'Reminder'   => Cartalyst\Sentinel\Laravel\Facades\Reminder::class,
         'Sentinel'   => Cartalyst\Sentinel\Laravel\Facades\Sentinel::class,
+
+        /**
+         * Application Facades...
+         */
+        'ReCaptcha' => \App\Facades\ReCaptcha::class,
+        'Message' => \App\Facades\Message::class
     ],
 
 ];

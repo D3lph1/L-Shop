@@ -2,11 +2,20 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Services\Message;
+use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
 use Illuminate\Http\Request;
 use App\Http\Requests\SignInRequest;
 use App\Http\Controllers\Controller;
 use Cartalyst\Sentinel\Checkpoints\ThrottlingException;
 
+/**
+ * Class SignInController
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Http\Controllers\Auth
+ */
 class SignInController extends Controller
 {
     /**
@@ -17,11 +26,9 @@ class SignInController extends Controller
      */
     public function render(Request $request)
     {
-        if (access_mode_free()) {
-            return redirect()->route('servers');
-        }
-
         $data = [
+            'onlyForAdmins' => $request->get('onlyForAdmins'),
+            'downForMaintenance' => $this->app->isDownForMaintenance(),
             'enable_signup' => is_enable('shop.enable_signup'),
             'enable_pr' => is_enable('shop.enable_password_reset'),
         ];
@@ -43,15 +50,27 @@ class SignInController extends Controller
         ];
 
         try {
-            $auth = \Sentinel::authenticate($credentials, true);
+            $user = \Sentinel::authenticate($credentials, true);
         } catch (ThrottlingException $e) {
             return response()->json([
                 'status' => 'frozen',
                 'delay' => $e->getDelay()
             ]);
+        } catch (NotActivatedException $e) {
+            return response()->json([
+                'status' => 'not activated'
+            ]);
         }
 
-        if ($auth) {
+        if ($user) {
+            if ($request->get('onlyForAdmins') and !$user->hasAccess(['user.admin'])) {
+                // If is not admin
+                return response()->json([
+                    'status' => 'only for admins'
+                ]);
+            }
+            \Message::success("Добро пожаловать, $credentials[username]!");
+
             return response()->json([
                 'status' => 'success'
             ]);
@@ -74,5 +93,8 @@ class SignInController extends Controller
     public function logout()
     {
         \Sentinel::logout();
+        \Message::info('Вы вышли из аккаунта');
+
+        return response()->redirectToRoute('signin');
     }
 }
