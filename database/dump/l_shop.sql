@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Мар 09 2017 г., 19:25
+-- Время создания: Мар 09 2017 г., 19:41
 -- Версия сервера: 5.5.53-log
 -- Версия PHP: 5.6.29
 
@@ -180,7 +180,7 @@ CREATE TABLE `lshop_persistences` (
 --
 
 INSERT INTO `lshop_persistences` (`id`, `user_id`, `code`, `created_at`, `updated_at`) VALUES
-(118, 1, 'z3NFwtdFmFSgiZhjkXcxUfpuBLTO4kEC', '2017-03-09 08:28:40', '2017-03-09 08:28:40');
+(119, 1, 'Pfb7fZhNEYMQ88xyMzjpNzinVEkBSXYA', '2017-03-09 12:40:52', '2017-03-09 12:40:52');
 
 -- --------------------------------------------------------
 
@@ -362,7 +362,9 @@ CREATE TABLE `lshop_throttle` (
 
 INSERT INTO `lshop_throttle` (`id`, `user_id`, `type`, `ip`, `created_at`, `updated_at`) VALUES
 (1, NULL, 'global', NULL, '2017-03-09 08:27:46', '2017-03-09 08:27:46'),
-(2, NULL, 'ip', '127.0.0.1', '2017-03-09 08:27:46', '2017-03-09 08:27:46');
+(2, NULL, 'ip', '127.0.0.1', '2017-03-09 08:27:46', '2017-03-09 08:27:46'),
+(3, NULL, 'global', NULL, '2017-03-09 12:40:45', '2017-03-09 12:40:45'),
+(4, NULL, 'ip', '127.0.0.1', '2017-03-09 12:40:45', '2017-03-09 12:40:45');
 
 -- --------------------------------------------------------
 
@@ -387,7 +389,7 @@ CREATE TABLE `lshop_users` (
 --
 
 INSERT INTO `lshop_users` (`id`, `username`, `email`, `password`, `permissions`, `last_login`, `balance`, `created_at`, `updated_at`) VALUES
-(1, 'Admin', 'admin@example.com', '$2y$10$Hk/fnBH/E5Hr8UppyYHux.SOuaMuId.E2B1MW8TqT2ssZI8TCkFAe', NULL, '2017-03-09 08:28:40', 100, '2017-02-05 08:45:27', '2017-03-09 08:28:40');
+(1, 'Admin', 'admin@example.com', '$2y$10$Hk/fnBH/E5Hr8UppyYHux.SOuaMuId.E2B1MW8TqT2ssZI8TCkFAe', NULL, '2017-03-09 12:40:52', 100, '2017-02-05 08:45:27', '2017-03-09 12:40:52');
 
 --
 -- Индексы сохранённых таблиц
@@ -531,7 +533,7 @@ ALTER TABLE `lshop_payments`
 -- AUTO_INCREMENT для таблицы `lshop_persistences`
 --
 ALTER TABLE `lshop_persistences`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=119;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=120;
 --
 -- AUTO_INCREMENT для таблицы `lshop_products`
 --
@@ -561,7 +563,7 @@ ALTER TABLE `lshop_settings`
 -- AUTO_INCREMENT для таблицы `lshop_throttle`
 --
 ALTER TABLE `lshop_throttle`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT для таблицы `lshop_users`
 --
