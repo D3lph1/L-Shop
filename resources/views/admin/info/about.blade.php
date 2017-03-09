@@ -12,7 +12,7 @@
         </div>
         <div id="logo-block">
             <div class="logo-img">
-                <img src="{{ asset('img/logo_small.png') }}" alt="logo" class="c-logo">
+                <img src="{{ asset('img/admin/logo_small.png') }}" alt="logo" class="c-logo">
             </div>
             <div class="logo-text text-depth">
                 <h1>L - Shop</h1>
