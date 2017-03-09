@@ -31,6 +31,14 @@ class DocsController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
+    public function main()
+    {
+        return view('admin.info.docs.main');
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function api()
     {
         return view('admin.info.docs.api');

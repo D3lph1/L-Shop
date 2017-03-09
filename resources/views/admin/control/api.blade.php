@@ -85,22 +85,6 @@
             </div>
 
             <div class="card card-block mt-2">
-                <h4 class="card-title">Соль</h4>
-                <p class="card-text">
-                    <p>
-                        <input type="checkbox" name="salt" id="api-salt" @if($salt) checked="checked" @endif value="1">
-                        <label for="api-salt" class="ckeckbox-label">
-                            <span class='ui'></span>
-                            Использовать соль
-                        </label>
-                    </p>
-                </p>
-                <div class="flex-row">
-
-                </div>
-            </div>
-
-            <div class="card card-block mt-2">
                 <h4 class="card-title">API - авторизация</h4>
                 <p class="card-text">
                     <p>

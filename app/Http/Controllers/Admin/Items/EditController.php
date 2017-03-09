@@ -57,12 +57,18 @@ class EditController extends Controller
         }
 
         \DB::transaction(function () use ($request, $filename) {
-            $this->qm->updateItem((int)$request->route('item'), [
+            $update = [
                 'name' => $request->get('name'),
                 'item' => $request->get('item'),
                 'extra' => $request->get('extra'),
                 'image' => $filename
-            ]);
+            ];
+
+            if ($request->get('image_mode') == 'current') {
+                unset($update['image']);
+            }
+
+            $this->qm->updateItem((int)$request->route('item'), $update);
         });
         \Message::success('Изменения успешно сохранены');
 

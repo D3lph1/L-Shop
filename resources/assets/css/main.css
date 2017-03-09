@@ -40,6 +40,10 @@ button:hover {
 }
 
 /* Helpers */
+.pointer {
+    cursor: pointer;
+}
+
 .fa-left {
     margin-right: .5rem;
 }

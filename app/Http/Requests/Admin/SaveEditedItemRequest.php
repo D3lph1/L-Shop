@@ -41,7 +41,7 @@ class SaveEditedItemRequest extends FormRequest
             'image.image' => trans('validation.image', ['attribute' => 'Изображение']),
             'image.required_if' => trans('validation.required_if', [
                 'attribute' => 'Изображение',
-                'other' => 'Тип изображения',
+                'other' => 'Изображения',
                 'value' => 'Загрузить изображение'
             ]),
             'item.required' => trans('validation.required', ['attribute' => 'ID или ID:DATA предмета']),

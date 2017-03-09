@@ -17,7 +17,7 @@
             @foreach($servers as $server)
                 <div class="a-s-e-block z-depth-1">
                     <div class="a-s-e-header text-center">
-                        <h3>{{ $server->name }}</h3>
+                        <h3><span class="pointer" title="Идентификатор сервера">[{{ $server->id }}]</span> {{ $server->name }}</h3>
                     </div>
                     @if(isset($server->categories))
                         <div class="a-s-e-cat text-center">

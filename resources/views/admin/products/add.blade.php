@@ -20,7 +20,6 @@
                                 <button id="edit-products-clip" class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Выбрать</button>
 
                                 <div class="dropdown-menu dropdown-overflow">
-                                    <div class="dropdown-divider"></div>
                                     @foreach($items as $item)
                                         <a class="dropdown-item edit-products-clip-item change" data-item="{{ $item->id }}" data-parent="edit-products-clip">[{{ $item->id }}] {{ $item->name }}</a>
                                     @endforeach

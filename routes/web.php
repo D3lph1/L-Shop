@@ -492,6 +492,13 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
             'servers:all'
         ]);
 
+    // Render main documentation page
+    Route::get('/server/{server}/admin/info/docs/main', 'Info\DocsController@main')
+        ->name('admin.info.docs.main')
+        ->middleware([
+            'servers:all'
+        ]);
+
     // Render API documentation page
     Route::get('/server/{server}/admin/info/docs/api', 'Info\DocsController@api')
         ->name('admin.info.docs.api')

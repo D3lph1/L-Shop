@@ -28,14 +28,19 @@
                 <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-12 offset-xs-0">
                     <div class="row">
                         <div class="col-sm-6 offset-sm-3 col-12">
-                            <h4 class="text-center">Тип изображения:</h4>
+                            <h4 class="text-center">Изображение:</h4>
                             <div class="plus-category text-center mt-1 mb-3">
                                 <div class="btn-group" data-toggle="buttons">
-                                    <label class="btn btn-info active">
-                                        <input type="radio" name="image_mode" id="item-set-default-image" autocomplete="off" value="default" checked> Стандартное изображеиние
+                                    @if($item->image)
+                                        <label class="btn btn-info active">
+                                            <input type="radio" name="image_mode" id="item-set-current-image" autocomplete="off" value="current" checked> Текущее
+                                        </label>
+                                    @endif
+                                    <label class="btn btn-info @if(!$item->image) active @endif">
+                                        <input type="radio" name="image_mode" id="item-set-default-image" autocomplete="off" value="default" @if(!$item->image) checked @endif> Стандартное
                                     </label>
                                     <label class="btn btn-info">
-                                        <input type="radio" name="image_mode" id="item-set-uploaded-image" autocomplete="off" value="upload"> Загрузить изображение
+                                        <input type="radio" name="image_mode" id="item-set-uploaded-image" autocomplete="off" value="upload"> Загрузить
                                     </label>
                                 </div>
                             </div>
