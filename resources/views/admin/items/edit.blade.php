@@ -18,7 +18,7 @@
                             <div class="md-form text-left">
                                 <i class="fa fa-font prefix"></i>
                                 <input type="text" name="name" id="item-name" class="form-control" value="{{ $item->name }}">
-                                <label for="item-name">Название предмета</label>
+                                <label for="item-name">@if($item->type == 'item') Название предмета @elseif($item->type == 'permgroup') Название привилегии @endif</label>
                             </div>
                         </div>
                     </div>
@@ -28,6 +28,18 @@
                 <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-12 offset-xs-0">
                     <div class="row">
                         <div class="col-sm-6 offset-sm-3 col-12">
+                            <h4 class="text-center">Тип:</h4>
+                            <div class="plus-category text-center mt-1 mb-3">
+                                <div class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-info @if($item->type == 'item') active @endif">
+                                        <input type="radio" name="item_type" id="item-set-item-type" autocomplete="off" value="item" @if($item->type == 'item') checked @endif> Предмет/блок
+                                    </label>
+                                    <label class="btn btn-info @if($item->type == 'permgroup') active @endif">
+                                        <input type="radio" name="item_type" id="item-set-permgroup-type" autocomplete="off" value="permgroup" @if($item->type == 'permgroup') checked @endif> Привилегия
+                                    </label>
+                                </div>
+                            </div>
+
                             <h4 class="text-center">Изображение:</h4>
                             <div class="plus-category text-center mt-1 mb-3">
                                 <div class="btn-group" data-toggle="buttons">
@@ -54,11 +66,11 @@
                                 <div class="md-form text-left">
                                     <i class="fa fa-list prefix"></i>
                                     <input type="text" name="item" id="item" class="form-control" value="{{ $item->item }}">
-                                    <label for="item">ID или ID:DATA предмета</label>
+                                    <label for="item">@if($item->type == 'item') ID или ID:DATA предмета @elseif($item->type == 'permgroup') Внутриигровой идентификатор привилегии @endif</label>
                                 </div>
                             </div>
                             <div class="plus-category">
-                                <div class="md-form text-left">
+                                <div class="md-form text-left" @if($item->type == 'permgroup') style="display: none;" @endif>
                                     <i class="fa fa-list prefix"></i>
                                     <input type="text" name="extra" id="extra" class="form-control" value="{{ $item->extra }}">
                                     <label for="extra">Extra</label>

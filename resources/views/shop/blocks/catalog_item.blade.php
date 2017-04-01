@@ -8,7 +8,7 @@
     @endif
 
     <p class="product-price"><span class="catalog-price-span">{{ $product->price }}</span> {!! s_get('shop.currency_html', 'руб.') !!}</p>
-    <p class="product-count">за <span>{{ $product->stack }}</span> шт.</p>
+    <p class="product-count">за <span class="number">@if($product->type == 'item') {{ $product->stack }} @elseif($product->type == 'permgroup') {{ $product->stack }} @endif</span>@if($product->type == 'item') шт. @else дн. @endif</p>
 
     @if($cart->has($product->id))
         <button class="btn btn-info btn-block btn-sm catalog-to-cart disabled" disabled="disabled" data-url="{{ route('cart.put', ['server' => $currentServer->id, 'product' => $product->id ]) }}">

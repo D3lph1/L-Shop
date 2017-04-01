@@ -155,6 +155,27 @@ Route::group(['namespace' => 'Profile', 'where' => ['server' => '\d+']], functio
             'servers:all',
             'auth:hard'
         ]);
+
+    Route::get('/server/{server}/profile/settings', 'SettingsController@render')
+        ->name('profile.settings')
+        ->middleware([
+            'servers:all',
+            'auth:hard'
+        ]);
+
+    Route::post('/server/{server}/profile/settings', 'SettingsController@password')
+        ->name('profile.settings.password')
+        ->middleware([
+            'servers:one',
+            'auth:hard'
+        ]);
+
+    Route::post('/server/{server}/profile/sessions', 'SettingsController@sessions')
+        ->name('profile.settings.sessions')
+        ->middleware([
+            'servers:one',
+            'auth:hard'
+        ]);
 });
 
 Route::group(['namespace' => 'Api'], function () {

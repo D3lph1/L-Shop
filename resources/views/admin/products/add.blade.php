@@ -21,7 +21,7 @@
 
                                 <div class="dropdown-menu dropdown-overflow">
                                     @foreach($items as $item)
-                                        <a class="dropdown-item edit-products-clip-item change" data-item="{{ $item->id }}" data-parent="edit-products-clip">[{{ $item->id }}] {{ $item->name }}</a>
+                                        <a class="dropdown-item edit-products-clip-item change" data-item="{{ $item->id }}" data-item-type="{{ $item->type }}" data-parent="edit-products-clip">[{{ $item->id }}] {{ $item->name }}</a>
                                     @endforeach
                                 </div>
                                 <input type="hidden" name="item" id="item">

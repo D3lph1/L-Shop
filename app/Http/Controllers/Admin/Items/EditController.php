@@ -26,6 +26,7 @@ class EditController extends Controller
         $item = $this->qm->item($request->route('item'), [
             'id',
             'name',
+            'type',
             'item',
             'image',
             'extra'
@@ -50,15 +51,17 @@ class EditController extends Controller
      */
     public function save(SaveEditedItemRequest $request)
     {
+        $itemType = $request->get('item_type');
         $image = $request->file('image');
         $filename = null;
         if ($image) {
             $filename = $this->moveImageAndGetName($image);
         }
 
-        \DB::transaction(function () use ($request, $filename) {
+        \DB::transaction(function () use ($request, $filename, $itemType) {
             $update = [
                 'name' => $request->get('name'),
+                'type' => $itemType == 'item' ? 'item' : 'permgroup',
                 'item' => $request->get('item'),
                 'extra' => $request->get('extra'),
                 'image' => $filename

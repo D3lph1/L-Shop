@@ -30,7 +30,7 @@ return [
         'array'   => 'The :attribute must have between :min and :max items.',
     ],
     'boolean'              => 'Поле :attribute должно иметь булевое значение.',
-    'confirmed'            => 'The :attribute confirmation does not match.',
+    'confirmed'            => 'Вы должны подтведить значение поля ":attribute"',
     'date'                 => 'The :attribute is not a valid date.',
     'date_format'          => 'The :attribute does not match the format :format.',
     'different'            => 'The :attribute and :other must be different.',

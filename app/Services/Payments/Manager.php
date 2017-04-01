@@ -162,7 +162,6 @@ class Manager
                 if ($product->id == $key) {
                     if ($this->productsCountType == self::COUNT_TYPE_STACKS) {
                         $result[$product->id] = $value * $product->stack;
-                        $result[$product->id] = $value * $product->stack;
                         $cost += $product->price * $value;
                     } else {
                         if ($value % $product->stack !== 0) {

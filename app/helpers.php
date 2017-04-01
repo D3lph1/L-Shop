@@ -189,3 +189,74 @@ if (!function_exists('refill_user_balance')) {
         }
     }
 }
+
+if (!function_exists('humanize_perm_duration')) {
+    /**
+     * @param int $interval
+     *
+     * @return array
+     */
+    function humanize_perm_duration($interval)
+    {
+        if ($interval < 60) {
+            return [
+                'original' => $interval,
+                'short' => $interval,
+                'name' => 'second',
+                'title' => 'сек.'
+            ];
+        }
+
+        if ($interval >= 60 and $interval < 3600) {
+            return [
+                'original' => $interval,
+                'short' => $interval / 60,
+                'name' => 'minute',
+                'title' => 'мин.'
+            ];
+        }
+
+        if ($interval >= 3600 and $interval < 86400) {
+            return [
+                'original' => $interval,
+                'short' => $interval / 3600,
+                'name' => 'hour',
+                'title' => 'час.'
+            ];
+        }
+
+        if ($interval > 86400) {
+            return [
+                'original' => $interval,
+                'short' => $interval / 86400,
+                'name' => 'day',
+                'title' => 'дн.'
+            ];
+        }
+
+        return [];
+    }
+}
+
+if (!function_exists('unhumanize_perm_duration')) {
+    /**
+     * @param int $interval
+     * @param string $measure
+     *
+     * @return mixed
+     */
+    function unhumanize_perm_duration($interval, $measure)
+    {
+        if ($measure == 'second') {
+            return $interval;
+        }else if ($measure == 'minute') {
+            return $interval * 60;
+        }else if ($measure == 'hour') {
+            return $interval * 3600;
+        }else if ($measure == 'day') {
+            return $interval * 86400;
+        }
+
+        return $interval;
+    }
+}

@@ -343,7 +343,7 @@ class QueryManager
      */
     public function products($serverId, $category)
     {
-        return Product::select('products.id as id', 'items.name', 'items.image', 'products.price', 'products.stack')
+        return Product::select('products.id as id', 'items.name', 'items.image', 'items.type', 'products.price', 'products.stack')
             ->join('items', 'items.id', '=', 'products.item_id')
             ->where('server_id', $serverId)
             ->where('category_id', $category)

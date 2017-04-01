@@ -34,6 +34,8 @@ class SaveAddedProductRequest extends FormRequest
 
     public function messages()
     {
+
+
         return [
             'item.required' => trans('validation.required', ['attribute' => 'Привязать предмет']),
             'item.numeric' => trans('validation.numeric', ['attribute' => 'Привязать предмет']),

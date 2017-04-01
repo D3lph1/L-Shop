@@ -15,15 +15,15 @@
                 <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-12 offset-xs-0">
                     <div class="row">
                         <div class="col-sm-6 offset-sm-3 col-12 text-center">
-                            <h4>Привязать предмет:</h4>
+                            <h4>Привязать предмет/привилегию:</h4>
                             <div class="btn-group mb-2 mt-1">
                                 <button id="edit-products-clip" class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">[{{ $product->item_id }}] {{ $product->name }}</button>
 
                                 <div class="dropdown-menu dropdown-overflow">
-                                    <a class="dropdown-item edit-products-clip-item change" data-item="{{ $product->item_id }}" data-parent="edit-products-clip">[{{ $product->item_id }}] {{ $product->name }}</a>
+                                    <a class="dropdown-item edit-products-clip-item change" data-item="{{ $product->item_id }}" data-item-type="{{ $product->type }}" data-parent="edit-products-clip">[{{ $product->item_id }}] {{ $product->name }}</a>
                                     <div class="dropdown-divider"></div>
                                     @foreach($items as $item)
-                                        <a class="dropdown-item edit-products-clip-item change" data-item="{{ $item->id }}" data-parent="edit-products-clip">[{{ $item->id }}] {{ $item->name }}</a>
+                                        <a class="dropdown-item edit-products-clip-item change" data-item="{{ $item->id }}" data-item-type="{{ $item->type }}" data-parent="edit-products-clip">[{{ $item->id }}] {{ $item->name }}</a>
                                     @endforeach
                                 </div>
                                 <input type="hidden" name="item" id="item" value="{{ $product->item_id }}">
@@ -40,14 +40,14 @@
                                 <div class="md-form text-left">
                                     <i class="fa fa-cubes prefix"></i>
                                     <input type="text" name="stack" id="stack" class="form-control" value="{{ $product->stack }}">
-                                    <label for="stack">Количество товара в 1 стаке</label>
+                                    <label for="stack">@if($product->type == 'permgroup') Длительность привилегии (В днях) @else Количество товара в 1 стаке @endif</label>
                                 </div>
                             </div>
                             <div class="plus-category">
                                 <div class="md-form text-left">
                                     <i class="fa fa-money prefix"></i>
                                     <input type="text" name="price" id="price" class="form-control" value="{{ $product->price }}">
-                                    <label for="price">Цена за стак товара</label>
+                                    <label for="price">@if($product->type == 'permgroup') Цена одного периода привилегии @else Цена за стак товара @endif</label>
                                 </div>
                             </div>
                         </div>

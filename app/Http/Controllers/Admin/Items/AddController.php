@@ -38,17 +38,18 @@ class AddController extends Controller
      */
     public function save(SaveAddedItemRequest $request)
     {
+        $itemType = $request->get('item_type');
         $image = $request->file('image');
         $filename = null;
         if ($image) {
             $filename = $this->moveImageAndGetName($image);
         }
 
-        \DB::transaction(function () use ($request, $filename){
+        \DB::transaction(function () use ($request, $filename, $itemType){
             $this->qm->createItem([
                 'name' => $request->get('name'),
                 'description' => '',
-                'type' => 'item',
+                'type' => $itemType == 'item' ? 'item' : 'permgroup',
                 'image' => $filename,
                 'item' => $request->get('item'),
                 'extra' => $request->get('extra'),

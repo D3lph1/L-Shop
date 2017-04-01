@@ -23,6 +23,10 @@ class Captcha
      */
     public function handle($request, Closure $next)
     {
+        if (config('app.debug') === true) {
+            return $next($request);
+        }
+
         $reCaptchaResponse = $request->get('g-recaptcha-response');
         if (!$reCaptchaResponse) {
             $reCaptchaResponse = $request->get('captcha');

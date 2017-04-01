@@ -28,12 +28,14 @@ class EditController extends Controller
             'products.stack',
             'products.item_id',
             'products.category_id',
-            'items.name'
+            'items.name',
+            'items.type'
         ]);
 
         $items = $this->qm->items([
             'id',
-            'name'
+            'name',
+            'type'
         ]);
 
         $categories = $this->qm->allCategoriesWithServers([
@@ -79,20 +81,6 @@ class EditController extends Controller
     {
         $server = (int)$request->get('server');
         $category = (int)$request->get('category');
-
-        $categories = $this->qm->serverWithCategories($server, [
-            'categories.id'
-        ]);
-        \Debugbar::info($request->all());
-        if (!$categories) {
-            \Message::danger('Неудалось сохранть товар');
-            return back();
-        }
-
-        if ($categories->id != $category) {
-            \Message::danger('Категория не является дочерней для заданного сервера!');
-            return back();
-        }
 
         \DB::transaction(function () use ($request, $server, $category) {
             $this->qm->updateProduct((int)$request->route('product'), [

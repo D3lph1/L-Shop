@@ -28,6 +28,7 @@ class ListController extends ListParent
         $items = $this->qm->items([
             'id',
             'name',
+            'type',
             'image',
             'extra'
         ], $orderBy, $orderType, $filter);

@@ -39,12 +39,20 @@ class ShoppingCart extends Distributor
     {
         $insertData = [];
         foreach ($products as $product) {
+            if ($product->type == 'permgroup') {
+                $item = $product->item . '?lifetime=' . $product->count * 86400;
+                $amount = $product->count;
+            }else {
+                $item = $product->item;
+                $amount = $product->count;
+            }
+
             $insertData[] = [
                 'server' => $this->payment->server_id,
                 'player' => $this->user,
                 'type' => $product->type,
-                'item' => $product->item,
-                'amount' => $product->count,
+                'item' => $item,
+                'amount' => $amount,
                 'extra' => $product->extra,
                 'item_id' => $product->item_id,
                 'created_at' => Carbon::now()->toDateTimeString()

@@ -61,6 +61,9 @@
             @if($isAuth)
                 <div class="l-shop-collapse">
                     <p class="a-b-header">Профиль</p>
+                    <p>
+                        <a href="{{ route('profile.settings', ['server' => $currentServer->id]) }}" class="btn btn-info btn-block"><i class="fa fa-gear left"></i>Настройки</a>
+                    </p>
                     <div class="ad-btn-block">
                         <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-info left"></i>Информация</button>
                         <ul class="ad-btn-list">

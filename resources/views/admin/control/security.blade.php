@@ -72,6 +72,19 @@
                 </div>
             </div>
 
+            <div class="card card-block mt-2">
+                <h4 class="card-title">Пользователь</h4>
+                <p class="card-text">
+                <div class="md-form mt-1">
+                    <input type="checkbox" name="enable_change_password" id="enable-change-password" @if($enabledChangePassword) checked="checked" @endif value="1">
+                    <label for="enable-change-password" class="ckeckbox-label">
+                        <span class='ui'></span>
+                        Разрешить пользователю менять пароль от своего аккаунта
+                    </label>
+                </div>
+                </p>
+            </div>
+
             <div class="card card-block mt-5">
                 <div class="flex-row">
                     {{ csrf_field() }}

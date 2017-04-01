@@ -34,6 +34,8 @@ class SaveAddedItemRequest extends FormRequest
 
     public function messages()
     {
+        $itemType = $this->get('item_type');
+
         return [
             'name.required' => trans('validation.required', ['attribute' => 'Название предмета']),
             'name.min' => trans('validation.min.string', ['attribute' => 'Название предмета']),
@@ -44,9 +46,9 @@ class SaveAddedItemRequest extends FormRequest
                 'other' => 'Тип изображения',
                 'value' => 'Загрузить изображение'
             ]),
-            'item.required' => trans('validation.required', ['attribute' => 'ID или ID:DATA предмета']),
-            'item.min' => trans('validation.min.string', ['attribute' => 'ID или ID:DATA предмета']),
-            'item.max' => trans('validation.max.string', ['attribute' => 'ID или ID:DATA предмета'])
+            'item.required' => trans('validation.required', ['attribute' => $itemType == 'item' ? 'ID или ID:DATA предмета' : 'Внутриигровой идентификатор привилегии']),
+            'item.min' => trans('validation.min.string', ['attribute' => $itemType == 'item' ? 'ID или ID:DATA предмета' : 'Внутриигровой идентификатор привилегии']),
+            'item.max' => trans('validation.max.string', ['attribute' => $itemType == 'item' ? 'ID или ID:DATA предмета' : 'Внутриигровой идентификатор привилегии'])
         ];
     }
 }
