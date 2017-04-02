@@ -47,6 +47,7 @@
                         <th>ID</th>
                         <th>Изображение</th>
                         <th>Название</th>
+                        <th>Тип</th>
                         <th>Extra</th>
                         <th>Редактировать</th>
                     </tr>
@@ -57,6 +58,7 @@
                             <th scope="row">{{ $item->id }}</th>
                             <td><img height="35" width="35" src="@if(is_file(img_path("items/$item->image"))) {{ asset("img/items/{$item->image}") }} @else {{ asset("img/empty.png") }} @endif"></td>
                             <td>{{ $item->name }}</td>
+                            <td>@if ($item->type == 'item') Предмет/блок @elseif($item->type == 'permgroup') Привилегия @endif</td>
                             <td>@if(is_null($item->extra)) Нет @else {{ $item->extra }} @endif</td>
                             <td><a href="{{ route('admin.items.edit', ['server' => $currentServer->id, 'item' => $item->id]) }}" class="btn btn-info btn-sm">Редактировать</a></td>
                         </tr>

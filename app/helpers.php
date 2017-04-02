@@ -189,3 +189,30 @@ if (!function_exists('refill_user_balance')) {
         }
     }
 }
+
+if (!function_exists('humanize_month')) {
+    /**
+     * @param string $month
+     *
+     * @return string
+     */
+    function humanize_month($month)
+    {
+        $list = [
+            'January' => 'Январь',
+            'February' => 'Февраль',
+            'March' => 'Март',
+            'April' => 'Апрель',
+            'May' => 'Май',
+            'June' => 'Июнь',
+            'July' => 'Июль',
+            'August' => 'Август',
+            'September' => 'Сентябрь',
+            'October' => 'Октябрь',
+            'Novemver' => 'Ноябрь',
+            'December' => 'Декабрь'
+        ];
+
+        return strtr($month, $list);
+    }
+}

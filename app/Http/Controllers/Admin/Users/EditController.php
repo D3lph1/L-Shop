@@ -116,4 +116,30 @@ class EditController extends Controller
 
         return response()->redirectToRoute('admin.users.list', ['server' => $request->get('currentServer')->id]);
     }
+
+    /**
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function destroySessions(Request $request)
+    {
+        $user = \Sentinel::getUserRepository()->findById($request->route('user'));
+
+        if (!$user) {
+            \Message::danger('Пользователь не найден');
+
+            return back();
+        }
+
+        $result = \Sentinel::logout($user, true);
+
+        if ($result) {
+            \Message::info('Логин-сессии данного пользователя успешно сброшены!');
+        }else {
+            \Message::danger('Не удалось сбросить логин-сессии данного пользователя!');
+        }
+
+        return back();
+    }
 }

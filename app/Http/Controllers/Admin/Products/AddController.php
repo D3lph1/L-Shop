@@ -25,7 +25,8 @@ class AddController extends Controller
     {
         $items = $this->qm->items([
             'id',
-            'name'
+            'name',
+            'type'
         ]);
 
         $categories = $this->qm->allCategoriesWithServers([

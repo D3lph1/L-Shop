@@ -25,7 +25,7 @@
                 <tbody>
                 <tr>
                     <td>Версия системы L - Shop</td>
-                    <td>0.1.0 (BETA)</td>
+                    <td>0.2.0 (BETA)</td>
                 </tr>
                 <tr>
                     <td>Версия фреймворка Laravel</td>
@@ -35,10 +35,10 @@
                     <td>GitHub репозиторий</td>
                     <td><a href="https://github.com/D3lph1/L-shop" target="_blank">https://github.com/D3lph1/L-shop</a></td>
                 </tr>
-                <!--<tr>
+                <tr>
                     <td>Тема на RuBukkit.org</td>
-                    <td><a href="http://rubukkit.org/" target="_blank">http://rubukkit.org/</a></td>
-                </tr>-->
+                    <td><a href="http://rubukkit.org/threads/l-shop-open-source.133265/" target="_blank">http://rubukkit.org/threads/l-shop-open-source.133265/</a></td>
+                </tr>
                 </tbody>
             </table>
         </div>

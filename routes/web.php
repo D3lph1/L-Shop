@@ -155,6 +155,27 @@ Route::group(['namespace' => 'Profile', 'where' => ['server' => '\d+']], functio
             'servers:all',
             'auth:hard'
         ]);
+
+    Route::get('/server/{server}/profile/settings', 'SettingsController@render')
+        ->name('profile.settings')
+        ->middleware([
+            'servers:all',
+            'auth:hard'
+        ]);
+
+    Route::post('/server/{server}/profile/settings', 'SettingsController@password')
+        ->name('profile.settings.password')
+        ->middleware([
+            'servers:one',
+            'auth:hard'
+        ]);
+
+    Route::post('/server/{server}/profile/sessions', 'SettingsController@sessions')
+        ->name('profile.settings.sessions')
+        ->middleware([
+            'servers:one',
+            'auth:hard'
+        ]);
 });
 
 Route::group(['namespace' => 'Api'], function () {
@@ -454,6 +475,13 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
         ->middleware([
             'servers:one'
         ]);
+
+    // Remove given user
+    Route::get('/server/{server}/admin/users/destroy_sessions/{user}', 'Users\EditController@destroySessions')
+        ->name('admin.users.edit.destroy_sessions')
+        ->middleware([
+            'servers:one'
+        ]);
     /**
      * END USERS SECTION
      */
@@ -477,6 +505,12 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
         ->name('admin.statistic.payments.complete')
         ->middleware([
             'servers:one',
+        ]);
+
+    Route::get('/server/{server}/admin/statistic/view', 'Statistic\ViewController@render')
+        ->name('admin.statistic.view')
+        ->middleware([
+            'servers:all'
         ]);
     /**
      * END STATISTIC SECTION

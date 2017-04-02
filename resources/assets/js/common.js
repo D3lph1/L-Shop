@@ -102,7 +102,7 @@ $('#btn-sign-up').click(function () {
 });
 
 function signup(self) {
-    
+
 }
 
 /**
@@ -596,7 +596,7 @@ $('#fub-btn').click(function () {
 $('.profile-payments-info').click(function () {
     var url = $(this).attr('data-url');
     var self = this;
-    
+
     $.ajax({
         url: url,
         method: 'POST',
@@ -654,7 +654,7 @@ $('#server-edit-add-category').click(function () {
     var url = $(this).attr('data-url');
     var category = $('#server-edit-add-category-input').val();
     var self = this;
-    
+
     $.ajax({
         url: url,
         method: 'POST',
@@ -679,7 +679,7 @@ $('.server-edit-remove-category').click(function () {
     var url = $(this).attr('data-url');
     var category = $(this).attr('data-category');
     var self = this;
-    
+
     $.ajax({
         url: url,
         method: 'POST',
@@ -723,6 +723,15 @@ $(document).on('click', '.server-add-remove-category', function () {
 
 $('.edit-products-clip-item').click(function () {
     $('#item').val($(this).attr('data-item'));
+    var type = $(this).attr('data-item-type');
+
+    if (type == 'item') {
+        $('label[for=stack]').text('Количество товара в 1 стаке');
+        $('label[for=price]').text('Цена за стак товара');
+    }else if(type == 'permgroup') {
+        $('label[for=stack]').text('Длительность привилегии (В днях)');
+        $('label[for=price]').text('Цена одного периода привилегии');
+    }
 });
 
 $('.edit-categories-clip-item').click(function () {
@@ -747,3 +756,24 @@ $('.access-mode-item').click(function () {
     $('#access-mode-input').val($(this).attr('data-value'));
 });
 
+$('#item-set-item-type').change(function () {
+    $('label[for="item-name"]').text('Название предмета');
+    $('label[for="item"]').text('ID или ID:DATA предмета');
+    $('#extra').parent().fadeIn('fast');
+});
+
+$('#item-set-permgroup-type').change(function () {
+    $('label[for="item-name"]').text('Название привилегии');
+    $('label[for="item"]').text('Внутриигровой идентификатор привилегии');
+    $('#extra').parent().fadeOut('fast');
+});
+
+/**
+ * Statistic section
+ */
+
+//
+
+/**
+ * End statistic section
+ */

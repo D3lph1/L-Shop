@@ -1,12 +1,9 @@
 <?php
-
 namespace App\Http\Controllers\Shop;
-
 use App\Traits\Responsible;
 use Illuminate\Http\Request;
 use App\Services\Payments\Manager;
 use App\Http\Controllers\Controller;
-
 /**
  * Class CartController
  *
@@ -39,14 +36,11 @@ class CartController extends Controller
     {
         $this->server = (int)$request->route('server');
         $server = $request->get('currentServer');
-
         $products = [];
         $cost = 0;
         $fromCart = $this->cart->products();
-
         if ($fromCart) {
             $ids = array_keys($fromCart);
-
             $products = $this->qm->product(
                 $ids,
                 ['products.id as id', 'items.name', 'items.image', 'products.price', 'products.stack']
@@ -55,13 +49,11 @@ class CartController extends Controller
                 $cost += $product->price;
             }
         }
-
         $data = [
             'cart' => $this->cart,
             'products' => $products,
             'cost' => $cost
         ];
-
         return view('shop.cart', $data);
     }
 
@@ -76,7 +68,6 @@ class CartController extends Controller
         $distributor = \App::make('distributor');
         $server = (int)$request->route('server');
         $username = $request->get('username');
-
         if (!is_auth()) {
             $validated = $this->checkUsername($username, true);
             if ($validated !== true) {
@@ -150,14 +141,12 @@ class CartController extends Controller
             if ($count[$i] % $product->stack !== 0) {
                 return json_response('invalid count');
             }
-
             $this->cart->setProductCount((int)$product->id, $count[$i] / $product->stack);
             $i++;
         }
 
         return true;
     }
-
     /**
      * Put item in cart
      *
@@ -173,14 +162,14 @@ class CartController extends Controller
         if ($this->cart->isFull()) {
             return json_response('cart is full');
         }
+
         if ($this->cart->has($product)) {
             return json_response('already in cart');
         }
-        $this->cart->put($product);
 
+        $this->cart->put($product);
         return json_response('success');
     }
-
     /**
      * Remove item from cart
      *
@@ -195,7 +184,6 @@ class CartController extends Controller
 
         if ($this->cart->has($product)) {
             $this->cart->remove($product);
-
             return json_response('success');
         }
 

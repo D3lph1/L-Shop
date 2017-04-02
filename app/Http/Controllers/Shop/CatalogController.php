@@ -74,7 +74,7 @@ class CatalogController extends Controller
         $distributor = \App::make('distributor');
         $server = (int)$request->route('server');
         $username = $request->get('username');
-        \Debugbar::info('test');
+
         if (!is_auth()) {
             $validated = $this->checkUsername($username, false);
             if ($validated !== true) {
@@ -84,7 +84,7 @@ class CatalogController extends Controller
 
 
         $productId = [$request->route('product')];
-        $productCount = [$request->get('count')];
+        $productCount = [unhumanize_perm_duration($request->get('count'), $request->get('measure'))];
         $manager
             ->setServer($server)
             ->setIp($request->ip());

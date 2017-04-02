@@ -30,6 +30,6 @@
 
 <script src="{{ asset('js/app.min.js') }}" type="text/javascript"></script>
 @include('components.messages')
-<script type="text/javascript">@yield('js')</script>
+@yield('js')
 </body>
 </html>

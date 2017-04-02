@@ -28,6 +28,18 @@
                 <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-12 offset-xs-0">
                     <div class="row">
                         <div class="col-sm-6 offset-sm-3 col-12">
+                            <h4 class="text-center">Тип:</h4>
+                            <div class="plus-category text-center mt-1 mb-3">
+                                <div class="btn-group" data-toggle="buttons">
+                                    <label class="btn btn-info active">
+                                        <input type="radio" name="item_type" id="item-set-item-type" autocomplete="off" value="item" checked> Предмет/блок
+                                    </label>
+                                    <label class="btn btn-info">
+                                        <input type="radio" name="item_type" id="item-set-permgroup-type" autocomplete="off" value="permgroup"> Привилегия
+                                    </label>
+                                </div>
+                            </div>
+
                             <h4 class="text-center">Тип изображения:</h4>
                             <div class="plus-category text-center mt-1 mb-3">
                                 <div class="btn-group" data-toggle="buttons">
