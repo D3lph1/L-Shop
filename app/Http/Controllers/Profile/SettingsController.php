@@ -51,7 +51,7 @@ class SettingsController extends Controller
     public function sessions(Request $request)
     {
         \Sentinel::logout(null, true);
-        \Message::info('Сессии сброшены');
+        \Message::info('Логин-сессии успешно сброшены. Вам потребуется авторизоваться заного.');
 
         return back();
     }

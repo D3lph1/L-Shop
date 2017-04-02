@@ -116,6 +116,7 @@
                     <div class="ad-btn-block">
                         <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-pencil left"></i>Статистика</button>
                         <ul class="ad-btn-list">
+                            <a href="{{ route('admin.statistic.view', ['server' => $currentServer->id]) }}" class="waves-effect">Просмотр статистики</a>
                             <a href="{{ route('admin.statistic.payments', ['server' => $currentServer->id]) }}" class="waves-effect">Платежи</a>
                         </ul>
                     </div>

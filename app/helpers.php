@@ -190,73 +190,29 @@ if (!function_exists('refill_user_balance')) {
     }
 }
 
-if (!function_exists('humanize_perm_duration')) {
+if (!function_exists('humanize_month')) {
     /**
-     * @param int $interval
+     * @param string $month
      *
-     * @return array
+     * @return string
      */
-    function humanize_perm_duration($interval)
+    function humanize_month($month)
     {
-        if ($interval < 60) {
-            return [
-                'original' => $interval,
-                'short' => $interval,
-                'name' => 'second',
-                'title' => 'сек.'
-            ];
-        }
+        $list = [
+            'January' => 'Январь',
+            'February' => 'Февраль',
+            'March' => 'Март',
+            'April' => 'Апрель',
+            'May' => 'Май',
+            'June' => 'Июнь',
+            'July' => 'Июль',
+            'August' => 'Август',
+            'September' => 'Сентябрь',
+            'October' => 'Октябрь',
+            'Novemver' => 'Ноябрь',
+            'December' => 'Декабрь'
+        ];
 
-        if ($interval >= 60 and $interval < 3600) {
-            return [
-                'original' => $interval,
-                'short' => $interval / 60,
-                'name' => 'minute',
-                'title' => 'мин.'
-            ];
-        }
-
-        if ($interval >= 3600 and $interval < 86400) {
-            return [
-                'original' => $interval,
-                'short' => $interval / 3600,
-                'name' => 'hour',
-                'title' => 'час.'
-            ];
-        }
-
-        if ($interval > 86400) {
-            return [
-                'original' => $interval,
-                'short' => $interval / 86400,
-                'name' => 'day',
-                'title' => 'дн.'
-            ];
-        }
-
-        return [];
-    }
-}
-
-if (!function_exists('unhumanize_perm_duration')) {
-    /**
-     * @param int $interval
-     * @param string $measure
-     *
-     * @return mixed
-     */
-    function unhumanize_perm_duration($interval, $measure)
-    {
-        if ($measure == 'second') {
-            return $interval;
-        }else if ($measure == 'minute') {
-            return $interval * 60;
-        }else if ($measure == 'hour') {
-            return $interval * 3600;
-        }else if ($measure == 'day') {
-            return $interval * 86400;
-        }
-
-        return $interval;
+        return strtr($month, $list);
     }
 }

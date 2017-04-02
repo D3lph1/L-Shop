@@ -58,6 +58,20 @@
                                     </label>
                                 </div>
                             </div>
+
+                            <div class="plus-category text-center">
+                                <p>
+                                    <a class="btn btn-info" data-toggle="collapse" data-target="#collapseOtherUserActions" aria-expanded="false" aria-controls="collapseOtherUserActions">
+                                        Другое
+                                    </a>
+                                </p>
+                                <div class="collapse" id="collapseOtherUserActions">
+                                    <div class="md-form text-left mb-3">
+                                        <a href="{{ route('admin.users.edit.destroy_sessions', ['server' => $currentServer->id, 'user' => $user->id]) }}" class="btn btn-danger btn-sm btn-block">Сбросить все логин-сессии данного пользователя</a>
+                                    </div>
+                                </div>
+                            </div>
+
                         </div>
                         <div class="col-sm-6 offset-sm-3 col-12 save-and-del text-center">
                             {{ csrf_field() }}

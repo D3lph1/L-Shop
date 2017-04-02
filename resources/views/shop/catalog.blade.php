@@ -18,8 +18,10 @@
         <div id="categories" class="col-12">
             @foreach($categories as $category)
                 <a href="{{ route('catalog', ['server' => $currentServer->id, 'category' => $category->id]) }}"
-                   @if($category->id == $currentCategory) style="background-color: #FF8800"
-                   @endif class="cat-btn waves-effect z-depth-1">
+                   @if($category->id == $currentCategory)
+                        style="background-color: #FF8800"
+                   @endif
+                   class="cat-btn waves-effect z-depth-1">
                     <span>{{ $category->name }}</span>
                 </a>
             @endforeach

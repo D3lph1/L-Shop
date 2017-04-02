@@ -767,3 +767,13 @@ $('#item-set-permgroup-type').change(function () {
     $('label[for="item"]').text('Внутриигровой идентификатор привилегии');
     $('#extra').parent().fadeOut('fast');
 });
+
+/**
+ * Statistic section
+ */
+
+//
+
+/**
+ * End statistic section
+ */

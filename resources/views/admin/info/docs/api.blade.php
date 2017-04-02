@@ -6,7 +6,9 @@
 @endsection
 
 @section('js')
-    hljs.initHighlightingOnLoad();
+    <script type="text/javascript">
+        hljs.initHighlightingOnLoad();
+    </script>
 @endsection
 
 @section('content')

@@ -475,6 +475,13 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
         ->middleware([
             'servers:one'
         ]);
+
+    // Remove given user
+    Route::get('/server/{server}/admin/users/destroy_sessions/{user}', 'Users\EditController@destroySessions')
+        ->name('admin.users.edit.destroy_sessions')
+        ->middleware([
+            'servers:one'
+        ]);
     /**
      * END USERS SECTION
      */
@@ -498,6 +505,12 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
         ->name('admin.statistic.payments.complete')
         ->middleware([
             'servers:one',
+        ]);
+
+    Route::get('/server/{server}/admin/statistic/view', 'Statistic\ViewController@render')
+        ->name('admin.statistic.view')
+        ->middleware([
+            'servers:all'
         ]);
     /**
      * END STATISTIC SECTION
