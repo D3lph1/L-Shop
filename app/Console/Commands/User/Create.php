@@ -46,7 +46,7 @@ class Create extends Command
         $credentials = [
             'username' => $this->argument('username'),
             'email' => $this->argument('email'),
-            'password' => bcrypt($this->argument('password')),
+            'password' => $this->argument('password'),
             'balance' => $this->hasOption('balance') ? $this->option('balance') : 0
         ];
 
