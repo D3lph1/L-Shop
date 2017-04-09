@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Апр 02 2017 г., 14:04
+-- Время создания: Апр 09 2017 г., 21:47
 -- Версия сервера: 5.5.53-log
 -- Версия PHP: 5.6.29
 
@@ -60,6 +60,15 @@ CREATE TABLE `lshop_cart` (
   `created_at` timestamp NULL DEFAULT NULL,
   `server` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `lshop_cart`
+--
+
+INSERT INTO `lshop_cart` (`id`, `player`, `type`, `item`, `amount`, `extra`, `item_id`, `created_at`, `server`) VALUES
+(1, 'Admin', 'item', '46', 16, NULL, 6, '2017-04-09 14:44:51', 1),
+(2, 'Admin', 'item', '46', 16, NULL, 6, '2017-04-09 14:44:58', 1),
+(3, 'Admin', 'item', '46', 16, NULL, 6, '2017-04-09 14:46:39', 1);
 
 -- --------------------------------------------------------
 
@@ -164,6 +173,15 @@ CREATE TABLE `lshop_payments` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Дамп данных таблицы `lshop_payments`
+--
+
+INSERT INTO `lshop_payments` (`id`, `service`, `products`, `cost`, `user_id`, `username`, `server_id`, `ip`, `completed`, `created_at`, `updated_at`) VALUES
+(1, NULL, 'a:1:{i:15;s:2:\"16\";}', 20, 1, NULL, 1, '127.0.0.1', 1, '2017-04-09 14:44:51', '2017-04-09 14:44:51'),
+(2, NULL, 'a:1:{i:15;s:2:\"16\";}', 20, 1, NULL, 1, '127.0.0.1', 1, '2017-04-09 14:44:58', '2017-04-09 14:44:58'),
+(3, NULL, 'a:1:{i:15;s:2:\"16\";}', 20, 1, NULL, 1, '127.0.0.1', 1, '2017-04-09 14:46:39', '2017-04-09 14:46:39');
+
 -- --------------------------------------------------------
 
 --
@@ -177,6 +195,14 @@ CREATE TABLE `lshop_persistences` (
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `lshop_persistences`
+--
+
+INSERT INTO `lshop_persistences` (`id`, `user_id`, `code`, `created_at`, `updated_at`) VALUES
+(131, 1, '9cRdyRlD4tyibVl1ltTwZDNxSapc5ZpZ', '2017-04-02 07:41:49', '2017-04-02 07:41:49'),
+(132, 1, 'OtV434Wq8BgLVhTVQ2mK4XNIbwPiOZV9', '2017-04-02 13:58:45', '2017-04-02 13:58:45');
 
 -- --------------------------------------------------------
 
@@ -385,7 +411,7 @@ CREATE TABLE `lshop_users` (
 --
 
 INSERT INTO `lshop_users` (`id`, `username`, `email`, `password`, `permissions`, `last_login`, `balance`, `created_at`, `updated_at`) VALUES
-(1, 'Admin', 'admin@example.com', '$2y$10$DZwKqeaU6mB61DCjOZHC7eFsYmp8Mk64Fg.61Tc.31W/93sxt061u', NULL, '2017-04-02 06:58:11', 154, '2017-02-05 08:45:27', '2017-04-02 06:58:11');
+(1, 'Admin', 'admin@example.com', '$2y$10$DZwKqeaU6mB61DCjOZHC7eFsYmp8Mk64Fg.61Tc.31W/93sxt061u', NULL, '2017-04-02 13:58:45', 94, '2017-02-05 08:45:27', '2017-04-09 14:46:39');
 
 --
 -- Индексы сохранённых таблиц
@@ -504,7 +530,7 @@ ALTER TABLE `lshop_activations`
 -- AUTO_INCREMENT для таблицы `lshop_cart`
 --
 ALTER TABLE `lshop_cart`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT для таблицы `lshop_categories`
 --
@@ -524,17 +550,17 @@ ALTER TABLE `lshop_migrations`
 -- AUTO_INCREMENT для таблицы `lshop_payments`
 --
 ALTER TABLE `lshop_payments`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT для таблицы `lshop_persistences`
 --
 ALTER TABLE `lshop_persistences`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=131;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
 --
 -- AUTO_INCREMENT для таблицы `lshop_products`
 --
 ALTER TABLE `lshop_products`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 --
 -- AUTO_INCREMENT для таблицы `lshop_reminders`
 --

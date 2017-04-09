@@ -84,7 +84,7 @@ class CatalogController extends Controller
 
 
         $productId = [$request->route('product')];
-        $productCount = [unhumanize_perm_duration($request->get('count'), $request->get('measure'))];
+        $productCount = [$request->get('count')];
         $manager
             ->setServer($server)
             ->setIp($request->ip());

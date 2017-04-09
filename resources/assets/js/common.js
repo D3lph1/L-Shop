@@ -154,7 +154,6 @@ if ($('#content').length) {
     };
 
     $('.product-container').hide().eq(0).show();
-    $('.cat-btn').eq(0).css({'background-color' : '#FF8800'});
     $('.ad-btn-list').hide();
 
     $('.admin-menu-btn').click(function() {
