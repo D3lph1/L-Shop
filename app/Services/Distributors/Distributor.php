@@ -112,5 +112,5 @@ abstract class Distributor
      *
      * @return void
      */
-    abstract protected function give(Payment $payment);
+    abstract public function give(Payment $payment);
 }

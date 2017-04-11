@@ -5,13 +5,13 @@ namespace App\Traits;
 use App\Models\Payment;
 
 /**
- * Trait Responsible
+ * Trait BuyResponse
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  *
  * @package App\Traits
  */
-trait Responsible
+trait BuyResponse
 {
     /**
      * @param int $serverId

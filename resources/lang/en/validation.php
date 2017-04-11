@@ -86,6 +86,9 @@ return [
     'uploaded'             => 'The :attribute failed to upload.',
     'url'                  => 'The :attribute format is invalid.',
 
+    // Specify validation messages
+    'api_sashok_auth_format_regex' => 'Field "Format" must be contains a marker {username}',
+
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines

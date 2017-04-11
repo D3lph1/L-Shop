@@ -105,6 +105,48 @@
                 </p>
             </div>
 
+            <div class="card card-block mt-2">
+                <h4 class="card-title">Интеграция с Sashok724's Launcher</h4>
+                <p class="card-text">
+                    <p>
+                        <input type="checkbox" name="sashok_launcher_auth_enabled" id="api-sashok-launcher-auth-enabled" @if($sashokAuthEnabled) checked="checked" @endif value="1">
+                        <label for="api-sashok-launcher-auth-enabled" class="ckeckbox-label">
+                            <span class='ui'></span>
+                            Включить
+                        </label>
+                    </p>
+
+                    <p>
+                        Формат успешного ответа сервиса. Данная строка будет "выведена" лаунчсерверу при успешной проверке введенных данных.
+                        Маркер {username} будет заменен на имя пользователя. Например, если формат ответа OK:{username}, при успешной
+                        проверке данных пользователя D3lph1, сервер получит ответ: OK:D3lph1
+                        <div class="md-form mt-1">
+                            <i class="fa fa-commenting-o prefix"></i>
+                            <input type="text" name="sashok_launcher_auth_format" id="api-sashok-launcher-format" class="form-control" value="{{ $sashokAuthFormat }}">
+                            <label for="api-sashok-launcher-format">Формат</label>
+                        </div>
+                    </p>
+
+                    <p>
+                        <div class="md-form">
+                            <i class="fa fa-exclamation-triangle prefix"></i>
+                            <input type="text" name="sashok_launcher_auth_error_message" id="api-sashok-launcher-error-message" class="form-control" value="{{ $sashokAuthErrorMessage }}">
+                            <label for="api-sashok-launcher-error-message">Сообщение при неверном вводе данных пользователем</label>
+                        </div>
+                    </p>
+
+                    <p>
+                        Ниже вы можете ввести список ip-адресов, которые могут соединяться с L-Shop и проверять данные пользователей для авторизации в лаунчере.
+                        Мы рекомендуем указать здесь ip вашего лаунчсервера. Оставьте поле пустым, дабы не использовать блокировку посторонних адресов (Не рекомендуется).
+                        <div class="md-form mt-1">
+                            <i class="fa fa-sticky-note-o prefix"></i>
+                            <input type="text" name="sashok_launcher_auth_white_list" id="api-sashok-launcher-white-list" class="form-control" value="{{ $sashokAuthWhiteList }}">
+                            <label for="api-sashok-launcher-white-list">Список разрешенных IP адресов (Разделитель - запятая. Например: 127.0.0.1, 192.168.0.1).</label>
+                        </div>
+                    </p>
+                </p>
+            </div>
+
             <div class="card card-block mt-5">
                 <div class="flex-row">
                     {{ csrf_field() }}

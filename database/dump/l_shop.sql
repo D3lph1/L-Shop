@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Апр 09 2017 г., 21:47
+-- Время создания: Апр 11 2017 г., 18:26
 -- Версия сервера: 5.5.53-log
 -- Версия PHP: 5.6.29
 
@@ -60,15 +60,6 @@ CREATE TABLE `lshop_cart` (
   `created_at` timestamp NULL DEFAULT NULL,
   `server` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Дамп данных таблицы `lshop_cart`
---
-
-INSERT INTO `lshop_cart` (`id`, `player`, `type`, `item`, `amount`, `extra`, `item_id`, `created_at`, `server`) VALUES
-(1, 'Admin', 'item', '46', 16, NULL, 6, '2017-04-09 14:44:51', 1),
-(2, 'Admin', 'item', '46', 16, NULL, 6, '2017-04-09 14:44:58', 1),
-(3, 'Admin', 'item', '46', 16, NULL, 6, '2017-04-09 14:46:39', 1);
 
 -- --------------------------------------------------------
 
@@ -144,7 +135,6 @@ CREATE TABLE `lshop_migrations` (
 --
 
 INSERT INTO `lshop_migrations` (`id`, `migration`, `batch`) VALUES
-(1, '2014_07_02_230147_migration_cartalyst_sentinel', 1),
 (2, '2015_08_25_172600_create_settings_table', 1),
 (4, '2017_02_06_120639_create_servers_table', 2),
 (12, '2017_02_08_173801_create_products_table', 3),
@@ -173,15 +163,6 @@ CREATE TABLE `lshop_payments` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Дамп данных таблицы `lshop_payments`
---
-
-INSERT INTO `lshop_payments` (`id`, `service`, `products`, `cost`, `user_id`, `username`, `server_id`, `ip`, `completed`, `created_at`, `updated_at`) VALUES
-(1, NULL, 'a:1:{i:15;s:2:\"16\";}', 20, 1, NULL, 1, '127.0.0.1', 1, '2017-04-09 14:44:51', '2017-04-09 14:44:51'),
-(2, NULL, 'a:1:{i:15;s:2:\"16\";}', 20, 1, NULL, 1, '127.0.0.1', 1, '2017-04-09 14:44:58', '2017-04-09 14:44:58'),
-(3, NULL, 'a:1:{i:15;s:2:\"16\";}', 20, 1, NULL, 1, '127.0.0.1', 1, '2017-04-09 14:46:39', '2017-04-09 14:46:39');
-
 -- --------------------------------------------------------
 
 --
@@ -201,8 +182,8 @@ CREATE TABLE `lshop_persistences` (
 --
 
 INSERT INTO `lshop_persistences` (`id`, `user_id`, `code`, `created_at`, `updated_at`) VALUES
-(131, 1, '9cRdyRlD4tyibVl1ltTwZDNxSapc5ZpZ', '2017-04-02 07:41:49', '2017-04-02 07:41:49'),
-(132, 1, 'OtV434Wq8BgLVhTVQ2mK4XNIbwPiOZV9', '2017-04-02 13:58:45', '2017-04-02 13:58:45');
+(132, 1, 'OtV434Wq8BgLVhTVQ2mK4XNIbwPiOZV9', '2017-04-02 13:58:45', '2017-04-02 13:58:45'),
+(146, 1, 'MpehtKYeohqrTBHEA9R2Fa2sK9YhVJBP', '2017-04-11 11:25:32', '2017-04-11 11:25:32');
 
 -- --------------------------------------------------------
 
@@ -291,7 +272,34 @@ CREATE TABLE `lshop_role_users` (
 --
 
 INSERT INTO `lshop_role_users` (`user_id`, `role_id`, `created_at`, `updated_at`) VALUES
-(1, 1, '2017-03-06 13:35:12', '2017-03-06 13:35:12');
+(1, 1, '2017-03-06 13:35:12', '2017-03-06 13:35:12'),
+(2, 2, '2017-04-10 07:09:08', '2017-04-10 07:09:08'),
+(3, 2, '2017-04-11 11:24:32', '2017-04-11 11:24:32'),
+(4, 2, '2017-04-09 16:11:48', '2017-04-09 16:11:48'),
+(5, 2, '2017-04-10 07:32:26', '2017-04-10 07:32:26'),
+(7, 2, '2017-04-09 16:42:57', '2017-04-09 16:42:57'),
+(8, 2, '2017-04-09 16:43:09', '2017-04-09 16:43:09'),
+(9, 2, '2017-04-10 07:34:35', '2017-04-10 07:34:35'),
+(10, 2, '2017-04-10 07:34:37', '2017-04-10 07:34:37'),
+(11, 2, '2017-04-10 07:34:39', '2017-04-10 07:34:39'),
+(12, 2, '2017-04-10 07:35:19', '2017-04-10 07:35:19'),
+(13, 2, '2017-04-10 07:36:46', '2017-04-10 07:36:46'),
+(14, 2, '2017-04-10 07:37:52', '2017-04-10 07:37:52'),
+(15, 2, '2017-04-10 07:38:43', '2017-04-10 07:38:43'),
+(16, 2, '2017-04-10 07:52:36', '2017-04-10 07:52:36'),
+(17, 2, '2017-04-10 07:54:20', '2017-04-10 07:54:20'),
+(18, 2, '2017-04-10 07:55:56', '2017-04-10 07:55:56'),
+(19, 2, '2017-04-10 07:57:47', '2017-04-10 07:57:47'),
+(20, 2, '2017-04-10 08:02:25', '2017-04-10 08:02:25'),
+(21, 2, '2017-04-10 09:15:44', '2017-04-10 09:15:44'),
+(22, 2, '2017-04-10 09:22:14', '2017-04-10 09:22:14'),
+(23, 2, '2017-04-10 09:25:13', '2017-04-10 09:25:13'),
+(24, 2, '2017-04-10 09:26:09', '2017-04-10 09:26:09'),
+(25, 2, '2017-04-10 09:26:58', '2017-04-10 09:26:58'),
+(26, 2, '2017-04-10 09:28:28', '2017-04-10 09:28:28'),
+(27, 2, '2017-04-10 09:32:38', '2017-04-10 09:32:38'),
+(28, 2, '2017-04-10 09:33:44', '2017-04-10 09:33:44'),
+(31, 1, '2017-04-10 12:12:56', '2017-04-10 12:12:56');
 
 -- --------------------------------------------------------
 
@@ -312,7 +320,7 @@ CREATE TABLE `lshop_servers` (
 --
 
 INSERT INTO `lshop_servers` (`id`, `name`, `enabled`, `created_at`, `updated_at`) VALUES
-(1, 'MMO', 1, '2017-02-06 12:16:42', '2017-02-28 10:49:09'),
+(1, 'MMO', 1, '2017-02-06 12:16:42', '2017-04-09 15:10:12'),
 (2, 'Hi-Tech (PvP)', 1, '2017-02-06 12:16:55', '2017-03-03 11:24:20'),
 (3, 'Hi-Tech (PvE)', 1, '2017-02-06 12:17:08', '2017-03-08 10:53:46');
 
@@ -363,7 +371,11 @@ INSERT INTO `lshop_settings` (`id`, `key`, `value`) VALUES
 (31, 'api.salt', '0'),
 (33, 'payment.method.robokassa.test', '1'),
 (34, 'auth.email_activation', '0'),
-(35, 'user.enable_change_password', '1');
+(35, 'user.enable_change_password', '1'),
+(36, 'api.launcher.sashok.auth.error_message', 'Пользователь с такими данными не найден'),
+(38, 'api.launcher.sashok.auth.enabled', '0'),
+(39, 'api.launcher.sashok.auth.ips_white_list', '[]'),
+(40, 'api.launcher.sashok.auth.format', 'OK:{username}');
 
 -- --------------------------------------------------------
 
@@ -380,14 +392,6 @@ CREATE TABLE `lshop_throttle` (
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
---
--- Дамп данных таблицы `lshop_throttle`
---
-
-INSERT INTO `lshop_throttle` (`id`, `user_id`, `type`, `ip`, `created_at`, `updated_at`) VALUES
-(29, NULL, 'global', NULL, '2017-04-02 06:56:51', '2017-04-02 06:56:51'),
-(30, NULL, 'ip', '127.0.0.1', '2017-04-02 06:56:51', '2017-04-02 06:56:51');
-
 -- --------------------------------------------------------
 
 --
@@ -401,7 +405,10 @@ CREATE TABLE `lshop_users` (
   `password` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
   `permissions` text COLLATE utf8mb4_unicode_ci,
   `last_login` timestamp NULL DEFAULT NULL,
-  `balance` double NOT NULL DEFAULT '0',
+  `balance` double UNSIGNED NOT NULL DEFAULT '0',
+  `uuid` char(36) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `accessToken` char(32) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
+  `serverID` varchar(41) COLLATE utf8mb4_unicode_ci DEFAULT NULL,
   `created_at` timestamp NULL DEFAULT NULL,
   `updated_at` timestamp NULL DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
@@ -410,8 +417,8 @@ CREATE TABLE `lshop_users` (
 -- Дамп данных таблицы `lshop_users`
 --
 
-INSERT INTO `lshop_users` (`id`, `username`, `email`, `password`, `permissions`, `last_login`, `balance`, `created_at`, `updated_at`) VALUES
-(1, 'Admin', 'admin@example.com', '$2y$10$DZwKqeaU6mB61DCjOZHC7eFsYmp8Mk64Fg.61Tc.31W/93sxt061u', NULL, '2017-04-02 13:58:45', 94, '2017-02-05 08:45:27', '2017-04-09 14:46:39');
+INSERT INTO `lshop_users` (`id`, `username`, `email`, `password`, `permissions`, `last_login`, `balance`, `uuid`, `accessToken`, `serverID`, `created_at`, `updated_at`) VALUES
+(1, 'admin', 'admin@example.com', '$2y$10$GDJaNAnP5O.TEACogNq7VuR/1990ABce3ovy.JNM.Ffv97jZEDM7y', NULL, '2017-04-11 11:25:32', 250, 'aec998b1-1e19-11e7-a727-0a0027000014', 'efd406abdfa6837875c9ba3850a4d1c9', NULL, '2017-04-10 13:33:25', '2017-04-11 11:25:32');
 
 --
 -- Индексы сохранённых таблиц
@@ -514,8 +521,8 @@ ALTER TABLE `lshop_throttle`
 --
 ALTER TABLE `lshop_users`
   ADD PRIMARY KEY (`id`),
-  ADD UNIQUE KEY `users_username_unique` (`username`),
-  ADD UNIQUE KEY `users_email_unique` (`email`);
+  ADD UNIQUE KEY `users_email_unique` (`email`),
+  ADD UNIQUE KEY `users_username_uuid_unique` (`username`,`uuid`);
 
 --
 -- AUTO_INCREMENT для сохранённых таблиц
@@ -525,12 +532,12 @@ ALTER TABLE `lshop_users`
 -- AUTO_INCREMENT для таблицы `lshop_activations`
 --
 ALTER TABLE `lshop_activations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 --
 -- AUTO_INCREMENT для таблицы `lshop_cart`
 --
 ALTER TABLE `lshop_cart`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT для таблицы `lshop_categories`
 --
@@ -550,12 +557,12 @@ ALTER TABLE `lshop_migrations`
 -- AUTO_INCREMENT для таблицы `lshop_payments`
 --
 ALTER TABLE `lshop_payments`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT для таблицы `lshop_persistences`
 --
 ALTER TABLE `lshop_persistences`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=133;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=147;
 --
 -- AUTO_INCREMENT для таблицы `lshop_products`
 --
@@ -580,17 +587,17 @@ ALTER TABLE `lshop_servers`
 -- AUTO_INCREMENT для таблицы `lshop_settings`
 --
 ALTER TABLE `lshop_settings`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
 --
 -- AUTO_INCREMENT для таблицы `lshop_throttle`
 --
 ALTER TABLE `lshop_throttle`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
 --
 -- AUTO_INCREMENT для таблицы `lshop_users`
 --
 ALTER TABLE `lshop_users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

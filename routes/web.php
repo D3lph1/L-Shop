@@ -182,6 +182,10 @@ Route::group(['namespace' => 'Api'], function () {
     Route::get('/api/signin', 'SignInController@signin')
         ->name('api.signin')
         ->middleware('api');
+
+    Route::get('/api/launcher/sashok/auth', 'SashokLauncher@auth')
+        ->name('api.launcher.sashok.auth')
+        ->middleware('api');
 });
 
 /**
@@ -536,6 +540,13 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
     // Render API documentation page
     Route::get('/server/{server}/admin/info/docs/api', 'Info\DocsController@api')
         ->name('admin.info.docs.api')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Render Sashok724 Launcher integration page
+    Route::get('/server/{server}/admin/info/docs/sashok_launcher_integration', 'Info\DocsController@sashokLauncherIntegration')
+        ->name('admin.info.docs.sashok_launcher_integration')
         ->middleware([
             'servers:all'
         ]);

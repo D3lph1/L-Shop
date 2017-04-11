@@ -27,8 +27,8 @@ class SignUpRequest extends FormRequest
         $rule = $rule ? '|' . $rule : '';
 
         return [
-            'username' =>"required|unique:users|min:" . config('l-shop.validation.username.min') . "|max:" . config('l-shop.validation.username.max') . "{$rule}",
-            'email' => 'required|email|unique:users|min:4|max:191',
+            'username' =>"required|min:" . config('l-shop.validation.username.min') . "|max:" . config('l-shop.validation.username.max') . "{$rule}",
+            'email' => 'required|email|min:4|max:191',
             'password' => 'required|confirmed|max:191|min:' . config('l-shop.validation.password.min') . ''
         ];
     }
@@ -40,14 +40,12 @@ class SignUpRequest extends FormRequest
     {
         return [
             'username.required' => trans('validation.required', ['attribute' => 'Имя пользователя']),
-            'username.unique' => trans('validation.unique', ['attribute' => 'Имя пользователя']),
             'username.min' => trans('validation.min.string', ['attribute' => 'Имя пользователя']),
             'username.max' => trans('validation.max.string', ['attribute' => 'Имя пользователя']),
             'username.alpha_dash' => trans('validation.alpha_dash', ['attribute' => 'Имя пользователя']),
             'username.regex' => trans('validation.regex', ['attribute' => 'Имя пользователя']),
 
             'email.required' => trans('validation.required', ['attribute' => 'Адрес электронной почты']),
-            'email.email' => trans('validation.email', ['attribute' => 'Адрес электронной почты']),
             'email.unique' => trans('validation.unique', ['attribute' => 'Адрес электронной почты']),
             'email.min' => trans('validation.min.string', ['attribute' => 'Адрес электронной почты']),
             'email.max' => trans('validation.max.string', ['attribute' => 'Адрес электронной почты']),

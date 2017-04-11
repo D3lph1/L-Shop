@@ -101,10 +101,13 @@ class MigrationCartalystSentinel extends Migration
             $table->text('permissions')->nullable();
             $table->timestamp('last_login')->nullable();
             $table->double('balance')->unsigned()->default(0);
+            $table->char('uuid', 36)->nullable();
+            $table->char('accessToken', 32)->nullable();
+            $table->string('serverID', 41)->nullable();
             $table->timestamps();
 
             $table->engine = 'InnoDB';
-            $table->unique('username');
+            $table->unique(['username', 'uuid']);
             $table->unique('email');
         });
     }

@@ -15,5 +15,6 @@ Homestead.yaml
 /yarn.lock
 /composer.lock
 /workbench/
+.env
 
 !.gitignore

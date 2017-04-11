@@ -21,6 +21,11 @@ class ResultController extends Controller
      */
     private $payment;
 
+    /**
+     * Current service name
+     *
+     * @var string
+     */
     private $service;
 
     /**

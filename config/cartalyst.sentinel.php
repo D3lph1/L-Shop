@@ -29,7 +29,7 @@ return [
     |
     */
 
-    'session' => 'zJPXQd3MNzZvRfqIEI7HyxWBhrqmkjEO',
+    'session' => env('APP_AUTH_KEY'),
 
     /*
     |--------------------------------------------------------------------------
@@ -245,9 +245,9 @@ return [
 
         'ip' => [
 
-            'interval' => 900,
+            'interval' => env('THROTTLE_IP_INTERVAL', 900),
 
-            'thresholds' => 5,
+            'thresholds' => env('THROTTLE_IP_THRESHOLDS', 5),
 
         ],
 

@@ -26,7 +26,7 @@ trait Validator
      * @return bool|\Illuminate\Http\JsonResponse
      *
      */
-    public function checkUsername($username, $required = true)
+    public function validateUsername($username, $required = true)
     {
         $min = $this->getOption('username.min', 4);
         $max = $this->getOption('username.max', 32);
@@ -48,7 +48,7 @@ trait Validator
         return true;
     }
 
-    public function checkFillUpBalanceSum($sum, $required = true)
+    public function validateFillUpBalanceSum($sum, $required = true)
     {
 
         $required = $required ? 'required|' : 'sometimes|';

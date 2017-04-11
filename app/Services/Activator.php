@@ -8,7 +8,7 @@ use Cartalyst\Sentinel\Users\UserInterface;
 /**
  * Class Activator
  *
- * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
  *
  * @package App\Services
  */
@@ -21,18 +21,19 @@ class Activator
     {
         $activation = \Activation::create($user);
 
-        $this->mail($user->id, $user->username, $activation->code);
+        $this->mail($user->id, $user->username, $user->email, $activation->code);
     }
 
     /**
      * Send mail with activation link
      *
-     * @param int $userId
+     * @param int    $userId
      * @param string $username
+     * @param string $email
      * @param string $code
      */
-    private function mail($userId, $username, $code)
+    private function mail($userId, $username, $email, $code)
     {
-        \Mail::to('mailbogdik@gmail.com')->sendNow(new UserActivation($userId, $username, $code));
+        \Mail::to($email)->sendNow(new UserActivation($userId, $username, $code));
     }
 }

@@ -2,9 +2,13 @@
 
 namespace App\Console\Commands\User;
 
-use Illuminate\Console\Command;
+use App\Exceptions\User\UsernameAlreadyExistsException;
+use App\Exceptions\User\EmailAlreadyExistsException;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
+use App\Exceptions\User\UnableToCreateUser;
+use Illuminate\Container\Container;
+use Illuminate\Console\Command;
 
 /**
  * Class CreateUser
@@ -43,60 +47,37 @@ class Create extends Command
      */
     public function handle()
     {
-        $credentials = [
-            'username' => $this->argument('username'),
-            'email' => $this->argument('email'),
-            'password' => $this->argument('password'),
-            'balance' => $this->hasOption('balance') ? $this->option('balance') : 0
-        ];
+        $username = $this->argument('username');
+        $email = $this->argument('email');
+        $password = $this->argument('password');
+        $balance = (int)$this->hasOption('balance') ? $this->option('balance') : 0;
+        $forceActivate = (bool)$this->option('activate');
+        $admin = (bool)$this->option('admin');
 
-        if (!\Sentinel::validForCreation($credentials)) {
-            $this->error('Invalid credentials');
-
-            return 1;
-        }
-
-        if (\Sentinel::findByCredentials(['username' => $credentials['username']])) {
-            $this->error('User with this username already exists');
-
-            return 2;
-        }
-
-        if (\Sentinel::findByCredentials(['email' => $credentials['email']])) {
-            $this->error('User with this email already exists');
-
-            return 3;
-        }
-
-        $user = null;
-        $activate = $this->option('activate');
+        // Get registrar service from container
+        $registrar = Container::getInstance()->make('registrar');
 
         try {
-            $user = \Sentinel::register($credentials, $activate);
-        } catch (\Exception $e) {
+            // Call registrar service method
+            $registrar->register($username, $email, $password, $balance, $forceActivate, $admin);
+        } catch (UsernameAlreadyExistsException $e) {
+            $this->error('User with this username already exists');
+
+            return 1;
+        } catch (EmailAlreadyExistsException $e) {
+            $this->error('User with this email already exists');
+
+            return 2;
+        } catch (UnableToCreateUser $e) {
             $this->error('User has not been created. Error details: ' . $e->getMessage());
 
             return 4;
         }
 
-        if (!$user) {
-            $this->error('User has not been created.');
-
-            return 5;
-        }
-
-        if ($this->option('admin')) {
-            $adminRole = \Sentinel::findRoleBySlug('admin');
-            $adminRole->users()->attach($user);
-        } else {
-            $userRole = \Sentinel::findRoleBySlug('user');
-            $userRole->users()->attach($user);
-        }
-
-        if ($activate) {
+        if ($forceActivate) {
             $this->info("User successfully created and activated!");
 
-            return 6;
+            return 0;
         }
 
         $this->info("User successfully created!");
