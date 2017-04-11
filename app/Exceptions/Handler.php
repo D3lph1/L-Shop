@@ -2,6 +2,8 @@
 
 namespace App\Exceptions;
 
+use App\Exceptions\User\EmailAlreadyExistsException;
+use App\Exceptions\User\UsernameAlreadyExistsException;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -20,6 +22,8 @@ class Handler extends ExceptionHandler
         \Illuminate\Database\Eloquent\ModelNotFoundException::class,
         \Illuminate\Session\TokenMismatchException::class,
         \Illuminate\Validation\ValidationException::class,
+        UsernameAlreadyExistsException::class,
+        EmailAlreadyExistsException::class
     ];
 
     /**

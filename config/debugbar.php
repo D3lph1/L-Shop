@@ -93,7 +93,7 @@ return [
         'views'           => true,  // Views with their data
         'route'           => true,  // Current route information
         'laravel'         => true, // Laravel version and environment
-        'events'          => false, // All events fired
+        'events'          => true, // All events fired
         'default_request' => true, // Regular or special Symfony request logger
         'symfony_request' => false,  // Only one can be enabled..
         'mail'            => true,  // Catch mail messages

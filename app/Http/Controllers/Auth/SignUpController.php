@@ -2,10 +2,13 @@
 
 namespace App\Http\Controllers\Auth;
 
-use App\Services\Activator;
-use Illuminate\Http\Request;
+use App\Exceptions\User\UsernameAlreadyExistsException;
+use App\Exceptions\User\EmailAlreadyExistsException;
+use App\Exceptions\User\UnableToCreateUser;
 use App\Http\Requests\SignUpRequest;
 use App\Http\Controllers\Controller;
+use Illuminate\Container\Container;
+use Illuminate\Http\Request;
 
 /**
  * Class SignUpController
@@ -33,35 +36,54 @@ class SignUpController extends Controller
     }
 
     /**
+     * Register new user
+     *
      * @param SignUpRequest $request
-     * @param Activator     $activator
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function signup(SignUpRequest $request, Activator $activator)
+    public function signup(SignUpRequest $request)
     {
-        if (!(bool)s_get('shop.enable_signup')) {
-            return view('auth.signup');
+        if (!s_get('shop.enable_signup')) {
+            return response()->redirectToRoute('signin');
         }
 
-        $credentials = [
-            'username' => $request->get('username'),
-            'email' => $request->get('email'),
-            'password' => $request->get('password')
-        ];
+        $username = $request->get('username');
+        $email = $request->get('email');
+        $password = $request->get('password');
+        $forceActivate = !(bool)s_get('auth.email_activation');
 
-        $activate = (bool)s_get('auth.email_activation');
-        $user = \Sentinel::register($credentials, !$activate);
+        // Get registrar service from container
+        $registrar = Container::getInstance()->make('registrar');
 
-        if (!$user) {
-            \Message::danger('Не удалось зарегистрировать пользователя');
+        try {
+            // Call registrar service method
+            $registrar->register($username, $email, $password, 0, $forceActivate, false);
+        } catch (UsernameAlreadyExistsException $e) {
+            \Message::danger(trans('validation.unique', ['attribute' => 'Имя пользователя']));
+
+            return back();
+        } catch (EmailAlreadyExistsException $e) {
+            \Message::danger(trans('validation.email', ['attribute' => 'Адрес электронной почты']));
+
+            return back();
+        } catch (UnableToCreateUser $e) {
+            \Message::danger(trans('messages.error.signup'));
 
             return back();
         }
 
+        return $this->redirect(!$forceActivate);
+    }
+
+    /**
+     * @param bool $activate
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    private function redirect($activate)
+    {
         if ($activate) {
-            // create new activation and send email
-            $activator->createAndSend($user);
             return response()->redirectToRoute('activation.wait');
         }else {
             \Message::success('Вы успешно зарегистрированы');

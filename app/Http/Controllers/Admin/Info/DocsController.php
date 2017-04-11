@@ -47,6 +47,14 @@ class DocsController extends Controller
     /**
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
+    public function sashokLauncherIntegration()
+    {
+        return view('admin.info.docs.sashok_launcher_intagration');
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function cli()
     {
         return view('admin.info.docs.cli');

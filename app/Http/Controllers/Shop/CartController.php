@@ -1,9 +1,12 @@
 <?php
 namespace App\Http\Controllers\Shop;
-use App\Traits\Responsible;
-use Illuminate\Http\Request;
-use App\Services\Payments\Manager;
+
+use App\Exceptions\User\InvalidUsernameException;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use App\Traits\BuyResponse;
+use App\Services\CartBuy;
+
 /**
  * Class CartController
  *
@@ -13,7 +16,7 @@ use App\Http\Controllers\Controller;
  */
 class CartController extends Controller
 {
-    use Responsible;
+    use BuyResponse;
 
     /**
      * @var array
@@ -58,95 +61,25 @@ class CartController extends Controller
     }
 
     /**
-     * @param Request      $request
-     * @param Manager      $manager
+     * @param Request $request
+     * @param CartBuy $handler
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function buy(Request $request, Manager $manager)
+    public function buy(Request $request, CartBuy $handler)
     {
-        $distributor = \App::make('distributor');
         $server = (int)$request->route('server');
+        $ip = $request->ip();
         $username = $request->get('username');
-        if (!is_auth()) {
-            $validated = $this->checkUsername($username, true);
-            if ($validated !== true) {
-                return $validated;
-            }
-        }
+        $products = $request->get('products');
 
-        $this->setProductsIdAndCount($request->get('products'));
-        $manager
-            ->setServer($server)
-            ->setIp($request->ip());
-
-        if (!is_auth() and $username) {
-            $manager->setUsername($username);
-        }
-
-        $payment = null;
-        \DB::transaction(function () use ($manager, $distributor, &$payment) {
-            $payment = $manager->createPayment($this->productsId, $this->productsCount, Manager::COUNT_TYPE_NUMBER);
-            if ($payment->completed) {
-                $distributor->give($payment);
-            }
-            $this->cart->flush();
-        });
-
-        return $this->buildResponse($server, $payment);
-    }
-
-    private function setProductsIdAndCount($products)
-    {
-        foreach ($products as $product) {
-            $this->productsId[] = $product['id'];
-            $this->productsCount[] = $product['count'];
+        try {
+            return $handler->buy($products, $this->cart, $server, $ip, $username);
+        }catch (InvalidUsernameException $e) {
+            return json_response('invalid username');
         }
     }
 
-    /**
-     * Put information on the number of products in the cart
-     *
-     * @param array $products
-     *
-     * @return bool|\Illuminate\Http\JsonResponse
-     */
-    private function putCount($products)
-    {
-        $ids = [];
-        $count = [];
-        foreach ($products as $product) {
-            $ids[] = $product['id'];
-            $count[] = $product['count'];
-        }
-
-        $products = $this->qm->product(
-            $ids,
-            [
-                'products.id',
-                'items.name',
-                'products.price',
-                'products.stack'
-            ]
-        );
-
-        // Check on valid products identifiers
-        if (count($ids) !== count($products)) {
-            return json_response('invalid product id');
-        }
-
-        $i = 0;
-        foreach ($products as $product) {
-            // Check on valid stacks count
-            if ($count[$i] % $product->stack !== 0) {
-                return json_response('invalid count');
-            }
-            $this->cart->setProductCount((int)$product->id, $count[$i] / $product->stack);
-            $i++;
-        }
-
-        return true;
-    }
     /**
      * Put item in cart
      *
@@ -156,7 +89,6 @@ class CartController extends Controller
      */
     public function put(Request $request)
     {
-        $server = $request->route('server');
         $product = (int)$request->route('product');
 
         if ($this->cart->isFull()) {
@@ -170,6 +102,7 @@ class CartController extends Controller
         $this->cart->put($product);
         return json_response('success');
     }
+
     /**
      * Remove item from cart
      *
@@ -179,7 +112,6 @@ class CartController extends Controller
      */
     public function remove(Request $request)
     {
-        $server = $request->route('server');
         $product = (int)$request->route('product');
 
         if ($this->cart->has($product)) {

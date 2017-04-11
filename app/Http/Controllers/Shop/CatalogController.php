@@ -2,12 +2,13 @@
 
 namespace App\Http\Controllers\Shop;
 
-use App\Services\Cart;
-use App\Traits\Responsible;
-use Illuminate\Http\Request;
-use App\Services\QueryManager;
-use App\Services\Payments\Manager;
+use App\Exceptions\User\InvalidUsernameException;
 use App\Http\Controllers\Controller;
+use App\Services\QueryManager;
+use Illuminate\Http\Request;
+use App\Services\CatalogBuy;
+use App\Traits\BuyResponse;
+use App\Services\Cart;
 
 /**
  * Class CatalogController
@@ -18,7 +19,7 @@ use App\Http\Controllers\Controller;
  */
 class CatalogController extends Controller
 {
-    use Responsible;
+    use BuyResponse;
 
     /**
      * Render the catalog page
@@ -64,43 +65,21 @@ class CatalogController extends Controller
     }
 
     /**
-     * @param Request      $request
-     * @param Manager      $manager
+     * @param Request    $request
+     * @param CatalogBuy $handler
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function buy(Request $request, Manager $manager)
+    public function buy(Request $request, CatalogBuy $handler)
     {
-        $distributor = \App::make('distributor');
         $server = (int)$request->route('server');
+        $ip = $request->ip();
         $username = $request->get('username');
 
-        if (!is_auth()) {
-            $validated = $this->checkUsername($username, false);
-            if ($validated !== true) {
-                return $validated;
-            }
+        try {
+            return $handler->buy($request->route('product'), $request->get('count'), $server, $ip, $username);
+        }catch (InvalidUsernameException $e) {
+            return json_response('invalid username');
         }
-
-
-        $productId = [$request->route('product')];
-        $productCount = [$request->get('count')];
-        $manager
-            ->setServer($server)
-            ->setIp($request->ip());
-
-        if (!is_auth() and $username) {
-            $manager->setUsername($username);
-        }
-
-        $payment = null;
-        \DB::transaction(function () use ($manager, $distributor, $productId, $productCount, &$payment) {
-            $payment = $manager->createPayment($productId, $productCount, Manager::COUNT_TYPE_NUMBER);
-            if ($payment->completed) {
-                $distributor->give($payment);
-            }
-        });
-
-        return $this->buildResponse($server, $payment);
     }
 }

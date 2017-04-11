@@ -74,7 +74,7 @@ class PaymentController extends Controller
         $server = (int)$request->route('server');
         $sum = $request->get('sum');
 
-        $validated = $this->checkFillUpBalanceSum($sum, true);
+        $validated = $this->validateFillUpBalanceSum($sum, true);
         if ($validated !== true) {
             return $validated;
         }

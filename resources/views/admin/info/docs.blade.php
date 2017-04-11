@@ -25,6 +25,13 @@
             </div>
         </div>
         <div class="card card-block mt-2">
+            <h4 class="card-title">Гайд по интеграции Sashok724's Launcher</h4>
+            <p class="card-text"></p>
+            <div class="flex-row">
+                <a href="{{ route('admin.info.docs.sashok_launcher_integration', ['server' => $currentServer->id]) }}" class="btn btn-info">Читать</a>
+            </div>
+        </div>
+        <div class="card card-block mt-2">
             <h4 class="card-title">Документация по CLI L - Shop</h4>
             <p class="card-text"></p>
             <div class="flex-row">

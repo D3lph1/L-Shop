@@ -15,8 +15,8 @@
             <div class="alert alert-danger">
                 <p><strong>Внимание!</strong> У вас включен режим отладки. Посетители вашего сайта могут видеть отладочную
                 информацияю, а также, ошибки. В обязательном порядке отключите этот режим в "продакшене", выставив значение
-                элемента <code>debug</code> массива в файле <code>config/app.php</code> в значение <code>true</code>.</p>
-                Чтобы получилось так: <code>'debug' => false,</code>
+                элемента <code>APP_DEBUG</code> в файле <code>.env</code> в значение <code>false</code>.</p>
+                Чтобы получилось так: <code>APP_DEBUG=false</code>
             </div>
         @endif
 
@@ -30,8 +30,8 @@
                         <a class="btn btn-info" onclick="prompt('Скопировать', '{{ $key }}')"><i class="fa fa-copy"></i> Копировать</a>
                     </div>
                     <div class="alert alert-info">
-                        <p>Установите этот ключ значением элемента <code>key</code> массива в файле <code>config/app.php</code></p>.
-                        Должно получиться так: <code>'key' => '{{ $key }}',</code>
+                        <p>Установите этот ключ значением элемента <code>APP_KEY</code> в файле <code>.env</code></p>
+                        Должно получиться так: <code>APP_KEY={{ $key }}</code>
                     </div>
                     <div class="alert alert-warning">
                         <strong>Внимание!</strong> После изменения ключа приложения все пользователи (в том числе и вы) будут разлогинены.
@@ -43,8 +43,8 @@
                         <a class="btn btn-info" onclick="prompt('Скопировать', '{{ $key }}')"><i class="fa fa-copy"></i> Копировать</a>
                     </div>
                     <div class="alert alert-info">
-                        <p>Установите этот ключ значением элемента <code>session</code> массива в файле <code>config/cartalyst.sentinel.php</code></p>
-                        Должно получиться так: <code>'session' => '{{ $key }}',</code>
+                        <p>Установите этот ключ значением элемента <code>APP_AUTH_KEY</code> в файле <code>.env</code></p>
+                        Должно получиться так: <code>APP_AUTH_KEY={{ $key }}</code>
                     </div>
                     <div class="alert alert-warning">
                         Никогда и никому не сообщайте эти ключи! В противном случае, безопасность приложения будет под угрозой.

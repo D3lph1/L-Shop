@@ -1,7 +1,7 @@
 <?php
 /**
  * A helper file for Laravel 5, to provide autocomplete information to your IDE
- * Generated for Laravel 5.4.11 on 2017-02-27.
+ * Generated for Laravel 5.4.11 on 2017-04-09.
  *
  * @author Barry vd. Heuvel <barryvdh@gmail.com>
  * @see https://github.com/barryvdh/laravel-ide-helper
@@ -13514,8 +13514,9 @@ namespace {
     class Message extends \App\Facades\Message{
         
         /**
-         * 
+         * Set the informing(blue) message
          *
+         * @param string $text
          * @static 
          */
         public static function info($text){
@@ -13523,8 +13524,9 @@ namespace {
         }
         
         /**
-         * 
+         * Set the success(green) message
          *
+         * @param string $text
          * @static 
          */
         public static function success($text){
@@ -13532,8 +13534,9 @@ namespace {
         }
         
         /**
-         * 
+         * Set the warning(yellow) message
          *
+         * @param string $text
          * @static 
          */
         public static function warning($text){
@@ -13541,8 +13544,9 @@ namespace {
         }
         
         /**
-         * 
+         * Set the danger(red) message
          *
+         * @param string $text
          * @static 
          */
         public static function danger($text){
@@ -13550,8 +13554,22 @@ namespace {
         }
         
         /**
+         * Get all messages as array. And clear message storage.
          * 
+         * Result structure:
+         * [
+         *      0 => [
+         *              'type' => 'info',
+         *              'text' => 'Example text...'
+         *           ],
+         *      1 => [
+         *              'type' => 'success',
+         *              'text' => 'С нами лучше не балуй, лишь бы цел остался... (c) Золтан'
+         *           ],
+         *      ...
+         * ]
          *
+         * @return array 
          * @static 
          */
         public static function get(){
