@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Services\Activator;
+use App\Services\AdminProducts;
 use App\Services\Cart;
 use App\Services\CartBuy;
 use App\Services\CatalogBuy;

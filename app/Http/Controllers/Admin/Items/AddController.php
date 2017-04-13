@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin\Items;
 
+use App\Services\AdminItems;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveAddedItemRequest;
-use Illuminate\Http\UploadedFile;
 
 /**
  * Class AddController
@@ -17,6 +17,17 @@ use Illuminate\Http\UploadedFile;
  */
 class AddController extends Controller
 {
+    /**
+     * @var AdminItems
+     */
+    private $adminItems;
+
+    public function __construct(AdminItems $adminItems)
+    {
+        $this->adminItems = $adminItems;
+        parent::__construct();
+    }
+
     /**
      * @param Request $request
      *
@@ -38,41 +49,21 @@ class AddController extends Controller
      */
     public function save(SaveAddedItemRequest $request)
     {
-        $itemType = $request->get('item_type');
+        $name = $request->get('name');
+        $description = '';
+        $type = $request->get('item_type');
         $image = $request->file('image');
-        $filename = null;
-        if ($image) {
-            $filename = $this->moveImageAndGetName($image);
+        $item = $request->get('item');
+        $extra = $request->get('extra');
+
+        $result = $this->adminItems->create($name, $description, $type, $image, $item, $extra);
+
+        if ($result) {
+            \Message::success('Предмет создан успешно');
+        }else {
+            \Message::danger('Не удалось создать предмет');
         }
 
-        \DB::transaction(function () use ($request, $filename, $itemType){
-            $this->qm->createItem([
-                'name' => $request->get('name'),
-                'description' => '',
-                'type' => $itemType == 'item' ? 'item' : 'permgroup',
-                'image' => $filename,
-                'item' => $request->get('item'),
-                'extra' => $request->get('extra'),
-                'created_at' => Carbon::now()->toDateTimeString()
-            ]);
-        });
-
-        \Message::success('Предмет создан успешно');
-
         return response()->redirectToRoute('admin.items.list', ['server' => $request->get('currentServer')->id]);
-    }
-
-    /**
-     * @param UploadedFile $file
-     *
-     * @return string
-     */
-    private function moveImageAndGetName(UploadedFile $file)
-    {
-        $extension = $file->getClientOriginalExtension();
-        $md5 = md5_file(sys_get_temp_dir() . DIRECTORY_SEPARATOR . $file->getFilename());
-        $filename = $md5 . '.' . $extension;
-        $file->move(public_path('img/items'), $filename);
-        return $filename;
     }
 }

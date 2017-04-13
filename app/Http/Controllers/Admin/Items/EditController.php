@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Items;
 
 use App\Http\Requests\Admin\SaveEditedItemRequest;
+use App\Services\AdminItems;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\UploadedFile;
@@ -16,6 +17,17 @@ use Illuminate\Http\UploadedFile;
  */
 class EditController extends Controller
 {
+    /**
+     * @var AdminItems
+     */
+    private $adminItems;
+
+    public function __construct(AdminItems $adminItems)
+    {
+        $this->adminItems = $adminItems;
+        parent::__construct();
+    }
+
     /**
      * @param Request $request
      *
@@ -51,29 +63,22 @@ class EditController extends Controller
      */
     public function save(SaveEditedItemRequest $request)
     {
-        $itemType = $request->get('item_type');
+        $itemId = (int)$request->route('item');
+        $name = $request->get('name');
+        $description = '';
+        $imageMode = $request->get('image_mode');
         $image = $request->file('image');
-        $filename = null;
-        if ($image) {
-            $filename = $this->moveImageAndGetName($image);
+        $type = $request->get('item_type');
+        $item = $request->get('item');
+        $extra = $request->get('extra');
+
+        $result = $this->adminItems->saveEdited($itemId, $name, $description, $type, $imageMode, $image, $item, $extra);
+
+        if ($result) {
+            \Message::success('Изменения успешно сохранены');
+        } else {
+            \Message::danger('Не удалось сохранить изменения');
         }
-
-        \DB::transaction(function () use ($request, $filename, $itemType) {
-            $update = [
-                'name' => $request->get('name'),
-                'type' => $itemType == 'item' ? 'item' : 'permgroup',
-                'item' => $request->get('item'),
-                'extra' => $request->get('extra'),
-                'image' => $filename
-            ];
-
-            if ($request->get('image_mode') == 'current') {
-                unset($update['image']);
-            }
-
-            $this->qm->updateItem((int)$request->route('item'), $update);
-        });
-        \Message::success('Изменения успешно сохранены');
 
         return response()->redirectToRoute('admin.items.list', ['server' => $request->get('currentServer')->id]);
     }
@@ -85,24 +90,15 @@ class EditController extends Controller
      */
     public function remove(Request $request)
     {
-        $item = (int)$request->route('item');
-        $this->qm->removeItem($item);
-        \Message::info('Предмет удален');
+        $itemId = (int)$request->route('item');
+        $result = $this->adminItems->delete($itemId);
+
+        if ($result) {
+            \Message::info('Предмет удален вместе с товарами, привязанными к нему');
+        } else {
+            \Message::danger('Не удалось удалить предмет');
+        }
 
         return response()->redirectToRoute('admin.items.list', ['server' => $request->get('currentServer')->id]);
-    }
-
-    /**
-     * @param UploadedFile $file
-     *
-     * @return string
-     */
-    private function moveImageAndGetName(UploadedFile $file)
-    {
-        $extension = $file->getClientOriginalExtension();
-        $md5 = md5_file(sys_get_temp_dir() . DIRECTORY_SEPARATOR . $file->getFilename());
-        $filename = $md5 . '.' . $extension;
-        $file->move(public_path('img/items'), $filename);
-        return $filename;
     }
 }

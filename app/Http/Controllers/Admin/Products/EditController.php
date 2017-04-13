@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Products;
 
+use App\Services\AdminProducts;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveEditedProductRequest;
@@ -15,6 +16,20 @@ use App\Http\Requests\Admin\SaveEditedProductRequest;
  */
 class EditController extends Controller
 {
+    /**
+     * @var AdminProducts
+     */
+    private $adminProducts;
+
+    /**
+     * @param AdminProducts $adminProducts
+     */
+    public function __construct(AdminProducts $adminProducts)
+    {
+        $this->adminProducts = $adminProducts;
+        parent::__construct();
+    }
+
     /**
      * @param Request $request
      *
@@ -73,39 +88,49 @@ class EditController extends Controller
     }
 
     /**
+     * Save edited product
+     *
      * @param SaveEditedProductRequest $request
      *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function save(SaveEditedProductRequest $request)
     {
-        $server = (int)$request->get('server');
-        $category = (int)$request->get('category');
+        $productId = (int)$request->route('product');
+        $serverId = (int)$request->get('server');
+        $categoryId = (int)$request->get('category');
+        $price = (double)$request->get('price');
+        $stack = (int)$request->get('stack');
+        $itemId = (int)$request->get('item');
 
-        \DB::transaction(function () use ($request, $server, $category) {
-            $this->qm->updateProduct((int)$request->route('product'), [
-                'price' => (double)$request->get('price'),
-                'stack' => (int)$request->get('stack'),
-                'item_id' => (int)$request->get('item'),
-                'server_id' => $server,
-                'category_id' => $category
-            ]);
-        });
+        $result = $this->adminProducts->edit($productId, $price, $stack, $itemId, $serverId, $categoryId);
 
-        \Message::success('Изменения успешно сохранены');
+        if ($result) {
+            \Message::success(trans('messages.success.changes'));
+        } else {
+            \Message::danger(trans('messages.error.changes'));
+        }
 
         return response()->redirectToRoute('admin.products.list', ['server' => $request->get('currentServer')->id]);
     }
 
     /**
+     * Remove product
+     *
      * @param Request $request
      *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function remove(Request $request)
     {
-        $this->qm->removeProduct((int)$request->route('product'));
-        \Message::info('Товар удален');
+        $productId = (int)$request->route('product');
+        $result = $this->adminProducts->delete($productId);
+
+        if ($result) {
+            \Message::info('Товар удален');
+        } else {
+            \Message::danger('Не удалось удалить товар');
+        }
 
         return response()->redirectToRoute('admin.products.list', ['server' => $request->get('currentServer')->id]);
     }
