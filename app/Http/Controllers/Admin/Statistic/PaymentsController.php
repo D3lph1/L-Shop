@@ -22,6 +22,8 @@ class PaymentsController extends Controller
     public function render(Request $request)
     {
         $payments = $this->qm->paymentsHistoryAll();
+        $users = [];
+
         foreach ($payments as $payment) {
             if ($payment->user_id) {
                 $users[] = $payment->user_id;
