@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Апр 11 2017 г., 18:26
+-- Время создания: Апр 13 2017 г., 20:23
 -- Версия сервера: 5.5.53-log
 -- Версия PHP: 5.6.29
 
@@ -115,8 +115,7 @@ INSERT INTO `lshop_items` (`id`, `name`, `description`, `type`, `item`, `image`,
 (8, 'Печь', '', 'item', '61', '4a69519aa46ee6b5b15bab8abd5139f3.png', NULL, '2017-03-08 10:50:55', NULL),
 (9, 'Алмазный меч', '', 'item', '276', '9d8feda602d70231f0297a3b7e436d4b.png', NULL, '2017-03-08 10:52:47', '2017-03-09 07:19:46'),
 (10, 'Алмазный шлем', '', 'item', '310', 'd2714c56c81bcc4ff35798832226967f.png', NULL, '2017-03-09 07:21:26', '2017-03-11 13:31:34'),
-(11, 'VIP', '', 'permgroup', 'vip', 'f0c9755f2685d55b7540c941b6f29ff9.png', NULL, '2017-03-11 13:23:54', '2017-03-11 13:46:32'),
-(12, 'Premium', '', 'permgroup', 'premium', NULL, NULL, '2017-04-01 15:00:43', NULL);
+(11, 'VIP', '', 'permgroup', 'vip', 'f0c9755f2685d55b7540c941b6f29ff9.png', NULL, '2017-03-11 13:23:54', '2017-03-11 13:46:32');
 
 -- --------------------------------------------------------
 
@@ -141,7 +140,9 @@ INSERT INTO `lshop_migrations` (`id`, `migration`, `batch`) VALUES
 (13, '2017_02_08_184940_create_items_table', 3),
 (14, '2017_02_10_145425_create_categories_table', 4),
 (15, '2017_02_08_171826_create_cart_table', 5),
-(25, '2017_02_15_193645_create_payments_table', 6);
+(25, '2017_02_15_193645_create_payments_table', 6),
+(26, '2014_07_02_230147_migration_cartalyst_sentinel', 7),
+(27, '2017_04_10_172343_create_users_uuid_trigger', 8);
 
 -- --------------------------------------------------------
 
@@ -207,7 +208,7 @@ CREATE TABLE `lshop_products` (
 --
 
 INSERT INTO `lshop_products` (`id`, `price`, `item_id`, `server_id`, `stack`, `category_id`, `created_at`, `updated_at`) VALUES
-(14, 2, 5, 1, 64, 1, '2017-03-08 10:49:00', NULL),
+(14, 2, 5, 1, 64, 1, '2017-03-08 10:49:00', '2017-04-13 12:19:37'),
 (15, 20, 6, 1, 16, 1, '2017-03-08 10:49:23', NULL),
 (16, 15, 7, 1, 16, 1, '2017-03-08 10:49:38', NULL),
 (17, 15, 8, 1, 32, 1, '2017-03-08 10:51:26', NULL),
@@ -418,7 +419,19 @@ CREATE TABLE `lshop_users` (
 --
 
 INSERT INTO `lshop_users` (`id`, `username`, `email`, `password`, `permissions`, `last_login`, `balance`, `uuid`, `accessToken`, `serverID`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'admin@example.com', '$2y$10$GDJaNAnP5O.TEACogNq7VuR/1990ABce3ovy.JNM.Ffv97jZEDM7y', NULL, '2017-04-11 11:25:32', 250, 'aec998b1-1e19-11e7-a727-0a0027000014', 'efd406abdfa6837875c9ba3850a4d1c9', NULL, '2017-04-10 13:33:25', '2017-04-11 11:25:32');
+(1, 'admin', 'admin@example.com', '$2y$10$GDJaNAnP5O.TEACogNq7VuR/1990ABce3ovy.JNM.Ffv97jZEDM7y', NULL, '2017-04-11 11:25:32', 250, 'aec998b1-1e19-11e7-a727-0a0027000014', 'fe487bf776277192cfdf2eab1ecb24e9', NULL, '2017-04-10 13:33:25', '2017-04-13 08:16:59');
+
+--
+-- Триггеры `lshop_users`
+--
+DELIMITER $$
+CREATE TRIGGER `setUUID` BEFORE INSERT ON `lshop_users` FOR EACH ROW BEGIN
+                    IF NEW.uuid IS NULL THEN
+                        SET NEW.uuid = UUID();
+                    END IF;
+                END
+$$
+DELIMITER ;
 
 --
 -- Индексы сохранённых таблиц
@@ -532,12 +545,12 @@ ALTER TABLE `lshop_users`
 -- AUTO_INCREMENT для таблицы `lshop_activations`
 --
 ALTER TABLE `lshop_activations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT для таблицы `lshop_cart`
 --
 ALTER TABLE `lshop_cart`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT для таблицы `lshop_categories`
 --
@@ -547,17 +560,17 @@ ALTER TABLE `lshop_categories`
 -- AUTO_INCREMENT для таблицы `lshop_items`
 --
 ALTER TABLE `lshop_items`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
 --
 -- AUTO_INCREMENT для таблицы `lshop_migrations`
 --
 ALTER TABLE `lshop_migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
 --
 -- AUTO_INCREMENT для таблицы `lshop_payments`
 --
 ALTER TABLE `lshop_payments`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT для таблицы `lshop_persistences`
 --
@@ -567,7 +580,7 @@ ALTER TABLE `lshop_persistences`
 -- AUTO_INCREMENT для таблицы `lshop_products`
 --
 ALTER TABLE `lshop_products`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 --
 -- AUTO_INCREMENT для таблицы `lshop_reminders`
 --
@@ -592,12 +605,12 @@ ALTER TABLE `lshop_settings`
 -- AUTO_INCREMENT для таблицы `lshop_throttle`
 --
 ALTER TABLE `lshop_throttle`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=73;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT для таблицы `lshop_users`
 --
 ALTER TABLE `lshop_users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
