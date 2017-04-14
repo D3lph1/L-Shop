@@ -34,6 +34,6 @@ class Activator
      */
     private function mail($userId, $username, $email, $code)
     {
-        \Mail::to($email)->sendNow(new UserActivation($userId, $username, $code));
+        \Mail::to($email)->queue(new UserActivation($userId, $username, $code));
     }
 }

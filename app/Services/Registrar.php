@@ -92,13 +92,15 @@ class Registrar
         try {
             $user = \Sentinel::register($credentials, $forceActivate);
         } catch (\Throwable $e) {
-            throw new UnableToCreateUser($e->getMessage(), $e->getCode(), $e->getPrevious());
+            \Log::error($e);
+
+            throw new UnableToCreateUser();
         }
 
         if (!$user) {
-            throw new UnableToCreateUser(
-                'Method \Sentinel::register() returned a boolean value'
-            );
+            \Log::error('Method \Sentinel::register() returned a boolean value');
+
+            throw new UnableToCreateUser();
         }
 
         $this->attachRole($user, $admin);

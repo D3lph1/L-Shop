@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Апр 13 2017 г., 20:23
+-- Время создания: Апр 14 2017 г., 21:28
 -- Версия сервера: 5.5.53-log
--- Версия PHP: 5.6.29
+-- Версия PHP: 7.0.14
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -183,8 +183,7 @@ CREATE TABLE `lshop_persistences` (
 --
 
 INSERT INTO `lshop_persistences` (`id`, `user_id`, `code`, `created_at`, `updated_at`) VALUES
-(132, 1, 'OtV434Wq8BgLVhTVQ2mK4XNIbwPiOZV9', '2017-04-02 13:58:45', '2017-04-02 13:58:45'),
-(146, 1, 'MpehtKYeohqrTBHEA9R2Fa2sK9YhVJBP', '2017-04-11 11:25:32', '2017-04-11 11:25:32');
+(139, 1, 'oDKlplEn6PWPZc8zi1YhCSElhFpRQHUK', '2017-04-14 14:27:52', '2017-04-14 14:27:52');
 
 -- --------------------------------------------------------
 
@@ -273,34 +272,7 @@ CREATE TABLE `lshop_role_users` (
 --
 
 INSERT INTO `lshop_role_users` (`user_id`, `role_id`, `created_at`, `updated_at`) VALUES
-(1, 1, '2017-03-06 13:35:12', '2017-03-06 13:35:12'),
-(2, 2, '2017-04-10 07:09:08', '2017-04-10 07:09:08'),
-(3, 2, '2017-04-11 11:24:32', '2017-04-11 11:24:32'),
-(4, 2, '2017-04-09 16:11:48', '2017-04-09 16:11:48'),
-(5, 2, '2017-04-10 07:32:26', '2017-04-10 07:32:26'),
-(7, 2, '2017-04-09 16:42:57', '2017-04-09 16:42:57'),
-(8, 2, '2017-04-09 16:43:09', '2017-04-09 16:43:09'),
-(9, 2, '2017-04-10 07:34:35', '2017-04-10 07:34:35'),
-(10, 2, '2017-04-10 07:34:37', '2017-04-10 07:34:37'),
-(11, 2, '2017-04-10 07:34:39', '2017-04-10 07:34:39'),
-(12, 2, '2017-04-10 07:35:19', '2017-04-10 07:35:19'),
-(13, 2, '2017-04-10 07:36:46', '2017-04-10 07:36:46'),
-(14, 2, '2017-04-10 07:37:52', '2017-04-10 07:37:52'),
-(15, 2, '2017-04-10 07:38:43', '2017-04-10 07:38:43'),
-(16, 2, '2017-04-10 07:52:36', '2017-04-10 07:52:36'),
-(17, 2, '2017-04-10 07:54:20', '2017-04-10 07:54:20'),
-(18, 2, '2017-04-10 07:55:56', '2017-04-10 07:55:56'),
-(19, 2, '2017-04-10 07:57:47', '2017-04-10 07:57:47'),
-(20, 2, '2017-04-10 08:02:25', '2017-04-10 08:02:25'),
-(21, 2, '2017-04-10 09:15:44', '2017-04-10 09:15:44'),
-(22, 2, '2017-04-10 09:22:14', '2017-04-10 09:22:14'),
-(23, 2, '2017-04-10 09:25:13', '2017-04-10 09:25:13'),
-(24, 2, '2017-04-10 09:26:09', '2017-04-10 09:26:09'),
-(25, 2, '2017-04-10 09:26:58', '2017-04-10 09:26:58'),
-(26, 2, '2017-04-10 09:28:28', '2017-04-10 09:28:28'),
-(27, 2, '2017-04-10 09:32:38', '2017-04-10 09:32:38'),
-(28, 2, '2017-04-10 09:33:44', '2017-04-10 09:33:44'),
-(31, 1, '2017-04-10 12:12:56', '2017-04-10 12:12:56');
+(1, 1, '2017-04-13 14:38:36', '2017-04-13 14:38:36');
 
 -- --------------------------------------------------------
 
@@ -376,7 +348,8 @@ INSERT INTO `lshop_settings` (`id`, `key`, `value`) VALUES
 (36, 'api.launcher.sashok.auth.error_message', 'Пользователь с такими данными не найден'),
 (38, 'api.launcher.sashok.auth.enabled', '0'),
 (39, 'api.launcher.sashok.auth.ips_white_list', '[]'),
-(40, 'api.launcher.sashok.auth.format', 'OK:{username}');
+(40, 'api.launcher.sashok.auth.format', 'OK:{username}'),
+(41, 'caching.statistic.ttl', '60');
 
 -- --------------------------------------------------------
 
@@ -419,7 +392,7 @@ CREATE TABLE `lshop_users` (
 --
 
 INSERT INTO `lshop_users` (`id`, `username`, `email`, `password`, `permissions`, `last_login`, `balance`, `uuid`, `accessToken`, `serverID`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'admin@example.com', '$2y$10$GDJaNAnP5O.TEACogNq7VuR/1990ABce3ovy.JNM.Ffv97jZEDM7y', NULL, '2017-04-11 11:25:32', 250, 'aec998b1-1e19-11e7-a727-0a0027000014', 'fe487bf776277192cfdf2eab1ecb24e9', NULL, '2017-04-10 13:33:25', '2017-04-13 08:16:59');
+(1, 'admin', 'admin@example.com', '$2y$10$GDJaNAnP5O.TEACogNq7VuR/1990ABce3ovy.JNM.Ffv97jZEDM7y', NULL, '2017-04-14 14:27:52', 250, 'aec998b1-1e19-11e7-a727-0a0027000014', 'fe487bf776277192cfdf2eab1ecb24e9', NULL, '2017-04-10 13:33:25', '2017-04-14 14:27:52');
 
 --
 -- Триггеры `lshop_users`
@@ -545,7 +518,7 @@ ALTER TABLE `lshop_users`
 -- AUTO_INCREMENT для таблицы `lshop_activations`
 --
 ALTER TABLE `lshop_activations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT для таблицы `lshop_cart`
 --
@@ -560,7 +533,7 @@ ALTER TABLE `lshop_categories`
 -- AUTO_INCREMENT для таблицы `lshop_items`
 --
 ALTER TABLE `lshop_items`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT для таблицы `lshop_migrations`
 --
@@ -570,17 +543,17 @@ ALTER TABLE `lshop_migrations`
 -- AUTO_INCREMENT для таблицы `lshop_payments`
 --
 ALTER TABLE `lshop_payments`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT для таблицы `lshop_persistences`
 --
 ALTER TABLE `lshop_persistences`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=147;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=140;
 --
 -- AUTO_INCREMENT для таблицы `lshop_products`
 --
 ALTER TABLE `lshop_products`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 --
 -- AUTO_INCREMENT для таблицы `lshop_reminders`
 --
@@ -600,7 +573,7 @@ ALTER TABLE `lshop_servers`
 -- AUTO_INCREMENT для таблицы `lshop_settings`
 --
 ALTER TABLE `lshop_settings`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=41;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 --
 -- AUTO_INCREMENT для таблицы `lshop_throttle`
 --
@@ -610,7 +583,7 @@ ALTER TABLE `lshop_throttle`
 -- AUTO_INCREMENT для таблицы `lshop_users`
 --
 ALTER TABLE `lshop_users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

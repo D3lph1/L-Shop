@@ -51,7 +51,7 @@
                         @endif
                         @if(access_mode_any())
                             <div class="col-12 text-center">
-                                <a href="{{ route('servers') }}"><i class="fa fa-shopping-cart"></i> Покупка без авторизации</a>
+                                <a href="{{ route('servers') }}"><i class="fa fa-shopping-cart"></i> Покупка без аутентификации</a>
                             </div>
                         @endif
                     </div>

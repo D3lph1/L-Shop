@@ -255,22 +255,29 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
             'servers:all'
         ]);
 
+    // Save optimization settings
+    Route::post('/server/{server}/admin/control/optimization', 'Control\OptimizationController@save')
+        ->name('admin.control.optimization.save')
+        ->middleware([
+            'servers:one'
+        ]);
+
     // Update routes cache
-    Route::post('/server/{server}/admin/control/optimization/update_routes_cache', 'Control\OptimizationController@updateRoutesCache')
+    Route::get('/server/{server}/admin/control/optimization/update_routes_cache', 'Control\OptimizationController@updateRoutesCache')
         ->name('admin.control.optimization.update_routes_cache')
         ->middleware([
             'servers:one'
         ]);
 
     // Update config cache
-    Route::post('/server/{server}/admin/control/optimization/update_config_cache', 'Control\OptimizationController@updateConfigCache')
+    Route::get('/server/{server}/admin/control/optimization/update_config_cache', 'Control\OptimizationController@updateConfigCache')
         ->name('admin.control.optimization.update_config_cache')
         ->middleware([
             'servers:one'
         ]);
 
     // Update view cache
-    Route::post('/server/{server}/admin/control/optimization/clear_view_cache', 'Control\OptimizationController@clearViewCache')
+    Route::get('/server/{server}/admin/control/optimization/clear_view_cache', 'Control\OptimizationController@clearViewCache')
         ->name('admin.control.optimization.clear_view_cache')
         ->middleware([
             'servers:one'
@@ -491,6 +498,24 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
      */
 
     /**
+     * OTHER SECTION
+     */
+    Route::get('/server/{server}/admin/other/debug', 'Other\DebugController@render')
+        ->name('admin.other.debug')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    Route::post('/server/{server}/admin/other/debug/test_mail', 'Other\DebugController@testMail')
+        ->name('admin.other.test_mail')
+        ->middleware([
+            'servers:one'
+        ]);
+    /**
+     * END OTHER SECTION
+     */
+
+    /**
      * STATISTIC SECTION
      */
     Route::get('/server/{server}/admin/statistic/payments', 'Statistic\PaymentsController@render')
@@ -511,10 +536,16 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
             'servers:one',
         ]);
 
-    Route::get('/server/{server}/admin/statistic/view', 'Statistic\ViewController@render')
-        ->name('admin.statistic.view')
+    Route::get('/server/{server}/admin/statistic/show', 'Statistic\ShowController@render')
+        ->name('admin.statistic.show')
         ->middleware([
             'servers:all'
+        ]);
+
+    Route::post('/server/{server}/admin/statistic/flush_cache', 'Statistic\ShowController@flushCache')
+        ->name('admin.statistic.flush_cache')
+        ->middleware([
+            'servers:one'
         ]);
     /**
      * END STATISTIC SECTION

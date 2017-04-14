@@ -12,7 +12,7 @@ use Illuminate\Database\Eloquent\Builder;
  *
  * @package App\Repositories
  */
-class BaseRepository
+abstract class BaseRepository
 {
     /**
      * Find by id
@@ -82,6 +82,36 @@ class BaseRepository
         }
 
         return $this->query()->where('id', $id)->exists();
+    }
+
+    /**
+     * Checking argument on a valid type
+     *
+     * @throws InvalidArgumentTypeException
+     *
+     * @param null|string|array $columns
+     *
+     * @return mixed
+     */
+    protected function prepareColumns($columns = null)
+    {
+        if (is_null($columns)) {
+            return '*';
+        }
+
+        if (is_string($columns)) {
+            return $columns;
+        }
+
+        if (is_array($columns)) {
+            if (count($columns) === 0) {
+                return '*';
+            }
+
+            return $columns;
+        }
+
+        throw new InvalidArgumentTypeException(['string', 'array'], $columns);
     }
 
     /**
