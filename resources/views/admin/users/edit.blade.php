@@ -67,7 +67,7 @@
                                 </p>
                                 <div class="collapse" id="collapseOtherUserActions">
                                     <div class="md-form text-left mb-3">
-                                        <a href="{{ route('admin.users.edit.destroy_sessions', ['server' => $currentServer->id, 'user' => $user->id]) }}" class="btn btn-danger btn-sm btn-block">Сбросить все логин-сессии данного пользователя</a>
+                                        <a href="{{ route('admin.users.edit.destroy_sessions', ['server' => $currentServer->id, 'user' => $user->id]) }}" class="btn danger-color btn-sm btn-block">Сбросить все логин-сессии данного пользователя</a>
                                     </div>
                                 </div>
                             </div>

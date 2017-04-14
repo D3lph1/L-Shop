@@ -24,7 +24,7 @@
 
                                 <div class="dropdown-menu">
                                     @foreach($months as $key => $value)
-                                        <a class="dropdown-item" href="{{ route('admin.statistic.view', ['server' => $currentServer->id, 'month' => $key]) }}">{{ $value }}</a>
+                                        <a class="dropdown-item" href="{{ route('admin.statistic.show', ['server' => $currentServer->id, 'month' => $key]) }}">{{ $value }}</a>
                                     @endforeach
                                 </div>
                             </div>
@@ -35,6 +35,15 @@
                     <hr>
                     <h3 class="text-center">Общая прибыль: {{ $profit }} {!! $currency !!}</h3>
                     <hr>
+                </div>
+            </div>
+
+            <div class="card card-block mt-5">
+                <div class="flex-row">
+                    <form method="post" action="{{ route('admin.statistic.flush_cache', ['server' => $currentServer->id]) }}">
+                        {{ csrf_field() }}
+                        <button class="btn btn-warning">Очистить кэш статистики</button>
+                    </form>
                 </div>
             </div>
         </div>

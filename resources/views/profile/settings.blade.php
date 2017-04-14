@@ -41,7 +41,7 @@
                     <form action="{{ route('profile.settings.sessions', ['server' => $currentServer->id]) }}" method="POST">
                         {{ csrf_field() }}
                         <div class="flex-row">
-                            <button class="btn btn-danger">Сбросить</button>
+                            <button class="btn danger-color">Сбросить</button>
                         </div>
                     </form>
                 </p>

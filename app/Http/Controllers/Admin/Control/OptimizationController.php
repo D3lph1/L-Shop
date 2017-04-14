@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Control;
 
+use App\Http\Requests\Admin\SaveOptimizationRequest;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -24,10 +25,22 @@ class OptimizationController extends Controller
     public function render(Request $request)
     {
         $data = [
-            'currentServer' => $request->get('currentServer')
+            'currentServer' => $request->get('currentServer'),
+            'ttlStatistic' => (int)s_get('caching.statistic.ttl')
         ];
 
         return view('admin.control.optimization', $data);
+    }
+
+    public function save(SaveOptimizationRequest $request)
+    {
+        s_set([
+            'caching.statistic.ttl' => $request->get('ttl_statistic')
+        ]);
+        s_save();
+        \Message::success('Изменения успешно сохранены!');
+
+        return back();
     }
 
     /**

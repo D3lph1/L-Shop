@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers\Admin\Products;
 
+use App\Exceptions\ItemNotFoundException;
 use App\Http\Requests\Admin\SaveAddedProductRequest;
+use App\Services\AdminProducts;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -16,6 +18,21 @@ use App\Http\Controllers\Controller;
  */
 class AddController extends Controller
 {
+    /**
+     * @var AdminProducts
+     */
+    private $adminProducts;
+
+    /**
+     * @param AdminProducts $adminProducts
+     */
+    public function __construct(AdminProducts $adminProducts)
+    {
+        $this->adminProducts = $adminProducts;
+
+        parent::__construct();
+    }
+
     /**
      * @param Request $request
      *
@@ -52,17 +69,24 @@ class AddController extends Controller
      */
     public function save(SaveAddedProductRequest $request)
     {
-        \DB::transaction(function () use ($request) {
-            $this->qm->createProduct([
-                'price' => (double)$request->get('price'),
-                'stack' => (int)$request->get('stack'),
-                'item_id' => (int)$request->get('item'),
-                'server_id' => (int)$request->get('server'),
-                'category_id' => (int)$request->get('category'),
-                'created_at' => Carbon::now()->toDateTimeString()
-            ]);
-        });
-        \Message::success('Товар добавлен');
+        $price = (double)$request->get('price');
+        $stack = (int)$request->get('stack');
+        $itemId = (int)$request->get('item');
+        $serverId = (int)$request->get('server');
+        $categoryId = (int)$request->get('category');
+        $result = false;
+
+        try {
+            $result = $this->adminProducts->create($price, $stack, $itemId, $serverId, $categoryId);
+        } catch (ItemNotFoundException $e) {
+            \Message::danger("Предмет с идентификатором {$itemId} не найден");
+        }
+
+        if ($result) {
+            \Message::success('Товар добавлен');
+        }else {
+            \Message::danger('Не удалось добавить товар');
+        }
 
         return response()->redirectToRoute('admin.products.list', ['server' => $request->get('currentServer')->id]);
     }

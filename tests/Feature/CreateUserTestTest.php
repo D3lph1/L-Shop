@@ -2,13 +2,9 @@
 
 namespace Tests\Feature;
 
-use Illuminate\Foundation\Testing\DatabaseTransactions;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Container\Container;
-use App\Models\User;
 use Tests\TestCase;
-
+use App\Models\User;
+use Illuminate\Container\Container;
 
 class CreateUserTestTest extends TestCase
 {

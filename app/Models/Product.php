@@ -13,6 +13,8 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Product extends Model
 {
+    protected $fillable = ['price', 'item_id', 'server_id', 'stack', 'category_id'];
+
     /**
      * @var string
      */
