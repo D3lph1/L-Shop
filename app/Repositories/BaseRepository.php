@@ -31,6 +31,18 @@ abstract class BaseRepository
     }
 
     /**
+     * Create new row
+     *
+     * @param array $attributes
+     *
+     * @return \Illuminate\Database\Eloquent\Model
+     */
+    public function create(array $attributes)
+    {
+        return $this->query()->create($attributes);
+    }
+
+    /**
      * Update by id
      *
      * @param int   $id

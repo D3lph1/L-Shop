@@ -17,7 +17,7 @@
                 <div class="md-form">
                     <i class="fa fa-clock-o prefix"></i>
                     <input type="text" name="ttl_statistic" id="ttl-statistic" class="form-control" value="{{ $ttlStatistic }}">
-                    <label for="ttl-statistic">Время существования кэша статистики</label>
+                    <label for="ttl-statistic">Время существования кэша статистики (минут)</label>
                 </div>
                 </p>
             </div>

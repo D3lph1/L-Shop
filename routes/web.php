@@ -183,7 +183,11 @@ Route::group(['namespace' => 'Api'], function () {
         ->name('api.signin')
         ->middleware('api');
 
-    Route::get('/api/launcher/sashok/auth', 'SashokLauncher@auth')
+    Route::any('/api/signup', 'SignupController@signup')
+        ->name('api.signup')
+        ->middleware('api');
+
+    Route::any('/api/launcher/sashok/auth', 'SashokLauncher@auth')
         ->name('api.launcher.sashok.auth')
         ->middleware('api');
 });
@@ -448,6 +452,33 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
     /**
      * END OF ITEM SECTION
      */
+
+    /**
+     * STATIC PAGES SECTION
+     */
+    // Render add static page page
+    Route::get('/server/{server}/admin/pages/add', 'Pages\AddController@render')
+        ->name('admin.pages.add')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    Route::post('/server/{server}/admin/pages/add', 'Pages\AddController@save')
+        ->name('admin.pages.add.save')
+        ->middleware([
+            'servers:one'
+        ]);
+
+    // Render add static page page
+    Route::get('/server/{server}/admin/pages/list', 'Pages\ListController@render')
+        ->name('admin.pages.list')
+        ->middleware([
+            'servers:all'
+        ]);
+    /**
+     * END STATIC PAGES SECTION
+     */
+
 
     /**
      * USERS SECTION

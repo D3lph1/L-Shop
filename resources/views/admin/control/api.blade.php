@@ -85,7 +85,7 @@
             </div>
 
             <div class="card card-block mt-2">
-                <h4 class="card-title">API - авторизация</h4>
+                <h4 class="card-title">API - аутентификация</h4>
                 <p class="card-text">
                     <p>
                         <input type="checkbox" name="signin_enabled" id="api-signin-enabled" @if($signinEnabeld) checked="checked" @endif value="1">
@@ -99,9 +99,19 @@
                         <input type="checkbox" name="signin_remember" id="api-signin-remember" @if($signinRemember) checked="checked" @endif value="1">
                         <label for="api-signin-remember" class="ckeckbox-label">
                             <span class='ui'></span>
-                            Запоминать авторизованных пользователей
+                            Запоминать аутентифицированных пользователей
                         </label>
                     </p>
+                </p>
+                <h4 class="card-title">API - регистрация</h4>
+                <p class="card-text">
+                <p>
+                    <input type="checkbox" name="signup_enabled" id="api-signup-enabled" @if($signupEnabled) checked="checked" @endif value="1">
+                    <label for="api-signup-enabled" class="ckeckbox-label">
+                        <span class='ui'></span>
+                        Включить
+                    </label>
+                </p>
                 </p>
             </div>
 
