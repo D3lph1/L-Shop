@@ -13,8 +13,9 @@
 
         @if(config('app.debug'))
             <div class="alert alert-danger">
+                <button id="admin-security-debug-alert-close" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <p><strong>Внимание!</strong> У вас включен режим отладки. Посетители вашего сайта могут видеть отладочную
-                информацияю, а также, ошибки. В обязательном порядке отключите этот режим в "продакшене", выставив значение
+                информацию, а также, ошибки. В обязательном порядке отключите этот режим в "продакшене", выставив значение
                 элемента <code>APP_DEBUG</code> в файле <code>.env</code> в значение <code>false</code>.</p>
                 Чтобы получилось так: <code>APP_DEBUG=false</code>
             </div>

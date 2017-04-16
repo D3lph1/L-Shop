@@ -25,7 +25,7 @@
             <h4 class="card-title">Настройка лаунчсервера</h4>
             <p class="card-text">
                 Открываем файл <code>LaunchServer.cfg</code> и редактируем его следующим образом:
-<pre class="json"><code>
+<pre><code>
 # Auth handler
 authHandler: "mysql";
 authHandlerConfig: {
@@ -47,7 +47,7 @@ authHandlerConfig: {
 # Auth provider
 authProvider: "request";
 authProviderConfig: {
-	url: "http://l-shop.ru/api/launcher/sashok/auth?username=%login%&password=%password%"; # Url по которому будет идти обращение к L-Shop для проверки введенных данных, введенных пользователем
+	url: "http://example.com/api/launcher/sashok/auth?username=%login%&password=%password%"; # Url по которому будет идти обращение к L-Shop для проверки введенных данных, введенных пользователем
 	response: "OK:(?&lt;username&gt;.+)"; # Формат ответа
 };
 </code></pre>

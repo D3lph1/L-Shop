@@ -34,6 +34,10 @@
                     <label class="disabled" for="page-url"></label>
                 </div>
 
+                <div class="alert alert-info">
+                    Вы сможете получить доступ к странице, перейдя по ссылке: <strong>{{ urldecode(route('page', ['server' => $currentServer->id,'page' => '<строка, указанная выше>'])) }}</strong>
+                </div>
+
                 <div class="card card-block mt-3">
                     <div class="flex-row">
                         {{ csrf_field() }}

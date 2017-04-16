@@ -808,3 +808,15 @@ $('#page-url-auto').change(function () {
 $('#page-url').keydown(function () {
     buildPageUrl(this);
 });
+
+$('#admin-api-enable-alert-close').click(function () {
+    setRemember('api_enable', true);
+});
+
+$('#admin-api-docs-alert-close').click(function () {
+    setRemember('api_docs', true);
+});
+
+$('#admin-security-debug-alert-close').click(function () {
+    setRemember('security_debug', true);
+});

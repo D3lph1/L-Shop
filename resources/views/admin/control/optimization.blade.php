@@ -19,6 +19,11 @@
                     <input type="text" name="ttl_statistic" id="ttl-statistic" class="form-control" value="{{ $ttlStatistic }}">
                     <label for="ttl-statistic">Время существования кэша статистики (минут)</label>
                 </div>
+                <div class="md-form">
+                    <i class="fa fa-clock-o prefix"></i>
+                    <input type="text" name="ttl_statistic_pages" id="ttl-static-pages" class="form-control" value="{{ $ttlStatiсPages }}">
+                    <label for="ttl-static-pages">Время существования кэша статических страниц (минут)</label>
+                </div>
                 </p>
             </div>
 
@@ -54,6 +59,17 @@
                 </p>
                 <div class="flex-row">
                     <a href="{{ route('admin.control.optimization.clear_view_cache', ['server' => $currentServer->id]) }}" class="btn btn-info">Очистить</a>
+                </div>
+            </div>
+            <div class="card card-block mt-2">
+                <h4 class="card-title">Очистить кэш приложения</h4>
+                <p class="card-text">
+                    Для достижения наилучшей производительности, L-Shop кеширует многие данные, дабы "доставать" их из
+                    кеша, а не "тащить" из базы данных. Кнопка ниже поможет очистить всю эту информацию. Она будет воссоздана
+                    автоматически, когда это потребуется.
+                </p>
+                <div class="flex-row">
+                    <a href="{{ route('admin.control.optimization.clear_app_cache', ['server' => $currentServer->id]) }}" class="btn btn-info">Очистить</a>
                 </div>
             </div>
 

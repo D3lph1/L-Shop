@@ -62,7 +62,6 @@ class Kernel extends HttpKernel
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'servers' => Servers::class,
-        'captcha' => Captcha::class,
-        'api' => Api::class
+        'captcha' => Captcha::class
     ];
 }

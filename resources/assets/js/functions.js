@@ -189,3 +189,24 @@ function requestError(more) {
 function getCaptcha() {
     return $('#captcha-form').serialize().split('=')[1];
 }
+
+/**
+ * Get remember value
+ *
+ * @param key
+ * @returns {*}
+ */
+function getRemember(key) {
+    return remember[key];
+}
+
+/**
+ * Set remeber
+ *
+ * @param key
+ * @param value
+ */
+function setRemember(key, value) {
+    remember[key] = value;
+    setCookie('lshop_remember', JSON.stringify(remember));
+}

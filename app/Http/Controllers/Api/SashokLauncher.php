@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
  *
  * @package App\Http\Controllers\Api
  */
-class SashokLauncher extends Controller
+class SashokLauncher extends ApiController
 {
     public function __construct()
     {
@@ -34,7 +34,7 @@ class SashokLauncher extends Controller
      */
     public function auth(Request $request, \App\Services\SashokLauncher $handler)
     {
-        if (!s_get('api.launcher.sashok.auth.enabled')) {
+        if (!$this->isEnabled('launcher.sashok.auth')) {
             return response('Функция отключена');
         }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Control;
 
 use App\Http\Requests\Admin\SaveOptimizationRequest;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -26,16 +27,25 @@ class OptimizationController extends Controller
     {
         $data = [
             'currentServer' => $request->get('currentServer'),
-            'ttlStatistic' => (int)s_get('caching.statistic.ttl')
+            'ttlStatistic' => (int)s_get('caching.statistic.ttl'),
+            'ttlStatiсPages' => (int)s_get('caching.pages.ttl'),
         ];
 
         return view('admin.control.optimization', $data);
     }
 
+    /**
+     * Handle save optimization settings request
+     *
+     * @param SaveOptimizationRequest $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function save(SaveOptimizationRequest $request)
     {
         s_set([
-            'caching.statistic.ttl' => $request->get('ttl_statistic')
+            'caching.statistic.ttl' => $request->get('ttl_statistic'),
+            'caching.pages.ttl' => $request->get('ttl_statistic_pages')
         ]);
         s_save();
         \Message::success('Изменения успешно сохранены!');
@@ -44,6 +54,8 @@ class OptimizationController extends Controller
     }
 
     /**
+     * Handle update routes cache request
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function updateRoutesCache()
@@ -55,6 +67,8 @@ class OptimizationController extends Controller
     }
 
     /**
+     * Handle update config cache request
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function updateConfigCache()
@@ -66,12 +80,30 @@ class OptimizationController extends Controller
     }
 
     /**
+     * Handle clear view cache request
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function clearViewCache()
     {
         \Artisan::call('view:clear');
         \Message::info('Кэш шаблонизатора успешно очищен!');
+
+        return back();
+    }
+
+    /**
+     * Handle clear app cache request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function clearAppCache()
+    {
+        if (\Cache::flush()) {
+            \Message::info('Кэш приложения успешно очищен!');
+        } else {
+            \Message::danger('Не удалось очистить кэш приложения');
+        }
 
         return back();
     }

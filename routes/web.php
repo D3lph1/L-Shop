@@ -103,6 +103,12 @@ Route::group(['namespace' => 'Shop', 'where' => ['server' => '\d+']], function (
             'product' => '\d+'
         ])
         ->middleware('servers:one');
+
+    Route::get('/server/{server}/page/{page}', 'PageController@render')
+        ->name('page')
+        ->middleware([
+            'servers:all'
+        ]);
 });
 
 Route::group(['namespace' => 'Payment'], function () {
@@ -180,16 +186,13 @@ Route::group(['namespace' => 'Profile', 'where' => ['server' => '\d+']], functio
 
 Route::group(['namespace' => 'Api'], function () {
     Route::get('/api/signin', 'SignInController@signin')
-        ->name('api.signin')
-        ->middleware('api');
+        ->name('api.signin');
 
     Route::any('/api/signup', 'SignupController@signup')
-        ->name('api.signup')
-        ->middleware('api');
+        ->name('api.signup');
 
     Route::any('/api/launcher/sashok/auth', 'SashokLauncher@auth')
-        ->name('api.launcher.sashok.auth')
-        ->middleware('api');
+        ->name('api.launcher.sashok.auth');
 });
 
 /**
@@ -280,9 +283,16 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
             'servers:one'
         ]);
 
-    // Update view cache
+    // Clear view cache
     Route::get('/server/{server}/admin/control/optimization/clear_view_cache', 'Control\OptimizationController@clearViewCache')
         ->name('admin.control.optimization.clear_view_cache')
+        ->middleware([
+            'servers:one'
+        ]);
+
+    // Clear app (L-Shop) cache
+    Route::get('/server/{server}/admin/control/optimization/clear_app_cache', 'Control\OptimizationController@clearAppCache')
+        ->name('admin.control.optimization.clear_app_cache')
         ->middleware([
             'servers:one'
         ]);
@@ -463,11 +473,34 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
             'servers:all'
         ]);
 
+    // Handle added new static page request
     Route::post('/server/{server}/admin/pages/add', 'Pages\AddController@save')
         ->name('admin.pages.add.save')
         ->middleware([
             'servers:one'
         ]);
+
+    // Render edit static page page
+    Route::get('/server/{server}/admin/pages/edit/{id}', 'Pages\EditController@render')
+        ->name('admin.pages.edit')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Handle edited static page request
+    Route::post('/server/{server}/admin/pages/edit/{id}', 'Pages\EditController@save')
+        ->name('admin.pages.edit.save')
+        ->middleware([
+            'servers:one'
+        ]);
+
+    // Handle edited static page request
+    Route::get('/server/{server}/admin/pages/delete/{id}', 'Pages\EditController@delete')
+        ->name('admin.pages.delete')
+        ->middleware([
+            'servers:one'
+        ]);
+
 
     // Render add static page page
     Route::get('/server/{server}/admin/pages/list', 'Pages\ListController@render')
