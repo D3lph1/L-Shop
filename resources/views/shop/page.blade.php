@@ -7,11 +7,15 @@
 
 @section('content')
     <div id="content-container">
-        <div id="cart-header" class="z-depth-1">
+        <div class="z-depth-1 content-header text-center">
             <h1>{{ $page->title }}</h1>
         </div>
         <div class="product-container">
-            {!! $page->content !!}
+            <div class="card card-block f-card">
+                <p class="card-text">
+                    {!! $page->content !!}
+                </p>
+            </div>
         </div>
     </div>
 @endsection

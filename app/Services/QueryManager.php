@@ -569,34 +569,6 @@ class QueryManager
     }
 
     /**
-     * @return Collection|static[]
-     */
-    public function paymentsForStatisticOrdersCount()
-    {
-        return Payment::select(['products', 'updated_at'])
-            ->where('updated_at', '>', '(NOW() - INTERVAL 1 YEAR)')
-            ->where('completed', 1)
-            ->orderBy('updated_at', 'ASC')
-            ->get();
-    }
-
-    /**
-     * @return mixed
-     */
-    public function profitForStatistic()
-    {
-        return Payment::where('completed', 1)
-            ->where(function ($query) {
-                $query->where('username', null)
-                    ->orWhere(function ($query) {
-                        $query->whereNotNull('username')
-                            ->where('products', null);
-                    });
-            })
-            ->sum('cost');
-    }
-
-    /**
      * @param int $id
      * @param int $mode
      */

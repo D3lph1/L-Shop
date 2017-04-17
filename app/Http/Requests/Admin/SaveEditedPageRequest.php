@@ -26,7 +26,7 @@ class SaveEditedPageRequest extends FormRequest
         return [
             'page_title' => 'required|min:2|max:191',
             'page_content' => 'required',
-            'page_url' => 'required|min:2|max:191|regex:/^[a-z\-]+$/ui'
+            'page_url' => 'required|min:2|max:191|regex:/^[a-z\-`]+$/ui'
         ];
     }
 

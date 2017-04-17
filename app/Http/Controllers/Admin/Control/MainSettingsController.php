@@ -33,6 +33,8 @@ class MainSettingsController extends Controller
             'enableSignup' => s_get('shop.enable_signup'),
             'enableEmailActivation' => s_get('auth.email_activation'),
             'productsPerPage' => s_get('catalog.products_per_page'),
+            'paymentsPerPage' => s_get('profile.payments_per_page'),
+            'cartPerPage' => s_get('profile.cart_items_per_page'),
             'cartCapacity' => s_get('cart.capacity'),
             'isDownForMaintenance' => $this->app->isDownForMaintenance()
         ];
@@ -57,6 +59,8 @@ class MainSettingsController extends Controller
             'shop.enable_signup' => (bool)$request->get('enable_signup'),
             'auth.email_activation' => (bool)$request->get('enable_email_activation'),
             'catalog.products_per_page' => $request->get('products_per_page'),
+            'profile.payments_per_page' => $request->get('payments_per_page'),
+            'profile.cart_items_per_page' => $request->get('cart_per_page'),
             'cart.capacity' => $request->get('cart_capacity')
         ]);
         s_save();

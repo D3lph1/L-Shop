@@ -50,6 +50,8 @@ class Page
      */
     public function update($id, array $attributes)
     {
+        \Cache::forget("page.{$attributes['url']}");
+
         return $this->pageRepository->update($id, $attributes);
     }
 

@@ -28,12 +28,18 @@
         </div>
         <div id="p-containers">
             <div class="product-container">
-                <div class="m-products">
-                    @foreach($goods as $product)
-                        @include('shop.blocks.catalog_item')
-                    @endforeach
-                </div>
-                {{ $goods->links('components.pagination') }}
+                @if($goods->count())
+                    <div class="m-products">
+                        @foreach($goods as $product)
+                            @include('shop.blocks.catalog_item')
+                        @endforeach
+                    </div>
+                    {{ $goods->links('components.pagination') }}
+                @else
+                    <div class="alert alert-info text-center">
+                        Категория пуста
+                    </div>
+                @endif
             </div>
         </div>
     </div>

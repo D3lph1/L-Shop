@@ -45,6 +45,6 @@ class AddController extends Controller
             \Message::danger('Не удалось создать страницу');
         }
 
-        return back();
+        return response()->redirectToRoute('admin.pages.list', ['server' => $request->get('currentServer')->id]);
     }
 }
