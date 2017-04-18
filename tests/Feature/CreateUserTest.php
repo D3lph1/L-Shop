@@ -6,7 +6,7 @@ use Tests\TestCase;
 use App\Models\User;
 use Illuminate\Container\Container;
 
-class CreateUserTestTest extends TestCase
+class CreateUserTest extends TestCase
 {
     /**
      * Create new user test

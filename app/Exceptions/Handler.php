@@ -2,7 +2,10 @@
 
 namespace App\Exceptions;
 
+use App\Exceptions\Payment\InvalidRequestDataException;
 use App\Exceptions\User\EmailAlreadyExistsException;
+use App\Exceptions\User\NotFoundException;
+use App\Exceptions\User\RemindCodeNotFound;
 use App\Exceptions\User\UsernameAlreadyExistsException;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
@@ -23,7 +26,10 @@ class Handler extends ExceptionHandler
         \Illuminate\Session\TokenMismatchException::class,
         \Illuminate\Validation\ValidationException::class,
         UsernameAlreadyExistsException::class,
-        EmailAlreadyExistsException::class
+        EmailAlreadyExistsException::class,
+        InvalidRequestDataException::class,
+        NotFoundException::class,
+        RemindCodeNotFound::class
     ];
 
     /**

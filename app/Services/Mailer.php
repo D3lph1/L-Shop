@@ -3,6 +3,8 @@
 namespace App\Services;
 
 use App\Mail\TestMail;
+use App\Mail\UserActivation;
+use Cartalyst\Sentinel\Users\UserInterface;
 
 class Mailer
 {

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Апр 14 2017 г., 21:28
+-- Время создания: Апр 18 2017 г., 16:47
 -- Версия сервера: 5.5.53-log
 -- Версия PHP: 7.0.14
 
@@ -60,6 +60,14 @@ CREATE TABLE `lshop_cart` (
   `created_at` timestamp NULL DEFAULT NULL,
   `server` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `lshop_cart`
+--
+
+INSERT INTO `lshop_cart` (`id`, `player`, `type`, `item`, `amount`, `extra`, `item_id`, `created_at`, `server`) VALUES
+(4, 'admin', 'item', '2', 64, NULL, 5, '2017-04-18 09:45:44', 1),
+(5, 'admin', 'item', '54', 128, NULL, 7, '2017-04-18 09:45:44', 1);
 
 -- --------------------------------------------------------
 
@@ -142,7 +150,30 @@ INSERT INTO `lshop_migrations` (`id`, `migration`, `batch`) VALUES
 (15, '2017_02_08_171826_create_cart_table', 5),
 (25, '2017_02_15_193645_create_payments_table', 6),
 (26, '2014_07_02_230147_migration_cartalyst_sentinel', 7),
-(27, '2017_04_10_172343_create_users_uuid_trigger', 8);
+(27, '2017_04_10_172343_create_users_uuid_trigger', 8),
+(29, '2017_04_15_165207_create_pages_table', 9);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `lshop_pages`
+--
+
+CREATE TABLE `lshop_pages` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `title` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `url` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `lshop_pages`
+--
+
+INSERT INTO `lshop_pages` (`id`, `title`, `content`, `url`, `created_at`, `updated_at`) VALUES
+(2, 'Добро пожаловать в L-Shop!', '<h1 style=\"text-align: center;\">Современная торговая система для Minecraft</h1><br><p style=\"text-align: center; \"><img src=\"http://i90.fastpic.ru/big/2017/0309/9c/1cebb8e0e70a432b71102bf20334459c.png\" alt=\"Логотип L-Shop\"><br></p><p style=\"margin-right: 0px; margin-bottom: 15px; margin-left: 0px; padding: 0px; text-align: justify; color: rgb(0, 0, 0); font-family: \" open=\"\" sans\",=\"\" arial,=\"\" sans-serif;=\"\" font-size:=\"\" 14px;=\"\" background-color:=\"\" rgb(255,=\"\" 255,=\"\" 255);\"=\"\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce condimentum nibh quis lorem malesuada, lobortis accumsan felis consequat. Fusce ac tortor gravida, dignissim quam sit amet, laoreet sapien. Nam ultricies libero in dignissim accumsan. Fusce ac lacinia quam. Integer convallis neque ac tortor sollicitudin, ac mollis erat malesuada. Suspendisse sapien turpis, mollis et nibh non, mollis venenatis augue. Aenean et leo sed mi tristique fringilla.</p><p style=\"margin-right: 0px; margin-bottom: 15px; margin-left: 0px; padding: 0px; text-align: justify; color: rgb(0, 0, 0); font-family: \" open=\"\" sans\",=\"\" arial,=\"\" sans-serif;=\"\" font-size:=\"\" 14px;=\"\" background-color:=\"\" rgb(255,=\"\" 255,=\"\" 255);\"=\"\">Donec in nibh turpis. Phasellus tincidunt tristique scelerisque. Sed aliquam pretium mauris a mattis. Sed ante magna, facilisis vel lorem eget, rhoncus ullamcorper ligula. Nunc venenatis dolor nec libero interdum, non lobortis libero molestie. Vivamus aliquet lacus non eros ullamcorper, quis convallis nisl aliquet. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nunc posuere ipsum quam, in commodo dui auctor nec.</p><p style=\"margin-right: 0px; margin-bottom: 15px; margin-left: 0px; padding: 0px; text-align: justify; color: rgb(0, 0, 0); font-family: \" open=\"\" sans\",=\"\" arial,=\"\" sans-serif;=\"\" font-size:=\"\" 14px;=\"\" background-color:=\"\" rgb(255,=\"\" 255,=\"\" 255);\"=\"\">Praesent dapibus velit eu leo aliquam, accumsan interdum ex laoreet. Etiam nec vehicula odio. Sed aliquam bibendum convallis. Proin sodales id ligula et pellentesque. Ut ullamcorper magna nec convallis pulvinar. Aenean nunc eros, consequat non nibh in, bibendum convallis eros. Vestibulum elit neque, elementum at egestas a, ultricies eget nisi. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed dapibus metus nec nisi semper, eu fringilla diam aliquam. Fusce accumsan gravida justo, sit amet sollicitudin erat suscipit ac. Nulla rhoncus non elit in tempor. Vestibulum at ligula vitae diam dapibus lobortis at a nulla.</p><p style=\"margin-right: 0px; margin-bottom: 15px; margin-left: 0px; padding: 0px; text-align: justify; color: rgb(0, 0, 0); font-family: \" open=\"\" sans\",=\"\" arial,=\"\" sans-serif;=\"\" font-size:=\"\" 14px;=\"\" background-color:=\"\" rgb(255,=\"\" 255,=\"\" 255);\"=\"\">Curabitur ac cursus tortor. Donec posuere magna sit amet felis condimentum cursus et vitae dolor. Curabitur vitae mauris a leo consequat sagittis at at tortor. Fusce dui mi, pretium ut tincidunt at, vestibulum et velit. Quisque posuere eleifend velit, nec mattis leo viverra non. Curabitur placerat, neque in sodales eleifend, nisi tortor lacinia nunc, in varius neque ipsum fringilla urna. Morbi nec ipsum diam. Vestibulum tincidunt augue eleifend dictum rutrum. Etiam vel nibh scelerisque, tincidunt mauris et, lacinia orci. Sed consectetur pellentesque malesuada. Suspendisse eget lectus velit.</p><p style=\"margin-right: 0px; margin-bottom: 15px; margin-left: 0px; padding: 0px; text-align: justify; color: rgb(0, 0, 0); font-family: \" open=\"\" sans\",=\"\" arial,=\"\" sans-serif;=\"\" font-size:=\"\" 14px;=\"\" background-color:=\"\" rgb(255,=\"\" 255,=\"\" 255);\"=\"\">Donec viverra vehicula nunc, eget fringilla justo rutrum eget. Duis convallis convallis dapibus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse placerat sagittis lacus. Mauris in aliquet urna, id posuere nisl. Phasellus accumsan in metus vel ullamcorper. Praesent pulvinar iaculis mauris vitae vehicula. Nunc vehicula risus massa, a accumsan turpis ornare in. Suspendisse non mauris eu diam convallis finibus ut et ex. Fusce ut dui massa.</p>', 'Dobro-pozhalovat`-v-L-Shopl', '2017-04-16 12:09:38', '2017-04-16 13:38:31');
 
 -- --------------------------------------------------------
 
@@ -183,7 +214,7 @@ CREATE TABLE `lshop_persistences` (
 --
 
 INSERT INTO `lshop_persistences` (`id`, `user_id`, `code`, `created_at`, `updated_at`) VALUES
-(139, 1, 'oDKlplEn6PWPZc8zi1YhCSElhFpRQHUK', '2017-04-14 14:27:52', '2017-04-14 14:27:52');
+(152, 1, 'WgmtXGd5YczqaRBSFkKKcaHzDaT4D8D2', '2017-04-18 09:46:16', '2017-04-18 09:46:16');
 
 -- --------------------------------------------------------
 
@@ -272,7 +303,9 @@ CREATE TABLE `lshop_role_users` (
 --
 
 INSERT INTO `lshop_role_users` (`user_id`, `role_id`, `created_at`, `updated_at`) VALUES
-(1, 1, '2017-04-13 14:38:36', '2017-04-13 14:38:36');
+(1, 1, '2017-04-13 14:38:36', '2017-04-13 14:38:36'),
+(2, 2, '2017-04-18 09:45:44', '2017-04-18 09:45:44'),
+(3, 2, '2017-04-17 07:41:29', '2017-04-17 07:41:29');
 
 -- --------------------------------------------------------
 
@@ -338,18 +371,20 @@ INSERT INTO `lshop_settings` (`id`, `key`, `value`) VALUES
 (25, 'profile.cart_items_per_page', '25'),
 (26, 'shop.description', 'Современная торговая система для Minecraft'),
 (27, 'shop.keywords', 'l-shop,магазин,купить,minecraft,маинкрафт'),
-(28, 'api.enabled', '1'),
-(29, 'api.signin.enabled', '1'),
+(28, 'api.enabled', '0'),
+(29, 'api.signin.enabled', '0'),
 (30, 'api.separator', ':'),
 (31, 'api.salt', '0'),
 (33, 'payment.method.robokassa.test', '1'),
 (34, 'auth.email_activation', '0'),
 (35, 'user.enable_change_password', '1'),
 (36, 'api.launcher.sashok.auth.error_message', 'Пользователь с такими данными не найден'),
-(38, 'api.launcher.sashok.auth.enabled', '0'),
+(38, 'api.launcher.sashok.auth.enabled', '1'),
 (39, 'api.launcher.sashok.auth.ips_white_list', '[]'),
 (40, 'api.launcher.sashok.auth.format', 'OK:{username}'),
-(41, 'caching.statistic.ttl', '60');
+(41, 'caching.statistic.ttl', '60'),
+(42, 'api.signup.enabled', '1'),
+(43, 'caching.pages.ttl', '3600');
 
 -- --------------------------------------------------------
 
@@ -392,7 +427,7 @@ CREATE TABLE `lshop_users` (
 --
 
 INSERT INTO `lshop_users` (`id`, `username`, `email`, `password`, `permissions`, `last_login`, `balance`, `uuid`, `accessToken`, `serverID`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'admin@example.com', '$2y$10$GDJaNAnP5O.TEACogNq7VuR/1990ABce3ovy.JNM.Ffv97jZEDM7y', NULL, '2017-04-14 14:27:52', 250, 'aec998b1-1e19-11e7-a727-0a0027000014', 'fe487bf776277192cfdf2eab1ecb24e9', NULL, '2017-04-10 13:33:25', '2017-04-14 14:27:52');
+(1, 'admin', 'admin@example.com', '$2y$10$cAMSzV.uvL16mFOOA3baA.SyndAruccZZ3FL53DQgpFQgPi1ONgtO', NULL, '2017-04-18 09:46:16', 325, 'aec998b1-1e19-11e7-a727-0a0027000014', '383ef4e1bde14a3e4fd9c17d98f7ae0e', NULL, '2017-04-10 13:33:25', '2017-04-18 09:46:16');
 
 --
 -- Триггеры `lshop_users`
@@ -441,6 +476,13 @@ ALTER TABLE `lshop_items`
 --
 ALTER TABLE `lshop_migrations`
   ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `lshop_pages`
+--
+ALTER TABLE `lshop_pages`
+  ADD PRIMARY KEY (`id`),
+  ADD UNIQUE KEY `pages_url_unique` (`url`);
 
 --
 -- Индексы таблицы `lshop_payments`
@@ -518,12 +560,12 @@ ALTER TABLE `lshop_users`
 -- AUTO_INCREMENT для таблицы `lshop_activations`
 --
 ALTER TABLE `lshop_activations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT для таблицы `lshop_cart`
 --
 ALTER TABLE `lshop_cart`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 --
 -- AUTO_INCREMENT для таблицы `lshop_categories`
 --
@@ -533,32 +575,37 @@ ALTER TABLE `lshop_categories`
 -- AUTO_INCREMENT для таблицы `lshop_items`
 --
 ALTER TABLE `lshop_items`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 --
 -- AUTO_INCREMENT для таблицы `lshop_migrations`
 --
 ALTER TABLE `lshop_migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+--
+-- AUTO_INCREMENT для таблицы `lshop_pages`
+--
+ALTER TABLE `lshop_pages`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- AUTO_INCREMENT для таблицы `lshop_payments`
 --
 ALTER TABLE `lshop_payments`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 --
 -- AUTO_INCREMENT для таблицы `lshop_persistences`
 --
 ALTER TABLE `lshop_persistences`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=140;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=153;
 --
 -- AUTO_INCREMENT для таблицы `lshop_products`
 --
 ALTER TABLE `lshop_products`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
 --
 -- AUTO_INCREMENT для таблицы `lshop_reminders`
 --
 ALTER TABLE `lshop_reminders`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 --
 -- AUTO_INCREMENT для таблицы `lshop_roles`
 --
@@ -573,17 +620,17 @@ ALTER TABLE `lshop_servers`
 -- AUTO_INCREMENT для таблицы `lshop_settings`
 --
 ALTER TABLE `lshop_settings`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
 --
 -- AUTO_INCREMENT для таблицы `lshop_throttle`
 --
 ALTER TABLE `lshop_throttle`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 --
 -- AUTO_INCREMENT для таблицы `lshop_users`
 --
 ALTER TABLE `lshop_users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

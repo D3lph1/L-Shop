@@ -41,15 +41,16 @@ class Auth
                     foreach ($this->except as $except) {
                         if ($except == \Route::currentRouteName()) {
                             $request->merge(['onlyForAdmins' => true]);
+
                             return $next($request);
                         }
                     }
 
-                    return $this->response($request, 'servers', 'not allowed');
+                    return $this->response($request, 'servers', 'not allowed', 'Запрещено');
                 }
 
                 if (is_auth()) {
-                    return $this->response($request, 'servers', 'only guests');
+                    return $this->response($request, 'servers', 'only guests', 'Только для гостей');
                 }
 
                 return $next($request);
@@ -83,13 +84,17 @@ class Auth
      * @param Request $request
      * @param string  $redirect
      * @param string  $jsonResponse
+     * @param null|string  $message
      *
      * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
      */
-    private function response($request, $redirect, $jsonResponse)
+    private function response($request, $redirect, $jsonResponse, $message = null)
     {
-        if (strtolower($request->method()) === 'post' or $request->ajax()) {
+        if ($request->ajax()) {
             return json_response($jsonResponse);
+        }
+        if (!is_null($message)) {
+            \Message::warning($message);
         }
 
         return response()->redirectToRoute($redirect);

@@ -83,6 +83,13 @@
                         Разрешить пользователю менять пароль от своего аккаунта
                     </label>
                 </div>
+                <div class="md-form mt-1">
+                    <input type="checkbox" name="enable_reset_password" id="enable-reset-password" @if($enabledChangePassword) checked="checked" @endif value="1">
+                    <label for="enable-reset-password" class="ckeckbox-label">
+                        <span class='ui'></span>
+                        Разрешить пользователю "сбрасывать" пароль
+                    </label>
+                </div>
                 </p>
             </div>
 

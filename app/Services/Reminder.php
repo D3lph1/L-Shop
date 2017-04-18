@@ -2,8 +2,12 @@
 
 namespace App\Services;
 
-use App\Mail\UserActivation;
+use App\Exceptions\User\RemindCodeNotFound;
+use App\Exceptions\User\UnableToCompleteRemindException;
+use App\Mail\ForgotPassword;
+use App\Exceptions\User\NotFoundException;
 use Cartalyst\Sentinel\Users\UserInterface;
+use Cartalyst\Sentinel\Reminders\EloquentReminder;
 
 /**
  * Class Reminder
@@ -15,24 +19,77 @@ use Cartalyst\Sentinel\Users\UserInterface;
 class Reminder
 {
     /**
-     * @param UserInterface $user
+     * @param string $email
+     * @param string $ip
      */
-    public function createAndSend(UserInterface $user)
+    public function forgot($email, $ip)
     {
-        $activation = \Activation::create($user);
+        $user = $this->user($email);
+        $reminder = \Reminder::create($user);
 
-        $this->mail($user->id, $user->username, $activation->code);
+        $this->sendEmail($user, $reminder, $ip);
     }
 
     /**
-     * Send mail with activation link
-     *
      * @param int $userId
-     * @param string $username
      * @param string $code
+     * @param string $password
+     *
+     * @return bool
      */
-    private function mail($userId, $username, $code)
+    public function reset($userId, $code, $password)
     {
-        \Mail::to('mailbogdik@gmail.com')->sendNow(new UserActivation($userId, $username, $code));
+        if (!$this->checkCode($userId, $code)) {
+            throw new RemindCodeNotFound();
+        }
+
+        if (!$this->complete($userId, $code, $password)) {
+            throw new UnableToCompleteRemindException();
+        }
+    }
+
+    /**
+     * @param int $userId
+     * @param string $code
+     *
+     * @return bool
+     */
+    public function checkCode($userId, $code)
+    {
+        $user = \Sentinel::findById($userId);
+
+        return \Reminder::exists($user, $code);
+    }
+
+    private function complete($userId, $code, $password)
+    {
+        $user = \Sentinel::findById($userId);
+
+        return \Reminder::complete($user, $code, $password);
+    }
+
+    /**
+     * Get user by email
+     *
+     * @param string $email
+     *
+     * @throws NotFoundException
+     *
+     * @return mixed
+     */
+    private function user($email)
+    {
+        $user = \Sentinel::findByCredentials(['email' => $email]);
+
+        if (!$user) {
+            throw new NotFoundException();
+        }
+
+        return $user;
+    }
+
+    private function sendEmail(UserInterface $user, EloquentReminder $reminder, $ip)
+    {
+        \Mail::to($user->email)->queue(new ForgotPassword($user->id, $user->username, $reminder->code, $ip));
     }
 }

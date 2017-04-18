@@ -29,7 +29,7 @@ class SignUpRequest extends FormRequest
         return [
             'username' =>"required|min:" . config('l-shop.validation.username.min') . "|max:" . config('l-shop.validation.username.max') . "{$rule}",
             'email' => 'required|email|min:4|max:191',
-            'password' => 'required|confirmed|max:191|min:' . config('l-shop.validation.password.min') . ''
+            'password' => 'required|confirmed|max:191|min:' . config('l-shop.validation.password.min')
         ];
     }
 

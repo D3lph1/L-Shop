@@ -49,6 +49,27 @@ Route::group(['namespace' => 'Auth'], function () {
     // Activate given user
     Route::get('/activate/{user}/{code}', 'ActivationController@activate')->name('activate');
 
+    // Render forgot password page
+    Route::get('/forgot', 'ForgotPasswordController@render')
+        ->name('forgot')
+        ->middleware('auth:guest');
+
+    // Handle forgot password request
+    Route::post('/forgot', 'ForgotPasswordController@handle')
+        ->name('forgot.handle')
+        ->middleware([
+            'auth:guest',
+            'captcha'
+        ]);
+
+    // Render reset password page
+    Route::get('/reset_password/{user}/{code}', 'ForgotPasswordController@renderResetPasswordPage')
+        ->name('reset_password');
+
+    // Render reset password page
+    Route::post('/reset_password/{user}/{code}', 'ForgotPasswordController@resetPassword')
+        ->name('reset_password.handle');
+
     // Render select server page
     Route::get('/servers', 'SelectServerController@render')
         ->name('servers')

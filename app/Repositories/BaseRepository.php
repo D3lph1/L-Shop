@@ -38,7 +38,7 @@ abstract class BaseRepository
      *
      * @param array $attributes
      *
-     * @return \Illuminate\Database\Eloquent\Model
+     * @return mixed
      */
     public function create(array $attributes)
     {

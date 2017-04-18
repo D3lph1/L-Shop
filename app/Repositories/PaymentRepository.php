@@ -62,4 +62,21 @@ class PaymentRepository extends BaseRepository
             return $result;
         });
     }
+
+    /**
+     * Complete given payment
+     *
+     * @param int $id
+     * @param string $serviceName
+     *
+     * @return bool
+     */
+    public function complete($id, $serviceName)
+    {
+        return Payment::where('id', $id)
+            ->update([
+                'service' => $serviceName,
+                'completed' => true
+            ]);
+    }
 }
