@@ -38,10 +38,6 @@
             @endif
             @if(!$isAuth)
                 <div id="profile-block">
-                    <p id="cart">
-                        <i class="fa fa-cube fa-left"></i>
-                        Корзина: <span>7</span>
-                    </p>
                     <a href="{{ $catalogUrl }}" class="btn info-color btn-block">
                         <i class="fa fa-list fa-lg fa-left"></i>
                         Каталог
