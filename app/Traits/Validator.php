@@ -40,7 +40,7 @@ trait Validator
             [
                 'username' => "{$required}min:$min|max:$max|$rule"
             ]);
-
+        \Debugbar::info($username);
         if ($validator->fails()) {
             return json_response('invalid username');
         }

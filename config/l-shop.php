@@ -9,12 +9,12 @@
 return [
     'validation' => [
         'username' => [
-            'min' => '4',
-            'max' => '32',
+            'min' => 4,
+            'max' => 32,
             'rule' => 'alpha_dash'
         ],
         'password' => [
-            'min' => '4'
+            'min' => 4
         ]
     ],
     'api' => [
