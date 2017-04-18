@@ -59,7 +59,7 @@ class CatalogBuy
             ->setServer($server)
             ->setIp($ip);
 
-        $this->username();
+        $this->username($username);
 
         if (!is_auth() and $username) {
             $this->manager->setUsername($username);
