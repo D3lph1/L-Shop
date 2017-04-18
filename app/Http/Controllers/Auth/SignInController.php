@@ -30,7 +30,7 @@ class SignInController extends Controller
             'onlyForAdmins' => $request->get('onlyForAdmins'),
             'downForMaintenance' => $this->app->isDownForMaintenance(),
             'enable_signup' => is_enable('shop.enable_signup'),
-            'enable_pr' => is_enable('shop.enable_password_reset'),
+            'enablePasswordReset' => is_enable('shop.enable_password_reset'),
         ];
 
         return view('auth.signin', $data);

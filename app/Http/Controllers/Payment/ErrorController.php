@@ -15,11 +15,9 @@ use App\Http\Controllers\Controller;
 class ErrorController extends Controller
 {
     /**
-     * @param Request $request
-     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function robokassa(Request $request)
+    public function robokassa()
     {
         \Message::danger('Оплата не удалась');
 

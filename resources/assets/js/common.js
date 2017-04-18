@@ -767,12 +767,56 @@ $('#item-set-permgroup-type').change(function () {
     $('#extra').parent().fadeOut('fast');
 });
 
-/**
- * Statistic section
- */
+transliterate = (
+    function() {
+        var
+            rus = "щ   ш  ч  ц  ю  я  ё  ж  ъ  ы  э  а б в г д е з и й к л м н о п р с т у ф х ь".split(/ +/g),
+            eng = "shh sh ch cz yu ya yo zh `` y' e` a b v g d e z i j k l m n o p r s t u f x `".split(/ +/g)
+        ;
+        return function(text, engToRus) {
+            var x;
+            for(x = 0; x < rus.length; x++) {
+                text = text.split(engToRus ? eng[x] : rus[x]).join(engToRus ? rus[x] : eng[x]);
+                text = text.split(engToRus ? eng[x].toUpperCase() : rus[x].toUpperCase()).join(engToRus ? rus[x].toUpperCase() : eng[x].toUpperCase());
+            }
+            return text;
+        }
+    }
+)();
 
-//
+function buildPageUrl(target) {
+    if ($('#page-url-auto').is(':checked')) {
+        var title = $(target).val();
+        var result = title.replace(/[\s]/gim, '-');
+        result = result.replace(/[^a-zа-я0-9\-]/guim, '');
+        result = transliterate(result);
 
-/**
- * End statistic section
- */
+        $('#page-url').val(result);
+    }
+}
+
+$('#page-title').keydown(function () {
+    buildPageUrl(this);
+});
+
+$('#page-url-auto').change(function () {
+    if ($(this).is(':checked')) {
+        buildPageUrl($('#page-title'));
+    }
+});
+
+$('#page-url').keydown(function () {
+    buildPageUrl(this);
+});
+
+$('#admin-api-enable-alert-close').click(function () {
+    setRemember('api_enable', true);
+});
+
+$('#admin-api-docs-alert-close').click(function () {
+    setRemember('api_docs', true);
+});
+
+$('#admin-security-debug-alert-close').click(function () {
+    setRemember('security_debug', true);
+});

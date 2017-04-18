@@ -49,6 +49,27 @@ Route::group(['namespace' => 'Auth'], function () {
     // Activate given user
     Route::get('/activate/{user}/{code}', 'ActivationController@activate')->name('activate');
 
+    // Render forgot password page
+    Route::get('/forgot', 'ForgotPasswordController@render')
+        ->name('forgot')
+        ->middleware('auth:guest');
+
+    // Handle forgot password request
+    Route::post('/forgot', 'ForgotPasswordController@handle')
+        ->name('forgot.handle')
+        ->middleware([
+            'auth:guest',
+            'captcha'
+        ]);
+
+    // Render reset password page
+    Route::get('/reset_password/{user}/{code}', 'ForgotPasswordController@renderResetPasswordPage')
+        ->name('reset_password');
+
+    // Render reset password page
+    Route::post('/reset_password/{user}/{code}', 'ForgotPasswordController@resetPassword')
+        ->name('reset_password.handle');
+
     // Render select server page
     Route::get('/servers', 'SelectServerController@render')
         ->name('servers')
@@ -103,6 +124,12 @@ Route::group(['namespace' => 'Shop', 'where' => ['server' => '\d+']], function (
             'product' => '\d+'
         ])
         ->middleware('servers:one');
+
+    Route::get('/server/{server}/page/{page}', 'PageController@render')
+        ->name('page')
+        ->middleware([
+            'servers:all'
+        ]);
 });
 
 Route::group(['namespace' => 'Payment'], function () {
@@ -180,12 +207,13 @@ Route::group(['namespace' => 'Profile', 'where' => ['server' => '\d+']], functio
 
 Route::group(['namespace' => 'Api'], function () {
     Route::get('/api/signin', 'SignInController@signin')
-        ->name('api.signin')
-        ->middleware('api');
+        ->name('api.signin');
 
-    Route::get('/api/launcher/sashok/auth', 'SashokLauncher@auth')
-        ->name('api.launcher.sashok.auth')
-        ->middleware('api');
+    Route::any('/api/signup', 'SignupController@signup')
+        ->name('api.signup');
+
+    Route::any('/api/launcher/sashok/auth', 'SashokLauncher@auth')
+        ->name('api.launcher.sashok.auth');
 });
 
 /**
@@ -276,9 +304,16 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
             'servers:one'
         ]);
 
-    // Update view cache
+    // Clear view cache
     Route::get('/server/{server}/admin/control/optimization/clear_view_cache', 'Control\OptimizationController@clearViewCache')
         ->name('admin.control.optimization.clear_view_cache')
+        ->middleware([
+            'servers:one'
+        ]);
+
+    // Clear app (L-Shop) cache
+    Route::get('/server/{server}/admin/control/optimization/clear_app_cache', 'Control\OptimizationController@clearAppCache')
+        ->name('admin.control.optimization.clear_app_cache')
         ->middleware([
             'servers:one'
         ]);
@@ -448,6 +483,56 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
     /**
      * END OF ITEM SECTION
      */
+
+    /**
+     * STATIC PAGES SECTION
+     */
+    // Render add static page page
+    Route::get('/server/{server}/admin/pages/add', 'Pages\AddController@render')
+        ->name('admin.pages.add')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Handle added new static page request
+    Route::post('/server/{server}/admin/pages/add', 'Pages\AddController@save')
+        ->name('admin.pages.add.save')
+        ->middleware([
+            'servers:one'
+        ]);
+
+    // Render edit static page page
+    Route::get('/server/{server}/admin/pages/edit/{id}', 'Pages\EditController@render')
+        ->name('admin.pages.edit')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    // Handle edited static page request
+    Route::post('/server/{server}/admin/pages/edit/{id}', 'Pages\EditController@save')
+        ->name('admin.pages.edit.save')
+        ->middleware([
+            'servers:one'
+        ]);
+
+    // Handle edited static page request
+    Route::get('/server/{server}/admin/pages/delete/{id}', 'Pages\EditController@delete')
+        ->name('admin.pages.delete')
+        ->middleware([
+            'servers:one'
+        ]);
+
+
+    // Render add static page page
+    Route::get('/server/{server}/admin/pages/list', 'Pages\ListController@render')
+        ->name('admin.pages.list')
+        ->middleware([
+            'servers:all'
+        ]);
+    /**
+     * END STATIC PAGES SECTION
+     */
+
 
     /**
      * USERS SECTION

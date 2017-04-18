@@ -65,7 +65,7 @@ return [
     'not_in'               => 'The selected :attribute is invalid.',
     'numeric'              => 'Поле ":attribute" должно содержать числовое значение',
     'present'              => 'The :attribute field must be present.',
-    'regex'                => 'The :attribute format is invalid.',
+    'regex'                => 'Поле ":attribute" содержит недопустимые символы.',
     'required'             => 'Поле ":attribute" обязательно для заполнения',
     'required_if'          => 'Поле ":attribute" обязательно для заполнения, так как ":other" находиться в значении ":value"',
     'required_unless'      => 'The :attribute field is required unless :other is in :values.',

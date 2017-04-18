@@ -12,7 +12,7 @@ use App\Http\Controllers\Controller;
  *
  * @package App\Http\Controllers\Api
  */
-class SignInController extends Controller
+class SignInController extends ApiController
 {
     /**
      * Authenticate user by request to API
@@ -23,8 +23,8 @@ class SignInController extends Controller
      */
     public function signin(Request $request)
     {
-        if (is_auth() or !s_get('api.signin.enabled')) {
-            return $this->redirectToServers();
+        if (is_auth() or !$this->isEnabled('signin')) {
+            return $this->redirectToSignin();
         }
 
         // From request
@@ -36,13 +36,7 @@ class SignInController extends Controller
             return $this->redirectToSignin();
         }
 
-        // From settings
-        $secretKey = s_get('api.key');
-        $algo = s_get('api.algo');
-        $separator = s_get('api.separator');
-
-        $calculatedHash = hash($algo, $secretKey . $separator . $username);
-        if ($hash !== $calculatedHash) {
+        if (!$this->validateHash($hash, $username)) {
             return $this->redirectToSignin();
         }
 

@@ -25,7 +25,7 @@
                     <label for="si-username">Имя пользователя</label>
                 </div>
                 <div class="md-form">
-                    <i class="fa fa-unlock-alt fa-lg prefix"></i>
+                    <i class="fa fa-lock fa-lg prefix"></i>
                     <input type="password" id="si-password" class="form-control">
                     <label for="si-password">Пароль</label>
                 </div>
@@ -35,14 +35,19 @@
             </div>
             <div class="card-footer">
                 <div class="row">
+                    @if($enablePasswordReset)
+                        <div class="col-12 text-center">
+                            <a href="{{ route('forgot') }}"><i class="fa fa-unlock fa-left"></i> Я забыл пароль</a>
+                        </div>
+                    @endif
                     @if($enable_signup and !$onlyForAdmins)
                         <div class="col-12 text-center">
-                            <a href="signup"><i class="fa fa-plus fa-left"></i> Регистрация</a>
+                            <a href="{{ route('signup') }}"><i class="fa fa-plus fa-left"></i> Регистрация</a>
                         </div>
                     @endif
                     @if(access_mode_any())
                         <div class="col-12 text-center">
-                            <a href="servers"><i class="fa fa-shopping-cart"></i> Покупка без авторизации</a>
+                            <a href="{{ route('servers') }}"><i class="fa fa-shopping-cart"></i> Покупка без авторизации</a>
                         </div>
                     @endif
                 </div>

@@ -13,8 +13,9 @@
 
         @if(config('app.debug'))
             <div class="alert alert-danger">
+                <button id="admin-security-debug-alert-close" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <p><strong>Внимание!</strong> У вас включен режим отладки. Посетители вашего сайта могут видеть отладочную
-                информацияю, а также, ошибки. В обязательном порядке отключите этот режим в "продакшене", выставив значение
+                информацию, а также, ошибки. В обязательном порядке отключите этот режим в "продакшене", выставив значение
                 элемента <code>APP_DEBUG</code> в файле <code>.env</code> в значение <code>false</code>.</p>
                 Чтобы получилось так: <code>APP_DEBUG=false</code>
             </div>
@@ -80,6 +81,13 @@
                     <label for="enable-change-password" class="ckeckbox-label">
                         <span class='ui'></span>
                         Разрешить пользователю менять пароль от своего аккаунта
+                    </label>
+                </div>
+                <div class="md-form mt-1">
+                    <input type="checkbox" name="enable_reset_password" id="enable-reset-password" @if($enabledChangePassword) checked="checked" @endif value="1">
+                    <label for="enable-reset-password" class="ckeckbox-label">
+                        <span class='ui'></span>
+                        Разрешить пользователю "сбрасывать" пароль
                     </label>
                 </div>
                 </p>

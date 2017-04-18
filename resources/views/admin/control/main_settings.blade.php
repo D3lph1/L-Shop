@@ -93,11 +93,20 @@
             <div class="card card-block mt-2">
                 <h4 class="card-title">Пагинация</h4>
                 <p class="card-text">
-
                     <div class="md-form mt-1">
                         <i class="fa fa-cubes prefix"></i>
                         <input type="text" name="products_per_page" id="m-s-products-per-page" class="form-control" value="{{ $productsPerPage }}">
                         <label for="m-s-products-per-page">Количество товаров на 1 странице магазина</label>
+                    </div>
+                    <div class="md-form mt-1">
+                        <i class="fa fa-cubes prefix"></i>
+                        <input type="text" name="payments_per_page" id="m-s-payments-per-page" class="form-control" value="{{ $paymentsPerPage }}">
+                        <label for="m-s-payments-per-page">Количество элементов на 1 странице истории платежей в профиле пользователя</label>
+                    </div>
+                    <div class="md-form mt-1">
+                        <i class="fa fa-cubes prefix"></i>
+                        <input type="text" name="cart_per_page" id="m-s-cart-per-page" class="form-control" value="{{ $cartPerPage }}">
+                        <label for="m-s-cart-per-page">Количество элементов на 1 странице внутриигровой корзины в профиле пользователя</label>
                     </div>
                 </p>
             </div>

@@ -17,17 +17,32 @@ abstract class BaseRepository
     /**
      * Find by id
      *
-     * @param int $id
+     * @param int   $id
+     * @param array $columns
      *
      * @return mixed
      */
-    public function find($id)
+    public function find($id, $columns = [])
     {
+        $columns = $this->prepareColumns($columns);
+
         if (!is_int($id)) {
             throw new InvalidArgumentTypeException('integer', $id);
         }
 
-        return $this->query()->find($id);
+        return $this->query()->find($id, $columns);
+    }
+
+    /**
+     * Create new row
+     *
+     * @param array $attributes
+     *
+     * @return mixed
+     */
+    public function create(array $attributes)
+    {
+        return $this->query()->create($attributes);
     }
 
     /**
@@ -96,7 +111,7 @@ abstract class BaseRepository
     protected function prepareColumns($columns = null)
     {
         if (is_null($columns)) {
-            return '*';
+            return ['*'];
         }
 
         if (is_string($columns)) {
@@ -105,7 +120,7 @@ abstract class BaseRepository
 
         if (is_array($columns)) {
             if (count($columns) === 0) {
-                return '*';
+                return ['*'];
             }
 
             return $columns;

@@ -21,7 +21,8 @@ class SecurityController extends Controller
             'currentServer' => $request->get('currentServer'),
             'recaptchaPublicKey' => s_get('recaptcha.public_key'),
             'recaptchaSecretKey' => s_get('recaptcha.secret_key'),
-            'enabledChangePassword' => s_get('user.enable_change_password')
+            'enabledChangePassword' => s_get('user.enable_change_password'),
+            'enabledResetPassword' => s_get('shop.enable_password_reset'),
         ];
 
         return view('admin.control.security', $data);
@@ -32,7 +33,8 @@ class SecurityController extends Controller
         s_set([
             'recaptcha.public_key' => $request->get('recaptcha_public_key'),
             'recaptcha.secret_key' => $request->get('recaptcha_secret_key'),
-            'user.enable_change_password' => (bool)$request->get('enable_change_password')
+            'user.enable_change_password' => (bool)$request->get('enable_change_password'),
+            'shop.enable_password_reset' => (bool)$request->get('enable_reset_password')
         ]);
         s_save();
 
