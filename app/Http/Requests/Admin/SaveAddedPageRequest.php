@@ -26,7 +26,7 @@ class SaveAddedPageRequest extends FormRequest
         return [
             'page_title' => 'required|min:2|max:191',
             'page_content' => 'required',
-            'page_url' => 'required|min:2|max:191|unique:pages,url|regex:/^[a-z\-`]+$/ui'
+            'page_url' => 'required|min:2|max:191|unique:pages,url|regex:/^[a-z_\-`0-9]+$/ui'
         ];
    }
 

@@ -76,6 +76,9 @@ class CatalogBuy
         return $this->buildResponse($server, $payment);
     }
 
+    /**
+     * @param null|string $username
+     */
     private function username($username = null)
     {
         if (!is_auth()) {
