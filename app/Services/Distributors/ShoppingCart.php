@@ -41,7 +41,7 @@ class ShoppingCart extends Distributor
         foreach ($products as $product) {
             if ($product->type == 'permgroup') {
                 $item = $product->item . '?lifetime=' . $product->count * 86400;
-                $amount = $product->count;
+                $amount = 1;
             }else {
                 $item = $product->item;
                 $amount = $product->count;
