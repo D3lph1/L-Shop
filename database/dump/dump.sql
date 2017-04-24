@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Апр 18 2017 г., 16:47
--- Версия сервера: 5.5.53-log
--- Версия PHP: 7.0.14
+-- Время создания: Апр 24 2017 г., 21:00
+-- Версия сервера: 5.6.34
+-- Версия PHP: 7.1.0
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET time_zone = "+00:00";
@@ -214,7 +214,8 @@ CREATE TABLE `lshop_persistences` (
 --
 
 INSERT INTO `lshop_persistences` (`id`, `user_id`, `code`, `created_at`, `updated_at`) VALUES
-(152, 1, 'WgmtXGd5YczqaRBSFkKKcaHzDaT4D8D2', '2017-04-18 09:46:16', '2017-04-18 09:46:16');
+(152, 1, 'WgmtXGd5YczqaRBSFkKKcaHzDaT4D8D2', '2017-04-18 09:46:16', '2017-04-18 09:46:16'),
+(153, 1, 'J9w432xZrZKT64675hXZmU9IzsElZDvG', '2017-04-24 13:58:35', '2017-04-24 13:58:35');
 
 -- --------------------------------------------------------
 
@@ -224,7 +225,7 @@ INSERT INTO `lshop_persistences` (`id`, `user_id`, `code`, `created_at`, `update
 
 CREATE TABLE `lshop_products` (
   `id` int(10) UNSIGNED NOT NULL,
-  `price` tinyint(1) UNSIGNED NOT NULL,
+  `price` int(10) UNSIGNED NOT NULL,
   `item_id` int(11) NOT NULL,
   `server_id` int(11) NOT NULL,
   `stack` int(11) DEFAULT NULL,
@@ -427,17 +428,17 @@ CREATE TABLE `lshop_users` (
 --
 
 INSERT INTO `lshop_users` (`id`, `username`, `email`, `password`, `permissions`, `last_login`, `balance`, `uuid`, `accessToken`, `serverID`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'admin@example.com', '$2y$10$cAMSzV.uvL16mFOOA3baA.SyndAruccZZ3FL53DQgpFQgPi1ONgtO', NULL, '2017-04-18 09:46:16', 325, 'aec998b1-1e19-11e7-a727-0a0027000014', '383ef4e1bde14a3e4fd9c17d98f7ae0e', NULL, '2017-04-10 13:33:25', '2017-04-18 09:46:16');
+(1, 'admin', 'admin@example.com', '$2y$10$cAMSzV.uvL16mFOOA3baA.SyndAruccZZ3FL53DQgpFQgPi1ONgtO', NULL, '2017-04-24 13:58:35', 325, 'aec998b1-1e19-11e7-a727-0a0027000014', '383ef4e1bde14a3e4fd9c17d98f7ae0e', NULL, '2017-04-10 13:33:25', '2017-04-24 13:58:35');
 
 --
 -- Триггеры `lshop_users`
 --
 DELIMITER $$
 CREATE TRIGGER `setUUID` BEFORE INSERT ON `lshop_users` FOR EACH ROW BEGIN
-                    IF NEW.uuid IS NULL THEN
-                        SET NEW.uuid = UUID();
-                    END IF;
-                END
+  IF NEW.uuid IS NULL THEN
+    SET NEW.uuid = UUID();
+  END IF;
+END
 $$
 DELIMITER ;
 
@@ -595,7 +596,7 @@ ALTER TABLE `lshop_payments`
 -- AUTO_INCREMENT для таблицы `lshop_persistences`
 --
 ALTER TABLE `lshop_persistences`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=153;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=154;
 --
 -- AUTO_INCREMENT для таблицы `lshop_products`
 --
