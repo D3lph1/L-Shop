@@ -58,4 +58,17 @@ class NewsRepository extends BaseRepository
             ->limit(s_get('news.per_page', 15))
             ->get();
     }
+
+    /**
+     * @param int   $perPage
+     * @param array $columns
+     *
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function paginate($perPage, $columns = [])
+    {
+        $columns = $this->prepareColumns($columns);
+
+        return News::select($columns)->orderBy('created_at', 'DESC')->paginate($perPage);
+    }
 }

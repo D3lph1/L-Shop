@@ -494,6 +494,45 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
      */
 
     /**
+     * NEWS SECTION
+     */
+    // Render add news page
+    Route::get('/server/{server}/admin/news/add', 'News\AddController@render')
+        ->name('admin.news.add')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    Route::post('/server/{server}/admin/news/add', 'News\AddController@save')
+        ->name('admin.news.add.save')
+        ->middleware([
+            'servers:one'
+        ]);
+
+    // Render page with news list
+    Route::get('/server/{server}/admin/news/list', 'News\ListController@render')
+        ->name('admin.news.list')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    Route::get('/server/{server}/admin/news/edit/{id}', 'News\EditController@render')
+        ->name('admin.news.edit')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    Route::post('/server/{server}/admin/news/edit/{id}', 'News\EditController@save')
+        ->name('admin.news.edit.save')
+        ->middleware([
+            'servers:all'
+        ]);
+    /**
+     * END NEWS SECTION
+     */
+
+
+    /**
      * STATIC PAGES SECTION
      */
     // Render add static page page
