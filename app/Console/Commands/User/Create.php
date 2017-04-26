@@ -14,6 +14,8 @@ use Illuminate\Console\Command;
  * Class CreateUser
  * Creates a new user with the specified credentials
  *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ *
  * @package App\Console\Commands
  */
 class Create extends Command

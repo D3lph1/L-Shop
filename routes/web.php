@@ -130,6 +130,15 @@ Route::group(['namespace' => 'Shop', 'where' => ['server' => '\d+']], function (
         ->middleware([
             'servers:all'
         ]);
+
+    Route::get('/server/{server}/news/{id}', 'NewsController@render')
+        ->name('news')
+        ->where('id', '\d+')
+        ->middleware('servers:all');
+
+    Route::post('/server/{server}/news/load', 'NewsController@load')
+        ->name('news.load_more')
+        ->middleware('servers:one');
 });
 
 Route::group(['namespace' => 'Payment'], function () {

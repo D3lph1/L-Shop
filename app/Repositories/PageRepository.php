@@ -4,6 +4,13 @@ namespace App\Repositories;
 
 use App\Models\Page;
 
+/**
+ * Class PageRepository
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Repositories
+ */
 class PageRepository extends BaseRepository
 {
     const MODEL = Page::class;

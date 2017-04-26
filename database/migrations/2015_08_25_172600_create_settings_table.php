@@ -38,6 +38,6 @@ class CreateSettingsTable extends Migration
 	 */
 	public function down()
 	{
-		Schema::drop($this->tablename);
+		Schema::dropIfExists($this->tablename);
 	}
 }

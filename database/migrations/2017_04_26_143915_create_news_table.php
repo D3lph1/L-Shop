@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateServersTable extends Migration
+class CreateNewsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,13 +13,12 @@ class CreateServersTable extends Migration
      */
     public function up()
     {
-        Schema::create('servers', function (Blueprint $table) {
+        Schema::create('news', function (Blueprint $table) {
             $table->increments('id');
             $table->string('title');
-            $table->boolean('enabled');
+            $table->text('content');
+            $table->integer('user_id')->unsigned();
             $table->timestamps();
-
-            $table->engine = 'InnoDB';
         });
     }
 
@@ -30,6 +29,6 @@ class CreateServersTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('servers');
+        Schema::dropIfExists('news');
     }
 }

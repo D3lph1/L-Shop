@@ -10,6 +10,13 @@ use App\Repositories\PaymentRepository;
 use App\Services\Payments\Robokassa\Payment;
 use Illuminate\Container\Container;
 
+/**
+ * Class Robokassa
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Services\Handlers\Payments
+ */
 class Robokassa extends AbstractPayment
 {
     const SERVICE_NAME = 'robokassa';
