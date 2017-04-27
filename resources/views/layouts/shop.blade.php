@@ -118,7 +118,7 @@
                 <div class="col-9" id="topbar-content-1">
                     <button id="btn-menu" class="btn"><i class="fa fa-bars"></i></button>
                     <a href="{{ route('servers') }}">
-                        <span id="topbar-server">Текущий сервер: <span id="tbs-name">{{ $currentServer->name }}</span></span>
+                        <span id="topbar-server">Сервер: <span id="tbs-name">{{ $currentServer->name }}</span></span>
                     </a>
                 </div>
                 @if($news)

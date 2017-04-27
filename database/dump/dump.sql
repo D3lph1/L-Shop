@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Апр 24 2017 г., 21:00
+-- Время создания: Апр 27 2017 г., 20:16
 -- Версия сервера: 5.6.34
 -- Версия PHP: 7.1.0
 
@@ -60,14 +60,6 @@ CREATE TABLE `lshop_cart` (
   `created_at` timestamp NULL DEFAULT NULL,
   `server` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
-
---
--- Дамп данных таблицы `lshop_cart`
---
-
-INSERT INTO `lshop_cart` (`id`, `player`, `type`, `item`, `amount`, `extra`, `item_id`, `created_at`, `server`) VALUES
-(4, 'admin', 'item', '2', 64, NULL, 5, '2017-04-18 09:45:44', 1),
-(5, 'admin', 'item', '54', 128, NULL, 7, '2017-04-18 09:45:44', 1);
 
 -- --------------------------------------------------------
 
@@ -151,7 +143,33 @@ INSERT INTO `lshop_migrations` (`id`, `migration`, `batch`) VALUES
 (25, '2017_02_15_193645_create_payments_table', 6),
 (26, '2014_07_02_230147_migration_cartalyst_sentinel', 7),
 (27, '2017_04_10_172343_create_users_uuid_trigger', 8),
-(29, '2017_04_15_165207_create_pages_table', 9);
+(29, '2017_04_15_165207_create_pages_table', 9),
+(30, '2017_04_26_143915_create_news_table', 10);
+
+-- --------------------------------------------------------
+
+--
+-- Структура таблицы `lshop_news`
+--
+
+CREATE TABLE `lshop_news` (
+  `id` int(10) UNSIGNED NOT NULL,
+  `title` varchar(191) COLLATE utf8mb4_unicode_ci NOT NULL,
+  `content` text COLLATE utf8mb4_unicode_ci NOT NULL,
+  `user_id` int(10) UNSIGNED NOT NULL,
+  `created_at` timestamp NULL DEFAULT NULL,
+  `updated_at` timestamp NULL DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Дамп данных таблицы `lshop_news`
+--
+
+INSERT INTO `lshop_news` (`id`, `title`, `content`, `user_id`, `created_at`, `updated_at`) VALUES
+(1, 'Новость 892', 'Recusandae tempora ea ut reiciendis nesciunt et. Molestias et nam temporibus qui reiciendis vel totam.\nSit et minima fugit aliquid qui ullam minus rerum. Mollitia porro dolorem totam voluptatem. Omnis qui vero et unde reiciendis id sed. Rerum consequuntur et sunt qui qui corporis officia ut.\nEt est expedita suscipit qui deleniti. Sit vel sunt dolorem. Voluptatem aperiam nihil deleniti facere nisi doloremque. Quia ipsam rerum omnis aliquam.\nQuibusdam rerum maxime qui in dolores facere. In sit et aut ipsum est eos excepturi.\nIste voluptatem omnis ea nisi consequatur. Numquam ea mollitia qui. Possimus ut accusamus nesciunt rerum nemo omnis autem.\nEt non deleniti commodi a tempore est placeat. Eligendi rerum facilis et vel. Optio vitae ducimus sit repellendus molestiae assumenda harum. Voluptatem nulla ut incidunt non animi temporibus voluptas aut. A voluptate nobis ut ut ut quod mollitia sed.', 1, '2017-04-26 11:20:58', '2017-04-26 11:20:58'),
+(2, 'Новость 845', 'Minus sit explicabo ipsum ad laboriosam et et. Facilis tenetur qui cumque accusamus eum omnis ut. Nemo atque iste aut doloribus. Sit eveniet qui dolore sit pariatur adipisci voluptatem totam.\nDolorem quia et enim. Omnis rerum corporis cumque sint beatae ullam et. Quo perferendis quasi facere architecto eos recusandae quis. Quia consequuntur ipsum repellendus consequatur occaecati aliquam soluta.\nIpsum error laboriosam perferendis ut. Molestias est consequatur et minima provident aut. Consequuntur quisquam aut dicta eius molestias dolores. Similique perferendis sint quia sed.\nQuam eum nostrum dolores sapiente aspernatur accusantium veniam vitae. Et veritatis deserunt laboriosam consectetur. Placeat quo qui veniam tenetur aut fugiat. Voluptatem cupiditate maxime consequatur dicta earum autem voluptate.\nA commodi a eos doloremque dignissimos. Debitis id pariatur eius natus.', 1, '2017-04-26 11:20:58', '2017-04-26 11:20:58'),
+(3, 'Новость 466', 'Rem consequatur officiis quo ut non ut neque. Dolore voluptatem unde excepturi rerum eius dolorem. Dolor odio quibusdam sed et exercitationem dolores soluta.\nEsse error cum ut quaerat dicta et omnis. Ut labore libero necessitatibus.\nAd eos enim quos sint blanditiis laborum. Consequuntur fugit enim consequatur assumenda libero id. Maxime cumque hic ea reprehenderit vel vel.\nAd eos voluptate distinctio omnis dolorem sit. Et ea exercitationem dolorem tempore officia cupiditate non. Optio odit perspiciatis nam eligendi.\nDolores exercitationem similique ullam numquam ut nisi accusamus minima. Dolores ex aliquam maiores quisquam earum suscipit. Accusantium sequi ipsam porro et. Repellendus sequi itaque a rem molestiae.\nNeque asperiores velit natus et qui voluptatem. Necessitatibus et at consequuntur qui eius dignissimos. Est consequatur sint illum tempora fugiat dolor.', 1, '2017-04-26 11:20:58', '2017-04-26 11:20:58'),
+(4, 'Новость 675', 'Quia quaerat animi rerum ut quas. Aspernatur et dolore asperiores provident dolorem perspiciatis consectetur officia. Sed dicta ab quibusdam molestiae.\nVeniam qui tempora quia vitae fugit similique laborum officia. Iste est iusto corporis et corrupti.\nQuis voluptatem libero et et. Nesciunt pariatur et nisi sunt facilis laboriosam facilis. Sit earum commodi voluptates consequatur. Veniam molestiae explicabo accusamus quos et autem doloremque fugit. Molestias neque atque culpa aut pariatur.\nSuscipit aperiam ex voluptatem perspiciatis possimus doloribus velit. Iure necessitatibus reiciendis eligendi veritatis ut. Nam omnis alias sed culpa sint. Culpa quam perspiciatis et rerum.\nId recusandae ea adipisci veniam. Ratione sit quos quia possimus. Rem molestias veritatis quod velit accusamus ea incidunt. Libero dolores eos animi aut ipsam.', 1, '2017-04-26 11:20:58', '2017-04-26 11:20:58');
 
 -- --------------------------------------------------------
 
@@ -215,7 +233,8 @@ CREATE TABLE `lshop_persistences` (
 
 INSERT INTO `lshop_persistences` (`id`, `user_id`, `code`, `created_at`, `updated_at`) VALUES
 (152, 1, 'WgmtXGd5YczqaRBSFkKKcaHzDaT4D8D2', '2017-04-18 09:46:16', '2017-04-18 09:46:16'),
-(153, 1, 'J9w432xZrZKT64675hXZmU9IzsElZDvG', '2017-04-24 13:58:35', '2017-04-24 13:58:35');
+(153, 1, 'J9w432xZrZKT64675hXZmU9IzsElZDvG', '2017-04-24 13:58:35', '2017-04-24 13:58:35'),
+(154, 1, '2XM6usFSNIu9Z3hcAso8WBFiGhGsNU82', '2017-04-26 09:56:30', '2017-04-26 09:56:30');
 
 -- --------------------------------------------------------
 
@@ -385,7 +404,11 @@ INSERT INTO `lshop_settings` (`id`, `key`, `value`) VALUES
 (40, 'api.launcher.sashok.auth.format', 'OK:{username}'),
 (41, 'caching.statistic.ttl', '60'),
 (42, 'api.signup.enabled', '1'),
-(43, 'caching.pages.ttl', '3600');
+(43, 'caching.pages.ttl', '3600'),
+(44, 'news.first_portion', '15'),
+(45, 'news.per_page', '15'),
+(46, 'caching.news.ttl', '600'),
+(47, 'news.enabled', '1');
 
 -- --------------------------------------------------------
 
@@ -428,7 +451,7 @@ CREATE TABLE `lshop_users` (
 --
 
 INSERT INTO `lshop_users` (`id`, `username`, `email`, `password`, `permissions`, `last_login`, `balance`, `uuid`, `accessToken`, `serverID`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'admin@example.com', '$2y$10$cAMSzV.uvL16mFOOA3baA.SyndAruccZZ3FL53DQgpFQgPi1ONgtO', NULL, '2017-04-24 13:58:35', 325, 'aec998b1-1e19-11e7-a727-0a0027000014', '383ef4e1bde14a3e4fd9c17d98f7ae0e', NULL, '2017-04-10 13:33:25', '2017-04-24 13:58:35');
+(1, 'admin', 'admin@example.com', '$2y$10$cAMSzV.uvL16mFOOA3baA.SyndAruccZZ3FL53DQgpFQgPi1ONgtO', NULL, '2017-04-26 09:56:30', 250, 'aec998b1-1e19-11e7-a727-0a0027000014', '383ef4e1bde14a3e4fd9c17d98f7ae0e', NULL, '2017-04-10 13:33:25', '2017-04-26 09:56:30');
 
 --
 -- Триггеры `lshop_users`
@@ -476,6 +499,12 @@ ALTER TABLE `lshop_items`
 -- Индексы таблицы `lshop_migrations`
 --
 ALTER TABLE `lshop_migrations`
+  ADD PRIMARY KEY (`id`);
+
+--
+-- Индексы таблицы `lshop_news`
+--
+ALTER TABLE `lshop_news`
   ADD PRIMARY KEY (`id`);
 
 --
@@ -561,12 +590,12 @@ ALTER TABLE `lshop_users`
 -- AUTO_INCREMENT для таблицы `lshop_activations`
 --
 ALTER TABLE `lshop_activations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 --
 -- AUTO_INCREMENT для таблицы `lshop_cart`
 --
 ALTER TABLE `lshop_cart`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT для таблицы `lshop_categories`
 --
@@ -576,12 +605,17 @@ ALTER TABLE `lshop_categories`
 -- AUTO_INCREMENT для таблицы `lshop_items`
 --
 ALTER TABLE `lshop_items`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 --
 -- AUTO_INCREMENT для таблицы `lshop_migrations`
 --
 ALTER TABLE `lshop_migrations`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=31;
+--
+-- AUTO_INCREMENT для таблицы `lshop_news`
+--
+ALTER TABLE `lshop_news`
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=51;
 --
 -- AUTO_INCREMENT для таблицы `lshop_pages`
 --
@@ -591,22 +625,22 @@ ALTER TABLE `lshop_pages`
 -- AUTO_INCREMENT для таблицы `lshop_payments`
 --
 ALTER TABLE `lshop_payments`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT для таблицы `lshop_persistences`
 --
 ALTER TABLE `lshop_persistences`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=154;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=155;
 --
 -- AUTO_INCREMENT для таблицы `lshop_products`
 --
 ALTER TABLE `lshop_products`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=22;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 --
 -- AUTO_INCREMENT для таблицы `lshop_reminders`
 --
 ALTER TABLE `lshop_reminders`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT для таблицы `lshop_roles`
 --
@@ -621,17 +655,17 @@ ALTER TABLE `lshop_servers`
 -- AUTO_INCREMENT для таблицы `lshop_settings`
 --
 ALTER TABLE `lshop_settings`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=44;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=48;
 --
 -- AUTO_INCREMENT для таблицы `lshop_throttle`
 --
 ALTER TABLE `lshop_throttle`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT;
 --
 -- AUTO_INCREMENT для таблицы `lshop_users`
 --
 ALTER TABLE `lshop_users`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
 /*!40101 SET CHARACTER_SET_RESULTS=@OLD_CHARACTER_SET_RESULTS */;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;

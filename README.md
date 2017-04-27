@@ -27,6 +27,7 @@
 * Integration with the payment aggregator robokassa.
 * Multiserver.
 * Separation of goods on each server by category.
+* News system.
 * Static pages.
 * Support Sashok724's Launcher'a.
 * 3 main operating modes: purchases can only be made by guests. (Unauthorized users); Only authorized users; And those and those.

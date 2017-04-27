@@ -6,6 +6,13 @@ use App\Exceptions\News\UnableToCreate;
 use App\Exceptions\News\UnableToUpdate;
 use App\Repositories\NewsRepository;
 
+/**
+ * Class News
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Services
+ */
 class News
 {
     /**
