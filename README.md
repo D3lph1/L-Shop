@@ -85,10 +85,11 @@ After the performed operations, we recommend installing the Directory root of yo
 
 #### Screenshots:
 
-![Catalog](http://i91.fastpic.ru/big/2017/0309/80/d44dff69a8f49657719f30ccf330f180.png)
-![Cart](http://i89.fastpic.ru/big/2017/0309/56/296a4c20ccbf1574ec893a945f076056.png)
-![Mobile Catalog](http://i89.fastpic.ru/big/2017/0309/c8/0714e669be61da8efb0b21e22fcc4cc8.png)
-![Mobile side menu](http://i89.fastpic.ru/big/2017/0309/17/ee2a8fe88f883dab58587bff4ca83917.png)
-![SignIn form](http://i89.fastpic.ru/big/2017/0309/ec/2b6c2c9a9e3be9ffae9898e0de1bbaec.png)
-![Fast buy menu](http://i89.fastpic.ru/big/2017/0309/31/cf22661cd8e7ff1cee87bfc700acdc31.png)
-![Statistic page](http://i90.fastpic.ru/big/2017/0402/20/5bfd77e644b9dcf46fd85e5d59e1d320.png)
+![Signin page](http://i89.fastpic.ru/big/2017/0427/66/4cb0664b14df09d07c68c6446ecdfa66.png)
+![Servers page](http://i89.fastpic.ru/big/2017/0427/1e/f8a97b0b74ee755ffee412076c7d961e.png)
+![Catalog](http://i89.fastpic.ru/big/2017/0427/27/73b1683032711c4f0b3471757ae51827.png)
+![Mobile sidebar](http://i89.fastpic.ru/big/2017/0427/25/717c52ec04553c1e8fc284e0877f7125.png)
+![Cart](http://i89.fastpic.ru/big/2017/0427/b6/0676983bf0673e2ec8f19c9813493ab6.png)
+![Admin settings](http://i89.fastpic.ru/big/2017/0427/c4/c25d3f67246efd1babe3a655deef9fc4.png)
+![Admin add item](http://i89.fastpic.ru/big/2017/0427/10/74a3155ef353dfc5d9d531139db8b710.png)
+![Admin statistic page](http://i89.fastpic.ru/big/2017/0427/c2/b3370246c56d610d534c5074558e63c2.png)
