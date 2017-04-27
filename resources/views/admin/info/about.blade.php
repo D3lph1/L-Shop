@@ -21,26 +21,28 @@
 
         <div class="mt-3 mb-5 ml-5 mr-5">
             <p><strong>L - Shop</strong> - это проект с открытым исходным кодом, целая система, призванная помочь администраторам игровых серверов Minecraft упростить процесс продажи виртуальных товаров.</p>
-            <table class="table table-sm">
-                <tbody>
-                <tr>
-                    <td>Версия системы L - Shop</td>
-                    <td>0.3.0 (BETA)</td>
-                </tr>
-                <tr>
-                    <td>Версия фреймворка Laravel</td>
-                    <td>5.4.11</td>
-                </tr>
-                <tr>
-                    <td>GitHub репозиторий</td>
-                    <td><a href="https://github.com/D3lph1/L-shop" target="_blank">https://github.com/D3lph1/L-shop</a></td>
-                </tr>
-                <tr>
-                    <td>Топик на RuBukkit.org</td>
-                    <td><a href="http://rubukkit.org/threads/l-shop-open-source.133265/" target="_blank">http://rubukkit.org/threads/l-shop-open-source.133265/</a></td>
-                </tr>
-                </tbody>
-            </table>
+            <div class="table-responsive">
+                <table class="table table-sm">
+                    <tbody>
+                    <tr>
+                        <td>Версия системы L - Shop</td>
+                        <td>0.3.0 (BETA)</td>
+                    </tr>
+                    <tr>
+                        <td>Версия фреймворка Laravel</td>
+                        <td>5.4.11</td>
+                    </tr>
+                    <tr>
+                        <td>GitHub репозиторий</td>
+                        <td><a href="https://github.com/D3lph1/L-shop" target="_blank">https://github.com/D3lph1/L-shop</a></td>
+                    </tr>
+                    <tr>
+                        <td>Топик на RuBukkit.org</td>
+                        <td><a href="http://rubukkit.org/threads/l-shop-open-source.133265/" target="_blank">http://rubukkit.org/threads/l-shop-open-source.133265/</a></td>
+                    </tr>
+                    </tbody>
+                </table>
+            </div>
         </div>
         <div class="col-md-12">
             <div class="text-center mb-3">

@@ -88,27 +88,29 @@
         </div>
     </div>
 
-    <div id="news-content" class="z-depth-1">
-        <button id="news-back" class="btn"><i class="fa fa-arrow-right"></i></button>
-        <div id="news-block">
-            @if(!count($news))
-                <div class="alert alert-info text-center">
-                    Новости отстуствуют
-                </div>
-            @endif
+    @if($news)
+        <div id="news-content" class="z-depth-1">
+            <button id="news-back" class="btn"><i class="fa fa-arrow-right"></i></button>
+            <div id="news-block">
+                @if(!count($news))
+                    <div class="alert alert-info text-center">
+                        Новости отстуствуют
+                    </div>
+                @endif
 
-            @foreach($news as $one)
-                <div class="news-preview z-depth-1">
-                    <h3 class="news-pre-header">{{ $one->title }}</h3>
-                    <p class="news-pre-text">{{ short_string($one->content, 150) }}</p>
-                    <a href="{{ route('news', ['server' => $currentServer->id, 'id' => $one->id]) }}" class="btn btn-info btn-sm btn-block mt-1">Подробнее...</a>
-                </div>
-            @endforeach
+                @foreach($news as $one)
+                    <div class="news-preview z-depth-1">
+                        <h3 class="news-pre-header">{{ $one->title }}</h3>
+                        <p class="news-pre-text">{{ short_string($one->content, 150) }}</p>
+                        <a href="{{ route('news', ['server' => $currentServer->id, 'id' => $one->id]) }}" class="btn btn-info btn-sm btn-block mt-1">Подробнее...</a>
+                    </div>
+                @endforeach
+            </div>
+            @if($newsCount >= s_get('news.first_portion', 15))
+                <button id="news-load-more" class="btn btn-blue-grey btn-block mt-1" data-url="{{ route('news.load_more', ['server' => $currentServer->id]) }}"><i class="fa fa-plus"></i></button>
+            @endif
         </div>
-        @if($newsCount >= s_get('news.first_portion', 15))
-            <button id="news-load-more" class="btn btn-blue-grey btn-block mt-1" data-url="{{ route('news.load_more', ['server' => $currentServer->id]) }}"><i class="fa fa-plus"></i></button>
-        @endif
-    </div>
+    @endif
 
     <div id="content">
         <div id="topbar" class="z-depth-1">
@@ -119,9 +121,11 @@
                         <span id="topbar-server">Текущий сервер: <span id="tbs-name">{{ $currentServer->name }}</span></span>
                     </a>
                 </div>
-                <div class="col-3 text-right" id="topbar-content-2">
-                    <button id="btn-news" class="btn"><i class="fa fa-newspaper-o"></i></button>
-                </div>
+                @if($news)
+                    <div class="col-3 text-right" id="topbar-content-2">
+                        <button id="btn-news" class="btn"><i class="fa fa-newspaper-o"></i></button>
+                    </div>
+                @endif
             </div>
         </div>
 

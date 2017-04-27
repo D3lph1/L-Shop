@@ -665,6 +665,13 @@ $('#news-load-more').click(function () {
             disable(self);
         },
         success: function (response) {
+
+            if (response.status == 'news disabled') {
+                msg.warning('Отображение новостей отключено');
+
+                return;
+            }
+
             if (response.status == 'no more news') {
                 msg.info('Новостей больше нет');
                 $(self).hide();

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin\News;
 
-use App\Exceptions\News\UnableToCreateNews;
+use App\Exceptions\News\UnableToCreate;
 use App\Http\Requests\Admin\SaveAddedNewsRequest;
 use App\Services\News;
 use Illuminate\Http\Request;
@@ -42,7 +42,8 @@ class AddController extends Controller
 
         try {
             $news->add($title, $content, $userId);
-        } catch (UnableToCreateNews $e) {
+        } catch (UnableToCreate $e) {
+            \Log::error($e);
             \Message::danger('Не удалось опубликовать новость');
 
             return back();

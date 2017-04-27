@@ -91,6 +91,27 @@
             </div>
 
             <div class="card card-block mt-2">
+                <h4 class="card-title">Новости</h4>
+                <p class="card-text mt-1">
+                    <input type="checkbox" name="news_enabled" id="m-s-news-enabled" @if($enableNews) checked="checked" @endif value="1">
+                    <label for="m-s-news-enabled" class="ckeckbox-label">
+                        <span class='ui'></span>
+                        Включить показ новостей
+                    </label>
+                    <div class="md-form mt-1">
+                        <i class="fa fa-cubes prefix"></i>
+                        <input type="text" name="news_first_portion" id="m-s-news-first-portion" class="form-control" value="{{ $newsFirstPortion }}">
+                        <label for="m-s-news-first-portion">Количество новостей, находящихся на экране при загрузке</label>
+                    </div>
+                    <div class="md-form mt-1">
+                        <i class="fa fa-cubes prefix"></i>
+                        <input type="text" name="news_per_page" id="m-s-news-per-page" class="form-control" value="{{ $newsPerPage }}">
+                        <label for="m-s-news-per-page">Количество подгружаемых за раз новостей</label>
+                    </div>
+                </p>
+            </div>
+
+            <div class="card card-block mt-2">
                 <h4 class="card-title">Пагинация</h4>
                 <p class="card-text">
                     <div class="md-form mt-1">

@@ -14,16 +14,21 @@
             <div class="card card-block">
                 <h4 class="card-title">Кеширование</h4>
                 <p class="card-text">
-                <div class="md-form">
-                    <i class="fa fa-clock-o prefix"></i>
-                    <input type="text" name="ttl_statistic" id="ttl-statistic" class="form-control" value="{{ $ttlStatistic }}">
-                    <label for="ttl-statistic">Время существования кэша статистики (минут)</label>
-                </div>
-                <div class="md-form">
-                    <i class="fa fa-clock-o prefix"></i>
-                    <input type="text" name="ttl_statistic_pages" id="ttl-static-pages" class="form-control" value="{{ $ttlStatiсPages }}">
-                    <label for="ttl-static-pages">Время существования кэша статических страниц (минут)</label>
-                </div>
+                    <div class="md-form">
+                        <i class="fa fa-clock-o prefix"></i>
+                        <input type="text" name="ttl_statistic" id="ttl-statistic" class="form-control" value="{{ $ttlStatistic }}">
+                        <label for="ttl-statistic">Время существования кэша статистики (минут)</label>
+                    </div>
+                    <div class="md-form">
+                        <i class="fa fa-clock-o prefix"></i>
+                        <input type="text" name="ttl_statistic_pages" id="ttl-static-pages" class="form-control" value="{{ $ttlStatiсPages }}">
+                        <label for="ttl-static-pages">Время существования кэша статических страниц (минут)</label>
+                    </div>
+                    <div class="md-form">
+                        <i class="fa fa-clock-o prefix"></i>
+                        <input type="text" name="ttl_news" id="ttl-news" class="form-control" value="{{ $ttlNews }}">
+                        <label for="ttl-news">Время существования кэша новостей (минут)</label>
+                    </div>
                 </p>
             </div>
 

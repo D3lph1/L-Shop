@@ -70,6 +70,14 @@ class ShopLayoutComposer implements ComposerContract
      */
     private function getData()
     {
+        if (s_get('news.enabled')) {
+            $news = $this->news();
+            $newsCount = $this->newsCount();
+        } else {
+            $news = false;
+            $newsCount = 0;
+        }
+
         return [
             'isAuth' => is_auth(),
             'isAdmin' => is_admin(),
@@ -88,8 +96,8 @@ class ShopLayoutComposer implements ComposerContract
             'signinUrl' => route('signin'),
             'logoutUrl' => route('logout'),
             'shopName' => s_get('shop.name', 'L - Shop'),
-            'news' => $this->news(),
-            'newsCount' => $this->newsCount()
+            'news' => $news,
+            'newsCount' => $newsCount
         ];
     }
 

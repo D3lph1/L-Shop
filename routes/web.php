@@ -525,7 +525,14 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
     Route::post('/server/{server}/admin/news/edit/{id}', 'News\EditController@save')
         ->name('admin.news.edit.save')
         ->middleware([
-            'servers:all'
+            'servers:one'
+        ]);
+
+    // Remove given news
+    Route::get('/server/{server}/admin/news/remove/{id}', 'News\EditController@remove')
+        ->name('admin.news.remove')
+        ->middleware([
+            'servers:one'
         ]);
     /**
      * END NEWS SECTION

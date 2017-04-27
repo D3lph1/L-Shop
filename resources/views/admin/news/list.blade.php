@@ -21,6 +21,7 @@
                         <tr>
                             <th>ID</th>
                             <th>Заголовок</th>
+                            <th>Автор</th>
                             <th>Дата публикации</th>
                             <th>Дата последнего редактирования</th>
                             <th>Редактировать</th>
@@ -30,6 +31,7 @@
                             <tr>
                                 <th scope="row">{{ $one->id }}</th>
                                 <td>{{ $one->title }}</td>
+                                <td>{{ $one->author->username }}</td>
                                 <td>{{ $one->created_at }}</td>
                                 <td>{{ $one->updated_at }}</td>
                                 <td><a href="{{ route('admin.news.edit', ['server' => $currentServer->id, 'id' => $one->id]) }}" class="btn btn-info btn-sm">Редактировать</a></td>

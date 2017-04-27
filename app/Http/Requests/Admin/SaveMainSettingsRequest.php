@@ -30,6 +30,8 @@ class SaveMainSettingsRequest extends FormRequest
             'access_mode' => 'required',
             'enable_signup' => 'boolean',
             'enable_email_activation' => 'boolean',
+            'news_first_portion' => 'required|integer|min:1|max:1000',
+            'news_per_page' => 'required|integer|min:1|max:1000',
             'products_per_page' => 'required|integer|min:1|max:1000',
             'payments_per_page' => 'required|integer|min:1|max:1000',
             'cart_per_page' => 'required|integer|min:1|max:1000',
@@ -46,6 +48,8 @@ class SaveMainSettingsRequest extends FormRequest
         $productsPerPage = ['attribute' => 'Количество товара на 1 странице магазина'];
         $paymentsPerPage = ['attribute' => 'Количество элементов на 1 странице истории платежей в профиле пользователя'];
         $cartPerPage = ['attribute' => 'Количество элементов на 1 странице внутриигровой корзины в профиле пользователя'];
+        $newsFirstPortion = ['attribute' => 'Количество новостей, находящихся на экране при загрузке'];
+        $newsPerPage = ['attribute' => 'Количество подгружаемых за раз новостей'];
 
         return [
             'shop_name.required' => trans('validation.required', ['attribute' => 'Имя магазина']),
@@ -57,6 +61,16 @@ class SaveMainSettingsRequest extends FormRequest
             'products_per_page.integer' => trans('validation.integer', $productsPerPage),
             'products_per_page.min' => trans('validation.min.numeric', $productsPerPage),
             'products_per_page.max' => trans('validation.max.numeric', $productsPerPage),
+
+            'news_first_portion.required' => trans('validation.required', $newsFirstPortion),
+            'news_first_portion.integer' => trans('validation.integer', $newsFirstPortion),
+            'news_first_portion.min' => trans('validation.min.numeric', $newsFirstPortion),
+            'news_first_portion.max' => trans('validation.max.numeric', $newsFirstPortion),
+
+            'news_per_page.required' => trans('validation.required', $newsPerPage),
+            'news_per_page.integer' => trans('validation.integer', $newsPerPage),
+            'news_per_page.min' => trans('validation.min.numeric', $newsPerPage),
+            'news_per_page.max' => trans('validation.max.numeric', $newsPerPage),
 
             'payments_per_page.required' => trans('validation.required', $paymentsPerPage),
             'payments_per_page.integer' => trans('validation.integer', $paymentsPerPage),

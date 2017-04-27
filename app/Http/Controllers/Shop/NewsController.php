@@ -3,13 +3,14 @@
 namespace App\Http\Controllers\Shop;
 
 use App\Repositories\NewsRepository;
+use App\Services\News;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
 /**
  * Class NewsController
  *
- * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
  *
  * @package App\Http\Controllers\Shop
  */
@@ -39,6 +40,12 @@ class NewsController extends Controller
      */
     public function render(Request $request)
     {
+        if (!s_get('news.enabled')) {
+            \Message::warning('Отображение новостей отключено');
+
+            return back();
+        }
+
         $id = (int)$request->route('id');
         $news = $this->newsRepository->find($id);
 
@@ -55,37 +62,19 @@ class NewsController extends Controller
     }
 
     /**
-     * @param Request        $request
+     * @param Request $request
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function load(Request $request)
+    public function load(Request $request, News $news)
     {
+        if (!s_get('news.enabled')) {
+            return json_response('news disabled');
+        }
+
         $count = (int)$request->get('count');
-        $news = $this->newsRepository->load($count);
+        $serverId = $request->get('currentServer')->id;
 
-        foreach ($news as &$one) {
-            $one->content = short_string($one->content, 150);
-            $one->link = route('news', [
-                'server' => $request->get('currentServer')->id,
-                'id' => $one->id
-            ]);
-        }
-        unset($one);
-        $count = count($news);
-
-        if ($count) {
-            if ($count < s_get('news.per_page', 15)) {
-                $status = 'last portion';
-            } else {
-                $status = 'success';
-            }
-
-            return json_response($status, [
-                'news' => $news
-            ]);
-        }
-
-        return json_response('no more news');
+        return $news->load($count, $serverId);
     }
 }
