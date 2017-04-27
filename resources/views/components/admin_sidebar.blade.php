@@ -33,6 +33,13 @@
         </ul>
     </div>
     <div class="ad-btn-block">
+        <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-newspaper-o left"></i>Новости</button>
+        <ul class="ad-btn-list">
+            <a href="{{ route('admin.news.add', ['server' => $currentServer->id]) }}" class="waves-effect">Добавить</a>
+            <a href="{{ route('admin.news.list', ['server' => $currentServer->id]) }}" class="waves-effect">Редактировать</a>
+        </ul>
+    </div>
+    <div class="ad-btn-block">
         <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-files-o left"></i>Статические страницы</button>
         <ul class="ad-btn-list">
             <a href="{{ route('admin.pages.add', ['server' => $currentServer->id]) }}" class="waves-effect">Добавить</a>

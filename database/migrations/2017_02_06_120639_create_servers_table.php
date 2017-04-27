@@ -30,6 +30,6 @@ class CreateServersTable extends Migration
      */
     public function down()
     {
-        Schema::drop('servers');
+        Schema::dropIfExists('servers');
     }
 }

@@ -170,6 +170,18 @@ if ($('#content').length) {
             $('.product-container').eq(tabNumber).fadeIn();
         }
     });
+
+    var scrollWidth = document.getElementById('news-content').offsetWidth - document.getElementById('news-content').clientWidth;
+
+    document.getElementById('news-content').style.marginRight = -scrollWidth + 'px';
+
+    $('#btn-news').click(function() {
+        $('#news-content').css({'transform' : 'translateX(0)'})
+    });
+
+    $('#news-back').click(function() {
+        $('#news-content').css({'transform' : 'translateX(100%)'})
+    });
 }
 /**
  * End
@@ -636,6 +648,57 @@ $('.profile-payments-info').click(function () {
         }
     })
 });
+
+$('#news-load-more').click(function () {
+    var count = $('#news-block>div').length;
+    var self = this;
+
+    $.ajax({
+        url: $(self).attr('data-url'),
+        method: 'POST',
+        data: ({
+            _token: getToken(),
+            count: count
+        }),
+        dataType: 'json',
+        beforeSend: function () {
+            disable(self);
+        },
+        success: function (response) {
+
+            if (response.status == 'news disabled') {
+                msg.warning('Отображение новостей отключено');
+
+                return;
+            }
+
+            if (response.status == 'no more news') {
+                msg.info('Новостей больше нет');
+                $(self).hide();
+
+                return;
+            }
+            enable(self);
+
+            if (response.status == 'last portion') {
+                $(self).hide();
+            }
+
+            var content = response.news;
+            var result = '';
+
+            for (var i = 0; i < content.length; i++) {
+                result += '<div class="news-preview z-depth-1"><h3 class="news-pre-header">' + content[i].title + '</h3><p class="news-pre-text">' + content[i].content + '</p> <a href="' + content[i].link + '" class="btn btn-info btn-sm btn-block mt-1">Подробнее...</a> </div>';
+            }
+
+            $('#news-block').append(result);
+        },
+        error: function () {
+            requestError();
+        }
+    })
+});
+
 
 /**
  * Admin panel section

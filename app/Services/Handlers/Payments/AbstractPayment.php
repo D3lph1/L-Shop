@@ -7,6 +7,13 @@ use App\Exceptions\Payment\NotFoundException;
 use App\Exceptions\Payment\AlreadyCompleteException;
 use App\Exceptions\Payment\UnableToCompleteException;
 
+/**
+ * Class AbstractPayment
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Services\Handlers\Payments
+ */
 abstract class AbstractPayment
 {
     /**

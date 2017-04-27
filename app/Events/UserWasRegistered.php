@@ -11,6 +11,14 @@ use Illuminate\Foundation\Events\Dispatchable;
 use Illuminate\Broadcasting\InteractsWithSockets;
 use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
 
+/**
+ * Class UserWasRegistered
+ * Event triggered when a new user is created.
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Events
+ */
 class UserWasRegistered
 {
     use SerializesModels;

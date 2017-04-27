@@ -7,8 +7,9 @@ use Symfony\Component\Console\Input\InputArgument;
 
 /**
  * Class Activate
- *
  * Activate given user account
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
  *
  * @package App\Console\Commands\User
  */

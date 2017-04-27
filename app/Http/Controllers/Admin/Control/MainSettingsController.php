@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Control;
 
+use App\Services\News;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveMainSettingsRequest;
@@ -30,8 +31,11 @@ class MainSettingsController extends Controller
             'shopDescription' => s_get('shop.description'),
             'shopKeywords' => s_get('shop.keywords'),
             'accessMode' => s_get('shop.access_mode'),
-            'enableSignup' => s_get('shop.enable_signup'),
-            'enableEmailActivation' => s_get('auth.email_activation'),
+            'enableSignup' => (bool)s_get('shop.enable_signup'),
+            'enableEmailActivation' => (bool)s_get('auth.email_activation'),
+            'enableNews' => (bool)s_get('news.enabled'),
+            'newsFirstPortion' => s_get('news.first_portion'),
+            'newsPerPage' => s_get('news.per_page'),
             'productsPerPage' => s_get('catalog.products_per_page'),
             'paymentsPerPage' => s_get('profile.payments_per_page'),
             'cartPerPage' => s_get('profile.cart_items_per_page'),
@@ -49,8 +53,15 @@ class MainSettingsController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(SaveMainSettingsRequest $request)
+    public function save(SaveMainSettingsRequest $request, News $news)
     {
+        $newsFirstPortion = (int)$request->get('news_first_portion');
+
+        if ($newsFirstPortion != s_get('news.first_portion')) {
+            // Clear news data from cache
+            $news->forgetNews();
+        }
+
         s_set([
             'shop.name' => $request->get('shop_name'),
             'shop.description' => $request->get('shop_description'),
@@ -58,6 +69,9 @@ class MainSettingsController extends Controller
             'shop.access_mode' => $request->get('access_mode'),
             'shop.enable_signup' => (bool)$request->get('enable_signup'),
             'auth.email_activation' => (bool)$request->get('enable_email_activation'),
+            'news.enabled' => (bool)$request->get('news_enabled'),
+            'news.first_portion' => $newsFirstPortion,
+            'news.per_page' => (int)$request->get('news_per_page'),
             'catalog.products_per_page' => $request->get('products_per_page'),
             'profile.payments_per_page' => $request->get('payments_per_page'),
             'profile.cart_items_per_page' => $request->get('cart_per_page'),

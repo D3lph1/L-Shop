@@ -3,6 +3,7 @@
 namespace App\Composers;
 
 use App\Models\Server;
+use App\Repositories\NewsRepository;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Services\QueryManager;
@@ -37,14 +38,21 @@ class ShopLayoutComposer implements ComposerContract
     private $qm;
 
     /**
-     * @param Request $request
-     * @param QueryManager $qm
+     * @var NewsRepository
      */
-    public function __construct(Request $request, QueryManager $qm)
+    private $newsRepository;
+
+    /**
+     * @param Request        $request
+     * @param QueryManager   $qm
+     * @param NewsRepository $newsRepository
+     */
+    public function __construct(Request $request, QueryManager $qm, NewsRepository $newsRepository)
     {
         $this->currentServer = $request->get('currentServer');
         $this->servers = $request->get('servers');
         $this->qm = $qm;
+        $this->newsRepository = $newsRepository;
     }
 
     /**
@@ -62,6 +70,14 @@ class ShopLayoutComposer implements ComposerContract
      */
     private function getData()
     {
+        if (s_get('news.enabled')) {
+            $news = $this->news();
+            $newsCount = $this->newsCount();
+        } else {
+            $news = false;
+            $newsCount = 0;
+        }
+
         return [
             'isAuth' => is_auth(),
             'isAdmin' => is_admin(),
@@ -79,7 +95,24 @@ class ShopLayoutComposer implements ComposerContract
             ]),
             'signinUrl' => route('signin'),
             'logoutUrl' => route('logout'),
-            'shopName' => s_get('shop.name', 'L - Shop')
+            'shopName' => s_get('shop.name', 'L - Shop'),
+            'news' => $news,
+            'newsCount' => $newsCount
         ];
+    }
+
+    /**
+     * Get first portion of news list
+     *
+     * @return mixed
+     */
+    private function news()
+    {
+        return $this->newsRepository->getFirstPortion();
+    }
+
+    private function newsCount()
+    {
+        return $this->newsRepository->count();
     }
 }

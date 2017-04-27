@@ -26,6 +26,7 @@ class SaveOptimizationRequest extends FormRequest
         return [
             'ttl_statistic' => 'required|integer|min:1',
             'ttl_statistic_pages' => 'required|integer|min:1',
+            'ttl_news' => 'required|integer|min:1',
         ];
     }
 
@@ -33,6 +34,7 @@ class SaveOptimizationRequest extends FormRequest
     {
         $ttlStatistic = 'Время существования кэша статистики';
         $ttlStaticPages = 'Время существования кэша статических страниц';
+        $ttlNews = 'Время существования кэша новостей';
 
         return [
             'ttl_statistic.required' => trans('validation.required', ['attribute' => $ttlStatistic]),
@@ -41,6 +43,9 @@ class SaveOptimizationRequest extends FormRequest
             'ttl_statistic_pages.required' => trans('validation.min.numeric', ['attribute' => $ttlStaticPages]),
             'ttl_statistic_pages.integer' => trans('validation.min.numeric', ['attribute' => $ttlStaticPages]),
             'ttl_statistic_pages.min' => trans('validation.min.numeric', ['attribute' => $ttlStaticPages]),
+            'ttl_news.required' => trans('validation.min.numeric', ['attribute' => $ttlNews]),
+            'ttl_news.integer' => trans('validation.min.numeric', ['attribute' => $ttlNews]),
+            'ttl_news.min' => trans('validation.min.numeric', ['attribute' => $ttlNews]),
         ];
     }
 }

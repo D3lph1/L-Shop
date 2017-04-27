@@ -29,6 +29,7 @@ class OptimizationController extends Controller
             'currentServer' => $request->get('currentServer'),
             'ttlStatistic' => (int)s_get('caching.statistic.ttl'),
             'ttlStatiсPages' => (int)s_get('caching.pages.ttl'),
+            'ttlNews' => (int)s_get('caching.news.ttl')
         ];
 
         return view('admin.control.optimization', $data);
@@ -45,7 +46,8 @@ class OptimizationController extends Controller
     {
         s_set([
             'caching.statistic.ttl' => $request->get('ttl_statistic'),
-            'caching.pages.ttl' => $request->get('ttl_statistic_pages')
+            'caching.pages.ttl' => $request->get('ttl_statistic_pages'),
+            'caching.news.ttl' => $request->get('ttl_news')
         ]);
         s_save();
         \Message::success('Изменения успешно сохранены!');

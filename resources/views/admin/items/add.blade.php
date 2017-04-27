@@ -44,7 +44,7 @@
                             <div class="plus-category text-center mt-1 mb-3">
                                 <div class="btn-group" data-toggle="buttons">
                                     <label class="btn btn-info active">
-                                        <input type="radio" name="image_mode" id="item-set-default-image" autocomplete="off" value="default" checked> Стандартное изображеиние
+                                        <input type="radio" name="image_mode" id="item-set-default-image" autocomplete="off" value="default" checked> Стандартное изображение
                                     </label>
                                     <label class="btn btn-info">
                                         <input type="radio" name="image_mode" id="item-set-uploaded-image" autocomplete="off" value="upload"> Загрузить изображение

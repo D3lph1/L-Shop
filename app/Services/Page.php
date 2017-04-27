@@ -4,6 +4,13 @@ namespace App\Services;
 
 use App\Repositories\PageRepository;
 
+/**
+ * Class Page
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Services
+ */
 class Page
 {
     /**

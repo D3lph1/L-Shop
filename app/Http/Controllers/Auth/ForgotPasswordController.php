@@ -11,6 +11,13 @@ use App\Services\Reminder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+/**
+ * Class ForgotPasswordController
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Http\Controllers\Auth
+ */
 class ForgotPasswordController extends Controller
 {
     /**
@@ -97,6 +104,13 @@ class ForgotPasswordController extends Controller
         return view('auth.reset_password', $data);
     }
 
+    /**
+     * Handle reset password request
+     *
+     * @param ResetPasswordRequest $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function resetPassword(ResetPasswordRequest $request)
     {
         if ($this->isDisabled()) {

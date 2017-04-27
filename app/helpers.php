@@ -31,7 +31,7 @@ if (!function_exists('s_set')) {
      * Set the option value
      *
      * @param string|array $option Option name or array `option` => `value`
-     * @param mixed  $value  Option value
+     * @param mixed        $value  Option value
      */
     function s_set($option, $value = null)
     {
@@ -214,5 +214,22 @@ if (!function_exists('humanize_month')) {
         ];
 
         return strtr($month, $list);
+    }
+}
+
+if (!function_exists('short_string')) {
+    /**
+     * @param string $string
+     * @param int    $length
+     *
+     * @return string
+     */
+    function short_string($string, $length)
+    {
+        if (mb_strlen($string) < $length) {
+            return $string;
+        }
+
+        return mb_substr($string, 0, $length) . '...';
     }
 }

@@ -34,6 +34,6 @@ class CreateGoodsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('goods');
+        Schema::dropIfExists('goods');
     }
 }

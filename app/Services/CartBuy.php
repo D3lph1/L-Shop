@@ -8,6 +8,13 @@ use App\Services\Payments\Manager;
 use App\Traits\BuyResponse;
 use App\Traits\Validator;
 
+/**
+ * Class CartBuy
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Services
+ */
 class CartBuy
 {
     use BuyResponse;
