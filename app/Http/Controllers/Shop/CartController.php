@@ -38,7 +38,6 @@ class CartController extends Controller
     public function render(Request $request)
     {
         $this->server = (int)$request->route('server');
-        $server = $request->get('currentServer');
         $products = [];
         $cost = 0;
         $fromCart = $this->cart->products();

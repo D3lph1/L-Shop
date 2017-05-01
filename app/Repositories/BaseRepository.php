@@ -33,6 +33,13 @@ abstract class BaseRepository
         return $this->query()->find($id, $columns);
     }
 
+    public function all($columns = [])
+    {
+        $columns = $this->prepareColumns($columns);
+
+        return $this->query()->select($columns)->get();
+    }
+
     /**
      * Create new row
      *
@@ -132,7 +139,7 @@ abstract class BaseRepository
     /**
      * @return Builder
      */
-    private function query()
+    protected function query()
     {
         return call_user_func(static::MODEL . '::query');
     }

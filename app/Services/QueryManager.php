@@ -24,114 +24,6 @@ use App\Exceptions\InvalidArgumentTypeException;
 class QueryManager
 {
     /**
-     * Gets a list of activated servers
-     *
-     * @param null|string|array $columns
-     *
-     * @return mixed
-     */
-    public function listOfServers($columns = null)
-    {
-        $columns = $this->prepareColumns($columns);
-
-        return Server::select($columns)->get();
-    }
-
-    /**
-     * Get server or drop 404
-     *
-     * @param int               $id
-     * @param null|string|array $columns
-     *
-     * @return mixed
-     */
-    public function server($id, $columns = null)
-    {
-        $columns = $this->prepareColumns($columns);
-
-        return Server::select($columns)->find($id);
-    }
-
-    /**
-     * @param int  $id
-     * @param null $columns
-     *
-     * @return mixed
-     */
-    public function serverWithCategories($id, $columns = null)
-    {
-        $columns = $this->prepareColumns($columns);
-
-        return Server::select($columns)
-            ->join('categories', 'categories.server_id', 'servers.id')
-            ->find($id);
-    }
-
-    /**
-     * @param array $credentials
-     *
-     * @return int
-     */
-    public function createServer(array $credentials)
-    {
-        return Server::insertGetId($credentials);
-    }
-
-    /**
-     * @param int   $id
-     * @param array $credentials
-     *
-     * @return bool
-     */
-    public function updateServer($id, array $credentials)
-    {
-        return Server::where('id', $id)
-            ->update($credentials);
-    }
-
-    /**
-     * @param string $name
-     * @param int    $serverId
-     *
-     * @return bool
-     */
-    public function createCategory($name, $serverId)
-    {
-        return Category::insert([
-            'name' => $name,
-            'server_id' => $serverId
-        ]);
-    }
-
-    public function createCategories(array $credentials)
-    {
-        return Category::insert($credentials);
-    }
-
-    /**
-     * @param int   $id
-     * @param array $credentials
-     *
-     * @return bool
-     */
-    public function updateCategory($id, array $credentials)
-    {
-        return Category::where('id', $id)
-            ->update($credentials);
-    }
-
-    /**
-     * @param int $serverId
-     *
-     * @return int
-     */
-    public function categoryCount($serverId)
-    {
-        return Category::where('server_id', $serverId)
-            ->count();
-    }
-
-    /**
      * @param null|array $columns
      *
      * @return Collection|static[]
@@ -143,17 +35,6 @@ class QueryManager
         return Category::select($columns)
             ->join('servers', 'servers.id', 'categories.server_id')
             ->get();
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return bool|null
-     */
-    public function removeCategory($id)
-    {
-        return Category::where('id', $id)
-            ->delete();
     }
 
     /**
@@ -174,63 +55,6 @@ class QueryManager
         }
 
         return $builder->get();
-    }
-
-    /**
-     * @param null|array $columns
-     *
-     * @return array|Collection|static[]
-     */
-    public function serversWithCategories($columns = null)
-    {
-        $columns = $this->prepareColumns($columns);
-        $servers = Server::select($columns)->get();
-        $categories = Category::select()->get();
-        $servers = $servers->toArray();
-
-        foreach ($servers as &$server) {
-            foreach ($categories as $category) {
-                if ($category->server_id == $server['id']) {
-                    $server['categories'][] = $category->name;
-                }
-            }
-            $server = (object)$server;
-        }
-
-        return $servers;
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return bool|null
-     */
-    public function removeServer($id)
-    {
-        return Server::where('id', $id)
-            ->delete();
-    }
-
-    /**
-     * @param array $credentials
-     *
-     * @return bool
-     */
-    public function createItem(array $credentials)
-    {
-        return Item::insert($credentials);
-    }
-
-    /**
-     * @param int   $id
-     * @param array $credentials
-     *
-     * @return bool
-     */
-    public function updateItem($id, array $credentials)
-    {
-        return Item::where('id', $id)
-            ->update($credentials);
     }
 
     /**
@@ -270,27 +94,6 @@ class QueryManager
         return Item::select($columns)
             ->where('id', $id)
             ->first();
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return bool|null
-     */
-    public function removeItem($id)
-    {
-        return Item::where('id', $id)
-            ->delete();
-    }
-
-    /**
-     * @param array $credentials
-     *
-     * @return bool
-     */
-    public function createProduct(array $credentials)
-    {
-        return Product::insert($credentials);
     }
 
     /**
@@ -382,29 +185,6 @@ class QueryManager
         }
 
         throw new InvalidArgumentTypeException(['integer', 'string', 'array'], $id);
-    }
-
-    /**
-     * @param int   $id
-     * @param array $credentials
-     *
-     * @return bool
-     */
-    public function updateProduct($id, array $credentials)
-    {
-        return Product::where('id', $id)
-            ->update($credentials);
-    }
-
-    /**
-     * @param int $id
-     *
-     * @return bool|null
-     */
-    public function removeProduct($id)
-    {
-        return Product::where('id', $id)
-            ->delete();
     }
 
     /**
@@ -523,37 +303,6 @@ class QueryManager
     }
 
     /**
-     * @param int $server
-     */
-    public function enableServer($server)
-    {
-        $this->changeServerEnabledMode($server, 1);
-    }
-
-    /**
-     * @param int $server
-     */
-    public function disableServer($server)
-    {
-        $this->changeServerEnabledMode($server, 0);
-    }
-
-    /**
-     * @param null|array $columns
-     *
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
-     */
-    public function usersWithRoles($columns = null)
-    {
-        $columns = $this->prepareColumns($columns);
-
-        return User::select($columns)
-            ->join('role_users', 'role_users.user_id', 'users.id')
-            ->join('roles', 'roles.id', 'role_users.role_id')
-            ->paginate(50);
-    }
-
-    /**
      * @param array $ids
      * @param null  $columns
      *
@@ -566,15 +315,6 @@ class QueryManager
         return User::select($columns)
             ->whereIn('id', $ids)
             ->get();
-    }
-
-    /**
-     * @param int $id
-     * @param int $mode
-     */
-    private function changeServerEnabledMode($id, $mode)
-    {
-        Server::where('id', $id)->update(['enabled' => $mode]);
     }
 
     /**

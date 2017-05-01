@@ -14,7 +14,7 @@ use App\Http\Controllers\Controller;
  *
  * @package App\Http\Controllers\Admin\Servers
  */
-class AddController extends Controller
+class AddController extends BaseController
 {
     /**
      * @param Request $request
@@ -37,26 +37,13 @@ class AddController extends Controller
      */
     public function save(SaveAddedServerRequest $request)
     {
-        \DB::transaction(function () use ($request) {
-            $id = $this->qm->createServer([
-                'name' => $request->get('server_name'),
-                'enabled' => (bool)$request->get('enabled'),
-                'created_at' => Carbon::now()->toDateTimeString(),
-                'updated_at' => Carbon::now()->toDateTimeString()
-            ]);
+        $name = $request->get('server_name');
+        $enabled = (bool)$request->get('enabled');
+        $categories = $request->get('categories');
 
-            $query = [];
-            foreach ($request->get('categories') as $category) {
-                $query[] = [
-                    'name' => $category,
-                    'server_id' => $id,
-                    'created_at' => Carbon::now()->toDateTimeString(),
-                    'updated_at' => Carbon::now()->toDateTimeString()
-                ];
-            }
+        // ~~~~~~~~~~ MAIN METHOD ~~~~~~~~~~ //
+        $this->serverService->createServer($name, $enabled, $categories);
 
-            $this->qm->createCategories($query);
-        });
         \Message::success("Сервер \"{$request->get('server_name')}\" успешно создан");
 
         return response()->redirectToRoute('admin.servers.list', [

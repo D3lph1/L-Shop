@@ -2,9 +2,10 @@
 
 namespace App\Http\Controllers\Admin\Servers;
 
+use App\Exceptions\Server\AttemptToDeleteTheLastCategoryException;
+use App\Exceptions\Server\AttemptToDeleteTheLastServerException;
 use App\Http\Requests\Admin\SaveEditedServerRequest;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 /**
  * Class EditController
@@ -13,7 +14,7 @@ use App\Http\Controllers\Controller;
  *
  * @package App\Http\Controllers\Admin\Servers
  */
-class EditController extends Controller
+class EditController extends BaseController
 {
     /**
      * Render edit server page
@@ -57,14 +58,12 @@ class EditController extends Controller
      */
     public function addCategory(Request $request)
     {
-        if (mb_strlen($request->get('category')) < 2) {
-            \Message::warning('Имя категории не может быть короче 2 символов');
-            return json_response('short category name');
-        }
+        $name = $request->get('category');
+        $serverId = (int)$request->route('edit');
 
-        \DB::transaction(function () use ($request) {
-            $this->qm->createCategory($request->get('category'), (int)$request->route('edit'));
-        });
+        // ~~~~~~~~~~ MAIN METHOD ~~~~~~~~~~ //
+        $this->serverService->createCategory($serverId, $name);
+
         \Message::success("Категория \"{$request->get('category')}\" создана");
 
         return json_response('success');
@@ -77,17 +76,18 @@ class EditController extends Controller
      */
     public function removeCategory(Request $request)
     {
-        $editedServer = (int)$request->route('edit');
-        $category = (int)$request->get('category');
+        $serverId = (int)$request->route('edit');
+        $categoryId = (int)$request->get('category');
 
-        if ($this->qm->categoryCount($editedServer) === 1) {
-            \Message::warning('Отказано в удалении категории. Должна остаться хотя бы одна категория для данного сервера.');
+        try {
+            // ~~~~~~~~~~ MAIN METHOD ~~~~~~~~~~ //
+            $this->serverService->removeCategory($serverId, $categoryId);
+        } catch (AttemptToDeleteTheLastCategoryException $e) {
+            \Message::warning('Должна остаться хотя бы одна категория для данного сервера.');
+
             return json_response('must stay at least one category');
         }
 
-        \DB::transaction(function () use ($category) {
-            $this->qm->removeCategory($category);
-        });
         \Message::info('Категория удалена');
 
         return json_response('success');
@@ -100,38 +100,41 @@ class EditController extends Controller
      */
     public function save(SaveEditedServerRequest $request)
     {
-        $editedServer = $request->route('edit');
+        $serverId = (int)$request->route('edit');
+        $name = $request->get('server_name');
+        $enabled = (bool)$request->get('enabled');
         $categories = $request->get('categories');
-        \DB::transaction(function () use ($request, $categories, $editedServer) {
-            foreach ($categories as $key => $value) {
-                $this->qm->updateCategory($key, [
-                    'name' => $value[0]
-                ]);
-            }
-            $this->qm->updateServer($editedServer, [
-                'name' => $request->get('server_name'),
-                'enabled' => (bool)$request->get('enabled')
-            ]);
-        });
+
+        // ~~~~~~~~~~ MAIN METHOD ~~~~~~~~~~ //
+        $this->serverService->updateServer($serverId, $name, $enabled, $categories);
+
         \Message::success('Изменения успешно сохранены');
 
         return back();
     }
 
     /**
+     * Attempt to delete given server with categories
+     *
      * @param Request $request
      *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function removeServer(Request $request)
     {
-        $removeServerId = $request->route('remove');
+        $serverId = (int)$request->route('remove');
 
-        \DB::transaction(function () use ($removeServerId) {
-            $this->qm->removeServer($removeServerId);
-        });
+        try {
+            // ~~~~~~~~~~ MAIN METHOD ~~~~~~~~~~ //
+            $this->serverService->removeServer($serverId);
+        }catch (AttemptToDeleteTheLastServerException $e) {
+            \Message::warning('Удалить последний сервер невозможно!');
+
+            return redirect()->route('admin.servers.list', $request->get('currentServer')->id);
+        }
+
         \Message::info('Сервер удален');
 
-        return redirect()->route('admin.servers.list', ['server' => $request->get('currentServer')->id]);
+        return redirect()->route('servers');
     }
 }

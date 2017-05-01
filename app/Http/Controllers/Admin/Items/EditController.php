@@ -22,6 +22,9 @@ class EditController extends Controller
      */
     private $adminItems;
 
+    /**
+     * @param AdminItems $adminItems
+     */
     public function __construct(AdminItems $adminItems)
     {
         $this->adminItems = $adminItems;

@@ -19,6 +19,11 @@ class Server extends Model
     protected $table = 'servers';
 
     /**
+     * @var array
+     */
+    protected $fillable = ['name', 'enabled'];
+
+    /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function categories()
