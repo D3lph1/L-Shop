@@ -12,7 +12,7 @@ use App\Http\Controllers\Controller;
  *
  * @package App\Http\Controllers\Admin\Servers
  */
-class ListController extends Controller
+class ListController extends BaseController
 {
     /**
      * Render page with servers list
@@ -23,7 +23,7 @@ class ListController extends Controller
      */
     public function render(Request $request)
     {
-        $servers = $this->qm->serversWithCategories([
+        $servers = $this->serverRepository->getWithCategories([
             'servers.id',
             'servers.name',
             'servers.enabled'
@@ -46,9 +46,13 @@ class ListController extends Controller
      */
     public function enable(Request $request)
     {
-        $server = $request->route('enable');
-        $this->qm->enableServer($server);
-        \Message::info('Сервер включен');
+        $serverId = (int)$request->route('enable');
+
+        if ($this->serverService->enabledServer($serverId)) {
+            \Message::info('Сервер включен');
+        } else {
+            \Message::danger('Не удалось включить сервер!');
+        }
 
         return back();
     }
@@ -62,9 +66,13 @@ class ListController extends Controller
      */
     public function disable(Request $request)
     {
-        $server = $request->route('disable');
-        $this->qm->disableServer($server);
-        \Message::info('Сервер отключен');
+        $serverId = (int)$request->route('enable');
+
+        if ($this->serverService->disabledServer($serverId)) {
+            \Message::info('Сервер отключен');
+        } else {
+            \Message::danger('Не удалось отключить сервер!');
+        }
 
         return back();
     }

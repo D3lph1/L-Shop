@@ -2,9 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Repositories\ServerRepository;
 use Closure;
 use Illuminate\Http\Request;
-use App\Services\QueryManager;
 
 /**
  * Class Servers
@@ -16,16 +16,16 @@ use App\Services\QueryManager;
 class Servers
 {
     /**
-     * @var QueryManager
+     * @var ServerRepository
      */
-    private $qm;
+    private $serverRepository;
 
     /**
-     * @param QueryManager $qm
+     * @param ServerRepository $repository
      */
-    public function __construct(QueryManager $qm)
+    public function __construct(ServerRepository $repository)
     {
-        $this->qm = $qm;
+        $this->serverRepository = $repository;
     }
 
     /**
@@ -82,7 +82,7 @@ class Servers
      */
     private function getCurrentServer($server)
     {
-        return $this->qm->server($server, ['id', 'name', 'enabled']);
+        return $this->serverRepository->find((int)$server, ['id', 'name', 'enabled']);
     }
 
     /**
@@ -92,6 +92,6 @@ class Servers
      */
     private function getServers()
     {
-        return $this->qm->listOfServers(['id', 'name', 'enabled']);
+        return $this->serverRepository->all(['id', 'name', 'enabled']);
     }
 }
