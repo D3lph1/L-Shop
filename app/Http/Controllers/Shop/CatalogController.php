@@ -75,7 +75,7 @@ class CatalogController extends Controller
         $server = (int)$request->route('server');
         $ip = $request->ip();
         $username = $request->get('username');
-        $count = abs($request->get('count'));
+        $count = $request->get('count');
 
         try {
             return $handler->buy($request->route('product'), $count, $server, $ip, $username);

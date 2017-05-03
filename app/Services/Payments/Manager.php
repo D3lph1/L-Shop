@@ -161,14 +161,14 @@ class Manager
             foreach ($idsAndCount as $key => $value) {
                 if ($product->id == $key) {
                     if ($this->productsCountType == self::COUNT_TYPE_STACKS) {
-                        $result[$product->id] = $value * $product->stack;
-                        $cost += $product->price * $value;
+                        $result[$product->id] = abs($value * $product->stack);
+                        $cost += abs($product->price * $value);
                     } else {
                         if ($value % $product->stack !== 0) {
                             throw new LShopException('Invalid products count number');
                         }
                         $result[$product->id] = $value;
-                        $cost += $product->price * ($value / $product->stack);
+                        $cost += abs($product->price * ($value / $product->stack));
                     }
                 }
             }

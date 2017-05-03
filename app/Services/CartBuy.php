@@ -94,7 +94,7 @@ class CartBuy
     {
         foreach ($products as $product) {
             $this->productsId[] = $product['id'];
-            $this->productsCount[] = abs($product['count']);
+            $this->productsCount[] = $product['count'];
         }
     }
 
