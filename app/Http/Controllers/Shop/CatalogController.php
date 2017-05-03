@@ -75,9 +75,10 @@ class CatalogController extends Controller
         $server = (int)$request->route('server');
         $ip = $request->ip();
         $username = $request->get('username');
+        $count = abs($request->get('count'));
 
         try {
-            return $handler->buy($request->route('product'), $request->get('count'), $server, $ip, $username);
+            return $handler->buy($request->route('product'), $count, $server, $ip, $username);
         }catch (InvalidUsernameException $e) {
             return json_response('invalid username');
         }
