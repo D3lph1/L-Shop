@@ -10,7 +10,7 @@ gulp.task('styles', function () {
     return gulp.src([
         'resources/assets/sass/*.sass',
         'resources/assets/css/Highlighter/*.css',
-        'resources/assets/css/*.css',
+        'resources/assets/css/*.css'
     ])
         .pipe(sass())
         .pipe(concat('app.min.css'))
@@ -35,7 +35,6 @@ gulp.task('scripts', function () {
         'resources/assets/js/highlight.pack.js'
     ])
         .pipe(concat('app.min.js'))
-        .pipe(uglify())
         .pipe(gulp.dest('public/js'));
 });
 

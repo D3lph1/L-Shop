@@ -1,6 +1,8 @@
 <?php
+
 namespace App\Http\Controllers\Shop;
 
+use App\Exceptions\Payment\InvalidProductsCountException;
 use App\Exceptions\User\InvalidUsernameException;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -56,6 +58,7 @@ class CartController extends Controller
             'products' => $products,
             'cost' => $cost
         ];
+
         return view('shop.cart', $data);
     }
 
@@ -74,8 +77,10 @@ class CartController extends Controller
 
         try {
             return $handler->buy($products, $this->cart, $server, $ip, $username);
-        }catch (InvalidUsernameException $e) {
+        } catch (InvalidUsernameException $e) {
             return json_response('invalid username');
+        } catch (InvalidProductsCountException $e) {
+            return json_response('invalid products count');
         }
     }
 
@@ -99,6 +104,7 @@ class CartController extends Controller
         }
 
         $this->cart->put($product);
+
         return json_response('success');
     }
 
@@ -115,6 +121,7 @@ class CartController extends Controller
 
         if ($this->cart->has($product)) {
             $this->cart->remove($product);
+
             return json_response('success');
         }
 

@@ -333,6 +333,10 @@ $('.catalog-to-cart').click(function () {
                     if (status == 'invalid username') {
                         msg.danger('Имя пользователя слишком короткое или содержит недопустимые символы');
                     }
+
+                    if (status == 'invalid products count') {
+                        msg.danger('Неверное количество товара');
+                    }
                 }
             },
 
@@ -528,6 +532,10 @@ $('#btn-cart-go-pay').click(function () {
 
                 if (status == 'invalid username') {
                     msg.danger('Имя пользователя слишком короткое или содержит недопустимые символы');
+                }
+
+                if (status == 'invalid products count') {
+                    msg.danger('Неверное количество товара');
                 }
             }
         },
