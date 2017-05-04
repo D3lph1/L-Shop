@@ -35,6 +35,7 @@ gulp.task('scripts', function () {
         'resources/assets/js/highlight.pack.js'
     ])
         .pipe(concat('app.min.js'))
+        .pipe(uglify())
         .pipe(gulp.dest('public/js'));
 });
 

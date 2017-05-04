@@ -858,8 +858,8 @@ transliterate = (
 function buildPageUrl(target) {
     if ($('#page-url-auto').is(':checked')) {
         var title = $(target).val();
-        var result = title.replace(/[\s]/gim, '-');
-        result = result.replace(/[^a-zа-я0-9\-]/guim, '');
+        var result = title.replace(/[\s]/ig, '-');
+        result = result.replace(/[^a-zа-я0-9\-]+/ig, '');
         result = transliterate(result);
 
         $('#page-url').val(result);
