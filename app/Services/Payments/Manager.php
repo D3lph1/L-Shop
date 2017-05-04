@@ -2,6 +2,7 @@
 
 namespace App\Services\Payments;
 
+use App\Exceptions\Payment\InvalidProductsCountException;
 use App\Models\Payment;
 use App\Services\QueryManager;
 use App\Exceptions\LShopException;
@@ -148,6 +149,7 @@ class Manager
      * @param array $ids Array with product identifiers
      * @param array $count Array with product counts
      *
+     * @throws InvalidProductsCountException
      * @throws LShopException
      */
     private function setHandledProductsAndCost($ids, $count)
@@ -159,15 +161,19 @@ class Manager
 
         foreach ($products as $product) {
             foreach ($idsAndCount as $key => $value) {
+                if ($value <= 0) {
+                    throw new InvalidProductsCountException();
+                }
+
                 if ($product->id == $key) {
                     if ($this->productsCountType == self::COUNT_TYPE_STACKS) {
                         $result[$product->id] = abs($value * $product->stack);
                         $cost += abs($product->price * $value);
                     } else {
                         if ($value % $product->stack !== 0) {
-                            throw new LShopException('Invalid products count number');
+                            throw new InvalidProductsCountException();
                         }
-                        $result[$product->id] = $value;
+                        $result[$product->id] = abs($value);
                         $cost += abs($product->price * ($value / $product->stack));
                     }
                 }

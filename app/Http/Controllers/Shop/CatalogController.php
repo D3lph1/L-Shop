@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Shop;
 
+use App\Exceptions\Payment\InvalidProductsCountException;
 use App\Exceptions\User\InvalidUsernameException;
 use App\Http\Controllers\Controller;
 use App\Services\QueryManager;
@@ -79,8 +80,10 @@ class CatalogController extends Controller
 
         try {
             return $handler->buy($request->route('product'), $count, $server, $ip, $username);
-        }catch (InvalidUsernameException $e) {
+        } catch (InvalidUsernameException $e) {
             return json_response('invalid username');
+        } catch (InvalidProductsCountException $e) {
+            return json_response('invalid products count');
         }
     }
 }

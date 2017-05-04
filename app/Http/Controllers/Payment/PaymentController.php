@@ -64,15 +64,23 @@ class PaymentController extends Controller
         return view('payment.methods', $data);
     }
 
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function renderFillUpBalancePage()
     {
         return view('payment.fillupbalance');
     }
 
+    /**
+     * @param Request $request
+     *
+     * @return bool|\Illuminate\Http\JsonResponse
+     */
     public function fillUpBalance(Request $request)
     {
         $server = (int)$request->route('server');
-        $sum = $request->get('sum');
+        $sum = abs($request->get('sum'));
 
         $validated = $this->validateFillUpBalanceSum($sum, true);
         if ($validated !== true) {
@@ -91,6 +99,9 @@ class PaymentController extends Controller
         ]);
     }
 
+    /**
+     * @return mixed
+     */
     private function robokassa()
     {
         $robokassa = \App::make('payment.robokassa');
