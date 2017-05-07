@@ -42,6 +42,10 @@ class Servers
         if ($mode == 'one') {
             $currentServer = $this->getCurrentServer($request->route('server'));
 
+            if (!$currentServer) {
+                \App::abort(404);
+            }
+
             if (!$currentServer->enabled and !is_admin()) {
                 \App::abort(403);
             }
@@ -65,6 +69,11 @@ class Servers
                     break;
                 }
             }
+
+            if (!$request->get('currentServer') and $request->route('server')) {
+                \App::abort(404);
+            }
+
             $request->merge([
                 'servers' => $servers
             ]);
