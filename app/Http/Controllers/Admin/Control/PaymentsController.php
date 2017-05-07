@@ -92,7 +92,7 @@ class PaymentsController extends Controller
         $password1 = $request->get('robokassa_password1');
         $password2 = $request->get('robokassa_password2');
         $algo = $request->get('robokassa_algo');
-        $isTest = $request->get('robokassa_test');
+        $isTest = (bool)$request->get('robokassa_test');
 
         if (!$this->checkAlgo($algo, 'robokassa')) {
             throw New \UnexpectedValueException('', 1);
