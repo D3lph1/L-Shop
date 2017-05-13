@@ -26,7 +26,7 @@
                     <tbody>
                     <tr>
                         <td>Версия системы L - Shop</td>
-                        <td>0.3.1 (BETA)</td>
+                        <td>0.3.2 (BETA)</td>
                     </tr>
                     <tr>
                         <td>Версия фреймворка Laravel</td>

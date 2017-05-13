@@ -40,7 +40,11 @@ class ShoppingCart extends Distributor
         $insertData = [];
         foreach ($products as $product) {
             if ($product->type == 'permgroup') {
-                $item = $product->item . '?lifetime=' . $product->count * 86400;
+                if ($product->count) {
+                    $item = $product->item . '?lifetime=' . $product->count * 86400;
+                } else {
+                    $item = $product->item;
+                }
                 $amount = 1;
             }else {
                 $item = $product->item;

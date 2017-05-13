@@ -107,6 +107,10 @@ button:hover {
     display: inline-block !important;
 }
 
+.d-n {
+    display: none;
+}
+
 /**
  * Checkboxes
  */

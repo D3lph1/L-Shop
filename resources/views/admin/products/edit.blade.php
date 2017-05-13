@@ -40,7 +40,7 @@
                                 <div class="md-form text-left">
                                     <i class="fa fa-cubes prefix"></i>
                                     <input type="text" name="stack" id="stack" class="form-control" value="{{ $product->stack }}">
-                                    <label for="stack">@if($product->type == 'permgroup') Длительность привилегии (В днях) @else Количество товара в 1 стаке @endif</label>
+                                    <label for="stack">@if($product->type == 'permgroup') Длительность привилегии (В днях). 0 - навсегда @else Количество товара в 1 стаке @endif</label>
                                 </div>
                             </div>
                             <div class="plus-category">

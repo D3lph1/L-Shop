@@ -21,16 +21,6 @@ class CartController extends Controller
     use BuyResponse;
 
     /**
-     * @var array
-     */
-    private $productsId = [];
-
-    /**
-     * @var array
-     */
-    private $productsCount = [];
-
-    /**
      * Render the cart page
      *
      * @param Request $request

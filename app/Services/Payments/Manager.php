@@ -161,18 +161,30 @@ class Manager
 
         foreach ($products as $product) {
             foreach ($idsAndCount as $key => $value) {
-                if ($value <= 0) {
+                if ($value < 0) {
+                    throw new InvalidProductsCountException();
+                }
+
+                // If it is not permanent privilege but the quantity of goods is 0
+                if (!($value == 0 and $product->type === 'permgroup' and $product->stack === 0)) {
                     throw new InvalidProductsCountException();
                 }
 
                 if ($product->id == $key) {
+                    if ($product->type === 'permgroup' and $product->stack === 0) {
+                        $result[$product->id] = 0;
+
+                        continue;
+                    }
+
+                    if ($value % $product->stack !== 0) {
+                        throw new InvalidProductsCountException();
+                    }
+
                     if ($this->productsCountType == self::COUNT_TYPE_STACKS) {
                         $result[$product->id] = abs($value * $product->stack);
                         $cost += abs($product->price * $value);
                     } else {
-                        if ($value % $product->stack !== 0) {
-                            throw new InvalidProductsCountException();
-                        }
                         $result[$product->id] = abs($value);
                         $cost += abs($product->price * ($value / $product->stack));
                     }
@@ -213,9 +225,10 @@ class Manager
     {
         return $this->qm->product($ids, [
             'products.id',
+            'items.type',
             'products.price',
             'products.stack'
-        ], false);
+        ], true);
     }
 
     /**
