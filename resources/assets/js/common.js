@@ -246,7 +246,14 @@ $('.catalog-to-cart').click(function () {
         url =  $(this).attr('data-url');
         price = Number($(this).parent().find('.catalog-price-span').text());
         $('#catalog-to-buy-name').html($(this).parent().find('.product-name').html());
-        $('#catalog-to-buy-count-input').val(stack);
+        if (isNaN(stack)) {
+            $('#catalog-to-buy-count-input').hide();
+            $('#catalog-to-buy-cbuttons').hide();
+        } else {
+            $('#catalog-to-buy-count-input').show();
+            $('#catalog-to-buy-cbuttons').show();
+            $('#catalog-to-buy-count-input').val(stack);
+        }
         $('#catalog-to-buy-modal').modal('show');
         $('#catalog-to-buy-summ').text(price);
     });
@@ -799,7 +806,7 @@ $('.edit-products-clip-item').click(function () {
         $('label[for=stack]').text('Количество товара в 1 стаке');
         $('label[for=price]').text('Цена за стак товара');
     }else if(type == 'permgroup') {
-        $('label[for=stack]').text('Длительность привилегии (В днях)');
+        $('label[for=stack]').text('Длительность привилегии (В днях). 0 - навсегда');
         $('label[for=price]').text('Цена одного периода привилегии');
     }
 });

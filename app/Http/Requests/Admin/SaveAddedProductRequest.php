@@ -25,7 +25,7 @@ class SaveAddedProductRequest extends FormRequest
     {
         return [
             'item' => 'required|numeric',
-            'stack' => 'required|numeric|integer|min:1',
+            'stack' => 'required|numeric|integer|min:0',
             'price' => 'required|numeric|min:0,001',
             'server' => 'required|numeric',
             'category' => 'required|numeric'
@@ -34,18 +34,19 @@ class SaveAddedProductRequest extends FormRequest
 
     public function messages()
     {
-
+        $count = ['attribute' => 'Количество товара в 1 стаке'];
+        $price = ['attribute' => 'Цена за стак товара'];
 
         return [
             'item.required' => trans('validation.required', ['attribute' => 'Привязать предмет']),
             'item.numeric' => trans('validation.numeric', ['attribute' => 'Привязать предмет']),
-            'stack.required' => trans('validation.required', ['attribute' => 'Количество товара в 1 стаке']),
-            'stack.numeric' => trans('validation.numeric', ['attribute' => 'Количество товара в 1 стаке']),
-            'stack.integer' => trans('validation.integer', ['attribute' => 'Количество товара в 1 стаке']),
-            'stack.min' => trans('validation.min.numeric', ['attribute' => 'Количество товара в 1 стаке']),
-            'price.required' => trans('validation.required', ['attribute' => 'Цена за стак товара']),
-            'price.numeric' => trans('validation.numeric', ['attribute' => 'Цена за стак товара']),
-            'price.min' => trans('validation.min.numeric', ['attribute' => 'Цена за стак товара']),
+            'stack.required' => trans('validation.required', $count),
+            'stack.numeric' => trans('validation.numeric', $count),
+            'stack.integer' => trans('validation.integer', $count),
+            'stack.min' => trans('validation.min.numeric', $count),
+            'price.required' => trans('validation.required', $price),
+            'price.numeric' => trans('validation.numeric', $price),
+            'price.min' => trans('validation.min.numeric', $price),
             'server.required' => trans('validation.numeric', ['attribute' => 'Привязать к серверу/категории']),
             'category.required' => trans('validation.numeric', ['attribute' => 'Привязать к серверу/категории']),
         ];

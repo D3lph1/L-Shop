@@ -15,15 +15,21 @@
 
     </div>
     <div class="c-2-info">
-        <p class="c-p-count">@if($product->type == 'item') Количество @elseif($product->type == 'permgroup') Длительность (Дн.) @endif</p>
-        <div class="md-form">
-            <input type="text" class="form-control text-center c-p-count-input" value="@if($product->type == 'permgroup') {{ $product->stack }} @else {{ $product->stack }} @endif">
-        </div>
+        @if($product->stack !== 0)
+            <p class="c-p-count">@if($product->type == 'item') Количество @elseif($product->type == 'permgroup') Длительность (Дн.) @endif</p>
+            <div class="md-form">
+                <input type="text" class="form-control text-center c-p-count-input" value="@if($product->type == 'permgroup') {{ $product->stack }} @else {{ $product->stack }} @endif">
+            </div>
 
-        <div class="c-p-cbuttons" data-stack="@if($product->type == 'permgroup') {{ humanize_perm_duration($product->stack)['short'] }} @else {{ $product->stack }} @endif" data-price="{{ $product->price }}">
-            <button class="btn btn-warning btn-sm cart-minus-btn"><i class="fa fa-minus"></i></button>
-            <button class="btn btn-warning btn-sm cart-plus-btn"><i class="fa fa-plus"></i></button>
-        </div>
+            <div class="c-p-cbuttons" data-stack="{{ $product->stack }}" data-price="{{ $product->price }}">
+                <button class="btn btn-warning btn-sm cart-minus-btn"><i class="fa fa-minus"></i></button>
+                <button class="btn btn-warning btn-sm cart-plus-btn"><i class="fa fa-plus"></i></button>
+            </div>
+        @else
+            <div class="alert alert-info alerts">
+                Этот товар приобретается навсегда.
+            </div>
+        @endif
 
         <p class="c-p-pay">К оплате:</p>
         <p class="c-p-pay-money"><span>{{ $product->price }}</span> {!! s_get('shop.currency_html', 'руб.') !!}</p>
