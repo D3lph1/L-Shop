@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Profile;
 
+use App\Repositories\PaymentRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -17,15 +18,16 @@ class PaymentsController extends Controller
     /**
      * Render the profile payments history page
      *
-     * @param Request $request
+     * @param Request           $request
+     * @param PaymentRepository $pr
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request, PaymentRepository $pr)
     {
         $data = [
             'servers' => $request->get('servers'),
-            'payments' => $this->qm->paymentsHistory(\Sentinel::getUser()->getUserId())
+            'payments' => $pr->historyForUser(\Sentinel::getUser()->getUserId())
         ];
 
         return view('profile.payments', $data);

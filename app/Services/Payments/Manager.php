@@ -161,23 +161,23 @@ class Manager
 
         foreach ($products as $product) {
             foreach ($idsAndCount as $key => $value) {
-                if ($value < 0) {
-                    throw new InvalidProductsCountException();
-                }
-
-                // If is item and count is 0
-                if ($product->type === 'item' and $value == 0) {
-                    throw new InvalidProductsCountException();
-                }
-
-                // If it is not permanent privilege but the quantity of goods is 0
-                if ($product->type === 'permgroup') {
-                    if ($product->stack != 0 and $value == 0) {
+                if ($product->id == $key) {
+                    if ($value < 0) {
                         throw new InvalidProductsCountException();
                     }
-                }
 
-                if ($product->id == $key) {
+                    // If is item and count is 0
+                    if ($product->type === 'item' and $value == 0) {
+                        throw new InvalidProductsCountException();
+                    }
+
+                    // If it is not permanent privilege but the quantity of goods is 0
+                    if ($product->type === 'permgroup') {
+                        if ($product->stack != 0 and $value == 0) {
+                            throw new InvalidProductsCountException();
+                        }
+                    }
+
                     if ($product->type === 'permgroup' and $product->stack === 0) {
                         $result[$product->id] = 0;
                         $cost += $product->price;

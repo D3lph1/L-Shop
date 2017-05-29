@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Class BaseRepository
+ * Abstract repository class
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
  *
@@ -33,6 +34,28 @@ abstract class BaseRepository
         return $this->query()->find($id, $columns);
     }
 
+    /**
+     * Get all rows where id contains in array
+     *
+     * @param array $ids
+     * @param array $columns
+     *
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function whereIdIn(array $ids, array $columns = [])
+    {
+        $columns = $this->prepareColumns($columns);
+
+        return $this->query()->select($columns)->whereIn('id', $ids)->get();
+    }
+
+    /**
+     * Get all rows
+     *
+     * @param array $columns
+     *
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
     public function all($columns = [])
     {
         $columns = $this->prepareColumns($columns);
