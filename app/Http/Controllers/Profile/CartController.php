@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Profile;
 
+use App\Repositories\CartRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -17,15 +18,16 @@ class CartController extends Controller
     /**
      * Render the profile cart page
      *
-     * @param Request $request
+     * @param Request        $request
+     * @param CartRepository $cr
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request, CartRepository $cr)
     {
         $server = $request->get('filter_server');
 
-        $items = $this->qm->cartHistory(\Sentinel::getUser()->getUserLogin(), $server, [
+        $items = $cr->historyForUser(\Sentinel::getUser()->getUserLogin(), $server, [
             'cart.amount',
             'cart.created_at',
             'cart.server',

@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin\Statistic;
 
+use App\Repositories\PaymentRepository;
+use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -15,13 +17,15 @@ use App\Http\Controllers\Controller;
 class PaymentsController extends Controller
 {
     /**
-     * @param Request $request
+     * @param Request           $request
+     * @param PaymentRepository $pr
+     * @param UserRepository    $ur
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request, PaymentRepository $pr, UserRepository $ur)
     {
-        $payments = $this->qm->paymentsHistoryAll();
+        $payments = $pr->allHistory();
         $users = [];
 
         foreach ($payments as $payment) {
@@ -30,7 +34,7 @@ class PaymentsController extends Controller
             }
         }
         $users = array_unique($users);
-        $users = $this->qm->users($users, ['id', 'username']);
+        $users = $ur->whereIdIn($users, ['id', 'username']);
         foreach ($payments as &$payment) {
             foreach ($users as $user) {
                 if ($user->id === $payment->user_id) {

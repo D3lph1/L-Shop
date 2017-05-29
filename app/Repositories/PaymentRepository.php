@@ -7,7 +7,7 @@ use App\Models\Payment;
 /**
  * Class PaymentRepository
  *
- * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
  *
  * @package App\Repositories
  */
@@ -66,7 +66,7 @@ class PaymentRepository extends BaseRepository
     /**
      * Complete given payment
      *
-     * @param int $id
+     * @param int    $id
      * @param string $serviceName
      *
      * @return bool
@@ -78,5 +78,39 @@ class PaymentRepository extends BaseRepository
                 'service' => $serviceName,
                 'completed' => true
             ]);
+    }
+
+    /**
+     * Get payments history for user with given id
+     *
+     * @param int   $userId
+     * @param array $columns
+     *
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function historyForUser($userId, array $columns = [])
+    {
+        $columns = $this->prepareColumns($columns);
+
+        return Payment::select()
+            ->where('payments.user_id', $userId)
+            ->orderBy('created_at', 'DESC')
+            ->paginate(s_get('profile.payments_per_page', 10));
+    }
+
+    /**
+     * Get payments history paginated
+     *
+     * @param array $columns
+     *
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
+    public function allHistory(array $columns = [])
+    {
+        $columns = $this->prepareColumns($columns);
+
+        return Payment::select($columns)
+            ->orderBy('created_at', 'DESC')
+            ->paginate(50);
     }
 }

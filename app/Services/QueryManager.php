@@ -230,27 +230,6 @@ class QueryManager
     }
 
     /**
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
-     */
-    public function paymentsHistoryAll()
-    {
-        return Payment::select()
-            ->paginate(50);
-    }
-
-    /**
-     * @param string $user
-     *
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
-     */
-    public function paymentsHistory($user)
-    {
-        return Payment::select()
-            ->where('payments.user_id', $user)
-            ->paginate(s_get('profile.payments_per_page', 10));
-    }
-
-    /**
      * @param int         $id
      * @param null|string $service
      *
@@ -273,47 +252,6 @@ class QueryManager
     public function putInShoppingCart(array $credentials)
     {
         return \App\Models\Cart::insert($credentials);
-    }
-
-    /**
-     * @param string     $player
-     * @param null|int   $server
-     * @param null|array $columns
-     *
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
-     */
-    public function cartHistory($player, $server = null, $columns = null)
-    {
-        $columns = $this->prepareColumns($columns);
-
-        if ($server) {
-            $builder = Cart::select($columns)
-                ->join('items', 'items.id', 'cart.item_id')
-                ->where('cart.server', $server);
-        } else {
-            $builder = Cart::select($columns)
-                ->join('items', 'items.id', 'cart.item_id');
-        }
-
-        return $builder
-            ->where('cart.player', $player)
-            ->orderBy('cart.created_at', 'DESC')
-            ->paginate(s_get('profile.cart_items_per_page', 10));
-    }
-
-    /**
-     * @param array $ids
-     * @param null  $columns
-     *
-     * @return Collection|static[]
-     */
-    public function users(array $ids, $columns = null)
-    {
-        $columns = $this->prepareColumns($columns);
-
-        return User::select($columns)
-            ->whereIn('id', $ids)
-            ->get();
     }
 
     /**

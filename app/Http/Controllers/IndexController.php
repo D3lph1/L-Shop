@@ -2,8 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
-
 /**
  * Class IndexController
  *
@@ -14,15 +12,13 @@ use Illuminate\Http\Request;
 class IndexController extends Controller
 {
     /**
+     * The action responsible for processing the request for URL "/"
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
     public function index()
     {
-        if (is_auth()) {
-            return response()->redirectToRoute('servers');
-        }
-
-        if (access_mode_guest()) {
+        if (is_auth() or access_mode_guest()) {
             return response()->redirectToRoute('servers');
         }
 
