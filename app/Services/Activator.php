@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Mail\UserActivation;
+use App\Models\User;
 use Cartalyst\Sentinel\Users\UserInterface;
 
 /**
@@ -21,6 +22,7 @@ class Activator
     {
         $activation = \Activation::create($user);
 
+        /** @var User $user */
         $this->mail($user->id, $user->username, $user->email, $activation->code);
     }
 

@@ -6,6 +6,7 @@ use App\Exceptions\User\RemindCodeNotFound;
 use App\Exceptions\User\UnableToCompleteRemindException;
 use App\Mail\ForgotPassword;
 use App\Exceptions\User\NotFoundException;
+use App\Models\User;
 use Cartalyst\Sentinel\Users\UserInterface;
 use Cartalyst\Sentinel\Reminders\EloquentReminder;
 
@@ -90,6 +91,7 @@ class Reminder
 
     private function sendEmail(UserInterface $user, EloquentReminder $reminder, $ip)
     {
+        /** @var User $user */
         \Mail::to($user->email)->queue(new ForgotPassword($user->id, $user->username, $reminder->code, $ip));
     }
 }

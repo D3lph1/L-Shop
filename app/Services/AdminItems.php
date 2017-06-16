@@ -27,7 +27,8 @@ class AdminItems
     private $productRepository;
 
     /**
-     * @param ItemRepository $itemRepository
+     * @param ItemRepository    $itemRepository
+     * @param ProductRepository $productRepository
      */
     public function __construct(ItemRepository $itemRepository, ProductRepository $productRepository)
     {

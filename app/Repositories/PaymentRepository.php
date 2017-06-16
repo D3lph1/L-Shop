@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Payment;
+use Illuminate\Database\Query\Builder;
 
 /**
  * Class PaymentRepository
@@ -49,8 +50,10 @@ class PaymentRepository extends BaseRepository
         return \Cache::get('admin.statistic.profit', function () {
             $result = Payment::where('completed', 1)
                 ->where(function ($query) {
+                    /** @var $query Builder */
                     $query->where('username', null)
                         ->orWhere(function ($query) {
+                            /** @var $query Builder */
                             $query->whereNotNull('username')
                                 ->where('products', null);
                         });

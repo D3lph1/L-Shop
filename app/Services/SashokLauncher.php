@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Exceptions\SashokLauncherAuthWhiteListException;
+use App\Models\User;
 
 /**
  * Class SashokLauncher
@@ -30,6 +31,7 @@ class SashokLauncher
             throw new SashokLauncherAuthWhiteListException();
         }
 
+        /** @var User $user */
         $user = \Sentinel::getUserRepository()->findByCredentials(['username' => $username]);
 
         if ($user) {
@@ -47,7 +49,7 @@ class SashokLauncher
      * Checks if the current ip is in the whitelist
      *
      * @param string $ip
-     * @param array  $whiteList
+     * @param string  $whiteList
      *
      * @return bool
      */

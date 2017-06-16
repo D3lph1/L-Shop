@@ -117,18 +117,6 @@ class Cart
     }
 
     /**
-     * @deprecated It deprecated as it does not throw an CartException when product not found
-     *
-     * @param int $product Product identify
-     *
-     * @return int
-     */
-    public function productCountSilent($product)
-    {
-        return $this->getSilent($product)['count'];
-    }
-
-    /**
      * Calculate and return count of all products in cart for current server
      *
      * @return int
