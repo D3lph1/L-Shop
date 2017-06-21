@@ -27,6 +27,8 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Product whereServerId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Product whereStack($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Product whereUpdatedAt($value)
+ * @property float $sort_priority
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Product whereSortPriority($value)
  */
 class Product extends Model
 {

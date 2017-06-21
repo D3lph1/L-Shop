@@ -10,7 +10,9 @@
         "barryvdh/laravel-debugbar": "^2.3",
         "barryvdh/laravel-ide-helper": "^2.2",
         "cartalyst/sentinel": "2.0.*",
-        "laravel/framework": "5.4.11",
+        "d3lph1/minecraft-rcon-manager": "~1.0",
+        "intervention/image": "^2.3",
+        "laravel/framework": "5.4.24",
         "laravel/tinker": "~1.0"
     },
     "require-dev": {

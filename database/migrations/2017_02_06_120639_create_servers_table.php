@@ -15,8 +15,12 @@ class CreateServersTable extends Migration
     {
         Schema::create('servers', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('title');
+            $table->string('name');
             $table->boolean('enabled');
+            $table->ipAddress('ip')->nullable();
+            $table->integer('port')->nullable();
+            $table->integer('password')->nullable();
+            $table->boolean('monitoring_enabled')->default(0);
             $table->timestamps();
 
             $table->engine = 'InnoDB';

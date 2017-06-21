@@ -4,6 +4,8 @@ namespace App\Services;
 
 use App\Exceptions\SashokLauncherAuthWhiteListException;
 use App\Models\User;
+use Cartalyst\Sentinel\Checkpoints\ActivationCheckpoint;
+use Cartalyst\Sentinel\Users\UserInterface;
 
 /**
  * Class SashokLauncher
@@ -23,23 +25,22 @@ class SashokLauncher
      *
      * @throws SashokLauncherAuthWhiteListException
      *
-     * @return bool
+     * @return mixed
      */
-    public function checkCredentials($username, $password, $ip, $whiteList)
+    public function auth($username, $password, $ip, $whiteList)
     {
         if (!$this->whiteList($ip, $whiteList)) {
             throw new SashokLauncherAuthWhiteListException();
         }
 
         /** @var User $user */
-        $user = \Sentinel::getUserRepository()->findByCredentials(['username' => $username]);
+        $user = \Sentinel::authenticate([
+            'username' => $username,
+            'password' => $password
+        ]);
 
         if ($user) {
-            $hash = $user->getUserPassword();
-
-            if (password_verify($password, $hash)) {
-                return $user->username;
-            }
+            return $user->username;
         }
 
         return false;
@@ -66,5 +67,31 @@ class SashokLauncher
         }
 
         return false;
+    }
+
+    /**
+     * @param UserInterface $user
+     *
+     * @return bool
+     */
+    protected function activationCheckpoint(UserInterface $user)
+    {
+        /** @var ActivationCheckpoint $checkpoint */
+        $checkpoint = app(ActivationCheckpoint::class);
+
+        return $checkpoint->login($user);
+    }
+
+    /**
+     * @param UserInterface $user
+     *
+     * @return bool
+     */
+    protected function banCheckpoint(UserInterface $user)
+    {
+        /** @var BanCheckpoint $checkpoint */
+        $checkpoint = app(BanCheckpoint::class);
+
+        return $checkpoint->login($user);
     }
 }

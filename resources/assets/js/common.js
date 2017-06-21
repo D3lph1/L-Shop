@@ -22,14 +22,14 @@ function signin(self) {
     var username = $('#si-username').val();
     var password = $('#si-password').val();
 
-    if (username.length < 4) {
-        msg.danger('Имя пользователя слишком короткое');
+    if (username.length === 0) {
+        msg.danger('Имя пользователя не заполнено');
 
         return;
     }
 
-    if (password.length < 4) {
-        msg.danger('Пароль слишком короткий');
+    if (password.length === 0) {
+        msg.danger('Пароль не заполнен');
 
         return;
     }
@@ -51,7 +51,7 @@ function signin(self) {
             enable(self);
             var status = response.status;
 
-            if (status == 'success') {
+            if (status === 'success') {
                 // If a user has successfully logged in
                 var to = getUrlParams()['to'];
 
@@ -63,16 +63,18 @@ function signin(self) {
                     document.location.href = $('#sign-in').attr('data-redirect');
                 }
             } else {
-                if (status == 'invalid_credentials') {
+                if (status === 'invalid_credentials') {
                     msg.danger('Пользователь с такими данными не найден');
-                } else if (status == 'frozen') {
+                } else if (status === 'frozen') {
                     msg.danger('Вы произвели слишком большое количество попыток входа. ' +
                         'Возможность авторизации будет недоступна последующие ' +
                         response.delay + ' секунд.');
-                }else if (status == 'not activated') {
+                } else if (status === 'not activated') {
                     msg.danger('Ваш аккаунт не активирован. Проверьте свою почту на наличие нашего письма.');
-                }else if(status = 'only for admins') {
+                } else if (status === 'only for admins') {
                     msg.danger('Вход обычным пользователям запрещен');
+                } else if (status === 'banned') {
+                    msg.danger(response.message);
                 }
             }
         },
@@ -89,7 +91,7 @@ function signin(self) {
  * Perform user registration attempts by pressing the enter key
  */
 $('#su-username, #su-email, #su-password, #su-password-confirm').keyup(function (event) {
-    if (event.keyCode == 13) {
+    if (event.keyCode === 13) {
         signup(this);
     }
 });
@@ -145,28 +147,28 @@ if ($('#content').length) {
     };
 
 
-    byId('btn-menu').onclick = function() {
+    byId('btn-menu').onclick = function () {
         byId('side-content').style.transform = 'translateX(0)';
     };
 
-    byId('btn-menu-c').onclick = function() {
+    byId('btn-menu-c').onclick = function () {
         byId('side-content').style.transform = 'translateX(-100%)';
     };
 
     $('.product-container').hide().eq(0).show();
     $('.ad-btn-list').hide();
 
-    $('.admin-menu-btn').click(function() {
+    $('.admin-menu-btn').click(function () {
         $(this).parent().siblings().find('.ad-btn-list').slideUp();
         $(this).siblings().slideToggle();
     });
 
-    $('.cat-btn').click(function() {
+    $('.cat-btn').click(function () {
         var tabNumber = $(this).index();
         if ($('.product-container').eq(tabNumber).css('display') == 'none') {
             $('.product-container').eq(tabNumber).siblings().hide();
-            $(this).siblings().css({'background-color' : '#ffbb33'});
-            $(this).css({'background-color' : '#FF8800'});
+            $(this).siblings().css({'background-color': '#ffbb33'});
+            $(this).css({'background-color': '#FF8800'});
             $('.product-container').eq(tabNumber).fadeIn();
         }
     });
@@ -175,12 +177,12 @@ if ($('#content').length) {
 
     document.getElementById('news-content').style.marginRight = -scrollWidth + 'px';
 
-    $('#btn-news').click(function() {
-        $('#news-content').css({'transform' : 'translateX(0)'})
+    $('#btn-news').click(function () {
+        $('#news-content').css({'transform': 'translateX(0)'})
     });
 
-    $('#news-back').click(function() {
-        $('#news-content').css({'transform' : 'translateX(100%)'})
+    $('#news-back').click(function () {
+        $('#news-content').css({'transform': 'translateX(100%)'})
     });
 }
 /**
@@ -243,7 +245,7 @@ $('.catalog-to-cart').click(function () {
 
     $('.catalog-to-buy').click(function () {
         stack = Number($(this).parent().find('.product-count>span').text());
-        url =  $(this).attr('data-url');
+        url = $(this).attr('data-url');
         price = Number($(this).parent().find('.catalog-price-span').text());
         $('#catalog-to-buy-name').html($(this).parent().find('.product-name').html());
         if (isNaN(stack)) {
@@ -333,10 +335,10 @@ $('.catalog-to-cart').click(function () {
                         msg.success('Покупка успешно совершена!');
                         $('#catalog-to-buy-modal').modal('hide');
                         $('#balance-span').text(response.new_balance);
-                    }else {
+                    } else {
                         document.location.href = response.redirect;
                     }
-                }else {
+                } else {
                     if (status == 'invalid username') {
                         msg.danger('Имя пользователя слишком короткое или содержит недопустимые символы');
                     }
@@ -531,7 +533,7 @@ $('#btn-cart-go-pay').click(function () {
                     $('#cart-products').empty();
                     $('#total').remove();
                     $('#cart-products').html('<h3>Корзина пуста</h3>');
-                }else {
+                } else {
                     document.location.href = response.redirect;
                 }
             } else {
@@ -603,7 +605,7 @@ $('#fub-btn').click(function () {
 
             if (status == 'success') {
                 document.location.href = response.redirect;
-            }else {
+            } else {
                 enable(self);
                 if (status == 'invalid sum') {
                     msg.warning('Сумма должна быть положительным числом и быть не меньше ' + response.min);
@@ -647,7 +649,7 @@ $('.profile-payments-info').click(function () {
 
                 if (!products.length) {
                     this.error();
-                }else {
+                } else {
                     $('#profile-payments-modal').modal('show');
 
                     for (i = 0; i < products.length; i++) {
@@ -681,13 +683,13 @@ $('#news-load-more').click(function () {
         },
         success: function (response) {
 
-            if (response.status == 'news disabled') {
+            if (response.status === 'news disabled') {
                 msg.warning('Отображение новостей отключено');
 
                 return;
             }
 
-            if (response.status == 'no more news') {
+            if (response.status === 'no more news') {
                 msg.info('Новостей больше нет');
                 $(self).hide();
 
@@ -695,7 +697,7 @@ $('#news-load-more').click(function () {
             }
             enable(self);
 
-            if (response.status == 'last portion') {
+            if (response.status === 'last portion') {
                 $(self).hide();
             }
 
@@ -714,6 +716,99 @@ $('#news-load-more').click(function () {
     })
 });
 
+/**
+ * Character section
+ */
+
+$('#profile-update-skin').click(function () {
+    var self = this;
+    var url = $(self).attr('data-url');
+
+    $.ajax({
+        url: url,
+        method: 'POST',
+        data: new FormData($('#skin-form')[0]),
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        beforeSend: function () {
+            disable(self);
+        },
+        success: function (response) {
+            enable(self);
+            var status = response.status;
+
+            if (status === 'success') {
+                msg.success('Новый скин установлен успешно');
+
+                var a = $('#skin-front').attr('src');
+                var b = $('#skin-back').attr('src');
+
+                $('#skin-front').attr('src', a);
+                $('#skin-back').attr('src', b);
+
+            } else if (status === 'invalid ratio') {
+                msg.danger('Неверный размер изображения');
+            }
+        },
+        complete: function (xhr) {
+            if (xhr.status === 422) {
+                var response = JSON.parse(xhr.responseText);
+                showErrors(response.skin);
+            }
+        }
+    })
+});
+
+$('#profile-update-cloak').click(function () {
+    var self = this;
+    var url = $(self).attr('data-url');
+
+    $.ajax({
+        url: url,
+        method: 'POST',
+        data: new FormData($('#cloak-form')[0]),
+        processData: false,
+        contentType: false,
+        dataType: 'json',
+        beforeSend: function () {
+            disable(self);
+        },
+        success: function (response) {
+            enable(self);
+            var status = response.status;
+
+            if (status === 'success') {
+                msg.success('Новый плащ установлен успешно');
+
+                var a = $('#cloak-front').attr('src');
+                var b = $('#cloak-back').attr('src');
+
+                $('#cloak-front').attr('src', a);
+                $('#cloak-back').attr('src', b);
+
+            } else if (status === 'invalid ratio') {
+                msg.danger('Неверный размер изображения');
+            }
+        },
+        complete: function (xhr) {
+            if (xhr.status === 422) {
+                var response = JSON.parse(xhr.responseText);
+                showErrors(response.skin);
+            }
+        }
+    })
+});
+
+/**
+ * End character section
+ */
+
+
+$('#btn-monitoring').click(function () {
+    $('#monitoring-modal').modal('show');
+});
+
 
 /**
  * Admin panel section
@@ -723,6 +818,7 @@ $('.api-algo-dropdown-item').click(function () {
     $('#s-api-algo').val($(this).text());
 });
 
+// Dropdown
 $('.dropdown-item.change').click(function () {
     $('#' + $(this).attr('data-parent')).html($(this).html());
 });
@@ -805,7 +901,7 @@ $('.edit-products-clip-item').click(function () {
     if (type == 'item') {
         $('label[for=stack]').text('Количество товара в 1 стаке');
         $('label[for=price]').text('Цена за стак товара');
-    }else if(type == 'permgroup') {
+    } else if (type == 'permgroup') {
         $('label[for=stack]').text('Длительность привилегии (В днях). 0 - навсегда');
         $('label[for=price]').text('Цена одного периода привилегии');
     }
@@ -829,8 +925,14 @@ $('.robokassa-algo-item').click(function () {
     $('#robokassa-algo-input').val($(this).text());
 });
 
+// Dropdown
 $('.access-mode-item').click(function () {
     $('#access-mode-input').val($(this).attr('data-value'));
+});
+
+// Dropdown
+$('.products-sort-type-item').click(function () {
+    $('#products-sort-type-input').val($(this).attr('data-value'));
 });
 
 $('#item-set-item-type').change(function () {
@@ -845,22 +947,20 @@ $('#item-set-permgroup-type').change(function () {
     $('#extra').parent().fadeOut('fast');
 });
 
-transliterate = (
-    function() {
-        var
-            rus = "щ   ш  ч  ц  ю  я  ё  ж  ъ  ы  э  а б в г д е з и й к л м н о п р с т у ф х ь".split(/ +/g),
-            eng = "shh sh ch cz yu ya yo zh `` y' e` a b v g d e z i j k l m n o p r s t u f x `".split(/ +/g)
-        ;
-        return function(text, engToRus) {
-            var x;
-            for(x = 0; x < rus.length; x++) {
-                text = text.split(engToRus ? eng[x] : rus[x]).join(engToRus ? rus[x] : eng[x]);
-                text = text.split(engToRus ? eng[x].toUpperCase() : rus[x].toUpperCase()).join(engToRus ? rus[x].toUpperCase() : eng[x].toUpperCase());
-            }
-            return text;
+transliterate = (function () {
+    var
+        rus = "щ   ш  ч  ц  ю  я  ё  ж  ъ  ы  э  а б в г д е з и й к л м н о п р с т у ф х ь".split(/ +/g),
+        eng = "shh sh ch cz yu ya yo zh `` y' e` a b v g d e z i j k l m n o p r s t u f x `".split(/ +/g)
+    ;
+    return function (text, engToRus) {
+        var x;
+        for (x = 0; x < rus.length; x++) {
+            text = text.split(engToRus ? eng[x] : rus[x]).join(engToRus ? rus[x] : eng[x]);
+            text = text.split(engToRus ? eng[x].toUpperCase() : rus[x].toUpperCase()).join(engToRus ? rus[x].toUpperCase() : eng[x].toUpperCase());
         }
+        return text;
     }
-)();
+})();
 
 function buildPageUrl(target) {
     if ($('#page-url-auto').is(':checked')) {
@@ -898,3 +998,113 @@ $('#admin-api-docs-alert-close').click(function () {
 $('#admin-security-debug-alert-close').click(function () {
     setRemember('security_debug', true);
 });
+
+$('#admin-users-edit-ban').click(function () {
+    var self = this;
+    var url = $(self).attr('data-url');
+
+    $.ajax({
+        url: url,
+        method: 'POST',
+        data: ({
+            _token: getToken(),
+            block_duration: $('#admin-users-edit-ban-duration').val(),
+            reason: $('#admin-users-edit-ban-reason').val()
+        }),
+        dataType: 'json',
+        beforeSend: function () {
+            disable(self);
+        },
+        success: function (response) {
+            var status = response.status;
+
+            if (status === 'success') {
+                $('#admin-users-edit-ban-modal').modal('hide');
+                msg.info('Пользователь заблокирован');
+
+                $('#admin-users-edit-ban-open-modal').hide();
+                $('#admin-users-edit-already-ban').removeClass('d-none');
+                $('#admin-users-edit-already-ban').find('span').html(response.unblock);
+            } else if (status === 'user not found') {
+                msg.danger('Пользователь не найден');
+            } else if (status === 'You can not block yourself') {
+                msg.warning('Вы не можете заблокировать самого себя');
+            } else {
+                msg.danger('Заблокировать пользователя неудалось');
+            }
+        },
+        complete: function (xhr) {
+            enable(self);
+
+            if (xhr.status === 422) {
+                var response = JSON.parse(xhr.responseText);
+                showErrors(response.skin);
+            }
+        }
+    })
+});
+
+/**
+ * Search user section
+ *
+ * @type {{val: string, buf: string, checkResult: search.checkResult}}
+ */
+var search = {
+    val: '',
+    buf: '',
+    checkResult: function () {
+        if (this.buf !== this.val) {
+            this.buf = this.val;
+
+            $.ajax({
+                url: $('#admin-users-search').attr('data-url'),
+                type: "POST",
+                data: ({
+                    _token: getToken(),
+                    search: search.val
+                }),
+                dataType: "json",
+                beforeSend: function () {
+                    if (search.val === '')
+                        $('#admin-users-search-results').html('<a class="dropdown-item">Начните вводить...</a>');
+                    else
+                        $('#admin-users-search-results').html('<a class="dropdown-item">Поиск...</a>');
+                },
+                success: function (response) {
+                    var status = response['status'];
+                    var data = response['data'];
+
+                    if (status === 'found') {
+                        var results = '';
+                        for (var i = 0; i < data.length; i++) {
+                            results += '<a class="dropdown-item admin-users-search-item" href="' + data[i]['url'] + '"><span class="mr-4 font-weight-bold">' + data[i]['id'] + '</span><span class="mr-4">' + data[i]['username'] + '</span><span class="mr-4">' + data[i]['email'] +  '</span><span class="mr-4">' + data[i]['balance'] +  ' ' + data[i]['currency'] + '</span></a>';
+                        }
+                    }
+
+                    if (status === 'not found') {
+                        results = '<a class="dropdown-item disabled">Ничего не найдено</a>';
+                    }
+
+                    $('#admin-users-search-results').html(results);
+                }
+            })
+        }
+    }
+};
+
+
+$('#admin-users-search')
+    .on('keyup change', function (event) {
+        search.val = $(this).val();
+    })
+    .on('focusin', function (event) {
+        search.interval = setInterval(function () {
+            search.checkResult.call(search);
+        }, 300);
+    })
+    .on('focusout', function (event) {
+        clearInterval(search.interval);
+    });
+/**
+ * End of search user section
+ */

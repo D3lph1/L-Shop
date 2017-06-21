@@ -37,7 +37,7 @@ class Server
      *
      * @return bool
      */
-    public function enabledServer($serverId)
+    public function enableServer($serverId)
     {
         return $this->serverRepository->enable($serverId);
     }
@@ -49,7 +49,7 @@ class Server
      *
      * @return bool
      */
-    public function disabledServer($serverId)
+    public function disableServer($serverId)
     {
         return $this->serverRepository->disable($serverId);
     }
@@ -60,13 +60,21 @@ class Server
      * @param string $name
      * @param bool   $enabled
      * @param array  $categories
+     * @param string $ip
+     * @param int    $port
+     * @param string $password
+     * @param bool   $monitoringEnabled
      */
-    public function createServer($name, $enabled, array $categories)
+    public function createServer($name, $enabled, array $categories, $ip, $port, $password, $monitoringEnabled)
     {
-        \DB::transaction(function () use ($name, $enabled, $categories) {
+        \DB::transaction(function () use ($name, $enabled, $categories, $ip, $port, $password, $monitoringEnabled) {
             $server = $this->serverRepository->create([
                 'name' => $name,
-                'enabled' => $enabled
+                'enabled' => $enabled,
+                'ip' => $ip,
+                'port' => $port,
+                'password' => $password,
+                'monitoring_enabled' => $monitoringEnabled
             ]);
 
             foreach ($categories as $category) {
@@ -89,13 +97,21 @@ class Server
      * @param string $name
      * @param bool   $enabled
      * @param array  $categories
+     * @param string $ip
+     * @param int    $port
+     * @param string $password
+     * @param bool   $monitoringEnabled
      */
-    public function updateServer($serverId, $name, $enabled, array $categories)
+    public function updateServer($serverId, $name, $enabled, array $categories, $ip, $port, $password, $monitoringEnabled)
     {
-        \DB::transaction(function () use ($serverId, $name, $enabled, $categories) {
+        \DB::transaction(function () use ($serverId, $name, $enabled, $categories, $ip, $port, $password, $monitoringEnabled) {
             $this->serverRepository->update($serverId, [
                 'name' => $name,
-                'enabled' => $enabled
+                'enabled' => $enabled,
+                'ip' => $ip,
+                'port' => $port,
+                'password' => $password,
+                'monitoring_enabled' => $monitoringEnabled
             ]);
 
             foreach ($categories as $key => $value) {
@@ -130,7 +146,7 @@ class Server
     /**
      * Create a new category for the given server
      *
-     * @param int $serverId
+     * @param int    $serverId
      * @param string $name
      */
     public function createCategory($serverId, $name)

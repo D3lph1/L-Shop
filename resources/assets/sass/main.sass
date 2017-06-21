@@ -147,6 +147,13 @@ body
         width: 100%
         padding: .7rem 1rem
         background-color: #888
+        .topbar-btn
+            display: inline-block
+            z-index: 1
+            padding: 1rem
+            border-radius: 50%
+            margin: 0 .5rem 0 0
+            background-color: #666
         #topbar-content-1, #topbar-content-2
             display: -webkit-flex
             display: -moz-flex
@@ -159,15 +166,12 @@ body
             padding-left: 0
             #btn-news
                 margin: 0
-        #btn-menu, #btn-news
+        #btn-menu
             padding: 1rem
             border-radius: 50%
             margin: 0 .5rem 0 0
             background-color: #666
             display: none
-        #btn-news
-            display: inline-block
-            z-index: 1
         p
             margin-bottom: 0
         #topbar-server
@@ -201,6 +205,17 @@ body
                 margin-top: .5rem
     #content-container
         padding: 1rem
+        #change-skin
+            .change-skin-col
+                padding: 15px
+                #skin, #cloak
+                    margin-bottom: 30px
+                    img
+                        max-width: 100%
+                #skin-upload, #cloak-upload
+                    margin-bottom: 15px
+                    input
+                        max-width: 300px
         .s-s-header
             margin-bottom: .5rem
         #s-change-name

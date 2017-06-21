@@ -39,6 +39,9 @@ use Cartalyst\Sentinel\Users\EloquentUser;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereUpdatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereUsername($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\User whereUuid($value)
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\News[] $news
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment[] $payments
+ * @property-read \App\Models\Ban $ban
  */
 class User extends EloquentUser
 {
@@ -69,5 +72,29 @@ class User extends EloquentUser
     public function getBalance()
     {
         return $this->balance;
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function news()
+    {
+        return $this->hasMany(News::class, 'user_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function payments()
+    {
+        return $this->hasMany(Payment::class, 'user_id', 'id');
+    }
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function ban()
+    {
+        return $this->hasOne(Ban::class, 'user_id', 'id');
     }
 }

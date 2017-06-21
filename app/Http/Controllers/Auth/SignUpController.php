@@ -7,6 +7,8 @@ use App\Exceptions\User\EmailAlreadyExistsException;
 use App\Exceptions\User\UnableToCreateUser;
 use App\Http\Requests\SignUpRequest;
 use App\Http\Controllers\Controller;
+use App\Services\Registrar;
+use App\Traits\Validator;
 use Illuminate\Container\Container;
 use Illuminate\Http\Request;
 
@@ -54,9 +56,10 @@ class SignUpController extends Controller
         $forceActivate = !(bool)s_get('auth.email_activation');
 
         // Get registrar service from container
+        /** @var Registrar $registrar */
         $registrar = Container::getInstance()->make('registrar');
 
-        try {
+        try {;
             // Call registrar service method
             $registrar->register($username, $email, $password, 0, $forceActivate, false);
         } catch (UsernameAlreadyExistsException $e) {
@@ -83,11 +86,14 @@ class SignUpController extends Controller
      */
     private function redirect($activate)
     {
+        if (s_get('auth.signup.redirect')) {
+            return response()->redirectTo(s_get('auth.signup.redirect_url'));
+        }
+
         if ($activate) {
             return response()->redirectToRoute('activation.wait');
         }else {
             \Message::success('Вы успешно зарегистрированы');
-
             return response()->redirectToRoute('signin');
         }
     }

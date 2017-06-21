@@ -21,6 +21,14 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Server whereId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Server whereName($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Server whereUpdatedAt($value)
+ * @property string $ip
+ * @property int $port
+ * @property bool $monitoring_enabled
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Server whereIp($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Server whereMonitoringEnabled($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Server wherePort($value)
+ * @property int $password
+ * @method static \Illuminate\Database\Query\Builder|\App\Models\Server wherePassword($value)
  */
 class Server extends Model
 {
@@ -32,7 +40,14 @@ class Server extends Model
     /**
      * @var array
      */
-    protected $fillable = ['name', 'enabled'];
+    protected $fillable = [
+        'name',
+        'enabled',
+        'ip',
+        'port',
+        'password',
+        'monitoring_enabled'
+    ];
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany

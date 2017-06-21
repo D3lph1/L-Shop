@@ -2,8 +2,10 @@
 
 namespace App\Composers;
 
+use App\DataTransferObjects\MonitoringPlayers;
 use App\Models\Server;
 use App\Repositories\NewsRepository;
+use App\Services\Monitoring\MonitoringInterface;
 use Illuminate\View\View;
 use Illuminate\Http\Request;
 use App\Services\QueryManager;
@@ -18,6 +20,11 @@ use App\Contracts\ComposerContract;
  */
 class ShopLayoutComposer implements ComposerContract
 {
+    /**
+     * @var Request
+     */
+    private $request;
+
     /**
      * Data about current server
      *
@@ -43,16 +50,24 @@ class ShopLayoutComposer implements ComposerContract
     private $newsRepository;
 
     /**
-     * @param Request        $request
-     * @param QueryManager   $qm
-     * @param NewsRepository $newsRepository
+     * @var MonitoringInterface
      */
-    public function __construct(Request $request, QueryManager $qm, NewsRepository $newsRepository)
+    private $monitoring;
+
+    /**
+     * @param Request             $request
+     * @param QueryManager        $qm
+     * @param NewsRepository      $newsRepository
+     * @param MonitoringInterface $monitoring
+     */
+    public function __construct(Request $request, QueryManager $qm, NewsRepository $newsRepository, MonitoringInterface $monitoring)
     {
+        $this->request = $request;
         $this->currentServer = $request->get('currentServer');
         $this->servers = $request->get('servers');
         $this->qm = $qm;
         $this->newsRepository = $newsRepository;
+        $this->monitoring = $monitoring;
     }
 
     /**
@@ -85,6 +100,9 @@ class ShopLayoutComposer implements ComposerContract
             'balance' => is_auth() ? \Sentinel::getUser()->getBalance() : null,
             'currency' => s_get('shop.currency_html', 'руб.'),
             'currentServer' => $this->currentServer,
+            'character' =>
+                s_get('profile.character.skin.enabled', 0) or s_get('profile.character.cloak.enabled', 0),
+
             'canEnter' => access_mode_any() and !is_auth(),
             'servers' => $this->servers,
             'catalogUrl' => route('catalog', [
@@ -97,7 +115,8 @@ class ShopLayoutComposer implements ComposerContract
             'logoutUrl' => route('logout'),
             'shopName' => s_get('shop.name', 'L - Shop'),
             'news' => $news,
-            'newsCount' => $newsCount
+            'newsCount' => $newsCount,
+            'monitoring' => $this->monitoring()
         ];
     }
 
@@ -111,8 +130,33 @@ class ShopLayoutComposer implements ComposerContract
         return $this->newsRepository->getFirstPortion();
     }
 
+    /**
+     * @return int
+     */
     private function newsCount()
     {
         return $this->newsRepository->count();
+    }
+
+    /**
+     * @return MonitoringPlayers[]
+     */
+    private function monitoring()
+    {
+        if (s_get('monitoring.enabled')) {
+            $servers = $this->request->get('servers');
+            $monitoring = [];
+
+            /** @var Server $server */
+            foreach ($servers as $server) {
+                if ($server->monitoring_enabled) {
+                    $monitoring[] = $this->monitoring->getPlayers($server->id);
+                }
+            }
+
+            return $monitoring;
+        }
+
+        return [];
     }
 }

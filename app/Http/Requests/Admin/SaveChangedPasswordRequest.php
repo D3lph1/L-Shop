@@ -28,13 +28,18 @@ class SaveChangedPasswordRequest extends FormRequest
         ];
     }
 
+    /**
+     * @return array
+     */
     public function messages()
     {
+        $a = ['attribute' => 'Новый пароль'];
+
         return [
-            'password.required' => trans('validation.required', ['attribute' => 'Новый пароль']),
-            'password.confirmed' => trans('validation.confirmed', ['attribute' => 'Новый пароль']),
-            'password.min' => trans('validation.required', ['attribute' => 'Новый пароль', 'min' => 4]),
-            'password.max' => trans('validation.required', ['attribute' => 'Новый пароль', 'max' => 191]),
+            'password.required' => trans('validation.required', $a),
+            'password.confirmed' => trans('validation.confirmed', $a),
+            'password.min' => trans('validation.required', $a),
+            'password.max' => trans('validation.required', $a),
         ];
     }
 }

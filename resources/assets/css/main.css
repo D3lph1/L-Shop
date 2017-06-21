@@ -201,3 +201,15 @@ button:hover {
 [type="checkbox"]:focus + label:before {
     box-sizing: border-box;
 }
+
+.activated_span {
+    color: #449d44;
+    border-bottom: 1px dotted #449d44;
+    cursor: pointer;
+}
+
+.banned_span {
+    color: #d9534f;
+    border-bottom: 1px dotted #d9534f;
+    cursor: pointer;
+}

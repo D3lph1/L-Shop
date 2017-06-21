@@ -7,10 +7,9 @@
 
 @section('content')
     <div id="content-container">
-        <div id="cart-header" class="z-depth-1">
+        <div class="z-depth-1 content-header text-center">
             <h1><i class="fa fa-gear fa-lg fa-left-big"></i>Настройки</h1>
         </div>
-        <div class="product-container">
             <div class="card card-block">
                 <h3 class="card-title">Безопасность</h3>
                 @if($enableChangePassword)
@@ -46,6 +45,5 @@
                     </form>
                 </p>
             </div>
-        </div>
     </div>
 @endsection

@@ -32,6 +32,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Payment whereUpdatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Payment whereUserId($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Payment whereUsername($value)
+ * @property-read \App\Models\User $user
  */
 class Payment extends Model
 {
@@ -55,4 +56,12 @@ class Payment extends Model
         'created_at',
         'updated_at'
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
+     */
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id', 'id');
+    }
 }

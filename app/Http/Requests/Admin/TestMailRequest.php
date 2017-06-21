@@ -27,17 +27,4 @@ class TestMailRequest extends FormRequest
             'test_mail_address' => 'required|email'
         ];
     }
-
-    /**
-     * @return array
-     */
-    public function messages()
-    {
-        $attribute = 'Адрес электронной почты, на который будет отправлено письмо';
-
-        return [
-            'test_mail_address.required' => trans('validation.required', ['attribute' => $attribute]),
-            'test_mail_address.email' => trans('validation.email', ['attribute' => $attribute])
-        ];
-    }
 }

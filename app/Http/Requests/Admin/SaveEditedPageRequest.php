@@ -29,18 +29,4 @@ class SaveEditedPageRequest extends FormRequest
             'page_url' => 'required|min:2|max:191|regex:/^[a-z_\-`0-9]+$/ui'
         ];
     }
-
-    public function messages()
-    {
-        return [
-            'page_title.required' => trans('validation.required', ['attribute' => 'Заголовок страницы']),
-            'page_title.min' => trans('validation.min.string', ['attribute' => 'Заголовок страницы']),
-            'page_title.max' => trans('validation.max.string', ['attribute' => 'Заголовок страницы']),
-            'page_content.required' => trans('validation.required', ['attribute' => 'Содержимое страницы']),
-            'page_url.required' => trans('validation.required', ['attribute' => 'Адрес страницы']),
-            'page_url.min' => trans('validation.min.string', ['attribute' => 'Адрес страницы', 'min' => 2]),
-            'page_url.max' => trans('validation.max.string', ['attribute' => 'Адрес страницы', 'max' => 191]),
-            'page_url.regex' => trans('validation.regex', ['attribute' => 'Адрес страницы'])
-        ];
-    }
 }

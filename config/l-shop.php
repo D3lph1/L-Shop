@@ -11,7 +11,7 @@ return [
         'username' => [
             'min' => 4,
             'max' => 32,
-            'rule' => 'alpha_dash'
+            'rule' => 'alpha_dash_strict'
         ],
         'password' => [
             'min' => 4
@@ -25,6 +25,17 @@ return [
             'sha384',
             'sha512',
             'whirlpool'
+        ]
+    ],
+    'profile' => [
+        'skins' => [
+            // Without trailing slash
+            'path' => public_path('img/users/skins'),
+            'default' => public_path('img/users/default.png')
+        ],
+        'cloaks' => [
+            // Without trailing slash
+            'path' => public_path('img/users/cloaks')
         ]
     ]
 ];

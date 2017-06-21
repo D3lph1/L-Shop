@@ -48,6 +48,13 @@
                                     <label for="price">Цена за стак товара</label>
                                 </div>
                             </div>
+                            <div class="plus-category">
+                                <div class="md-form text-left">
+                                    <i class="fa fa-sort-amount-desc prefix" data-toggle="popover" data-placement="right" data-trigger="hover" title="Подсказка" data-html="true" data-content="Приоритет сортировки - это дробное или целое, положительное или отрицательное число. По этому значению будет происходить сортировка товаров в каталоге (Этот режим можно включить/отключить в <strong>Управление > Основные настройки</strong>)."></i>
+                                    <input type="text" name="sort_priority" id="admin-product-sort-priority" class="form-control" value="0">
+                                    <label for="admin-product-sort-priority">Приоритет сортировки</label>
+                                </div>
+                            </div>
                         </div>
 
                         <div class="col-sm-6 offset-sm-3 col-12 text-center">

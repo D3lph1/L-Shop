@@ -10,7 +10,7 @@ use App\Repositories\ProductRepository;
  * Class AdminProducts
  * Service working with products in the admin panel
  *
- * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
  *
  * @package App\Services
  */
@@ -40,28 +40,28 @@ class AdminProducts
      * Create new product
      *
      * @param double $price
-     * @param int $stack
-     * @param int $itemId
-     * @param int $serverId
-     * @param int $categoryId
-     *
-     * @throws ItemNotFoundException
+     * @param int    $stack
+     * @param int    $itemId
+     * @param int    $serverId
+     * @param int    $categoryId
+     * @param float  $sortPriority
      *
      * @return mixed
      */
-    public function create($price, $stack, $itemId, $serverId, $categoryId)
+    public function create($price, $stack, $itemId, $serverId, $categoryId, $sortPriority)
     {
         if (!$this->itemRepository->exists($itemId)) {
             throw new ItemNotFoundException($itemId);
         }
 
-        return \DB::transaction(function () use ($price, $stack, $itemId, $serverId, $categoryId) {
+        return \DB::transaction(function () use ($price, $stack, $itemId, $serverId, $categoryId, $sortPriority) {
             return $this->productRepository->create([
                 'price' => $price,
                 'stack' => $stack,
                 'item_id' => $itemId,
                 'server_id' => $serverId,
-                'category_id' => $categoryId
+                'category_id' => $categoryId,
+                'sort_priority' => $sortPriority
             ]);
         });
     }
@@ -75,18 +75,20 @@ class AdminProducts
      * @param int    $itemId
      * @param int    $serverId
      * @param int    $categoryId
+     * @param float  $sortPriority
      *
      * @return bool
      */
-    public function edit($productId, $price, $stack, $itemId, $serverId, $categoryId)
+    public function edit($productId, $price, $stack, $itemId, $serverId, $categoryId, $sortPriority)
     {
-        return \DB::transaction(function () use ($productId, $price, $stack, $itemId, $serverId, $categoryId) {
+        return \DB::transaction(function () use ($productId, $price, $stack, $itemId, $serverId, $categoryId, $sortPriority) {
             return $this->productRepository->update($productId, [
                 'price' => $price,
                 'stack' => $stack,
                 'item_id' => $itemId,
                 'server_id' => $serverId,
-                'category_id' => $categoryId
+                'category_id' => $categoryId,
+                'sort_priority' => $sortPriority
             ]);
         });
     }

@@ -3,6 +3,7 @@
 namespace App\Exceptions;
 
 use App\Exceptions\Payment\InvalidRequestDataException;
+use App\Exceptions\User\BannedException;
 use App\Exceptions\User\EmailAlreadyExistsException;
 use App\Exceptions\User\NotFoundException;
 use App\Exceptions\User\RemindCodeNotFound;
@@ -10,6 +11,8 @@ use App\Exceptions\User\UsernameAlreadyExistsException;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
+use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -29,7 +32,8 @@ class Handler extends ExceptionHandler
         EmailAlreadyExistsException::class,
         InvalidRequestDataException::class,
         NotFoundException::class,
-        RemindCodeNotFound::class
+        RemindCodeNotFound::class,
+        BannedException::class
     ];
 
     /**
@@ -50,10 +54,18 @@ class Handler extends ExceptionHandler
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Exception  $exception
-     * @return \Illuminate\Http\Response
+     * @return Response
      */
     public function render($request, Exception $exception)
     {
+        if ($exception instanceof BannedException) {
+            return $this->ban($exception);
+        }
+
+        if (!$this->isHttpException($exception) and !config('app.debug')) {
+            $exception = new HttpException(500);
+        }
+
         return parent::render($request, $exception);
     }
 
@@ -71,5 +83,19 @@ class Handler extends ExceptionHandler
         }
 
         return redirect()->guest('login');
+    }
+
+    /**
+     * @param BannedException $e
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    protected function ban(BannedException $e)
+    {
+        $until = $e->getUntil();
+        $reason = $e->getReason();
+        \Message::danger(build_ban_message($until, $reason));
+
+        return redirect()->route('index');
     }
 }

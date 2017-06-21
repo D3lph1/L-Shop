@@ -50,6 +50,13 @@ authProviderConfig: {
 	url: "http://example.com/api/launcher/sashok/auth?username=%login%&password=%password%"; # Url по которому будет идти обращение к L-Shop для проверки введенных данных, введенных пользователем
 	response: "OK:(?&lt;username&gt;.+)"; # Формат ответа
 };
+
+# Настраиваем систему скинов и плащей
+textureProvider: "request";
+textureProviderConfig: {
+	skinsURL: "http://example.com/img/users/skins/%username%.png"; # URL скинов
+	cloaksURL: "http://example.com/img/users/cloaks/%username%.png"; # URL плащей
+};
 </code></pre>
             </p>
             <h4 class="card-title">Настройка магазина</h4>

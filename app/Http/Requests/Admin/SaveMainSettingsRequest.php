@@ -30,61 +30,25 @@ class SaveMainSettingsRequest extends FormRequest
             'access_mode' => 'required',
             'enable_signup' => 'boolean',
             'enable_email_activation' => 'boolean',
+            'signup_redirect' => 'boolean',
+            'signup_redirect_url' => 'required_if:signup_redirect,1|url',
+
+            'character_skin_enabled' => 'boolean',
+            'character_cloak_enabled' => 'boolean',
+            'character_hd_skin_enabled' => 'boolean',
+            'character_hd_cloak_enabled' => 'boolean',
+            'character_skin_max_file_size' => 'required|integer|min:1',
+            'character_cloak_max_file_size' => 'required|integer|min:1',
+
             'news_first_portion' => 'required|integer|min:1|max:1000',
             'news_per_page' => 'required|integer|min:1|max:1000',
             'products_per_page' => 'required|integer|min:1|max:1000',
             'payments_per_page' => 'required|integer|min:1|max:1000',
             'cart_per_page' => 'required|integer|min:1|max:1000',
+            'monitoring.enabled' => 'bool',
             'cart_capacity' => 'required|integer|min:1',
-            'maintenance' => 'boolean'
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function messages()
-    {
-        $productsPerPage = ['attribute' => 'Количество товара на 1 странице магазина'];
-        $paymentsPerPage = ['attribute' => 'Количество элементов на 1 странице истории платежей в профиле пользователя'];
-        $cartPerPage = ['attribute' => 'Количество элементов на 1 странице внутриигровой корзины в профиле пользователя'];
-        $newsFirstPortion = ['attribute' => 'Количество новостей, находящихся на экране при загрузке'];
-        $newsPerPage = ['attribute' => 'Количество подгружаемых за раз новостей'];
-
-        return [
-            'shop_name.required' => trans('validation.required', ['attribute' => 'Имя магазина']),
-            'shop_name.min' => trans('validation.min.string', ['attribute' => 'Имя магазина']),
-            'shop_name.max' => trans('validation.max.string', ['attribute' => 'Имя магазина']),
-            'access_mode.required' => trans('validation.required', ['attribute' => 'Режим доступа']),
-
-            'products_per_page.required' => trans('validation.required', $productsPerPage),
-            'products_per_page.integer' => trans('validation.integer', $productsPerPage),
-            'products_per_page.min' => trans('validation.min.numeric', $productsPerPage),
-            'products_per_page.max' => trans('validation.max.numeric', $productsPerPage),
-
-            'news_first_portion.required' => trans('validation.required', $newsFirstPortion),
-            'news_first_portion.integer' => trans('validation.integer', $newsFirstPortion),
-            'news_first_portion.min' => trans('validation.min.numeric', $newsFirstPortion),
-            'news_first_portion.max' => trans('validation.max.numeric', $newsFirstPortion),
-
-            'news_per_page.required' => trans('validation.required', $newsPerPage),
-            'news_per_page.integer' => trans('validation.integer', $newsPerPage),
-            'news_per_page.min' => trans('validation.min.numeric', $newsPerPage),
-            'news_per_page.max' => trans('validation.max.numeric', $newsPerPage),
-
-            'payments_per_page.required' => trans('validation.required', $paymentsPerPage),
-            'payments_per_page.integer' => trans('validation.integer', $paymentsPerPage),
-            'payments_per_page.min' => trans('validation.min.numeric', $paymentsPerPage),
-            'payments_per_page.max' => trans('validation.max.numeric', $paymentsPerPage),
-
-            'cart_per_page.required' => trans('validation.required', $cartPerPage),
-            'cart_per_page.integer' => trans('validation.integer', $cartPerPage),
-            'cart_per_page.min' => trans('validation.min.numeric', $cartPerPage),
-            'cart_per_page.max' => trans('validation.max.numeric', $cartPerPage),
-
-            'cart_capacity.required' => trans('validation.required', ['attribute' => 'Максимальная вместимость корзины']),
-            'cart_capacity.integer' => trans('validation.integer', ['attribute' => 'Максимальная вместимость корзины']),
-            'cart_capacity.min' => trans('validation.min.numeric', ['attribute' => 'Максимальная вместимость корзины']),
+            'rcon_connection_timeout' => 'required|numeric|min:0.01',
+            'maintenance' => 'boolean',
         ];
     }
 }

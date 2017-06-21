@@ -28,20 +28,4 @@ class SaveEditedNewsRequest extends FormRequest
             'news_content' => 'required'
         ];
     }
-
-    /**
-     * @return array
-     */
-    public function messages()
-    {
-        $title = 'Заголовок новости';
-        $content = 'Содержимое новости';
-
-        return [
-            'news_title.required' => trans('validation.required', ['attribute' => $title]),
-            'news_title.min' => trans('validation.min.string', ['attribute' => $title]),
-            'news_title.max' => trans('validation.max.string', ['attribute' => $title]),
-            'news_content.required' => trans('validation.required', ['attribute' => $content]),
-        ];
-    }
 }

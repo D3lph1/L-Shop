@@ -27,16 +27,17 @@ class SaveAddedServerRequest extends FormRequest
             'server_name' => 'required|min:2|max:32',
             'categories' => 'required|array',
             'categories.*' => 'required|min:2|max:32',
-            'enabled' => 'boolean'
+            'enabled' => 'boolean',
+            'server_ip' => 'ip',
+            'server_port' => 'integer',
+            'server_password' => 'min:6|max:64',
+            'server_monitoring_enabled' => 'boolean'
         ];
     }
 
     public function messages()
     {
         return [
-            'server_name.required' => trans('validation.required', ['attribute' => 'Имя сервера']),
-            'server_name.min' => trans('validation.required', ['attribute' => 'Имя сервера']),
-            'server_name.max' => trans('validation.required', ['attribute' => 'Имя сервера']),
             'categories.*.required' => trans('validation.required', ['attribute' => 'Имя категории']),
             'categories.*.*.min' => trans('validation.min.string', ['attribute' => 'Имя категории'])
         ];

@@ -49,6 +49,30 @@
                                 </div>
                             </div>
 
+                            <div class="plus-category">
+                                <div class="row">
+                                    <div class="col-md-8 md-form text-left">
+                                        <input type="text" name="server_ip" id="admin-servers-ip" class="form-control" value="">
+                                        <label for="admin-servers-ip">IP адрес сервера</label>
+                                    </div>
+                                    <div class="col-md-4 md-form text-left">
+                                        <input type="text" name="server_port" id="admin-servers-port" class="form-control" value="">
+                                        <label for="admin-servers-port">Порт сервера</label>
+                                    </div>
+                                </div>
+                                <div class="md-form text-left mb-3">
+                                    <input type="password" name="server_password" id="admin-servers-password" class="form-control" value="">
+                                    <label for="admin-servers-password">RCON пароль</label>
+                                </div>
+                                <div class="text-left">
+                                    <input type="checkbox" name="server_monitoring_enabled" id="admin-servers-monitoring" value="1">
+                                    <label for="admin-servers-monitoring" class="ckeckbox-label">
+                                        <span class='ui'></span>
+                                        Включить мониторинг сервера
+                                    </label>
+                                </div>
+                            </div>
+
                             <div class="mt-2 mb-1">
                                 <input type="checkbox" name="enabled" id="server-edit-enabled" checked="checked" value="1">
                                 <label for="server-edit-enabled" class="ckeckbox-label">

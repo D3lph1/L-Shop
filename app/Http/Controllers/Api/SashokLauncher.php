@@ -3,7 +3,9 @@
 namespace App\Http\Controllers\Api;
 
 use App\Exceptions\SashokLauncherAuthWhiteListException;
+use App\Exceptions\User\BannedException;
 use App\Http\Controllers\Controller;
+use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
 use Illuminate\Http\Request;
 
 /**
@@ -43,7 +45,7 @@ class SashokLauncher extends ApiController
         $ip = $request->ip();
 
         try {
-            $username = $handler->checkCredentials(
+            $username = $handler->auth(
                 $username,
                 $password,
                 $ip,
@@ -51,6 +53,10 @@ class SashokLauncher extends ApiController
             );
         } catch (SashokLauncherAuthWhiteListException $e) {
             return response('Доступ запрещен');
+        } catch (NotActivatedException $e) {
+            return response('Аккаунт пользователя не активирован');
+        } catch (BannedException $e) {
+            return response(build_ban_message($e->getUntil(), $e->getReason()));
         }
 
         if ($username) {

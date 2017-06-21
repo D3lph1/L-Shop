@@ -109,7 +109,7 @@ class CartBuy
     {
         if (!is_auth()) {
             $validated = $this->validateUsername($username, false);
-            if ($validated !== true) {
+            if (!$validated) {
                 throw new InvalidUsernameException();
             }
         }

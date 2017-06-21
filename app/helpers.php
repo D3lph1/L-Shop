@@ -233,3 +233,88 @@ if (!function_exists('short_string')) {
         return mb_substr($string, 0, $length) . '...';
     }
 }
+
+if (!function_exists('dt')) {
+    /**
+     * dt - default time.
+     * Formatted time to default format.
+     *
+     * @param string|\Carbon\Carbon $date
+     *
+     * @return string
+     */
+    function dt( $date)
+    {
+        $format = 'd-m-Y H:i:s';
+
+        if ($date instanceof \Carbon\Carbon) {
+            return $date->format($format);
+        }
+
+        return (new \Carbon\Carbon($date))->format($format);
+    }
+}
+
+if (!function_exists('build_ban_message')) {
+    /**
+     * @param null|\Carbon\Carbon $until
+     * @param null|string         $reason
+     *
+     * @return string
+     */
+    function build_ban_message($until = null, $reason = null)
+    {
+        if (is_null($until)) {
+            $until = "навсегда";
+        } else {
+            $until = dt($until);
+            $until = "до $until";
+        }
+
+        if ($reason) {
+            $reason = " по причине: \"$reason\"";
+        }
+        $result = "Аккаунт этого пользователя заблокирован {$until}{$reason}.";
+
+        return $result;
+    }
+}
+
+if (!function_exists('username')) {
+    /**
+     * @return string
+     */
+    function username()
+    {
+        return \Sentinel::getUser()->getUserLogin();
+    }
+}
+
+if (!function_exists('cloak_exists')) {
+    /**
+     * @param string $username
+     *
+     * @return bool
+     */
+    function cloak_exists($username)
+    {
+        return file_exists(config('l-shop.profile.cloaks.path') . '/' . $username . '.png');
+    }
+}
+
+if (!function_exists('get_server_by_id')) {
+    /**
+     * @param $servers
+     * @param $id
+     *
+     * @return mixed
+     */
+    function get_server_by_id($servers, $id)
+    {
+        foreach ($servers as $server) {
+            if ($server->id === $id) {
+                return $server;
+            }
+        }
+    }
+}

@@ -26,20 +26,9 @@ class SaveEditedUserRequest extends FormRequest
         return [
             'username' => 'required',
             'email' => 'required',
-            'balance' => 'required|numeric|min:0,01',
+            'balance' => 'required|numeric|min:0.01',
             'admin' => 'boolean',
             'password' => 'sometimes'
-        ];
-    }
-
-    public function messages()
-    {
-        return [
-            'username.required' => trans('validation.required', ['attribute' => 'Имя пользователя']),
-            'email.required' => trans('validation.required', ['attribute' => 'Почта']),
-            'balance.required' => trans('validation.required', ['attribute' => 'Баланс']),
-            'balance.numeric' => trans('validation.numeric', ['attribute' => 'Баланс']),
-            'balance.min' => trans('validation.min.numeric', ['attribute' => 'Баланс'])
         ];
     }
 }

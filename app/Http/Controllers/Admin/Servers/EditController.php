@@ -104,11 +104,15 @@ class EditController extends BaseController
         $name = $request->get('server_name');
         $enabled = (bool)$request->get('enabled');
         $categories = $request->get('categories');
+        $ip = $request->get('server_ip');
+        $port = $request->get('server_port');
+        $password = $request->get('server_password');
+        $monitoringEnabled = (bool)$request->get('server_monitoring_enabled');
 
         // ~~~~~~~~~~ MAIN METHOD ~~~~~~~~~~ //
-        $this->serverService->updateServer($serverId, $name, $enabled, $categories);
+        $this->serverService->updateServer($serverId, $name, $enabled, $categories, $ip, $port, $password, $monitoringEnabled);
 
-        \Message::success('Изменения успешно сохранены');
+        \Message::success('Изменения успешно сохранены.');
 
         return back();
     }
@@ -133,7 +137,7 @@ class EditController extends BaseController
             return redirect()->route('admin.servers.list', $request->get('currentServer')->id);
         }
 
-        \Message::info('Сервер удален');
+        \Message::info('Сервер удален.');
 
         return redirect()->route('servers');
     }
