@@ -9,7 +9,7 @@ namespace App\Exceptions;
  *
  * @package App\Exceptions
  */
-class FailedToUpdateTableException extends LShopException
+class FailedToUpdateTableException extends \RuntimeException
 {
     //
 }

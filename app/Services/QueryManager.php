@@ -14,7 +14,7 @@ use App\Exceptions\InvalidArgumentTypeException;
 
 /**
  * Class QueryManager
- * Service in charge of working with ORM
+ * Service in charge of working with ORM.
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  *

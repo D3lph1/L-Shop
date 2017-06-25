@@ -3,18 +3,19 @@
 namespace App\Services;
 
 /**
- * BuyResponse for working with alert messages
+ * Class Message
+ * BuyResponse for working with alert messages.
  *
- * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
  *
  * @package App\Services
  */
 class Message
 {
     /**
-     * Set the informing(blue) message
+     * Set the informing (blue) message.
      *
-     * @param string $text
+     * @param string $text Text of message.
      */
     public function info($text)
     {
@@ -22,9 +23,9 @@ class Message
     }
 
     /**
-     * Set the success(green) message
+     * Set the success (green) message.
      *
-     * @param string $text
+     * @param string $text Text of message.
      */
     public function success($text)
     {
@@ -32,9 +33,9 @@ class Message
     }
 
     /**
-     * Set the warning(yellow) message
+     * Set the warning (yellow) message.
      *
-     * @param string $text
+     * @param string $text Text of message.
      */
     public function warning($text)
     {
@@ -42,9 +43,9 @@ class Message
     }
 
     /**
-     * Set the danger(red) message
+     * Set the danger (red) message.
      *
-     * @param string $text
+     * @param string $text Text of message.
      */
     public function danger($text)
     {
@@ -77,10 +78,10 @@ class Message
     }
 
     /**
-     * Push the message in session
+     * Push the message in session.
      *
-     * @param string $type
-     * @param string $text
+     * @param string $type Type of message.
+     * @param string $text Text of message.
      */
     private function set($type, $text)
     {
@@ -93,7 +94,7 @@ class Message
     }
 
     /**
-     * Clear all messages storage
+     * Clear all messages storage.
      */
     private function clear()
     {

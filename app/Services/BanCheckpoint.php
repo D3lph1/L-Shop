@@ -71,6 +71,8 @@ class BanCheckpoint implements CheckpointInterface
     }
 
     /**
+     * Check if the user is locked.
+     *
      * @param UserInterface $user
      *
      * @return bool
@@ -100,6 +102,9 @@ class BanCheckpoint implements CheckpointInterface
         return true;
     }
 
+    /**
+     * Turns off all checkpoints, de-logs the user, and then turns them back on.
+     */
     protected function logout()
     {
         \Sentinel::disableCheckpoints();

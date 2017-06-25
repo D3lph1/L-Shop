@@ -10,7 +10,7 @@ use Illuminate\Http\UploadedFile;
  * Class AdminItems
  * Service that works with items in the admin panel.
  *
- * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
  *
  * @package App\Services
  */
@@ -37,12 +37,14 @@ class AdminItems
     }
 
     /**
-     * @param string            $name
-     * @param string            $description
-     * @param string            $type
-     * @param null|UploadedFile $imageFile
-     * @param int               $item
-     * @param string            $extra
+     * Create new item.
+     *
+     * @param string            $name        New item name.
+     * @param string            $description New item description.
+     * @param string            $type        New item type (item/permgroup).
+     * @param null|UploadedFile $imageFile   New item image.
+     * @param int               $item        New item in-game identifier.
+     * @param string            $extra       New item extra data.
      *
      * @return mixed
      */
@@ -64,14 +66,16 @@ class AdminItems
     }
 
     /**
-     * @param int          $itemId
-     * @param string       $name
-     * @param string       $description
-     * @param string       $type
-     * @param string       $imageMode
-     * @param UploadedFile $imageFile
-     * @param int          $item
-     * @param string       $extra
+     * Update given item.
+     *
+     * @param int          $itemId      Updated item identifier.
+     * @param string       $name        Item name.
+     * @param string       $description Item description.
+     * @param string       $type        Item type (item/permgroup).
+     * @param string       $imageMode   Image mode (New uploaded or old image).
+     * @param UploadedFile $imageFile   Item image.
+     * @param int          $item        Item in-game identifier.
+     * @param string       $extra       Item extra data.
      *
      * @return mixed
      */
@@ -99,9 +103,9 @@ class AdminItems
     }
 
     /**
-     * Delete items with related products
+     * Delete items with related products.
      *
-     * @param int $itemId
+     * @param int $itemId Item identifier.
      *
      * @return mixed
      */
@@ -116,7 +120,7 @@ class AdminItems
     }
 
     /**
-     * Return a valid type string
+     * Return a valid type string.
      *
      * @param string $type
      *
@@ -128,7 +132,7 @@ class AdminItems
     }
 
     /**
-     * Get filename by UploadedFile instance
+     * Get filename by UploadedFile instance.
      *
      * @param null|UploadedFile $file
      *
@@ -144,7 +148,7 @@ class AdminItems
     }
 
     /**
-     * Calculate the name of a file using md5, move it and return filename
+     * Calculate the name of a file using md5, move it and return filename.
      *
      * @param UploadedFile $file
      *

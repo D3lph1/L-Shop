@@ -8,6 +8,13 @@ use App\Repositories\CategoryRepository;
 use App\Repositories\ServerRepository;
 use Carbon\Carbon;
 
+/**
+ * Class Server
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Services
+ */
 class Server
 {
     /**
@@ -33,7 +40,7 @@ class Server
     /**
      * Enables the server
      *
-     * @param int $serverId
+     * @param int $serverId Server identifier.
      *
      * @return bool
      */
@@ -43,9 +50,9 @@ class Server
     }
 
     /**
-     * Disables the server
+     * Disables the server.
      *
-     * @param int $serverId
+     * @param int $serverId Server identifier.
      *
      * @return bool
      */
@@ -57,13 +64,13 @@ class Server
     /**
      * Create a new server with attached categories
      *
-     * @param string $name
-     * @param bool   $enabled
-     * @param array  $categories
-     * @param string $ip
-     * @param int    $port
-     * @param string $password
-     * @param bool   $monitoringEnabled
+     * @param string $name              Server name.
+     * @param bool   $enabled           Enable the server after creation.
+     * @param array  $categories        Attached server categories.
+     * @param string $ip                Server ip address.
+     * @param int    $port              Server RCON port.
+     * @param string $password          Server RCON password.
+     * @param bool   $monitoringEnabled Enable the server monitoring after creation.
      */
     public function createServer($name, $enabled, array $categories, $ip, $port, $password, $monitoringEnabled)
     {
@@ -91,16 +98,16 @@ class Server
     }
 
     /**
-     * Update given server with categories
+     * Update given server with categories.
      *
-     * @param int    $serverId
-     * @param string $name
-     * @param bool   $enabled
-     * @param array  $categories
-     * @param string $ip
-     * @param int    $port
-     * @param string $password
-     * @param bool   $monitoringEnabled
+     * @param int    $serverId          Updated server identifier.
+     * @param string $name              Updated server name.
+     * @param bool   $enabled           Enable this server after the update.
+     * @param array  $categories        New categories attached to this server.
+     * @param string $ip                Updated server ip address.
+     * @param int    $port              Updated server RCON port.
+     * @param string $password          Updated server RCON password.
+     * @param bool   $monitoringEnabled Enable monitoring for this server after the update.
      */
     public function updateServer($serverId, $name, $enabled, array $categories, $ip, $port, $password, $monitoringEnabled)
     {
@@ -123,9 +130,9 @@ class Server
     }
 
     /**
-     * Remove given server with attached categories
+     * Remove given server with attached categories.
      *
-     * @param int $serverId
+     * @param int $serverId Removing server identifier.
      *
      * @throws AttemptToDeleteTheLastServerException
      */
@@ -144,10 +151,10 @@ class Server
     }
 
     /**
-     * Create a new category for the given server
+     * Create a new category for the given server.
      *
-     * @param int    $serverId
-     * @param string $name
+     * @param int    $serverId The server identifier to which the category will be bound.
+     * @param string $name New category name.
      */
     public function createCategory($serverId, $name)
     {
@@ -160,10 +167,10 @@ class Server
     }
 
     /**
-     * Attempt to remove given category
+     * Attempt to remove given category.
      *
-     * @param int $serverId
-     * @param int $categoryId
+     * @param int $serverId The identifier of the server to which the category is bound.
+     * @param int $categoryId Removing category identifier.
      */
     public function removeCategory($serverId, $categoryId)
     {

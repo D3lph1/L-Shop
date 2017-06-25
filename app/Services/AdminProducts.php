@@ -39,12 +39,12 @@ class AdminProducts
     /**
      * Create new product
      *
-     * @param double $price
-     * @param int    $stack
-     * @param int    $itemId
-     * @param int    $serverId
-     * @param int    $categoryId
-     * @param float  $sortPriority
+     * @param double $price        New product price.
+     * @param int    $stack        New product stack. Stack - the amount of goods sold for one purchase.
+     * @param int    $itemId       The identifier of the object to which the product is attached.
+     * @param int    $serverId     The identifier of the server on which the product is sold.
+     * @param int    $categoryId   The identifier of the category in which the product is sold.
+     * @param float  $sortPriority Priority of products sorting.
      *
      * @return mixed
      */
@@ -69,13 +69,13 @@ class AdminProducts
     /**
      * Edit given product
      *
-     * @param int    $productId
-     * @param double $price
-     * @param int    $stack
-     * @param int    $itemId
-     * @param int    $serverId
-     * @param int    $categoryId
-     * @param float  $sortPriority
+     * @param int    $productId    Updated product identifier.
+     * @param double $price        Product price
+     * @param int    $stack        Updated product stack. Stack - the amount of goods sold for one purchase.
+     * @param int    $itemId       The identifier of the object to which the product is attached.
+     * @param int    $serverId     The identifier of the server on which the product is sold.
+     * @param int    $categoryId   The identifier of the category in which the product is sold.
+     * @param float  $sortPriority Priority of products sorting.
      *
      * @return bool
      */
@@ -94,11 +94,11 @@ class AdminProducts
     }
 
     /**
-     * Delete product
+     * Delete product with given identifier.
      *
-     * @param $productId
+     * @param int $productId Product identifier.
      *
-     * @return bool|null
+     * @return bool
      */
     public function delete($productId)
     {

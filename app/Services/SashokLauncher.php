@@ -17,11 +17,11 @@ use Cartalyst\Sentinel\Users\UserInterface;
 class SashokLauncher
 {
     /**
-     * Method - handler
+     * Method - handler.
      *
-     * @param string $username
-     * @param string $password
-     * @param string $ip
+     * @param string $username User username.
+     * @param string $password User password.
+     * @param string $ip       Sender ip address.
      *
      * @throws SashokLauncherAuthWhiteListException
      *
@@ -47,10 +47,10 @@ class SashokLauncher
     }
 
     /**
-     * Checks if the current ip is in the whitelist
+     * Checks if the current ip is in the whitelist.
      *
-     * @param string $ip
-     * @param string  $whiteList
+     * @param string $ip Sender ip address.
+     * @param string $whiteList White list with ip addresses in JSON format.
      *
      * @return bool
      */

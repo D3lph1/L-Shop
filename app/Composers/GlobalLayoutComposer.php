@@ -15,9 +15,7 @@ use App\Contracts\ComposerContract;
 class GlobalLayoutComposer implements ComposerContract
 {
     /**
-     * Compose the view
-     *
-     * @param View $view
+     * {@inheritdoc}
      */
     public function compose(View $view)
     {

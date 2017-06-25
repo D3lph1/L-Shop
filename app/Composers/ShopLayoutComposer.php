@@ -13,6 +13,8 @@ use App\Contracts\ComposerContract;
 
 /**
  * Class ShopLayoutComposer
+ * Serves to transfer shared data to a layout.shop template that will be available
+ * on each child page of this template.
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
  *
@@ -71,9 +73,7 @@ class ShopLayoutComposer implements ComposerContract
     }
 
     /**
-     * Compose the view
-     *
-     * @param View $view
+     * {@inheritdoc}
      */
     public function compose(View $view)
     {
@@ -81,6 +81,8 @@ class ShopLayoutComposer implements ComposerContract
     }
 
     /**
+     * Obtain information for subsequent composing.
+     *
      * @return array
      */
     private function getData()
@@ -121,9 +123,9 @@ class ShopLayoutComposer implements ComposerContract
     }
 
     /**
-     * Get first portion of news list
+     * Get first portion of news list.
      *
-     * @return mixed
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     private function news()
     {
@@ -131,6 +133,8 @@ class ShopLayoutComposer implements ComposerContract
     }
 
     /**
+     * Get all news count.
+     *
      * @return int
      */
     private function newsCount()
@@ -139,6 +143,8 @@ class ShopLayoutComposer implements ComposerContract
     }
 
     /**
+     * Obtain data for monitoring servers.
+     *
      * @return MonitoringPlayers[]
      */
     private function monitoring()

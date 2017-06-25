@@ -8,7 +8,7 @@ use App\Exceptions\FailedToInsertException;
 
 /**
  * Class ShoppingCart
- * It produces goods issue in the player shopping cart plugin table
+ * It produces goods issue in the player shopping cart plugin table.
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
  *
@@ -17,7 +17,7 @@ use App\Exceptions\FailedToInsertException;
 class ShoppingCart extends Distributor
 {
     /**
-     * @param Payment $payment
+     * {@inheritdoc}
      */
     public function give(Payment $payment)
     {

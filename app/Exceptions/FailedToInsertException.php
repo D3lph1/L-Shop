@@ -9,7 +9,7 @@ namespace App\Exceptions;
  *
  * @package App\Exceptions
  */
-class FailedToInsertException extends LShopException
+class FailedToInsertException extends \RuntimeException
 {
     //
 }

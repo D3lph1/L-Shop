@@ -20,7 +20,7 @@ class Complete extends Command
      *
      * @var string
      */
-    protected $signature = 'payment:complete {id}';
+    protected $signature = 'payment:complete {id : Payment identifier}';
 
     /**
      * The console command description.

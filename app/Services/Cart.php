@@ -15,19 +15,22 @@ use App\Exceptions\InvalidArgumentTypeException;
 class Cart
 {
     /**
-     * Name of cart - array in session
+     * Name of cart - array in session.
      *
      * @var string
      */
     private $name = 'cart';
 
     /**
-     * Server ID
+     * Server identifier.
      *
      * @var int
      */
     private $server;
 
+    /**
+     * Cart constructor.
+     */
     public function __construct()
     {
         $this->server = \Request::route('server');
@@ -40,8 +43,8 @@ class Cart
     /**
      * Put the products in cart
      *
-     * @param int   $product Product identify
-     * @param int   $count Product count
+     * @param int   $product    Product identify
+     * @param int   $count      Product count
      * @param array $attributes Optional attributes
      */
     public function put($product, $count = 1, array $attributes = [])
@@ -57,8 +60,8 @@ class Cart
     }
 
     /**
-     * @param int $product Product identify
-     * @param int $count Product count
+     * @param int $product Product identifier.
+     * @param int $count   Product count.
      */
     public function setProductCount($product, $count)
     {
@@ -69,12 +72,13 @@ class Cart
     }
 
     /**
-     * Get given product from cart
+     * Get given product from cart.
      *
-     * @param int $product Product identify
+     * @param int $product Product identifier.
+     *
+     * @throws CartException
      *
      * @return array
-     * @throws CartException
      */
     public function get($product)
     {
@@ -89,11 +93,11 @@ class Cart
 
     /**
      * Get given product from cart. Unlike App\Services\Cart::get this method will
-     * throw an exception if product does not exists in cart
+     * throw an exception if product does not exists in cart.
      *
-     * @deprecated It deprecated as it does not throw an CartException when product not found
+     * @deprecated It deprecated as it does not throw an CartException when product not found.
      *
-     * @param int $product Product identify
+     * @param int $product Product identifier.
      *
      * @return array
      */
@@ -105,9 +109,9 @@ class Cart
     }
 
     /**
-     * Get attribute `count` value of given product
+     * Get attribute `count` value of given product.
      *
-     * @param int $product Product identify
+     * @param int $product Product identifier.
      *
      * @return int
      */
@@ -117,7 +121,7 @@ class Cart
     }
 
     /**
-     * Calculate and return count of all products in cart for current server
+     * Calculate and return count of all products in cart for current server.
      *
      * @return int
      */
@@ -127,9 +131,9 @@ class Cart
     }
 
     /**
-     * Get value of given product attribute such as `count`
+     * Get value of given product attribute such as `count`.
      *
-     * @param int   $product Product identify
+     * @param int   $product Product identify.
      * @param mixed $attribute
      */
     public function attribute($product, $attribute)
@@ -138,7 +142,7 @@ class Cart
     }
 
     /**
-     * Get all products from cart of current server
+     * Get all products from cart of current server.
      *
      * @return array|null
      */
@@ -171,7 +175,7 @@ class Cart
     }
 
     /**
-     * @param int $product Product identify
+     * @param int $product Product identify.
      *
      * @return bool
      */
@@ -183,7 +187,7 @@ class Cart
     }
 
     /**
-     * Check cart on the absence of product
+     * Check cart on the absence of product.
      *
      * @return bool
      */
@@ -193,7 +197,7 @@ class Cart
     }
 
     /**
-     * Check for completeness cart
+     * Check for completeness cart.
      *
      * @return bool
      */
@@ -203,7 +207,9 @@ class Cart
     }
 
     /**
-     * @param int $product
+     * Remove given product from cart.
+     *
+     * @param int $product Product identifier.
      */
     public function remove($product)
     {
@@ -212,23 +218,34 @@ class Cart
         \Session::forget($this->getProductSectionName($product));
     }
 
+    /**
+     * Delete all products from cart.
+     */
     public function flush()
     {
         \Session::forget($this->getServerSectionName());
     }
 
+    /**
+     * @return string
+     */
     private function getServerSectionName()
     {
         return "{$this->name}.{$this->server}";
     }
 
+    /**
+     * @param int $product Product identifier.
+     *
+     * @return string
+     */
     private function getProductSectionName($product)
     {
         return $this->getServerSectionName() . ".$product";
     }
 
     /**
-     * @param int $serverId
+     * @param int $serverId Server identifier.
      */
     private function createNewSection($serverId)
     {
@@ -236,7 +253,7 @@ class Cart
     }
 
     /**
-     * @param mixed  $target
+     * @param mixed $target
      */
     private function checkType($target)
     {

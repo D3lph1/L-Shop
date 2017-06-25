@@ -9,6 +9,7 @@ namespace App\Exceptions;
  *
  * @package App\Exceptions
  */
-class CartException extends LShopException
+class CartException extends \Exception
 {
+    //
 }

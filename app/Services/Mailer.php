@@ -14,7 +14,9 @@ use App\Mail\TestMail;
 class Mailer
 {
     /**
-     * @param string $address
+     * Send mail for test all mail services.
+     *
+     * @param string $address Email to which the letter will be sent.
      */
     public function sendTest($address)
     {

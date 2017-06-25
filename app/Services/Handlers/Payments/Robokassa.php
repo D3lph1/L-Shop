@@ -64,7 +64,7 @@ class Robokassa extends AbstractPayment
     }
 
     /**
-     * Validate request data
+     * Validate request data.
      *
      * @throws InvalidRequestDataException
      *

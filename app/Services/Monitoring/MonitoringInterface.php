@@ -2,6 +2,8 @@
 
 namespace App\Services\Monitoring;
 
+use App\DataTransferObjects\MonitoringPlayers;
+
 /**
  * Interface MonitoringInterface
  *
@@ -11,5 +13,12 @@ namespace App\Services\Monitoring;
  */
 interface MonitoringInterface
 {
+    /**
+     * Get monitoring-information about the server.
+     *
+     * @param int $serverId Server identifier.
+     *
+     * @return MonitoringPlayers
+     */
     public function getPlayers($serverId);
 }

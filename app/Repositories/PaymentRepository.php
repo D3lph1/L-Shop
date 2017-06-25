@@ -17,7 +17,7 @@ class PaymentRepository extends BaseRepository
     const MODEL = 'App\Models\Payment';
 
     /**
-     * Receives completed payments created within one year from this moment
+     * Receives completed payments created within one year from this moment.
      *
      * @param string|array $columns
      *
@@ -41,9 +41,9 @@ class PaymentRepository extends BaseRepository
     }
 
     /**
-     * Summarizes the income received from the sale of products for all time
+     * Summarizes the income received from the sale of products for all time.
      *
-     * @return int
+     * @return double
      */
     public function profit()
     {
@@ -67,10 +67,10 @@ class PaymentRepository extends BaseRepository
     }
 
     /**
-     * Complete given payment
+     * Complete given payment.
      *
-     * @param int    $id
-     * @param string $serviceName
+     * @param int    $id          Payment identifier.
+     * @param string $serviceName Service name (For example, Robokassa).
      *
      * @return bool
      */
@@ -84,10 +84,10 @@ class PaymentRepository extends BaseRepository
     }
 
     /**
-     * Get payments history for user with given id
+     * Get payments history for user with given id.
      *
-     * @param int   $userId
-     * @param array $columns
+     * @param int   $userId  User identifier.
+     * @param array $columns Columns for sampling.
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
@@ -95,16 +95,16 @@ class PaymentRepository extends BaseRepository
     {
         $columns = $this->prepareColumns($columns);
 
-        return Payment::select()
+        return Payment::select($columns)
             ->where('payments.user_id', $userId)
             ->orderBy('created_at', 'DESC')
             ->paginate(s_get('profile.payments_per_page', 10));
     }
 
     /**
-     * Get payments history paginated
+     * Get payments history paginated.
      *
-     * @param array $columns
+     * @param array $columns Columns for sampling.
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */

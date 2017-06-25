@@ -12,18 +12,18 @@ namespace App\Services;
 class ReCaptcha
 {
     /**
-     * @var string
+     * @var string Public ReCAPTCHA key.
      */
     private $publicKey;
 
     /**
-     * @var string
+     * @var string Secret ReCAPTCHA key.
      */
     private $secretKey;
 
     /**
-     * @param string $publicKey
-     * @param string $secretKey
+     * @param string $publicKey Public ReCAPTCHA key.
+     * @param string $secretKey Secret ReCAPTCHA key.
      */
     public function __construct($publicKey, $secretKey)
     {
@@ -32,11 +32,11 @@ class ReCaptcha
     }
 
     /**
-     * Render the ReCaptcha HTML in at the call site
+     * Render the ReCaptcha HTML in at the call site.
      *
-     * @param bool $clear Return the captcha without wrappers in a leveling div
+     * @param bool $clear If true return the captcha without wrappers in a leveling div.
      *
-     * @return string
+     * @return string HTML markup.
      */
     public function render($clear = false)
     {
@@ -55,7 +55,7 @@ class ReCaptcha
     }
 
     /**
-     * It checks the validity of a response from the ReCaptcha and returns the result
+     * It checks the validity of a response from the ReCaptcha and returns the result.
      *
      * @param string $reCaptchaResponse
      *
@@ -77,7 +77,7 @@ class ReCaptcha
     }
 
     /**
-     * It sends a request to the specified url
+     * It sends a request to the specified url.
      *
      * @param string $url
      *

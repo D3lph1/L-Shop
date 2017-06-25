@@ -4,34 +4,35 @@ namespace App\DataTransferObjects;
 
 /**
  * Class MonitoringPlayers
+ * It serves to transfer information about players on the server between parts of the application.
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  *
  * @package App\DataTransferObjects
  */
-class MonitoringPlayers
+final class MonitoringPlayers
 {
     /**
-     * @var int
+     * @var int Server identifier.
      */
     private $serverId;
 
     /**
-     * @var int
+     * @var int Count of players at the moment.
      */
     private $now;
 
     /**
-     * @var int
+     * @var int Count of available slots.
      */
     private $total;
 
     /**
      * MonitoringPlayers constructor.
      *
-     * @param     $serverId
-     * @param int $now
-     * @param int $total
+     * @param int $serverId Server identifier
+     * @param int $now Count of players at the moment.
+     * @param int $total Count of available slots.
      */
     public function __construct($serverId, $now, $total)
     {

@@ -32,6 +32,9 @@ class CatalogBuy
      */
     private $distributor;
 
+    /**
+     * CatalogBuy constructor.
+     */
     public function __construct()
     {
         $this->manager = \App::make('payment.manager');
@@ -41,11 +44,11 @@ class CatalogBuy
     /**
      * Method - handler
      *
-     * @param int         $productId
-     * @param int         $productCount
-     * @param int         $server
-     * @param string      $ip
-     * @param null|string $username
+     * @param int         $productId Product identifier.
+     * @param int         $productCount Product count.
+     * @param int         $server Server identifier.
+     * @param string      $ip The ip address of the device from which the purchase is made.
+     * @param null|string $username The username (for which) the product is purchased.
      * @throws InvalidUsernameException
      *
      * @return \Illuminate\Http\JsonResponse

@@ -35,7 +35,8 @@ class Ban
     /**
      * Ban constructor.
      *
-     * @param UserInterface $user
+     * @param UserInterface $user The user under which the operations of blocking, unlocking, checking and so on will
+     *                            occur.
      * @param BanRepository $repository
      */
     public function __construct(UserInterface $user, BanRepository $repository)
@@ -45,6 +46,8 @@ class Ban
     }
 
     /**
+     * Check if the current user is blocked.
+     *
      * @return bool
      */
     public function isBanned()
@@ -64,8 +67,10 @@ class Ban
     }
 
     /**
-     * @param int $days
-     * @param string         $reason
+     * Block user for a certain number of days.
+     *
+     * @param int    $days   Term of blocking.
+     * @param string $reason Reason for blocking.
      *
      * @return \App\Models\Ban
      */
@@ -81,8 +86,10 @@ class Ban
     }
 
     /**
+     * Blocks the user until a certain date.
+     *
      * @param null|Carbon $date
-     * @param string $reason
+     * @param string      $reason Reason for blocking.
      *
      * @return \App\Models\Ban
      */
@@ -97,6 +104,23 @@ class Ban
         ]);
     }
 
+    /**
+     * Blocks the user forever.
+     *
+     * @param string $reason Reason for blocking.
+     *
+     * @return \App\Models\Ban
+     */
+    public function banPermanently($reason)
+    {
+        return $this->banUntil(null, $reason);
+    }
+
+    /**
+     * Set ban model.
+     *
+     * @param $ban
+     */
     public function setBan($ban)
     {
         if (is_null($ban)) {
@@ -141,7 +165,9 @@ class Ban
     }
 
     /**
-     * @return mixed
+     * Unblock current user.
+     *
+     * @return bool
      */
     public function unblock()
     {

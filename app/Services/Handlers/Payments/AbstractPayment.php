@@ -35,19 +35,19 @@ abstract class AbstractPayment
      */
     protected function validatePayment($payment)
     {
-        // If payment has already been completed
+        // If payment has already been completed.
         if ($payment->completed) {
             throw new AlreadyCompleteException();
         }
 
-        // If payment with this ID does not exist, exit
+        // If payment with this ID does not exist, exit.
         if (!$payment) {
             throw new NotFoundException();
         }
     }
 
     /**
-     * @param int $id
+     * @param int $id Payment identifier.
      *
      * @return mixed
      */
@@ -65,7 +65,7 @@ abstract class AbstractPayment
     }
 
     /**
-     * Give items or money
+     * Give items or money.
      *
      * @param \App\Models\Payment $payment
      */
@@ -85,7 +85,7 @@ abstract class AbstractPayment
     }
 
     /**
-     * Outstanding product player
+     * Outstanding product player.
      *
      * @param \App\Models\Payment $payment
      */
@@ -96,7 +96,7 @@ abstract class AbstractPayment
     }
 
     /**
-     * Outstanding money player
+     * Outstanding money player.
      *
      * @param \App\Models\Payment $payment
      */

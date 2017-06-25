@@ -31,9 +31,9 @@ class ReadySkin
     }
 
     /**
-     * Change size of skin or cloak
+     * Change size of skin or cloak.
      *
-     * @param int $maxHeight New image height
+     * @param int $maxHeight New image height.
      *
      * @return $this
      */
@@ -58,7 +58,7 @@ class ReadySkin
     }
 
     /**
-     * @return resource Image in .PNG format
+     * @return resource Image in .PNG format.
      */
     public function getImage()
     {
@@ -66,7 +66,7 @@ class ReadySkin
     }
 
     /**
-     * @param string $path Save image path
+     * @param string $path Save image path.
      */
     public function saveImage($path)
     {

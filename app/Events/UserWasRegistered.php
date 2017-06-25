@@ -29,7 +29,7 @@ class UserWasRegistered
     private $user;
 
     /**
-     * @var bool
+     * @var bool If true, then a user will receive a confirmation e-mail when a mailing address is specified.
      */
     private $needSendActivationMail;
 

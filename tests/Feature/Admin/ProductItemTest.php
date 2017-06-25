@@ -52,7 +52,7 @@ class ProductItemTest extends TestCase
         $this->assertInstanceOf(Item::class, $item);
         $itemId = (int)$item->id;
 
-        $product = $this->adminProduct->create(0.01, 64, $itemId, 1, 1);
+        $product = $this->adminProduct->create(0.01, 64, $itemId, 1, 1, 0);
         $this->assertInstanceOf(Product::class, $product);
 
         $this->assertTrue($this->adminItems->delete($itemId));

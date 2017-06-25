@@ -25,7 +25,7 @@ class BanRepository extends BaseRepository
     /**
      * @param UserInterface $user
      *
-     * @return mixed
+     * @return bool
      */
     public function deleteByUser(UserInterface $user)
     {

@@ -30,7 +30,7 @@ class SaveAddedServerRequest extends FormRequest
             'enabled' => 'boolean',
             'server_ip' => 'ip',
             'server_port' => 'integer',
-            'server_password' => 'min:6|max:64',
+            'server_password' => 'max:64',
             'server_monitoring_enabled' => 'boolean'
         ];
     }

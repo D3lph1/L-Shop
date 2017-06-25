@@ -4,7 +4,7 @@ namespace App\Exceptions;
 
 /**
  * Class InvalidTypeArgumentException
- * An exception is thrown if the arguments passed to a function or method have an extraneous type
+ * An exception is thrown if the arguments passed to a function or method have an extraneous type.
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  *

@@ -30,9 +30,7 @@ class RconMonitoring implements MonitoringInterface
     }
 
     /**
-     * @param int $serverId
-     *
-     * @return MonitoringPlayers
+     * {@inheritdoc}
      */
     public function getPlayers($serverId)
     {
@@ -40,7 +38,7 @@ class RconMonitoring implements MonitoringInterface
     }
 
     /**
-     * @param int $serverId
+     * @param int $serverId Server identifier.
      *
      * @return MonitoringPlayers
      */

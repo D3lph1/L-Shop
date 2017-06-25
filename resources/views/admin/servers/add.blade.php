@@ -57,7 +57,7 @@
                                     </div>
                                     <div class="col-md-4 md-form text-left">
                                         <input type="text" name="server_port" id="admin-servers-port" class="form-control" value="">
-                                        <label for="admin-servers-port">Порт сервера</label>
+                                        <label for="admin-servers-port">RCON порт сервера</label>
                                     </div>
                                 </div>
                                 <div class="md-form text-left mb-3">

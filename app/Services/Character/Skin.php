@@ -8,11 +8,31 @@ namespace App\Services\Character;
  */
 class Skin
 {
+    /**
+     * @var null|resource
+     */
     private $skin = null;
+
+    /**
+     * @var null|resource
+     */
     private $cloak = null;
+
+    /**
+     * @var int Aspect ratio of the skin image.
+     */
     private $skinRatio = 1;
+
+    /**
+     * @var int Aspect ratio of the cloak image.
+     */
     private $cloakRatio = 1;
 
+    /**
+     * Skin constructor.
+     *
+     * @param string $player
+     */
     public function __construct($player)
     {
         $skinPath = Skin::getSkinPath($player);
@@ -38,11 +58,11 @@ class Skin
     }
 
     /**
-     * Загружает новый скин
+     * Load new skin.
      *
-     * @param $file string путь или URL до скина
+     * @param string $file Path or URL to the cloak.
      *
-     * @throws \Exception ошибка в случае если файл не загрузился или скин не прошел проверку
+     * @throws \Exception Error in case the file did not boot or the skin failed.
      */
     public function loadSkin($file)
     {
@@ -61,11 +81,11 @@ class Skin
     }
 
     /**
-     * Загружает новый плащ
+     * Load new cloak.
      *
-     * @param $file string путь или URL до плаща
+     * @param string $file Path or URL to the cloak.
      *
-     * @throws \Exception ошибка в случае если файл не загрузился или плаш не прошел проверку
+     * @throws \Exception Error in case the file did not boot or the cloak failed.
      */
     public function loadCloak($file)
     {
@@ -81,12 +101,12 @@ class Skin
     }
 
     /**
-     * Возвращает ширину картинки
+     * Return image width.
      *
-     * @param $image resource картинка
+     * @param resource $image Image.
      *
-     * @return int ширина картинки в пикселях
-     * @throws \Exception если картинка не задана
+     * @return int Image width in pixels.
+     * @throws \Exception If no picture is specified.
      */
     private function width($image)
     {
@@ -98,12 +118,12 @@ class Skin
     }
 
     /**
-     * Возвращает высоту картинки
+     * Return image height.
      *
-     * @param $image resource картинка
+     * @param resource $image Image.
      *
-     * @return int высота картинки в пикселях
-     * @throws \Exception если картинка не задана
+     * @return int Image height in pixels.
+     * @throws \Exception If no picture is specified.
      */
     private function height($image)
     {
@@ -115,9 +135,9 @@ class Skin
     }
 
     /**
-     * Проверяет является ли скин валидным
+     * Checks whether the skin is valid.
      *
-     * @return bool true если скин валидный
+     * @return bool
      */
     protected function validSkin()
     {
@@ -130,9 +150,9 @@ class Skin
     }
 
     /**
-     * Проверяет является ли плащ валидным
+     * Checks whether the cloak is valid.
      *
-     * @return bool true если скин валидный
+     * @return bool
      */
     protected function validCloak()
     {
@@ -170,9 +190,9 @@ class Skin
     }
 
     /**
-     * Строит лицевую часть головы
+     * Builds the front of the head.
      *
-     * @return ReadySkin объект с готовой головой
+     * @return ReadySkin Object with a ready head.
      */
     public function getFrontHead()
     {
@@ -187,9 +207,9 @@ class Skin
     }
 
     /**
-     * Строит заднюю часть головы
+     * Builds the back of the head.
      *
-     * @return ReadySkin объект с готовой головой
+     * @return ReadySkin Object with a ready head.
      */
     public function getBackHead()
     {
@@ -204,9 +224,9 @@ class Skin
     }
 
     /**
-     * Строит лицевую часть скина
+     * Builds the front of the skin.
      *
-     * @return ReadySkin объект с готовым скином
+     * @return ReadySkin Object with a ready skin.
      */
     public function getFrontSkin()
     {
@@ -229,9 +249,9 @@ class Skin
     }
 
     /**
-     * Строит лицевую часть скина
+     * Builds the back of the skin.
      *
-     * @return ReadySkin объект с готовым скином
+     * @return ReadySkin Object with a ready skin.
      */
     public function getBackSkin()
     {
@@ -254,9 +274,9 @@ class Skin
     }
 
     /**
-     * Строит лицевую часть плаща
+     * Builds the front of the cloak.
      *
-     * @return ReadySkin|false объект с готовым плащом или false если плаща нет
+     * @return ReadySkin|false Object with a ready cloak.
      */
     public function getFrontCloak()
     {
@@ -272,9 +292,9 @@ class Skin
     }
 
     /**
-     * Строит заднюю часть плаща
+     * Builds the back of the cloak.
      *
-     * @return ReadySkin|false объект с готовым плащом или false если плаща нет
+     * @return ReadySkin|false Object with a ready cloak or false if the cloak does not exists.
      */
     public function getBackCloak()
     {
@@ -308,11 +328,11 @@ class Skin
     }
 
     /**
-     * Возвращает путь до скина игрока
+     * Return path to player skin.
      *
-     * @param $player string ник игрока чей скин необходимо показать.
+     * @param string $player Player username.
      *
-     * @return bool|string ссылка на скин игрока или false если скин не найден
+     * @return bool|string Path to skin or false if skin does not exists.
      */
     public static function getSkinPath($player)
     {
@@ -326,11 +346,11 @@ class Skin
     }
 
     /**
-     * Возвращает путь до плаща игрока
+     * Return path to player cloak.
      *
-     * @param $player string ссылка игрока чей плащ необходимо показать.
+     * @param string $player Player username.
      *
-     * @return bool|string ссылка на скин игрока или false если плащ не найден
+     * @return bool|string Path to cloak or false if cloak does not exists.
      */
     public static function getCloakPath($player)
     {
