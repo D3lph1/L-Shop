@@ -34,6 +34,8 @@ class AddController extends Controller
     }
 
     /**
+     * Render add product page
+     *
      * @param Request $request
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -74,10 +76,11 @@ class AddController extends Controller
         $itemId = (int)$request->get('item');
         $serverId = (int)$request->get('server');
         $categoryId = (int)$request->get('category');
+        $sortPriority = (float)$request->get('sort_priority');
         $result = false;
 
         try {
-            $result = $this->adminProducts->create($price, $stack, $itemId, $serverId, $categoryId);
+            $result = $this->adminProducts->create($price, $stack, $itemId, $serverId, $categoryId, $sortPriority);
         } catch (ItemNotFoundException $e) {
             \Message::danger("Предмет с идентификатором {$itemId} не найден");
         }

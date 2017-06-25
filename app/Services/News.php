@@ -9,7 +9,7 @@ use App\Repositories\NewsRepository;
 /**
  * Class News
  *
- * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
  *
  * @package App\Services
  */
@@ -29,9 +29,9 @@ class News
     }
 
     /**
-     * @param string $title
-     * @param string $content
-     * @param int $userId
+     * @param string $title   News title.
+     * @param string $content News content.
+     * @param int    $userId  Author identifier.
      *
      * @throws UnableToCreate
      */
@@ -53,9 +53,11 @@ class News
     }
 
     /**
-     * @param int $id
-     * @param int $title
-     * @param int $content
+     * @param int $id      Updated news identifier.
+     * @param int $title   New title.
+     * @param int $content New content.
+     *
+     * @throws UnableToUpdate
      */
     public function update($id, $title, $content)
     {
@@ -72,6 +74,14 @@ class News
         $this->forgetNews();
     }
 
+    /**
+     * Load more news.
+     *
+     * @param int $count    Count news in portion.
+     * @param int $serverId Server identifier.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
     public function load($count, $serverId)
     {
         $news = $this->newsRepository->load($count);
@@ -102,7 +112,7 @@ class News
     }
 
     /**
-     * Remove news list from cache
+     * Remove news list from cache.
      */
     public function forgetNews()
     {
@@ -110,7 +120,7 @@ class News
     }
 
     /**
-     * Remove news count from cache
+     * Remove news count from cache.
      */
     public function forgetCount()
     {
@@ -118,7 +128,7 @@ class News
     }
 
     /**
-     * @param int $id
+     * @param int $id Removing news identifier.
      *
      * @return bool|null
      */

@@ -15,19 +15,24 @@
                 <h4 class="card-title">Кеширование</h4>
                 <p class="card-text">
                     <div class="md-form">
-                        <i class="fa fa-clock-o prefix"></i>
+                        <i class="fa fa-clock-o prefix" data-toggle="popover" data-placement="right" data-trigger="hover" title="Подсказка" data-content="По истечении этого времени кэш статистики магазина будет удален, а затем обновлен."></i>
                         <input type="text" name="ttl_statistic" id="ttl-statistic" class="form-control" value="{{ $ttlStatistic }}">
                         <label for="ttl-statistic">Время существования кэша статистики (минут)</label>
                     </div>
                     <div class="md-form">
-                        <i class="fa fa-clock-o prefix"></i>
+                        <i class="fa fa-clock-o prefix" data-toggle="popover" data-placement="right" data-trigger="hover" title="Подсказка" data-content="По истечении этого времени кэш статических страниц будет удален, а затем обновлен."></i>
                         <input type="text" name="ttl_statistic_pages" id="ttl-static-pages" class="form-control" value="{{ $ttlStatiсPages }}">
                         <label for="ttl-static-pages">Время существования кэша статических страниц (минут)</label>
                     </div>
                     <div class="md-form">
-                        <i class="fa fa-clock-o prefix"></i>
+                        <i class="fa fa-clock-o prefix" data-toggle="popover" data-placement="right" data-trigger="hover" title="Подсказка" data-content="По истечении этого времени кэш новостей будет удален, а затем обновлен."></i>
                         <input type="text" name="ttl_news" id="ttl-news" class="form-control" value="{{ $ttlNews }}">
                         <label for="ttl-news">Время существования кэша новостей (минут)</label>
+                    </div>
+                    <div class="md-form">
+                        <i class="fa fa-clock-o prefix" data-toggle="popover" data-placement="right" data-trigger="hover" title="Подсказка" data-content="По истечении этого времени кэш мониторинга серверов будет удален, а затем обновлен."></i>
+                        <input type="text" name="ttl_monitoring" id="ttl-monitoring" class="form-control" value="{{ $ttlMonitoring }}">
+                        <label for="ttl-news">Время существования кэша мониторинга серверов (минут)</label>
                     </div>
                 </p>
             </div>

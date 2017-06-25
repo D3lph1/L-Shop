@@ -58,7 +58,7 @@ class CatalogController extends Controller
         $data = [
             'categories' => $categories,
             'currentCategory' => $category,
-            'goods' => $qm->products($request->currentServer->id, $category),
+            'goods' => $qm->products($request->get('currentServer')->id, $category),
             'cart' => $cart
         ];
 

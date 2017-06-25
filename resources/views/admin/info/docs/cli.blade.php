@@ -112,7 +112,7 @@
                 <p>Сигнатура: <code>php artisan user:activate {username}</code></p>
                 <p>Примеры:</p>
                 <p>
-                    <code>php artisan user:activate WhilD0S</code> - активирует аккаунт пользователя <code>WhilD0S</code>
+                    <code>php artisan user:activate WhilD0S</code> - активирует аккаунт пользователя <code>WhilD0S</code>.
                 </p>
                 <table class="table table-sm">
                     <thead>
@@ -140,7 +140,7 @@
                 <p>Сигнатура: <code>php artisan user:remove {username}</code></p>
                 <p>Примеры:</p>
                 <p>
-                    <code>php artisan user:remove D3lph1</code> - Удалит пользователя <code>D3lph1</code>
+                    <code>php artisan user:remove D3lph1</code> - Удалит пользователя <code>D3lph1</code>.
                 </p>
                 <table class="table table-sm">
                     <thead>
@@ -162,6 +162,77 @@
                     </tr>
                     </tbody>
                 </table>
+            </p>
+            <h4 class="card-title">Заблокировать пользователя</h4>
+            <p class="card-text">
+            <p>Сигнатура: <code>php artisan user:block {username} {duration} --reason=""</code></p>
+            <p>Примеры:</p>
+            <p>
+                <code>php artisan user:block D3lph1 30 --reason="Нарушение правил ресурса"</code> - Заблокирует
+                пользователя <code>D3lph1</code> на 40 дней с причиной "Нарушение правил ресурса".
+            </p>
+            <table class="table table-sm">
+                <thead>
+                <tr>
+                    <th>Элемент</th>
+                    <th>Описание</th>
+                    <th>Тип</th>
+                    <th>Обзателен</th>
+                    <th>Значение по умолчанию</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>username</td>
+                    <td>Имя пользователя (логин)</td>
+                    <td>Аргумент</td>
+                    <td>Да</td>
+                    <td>Нет</td>
+                </tr>
+                <tr>
+                    <td>duration</td>
+                    <td>Длительность блокировки (в днях). Если отстутсвует или равен "0", пользователь блокируется навсегда.</td>
+                    <td>Аргумент</td>
+                    <td>Нет</td>
+                    <td>0</td>
+                </tr>
+                <tr>
+                    <td>reason</td>
+                    <td>Причина блокировки.</td>
+                    <td>Опция</td>
+                    <td>Нет</td>
+                    <td>Нет</td>
+                </tr>
+                </tbody>
+            </table>
+            </p>
+            <h4 class="card-title">Разблокировать пользователя</h4>
+            <p class="card-text">
+            <p>Сигнатура: <code>php artisan user:unblock {username}</code></p>
+            <p>Примеры:</p>
+            <p>
+                <code>php artisan user:unblock D3lph1</code> - Разблокирует пользоваетля <code>D3lph1</code>.
+            </p>
+            <table class="table table-sm">
+                <thead>
+                <tr>
+                    <th>Элемент</th>
+                    <th>Описание</th>
+                    <th>Тип</th>
+                    <th>Обзателен</th>
+                    <th>Значение по умолчанию</th>
+                </tr>
+                </thead>
+                <tbody>
+                <tr>
+                    <td>username</td>
+                    <td>Имя пользователя (логин)</td>
+                    <td>Аргумент</td>
+                    <td>Да</td>
+                    <td>Нет</td>
+                </tr>
+                </tbody>
+            </table>
             </p>
             <h3 class="card-title">Управление платежами</h3>
             <h4 class="card-title">Завершить платеж</h4>

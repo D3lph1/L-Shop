@@ -41,7 +41,7 @@ abstract class Distributor
     }
 
     /**
-     * @param array $serialized
+     * @param string $serialized
      *
      * @return array
      */

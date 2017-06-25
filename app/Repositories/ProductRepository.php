@@ -31,6 +31,13 @@ class ProductRepository extends BaseRepository
         return Product::create($attributes);
     }
 
+    /**
+     * Delete item with given identifier
+     *
+     * @param int $itemId
+     *
+     * @return bool|null
+     */
     public function deleteByItemId($itemId)
     {
         if (!is_int($itemId)) {

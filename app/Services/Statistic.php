@@ -29,6 +29,8 @@ class Statistic
     }
 
     /**
+     * Get the number of completed payments for the last year.
+     *
      * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
     public function forTheLastYearCompleted()
@@ -37,6 +39,8 @@ class Statistic
     }
 
     /**
+     * Get total profit from completed orders.
+     *
      * @return int
      */
     public function profit()

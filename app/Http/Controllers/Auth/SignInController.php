@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Auth;
 
+use App\Exceptions\User\BannedException;
 use App\Services\Message;
 use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
 use Illuminate\Http\Request;
@@ -52,13 +53,14 @@ class SignInController extends Controller
         try {
             $user = \Sentinel::authenticate($credentials, true);
         } catch (ThrottlingException $e) {
-            return response()->json([
-                'status' => 'frozen',
+            return json_response('frozen', [
                 'delay' => $e->getDelay()
             ]);
         } catch (NotActivatedException $e) {
-            return response()->json([
-                'status' => 'not activated'
+            return json_response('not activated');
+        } catch (BannedException $e) {
+            return json_response('banned', [
+                'message' => build_ban_message($e->getUntil(), $e->getReason())
             ]);
         }
 

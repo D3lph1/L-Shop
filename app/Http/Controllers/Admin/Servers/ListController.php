@@ -48,7 +48,7 @@ class ListController extends BaseController
     {
         $serverId = (int)$request->route('enable');
 
-        if ($this->serverService->enabledServer($serverId)) {
+        if ($this->serverService->enableServer($serverId)) {
             \Message::info('Сервер включен');
         } else {
             \Message::danger('Не удалось включить сервер!');
@@ -66,9 +66,9 @@ class ListController extends BaseController
      */
     public function disable(Request $request)
     {
-        $serverId = (int)$request->route('enable');
+        $serverId = (int)$request->route('disable');
 
-        if ($this->serverService->disabledServer($serverId)) {
+        if ($this->serverService->disableServer($serverId)) {
             \Message::info('Сервер отключен');
         } else {
             \Message::danger('Не удалось отключить сервер!');

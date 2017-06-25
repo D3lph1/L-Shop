@@ -26,11 +26,11 @@
                     <tbody>
                     <tr>
                         <td>Версия системы L - Shop</td>
-                        <td>0.3.2 (BETA)</td>
+                        <td>0.4.0 (BETA)</td>
                     </tr>
                     <tr>
                         <td>Версия фреймворка Laravel</td>
-                        <td>5.4.11</td>
+                        <td>5.4.24</td>
                     </tr>
                     <tr>
                         <td>GitHub репозиторий</td>

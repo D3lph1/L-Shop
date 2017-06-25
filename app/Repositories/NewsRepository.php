@@ -16,7 +16,9 @@ class NewsRepository extends BaseRepository
     const MODEL = News::class;
 
     /**
-     * @return mixed
+     * Get first portion of the news.
+     *
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function getFirstPortion()
     {
@@ -32,6 +34,11 @@ class NewsRepository extends BaseRepository
         });
     }
 
+    /**
+     * Get all news count.
+     *
+     * @return int
+     */
     public function count()
     {
         return \Cache::get('news.count', function () {
@@ -44,11 +51,11 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * Load more news
+     * Load more news.
      *
-     * @param int $count
+     * @param int $count Count of news for load.
      *
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * @return \Illuminate\Database\Eloquent\Collection
      */
     public function load($count)
     {
@@ -60,8 +67,10 @@ class NewsRepository extends BaseRepository
     }
 
     /**
-     * @param int   $perPage
-     * @param array $columns
+     * Retrieve and paginate news.
+     *
+     * @param int   $perPage Count of news in one pagination page.
+     * @param array $columns Columns for sampling.
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */

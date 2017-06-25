@@ -14,7 +14,7 @@ use App\Exceptions\InvalidArgumentTypeException;
 
 /**
  * Class QueryManager
- * Service in charge of working with ORM
+ * Service in charge of working with ORM.
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  *
@@ -136,20 +136,36 @@ class QueryManager
     }
 
     /**
-     * Get goods joined with items for current server (paginated)
+     * Get products joined with items for current server (paginated)
      *
-     * @param $serverId
-     * @param $category
+     * @param int $serverId
+     * @param int $category
      *
      * @return mixed
      */
     public function products($serverId, $category)
     {
+        $orderBy = s_get('shop.sort');
+
+        if ($orderBy === 'name_desc') {
+            $orderField = 'items.name';
+            $orderDirection = 'DESC';
+        } else if ($orderBy === 'priority') {
+            $orderField = 'products.sort_priority';
+            $orderDirection = 'ASC';
+        } else if ($orderBy === 'priority_desc') {
+            $orderField = 'products.sort_priority';
+            $orderDirection = 'DESC';
+        } else {
+            $orderField = 'items.name';
+            $orderDirection = 'ASC';
+        }
+
         return Product::select('products.id as id', 'items.name', 'items.image', 'items.type', 'products.price', 'products.stack')
             ->join('items', 'items.id', '=', 'products.item_id')
             ->where('server_id', $serverId)
             ->where('category_id', $category)
-            ->orderBy('items.name')
+            ->orderBy($orderField, $orderDirection)
             ->paginate(s_get('catalog.products_per_page', 10));
     }
 

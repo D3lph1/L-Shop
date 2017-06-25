@@ -31,6 +31,8 @@ class EditController extends Controller
     }
 
     /**
+     * Render edit product page
+     *
      * @param Request $request
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -43,6 +45,7 @@ class EditController extends Controller
             'products.stack',
             'products.item_id',
             'products.category_id',
+            'products.sort_priority',
             'items.name',
             'items.type'
         ]);
@@ -102,8 +105,9 @@ class EditController extends Controller
         $price = (double)$request->get('price');
         $stack = (int)$request->get('stack');
         $itemId = (int)$request->get('item');
+        $sortPriority = (float)$request->get('sort_priority');
 
-        $result = $this->adminProducts->edit($productId, $price, $stack, $itemId, $serverId, $categoryId);
+        $result = $this->adminProducts->edit($productId, $price, $stack, $itemId, $serverId, $categoryId, $sortPriority);
 
         if ($result) {
             \Message::success(trans('messages.success.changes'));

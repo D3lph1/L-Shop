@@ -32,11 +32,11 @@ class Page
     }
 
     /**
-     * Create new static page
+     * Create new static page.
      *
-     * @param string $title
-     * @param string $content
-     * @param string $url
+     * @param string $title   Static page title.
+     * @param string $content Static page content.
+     * @param string $url     Static page url.
      *
      * @return \Illuminate\Database\Eloquent\Model
      */
@@ -50,8 +50,8 @@ class Page
     }
 
     /**
-     * @param int   $id
-     * @param array $attributes
+     * @param int   $id         Updated static page identifier.
+     * @param array $attributes New static page attributes.
      *
      * @return bool
      */
@@ -63,9 +63,9 @@ class Page
     }
 
     /**
-     * Delete static page by id
+     * Delete static page by identifier.
      *
-     * @param string $id
+     * @param string $id Static page identifier.
      *
      * @return bool|null
      */
@@ -75,8 +75,11 @@ class Page
     }
 
     /**
-     * @param int    $id
-     * @param string $url
+     * Checks whether the transmitted URL is unique.
+     *
+     * @param int    $id The identifier of the page being checked. It is necessary to exclude from the scan directly
+     *                   the static page itself.
+     * @param string $url Verifiable URL.
      *
      * @return bool
      */
@@ -86,10 +89,10 @@ class Page
     }
 
     /**
-     * Get static page by id
+     * Get static page by identifier.
      *
-     * @param int   $id
-     * @param array $columns
+     * @param int   $id Static page identifier.
+     * @param array $columns Columns for sampling.
      *
      * @return mixed
      */
@@ -99,10 +102,10 @@ class Page
     }
 
     /**
-     * Get static page by url
+     * Get static page by URL.
      *
-     * @param string $url
-     * @param array  $columns
+     * @param string $url Static page URL.
+     * @param array  $columns Columns for sampling.
      *
      * @return bool|\App\Models\Page
      */

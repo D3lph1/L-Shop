@@ -3,6 +3,7 @@
 namespace App\Services;
 
 use App\Mail\UserActivation;
+use App\Models\User;
 use Cartalyst\Sentinel\Users\UserInterface;
 
 /**
@@ -15,22 +16,25 @@ use Cartalyst\Sentinel\Users\UserInterface;
 class Activator
 {
     /**
-     * @param UserInterface $user
+     * Create new activation and send it in mail to given user.
+     *
+     * @param UserInterface $user Activation letter recipient.
      */
     public function createAndSend(UserInterface $user)
     {
         $activation = \Activation::create($user);
 
+        /** @var User $user */
         $this->mail($user->id, $user->username, $user->email, $activation->code);
     }
 
     /**
-     * Send mail with activation link
+     * Send mail with activation link.
      *
-     * @param int    $userId
-     * @param string $username
-     * @param string $email
-     * @param string $code
+     * @param int    $userId   Activation user identifier.
+     * @param string $username Activation user username.
+     * @param string $email    Activation user email.
+     * @param string $code     Activation code.
      */
     private function mail($userId, $username, $email, $code)
     {

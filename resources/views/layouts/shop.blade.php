@@ -57,6 +57,11 @@
             @if($isAuth)
                 <div class="l-shop-collapse">
                     <p class="a-b-header">Профиль</p>
+                    @if($character)
+                        <p>
+                            <a href="{{ route('profile.character', ['server' => $currentServer->id]) }}" class="btn btn-info btn-block"><i class="fa fa-user left"></i>Персонаж</a>
+                        </p>
+                    @endif
                     <p>
                         <a href="{{ route('profile.settings', ['server' => $currentServer->id]) }}" class="btn btn-info btn-block"><i class="fa fa-gear left"></i>Настройки</a>
                     </p>
@@ -115,29 +120,67 @@
     <div id="content">
         <div id="topbar" class="z-depth-1">
             <div class="row">
-                <div class="col-9" id="topbar-content-1">
+                <div class="col-8" id="topbar-content-1">
                     <button id="btn-menu" class="btn"><i class="fa fa-bars"></i></button>
                     <a href="{{ route('servers') }}">
                         <span id="topbar-server">Сервер: <span id="tbs-name">{{ $currentServer->name }}</span></span>
                     </a>
                 </div>
-                @if($news)
-                    <div class="col-3 text-right" id="topbar-content-2">
-                        <button id="btn-news" class="btn"><i class="fa fa-newspaper-o"></i></button>
-                    </div>
-                @endif
+
+                <div class="col-4 text-right" id="topbar-content-2">
+                    @if(s_get('monitoring.enabled') && count($monitoring) !== 0)
+                        <button id="btn-monitoring" class="btn topbar-btn"><i class="fa fa-bar-chart"></i></button>
+                    @endif
+                    @if($news)
+                        <button id="btn-news" class="btn topbar-btn"><i class="fa fa-newspaper-o"></i></button>
+                    @endif
+                </div>
             </div>
         </div>
 
+        <!-- Content -->
         @yield('content')
+        <!-- End content -->
 
         <div id="footer">
             <div id="f-first">
                 <p>2017<i class="fa fa-copyright fa-left fa-right"></i>Copyright : {{ $shopName }}</p>
             </div>
+
             <div id="f-second">
                 <a href="https://github.com/D3lph1/L-shop" target="_blank" class="btn btn-info"><i class="fa fa-github fa-lg fa-left"></i>Github</a>
             </div>
         </div>
     </div>
 @endsection
+
+@if(s_get('monitoring.enabled'))
+    @component('components.modal')
+        @slot('id')
+            monitoring-modal
+        @endslot
+        @slot('title')
+            Мониторинг серверов
+        @endslot
+        @slot('buttons')
+            <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Отменить</button>
+        @endslot
+
+        @foreach($monitoring as $server)
+            <div class="md-form text-left">
+                <h4>{{ get_server_by_id($servers, $server->getServerId())->name }}</h4>
+                <div class="progress">
+                    @if($server->getNow() === -1)
+                        <div class="progress-bar progress-bar-danger danger-color" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                            Сервер отключен
+                        </div>
+                    @else
+                        <div class="progress-bar info-color" role="progressbar" aria-valuenow="{{ $server->getNow() }}" aria-valuemin="0" aria-valuemax="{{ $server->getTotal() }}" style="min-width: 12%; width: {{ ($server->getNow() / $server->getTotal()) * 100 }}%;">
+                            {{ $server->getNow() }} / {{ $server->getTotal() }}
+                        </div>
+                    @endif
+                </div>
+            </div>
+        @endforeach
+    @endcomponent
+@endif

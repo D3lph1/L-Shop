@@ -43,11 +43,6 @@ class SaveApiRequest extends FormRequest
             'key.min' => trans('validation.min', ['attribute' => 'Ключ доступа']),
             'key.max' => trans('validation.max', ['attribute' => 'Ключ доступа']),
             'key.algo' => trans('validation.required', ['attribute' => 'Алгоритм хэширования']),
-            'separator.required' => trans('validation.required', ['attribute' => 'Разделитель']),
-            'sashok_launcher_auth_error_message.required' => trans('validation.required', ['attribute' => 'Сообщение при неверном вводе данных пользователем']),
-            'sashok_launcher_auth_error_message.min' => trans('validation.min', ['attribute' => 'Сообщение при неверном вводе данных пользователем']),
-            'sashok_launcher_auth_format.required' => trans('validation.required', ['attribute' => 'Формат']),
-            'sashok_launcher_auth_format.regex' => trans('validation.api_sashok_auth_format_regex')
         ];
     }
 }

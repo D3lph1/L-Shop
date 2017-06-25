@@ -23,7 +23,7 @@ trait Validator
      * @param string $username
      * @param bool   $required
      *
-     * @return bool|\Illuminate\Http\JsonResponse
+     * @return bool
      *
      */
     public function validateUsername($username, $required = true)
@@ -40,9 +40,9 @@ trait Validator
             [
                 'username' => "{$required}min:$min|max:$max|$rule"
             ]);
-        \Debugbar::info($username);
+
         if ($validator->fails()) {
-            return json_response('invalid username');
+            return false;
         }
 
         return true;

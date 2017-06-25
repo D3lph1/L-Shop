@@ -41,6 +41,9 @@ class CartBuy
      */
     private $productsCount = [];
 
+    /**
+     * CartBuy constructor.
+     */
     public function __construct()
     {
         $this->manager = \App::make('payment.manager');
@@ -48,13 +51,13 @@ class CartBuy
     }
 
     /**
-     * Method - handler
+     * Method - handler.
      *
-     * @param array       $products
+     * @param array       $products Array with [product_identifier => product_count].
      * @param Cart        $cart
-     * @param int         $server
-     * @param string      $ip
-     * @param null|string $username
+     * @param int         $server   Server identifier.
+     * @param string      $ip       The ip address of the device from which the purchase is made.
+     * @param null|string $username The username (for which) the product is purchased.
      *
      * @throws InvalidUsernameException
      *
@@ -101,7 +104,7 @@ class CartBuy
     /**
      * Validate username
      *
-     * @param null $username
+     * @param null|string $username
      *
      * @throws InvalidUsernameException
      */
@@ -109,7 +112,7 @@ class CartBuy
     {
         if (!is_auth()) {
             $validated = $this->validateUsername($username, false);
-            if ($validated !== true) {
+            if (!$validated) {
                 throw new InvalidUsernameException();
             }
         }

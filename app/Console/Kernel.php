@@ -2,10 +2,12 @@
 
 namespace App\Console;
 
+use App\Console\Commands\User\Block;
 use App\Console\Commands\User\Create;
 use App\Console\Commands\User\Remove;
 use App\Console\Commands\User\Activate;
 use App\Console\Commands\Payment\Complete;
+use App\Console\Commands\User\Unblock;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -20,6 +22,8 @@ class Kernel extends ConsoleKernel
         Create::class,
         Remove::class,
         Activate::class,
+        Block::class,
+        Unblock::class,
         Complete::class
     ];
 

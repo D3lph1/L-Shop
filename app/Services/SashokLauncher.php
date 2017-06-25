@@ -3,6 +3,9 @@
 namespace App\Services;
 
 use App\Exceptions\SashokLauncherAuthWhiteListException;
+use App\Models\User;
+use Cartalyst\Sentinel\Checkpoints\ActivationCheckpoint;
+use Cartalyst\Sentinel\Users\UserInterface;
 
 /**
  * Class SashokLauncher
@@ -14,40 +17,40 @@ use App\Exceptions\SashokLauncherAuthWhiteListException;
 class SashokLauncher
 {
     /**
-     * Method - handler
+     * Method - handler.
      *
-     * @param string $username
-     * @param string $password
-     * @param string $ip
+     * @param string $username User username.
+     * @param string $password User password.
+     * @param string $ip       Sender ip address.
      *
      * @throws SashokLauncherAuthWhiteListException
      *
-     * @return bool
+     * @return mixed
      */
-    public function checkCredentials($username, $password, $ip, $whiteList)
+    public function auth($username, $password, $ip, $whiteList)
     {
         if (!$this->whiteList($ip, $whiteList)) {
             throw new SashokLauncherAuthWhiteListException();
         }
 
-        $user = \Sentinel::getUserRepository()->findByCredentials(['username' => $username]);
+        /** @var User $user */
+        $user = \Sentinel::authenticate([
+            'username' => $username,
+            'password' => $password
+        ]);
 
         if ($user) {
-            $hash = $user->getUserPassword();
-
-            if (password_verify($password, $hash)) {
-                return $user->username;
-            }
+            return $user->username;
         }
 
         return false;
     }
 
     /**
-     * Checks if the current ip is in the whitelist
+     * Checks if the current ip is in the whitelist.
      *
-     * @param string $ip
-     * @param array  $whiteList
+     * @param string $ip Sender ip address.
+     * @param string $whiteList White list with ip addresses in JSON format.
      *
      * @return bool
      */
@@ -64,5 +67,31 @@ class SashokLauncher
         }
 
         return false;
+    }
+
+    /**
+     * @param UserInterface $user
+     *
+     * @return bool
+     */
+    protected function activationCheckpoint(UserInterface $user)
+    {
+        /** @var ActivationCheckpoint $checkpoint */
+        $checkpoint = app(ActivationCheckpoint::class);
+
+        return $checkpoint->login($user);
+    }
+
+    /**
+     * @param UserInterface $user
+     *
+     * @return bool
+     */
+    protected function banCheckpoint(UserInterface $user)
+    {
+        /** @var BanCheckpoint $checkpoint */
+        $checkpoint = app(BanCheckpoint::class);
+
+        return $checkpoint->login($user);
     }
 }

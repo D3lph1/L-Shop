@@ -2,11 +2,11 @@
 
 namespace App\Services;
 
-use App\Exceptions\User\UsernameAlreadyExistsException;
+use App\Events\UserWasRegistered;
 use App\Exceptions\User\EmailAlreadyExistsException;
 use App\Exceptions\User\UnableToCreateUser;
+use App\Exceptions\User\UsernameAlreadyExistsException;
 use Cartalyst\Sentinel\Users\UserInterface;
-use App\Events\UserWasRegistered;
 
 /**
  * Class Registrar
@@ -19,14 +19,14 @@ use App\Events\UserWasRegistered;
 class Registrar
 {
     /**
-     * Register new user in a system
+     * Register new user in a system.
      *
-     * @param string $username
-     * @param string $email
-     * @param string $password
-     * @param int    $balance
-     * @param bool   $admin
-     * @param bool   $forceActivate
+     * @param string $username      New user username.
+     * @param string $email         New user email.
+     * @param string $password      New user plain password.
+     * @param int    $balance       Starting user balance.
+     * @param bool   $admin         Is new user admin?
+     * @param bool   $forceActivate Activate the user without confirming the email address.
      *
      * @throws UsernameAlreadyExistsException
      * @throws EmailAlreadyExistsException

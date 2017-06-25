@@ -2,7 +2,13 @@
 
 namespace App\Http\Controllers\Admin\Users;
 
+use App\Http\Requests\Admin\BlockUserRequest;
 use App\Http\Requests\Admin\SaveEditedUserRequest;
+use App\Models\User;
+use App\Repositories\BanRepository;
+use App\Services\Ban;
+use Cartalyst\Sentinel\Roles\EloquentRole;
+use Cartalyst\Sentinel\Users\UserInterface;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -16,11 +22,12 @@ use App\Http\Controllers\Controller;
 class EditController extends Controller
 {
     /**
-     * @param Request $request
+     * @param Request       $request
+     * @param BanRepository $banRepository
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request, BanRepository $banRepository)
     {
         $user = \Sentinel::findById((int)$request->route('edit'));
         if (!$user) {
@@ -28,9 +35,13 @@ class EditController extends Controller
 
             return response()->redirectToRoute('admin.users.list', ['server' => $request->get('currentServer')->id]);
         }
+
+        $ban = app(Ban::class, ['user' => $user, 'repository' => $banRepository]);
+
         $data = [
             'currentServer' => $request->get('currentServer'),
-            'user' => $user
+            'user' => $user,
+            'ban' => $ban
         ];
 
         return view('admin.users.edit', $data);
@@ -46,6 +57,8 @@ class EditController extends Controller
         $id = (int)$request->route('edit');
         $username = $request->get('username');
         $email = $request->get('email');
+
+        /** @var User $user */
         $user = \Sentinel::findById($id);
         if (!$user) {
             \Message::danger('Пользователь не найден');
@@ -78,7 +91,10 @@ class EditController extends Controller
             $update['password'] = bcrypt($request->get('password'));
         }
         if ($user->update($update)) {
+            /** @var EloquentRole $adminRole */
             $adminRole = \Sentinel::findRoleBySlug('admin');
+
+            /** @var EloquentRole $userRole */
             $userRole = \Sentinel::findRoleBySlug('user');
             if ($admin) {
                 if (!$user->inRole($adminRole)) {
@@ -106,8 +122,16 @@ class EditController extends Controller
      */
     public function remove(Request $request)
     {
+        /** @var UserInterface|User $user */
         $user = \Sentinel::findById((int)$request->route('user'));
         if ($user) {
+
+            if ($user->getUserId() === \Sentinel::getUser()->getUserId()) {
+                \Message::warning('Вы не можите удалить самого себя');
+
+                return back();
+            }
+
             $user->delete();
             \Message::info('Пользователь удален');
         }else {
@@ -138,6 +162,72 @@ class EditController extends Controller
             \Message::info('Логин-сессии данного пользователя успешно сброшены!');
         }else {
             \Message::danger('Не удалось сбросить логин-сессии данного пользователя!');
+        }
+
+        return back();
+    }
+
+    /**
+     * @param BlockUserRequest $request
+     * @param BanRepository            $banRepository
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function block(BlockUserRequest $request, BanRepository $banRepository)
+    {
+        /** @var User|UserInterface $user */
+        $user = \Sentinel::findById((int)$request->route('user'));
+        $duration = (int)$request->get('duration');
+        $reason = $request->get('reason');
+
+        if (!$user) {
+            json_response('user not found');
+
+            return json_response('user not found');
+        }
+
+        if ($user->getUserId() === \Sentinel::getUser()->getUserId()) {
+            return json_response('You can not block yourself');
+        }
+
+        /** @var Ban $ban */
+        $ban = app(Ban::class, ['user' => $user, 'repository' => $banRepository]);
+
+        $result = $ban->banForDays($duration, $reason);
+
+        if ($result) {
+            return json_response('success', [
+                'unblock' => build_ban_message($result->until, $result->reason)
+            ]);
+        }
+
+        return json_response('failed');
+    }
+
+    /**
+     * @param Request       $request
+     * @param BanRepository $banRepository
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function unblock(Request $request, BanRepository $banRepository)
+    {
+        /** @var User|UserInterface $user */
+        $user = \Sentinel::findById((int)$request->route('user'));
+
+        if (!$user) {
+            \Message::danger('Пользователь не найден');
+
+            return response()->redirectToRoute('admin.users.list', ['server' => $request->get('currentServer')->id]);
+        }
+
+        /** @var Ban $ban */
+        $ban = app(Ban::class, ['user' => $user, 'repository' => $banRepository]);
+
+        if ($ban->unblock()) {
+            \Message::info('Пользователь разблокирован');
+        } else {
+            \Message::danger('Неудалось разблокировать пользователя');
         }
 
         return back();

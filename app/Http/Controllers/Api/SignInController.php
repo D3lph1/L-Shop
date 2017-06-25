@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers\Api;
 
+use App\Exceptions\User\BannedException;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 /**
  * Class SignInController
@@ -53,8 +53,14 @@ class SignInController extends ApiController
             return $this->redirectToServers();
         }
 
-        if (\Sentinel::authenticate($user, (bool)s_get('api.signin.remember_user'))) {
-            \Message::success("Добро пожаловать, $username");
+        try {
+            if (\Sentinel::authenticate($user, (bool)s_get('api.signin.remember_user'))) {
+                \Message::success("Добро пожаловать, $username");
+
+                return $this->redirectToServers();
+            }
+        } catch (BannedException $e) {
+            \Message::danger(build_ban_message($e->getUntil(), $e->getReason()));
 
             return $this->redirectToServers();
         }

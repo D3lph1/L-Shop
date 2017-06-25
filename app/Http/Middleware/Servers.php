@@ -91,7 +91,7 @@ class Servers
      */
     private function getCurrentServer($server)
     {
-        return $this->serverRepository->find((int)$server, ['id', 'name', 'enabled']);
+        return $this->serverRepository->find((int)$server, ['id', 'name', 'enabled', 'ip', 'port', 'password', 'monitoring_enabled']);
     }
 
     /**
@@ -101,6 +101,6 @@ class Servers
      */
     private function getServers()
     {
-        return $this->serverRepository->all(['id', 'name', 'enabled']);
+        return $this->serverRepository->all(['id', 'name', 'enabled', 'ip', 'port', 'password', 'monitoring_enabled']);
     }
 }

@@ -210,3 +210,9 @@ function setRemember(key, value) {
     remember[key] = value;
     setCookie('lshop_remember', JSON.stringify(remember));
 }
+
+function showErrors(errors) {
+    for (i = 0; i < errors.length; i++) {
+        msg.danger(errors[i]);
+    }
+}

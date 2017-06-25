@@ -27,3 +27,11 @@ $(document).ready(function () {
     // Hide preloader when the page is ready
     $('#pre-loader').fadeOut();
 });
+
+$(function () {
+    $('[data-toggle="tooltip"]').tooltip()
+});
+
+$(function () {
+    $('[data-toggle="popover"]').popover()
+});

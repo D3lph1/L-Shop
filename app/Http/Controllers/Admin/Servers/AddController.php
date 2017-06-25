@@ -17,6 +17,8 @@ use App\Http\Controllers\Controller;
 class AddController extends BaseController
 {
     /**
+     * Render the add new server page
+     *
      * @param Request $request
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -40,11 +42,15 @@ class AddController extends BaseController
         $name = $request->get('server_name');
         $enabled = (bool)$request->get('enabled');
         $categories = $request->get('categories');
+        $ip = $request->get('server_ip');
+        $port = $request->get('server_port');
+        $password = $request->get('server_password');
+        $monitoringEnabled = (bool)$request->get('server_monitoring_enabled');
 
         // ~~~~~~~~~~ MAIN METHOD ~~~~~~~~~~ //
-        $this->serverService->createServer($name, $enabled, $categories);
+        $this->serverService->createServer($name, $enabled, $categories, $ip, $port, $password, $monitoringEnabled);
 
-        \Message::success("Сервер \"{$request->get('server_name')}\" успешно создан");
+        \Message::success("Сервер \"{$request->get('server_name')}\" успешно создан.");
 
         return response()->redirectToRoute('admin.servers.list', [
             'server' => $request->get('currentServer')->id

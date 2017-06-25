@@ -25,6 +25,7 @@ class BaseController extends Controller
     {
         $this->serverService = $server;
         $this->serverRepository = $serverRepository;
+
         parent::__construct();
     }
 }

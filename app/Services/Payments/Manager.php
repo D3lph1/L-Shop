@@ -5,7 +5,6 @@ namespace App\Services\Payments;
 use App\Exceptions\Payment\InvalidProductsCountException;
 use App\Models\Payment;
 use App\Services\QueryManager;
-use App\Exceptions\LShopException;
 use App\Exceptions\InvalidArgumentTypeException;
 
 /**
@@ -37,14 +36,12 @@ class Manager
     private $username = null;
 
     /**
-     * @var double
+     * @var double Balance of given user.
      */
     private $userBalance;
 
     /**
-     * Ip Address the computer from which the payment was created
-     *
-     * @var null|string
+     * @var null|string Ip Address the computer from which the payment was created.
      */
     private $ip = null;
 
@@ -59,7 +56,7 @@ class Manager
     private $productsCountType;
 
     /**
-     * @var int
+     * @var int Total cost of this order.
      */
     private $cost = 0;
 
@@ -93,8 +90,9 @@ class Manager
     }
 
     /**
+     * @throws \LogicException
+     *
      * @return bool
-     * @throws LShopException
      */
     private function checkOnQuick()
     {
@@ -103,7 +101,7 @@ class Manager
         }
 
         if (!is_auth()) {
-            throw new LShopException('Username is not set and the user is not authorized');
+            throw new \LogicException('Username is not set and the user is not authorized');
         }
 
         $this->username = \Sentinel::getUser()->getUserId();
@@ -127,6 +125,8 @@ class Manager
     }
 
     /**
+     * Create new payment in database.
+     *
      * @param bool $isQuick
      *
      * @return Payment
@@ -146,11 +146,11 @@ class Manager
     }
 
     /**
-     * @param array $ids Array with product identifiers
-     * @param array $count Array with product counts
+     * @param array $ids Array with product identifiers.
+     * @param array $count Array with product counts.
      *
      * @throws InvalidProductsCountException
-     * @throws LShopException
+     * @throws \LogicException
      */
     private function setHandledProductsAndCost($ids, $count)
     {
@@ -201,7 +201,7 @@ class Manager
         }
 
         if (!$result) {
-            throw new LShopException('Products referred to arguments not found');
+            throw new \LogicException('Products referred to arguments not found');
         }
 
         $this->products = $result;
@@ -209,6 +209,8 @@ class Manager
     }
 
     /**
+     * Update the user's balance if there are enough funds on his balance sheet.
+     *
      * @return bool
      */
     private function updateBalance()
@@ -225,7 +227,9 @@ class Manager
     }
 
     /**
-     * @param array $ids Array with product identifiers
+     * Retrieve products with items from database by given identifiers.
+     *
+     * @param array $ids Array with product identifiers.
      *
      * @return mixed
      */
@@ -240,15 +244,16 @@ class Manager
     }
 
     /**
-     * @param int $server
+     * @param int $server Server identifier.
+     *
+     * @throws InvalidArgumentTypeException
      *
      * @return Manager
-     * @throws InvalidArgumentTypeException
      */
     public function setServer($server)
     {
         if (!is_int($server)) {
-            throw new InvalidArgumentTypeException('string', $server);
+            throw new InvalidArgumentTypeException('integer', $server);
         }
         $this->server = $server;
 
@@ -258,8 +263,9 @@ class Manager
     /**
      * @param string $username
      *
-     * @return Manager
      * @throws InvalidArgumentTypeException
+     *
+     * @return Manager
      */
     public function setUsername($username)
     {
@@ -272,10 +278,13 @@ class Manager
     }
 
     /**
-     * @param string $ip
+     * It sets ip address from which the order was made.
+     *
+     * @param string $ip Ip address.
+     *
+     * @throws InvalidArgumentTypeException
      *
      * @return Manager
-     * @throws InvalidArgumentTypeException
      */
     public function setIp($ip)
     {

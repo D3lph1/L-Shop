@@ -29,14 +29,4 @@ class SaveSecurityRequest extends FormRequest
             'enable_change_password' => 'boolean'
         ];
     }
-
-    public function messages()
-    {
-        return [
-            'recaptcha_public_key.required' => trans('validation.required', ['attribute' => 'Публичный ключ ReCAPTCHA']),
-            'recaptcha_secret_key.required' => trans('validation.required', ['attribute' => 'Секретный ключ ReCAPTCHA']),
-            'recaptcha_public_key.size' => trans('validation.size.string', ['attribute' => 'Публичный ключ ReCAPTCHA']),
-            'recaptcha_secret_key.size' => trans('validation.size.string', ['attribute' => 'Публичный ключ ReCAPTCHA'])
-        ];
-    }
 }

@@ -6,6 +6,7 @@ use App\Exceptions\User\RemindCodeNotFound;
 use App\Exceptions\User\UnableToCompleteRemindException;
 use App\Mail\ForgotPassword;
 use App\Exceptions\User\NotFoundException;
+use App\Models\User;
 use Cartalyst\Sentinel\Users\UserInterface;
 use Cartalyst\Sentinel\Reminders\EloquentReminder;
 
@@ -19,8 +20,8 @@ use Cartalyst\Sentinel\Reminders\EloquentReminder;
 class Reminder
 {
     /**
-     * @param string $email
-     * @param string $ip
+     * @param string $email User email address
+     * @param string $ip    User ip address
      */
     public function forgot($email, $ip)
     {
@@ -31,7 +32,7 @@ class Reminder
     }
 
     /**
-     * @param int $userId
+     * @param int    $userId
      * @param string $code
      * @param string $password
      *
@@ -49,8 +50,8 @@ class Reminder
     }
 
     /**
-     * @param int $userId
-     * @param string $code
+     * @param int    $userId User identifier.
+     * @param string $code   Code for reset password.
      *
      * @return bool
      */
@@ -61,6 +62,15 @@ class Reminder
         return \Reminder::exists($user, $code);
     }
 
+    /**
+     * Complete the password recovery.
+     *
+     * @param int    $userId   User identifier.
+     * @param string $code     Code for reset password.
+     * @param string $password New password.
+     *
+     * @return bool
+     */
     private function complete($userId, $code, $password)
     {
         $user = \Sentinel::findById($userId);
@@ -69,9 +79,9 @@ class Reminder
     }
 
     /**
-     * Get user by email
+     * Get user by email.
      *
-     * @param string $email
+     * @param string $email User email.
      *
      * @throws NotFoundException
      *
@@ -88,8 +98,16 @@ class Reminder
         return $user;
     }
 
+    /**
+     * Send email for password reset.
+     *
+     * @param UserInterface    $user
+     * @param EloquentReminder $reminder
+     * @param                  $ip
+     */
     private function sendEmail(UserInterface $user, EloquentReminder $reminder, $ip)
     {
+        /** @var User $user */
         \Mail::to($user->email)->queue(new ForgotPassword($user->id, $user->username, $reminder->code, $ip));
     }
 }

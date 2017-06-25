@@ -76,6 +76,24 @@ Route::group(['namespace' => 'Auth'], function () {
         ->middleware('servers:all');
 });
 
+Route::get('/skin/{user}/front', 'SkinController@skinFront')
+    ->name('skin.front');
+
+Route::get('/skin/{user}/back', 'SkinController@skinBack')
+    ->name('skin.back');
+
+Route::get('/head/{user}/front', 'SkinController@headFront')
+    ->name('head.front');
+
+Route::get('/head/{user}/back', 'SkinController@headBack')
+    ->name('head.back');
+
+Route::get('/cloak/{user}/front', 'SkinController@cloakFront')
+    ->name('cloak.front');
+
+Route::get('/cloak/{user}/back', 'SkinController@cloakBack')
+    ->name('cloak.back');
+
 Route::group(['namespace' => 'Shop', 'where' => ['server' => '\d+']], function () {
     // Route of main shop page
     Route::get('/server/{server}/{category?}', 'CatalogController@render')
@@ -170,6 +188,19 @@ Route::group(['namespace' => 'Payment'], function () {
 });
 
 Route::group(['namespace' => 'Profile', 'where' => ['server' => '\d+']], function () {
+    Route::get('/server/{server}/profile/character', 'CharacterController@render')
+        ->name('profile.character')
+        ->middleware([
+            'servers:all',
+            'auth:hard'
+        ]);
+
+    Route::post('/upload/skin', 'CharacterController@uploadSkin')
+        ->name('profile.character.skin.upload');
+
+    Route::post('/upload/cloak', 'CharacterController@uploadCloak')
+        ->name('profile.character.cloak.upload');
+
     Route::get('/server/{server}/profile/payments', 'PaymentsController@render')
         ->name('profile.payments')
         ->middleware([
@@ -592,12 +623,14 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
     /**
      * USERS SECTION
      */
+    Route::post('/server/{server}/admin/users/search', 'Users\ListController@search')
+        ->name('admin.users.search')
+        ->middleware('servers:one');
+
     // Render page with users list
     Route::get('/server/{server}/admin/users/list', 'Users\ListController@render')
         ->name('admin.users.list')
-        ->middleware([
-            'servers:all'
-        ]);
+        ->middleware('servers:all');
 
     // Render page with users list
     Route::any('/server/{server}/admin/users/complete/{user}', 'Users\ListController@complete')
@@ -620,6 +653,11 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
             'servers:one'
         ]);
 
+    Route::post('/server/{server}/admin/users/unblock/{user}', 'Users\EditController@unblock')
+        ->name('admin.users.unblock')
+        ->middleware('servers:one')
+        ->where('user', '\d+');
+
     // Remove given user
     Route::any('/server/{server}/admin/users/remove/{user}', 'Users\EditController@remove')
         ->name('admin.users.edit.remove')
@@ -633,6 +671,10 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
         ->middleware([
             'servers:one'
         ]);
+
+    Route::post('/server/{server}/admin/users/block/{user}', 'Users\EditController@block')
+        ->name('admin.users.block')
+        ->middleware('servers:one');
     /**
      * END USERS SECTION
      */

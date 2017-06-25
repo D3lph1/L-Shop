@@ -32,28 +32,4 @@ class SignUpRequest extends FormRequest
             'password' => 'required|confirmed|max:191|min:' . config('l-shop.validation.password.min')
         ];
     }
-
-    /***
-     * @return array
-     */
-    public function messages()
-    {
-        return [
-            'username.required' => trans('validation.required', ['attribute' => 'Имя пользователя']),
-            'username.min' => trans('validation.min.string', ['attribute' => 'Имя пользователя']),
-            'username.max' => trans('validation.max.string', ['attribute' => 'Имя пользователя']),
-            'username.alpha_dash' => trans('validation.alpha_dash', ['attribute' => 'Имя пользователя']),
-            'username.regex' => trans('validation.regex', ['attribute' => 'Имя пользователя']),
-
-            'email.required' => trans('validation.required', ['attribute' => 'Адрес электронной почты']),
-            'email.unique' => trans('validation.unique', ['attribute' => 'Адрес электронной почты']),
-            'email.min' => trans('validation.min.string', ['attribute' => 'Адрес электронной почты']),
-            'email.max' => trans('validation.max.string', ['attribute' => 'Адрес электронной почты']),
-
-            'password.required' => trans('validation.required', ['attribute' => 'Пароль']),
-            'password.min' => trans('validation.min.string', ['attribute' => 'Пароль']),
-            'password.max' => trans('validation.max.string', ['attribute' => 'Пароль']),
-            'password.confirmed' => trans('validation.confirmed', ['attribute' => 'Пароль'])
-        ];
-    }
 }
