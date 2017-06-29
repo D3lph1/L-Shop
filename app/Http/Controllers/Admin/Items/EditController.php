@@ -32,6 +32,8 @@ class EditController extends Controller
     }
 
     /**
+     * Render the edit item page.
+     *
      * @param Request $request
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -60,6 +62,8 @@ class EditController extends Controller
     }
 
     /**
+     * Handle the save edited item request.
+     *
      * @param SaveEditedItemRequest $request
      *
      * @return \Illuminate\Http\RedirectResponse
@@ -87,6 +91,8 @@ class EditController extends Controller
     }
 
     /**
+     * Remove item request.
+     *
      * @param Request $request
      *
      * @return \Illuminate\Http\RedirectResponse

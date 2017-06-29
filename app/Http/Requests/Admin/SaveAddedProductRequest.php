@@ -25,7 +25,7 @@ class SaveAddedProductRequest extends FormRequest
     {
         return [
             'item' => 'required|numeric',
-            'stack' => 'required|numeric|integer|min:0',
+            'stack' => 'required|integer|min:0',
             'price' => 'required|numeric|min:0.001',
             'sort_priority' => 'required|numeric',
             'server' => 'required|numeric',

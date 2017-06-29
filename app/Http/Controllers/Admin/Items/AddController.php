@@ -22,6 +22,11 @@ class AddController extends Controller
      */
     private $adminItems;
 
+    /**
+     * AddController constructor.
+     *
+     * @param AdminItems $adminItems
+     */
     public function __construct(AdminItems $adminItems)
     {
         $this->adminItems = $adminItems;
@@ -29,6 +34,8 @@ class AddController extends Controller
     }
 
     /**
+     * Render the add new item page.
+     *
      * @param Request $request
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -43,6 +50,8 @@ class AddController extends Controller
     }
 
     /**
+     * Handle the add new item request.
+     *
      * @param SaveAddedItemRequest $request
      *
      * @return \Illuminate\Http\RedirectResponse

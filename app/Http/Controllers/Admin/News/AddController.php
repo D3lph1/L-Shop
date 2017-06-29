@@ -18,7 +18,7 @@ use App\Http\Controllers\Controller;
 class AddController extends Controller
 {
     /**
-     * Render add news page
+     * Render the add news page.
      *
      * @param Request $request
      *
@@ -34,7 +34,7 @@ class AddController extends Controller
     }
 
     /**
-     * Save added news
+     * Save added news.
      *
      * @param SaveAddedNewsRequest $request
      * @param News                 $news Service - handler

@@ -16,7 +16,7 @@ use App\Http\Controllers\Controller;
 class ApiController extends Controller
 {
     /**
-     * Render API settings page
+     * Render API settings page.
      *
      * @param Request $request
      *
@@ -45,7 +45,7 @@ class ApiController extends Controller
     }
 
     /**
-     * Save API settings
+     * Save API settings.
      *
      * @param SaveApiRequest $request
      *
@@ -77,7 +77,7 @@ class ApiController extends Controller
     }
 
     /**
-     * Convert given whitelist string in needed format
+     * Convert given whitelist string in needed format.
      *
      * @param $whiteList
      *

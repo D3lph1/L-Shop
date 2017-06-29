@@ -17,7 +17,7 @@ use App\Http\Requests\Admin\SaveMainSettingsRequest;
 class MainSettingsController extends Controller
 {
     /**
-     * Render the main settings page
+     * Render the main settings page.
      *
      * @param Request $request
      *
@@ -60,7 +60,7 @@ class MainSettingsController extends Controller
     }
 
     /**
-     * Save main settings options
+     * Save main settings options.
      *
      * @param SaveMainSettingsRequest $request
      *
@@ -111,9 +111,9 @@ class MainSettingsController extends Controller
     }
 
     /**
-     * Enable/disable maintenance mode
+     * Enable/disable maintenance mode.
      *
-     * @param $maintenance
+     * @param bool $maintenance
      */
     public function maintenance($maintenance)
     {

@@ -15,6 +15,13 @@ use App\Http\Controllers\Controller;
  */
 class SecurityController extends Controller
 {
+    /**
+     * Render security settings page.
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function render(Request $request)
     {
         $data = [
@@ -28,6 +35,13 @@ class SecurityController extends Controller
         return view('admin.control.security', $data);
     }
 
+    /**
+     * Handle the save security settings request.
+     *
+     * @param SaveSecurityRequest $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function save(SaveSecurityRequest $request)
     {
         s_set([

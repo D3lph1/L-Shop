@@ -7,10 +7,17 @@ use App\Services\Mailer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+/**
+ * Class DebugController
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Http\Controllers\Admin\Other
+ */
 class DebugController extends Controller
 {
     /**
-     * Render debug page
+     * Render debug page.
      *
      * @param Request $request
      *
@@ -26,7 +33,7 @@ class DebugController extends Controller
     }
 
     /**
-     * Send test message on given email
+     * Send test message on given email.
      *
      * @param TestMailRequest $request
      * @param Mailer          $mailer
@@ -42,6 +49,7 @@ class DebugController extends Controller
             $mailer->sendTest($address);
         } catch (\Exception $e) {
             \Log::error($e);
+            // Write debug information in the flash session for user.
             \Session::flash('test_mail_exception', $e->getMessage());
             $error = true;
         }

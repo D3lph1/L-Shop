@@ -17,6 +17,8 @@ use App\Http\Controllers\Controller;
 class PaymentsController extends Controller
 {
     /**
+     * Render the payments list page.
+     *
      * @param Request           $request
      * @param PaymentRepository $pr
      * @param UserRepository    $ur
@@ -54,6 +56,8 @@ class PaymentsController extends Controller
     }
 
     /**
+     * Get detail information about concrete payment.
+     *
      * @param Request $request
      *
      * @return \Illuminate\Http\JsonResponse
@@ -94,6 +98,13 @@ class PaymentsController extends Controller
         ]);
     }
 
+    /**
+     * Complete given payment request.
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function complete(Request $request)
     {
         $result = \Artisan::call('payment:complete', ['id' => $request->route('payment')]);

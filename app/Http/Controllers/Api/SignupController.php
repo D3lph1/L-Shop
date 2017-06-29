@@ -18,7 +18,7 @@ use App\Exceptions\User\UsernameAlreadyExistsException;
 class SignupController extends ApiController
 {
     /**
-     * Signup user by API
+     * Signup user by API.
      *
      * @param Request   $request
      * @param Registrar $registrar
@@ -44,7 +44,7 @@ class SignupController extends ApiController
         }
 
         try {
-            // Register new user
+            // Register new user.
             $registrar->register($username, $email, $password, $balance, (bool)$forceActivate, $admin);
         } catch (UsernameAlreadyExistsException $e) {
             return json_response('username already exists', ['code' => 1]);

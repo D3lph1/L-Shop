@@ -13,6 +13,13 @@ use App\Http\Controllers\Controller;
  */
 class ApiController extends Controller
 {
+    /**
+     * Check given api param for enabled status.
+     *
+     * @param null|string $option
+     *
+     * @return bool
+     */
     protected function isEnabled($option = null)
     {
         if (is_null($option)) {
@@ -23,7 +30,7 @@ class ApiController extends Controller
     }
 
     /**
-     * It checks whether the hash transmitted in the request matches the calculated hash of the query parameters
+     * It checks whether the hash transmitted in the request matches the calculated hash of the query parameters.
      *
      * @param string $hash
      * @param array  ...$params
@@ -43,11 +50,11 @@ class ApiController extends Controller
     }
 
     /**
-     * Build string for hashing from params
+     * Build string for hashing from params.
      *
-     * @param string $key Secret API key
-     * @param string $separator String (character) separating parameters
-     * @param array  $params Params
+     * @param string $key Secret API key.
+     * @param string $separator String (character) separating parameters.
+     * @param array  $params Params.
      *
      * @return string
      */
@@ -62,7 +69,7 @@ class ApiController extends Controller
     }
 
     /**
-     * Build response if option disabled
+     * Build response if option disabled.
      *
      * @return \Illuminate\Http\JsonResponse
      */
@@ -72,7 +79,7 @@ class ApiController extends Controller
     }
 
     /**
-     * Build response if hash is not valid
+     * Build response if hash is not valid.
      *
      * @return \Illuminate\Http\JsonResponse
      */

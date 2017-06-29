@@ -15,6 +15,8 @@ use App\Http\Controllers\Controller;
 class DocsController extends Controller
 {
     /**
+     * Render the documentation menu page.
+     *
      * @param Request $request
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -29,6 +31,8 @@ class DocsController extends Controller
     }
 
     /**
+     * Render page with main documentation.
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function main()
@@ -37,6 +41,8 @@ class DocsController extends Controller
     }
 
     /**
+     * Render page with L-Shop API documentation.
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function api()
@@ -45,6 +51,8 @@ class DocsController extends Controller
     }
 
     /**
+     * Render page with Sashok724's integration guide.
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function sashokLauncherIntegration()
@@ -53,6 +61,8 @@ class DocsController extends Controller
     }
 
     /**
+     * Render page with L-Shop CLI documentation.
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function cli()

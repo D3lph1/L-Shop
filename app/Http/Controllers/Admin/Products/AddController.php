@@ -34,7 +34,7 @@ class AddController extends Controller
     }
 
     /**
-     * Render add product page
+     * Render the add product page.
      *
      * @param Request $request
      *
@@ -65,6 +65,8 @@ class AddController extends Controller
     }
 
     /**
+     * Save new product request.
+     *
      * @param SaveAddedProductRequest $request
      *
      * @return \Illuminate\Http\RedirectResponse

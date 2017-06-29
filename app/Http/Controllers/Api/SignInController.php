@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 class SignInController extends ApiController
 {
     /**
-     * Authenticate user by request to API
+     * Authenticate user by request to API.
      *
      * @param Request $request
      *

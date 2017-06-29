@@ -7,16 +7,38 @@ use App\Services\Page;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+/**
+ * Class EditController
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Http\Controllers\Admin\Pages
+ */
 class EditController extends Controller
 {
+    /**
+     * @var Page
+     */
     private $page;
 
+    /**
+     * EditController constructor.
+     *
+     * @param Page $page
+     */
     public function __construct(Page $page)
     {
         $this->page = $page;
         parent::__construct();
     }
 
+    /**
+     * Render the edit static page request.
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function render(Request $request)
     {
         $id = (int)$request->route('id');
@@ -36,7 +58,7 @@ class EditController extends Controller
     }
 
     /**
-     * Handle save edited static page request
+     * Handle save edited static page request.
      *
      * @param SaveEditedPageRequest $request
      *
@@ -70,6 +92,13 @@ class EditController extends Controller
         return back();
     }
 
+    /**
+     * Delete given static page.
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function delete(Request $request)
     {
         $id = (int)$request->route('id');
