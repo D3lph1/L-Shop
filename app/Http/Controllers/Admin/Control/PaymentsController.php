@@ -16,7 +16,7 @@ use App\Http\Controllers\Controller;
 class PaymentsController extends Controller
 {
     /**
-     * Available hash algos for robokassa
+     * Available hash algos for robokassa.
      *
      * @var array
      */
@@ -30,6 +30,8 @@ class PaymentsController extends Controller
     ];
 
     /**
+     * Render payments settings page.
+     *
      * @param Request $request
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -52,6 +54,13 @@ class PaymentsController extends Controller
         return view('admin.control.payments', $data);
     }
 
+    /**
+     * Handle the save payments settings request.
+     *
+     * @param SavePaymentsRequest $request
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function save(SavePaymentsRequest $request)
     {
         $this->all($request);
@@ -71,7 +80,7 @@ class PaymentsController extends Controller
     }
 
     /**
-     * Save all settings
+     * Save all settings.
      *
      * @param $request
      */
@@ -82,9 +91,9 @@ class PaymentsController extends Controller
     }
 
     /**
-     * Save settings for robokassa
+     * Save settings for robokassa.
      *
-     * @param $request
+     * @param Request $request
      */
     private function robokassa($request)
     {
@@ -109,7 +118,7 @@ class PaymentsController extends Controller
     }
 
     /**
-     * Check algo on correct name
+     * Check algo on correct name.
      *
      * @param string $algo
      * @param string $service

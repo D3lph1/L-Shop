@@ -10,7 +10,7 @@ use Illuminate\Http\Request;
 
 /**
  * Class SashokLauncher
- * Integration Sashok724's launcher in L-Shop system
+ * Integration Sashok724's launcher in L-Shop system.
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  *
@@ -18,16 +18,19 @@ use Illuminate\Http\Request;
  */
 class SashokLauncher extends ApiController
 {
+    /**
+     * SashokLauncher constructor.
+     */
     public function __construct()
     {
-        // Disable debugbar on this actions
+        // Disable debugbar on this actions for authorization to work even in debug mode.
         \Debugbar::disable();
 
         parent::__construct();
     }
 
     /**
-     * Handle authenticate request
+     * Handle authenticate request.
      *
      * @param Request                      $request
      * @param \App\Services\SashokLauncher $handler

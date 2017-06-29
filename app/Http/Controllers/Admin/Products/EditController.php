@@ -31,7 +31,7 @@ class EditController extends Controller
     }
 
     /**
-     * Render edit product page
+     * Render the edit given product page.
      *
      * @param Request $request
      *
@@ -91,7 +91,7 @@ class EditController extends Controller
     }
 
     /**
-     * Save edited product
+     * Save edited product.
      *
      * @param SaveEditedProductRequest $request
      *

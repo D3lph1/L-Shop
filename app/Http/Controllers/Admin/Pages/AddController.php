@@ -7,10 +7,17 @@ use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveAddedPageRequest;
 
+/**
+ * Class AddController
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Http\Controllers\Admin\Pages
+ */
 class AddController extends Controller
 {
     /**
-     * Render add static page
+     * Render add static page.
      *
      * @param Request $request
      *
@@ -26,7 +33,7 @@ class AddController extends Controller
     }
 
     /**
-     * Save new static page
+     * Save new static page.
      *
      * @param SaveAddedPageRequest $request
      * @param Page                 $handler

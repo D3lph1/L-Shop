@@ -15,6 +15,8 @@ use App\Http\Controllers\Controller;
 class AboutController extends Controller
 {
     /**
+     * Render the about page.
+     *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
     public function render()

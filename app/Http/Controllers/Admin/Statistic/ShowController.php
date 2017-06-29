@@ -7,6 +7,13 @@ use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+/**
+ * Class ShowController
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Http\Controllers\Admin\Statistic
+ */
 class ShowController extends Controller
 {
     /**
@@ -14,6 +21,9 @@ class ShowController extends Controller
      */
     private $statistic;
 
+    /**
+     * @var array
+     */
     protected $months = [
         1 => 'Январь',
         2 => 'Февраль',
@@ -29,12 +39,24 @@ class ShowController extends Controller
         12 => 'Декабрь'
     ];
 
+    /**
+     * ShowController constructor.
+     *
+     * @param Statistic $statistic
+     */
     public function __construct(Statistic $statistic)
     {
         $this->statistic = $statistic;
         parent::__construct();
     }
 
+    /**
+     * Render the "show L-Shop statistic" page.
+     *
+     * @param Request $request
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function render(Request $request)
     {
         $payments = $this->statistic->forTheLastYearCompleted();
@@ -60,6 +82,11 @@ class ShowController extends Controller
         return view('admin.statistic.show', $data);
     }
 
+    /**
+     * Flush all statistic cache.
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function flushCache()
     {
         $key = 'admin.statistic.for_the_last_year_completed';

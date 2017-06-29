@@ -18,6 +18,14 @@ use App\Http\Controllers\Controller;
  */
 class EditController extends Controller
 {
+    /**
+     * Render the edit news page.
+     *
+     * @param Request        $request
+     * @param NewsRepository $newsRepository
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function render(Request $request, NewsRepository $newsRepository)
     {
         $id = (int)$request->route('id');
@@ -36,6 +44,8 @@ class EditController extends Controller
     }
 
     /**
+     * Handle the edit news request.
+     *
      * @param SaveEditedNewsRequest $request
      * @param News                  $news
      *
@@ -60,6 +70,14 @@ class EditController extends Controller
         return response()->redirectToRoute('admin.news.list', ['server' => $request->get('currentServer')->id]);
     }
 
+    /**
+     * Remove given news.
+     *
+     * @param Request $request
+     * @param News    $news
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
     public function remove(Request $request, News $news)
     {
         $id = (int)$request->route('id');

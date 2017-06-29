@@ -17,7 +17,7 @@ use App\Http\Controllers\Controller;
 class OptimizationController extends Controller
 {
     /**
-     * Render the optimization page
+     * Render the optimization page.
      *
      * @param Request $request
      *
@@ -37,7 +37,7 @@ class OptimizationController extends Controller
     }
 
     /**
-     * Handle save optimization settings request
+     * Handle save optimization settings request.
      *
      * @param SaveOptimizationRequest $request
      *
@@ -58,7 +58,7 @@ class OptimizationController extends Controller
     }
 
     /**
-     * Handle update routes cache request
+     * Handle update routes cache request.
      *
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -71,7 +71,7 @@ class OptimizationController extends Controller
     }
 
     /**
-     * Handle update config cache request
+     * Handle update config cache request.
      *
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -84,7 +84,7 @@ class OptimizationController extends Controller
     }
 
     /**
-     * Handle clear view cache request
+     * Handle clear view cache request.
      *
      * @return \Illuminate\Http\RedirectResponse
      */
@@ -97,7 +97,7 @@ class OptimizationController extends Controller
     }
 
     /**
-     * Handle clear app cache request
+     * Handle clear app cache request.
      *
      * @return \Illuminate\Http\RedirectResponse
      */

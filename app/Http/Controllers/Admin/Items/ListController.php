@@ -15,6 +15,8 @@ use App\Http\Controllers\Admin\ListParent;
 class ListController extends ListParent
 {
     /**
+     * Render page with items list.
+     *
      * @param Request $request
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View

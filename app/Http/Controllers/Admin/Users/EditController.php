@@ -22,6 +22,8 @@ use App\Http\Controllers\Controller;
 class EditController extends Controller
 {
     /**
+     * Render the edit given user page.
+     *
      * @param Request       $request
      * @param BanRepository $banRepository
      *
@@ -48,6 +50,8 @@ class EditController extends Controller
     }
 
     /**
+     * Handle the save editable user request.
+     *
      * @param SaveEditedUserRequest $request
      *
      * @return \Illuminate\Http\RedirectResponse
@@ -116,6 +120,8 @@ class EditController extends Controller
     }
 
     /**
+     * Remove given user request.
+     *
      * @param Request $request
      *
      * @return \Illuminate\Http\RedirectResponse
@@ -142,6 +148,8 @@ class EditController extends Controller
     }
 
     /**
+     * Destroy all login-sessions for given user.
+     *
      * @param Request $request
      *
      * @return \Illuminate\Http\RedirectResponse
@@ -168,6 +176,8 @@ class EditController extends Controller
     }
 
     /**
+     * Block this user.
+     *
      * @param BlockUserRequest $request
      * @param BanRepository            $banRepository
      *
@@ -205,6 +215,8 @@ class EditController extends Controller
     }
 
     /**
+     * Unblock this user.
+     *
      * @param Request       $request
      * @param BanRepository $banRepository
      *

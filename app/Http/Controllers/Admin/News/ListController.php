@@ -15,6 +15,14 @@ use App\Http\Controllers\Controller;
  */
 class ListController extends Controller
 {
+    /**
+     * Render page with news list.
+     *
+     * @param Request        $request
+     * @param NewsRepository $newsRepository
+     *
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
     public function render(Request $request, NewsRepository $newsRepository)
     {
         $news = $newsRepository->paginate(50, ['id', 'title', 'user_id', 'created_at', 'updated_at']);
