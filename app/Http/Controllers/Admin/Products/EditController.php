@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Products;
 
+use App\Repositories\ItemRepository;
 use App\Services\AdminProducts;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -33,11 +34,12 @@ class EditController extends Controller
     /**
      * Render the edit given product page.
      *
-     * @param Request $request
+     * @param Request        $request
+     * @param ItemRepository $itemRepository
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request, ItemRepository $itemRepository)
     {
         $product = $this->qm->productForAdmin($request->route('product'), [
             'products.id',
@@ -50,7 +52,7 @@ class EditController extends Controller
             'items.type'
         ]);
 
-        $items = $this->qm->items([
+        $items = $itemRepository->all([
             'id',
             'name',
             'type'
