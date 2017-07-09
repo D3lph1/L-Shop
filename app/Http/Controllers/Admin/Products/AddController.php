@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Products;
 
 use App\Exceptions\ItemNotFoundException;
 use App\Http\Requests\Admin\SaveAddedProductRequest;
+use App\Repositories\ItemRepository;
 use App\Services\AdminProducts;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -36,13 +37,14 @@ class AddController extends Controller
     /**
      * Render the add product page.
      *
-     * @param Request $request
+     * @param Request        $request
+     * @param ItemRepository $itemRepository
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request, ItemRepository $itemRepository)
     {
-        $items = $this->qm->items([
+        $items = $itemRepository->all([
             'id',
             'name',
             'type'
