@@ -42,9 +42,9 @@
 * Monitoring servers by means of RCON.
 * 3 main operating modes: purchases can only be made by guests. (Unauthorized users); Only authorized users; And those and those.
 * 2 types of order: quick purchase from the catalog and purchase after filling the basket.
-* (Profile) Recharge the user's balance.
-* (Profile) View the in-game basket.
-* (Profile) View the payment history.
+* Recharge the user's balance.
+* View the in-game basket.
+* View the payment history.
 * Separation into objects and goods.
 * Protection from the search of passwords by means of "freezing" the user for a while.
 * reCAPTCHA form protection.
