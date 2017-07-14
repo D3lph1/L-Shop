@@ -35,7 +35,7 @@ class Statistic
      */
     public function forTheLastYearCompleted()
     {
-        return $this->paymentRepository->forTheLastYearCompleted(['products', 'updated_at']);
+        return $this->paymentRepository->forTheLastYearCompleted(['products', 'cost', 'updated_at']);
     }
 
     /**

@@ -79,6 +79,9 @@
                                 </p>
                                 <div class="collapse" id="collapseOtherUserActions">
                                     <div class="md-form text-left">
+                                        <a href="#" class="btn btn-warning btn-sm btn-block" data-toggle="modal" data-target="#admin-users-edit-show-cart">Просмотр внутриигровой корзины</a>
+                                    </div>
+                                    <div class="md-form text-left">
                                         <a href="{{ route('admin.users.edit.destroy_sessions', ['server' => $currentServer->id, 'user' => $user->id]) }}" class="btn danger-color btn-sm btn-block">Сбросить все логин - сессии данного пользователя</a>
                                     </div>
                                     @if($user->getUserId() !== \Sentinel::getUser()->getUserId())
@@ -125,5 +128,51 @@
         <i class="fa fa-pencil prefix"  data-toggle="popover" data-placement="right" data-trigger="hover" title="Подсказка" data-content="Причина блокировки указывается, дабы вы и сам пользователь знали о том, за что его аккаунт заблокировали. Это поле необязательно для заполнения."></i>
         <input type="text" id="admin-users-edit-ban-reason" class="form-control">
         <label for="admin-users-edit-ban-reason" class="ckeckbox-label">Причина блокировки</label>
+    </div>
+@endcomponent
+
+@component('components.modal')
+    @slot('id')
+        admin-users-edit-show-cart
+    @endslot
+    @slot('title')
+        Просмотр внутриигровой корзины
+    @endslot
+    @slot('buttons')
+        <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Понятно</button>
+    @endslot
+    <div class="md-form text-left">
+        @if($cart->count())
+            <div class="table-responsive">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Изображение</th>
+                        <th>Предмет</th>
+                        <th>Количество / длительность</th>
+                        <th>Сервер</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach($cart as $item)
+                        <tr>
+                            <td><img height="35" width="35" src="@if(is_file(img_path("items/$item->image"))) {{ asset("img/items/{$item->image}") }} @else {{ asset("img/empty.png") }} @endif"></td>
+                            <td>{{ $item->name }}</td>
+                            <td>{{ $item->amount }}</td>
+                            @foreach($servers as $server)
+                                @if($server->id == $item->server)
+                                    <td>{{ $server->name }}</td>
+                                @endif
+                            @endforeach
+                        </tr>
+                    @endforeach
+                    </tbody>
+                </table>
+            </div>
+        @else
+            <div class="text-center">
+                <h3>Корзина пуста</h3>
+            </div>
+        @endif
     </div>
 @endcomponent

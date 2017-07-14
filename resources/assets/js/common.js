@@ -6,7 +6,7 @@
  * Perform user authentication attempts by pressing the enter key
  */
 $('#si-username, #si-password').keyup(function (event) {
-    if (event.keyCode == 13) {
+    if (event.keyCode === 13) {
         signin(this);
     }
 });
@@ -1107,4 +1107,85 @@ $('#admin-users-search')
     });
 /**
  * End of search user section
+ */
+
+/**
+ * Rcon console section
+ */
+
+$('.rcon-dropdown-item').click(function () {
+    var id = $(this).attr('data-server-id');
+
+    $('.rcon-choose-server').hide();
+    $('.rcon-server').hide();
+    $('.rcon-server[data-server-id=' + id + ']').show();
+    $('.rcon-options').show();
+    msg.info('Выбран сервер ' + $(this).html());
+});
+
+$('.rcon-btn').click(function () {
+    disable(this);
+    execRcon(this);
+});
+
+$('.rcon-input').keyup(function (event) {
+    if (event.keyCode === 13) {
+        execRcon(this);
+    }
+});
+
+function execRcon(self) {
+    var id = $(self).attr('data-server-id');
+    var input = $('.rcon-input[data-server-id=' + id + ']');
+    var val = input.val();
+
+    if (val === '') {
+        msg.warning('Вам следует ввести команду!');
+
+        return;
+    }
+
+    var date = new Date();
+    var time = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
+    var list = $('.rcon-list[data-server-id=' + id + ']');
+
+    list.prepend('<li class="list-group-item justify-content-between rcon-sent">> ' + val + '<span class="badge grey badge-pill">' + time +'</span></li>');
+    input.val('');
+
+    $.ajax({
+        url: $(self).attr('data-url'),
+        method: 'POST',
+        data: ({
+            _token: getToken(),
+            cmd: val,
+            colorize: $('#rcon-colorize').prop('checked') ? 1 : 0
+        }),
+        dataType: 'json',
+        success: function (response) {
+            var status = response.status;
+
+            if (status === 'success') {
+                list.prepend('<li class="list-group-item justify-content-between">' + response.result + '<span class="badge grey badge-pill">' + time + '</span></li>');
+            } else if (status === 'connect error') {
+                list.prepend('<li class="list-group-item list-group-item-danger justify-content-between">Неудалось подключится к сокету [' + response.host + ':' + response.port + '].<span class="badge grey badge-pill">' + time + '</span></li>');
+            }
+        },
+        complete: function () {
+            enable(self);
+        }
+    })
+}
+
+$('#rcon-hide-sent').change(function () {
+    if ($(this).prop('checked')) {
+        $('.rcon-sent').hide();
+
+        return;
+    }
+
+    $('.rcon-sent').show();
+});
+
+/**
+ * End of rcon console section
  */

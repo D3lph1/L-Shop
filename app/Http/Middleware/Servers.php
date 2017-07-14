@@ -7,7 +7,7 @@ use Closure;
 use Illuminate\Http\Request;
 
 /**
- * Class Servers
+ * Class Server
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  *

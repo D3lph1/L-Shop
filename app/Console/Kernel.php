@@ -2,6 +2,7 @@
 
 namespace App\Console;
 
+use App\Console\Commands\Server\Rcon;
 use App\Console\Commands\User\Block;
 use App\Console\Commands\User\Create;
 use App\Console\Commands\User\Remove;
@@ -24,7 +25,8 @@ class Kernel extends ConsoleKernel
         Activate::class,
         Block::class,
         Unblock::class,
-        Complete::class
+        Complete::class,
+        Rcon::class
     ];
 
     /**

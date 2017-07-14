@@ -682,6 +682,18 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
     /**
      * OTHER SECTION
      */
+    Route::get('/server/{server}/admin/other/rcon', 'Other\RconController@render')
+        ->name('admin.other.rcon')
+        ->middleware([
+            'servers:all'
+        ]);
+
+    Route::post('/server/{server}/admin/other/rcon/{send}', 'Other\RconController@send')
+        ->name('admin.other.rcon.send')
+        ->middleware([
+            'servers:all'
+        ]);
+
     Route::get('/server/{server}/admin/other/debug', 'Other\DebugController@render')
         ->name('admin.other.debug')
         ->middleware([

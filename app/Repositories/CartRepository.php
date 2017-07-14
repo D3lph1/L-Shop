@@ -44,4 +44,20 @@ class CartRepository extends BaseRepository
             ->orderBy('cart.created_at', 'DESC')
             ->paginate(s_get('profile.cart_items_per_page', 10));
     }
+
+    /**
+     * Get all cart items for given player.
+     *
+     * @param string $player
+     * @param array  $columns
+     *
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function getByPlayerWithItems($player, $columns = [])
+    {
+        return Cart::select($this->prepareColumns($columns))
+            ->join('items', 'items.id', 'cart.item_id')
+            ->where('player', $player)
+            ->get();
+    }
 }

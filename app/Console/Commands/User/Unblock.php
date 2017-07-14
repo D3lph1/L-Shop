@@ -6,6 +6,13 @@ use App\Services\Ban;
 use Cartalyst\Sentinel\Sentinel;
 use Illuminate\Console\Command;
 
+/**
+ * Class Unblock
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ *
+ * @package App\Console\Commands\User
+ */
 class Unblock extends Command
 {
     /**

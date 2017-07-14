@@ -89,15 +89,9 @@ class ShowController extends Controller
      */
     public function flushCache()
     {
-        $key = 'admin.statistic.for_the_last_year_completed';
-
-        if (\Cache::has($key)) {
-            \Cache::forget($key);
-
-            \Message::info('Кэш статистики очищен!');
-        } else {
-            \Message::warning('Нечего очищать');
-        }
+        \Cache::forget('admin.statistic.for_the_last_year_completed');
+        \Cache::forget('admin.statistic.profit');
+        \Message::info('Кэш статистики очищен!');
 
         return back();
     }

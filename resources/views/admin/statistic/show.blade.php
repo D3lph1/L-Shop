@@ -31,6 +31,27 @@
                         месяц:</h4>
                     <canvas id="paymentsCountPerMonth"></canvas>
                 </div>
+
+                <div class="col-md-6 mt-3">
+                    <h4 class="text-center">Динамика получения прибыли за этот год:</h4>
+                    <canvas id="profitPerYear"></canvas>
+                </div>
+
+                <div class="col-md-6 mt-3">
+                    <h4 class="text-center">
+                        Динамика получения прибыли за
+                        <div class="btn-group">
+                            <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ $currentMonthWord }}</button>
+
+                            <div class="dropdown-menu">
+                                @foreach($months as $key => $value)
+                                    <a class="dropdown-item" href="{{ route('admin.statistic.show', ['server' => $currentServer->id, 'month' => $key]) }}">{{ $value }}</a>
+                                @endforeach
+                            </div>
+                        </div>
+                        месяц:</h4>
+                    <canvas id="profitPerMonth"></canvas>
+                </div>
                 <div class="col-md-12 mt-2">
                     <hr>
                     <h3 class="text-center">Общая прибыль: {{ $profit }} {!! $currency !!}</h3>
@@ -53,7 +74,7 @@
 @section('js')
     <script type="text/javascript">
         var option = {
-            responsive: true,
+            responsive: true
         };
 
         var paymentsCountPerYear = document.getElementById("paymentsCountPerYear").getContext('2d');
@@ -74,7 +95,7 @@
             ],
             datasets: [
                 {
-                    label: "Продажи за последний год",
+                    label: "Динамика совершенных заказов за этот год",
                     fillColor: "rgba(151,187,205,0.2)",
                     strokeColor: "rgba(151,187,205,1)",
                     pointColor: "rgba(151,187,205,1)",
@@ -85,9 +106,9 @@
                         @for($i = 1; $i <= 12; $i++)
                             <?php $k = 0; ?>
                             @foreach($payments as $payment)
-                                    @if((new \DateTime($payment->updated_at))->format('n') == $i)
-                                        <?php $k++; ?>
-                                    @endif
+                                @if((new \DateTime($payment->updated_at))->format('n') == $i)
+                                    <?php $k++; ?>
+                                @endif
                             @endforeach
                         {{ $k . ','}}
                         @endfor
@@ -98,13 +119,14 @@
 
         new Chart(paymentsCountPerYear).Line(data, option);
 
+        /** --- */
         var paymentsCountPerMonth = document.getElementById("paymentsCountPerMonth").getContext('2d');
 
         data = {
             labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"],
             datasets: [
                 {
-                    label: "Продажи за последний год",
+                    label: "Динамика совершенных заказов за месяц",
                     fillColor: "rgba(151,187,205,0.2)",
                     strokeColor: "rgba(151,187,205,1)",
                     pointColor: "rgba(151,187,205,1)",
@@ -129,5 +151,82 @@
         };
 
         new Chart(paymentsCountPerMonth).Line(data, option); //'Line' defines type of the chart.
+
+        /** --- */
+
+        var profitPerYear = document.getElementById("profitPerYear").getContext('2d');
+
+        data = {
+            labels: ["Январь",
+                "Февраль",
+                "Март",
+                "Апрель",
+                "Май",
+                "Июнь",
+                "Июль",
+                "Август",
+                "Сентябрь",
+                "Октябрь",
+                "Ноябрь",
+                "Декабрь"
+            ],
+            datasets: [
+                {
+                    label: "Динамика получения прибыли за этот год",
+                    fillColor: "rgba(151,187,205,0.2)",
+                    strokeColor: "rgba(151,187,205,1)",
+                    pointColor: "rgba(151,187,205,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(151,187,205,1)",
+                    data: [
+                        @for($i = 1; $i <= 12; $i++)
+                            <?php $k = 0; ?>
+                            @foreach($payments as $payment)
+                                @if((new \DateTime($payment->updated_at))->format('n') == $i)
+                                    <?php $k += $payment->cost; ?>
+                                @endif
+                            @endforeach
+                            {{ $k . ','}}
+                        @endfor
+                    ]
+                }
+            ]
+        };
+
+        new Chart(profitPerYear).Line(data, option);
+
+        /** --- */
+        var profitPerMonth = document.getElementById("profitPerMonth").getContext('2d');
+
+        data = {
+            labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"],
+            datasets: [
+                {
+                    label: "Динамика получения прибыли за месяц",
+                    fillColor: "rgba(151,187,205,0.2)",
+                    strokeColor: "rgba(151,187,205,1)",
+                    pointColor: "rgba(151,187,205,1)",
+                    pointStrokeColor: "#fff",
+                    pointHighlightFill: "#fff",
+                    pointHighlightStroke: "rgba(151,187,205,1)",
+                    data: [
+                        @for($i = 1; $i <= 31; $i++)
+                            <?php $k = 0; ?>
+                            @foreach($payments as $payment)
+                                @if((new \DateTime($payment->updated_at))->format('n') == $currentMonth)
+                                    @if((new \DateTime($payment->updated_at))->format('j') == $i)
+                                        <?php $k += $payment->cost; ?>
+                                    @endif
+                                @endif
+                            @endforeach
+                            {{ $k . ','}}
+                        @endfor
+                    ]
+                }
+            ]
+        };
+
+        new Chart(profitPerMonth).Line(data, option);
     </script>
 @endsection

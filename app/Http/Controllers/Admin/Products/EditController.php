@@ -52,6 +52,10 @@ class EditController extends Controller
             'items.type'
         ]);
 
+        if (!$product) {
+            \App::abort(404);
+        }
+
         $items = $itemRepository->all([
             'id',
             'name',
