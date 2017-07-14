@@ -6,6 +6,7 @@ use App\Http\Requests\Admin\BlockUserRequest;
 use App\Http\Requests\Admin\SaveEditedUserRequest;
 use App\Models\User;
 use App\Repositories\BanRepository;
+use App\Repositories\CartRepository;
 use App\Services\Ban;
 use Cartalyst\Sentinel\Roles\EloquentRole;
 use Cartalyst\Sentinel\Users\UserInterface;
@@ -24,26 +25,28 @@ class EditController extends Controller
     /**
      * Render the edit given user page.
      *
-     * @param Request       $request
-     * @param BanRepository $banRepository
+     * @param Request        $request
+     * @param BanRepository  $banRepository
+     * @param CartRepository $cartRepository
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function render(Request $request, BanRepository $banRepository)
+    public function render(Request $request, BanRepository $banRepository, CartRepository $cartRepository)
     {
+        /** @var User $user */
         $user = \Sentinel::findById((int)$request->route('edit'));
         if (!$user) {
-            \Message::danger('Пользователь не найден');
-
-            return response()->redirectToRoute('admin.users.list', ['server' => $request->get('currentServer')->id]);
+            \App::abort(404);
         }
 
         $ban = app(Ban::class, ['user' => $user, 'repository' => $banRepository]);
 
         $data = [
             'currentServer' => $request->get('currentServer'),
+            'servers' => $request->get('servers'),
             'user' => $user,
-            'ban' => $ban
+            'ban' => $ban,
+            'cart' => $cartRepository->getByPlayerWithItems($user->username)
         ];
 
         return view('admin.users.edit', $data);

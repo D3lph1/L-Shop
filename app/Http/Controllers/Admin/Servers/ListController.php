@@ -10,7 +10,7 @@ use App\Http\Controllers\Controller;
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
  *
- * @package App\Http\Controllers\Admin\Servers
+ * @package App\Http\Controllers\Admin\Server
  */
 class ListController extends BaseController
 {
@@ -50,11 +50,13 @@ class ListController extends BaseController
 
         if ($this->serverService->enableServer($serverId)) {
             \Message::info('Сервер включен');
+            $code = 302;
         } else {
             \Message::danger('Не удалось включить сервер!');
+            $code = 400;
         }
 
-        return back();
+        return back($code);
     }
 
     /**

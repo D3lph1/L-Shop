@@ -265,6 +265,12 @@
                     </tbody>
                 </table>
             </p>
+            <h3 class="card-title">Сервер</h3>
+            <h4 class="card-title">RCON управление</h4>
+            <p class="card-text">
+            <p>Сигнатура: <code>php artisan rcon</code></p>
+            <p>Эта команда не имеет ни аргументов, ни опций. Она является "интерактивной". После ее ввода следуйте инструкциям.</p>
+            </p>
         </div>
     </div>
 @endsection

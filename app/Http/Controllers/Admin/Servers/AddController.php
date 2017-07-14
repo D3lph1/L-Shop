@@ -12,7 +12,7 @@ use App\Http\Controllers\Controller;
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
  *
- * @package App\Http\Controllers\Admin\Servers
+ * @package App\Http\Controllers\Admin\Server
  */
 class AddController extends BaseController
 {

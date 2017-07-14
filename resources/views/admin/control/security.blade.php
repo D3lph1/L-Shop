@@ -54,9 +54,9 @@
             </div>
 
             <div class="card card-block mt-2">
-                <h4 class="card-title">ReCAPTCHA</h4>
+                <h4 class="card-title">reCAPTCHA</h4>
                 <p class="card-text">
-                    <p>Изменение ключей сервиса ReCAPTCHA.</p>
+                    <p>Изменение ключей сервиса reCAPTCHA.</p>
                     <div class="md-form mt-1">
                         <i class="fa fa-google prefix"></i>
                         <input type="text" name="recaptcha_public_key" id="sec-recaptcha-public-key" class="form-control" value="{{ $recaptchaPublicKey }}">

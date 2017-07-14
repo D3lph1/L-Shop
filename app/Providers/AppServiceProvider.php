@@ -3,6 +3,7 @@
 namespace App\Providers;
 
 use App\Models\Server;
+use App\Repositories\ServerRepository;
 use App\Services\Activator;
 use App\Services\Cart;
 use App\Services\CartBuy;
@@ -82,11 +83,11 @@ class AppServiceProvider extends ServiceProvider
             return new Registrar();
         });
 
-        $this->app->bind('catalog.buy', function (Application $app) {
+        $this->app->bind('catalog.buy', function () {
             return new CatalogBuy();
         });
 
-        $this->app->bind('cart.buy', function (Application $app) {
+        $this->app->bind('cart.buy', function () {
             return new CartBuy();
         });
 
@@ -97,13 +98,16 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(Rcon::class, function (Application $app) {
             $request = $app->make('request');
             $servers = $request->get('servers');
+
+            if (!$servers) {
+                $servers = $app->make(ServerRepository::class)->all();
+            }
+
             $rcon = new Connector();
 
             /** @var Server $server */
             foreach ($servers as $server) {
-                if ($server->monitoring_enabled) {
-                    $rcon->add($server->id, $server->ip, $server->port, $server->password, s_get('monitoring.rcon.timeout', 1));
-                }
+                $rcon->add($server->id, $server->ip, $server->port, $server->password, s_get('monitoring.rcon.timeout', 1));
             }
 
             return $rcon;

@@ -202,6 +202,10 @@ button:hover {
     box-sizing: border-box;
 }
 
+/**
+ * End checkboxes
+ */
+
 .activated_span {
     color: #449d44;
     border-bottom: 1px dotted #449d44;
@@ -212,4 +216,31 @@ button:hover {
     color: #d9534f;
     border-bottom: 1px dotted #d9534f;
     cursor: pointer;
+}
+
+.rcon-area {
+    height: 400px;
+    overflow: auto;
+}
+
+.rcon-btn {
+    width: 100%;
+    height: 2.1rem;
+    margin-top: 0 !important;
+}
+
+.cp {
+    cursor: pointer !important;
+}
+
+.ml-6 {
+    margin-left: 4rem !important;
+}
+
+.ml-7 {
+    margin-left: 5rem !important;
+}
+
+.ml-8 {
+    margin-left: 6rem !important;
 }

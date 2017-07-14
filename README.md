@@ -1,13 +1,20 @@
 # L-Shop
-### Modern trading system for Minecraft.
+
+<p align="center">
+<img src ="http://i90.fastpic.ru/big/2017/0309/9c/1cebb8e0e70a432b71102bf20334459c.png">
+</p>
+
+## Modern trading system for Minecraft.
 
 ##### L - Shop is an open source project, an entire system designed to help administrators of Minecraft gaming servers simplify the process of selling virtual goods.
 
-### Developers:
+[Читать README на русском.](README_RU.md)
+
+## Developers
 * **D3lph1** - Software code.
 * **WhileD0S** - Design and layout.
 
-### Requirements:
+## Requirements
 * PHP >= 5.6.4
 * OpenSSL PHP Extension
 * PDO PHP Extension
@@ -18,7 +25,7 @@
 
 > System based on **Laravel** framework (Version 5.4.24).
 
-### Functional:
+## Why L-Shop?
 * Full adaptability. Even on small screens use the store conveniently
 * Registration, authorization.
 * Confirmation of registration via Email. It is included in the settings.
@@ -40,12 +47,13 @@
 * (Profile) View the payment history.
 * Separation into objects and goods.
 * Protection from the search of passwords by means of "freezing" the user for a while.
-* Form protection ReCAPTCH'oy.
+* reCAPTCHA form protection.
 * Manage some of the store functionality from both the admin panel and the CLI.
 * Built-in API for the integration of the store with various cms.
+* RCON console.
 * The system collects and forms statistics of sales, profits.
 
-### Installing:
+### Installation
 1) Install the composer dependency manager (https://getcomposer.org/).
 2) Download the archive from: https://github.com/D3lph1/L-shop and unpack it to any convenient location on the server.
 3) Go to the directory with the unpacked L-Shop and execute the command composer install. Wait until the completion of the installation of dependencies (files are many and they weigh a lot (For the site), so downloading can be long).
@@ -86,7 +94,7 @@ If you plan to use the L-Shop API, be sure to change the secret key. You can do 
 
 After the performed operations, we recommend installing the Directory root of your web server in the public folder.
 
-### Screenshots:
+### Screenshots
 
 ![Signin page](http://i89.fastpic.ru/big/2017/0427/66/4cb0664b14df09d07c68c6446ecdfa66.png)
 ![Servers page](http://i89.fastpic.ru/big/2017/0427/1e/f8a97b0b74ee755ffee412076c7d961e.png)
@@ -97,4 +105,4 @@ After the performed operations, we recommend installing the Directory root of yo
 ![Monitoring](http://i95.fastpic.ru/big/2017/0625/ab/814e55e205411f935b4b6412189e1fab.png)
 ![Admin settings](http://i95.fastpic.ru/big/2017/0625/d7/d70188cfcee99a7df9415aca3063c2d7.png)
 ![Admin add item](http://i89.fastpic.ru/big/2017/0427/10/74a3155ef353dfc5d9d531139db8b710.png)
-![Admin statistic page](http://i89.fastpic.ru/big/2017/0427/c2/b3370246c56d610d534c5074558e63c2.png)
+![Admin statistic page](http://i95.fastpic.ru/big/2017/0714/80/6d78aeacc7a0bd185ce5661139b9b780.png)

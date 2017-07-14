@@ -55,6 +55,7 @@
     <div class="ad-btn-block">
         <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-ellipsis-h left"></i>Другое</button>
         <ul class="ad-btn-list">
+            <a href="{{ route('admin.other.rcon', ['server' => $currentServer->id]) }}" class="waves-effect">RCON консоль</a>
             <a href="{{ route('admin.other.debug', ['server' => $currentServer->id]) }}" class="waves-effect">Отладка</a>
         </ul>
     </div>
