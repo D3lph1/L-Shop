@@ -1167,7 +1167,7 @@ function execRcon(self) {
             if (status === 'success') {
                 list.prepend('<li class="list-group-item justify-content-between">' + response.result + '<span class="badge grey badge-pill">' + time + '</span></li>');
             } else if (status === 'connect error') {
-                list.prepend('<li class="list-group-item list-group-item-danger justify-content-between">Неудалось подключится к сокету [' + response.host + ':' + response.port + '].<span class="badge grey badge-pill">' + time + '</span></li>');
+                list.prepend('<li class="list-group-item list-group-item-danger justify-content-between">Не удалось подключится к сокету [' + response.host + ':' + response.port + '].<span class="badge grey badge-pill">' + time + '</span></li>');
             }
         },
         complete: function () {
