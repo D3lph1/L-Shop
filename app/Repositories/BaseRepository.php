@@ -37,6 +37,18 @@ abstract class BaseRepository
     }
 
     /**
+     * Get last row from table.
+     *
+     * @param string $column
+     *
+     * @return mixed
+     */
+    public function last($column = 'created_at')
+    {
+        return $this->query()->latest()->first();
+    }
+
+    /**
      * Get all rows where id contains in array
      *
      * @param array $ids
@@ -75,6 +87,18 @@ abstract class BaseRepository
     public function create(array $attributes)
     {
         return $this->query()->create($attributes);
+    }
+
+    /**
+     * Insert $data in table.
+     *
+     * @param array $data
+     *
+     * @return bool
+     */
+    public function insert(array $data)
+    {
+        return $this->query()->insert($data);
     }
 
     /**
@@ -117,6 +141,16 @@ abstract class BaseRepository
         }
 
         return $this->query()->where('id', $id)->delete();
+    }
+
+    /**
+     * Truncate table.
+     *
+     * @return void
+     */
+    public function truncate()
+    {
+        $this->query()->truncate();
     }
 
     /**

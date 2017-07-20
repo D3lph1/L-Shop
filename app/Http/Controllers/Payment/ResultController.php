@@ -2,15 +2,13 @@
 
 namespace App\Http\Controllers\Payment;
 
-use App\Exceptions\FailedToUpdateTableException;
 use App\Exceptions\Payment\AlreadyCompleteException;
 use App\Exceptions\Payment\NotFoundException;
 use App\Exceptions\Payment\UnableToCompleteException;
+use App\Http\Controllers\Controller;
 use App\Services\Handlers\Payments\AbstractPayment;
 use App\Services\Handlers\Payments\Robokassa;
-use App\Services\QueryManager;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 /**
  * Class ResultController

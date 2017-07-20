@@ -2,12 +2,15 @@
 
 namespace App\Services\Distributors;
 
-use App\Models\Payment;
-use App\Services\QueryManager;
 use App\Exceptions\FailedToUpdateTableException;
+use App\Models\Payment;
+use App\Repositories\PaymentRepository;
+use App\Repositories\ProductRepository;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class Distributor
+ * Parent class for all distributors.
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  *
@@ -16,9 +19,14 @@ use App\Exceptions\FailedToUpdateTableException;
 abstract class Distributor
 {
     /**
-     * @var QueryManager
+     * @var ProductRepository
      */
-    protected $qm;
+    protected $productRepository;
+
+    /**
+     * @var PaymentRepository
+     */
+    protected $paymentRepository;
 
     /**
      * @var Payment
@@ -33,25 +41,32 @@ abstract class Distributor
     /**
      * Distributor constructor.
      *
-     * @param QueryManager $qm
+     * @param ProductRepository $productRepository
+     * @param PaymentRepository $paymentRepository
      */
-    public function __construct(QueryManager $qm)
+    public function __construct(
+        ProductRepository $productRepository,
+        PaymentRepository $paymentRepository
+    )
     {
-        $this->qm = $qm;
+        $this->productRepository = $productRepository;
+        $this->paymentRepository = $paymentRepository;
     }
 
     /**
      * @param string $serialized
      *
-     * @return array
+     * @return Collection
      */
-    protected function convertProductsString($serialized)
+    protected function productsWithItems($serialized)
     {
         $unserialized = unserialize($serialized);
+        // Array with products identifiers.
         $ids = array_keys($unserialized);
         $counts = array_values($unserialized);
 
-        $products = $this->qm->product($ids, [
+        /** @var Collection $products */
+        $products = $this->productRepository->getWithItems($ids, [
             'products.server_id as server',
             'items.item as item',
             'items.extra as extra',
@@ -64,10 +79,10 @@ abstract class Distributor
     }
 
     /**
-     * @param array $counts
-     * @param array $products
+     * @param array      $counts
+     * @param Collection $products
      *
-     * @return array
+     * @return Collection
      */
     private function setCounts($counts, $products)
     {
@@ -80,34 +95,50 @@ abstract class Distributor
         return $products;
     }
 
+    /**
+     * Sets the user to whom the products will be issued.
+     */
     protected function setUser()
     {
+        // If the order was made by an NOT authorized user.
         if ($this->payment->username) {
             $this->user = $this->payment->username;
+
             return;
         }
+
+        // If the order was made by an authorized user.
         if ($this->payment->user_id) {
             $this->user = \Sentinel::getUserRepository()->findById($this->payment->user_id)['username'];
+
             return;
         }
+
+        // If for some reason both fields are empty.
         throw new \UnexpectedValueException(
             "Columns `user_id` and `username` is empty in row with id {$this->payment->id}"
         );
     }
 
     /**
+     * Completes the current payment.
+     *
      * @throws FailedToUpdateTableException
      */
     protected function complete()
     {
         if (!$this->payment->completed) {
-            if (!$this->qm->completePayment($this->payment->id, $this->payment->service)) {
-                throw new FailedToUpdateTableException("Can not complete the payment with id {$this->payment->id}");
+            if (!$this->paymentRepository->complete($this->payment->id, $this->payment->service)) {
+                throw new FailedToUpdateTableException(
+                    "Can not complete the payment with id {$this->payment->id}"
+                );
             }
         }
     }
 
     /**
+     * Gives products to the player.
+     *
      * @param Payment $payment
      *
      * @return void

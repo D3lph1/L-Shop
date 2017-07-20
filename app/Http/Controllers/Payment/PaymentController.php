@@ -2,10 +2,9 @@
 
 namespace App\Http\Controllers\Payment;
 
-use App\Services\Cart;
-use App\Services\QueryManager;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Repositories\PaymentRepository;
+use Illuminate\Http\Request;
 
 /**
  * Class PaymentController
@@ -24,15 +23,16 @@ class PaymentController extends Controller
     /**
      * Render the payment methods page
      *
-     * @param Request $request
+     * @param Request           $request
+     * @param PaymentRepository $paymentRepository
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request, PaymentRepository $paymentRepository)
     {
         $this->server = (int)$request->route('server');
         $this->payment = (int)$request->route('payment');
-        $this->payment = $this->qm->payment($this->payment, ['id', 'cost', 'user_id', 'username', 'completed']);
+        $this->payment = $paymentRepository->find($this->payment, ['id', 'cost', 'user_id', 'username', 'completed']);
 
         // If payment with this ID does not exist, exit
         if (!$this->payment) {
@@ -73,11 +73,12 @@ class PaymentController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request           $request
+     * @param PaymentRepository $paymentRepository
      *
      * @return bool|\Illuminate\Http\JsonResponse
      */
-    public function fillUpBalance(Request $request)
+    public function fillUpBalance(Request $request, PaymentRepository $paymentRepository)
     {
         $server = (int)$request->route('server');
         $sum = abs($request->get('sum'));
@@ -87,9 +88,16 @@ class PaymentController extends Controller
             return $validated;
         }
 
-        $payment = $this->qm->createPayment(
-            null, null, $sum, \Sentinel::getUser()->getUserId(), null, $server, $request->ip(), false
-        );
+        $payment = $paymentRepository->create([
+            'service' => null,
+            'products' => null,
+            'cost' => $sum,
+            'user_id' => \Sentinel::getUser()->getUserId(),
+            'username' => null,
+            'server_id' => $server,
+            'ip' => $request->ip(),
+            'completed' => false
+        ]);
 
         return json_response('success',[
                 'redirect' => route('payment.methods', [

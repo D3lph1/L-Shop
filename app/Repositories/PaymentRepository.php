@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Payment;
+use Carbon\Carbon;
 use Illuminate\Database\Query\Builder;
 
 /**
@@ -67,7 +68,7 @@ class PaymentRepository extends BaseRepository
     }
 
     /**
-     * Complete given payment.
+     * Complete payment with given identifier.
      *
      * @param int    $id          Payment identifier.
      * @param string $serviceName Service name (For example, Robokassa).
@@ -79,7 +80,8 @@ class PaymentRepository extends BaseRepository
         return Payment::where('id', $id)
             ->update([
                 'service' => $serviceName,
-                'completed' => true
+                'completed' => true,
+                'updated_at' => Carbon::now()->toDateTimeString()
             ]);
     }
 

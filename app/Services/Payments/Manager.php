@@ -2,10 +2,11 @@
 
 namespace App\Services\Payments;
 
+use App\Exceptions\InvalidArgumentTypeException;
 use App\Exceptions\Payment\InvalidProductsCountException;
 use App\Models\Payment;
-use App\Services\QueryManager;
-use App\Exceptions\InvalidArgumentTypeException;
+use App\Repositories\PaymentRepository;
+use App\Repositories\ProductRepository;
 
 /**
  * Class Manager
@@ -21,9 +22,14 @@ class Manager
     const COUNT_TYPE_NUMBER = 1;
 
     /**
-     * @var QueryManager
+     * @var PaymentRepository
      */
-    private $qm;
+    private $paymentRepository;
+
+    /**
+     * @var ProductRepository
+     */
+    private $productRepository;
 
     /**
      * @var null|int
@@ -60,18 +66,15 @@ class Manager
      */
     private $cost = 0;
 
-    /**
-     * @param QueryManager $qm
-     */
-    public function __construct(QueryManager $qm)
+    public function __construct(PaymentRepository $paymentRepository, ProductRepository $productRepository)
     {
-        $this->qm = $qm;
+        $this->paymentRepository = $paymentRepository;
+        $this->productRepository = $productRepository;
     }
 
     /**
      * @param array $productsId
      * @param array $productsCount
-     *
      * @param int   $productsCountType
      *
      * @return mixed
@@ -133,16 +136,16 @@ class Manager
      */
     private function insert($isQuick)
     {
-        return $this->qm->createPayment(
-            null,
-            serialize($this->products),
-            $this->cost,
-            is_int($this->username) ? $this->username : null,
-            is_string($this->username) ? $this->username : null,
-            $this->server,
-            $this->ip,
-            $isQuick
-        );
+        return $this->paymentRepository->create([
+            'service' => null,
+            'products' => serialize($this->products),
+            'cost' => $this->cost,
+            'user_id' => is_int($this->username) ? $this->username : null,
+            'username' => is_string($this->username) ? $this->username : null,
+            'server_id' => $this->server,
+            'ip' => $this->ip,
+            'completed' => (bool)$isQuick
+        ]);
     }
 
     /**
@@ -235,12 +238,12 @@ class Manager
      */
     private function getProducts($ids)
     {
-        return $this->qm->product($ids, [
+        return $this->productRepository->getWithItems($ids, [
             'products.id',
             'items.type',
             'products.price',
             'products.stack'
-        ], true);
+        ]);
     }
 
     /**

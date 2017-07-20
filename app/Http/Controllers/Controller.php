@@ -25,11 +25,6 @@ class Controller extends BaseController
     protected $app;
 
     /**
-     * @var \App\Services\QueryManager
-     */
-    protected $qm;
-
-    /**
      * @var \App\Services\Cart
      */
     protected $cart;
@@ -41,7 +36,6 @@ class Controller extends BaseController
 
     public function __construct()
     {
-        $this->qm = \App::make('qm');
         $this->cart = \App::make('cart');
         $this->app = \App::make('app');
     }

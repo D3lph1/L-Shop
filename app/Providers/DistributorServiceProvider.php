@@ -10,7 +10,7 @@ use Illuminate\Support\ServiceProvider;
 /**
  * Class DistributorServiceProvider
  *
- * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
  *
  * @package App\Providers
  */
@@ -34,13 +34,21 @@ class DistributorServiceProvider extends ServiceProvider
     public function register()
     {
         $this->app->bind('distributor', function () {
-                $distributor = s_get('distributor.name');
-                $full = "App\\Services\\Distributors\\$distributor";
-                if (class_exists($full)) {
-                    return new $full($this->app->make('qm'));
+            $distributor = s_get('distributor.name');
+            $full = "App\\Services\\Distributors\\$distributor";
+            if (class_exists($full)) {
+                $obj = $this->app->make($full);
+
+                if (is_a($obj, \App\Services\Distributors\Distributor::class)) {
+                    return $obj;
                 }
 
-                throw new DistributorNotFoundException($distributor);
-            });
+                throw new \LogicException(
+                    "Class $full must be a subclass of " . \App\Services\Distributors\Distributor::class
+                );
+            }
+
+            throw new DistributorNotFoundException($distributor);
+        });
     }
 }

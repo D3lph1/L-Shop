@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Shop;
 use App\Exceptions\Payment\InvalidProductsCountException;
 use App\Exceptions\User\InvalidUsernameException;
 use App\Http\Controllers\Controller;
-use App\Services\QueryManager;
-use Illuminate\Http\Request;
+use App\Repositories\ProductRepository;
+use App\Repositories\ServerRepository;
+use App\Services\Cart;
 use App\Services\CatalogBuy;
 use App\Traits\BuyResponse;
-use App\Services\Cart;
+use Illuminate\Http\Request;
 
 /**
  * Class CatalogController
@@ -25,19 +26,20 @@ class CatalogController extends Controller
     /**
      * Render the catalog page
      *
-     * @param Request      $request
-     * @param QueryManager $qm
-     * @param Cart         $cart
+     * @param Request           $request
+     * @param Cart              $cart
+     * @param ProductRepository $productRepository
+     * @param ServerRepository  $serverRepository
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request, QueryManager $qm, Cart $cart)
+    public function render(Request $request, Cart $cart, ProductRepository $productRepository, ServerRepository $serverRepository)
     {
-        $categories = $qm->serverCategories($request->get('currentServer')->id);
+        $categories = $serverRepository->categories($request->get('currentServer')->id);
         $category = $request->route('category');
         $f = false;
 
-        // To determine the presence and keep the current category
+        // To determine the presence and keep the current category.
         foreach ($categories as $one) {
             if (is_null($category)) {
                 $category = $one->id;
@@ -50,7 +52,7 @@ class CatalogController extends Controller
             }
         }
 
-        // If a category with this ID does not exist
+        // If a category with this ID does not exist.
         if (!$f) {
             \App::abort(404);
         }
@@ -58,7 +60,7 @@ class CatalogController extends Controller
         $data = [
             'categories' => $categories,
             'currentCategory' => $category,
-            'goods' => $qm->products($request->get('currentServer')->id, $category),
+            'goods' => $productRepository->forCatalog($request->get('currentServer')->id, $category),
             'cart' => $cart
         ];
 

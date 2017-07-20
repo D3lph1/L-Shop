@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Products;
 
+use App\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\ListParent;
 
@@ -17,17 +18,18 @@ class ListController extends ListParent
     /**
      * Render the page with products list.
      *
-     * @param Request $request
+     * @param Request           $request
+     * @param ProductRepository $productRepository
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request, ProductRepository $productRepository)
     {
         $orderBy = $this->checkOrderBy($request->get('orderBy'));
         $orderType = $this->checkOrderType($request->get('orderType'));
         $filter = $request->get('filter');
 
-        $products = $this->qm->productsForAdmin([
+        $products = $productRepository->forAdmin([
             'products.id',
             'products.price',
             'products.item_id',

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Servers;
 use App\Exceptions\Server\AttemptToDeleteTheLastCategoryException;
 use App\Exceptions\Server\AttemptToDeleteTheLastServerException;
 use App\Http\Requests\Admin\SaveEditedServerRequest;
+use App\Repositories\ServerRepository;
 use Illuminate\Http\Request;
 
 /**
@@ -17,13 +18,14 @@ use Illuminate\Http\Request;
 class EditController extends BaseController
 {
     /**
-     * Render edit server page
+     * Render edit server page.
      *
-     * @param Request $request
+     * @param Request          $request
+     * @param ServerRepository $serverRepository
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request, ServerRepository $serverRepository)
     {
         $server = null;
         foreach ($request->get('servers') as $s) {
@@ -37,7 +39,7 @@ class EditController extends BaseController
             \App::abort(404);
         }
 
-        $categories = $this->qm->serverCategories($server->first()->id, [
+        $categories = $serverRepository->categories($server->first()->id, [
             'id',
             'name'
         ]);
