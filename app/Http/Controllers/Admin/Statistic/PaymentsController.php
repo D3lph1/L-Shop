@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Statistic;
 
 use App\Repositories\PaymentRepository;
+use App\Repositories\ProductRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -58,20 +59,22 @@ class PaymentsController extends Controller
     /**
      * Get detail information about concrete payment.
      *
-     * @param Request $request
+     * @param Request           $request
+     * @param PaymentRepository $paymentRepository
+     * @param ProductRepository $productRepository
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function info(Request $request)
+    public function info(Request $request, PaymentRepository $paymentRepository, ProductRepository $productRepository)
     {
-        $payment = $this->qm->payment((int)$request->route('payment'), ['products']);
+        $payment = $paymentRepository->find((int)$request->route('payment'), ['products']);
 
         if (!$payment) {
             return json_response('payment not found');
         }
         $unserialized = unserialize($payment->products);
         $ids = array_keys($unserialized);
-        $products = $this->qm->product($ids, [
+        $products = $productRepository->getWithItems($ids, [
             'products.id',
             'items.name',
             'items.image'

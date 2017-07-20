@@ -2,14 +2,13 @@
 
 namespace App\Composers;
 
+use App\Contracts\ComposerContract;
 use App\DataTransferObjects\MonitoringPlayers;
 use App\Models\Server;
 use App\Repositories\NewsRepository;
 use App\Services\Monitoring\MonitoringInterface;
-use Illuminate\View\View;
 use Illuminate\Http\Request;
-use App\Services\QueryManager;
-use App\Contracts\ComposerContract;
+use Illuminate\View\View;
 
 /**
  * Class ShopLayoutComposer
@@ -42,11 +41,6 @@ class ShopLayoutComposer implements ComposerContract
     private $servers;
 
     /**
-     * @var QueryManager
-     */
-    private $qm;
-
-    /**
      * @var NewsRepository
      */
     private $newsRepository;
@@ -58,16 +52,14 @@ class ShopLayoutComposer implements ComposerContract
 
     /**
      * @param Request             $request
-     * @param QueryManager        $qm
      * @param NewsRepository      $newsRepository
      * @param MonitoringInterface $monitoring
      */
-    public function __construct(Request $request, QueryManager $qm, NewsRepository $newsRepository, MonitoringInterface $monitoring)
+    public function __construct(Request $request, NewsRepository $newsRepository, MonitoringInterface $monitoring)
     {
         $this->request = $request;
         $this->currentServer = $request->get('currentServer');
         $this->servers = $request->get('servers');
-        $this->qm = $qm;
         $this->newsRepository = $newsRepository;
         $this->monitoring = $monitoring;
     }

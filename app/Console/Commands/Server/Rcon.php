@@ -8,6 +8,7 @@ use Cartalyst\Support\Collection;
 use D3lph1\MinecraftRconManager\Connector;
 use D3lph1\MinecraftRconManager\Exceptions\ConnectSocketException;
 use Illuminate\Console\Command;
+use Illuminate\Http\Request;
 
 /**
  * Class Rcon
@@ -60,8 +61,10 @@ class Rcon extends Command
      *
      * @return mixed
      */
-    public function handle()
+    public function handle(Request $request)
     {
+        $this->info($request->method());
+
         $servers = $this->serverRepository->all();
         $names = $servers->map(function ($item) {
             return $item->name;

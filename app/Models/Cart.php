@@ -35,4 +35,17 @@ class Cart extends Model
      * @var string
      */
     protected $table = 'cart';
+
+    /**
+     * @var array
+     */
+    protected $fillable = [
+        'player',
+        'type',
+        'item',
+        'amount',
+        'extra',
+        'item_id',
+        'server'
+    ];
 }

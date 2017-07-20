@@ -8,7 +8,7 @@ use App\Models\Server;
 /**
  * Class ServerRepository
  *
- * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
  *
  * @package App\Repositories
  */
@@ -25,7 +25,6 @@ class ServerRepository extends BaseRepository
     {
         $columns = $this->prepareColumns($columns);
 
-        $columns = $this->prepareColumns($columns);
         $servers = Server::select($columns)->get();
         $categories = Category::select()->get();
         $servers = $servers->toArray();
@@ -40,6 +39,39 @@ class ServerRepository extends BaseRepository
         }
 
         return $servers;
+    }
+
+    /**
+     * @param array $columns
+     *
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function allWithCategories($columns = [])
+    {
+        $columns = $this->prepareColumns($columns);
+
+        return Server::select($columns)
+            ->join('categories', 'categories.server_id', 'servers.id')
+            ->get();
+    }
+
+    /**
+     * @param int|array $serverId
+     * @param array     $columns
+     *
+     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     */
+    public function categories($serverId, $columns = [])
+    {
+        $columns = $this->prepareColumns($columns);
+
+        if (is_array($serverId)) {
+            $builder = Category::select($columns)->whereIn('server_id', $serverId);
+        } else {
+            $builder = Category::select($columns)->where('server_id', $serverId);
+        }
+
+        return $builder->get();
     }
 
     /**
@@ -75,7 +107,7 @@ class ServerRepository extends BaseRepository
     }
 
     /**
-     * @param int $id
+     * @param int  $id
      * @param bool $mode
      *
      * @return bool

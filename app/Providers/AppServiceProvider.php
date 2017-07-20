@@ -11,7 +11,6 @@ use App\Services\CatalogBuy;
 use App\Services\Message;
 use App\Services\Monitoring\MonitoringInterface;
 use App\Services\Monitoring\RconMonitoring;
-use App\Services\QueryManager;
 use App\Services\ReCaptcha;
 use App\Services\Registrar;
 use App\Services\SashokLauncher;
@@ -52,10 +51,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->singleton('qm', function () {
-            return new QueryManager();
-        });
-
         $this->app->bind('message', function () {
             return new Message();
         });

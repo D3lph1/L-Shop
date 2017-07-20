@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Admin\Products;
 
 use App\Repositories\ItemRepository;
+use App\Repositories\ProductRepository;
+use App\Repositories\ServerRepository;
 use App\Services\AdminProducts;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -34,14 +36,16 @@ class EditController extends Controller
     /**
      * Render the edit given product page.
      *
-     * @param Request        $request
-     * @param ItemRepository $itemRepository
+     * @param Request           $request
+     * @param ItemRepository    $itemRepository
+     * @param ProductRepository $productRepository
+     * @param ServerRepository  $serverRepository
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request, ItemRepository $itemRepository)
+    public function render(Request $request, ItemRepository $itemRepository, ProductRepository $productRepository, ServerRepository $serverRepository)
     {
-        $product = $this->qm->productForAdmin($request->route('product'), [
+        $product = $productRepository->forEditProducts($request->route('product'), [
             'products.id',
             'products.price',
             'products.stack',
@@ -62,7 +66,7 @@ class EditController extends Controller
             'type'
         ]);
 
-        $categories = $this->qm->allCategoriesWithServers([
+        $categories = $serverRepository->allWithCategories([
             'categories.name as category',
             'categories.id as category_id',
             'servers.name as server',

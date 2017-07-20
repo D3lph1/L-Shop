@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Shop;
 use App\Exceptions\Payment\InvalidProductsCountException;
 use App\Exceptions\User\InvalidUsernameException;
 use App\Http\Controllers\Controller;
+use App\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 use App\Traits\BuyResponse;
 use App\Services\CartBuy;
@@ -21,13 +22,14 @@ class CartController extends Controller
     use BuyResponse;
 
     /**
-     * Render the cart page
+     * Render the cart page.
      *
-     * @param Request $request
+     * @param Request           $request
+     * @param ProductRepository $productRepository
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request, ProductRepository $productRepository)
     {
         $this->server = (int)$request->route('server');
         $products = [];
@@ -35,10 +37,11 @@ class CartController extends Controller
         $fromCart = $this->cart->products();
         if ($fromCart) {
             $ids = array_keys($fromCart);
-            $products = $this->qm->product(
+            $products = $productRepository->getWithItems(
                 $ids,
                 ['products.id as id', 'items.name', 'items.image', 'products.price', 'products.stack']
             );
+
             foreach ($products as $product) {
                 $cost += $product->price;
             }

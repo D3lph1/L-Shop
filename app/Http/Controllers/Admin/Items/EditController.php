@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Items;
 
 use App\Http\Requests\Admin\SaveEditedItemRequest;
+use App\Repositories\ItemRepository;
 use App\Services\AdminItems;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -34,13 +35,16 @@ class EditController extends Controller
     /**
      * Render the edit item page.
      *
-     * @param Request $request
+     * @param Request        $request
+     * @param ItemRepository $itemRepository
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request, ItemRepository $itemRepository)
     {
-        $item = $this->qm->item($request->route('item'), [
+        $itemId = (int)$request->route('item');
+
+        $item = $itemRepository->find($itemId, [
             'id',
             'name',
             'type',

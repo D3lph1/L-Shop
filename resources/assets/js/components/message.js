@@ -1,6 +1,9 @@
 /**
  * Responsible for working with alerts
  *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @link https://github.com/D3lph1/L-shop
+ *
  * @constructor
  */
 function Message() {

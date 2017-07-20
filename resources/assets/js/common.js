@@ -1,5 +1,8 @@
 /**
- * JavaScript file with main logic
+ * JavaScript file with main logic.
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @link https://github.com/D3lph1/L-shop
  */
 
 /**

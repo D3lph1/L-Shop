@@ -1,5 +1,8 @@
 /**
- * The JavaScript file that performs the necessary actions immediately after the page loads
+ * The JavaScript file that performs the necessary actions immediately after the page loads.
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @link https://github.com/D3lph1/L-shop
  */
 
 msg = new Message();

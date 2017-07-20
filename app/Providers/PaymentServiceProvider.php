@@ -33,9 +33,7 @@ class PaymentServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('payment.manager', function () {
-            return new Manager($this->app->make('qm'));
-        });
+        $this->app->alias(Manager::class, 'payment.manager');
 
         $this->app->bind('payment.robokassa', function () {
             return new Payment(
