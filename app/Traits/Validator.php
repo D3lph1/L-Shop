@@ -4,7 +4,7 @@ namespace App\Traits;
 
 /**
  * Trait Validator
- * Check data on valid
+ * Check data on valid.
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  *
@@ -24,7 +24,6 @@ trait Validator
      * @param bool   $required
      *
      * @return bool
-     *
      */
     public function validateUsername($username, $required = true)
     {
@@ -35,8 +34,8 @@ trait Validator
         $required = $required ? 'required|' : 'sometimes|';
 
         $validator = \Validator::make([
-                'username' => $username
-            ],
+            'username' => $username
+        ],
             [
                 'username' => "{$required}min:$min|max:$max|$rule"
             ]);
@@ -48,6 +47,12 @@ trait Validator
         return true;
     }
 
+    /**
+     * @param int  $sum
+     * @param bool $required
+     *
+     * @return bool|\Illuminate\Http\JsonResponse
+     */
     public function validateFillUpBalanceSum($sum, $required = true)
     {
 
@@ -62,8 +67,11 @@ trait Validator
             ]);
 
         if ($validator->fails()) {
-            return json_response('invalid sum', [
-                'min' => $min
+            return json_response('invalid_sum', [
+                'message' => [
+                    'type' => 'warning',
+                    'text' => __('messages.payments.fillupbalance.invalid_sum', ['min' => $min]),
+                ]
             ]);
         }
 

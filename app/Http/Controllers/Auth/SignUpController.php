@@ -22,7 +22,7 @@ use Illuminate\Http\Request;
 class SignUpController extends Controller
 {
     /**
-     * Render the sign up page
+     * Render the sign up page.
      *
      * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
@@ -32,13 +32,13 @@ class SignUpController extends Controller
         if ((bool)s_get('shop.enable_signup')) {
             return view('auth.signup');
         }
-        \Message::warning('Функция регистрации отключена');
+        $this->msg->warning('Функция регистрации отключена');
 
         return response()->redirectToRoute('servers');
     }
 
     /**
-     * Register new user
+     * Register new user.
      *
      * @param SignUpRequest $request
      *
@@ -55,24 +55,26 @@ class SignUpController extends Controller
         $password = $request->get('password');
         $forceActivate = !(bool)s_get('auth.email_activation');
 
-        // Get registrar service from container
+        // Get registrar service from container.
         /** @var Registrar $registrar */
-        $registrar = Container::getInstance()->make('registrar');
+        $registrar = $this->app->make('registrar');
 
         try {;
-            // Call registrar service method
+            // Call registrar service method.
             $registrar->register($username, $email, $password, 0, $forceActivate, false);
         } catch (UsernameAlreadyExistsException $e) {
-            \Message::danger(trans('validation.unique', ['attribute' => 'Имя пользователя']));
 
+            $this->msg->danger(__('messages.auth.signup.username_already_exists', ['username' => $username]));
             return back();
+
         } catch (EmailAlreadyExistsException $e) {
-            \Message::danger(trans('validation.email', ['attribute' => 'Адрес электронной почты']));
 
+            $this->msg->danger(__('messages.auth.signup.email_already_exists', ['email' => $email]));
             return back();
-        } catch (UnableToCreateUser $e) {
-            \Message::danger(trans('messages.error.signup'));
 
+        } catch (UnableToCreateUser $e) {
+
+            $this->msg->danger(__('messages.auth.signup.fail'));
             return back();
         }
 
@@ -93,7 +95,8 @@ class SignUpController extends Controller
         if ($activate) {
             return response()->redirectToRoute('activation.wait');
         }else {
-            \Message::success('Вы успешно зарегистрированы');
+            $this->msg->success(__('messages.auth.signup.success'));
+
             return response()->redirectToRoute('signin');
         }
     }

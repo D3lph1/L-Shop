@@ -41,7 +41,7 @@ class NewsController extends Controller
     public function render(Request $request)
     {
         if (!s_get('news.enabled')) {
-            \Message::warning('Отображение новостей отключено');
+            \Message::warning(__('messages.shop.catalog.news.disabled'));
 
             return back();
         }
@@ -50,7 +50,7 @@ class NewsController extends Controller
         $news = $this->newsRepository->find($id);
 
         if (!$news) {
-            \App::abort(404);
+            $this->app->abort(404);
         }
 
         $data = [
@@ -69,7 +69,13 @@ class NewsController extends Controller
     public function load(Request $request, News $news)
     {
         if (!s_get('news.enabled')) {
-            return json_response('news disabled');
+            return json_response('news disabled', [
+                'more' => __('content.shop.news.read_more'),
+                'message' => [
+                    'type' => 'warning',
+                    'text' => __('messages.shop.catalog.news.disabled')
+                ]
+            ]);
         }
 
         $count = (int)$request->get('count');

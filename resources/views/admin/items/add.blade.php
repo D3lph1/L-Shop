@@ -6,6 +6,8 @@
 @endsection
 
 @section('content')
+    @include('components.localization.admin.items')
+
     <div id="content-container">
         <div class="z-depth-1 content-header text-center">
             <h1><i class="fa fa-diamond fa-lg fa-left-big"></i>Добавить предмет</h1>
@@ -18,7 +20,7 @@
                             <div class="md-form text-left">
                                 <i class="fa fa-font prefix"></i>
                                 <input type="text" name="name" id="item-name" class="form-control" value="">
-                                <label for="item-name">Название предмета</label>
+                                <label for="item-name">@lang('content.admin.items.add.item_name')</label>
                             </div>
                         </div>
                     </div>
@@ -61,7 +63,7 @@
                                 <div class="md-form text-left">
                                     <i class="fa fa-list prefix"></i>
                                     <input type="text" name="item" id="item" class="form-control" value="">
-                                    <label for="item">ID или ID:DATA предмета</label>
+                                    <label for="item">@lang('content.admin.items.add.item_id')</label>
                                 </div>
                             </div>
                             <div class="plus-category">

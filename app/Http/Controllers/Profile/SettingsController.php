@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Profile;
 
 use App\Http\Requests\Admin\SaveChangedPasswordRequest;
+use Cartalyst\Sentinel\Sentinel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -16,7 +17,7 @@ use App\Http\Controllers\Controller;
 class SettingsController extends Controller
 {
     /**
-     * Render profile settings page
+     * Render profile settings page.
      *
      * @param Request $request
      *
@@ -33,32 +34,47 @@ class SettingsController extends Controller
         return view('profile.settings', $data);
     }
 
-    public function password(SaveChangedPasswordRequest $request)
+    /**
+     * Change password from profile.
+     *
+     * @param SaveChangedPasswordRequest $request
+     * @param Sentinel                   $sentinel
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function password(SaveChangedPasswordRequest $request, Sentinel $sentinel)
     {
         if (!s_get('user.enable_change_password', false)) {
-            \Message::danger('Возможность смены пароля отключена');
+            $this->msg->danger(__('messages.profile.password.disabled'));
 
             return back();
         }
 
-        $user = \Sentinel::getUser();
-        $result = \Sentinel::update($user, [
+        $user = $sentinel->getUser();
+        $result = $sentinel->getUserRepository()->update($user, [
             'password' => $request->get('password')
         ]);
 
         if ($result) {
-            \Message::success('Пароль успешно изменен!');
+            $this->msg->success(__('messages.profile.password.success'));
         }else {
-            \Message::danger('Не удалось изменить пароль');
+            $this->msg->danger(__('messages.profile.password.fail'));
         }
 
         return back();
     }
 
-    public function sessions(Request $request)
+    /**
+     * Reset login-sessions for current user.
+     *
+     * @param Sentinel $sentinel
+     *
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function sessions(Sentinel $sentinel)
     {
-        \Sentinel::logout(null, true);
-        \Message::info('Логин-сессии успешно сброшены. Вам потребуется авторизоваться заного.');
+        $sentinel->logout(null, true);
+        $this->msg->info(__('messages.profile.settings.sessions'));
 
         return back();
     }

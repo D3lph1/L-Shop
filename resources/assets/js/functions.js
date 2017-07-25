@@ -173,15 +173,9 @@ function getUrlParams() {
 
 /**
  * Display request error message
- *
- * @param {string|undefined} more
  */
 function requestError(more) {
-    if (more == undefined) {
-        msg.danger('Во время выполнения запроса произошла ошибка');
-    }else {
-        msg.danger('Во время выполнения запроса произошла ошибка. Подробности: ' + more);
-    }
+    msg.danger($('#request-error'));
 }
 
 /**
@@ -204,7 +198,7 @@ function getRemember(key) {
 }
 
 /**
- * Set remeber
+ * Set remember in cookie.
  *
  * @param key
  * @param value
@@ -215,7 +209,22 @@ function setRemember(key, value) {
 }
 
 function showErrors(errors) {
-    for (i = 0; i < errors.length; i++) {
-        msg.danger(errors[i]);
+    if (typeof errors === 'object') {
+        for (var property in errors) {
+            if (errors.hasOwnProperty(property)) {
+                for (i = 0; i < errors.length; i++) {
+                    msg.danger(errors[i]);
+                }
+
+                showErrors(errors[property]);
+            }
+        }
+    }
+}
+
+function complete(xhr) {
+    if (xhr.status === 422) {
+        var response = JSON.parse(xhr.responseText);
+        showErrors(response);
     }
 }

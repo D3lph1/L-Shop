@@ -6,6 +6,12 @@
 @endsection
 
 @section('content')
+    <div style="display: none;">
+        <div id="search-lets-typing">@lang('content.admin.users.list.search.lets_typing')</div>
+        <div id="search-wait">@lang('content.admin.users.list.search.wait')</div>
+        <div id="search-nothing">@lang('content.admin.users.list.search.nothing')</div>
+    </div>
+
     <div id="content-container">
         <div class="z-depth-1 content-header text-center">
             <h1><i class="fa fa-users fa-lg fa-left-big"></i>Редактировать пользователей</h1>
@@ -17,10 +23,10 @@
                    Так, запрос <strong>&gt;520</strong> выберет всех пользователей, баланс которых больше 520. <strong>&lt;100</strong> - меньше 100. <strong>=0</strong> - Тех, у кого на балансе нет средств."></i>
 
                 <input type="text" id="admin-users-search" class="form-control" data-toggle="dropdown"  data-url="{{ route('admin.users.search', ['server' => $currentServer->id]) }}">
-                <label for="admin-users-search">Искать пользователей</label>
+                <label for="admin-users-search">@lang('content.admin.users.list.search.placeholder')</label>
 
                 <div id="admin-users-search-results" class="dropdown-menu" style="width: 100%; max-height: 400px; overflow: auto">
-                    <a class="dropdown-item disabled">Начните вводить...</a>
+                    <a class="dropdown-item disabled">@lang('content.admin.users.list.search.lets_typing')</a>
                 </div>
             </div>
             <div class="table-responsive">
@@ -46,8 +52,10 @@
                             <td>@if($user->hasAccess('user.admin')) <strong>Да</strong> @else Нет @endif</td>
                             <td><a href="{{ route('admin.users.edit', ['server' => $currentServer->id, 'edit' => $user->id]) }}" class="btn btn-info btn-sm">Редактировать</a></td>
                             <td>
-                                @php($ban = app(App\Services\Ban::class, ['user' => $user, 'repository' => app(\App\Repositories\BanRepository::class)]))
-                                @php($ban->setBan($user->ban))
+                                <?php
+                                    $ban = app(App\Services\Ban::class, ['user' => $user, 'repository' => app(\App\Repositories\BanRepository::class)]);
+                                    $ban->setBan($user->ban);
+                                ?>
 
                                 @if($ban->isBanned())
                                     <span class="banned_span" data-toggle="popover" data-placement="left" data-trigger="hover" title="Информация о блокировке" data-content="{{ build_ban_message($ban->getBan()->until, $ban->getBan()->reason) }}">Заблокирован</span>

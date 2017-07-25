@@ -6,6 +6,8 @@
 @endsection
 
 @section('content')
+    @include('components.localization.admin.items')
+
     <div id="content-container">
         <div class="z-depth-1 content-header text-center">
             <h1><i class="fa fa-diamond fa-lg fa-left-big"></i>Редактировать предмет</h1>
@@ -18,7 +20,7 @@
                             <div class="md-form text-left">
                                 <i class="fa fa-font prefix"></i>
                                 <input type="text" name="name" id="item-name" class="form-control" value="{{ $item->name }}">
-                                <label for="item-name">@if($item->type == 'item') Название предмета @elseif($item->type == 'permgroup') Название привилегии @endif</label>
+                                <label for="item-name">@if($item->type == 'item') @lang('content.admin.items.add.item_name') @elseif($item->type == 'permgroup') @lang('content.admin.items.add.perm_name') @endif</label>
                             </div>
                         </div>
                     </div>
@@ -66,7 +68,7 @@
                                 <div class="md-form text-left">
                                     <i class="fa fa-list prefix"></i>
                                     <input type="text" name="item" id="item" class="form-control" value="{{ $item->item }}">
-                                    <label for="item">@if($item->type == 'item') ID или ID:DATA предмета @elseif($item->type == 'permgroup') Внутриигровой идентификатор привилегии @endif</label>
+                                    <label for="item">@if($item->type == 'item') @lang('content.admin.items.add.item_id') @elseif($item->type == 'permgroup') @lang('content.admin.items.add.perm_id') @endif</label>
                                 </div>
                             </div>
                             <div class="plus-category">

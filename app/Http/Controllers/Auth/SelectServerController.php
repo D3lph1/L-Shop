@@ -15,7 +15,9 @@ use App\Http\Controllers\Controller;
 class SelectServerController extends Controller
 {
     /**
-     * Render the select server page
+     * Render the select server page.
+     *
+     * @param Request $request
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */

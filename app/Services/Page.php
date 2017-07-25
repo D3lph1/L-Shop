@@ -26,9 +26,12 @@ class Page
         $this->pageRepository = $pageRepository;
     }
 
+    /**
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
     public function all()
     {
-        return $this->pageRepository->getPaginated();
+        return $this->pageRepository->getPaginated(['id', 'title', 'url', 'created_at', 'updated_at']);
     }
 
     /**

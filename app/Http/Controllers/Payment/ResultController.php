@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Services\Handlers\Payments\AbstractPayment;
 use App\Services\Handlers\Payments\Robokassa;
 use Illuminate\Http\Request;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class ResultController
@@ -19,8 +20,16 @@ use Illuminate\Http\Request;
  */
 class ResultController extends Controller
 {
+    private $logger;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->logger = $this->app->make(LoggerInterface::class);
+    }
+
     /**
-     * Handle request payment request from robokassa service
+     * Handle request payment request from robokassa service.
      *
      * @param Request   $request
      * @param Robokassa $handler
@@ -45,15 +54,15 @@ class ResultController extends Controller
         try {
             $result = $handler->handle($all, false);
         } catch (NotFoundException $e) {
-            \Log::warning($e);
+            $this->logger->warning($e);
 
             return response()->make('Payment not found', 404);
         } catch (AlreadyCompleteException $e) {
-            \Log::warning($e);
+            $this->logger->warning($e);
 
             return response()->make('Already complete', 400);
         } catch (UnableToCompleteException $e) {
-            \Log::warning($e);
+            $this->logger->warning($e);
 
             return response()->make('Unable to complete payment', 400);
         }

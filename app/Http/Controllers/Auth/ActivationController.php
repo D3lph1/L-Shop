@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Auth;
 
 use App\Services\Activator;
+use Cartalyst\Sentinel\Sentinel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RepeatSendActivationRequest;
@@ -27,15 +28,16 @@ class ActivationController extends Controller
     }
 
     /**
-     * @param Request $request
+     * @param Request  $request
+     * @param Sentinel $sentinel
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function activate(Request $request)
+    public function activate(Request $request, Sentinel $sentinel)
     {
         $userId = (int)$request->route('user');
 
-        $user = \Sentinel::findById($userId);
+        $user = $sentinel->getUserRepository()->findById($userId);
 
         if (!$user) {
             \Message::danger('Пользователь не найден');
@@ -44,10 +46,10 @@ class ActivationController extends Controller
         }
 
         $code = $request->route('code');
-        if (\Activation::complete($user, $code)) {
-            \Message::success('Ваш аккаунт успешно активирован!');
+        if ($sentinel->getActivationRepository()->complete($user, $code)) {
+            $this->msg->success('Ваш аккаунт успешно активирован!');
         } else {
-            \Message::danger('Код активации недействителен или устарел');
+            $this->msg->danger('Код активации недействителен или устарел');
         }
 
         return response()->redirectToRoute('signin');
@@ -55,27 +57,27 @@ class ActivationController extends Controller
 
     /**
      * @param RepeatSendActivationRequest $request
+     * @param Sentinel                    $sentinel
      * @param Activator                   $activator
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function repeatSend(RepeatSendActivationRequest $request, Activator $activator)
+    public function repeatSend(RepeatSendActivationRequest $request, Sentinel $sentinel, Activator $activator)
     {
         $email = $request->get('email');
-        $user = \Sentinel::findByCredentials(['email' => $email]);
+        $user = $sentinel->getUserRepository()->findByCredentials(['email' => $email]);
 
         if (!$user) {
-            \Message::danger('Пользователь с таким адресом электронной почты не найден');
+            $this->msg->danger('Пользователь с таким адресом электронной почты не найден');
 
             return back();
         }
 
-        if (\Activation::completed($user)) {
-            \Message::info('Этот аккаунт уже подтвержден');
+        if ($sentinel->getActivationRepository()->completed($user)) {
+            $this->msg->info('Этот аккаунт уже подтвержден');
         } else {
             $activator->createAndSend($user);
-
-            \Message::info('Сообщение на почту отправлено повторно');
+            $this->msg->info('Сообщение на почту отправлено повторно');
         }
 
         return back();

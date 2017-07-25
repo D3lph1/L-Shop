@@ -6,7 +6,7 @@
  */
 
 /**
- * Perform user authentication attempts by pressing the enter key
+ * Perform user authentication attempts by pressing the enter key.
  */
 $('#si-username, #si-password').keyup(function (event) {
     if (event.keyCode === 13) {
@@ -15,7 +15,7 @@ $('#si-username, #si-password').keyup(function (event) {
 });
 
 /**
- * Attempt to auth user
+ * Attempt to auth user.
  */
 $('#btn-sign-in').click(function () {
     signin(this);
@@ -26,14 +26,10 @@ function signin(self) {
     var password = $('#si-password').val();
 
     if (username.length === 0) {
-        msg.danger('Имя пользователя не заполнено');
-
         return;
     }
 
     if (password.length === 0) {
-        msg.danger('Пароль не заполнен');
-
         return;
     }
 
@@ -59,39 +55,26 @@ function signin(self) {
                 var to = getUrlParams()['to'];
 
                 if (to) {
-                    // If the GET parameters "to" exist, then forwards it to the address specified in the parameter
+                    // If the GET parameters "to" exist, then forwards it to the address specified in the parameter.
                     document.location.href = to;
                 } else {
-                    // Otherwise, it forwards the link established with the page rendering
+                    // Otherwise, it forwards the link established with the page rendering.
                     document.location.href = $('#sign-in').attr('data-redirect');
                 }
             } else {
-                if (status === 'invalid_credentials') {
-                    msg.danger('Пользователь с такими данными не найден');
-                } else if (status === 'frozen') {
-                    msg.danger('Вы произвели слишком большое количество попыток входа. ' +
-                        'Возможность авторизации будет недоступна последующие ' +
-                        response.delay + ' секунд.');
-                } else if (status === 'not activated') {
-                    msg.danger('Ваш аккаунт не активирован. Проверьте свою почту на наличие нашего письма.');
-                } else if (status === 'only for admins') {
-                    msg.danger('Вход обычным пользователям запрещен');
-                } else if (status === 'banned') {
-                    msg.danger(response.message);
-                }
+                msg.call(response.message.type, response.message.text)
             }
         },
 
-        // Request error
-        error: function () {
+        complete: function (xhr) {
             enable(self);
-            requestError();
+            complete(xhr);
         }
     });
 }
 
 /**
- * Perform user registration attempts by pressing the enter key
+ * Perform user registration attempts by pressing the enter key.
  */
 $('#su-username, #su-email, #su-password, #su-password-confirm').keyup(function (event) {
     if (event.keyCode === 13) {
@@ -107,7 +90,8 @@ $('#btn-sign-up').click(function () {
 });
 
 function signup(self) {
-
+    $('#signup-form').submit();
+    return false;
 }
 
 /**
@@ -168,11 +152,12 @@ if ($('#content').length) {
 
     $('.cat-btn').click(function () {
         var tabNumber = $(this).index();
-        if ($('.product-container').eq(tabNumber).css('display') == 'none') {
-            $('.product-container').eq(tabNumber).siblings().hide();
+        var pc = $('.product-container');
+        if (pc.eq(tabNumber).css('display') === 'none') {
+            pc.eq(tabNumber).siblings().hide();
             $(this).siblings().css({'background-color': '#ffbb33'});
             $(this).css({'background-color': '#FF8800'});
-            $('.product-container').eq(tabNumber).fadeIn();
+            pc.eq(tabNumber).fadeIn();
         }
     });
 
@@ -212,22 +197,18 @@ $('.catalog-to-cart').click(function () {
         },
         success: function (response) {
             var status = response.status;
+            msg.call(response.message.type, response.message.text);
 
-            if (status == 'success') {
-                msg.success('Товар добавлен в корзину');
+            if (status === 'success') {
                 disable(self);
-                $(self).children('span').text('Уже в корзине');
-
-            } else if (status == 'cart is full') {
-                enable(self);
-                msg.warning('Невозможно добавить товар. Корзина переполнена.');
-            } else if (status == 'already in cart') {
-                enable(self);
-                msg.warning('Товар уже есть в корзине');
+                $(self).children('span').text(response.button);
             } else {
                 enable(self);
-                msg.danger('Неудалось положить товар в корзину');
             }
+        },
+
+        complete: function (xhr) {
+            complete(xhr);
         },
 
         // Request error
@@ -255,9 +236,10 @@ $('.catalog-to-cart').click(function () {
             $('#catalog-to-buy-count-input').hide();
             $('#catalog-to-buy-cbuttons').hide();
         } else {
-            $('#catalog-to-buy-count-input').show();
+            var ctbci = $('#catalog-to-buy-count-input');
+            ctbci.show();
             $('#catalog-to-buy-cbuttons').show();
-            $('#catalog-to-buy-count-input').val(stack);
+            ctbci.val(stack);
         }
         $('#catalog-to-buy-modal').modal('show');
         $('#catalog-to-buy-summ').text(price);
@@ -284,14 +266,14 @@ $('.catalog-to-cart').click(function () {
     $('#catalog-to-buy-count-input').blur(function () {
         var val = Number($(this).val());
 
-        if (val % stack != 0) {
+        if (val % stack !== 0) {
             // Normalize input value
             var result = Math.round(val / stack) * stack;
             if (isNaN(result)) {
                 result = 0;
             }
 
-            if (result != 0) {
+            if (result !== 0) {
                 $(this).val(result);
                 $(this).parent().parent().find('#catalog-to-buy-summ').text(result / stack * price);
             } else {
@@ -309,8 +291,8 @@ $('.catalog-to-cart').click(function () {
     $('#catalog-to-buy-accept').click(function () {
         var self = this;
         var captcha = getCaptcha();
-        if (captcha == '') {
-            msg.warning('Вы должны подтвердить то, что не являетесь роботом!');
+        if (captcha === '') {
+            msg.warning($('#captcha-required').text());
             return;
         }
 
@@ -333,23 +315,21 @@ $('.catalog-to-cart').click(function () {
                 var status = response.status;
                 grecaptcha.reset();
 
-                if (status == 'success') {
+                if (status === 'success') {
                     if (response.quick) {
-                        msg.success('Покупка успешно совершена!');
+                        msg.call(response.message.type, response.message.text);
                         $('#catalog-to-buy-modal').modal('hide');
                         $('#balance-span').text(response.new_balance);
                     } else {
                         document.location.href = response.redirect;
                     }
                 } else {
-                    if (status == 'invalid username') {
-                        msg.danger('Имя пользователя слишком короткое или содержит недопустимые символы');
-                    }
-
-                    if (status == 'invalid products count') {
-                        msg.danger('Неверное количество товара');
-                    }
+                    msg.call(response.message.type, response.message.text);
                 }
+            },
+
+            complete: function (xhr) {
+                complete(xhr);
             },
 
             // Request error
@@ -385,26 +365,27 @@ $('.cart-remove').click(function () {
         },
         success: function (response) {
             var status = response.status;
+            msg.call(response.message.type, response.message.text);
 
-            if (status == 'success') {
-                msg.info('Товар убран из корзины');
+            if (status === 'success') {
 
-                // Change total cost
+                // Change total cost.
                 var cost = Number($(self).parents('.c-product').find('.c-p-pay-money>span').text());
-                var total = Number($('#total-money>span').text());
-                $('#total-money>span').text(total - cost);
+                var total_span = $('#total-money').find('>span');
+                var total = Number(total_span.text());
+                total_span.text(total - cost);
                 $(self).parents('.c-product').remove();
 
-                // If there are no more elements
-                if ($('.c-product').length == 0) {
+                // If there are no more products in cart.
+                if ($('.c-product').length === 0) {
                     $('#total').remove();
-                    $('#cart-products').html('<h3>Корзина пуста</h3>');
+                    $('#cart-products').html('<h3>' + $('#cart-empty').text() + '</h3>');
                 }
-            } else if (status == 'product not found') {
-                msg.warning('Товар в корзине не найден');
-            } else {
-                msg.danger('Неудалось убрать товар из корзины');
             }
+        },
+
+        complete: function (xhr) {
+            complete(xhr);
         },
 
         // Request error
@@ -416,14 +397,14 @@ $('.cart-remove').click(function () {
 });
 
 /**
- * Increase the number of goods in a cart
+ * Increase the number of goods in a cart.
  */
 $('.cart-minus-btn').click(function () {
-    // Number of items in one stack
+    // Number of items in one stack.
     var stack = Number($(this).parent().attr('data-stack'));
-    // Price for one stack
+    // Price for one stack.
     var price = Number($(this).parent().attr('data-price'));
-    // Current number of goods
+    // Current number of goods.
     var input = $(this).parent().parent().find('.c-p-count-input');
     var val = Number(input.val());
     if (val - stack > 0) {
@@ -431,8 +412,9 @@ $('.cart-minus-btn').click(function () {
         input.val(result);
         $(this).parent().parent().find('.c-p-pay-money>span').text(result / stack * price);
 
-        var total = Number($('#total-money>span').text());
-        $('#total-money>span').text(total - price);
+        var moneySpan = $('#total-money>span');
+        var total = Number(moneySpan.text());
+        moneySpan.text(total - price);
     }
 });
 
@@ -440,42 +422,44 @@ $('.cart-minus-btn').click(function () {
  * Reduce the quantity of goods in a cart
  */
 $('.cart-plus-btn').click(function () {
-    // Number of items in one stack
+    // Number of items in one stack.
     var stack = Number($(this).parent().attr('data-stack'));
-    // Price for one stack
+    // Price for one stack.
     var price = Number($(this).parent().attr('data-price'));
-    // Current number of goods
+    // Current number of goods.
     var input = $(this).parent().parent().find('.c-p-count-input');
     var val = Number(input.val());
     var result = val + stack;
     input.val(result);
     $(this).parent().parent().find('.c-p-pay-money>span').text(result / stack * price);
 
-    var total = Number($('#total-money>span').text());
-    $('#total-money>span').text(total + price);
+    var moneySpan = $('#total-money>span');
+    var total = Number(moneySpan.text());
+    moneySpan.text(total + price);
 });
 
 /**
- * Normalize the input value on input blur event
+ * Normalize the input value on input blur event.
  */
 $('.c-p-count-input').blur(function () {
     var stack = Number($(this).parents('.c-2-info').find('.c-p-cbuttons').attr('data-stack'));
     var price = Number($(this).parent().parent().find('.c-p-cbuttons').attr('data-price'));
     var val = Number($(this).val());
     console.log(price);
-    if (val % stack != 0) {
+    if (val % stack !== 0) {
         // Normalize input value
         var result = Math.round(val / stack) * stack;
         if (isNaN(result)) {
             result = 0;
         }
 
-        if (result != 0) {
+        var moneySpan = $('#total-money>span');
+        if (result !== 0) {
             $(this).val(result);
-            $('#total-money>span').text(result / stack * price);
+            moneySpan.text(result / stack * price);
         } else {
             $(this).val(stack);
-            $('#total-money>span').text(price);
+            moneySpan.text(price);
         }
     }
 
@@ -499,16 +483,12 @@ $('#btn-cart-go-pay').click(function () {
         products[index].count = $(value).find('.c-p-count-input').val();
     });
 
-    if ($('#c-login').length != 0) {
+    if ($('#c-login').length !== 0) {
         username = $('#c-login').val();
-        if (username.length < 4) {
-            msg.warning('Вы должны указать имя того пользователя (не короче 4 символов), которому хотите приобрести товары.');
-            return;
-        }
     }
 
-    if (captcha == '') {
-        msg.warning('Вы должны подтвердить то, что не являетесь роботом!');
+    if (captcha === '') {
+        msg.warning($('#captcha-required').text());
         return;
     }
 
@@ -529,26 +509,20 @@ $('#btn-cart-go-pay').click(function () {
             var status = response.status;
             grecaptcha.reset();
 
-            if (status == 'success') {
+            if (status === 'success') {
                 if (response.quick) {
-                    msg.success('Покупка совершена успешно!');
+                    msg.call(response.message.type, response.message.text);
                     $('#balance-span').text(response.new_balance);
-                    $('#cart-products').empty();
+                    var cartProducts = $('#cart-products');
+                    cartProducts.empty();
                     $('#total').remove();
-                    $('#cart-products').html('<h3>Корзина пуста</h3>');
+                    cartProducts.html('<h3>' + $('#cart-empty').text() + '</h3>');
                 } else {
                     document.location.href = response.redirect;
                 }
             } else {
                 enable(self);
-
-                if (status == 'invalid username') {
-                    msg.danger('Имя пользователя слишком короткое или содержит недопустимые символы');
-                }
-
-                if (status == 'invalid products count') {
-                    msg.danger('Неверное количество товара');
-                }
+                msg.call(response.message.type, response.message.text);
             }
         },
 
@@ -572,18 +546,8 @@ $('#fub-btn').click(function () {
     var captcha = getCaptcha();
     var self = this;
 
-    if (isNaN(sum)) {
-        msg.warning('Сумма должна иметь числовое значение');
-        return;
-    }
-
-    if (sum <= 0) {
-        msg.warning('Сумма должна быть положительным числом');
-        return;
-    }
-
-    if (captcha == '') {
-        msg.warning('Вы должны подтвердить то, что не являетесь роботом!');
+    if (captcha === '') {
+        msg.warning($('#captcha-required').html());
         return;
     }
 
@@ -600,20 +564,19 @@ $('#fub-btn').click(function () {
         beforeSend: function () {
             disable(self);
         },
-        complete: function () {
-            grecaptcha.reset();
-        },
         success: function (response) {
-            status = response.status;
+            var status = response.status;
 
-            if (status == 'success') {
+            if (status === 'success') {
                 document.location.href = response.redirect;
             } else {
                 enable(self);
-                if (status == 'invalid sum') {
-                    msg.warning('Сумма должна быть положительным числом и быть не меньше ' + response.min);
-                }
+                msg.call(response.message.type, response.message.text);
             }
+        },
+
+        complete: function (xhr) {
+            grecaptcha.reset();
         },
 
         // Request error
@@ -635,7 +598,7 @@ $('.profile-payments-info').click(function () {
             _token: getToken()
         }),
         dataType: 'json',
-        complete: function () {
+        complete: function (xhr) {
             enable(self);
             $('#pre-loader').fadeOut('fast');
         },
@@ -646,7 +609,7 @@ $('.profile-payments-info').click(function () {
         success: function (response) {
             var status = response.status;
 
-            if (status == 'success') {
+            if (status === 'success') {
                 var result = '';
                 var products = response.products;
 
@@ -663,8 +626,9 @@ $('.profile-payments-info').click(function () {
                 $('#profile-payments-modal-products').html(result);
             }
         },
+
         error: function () {
-            msg.danger('Подробная информация об этом платеже недоступна');
+            requestError();
         }
     })
 });
@@ -686,21 +650,21 @@ $('#news-load-more').click(function () {
         },
         success: function (response) {
 
-            if (response.status === 'news disabled') {
-                msg.warning('Отображение новостей отключено');
+            if (response.status === 'news_disabled') {
+                msg.call(response.message.type, response.message.text);
 
                 return;
             }
 
-            if (response.status === 'no more news') {
-                msg.info('Новостей больше нет');
+            if (response.status === 'no_more_news') {
+                msg.call(response.message.type, response.message.text);
                 $(self).hide();
 
                 return;
             }
             enable(self);
 
-            if (response.status === 'last portion') {
+            if (response.status === 'last_portion') {
                 $(self).hide();
             }
 
@@ -708,11 +672,12 @@ $('#news-load-more').click(function () {
             var result = '';
 
             for (var i = 0; i < content.length; i++) {
-                result += '<div class="news-preview z-depth-1"><h3 class="news-pre-header">' + content[i].title + '</h3><p class="news-pre-text">' + content[i].content + '</p> <a href="' + content[i].link + '" class="btn btn-info btn-sm btn-block mt-1">Подробнее...</a> </div>';
+                result += '<div class="news-preview z-depth-1"><h3 class="news-pre-header">' + content[i].title + '</h3><p class="news-pre-text">' + content[i].content + '</p> <a href="' + content[i].link + '" class="btn btn-info btn-sm btn-block mt-1">' + response.more + '</a> </div>';
             }
 
             $('#news-block').append(result);
         },
+
         error: function () {
             requestError();
         }
@@ -740,25 +705,19 @@ $('#profile-update-skin').click(function () {
         success: function (response) {
             enable(self);
             var status = response.status;
+            msg.call(response.message.type, response.message.text);
 
             if (status === 'success') {
-                msg.success('Новый скин установлен успешно');
+                var sf = $('#skin-front');
+                var sb = $('#skin-back');
 
-                var a = $('#skin-front').attr('src');
-                var b = $('#skin-back').attr('src');
+                sf.attr('src', sf.attr('src') + '?' + Math.random());
+                sb.attr('src', sb.attr('src') + '?' + Math.random());
 
-                $('#skin-front').attr('src', a);
-                $('#skin-back').attr('src', b);
-
-            } else if (status === 'invalid ratio') {
-                msg.danger('Неверный размер изображения');
             }
         },
         complete: function (xhr) {
-            if (xhr.status === 422) {
-                var response = JSON.parse(xhr.responseText);
-                showErrors(response.skin);
-            }
+            complete(xhr);
         }
     })
 });
@@ -780,25 +739,18 @@ $('#profile-update-cloak').click(function () {
         success: function (response) {
             enable(self);
             var status = response.status;
+            msg.call(response.message.type, response.message.text);
 
             if (status === 'success') {
-                msg.success('Новый плащ установлен успешно');
+                var cf = $('#cloak-front');
+                var cb = $('#cloak-back');
 
-                var a = $('#cloak-front').attr('src');
-                var b = $('#cloak-back').attr('src');
-
-                $('#cloak-front').attr('src', a);
-                $('#cloak-back').attr('src', b);
-
-            } else if (status === 'invalid ratio') {
-                msg.danger('Неверный размер изображения');
+                cf.attr('src', cf.attr('src') + '?' + Math.random());
+                cb.attr('src', cb.attr('src') + '?' + Math.random());
             }
         },
         complete: function (xhr) {
-            if (xhr.status === 422) {
-                var response = JSON.parse(xhr.responseText);
-                showErrors(response.skin);
-            }
+            complete(xhr);
         }
     })
 });
@@ -891,7 +843,7 @@ $('.server-edit-remove-category').click(function () {
 })();
 
 $(document).on('click', '.server-add-remove-category', function () {
-    if ($('.server-add-remove-category').length == 1) {
+    if ($('.server-add-remove-category').length === 1) {
         return;
     }
     $(this).parent().remove();
@@ -901,29 +853,33 @@ $('.edit-products-clip-item').click(function () {
     $('#item').val($(this).attr('data-item'));
     var type = $(this).attr('data-item-type');
 
-    if (type == 'item') {
-        $('label[for=stack]').text('Количество товара в 1 стаке');
-        $('label[for=price]').text('Цена за стак товара');
-    } else if (type == 'permgroup') {
-        $('label[for=stack]').text('Длительность привилегии (В днях). 0 - навсегда');
-        $('label[for=price]').text('Цена одного периода привилегии');
+    if (type === 'item') {
+        $('label[for=stack]').text($('#products-in-stack').text());
+        $('label[for=price]').text($('#products-price').text());
+    } else if (type === 'permgroup') {
+        $('label[for=stack]').text($('#perm-duration').text());
+        $('label[for=price]').text($('#perm-price').text());
     }
 });
 
+// Dropdown
 $('.edit-categories-clip-item').click(function () {
     $('#server').val($(this).attr('data-server'));
     $('#category').val($(this).attr('data-category'));
 });
 
+// Dropdown
 $('#item-set-default-image').change(function () {
     $('#item-load-image-block').fadeOut('fast');
 });
 
+// Dropdown
 $('#item-set-uploaded-image').change(function () {
     console.log('fd');
     $('#item-load-image-block').fadeIn('fast');
 });
 
+// Dropdown
 $('.robokassa-algo-item').click(function () {
     $('#robokassa-algo-input').val($(this).text());
 });
@@ -939,14 +895,14 @@ $('.products-sort-type-item').click(function () {
 });
 
 $('#item-set-item-type').change(function () {
-    $('label[for="item-name"]').text('Название предмета');
-    $('label[for="item"]').text('ID или ID:DATA предмета');
+    $('label[for="item-name"]').text($('#item-name').text());
+    $('label[for="item"]').text($('#item-id').text());
     $('#extra').parent().fadeIn('fast');
 });
 
 $('#item-set-permgroup-type').change(function () {
-    $('label[for="item-name"]').text('Название привилегии');
-    $('label[for="item"]').text('Внутриигровой идентификатор привилегии');
+    $('label[for="item-name"]').text($('#perm-name').text());
+    $('label[for="item"]').text($('#perm-id').text());
     $('#extra').parent().fadeOut('fast');
 });
 
@@ -1020,29 +976,20 @@ $('#admin-users-edit-ban').click(function () {
         },
         success: function (response) {
             var status = response.status;
+            msg.call(response.message.type, response.message.text);
 
             if (status === 'success') {
                 $('#admin-users-edit-ban-modal').modal('hide');
-                msg.info('Пользователь заблокирован');
 
                 $('#admin-users-edit-ban-open-modal').hide();
-                $('#admin-users-edit-already-ban').removeClass('d-none');
-                $('#admin-users-edit-already-ban').find('span').html(response.unblock);
-            } else if (status === 'user not found') {
-                msg.danger('Пользователь не найден');
-            } else if (status === 'You can not block yourself') {
-                msg.warning('Вы не можете заблокировать самого себя');
-            } else {
-                msg.danger('Заблокировать пользователя неудалось');
+                var t = $('#admin-users-edit-already-ban');
+                t.removeClass('d-none');
+                t.find('span').html(response.message.text);
             }
         },
         complete: function (xhr) {
             enable(self);
-
-            if (xhr.status === 422) {
-                var response = JSON.parse(xhr.responseText);
-                showErrors(response.skin);
-            }
+            complete(xhr);
         }
     })
 });
@@ -1058,6 +1005,9 @@ var search = {
     checkResult: function () {
         if (this.buf !== this.val) {
             this.buf = this.val;
+            var letsTyping = $('#search-lets-typing').text();
+            var wait = $('#search-wait').text();
+            var nothing = $('#search-nothing').text();
 
             $.ajax({
                 url: $('#admin-users-search').attr('data-url'),
@@ -1069,9 +1019,9 @@ var search = {
                 dataType: "json",
                 beforeSend: function () {
                     if (search.val === '')
-                        $('#admin-users-search-results').html('<a class="dropdown-item">Начните вводить...</a>');
+                        $('#admin-users-search-results').html('<a class="dropdown-item">' + letsTyping + '</a>');
                     else
-                        $('#admin-users-search-results').html('<a class="dropdown-item">Поиск...</a>');
+                        $('#admin-users-search-results').html('<a class="dropdown-item">' + wait + '</a>');
                 },
                 success: function (response) {
                     var status = response['status'];
@@ -1080,12 +1030,12 @@ var search = {
                     if (status === 'found') {
                         var results = '';
                         for (var i = 0; i < data.length; i++) {
-                            results += '<a class="dropdown-item admin-users-search-item" href="' + data[i]['url'] + '"><span class="mr-4 font-weight-bold">' + data[i]['id'] + '</span><span class="mr-4">' + data[i]['username'] + '</span><span class="mr-4">' + data[i]['email'] +  '</span><span class="mr-4">' + data[i]['balance'] +  ' ' + data[i]['currency'] + '</span></a>';
+                            results += '<a class="dropdown-item admin-users-search-item" href="' + data[i]['url'] + '"><span class="mr-4 font-weight-bold">' + data[i]['id'] + '</span><span class="mr-4">' + data[i]['username'] + '</span><span class="mr-4">' + data[i]['email'] + '</span><span class="mr-4">' + data[i]['balance'] + ' ' + data[i]['currency'] + '</span></a>';
                         }
                     }
 
-                    if (status === 'not found') {
-                        results = '<a class="dropdown-item disabled">Ничего не найдено</a>';
+                    if (status === 'not_found') {
+                        results = '<a class="dropdown-item disabled">' + nothing + '</a>';
                     }
 
                     $('#admin-users-search-results').html(results);
@@ -1123,7 +1073,7 @@ $('.rcon-dropdown-item').click(function () {
     $('.rcon-server').hide();
     $('.rcon-server[data-server-id=' + id + ']').show();
     $('.rcon-options').show();
-    msg.info('Выбран сервер ' + $(this).html());
+    msg.info($('#rcon-selected-server').text() + $(this).html());
 });
 
 $('.rcon-btn').click(function () {
@@ -1143,7 +1093,7 @@ function execRcon(self) {
     var val = input.val();
 
     if (val === '') {
-        msg.warning('Вам следует ввести команду!');
+        msg.warning($('#rcon-empty-input').text());
 
         return;
     }
@@ -1152,7 +1102,7 @@ function execRcon(self) {
     var time = date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds();
     var list = $('.rcon-list[data-server-id=' + id + ']');
 
-    list.prepend('<li class="list-group-item justify-content-between rcon-sent">> ' + val + '<span class="badge grey badge-pill">' + time +'</span></li>');
+    list.prepend('<li class="list-group-item justify-content-between rcon-sent">> ' + val + '<span class="badge grey badge-pill">' + time + '</span></li>');
     input.val('');
 
     $.ajax({
@@ -1170,7 +1120,7 @@ function execRcon(self) {
             if (status === 'success') {
                 list.prepend('<li class="list-group-item justify-content-between">' + response.result + '<span class="badge grey badge-pill">' + time + '</span></li>');
             } else if (status === 'connect error') {
-                list.prepend('<li class="list-group-item list-group-item-danger justify-content-between">Не удалось подключится к сокету [' + response.host + ':' + response.port + '].<span class="badge grey badge-pill">' + time + '</span></li>');
+                list.prepend('<li class="list-group-item list-group-item-danger justify-content-between">' + $('#rcon-connect-error').text() + ' [' + response.host + ':' + response.port + '].<span class="badge grey badge-pill">' + time + '</span></li>');
             }
         },
         complete: function () {
@@ -1180,13 +1130,14 @@ function execRcon(self) {
 }
 
 $('#rcon-hide-sent').change(function () {
+    var rconSent = $('.rcon-sent');
     if ($(this).prop('checked')) {
-        $('.rcon-sent').hide();
+        rconSent.hide();
 
         return;
     }
 
-    $('.rcon-sent').show();
+    rconSent.show();
 });
 
 /**

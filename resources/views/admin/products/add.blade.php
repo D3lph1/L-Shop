@@ -6,6 +6,8 @@
 @endsection
 
 @section('content')
+    @include('components.localization.admin.products')
+
     <div id="content-container">
         <div class="z-depth-1 content-header text-center">
             <h1><i class="fa fa-cube fa-lg fa-left-big"></i>Добавить товар</h1>

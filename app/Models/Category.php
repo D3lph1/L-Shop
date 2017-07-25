@@ -32,4 +32,14 @@ class Category extends Model
      * @var array
      */
     protected $fillable = ['name', 'server_id'];
+
+    /**
+     * Get the server to which the category is bound.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function server()
+    {
+        return $this->hasOne(Server::class, 'id', 'server_id');
+    }
 }

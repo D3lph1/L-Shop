@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Users;
 
 use App\Models\User;
+use App\Repositories\UserRepository;
 use Cartalyst\Sentinel\Sentinel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -17,6 +18,8 @@ use App\Http\Controllers\Controller;
  */
 class ListController extends Controller
 {
+    private $searchSpecials = ['>', '<', '=', '>=', '<=', '!=', '<>'];
+
     /**
      * Render the users list page.
      *
@@ -26,7 +29,7 @@ class ListController extends Controller
      */
     public function render(Request $request)
     {
-        $users = \Sentinel::getUserRepository()->with(['roles', 'activations', 'ban'])->paginate(50);
+        $users = $this->sentinel->getUserRepository()->with(['roles', 'activations', 'ban'])->paginate(50);
 
         $data = [
             'currentServer' => $request->get('currentServer'),
@@ -45,16 +48,16 @@ class ListController extends Controller
      */
     public function complete(Request $request)
     {
-        $user = \Sentinel::findById((int)$request->route('user'));
-        $activation = \Activation::completed($user);
+        $user = $this->sentinel->findById((int)$request->route('user'));
+        $activation = $this->sentinel->getActivationRepository()->completed($user);
         if ($activation) {
-            \Message::info('Аккаунт пользователя уже подтвержден');
+            $this->msg->info('Аккаунт пользователя уже подтвержден');
 
             return back();
         }
 
-        \Sentinel::activate($user);
-        \Message::success('Аккаунт пользователя подтвержден');
+        $this->sentinel->activate($user);
+        $this->msg->success('Аккаунт пользователя подтвержден');
 
         return back();
     }
@@ -63,11 +66,10 @@ class ListController extends Controller
      * Search given user.
      *
      * @param Request  $request
-     * @param Sentinel $sentinel
      *
      * @return \Illuminate\Http\JsonResponse
      */
-    public function search(Request $request, Sentinel $sentinel)
+    public function search(Request $request)
     {
         $search = $request->get('search');
         $result = $this->getResult($search);
@@ -90,7 +92,7 @@ class ListController extends Controller
             ]);
         }
 
-        return json_response('not found');
+        return json_response('not_found');
     }
 
     /**
@@ -102,24 +104,6 @@ class ListController extends Controller
      */
     protected function getResult($search)
     {
-        /** @var Builder $builder */
-        $builder = User::select(['id', 'username', 'email', 'balance']);
-
-        $first = $search[0];
-        if ($first === '>' or $first === '<' or $first === '=' or $first === '>=' or $first === '<=' or $first === '<>' or $first === '<>') {
-            $result = $builder
-                ->where('balance', $first, str_replace($first, '', $search))
-                ->get();
-        } else {
-            $pattern = '%' . $search . '%';
-            $result = $builder
-                ->where('id', 'like', $pattern)
-                ->orWhere('username', 'like', $pattern)
-                ->orWhere('email', 'like', $pattern)
-                ->orWhere('balance', 'like', $pattern)
-                ->get();
-        }
-
-        return $result->toArray();
+        return $this->app->make(UserRepository::class)->search($search, $this->searchSpecials);
     }
 }

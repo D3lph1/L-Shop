@@ -6,6 +6,12 @@
 @endsection
 
 @section('content')
+    <div style="display: none;">
+        <div id="rcon-selected-server">@lang('messages.admin.rcon.selected_server')</div>
+        <div id="rcon-empty-input">@lang('messages.admin.rcon.empty_input')</div>
+        <div id="rcon-connect-error">@lang('messages.admin.rcon.connect_error')</div>
+    </div>
+
     <div id="content-container">
         <div class="z-depth-1 content-header text-center">
             <h1><i class="fa fa-terminal fa-left-big"></i>RCON консоль</h1>

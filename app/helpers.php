@@ -264,19 +264,27 @@ if (!function_exists('build_ban_message')) {
      */
     function build_ban_message($until = null, $reason = null)
     {
-        if (is_null($until)) {
-            $until = "навсегда";
-        } else {
-            $until = dt($until);
-            $until = "до $until";
+        if (is_null($until) and is_null($reason)) {
+            return __('messages.admin.users.edit.block.successful.permanently.without_reason');
         }
 
-        if ($reason) {
-            $reason = " по причине: \"$reason\"";
+        if (is_null($until) and !is_null($reason)) {
+            return __('messages.admin.users.edit.block.successful.permanently.with_reason',
+                compact('reason'));
         }
-        $result = "Аккаунт этого пользователя заблокирован {$until}{$reason}.";
 
-        return $result;
+        if (!is_null($until) and is_null($reason)) {
+            return __('messages.admin.users.edit.block.successful.temporarily.without_reason',
+                compact('until'));
+        }
+
+        if (!is_null($until) and !is_null($reason)) {
+            return __('messages.admin.users.edit.block.successful.temporarily.with_reason',
+                compact('until', 'reason'));
+        }
+
+        // Unreachable, return statement for IDE.
+        return '';
     }
 }
 

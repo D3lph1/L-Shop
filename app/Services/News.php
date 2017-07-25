@@ -98,7 +98,7 @@ class News
 
         if ($count) {
             if ($count < s_get('news.per_page', 15)) {
-                $status = 'last portion';
+                $status = 'last_portion';
             } else {
                 $status = 'success';
             }
@@ -108,7 +108,12 @@ class News
             ]);
         }
 
-        return json_response('no more news');
+        return json_response('no_more_news', [
+            'message' => [
+                'type' => 'info',
+                'text' => __('messages.shop.catalog.news.no_more'),
+            ]
+        ]);
     }
 
     /**

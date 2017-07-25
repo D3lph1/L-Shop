@@ -50,6 +50,8 @@ class Server extends Model
     ];
 
     /**
+     * Get categories that are tied to the server.
+     *
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
      */
     public function categories()

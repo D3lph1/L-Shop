@@ -19,6 +19,14 @@
 </head>
 
 <body>
+
+{{-- Service block. It displays data for the localization of the shop. --}}
+<div id="localization" style="display: none;">
+    <span id="request-error">@lang('messages.request_error')</span>
+    <span id="captcha-required">@lang('messages.captcha_required')</span>
+</div>
+{{-- End --}}
+
 <div id="pre-loader">
     <div id="pre-animation">
         <span><i class="fa fa-spin fa-cog"></i></span>

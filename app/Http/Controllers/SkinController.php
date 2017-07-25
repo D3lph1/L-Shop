@@ -14,7 +14,7 @@ class SkinController extends Controller
      */
     protected function skin($player)
     {
-        return app(Skin::class, ['player' => $player]);
+        return $this->app->makeWith(Skin::class, ['player' => $player]);
     }
 
     /**
@@ -30,7 +30,9 @@ class SkinController extends Controller
             return true;
         }
 
-        abort(404);
+        $this->app->abort(404);
+
+        return false;
     }
 
     public function skinFront(Request $request)
@@ -96,7 +98,7 @@ class SkinController extends Controller
         $this->checkUser($username);
         $ready = $skin->getFrontCloak();
         if (!$ready) {
-            abort(404);
+            $this->app->abort(404);
         }
 
         $ready->resizeImage(256);
@@ -114,7 +116,7 @@ class SkinController extends Controller
         $this->checkUser($username);
         $ready = $skin->getBackCloak();
         if (!$ready) {
-            abort(404);
+            $this->app->abort(404);
         }
 
         $ready->resizeImage(256);

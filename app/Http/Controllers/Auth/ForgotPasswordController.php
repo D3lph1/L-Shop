@@ -10,6 +10,7 @@ use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Services\Reminder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class ForgotPasswordController
@@ -65,11 +66,11 @@ class ForgotPasswordController extends Controller
         try {
             $this->reminder->forgot($email, $request->ip());
         } catch (NotFoundException $e) {
-            \Message::danger('Пользователь с таким адресом электронной почты не найден!');
+            $this->msg->danger(__('messages.auth.forgot.user_not_found'));
 
             return back();
         }
-        \Message::info('На вашу почту отправлено письмо с инструкциями по сбросу пароля');
+        $this->msg->info(__('messages.auth.forgot.success'));
 
         return back();
     }
@@ -91,7 +92,7 @@ class ForgotPasswordController extends Controller
         $code = $request->route('code');
 
         if (!$this->reminder->checkCode($user, $code)) {
-            \Message::danger('Код сброса пароля не существует или истек срок восстановления пароля');
+            $this->msg->danger(__('messages.auth.reset.invalid_code'));
 
             return response()->redirectToRoute('index');
         }
@@ -108,10 +109,11 @@ class ForgotPasswordController extends Controller
      * Handle reset password request
      *
      * @param ResetPasswordRequest $request
+     * @param LoggerInterface      $logger
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function resetPassword(ResetPasswordRequest $request)
+    public function resetPassword(ResetPasswordRequest $request, LoggerInterface $logger)
     {
         if ($this->isDisabled()) {
             return response()->redirectToRoute('index');
@@ -124,17 +126,17 @@ class ForgotPasswordController extends Controller
         try {
             $this->reminder->reset($userId, $code, $password);
         } catch (RemindCodeNotFound $e) {
-            \Message::danger('Код сброса пароля не существует или истек срок восстановления пароля');
+            $this->msg->danger(__('messages.auth.reset.invalid_code'));
 
             return response()->redirectToRoute('index');
         } catch (UnableToCompleteRemindException $e) {
-            \Log::error($e);
-            \Message::danger('Не удалось сменить пароль');
+            $logger->error($e);
+            $this->msg->danger(__('messages.auth.reset.fail'));
 
             return response()->redirectToRoute('index');
         }
 
-        \Message::success('Пароль изменен успешно');
+        $this->msg->success(__('messages.auth.reset.success'));
 
         return response()->redirectToRoute('signin');
     }
@@ -145,7 +147,7 @@ class ForgotPasswordController extends Controller
     private function isDisabled()
     {
         if (!s_get('shop.enable_password_reset')) {
-            \Message::warning('Администрация проекта отключила возможность восстановления пароля');
+            $this->msg->warning('Администрация проекта отключила возможность восстановления пароля');
 
             return true;
         }

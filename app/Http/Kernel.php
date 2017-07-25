@@ -2,13 +2,9 @@
 
 namespace App\Http;
 
-use App\Http\Middleware\Api;
 use App\Http\Middleware\Captcha;
 use App\Http\Middleware\CheckForMaintenanceMode;
-use App\Http\Middleware\DenyIfModeAuth;
-use App\Http\Middleware\Server;
 use App\Http\Middleware\Servers;
-use App\Http\Middleware\Shop;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -40,7 +36,7 @@ class Kernel extends HttpKernel
             // \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class
         ],
 
         /**

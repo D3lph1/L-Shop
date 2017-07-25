@@ -11,7 +11,7 @@
                 <p id="name">{{ $username }}</p>
                 <div id="profile-block">
                     <p id="balance"><i class="fa fa-database fa-left"></i>
-                        Баланс:
+                        @lang('sidebar.main.balance'):
                         <span id="balance-span">
                             {{ $balance }}
                         </span>
@@ -20,19 +20,19 @@
                     <!--<p id="rank"><i class="fa fa-star fa-left"></i>Ранг: <span>Beginner</span></p>-->
                     <a href="{{ $catalogUrl }}" class="btn info-color btn-block">
                         <i class="fa fa-list fa-lg fa-left"></i>
-                        Каталог
+                        @lang('sidebar.main.catalog')
                     </a>
                     <a href="{{ route('cart', ['server' => $currentServer->id]) }}" class="btn info-color btn-block">
                         <i class="fa fa-shopping-cart fa-left fa-lg"></i>
-                        Корзина
+                        @lang('sidebar.main.cart')
                     </a>
                     <a href="{{ route('fillupbalance', ['server' => $currentServer->id]) }}" class="btn btn-warning btn-block">
                         <i class="fa fa-credit-card fa-left fa-lg"></i>
-                        Пополнить
+                        @lang('sidebar.main.fillupbalance')
                     </a>
                     <a href="{{ $logoutUrl }}" class="btn danger-color btn-block">
                         <i class="fa fa-times fa-left fa-lg"></i>
-                        Выйти
+                        @lang('sidebar.main.logout')
                     </a>
                 </div>
             @endif
@@ -40,36 +40,36 @@
                 <div id="profile-block">
                     <a href="{{ $catalogUrl }}" class="btn info-color btn-block">
                         <i class="fa fa-list fa-lg fa-left"></i>
-                        Каталог
+                        @lang('sidebar.main.catalog')
                     </a>
                     <a href="{{ $cartUrl }}" class="btn info-color btn-block">
                         <i class="fa fa-shopping-cart fa-left fa-lg"></i>
-                        Корзина
+                        @lang('sidebar.main.cart')
                     </a>
                     @if($canEnter)
                         <a href="{{ $signinUrl }}" class="btn btn-warning btn-block">
                             <i class="fa fa-key fa-left fa-lg"></i>
-                            Войти
+                            @lang('sidebar.main.signin')
                         </a>
                     @endif
                 </div>
             @endif
             @if($isAuth)
                 <div class="l-shop-collapse">
-                    <p class="a-b-header">Профиль</p>
+                    <p class="a-b-header">@lang('sidebar.profile.title')</p>
                     @if($character)
                         <p>
-                            <a href="{{ route('profile.character', ['server' => $currentServer->id]) }}" class="btn btn-info btn-block"><i class="fa fa-user left"></i>Персонаж</a>
+                            <a href="{{ route('profile.character', ['server' => $currentServer->id]) }}" class="btn btn-info btn-block"><i class="fa fa-user left"></i>@lang('sidebar.profile.character')</a>
                         </p>
                     @endif
                     <p>
-                        <a href="{{ route('profile.settings', ['server' => $currentServer->id]) }}" class="btn btn-info btn-block"><i class="fa fa-gear left"></i>Настройки</a>
+                        <a href="{{ route('profile.settings', ['server' => $currentServer->id]) }}" class="btn btn-info btn-block"><i class="fa fa-gear left"></i>@lang('sidebar.profile.settings')</a>
                     </p>
                     <div class="ad-btn-block">
-                        <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-info left"></i>Информация</button>
+                        <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-info left"></i>@lang('sidebar.profile.information.name')</button>
                         <ul class="ad-btn-list">
-                            <a href="{{ route('profile.payments', ['server' => $currentServer->id]) }}" class="waves-effect">Платежи</a>
-                            <a href="{{ route('profile.cart', ['server' => $currentServer->id]) }}" class="waves-effect">Внутриигровая корзина</a>
+                            <a href="{{ route('profile.payments', ['server' => $currentServer->id]) }}" class="waves-effect">@lang('sidebar.profile.information.nodes.payments')</a>
+                            <a href="{{ route('profile.cart', ['server' => $currentServer->id]) }}" class="waves-effect">@lang('sidebar.profile.information.nodes.cart')</a>
                         </ul>
                     </div>
                 </div>
@@ -80,7 +80,7 @@
             @endif
             <div id="server-block">
                 <button id="chose-server" class="btn btn-warning btn-block">
-                    <i class="fa fa-chevron-right fa-left left"></i>Серверы
+                    <i class="fa fa-chevron-right fa-left left"></i>@lang('sidebar.servers')
                 </button>
                 <div id="server-list" class="servers text-left">
                     @foreach($servers as $server)
@@ -107,7 +107,7 @@
                     <div class="news-preview z-depth-1">
                         <h3 class="news-pre-header">{{ $one->title }}</h3>
                         <p class="news-pre-text">{{ short_string($one->content, 150) }}</p>
-                        <a href="{{ route('news', ['server' => $currentServer->id, 'id' => $one->id]) }}" class="btn btn-info btn-sm btn-block mt-1">Подробнее...</a>
+                        <a href="{{ route('news', ['server' => $currentServer->id, 'id' => $one->id]) }}" class="btn btn-info btn-sm btn-block mt-1">@lang('content.shop.news.read_more')</a>
                     </div>
                 @endforeach
             </div>

@@ -6,6 +6,10 @@
 @endsection
 
 @section('content')
+    <div style="display: none;">
+        <div id="cart-empty">@lang('content.shop.cart.empty')</div>
+    </div>
+
     <div id="content-container">
         <div id="cart-header" class="z-depth-1">
             <h1><i class="fa fa-shopping-cart fa-lg fa-left-big"></i>Корзина</h1>

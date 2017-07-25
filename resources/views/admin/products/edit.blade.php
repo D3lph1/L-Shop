@@ -6,6 +6,8 @@
 @endsection
 
 @section('content')
+    @include('components.localization.admin.products')
+
     <div id="content-container">
         <div class="z-depth-1 content-header text-center">
             <h1><i class="fa fa-cube fa-lg fa-left-big"></i>Редактировать товар</h1>
@@ -40,14 +42,14 @@
                                 <div class="md-form text-left">
                                     <i class="fa fa-cubes prefix"></i>
                                     <input type="text" name="stack" id="stack" class="form-control" value="{{ $product->stack }}">
-                                    <label for="stack">@if($product->type == 'permgroup') Длительность привилегии (В днях). 0 - навсегда @else Количество товара в 1 стаке @endif</label>
+                                    <label for="stack">@if($product->type == 'permgroup') @lang('content.admin.products.add.perm_duration') @else @lang('content.admin.products.add.products_in_stack') @endif</label>
                                 </div>
                             </div>
                             <div class="plus-category">
                                 <div class="md-form text-left">
                                     <i class="fa fa-money prefix"></i>
                                     <input type="text" name="price" id="price" class="form-control" value="{{ $product->price }}">
-                                    <label for="price">@if($product->type == 'permgroup') Цена одного периода привилегии @else Цена за стак товара @endif</label>
+                                    <label for="price">@if($product->type == 'permgroup') @lang('content.admin.products.add.perm_price') @else @lang('content.admin.products.add.products_price') @endif</label>
                                 </div>
                             </div>
                             <div class="plus-category">

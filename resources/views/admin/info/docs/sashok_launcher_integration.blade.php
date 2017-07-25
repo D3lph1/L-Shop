@@ -2,13 +2,13 @@
 @extends('layouts.shop')
 
 @section('title')
-    Основные сведения по работе с системой
+    Гайд по интеграции Sashok724's Launcher
 @endsection
 
 @section('content')
     <div id="content-container">
         <div class="z-depth-1 content-header text-center">
-            <h1><i class="fa fa-info fa-left-big"></i>Основные сведения по работе с системой</h1>
+            <h1><i class="fa fa-link fa-left-big"></i> Гайд по интеграции Sashok724's Launcher</h1>
         </div>
         <div class="card card-block">
             {!! $data !!}
