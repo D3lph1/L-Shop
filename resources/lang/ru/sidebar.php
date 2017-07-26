@@ -96,5 +96,6 @@ return [
             ]
         ]
     ],
-    'servers' => 'Серверы'
+    'servers' => 'Серверы',
+    'server_name' => 'Сервер'
 ];

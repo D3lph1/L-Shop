@@ -6,8 +6,6 @@
 @endsection
 
 @section('content')
-    <div id=""></div>
-
     <div id="content-container">
         <div class="z-depth-1  content-header text-center">
             <h1><i class="fa fa-credit-card fa-left-big"></i>Пополнить баланс</h1>

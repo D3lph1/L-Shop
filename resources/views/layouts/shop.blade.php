@@ -123,7 +123,7 @@
                 <div class="col-8" id="topbar-content-1">
                     <button id="btn-menu" class="btn"><i class="fa fa-bars"></i></button>
                     <a href="{{ route('servers') }}">
-                        <span id="topbar-server">Сервер: <span id="tbs-name">{{ $currentServer->name }}</span></span>
+                        <span id="topbar-server">@lang('content.shop.server_name') <span id="tbs-name">{{ $currentServer->name }}</span></span>
                     </a>
                 </div>
 

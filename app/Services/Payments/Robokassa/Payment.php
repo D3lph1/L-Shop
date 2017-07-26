@@ -47,8 +47,9 @@ class Payment {
      * @param  string $validationPassword password #2
      * @param  string $algo               hashing algo
      * @param  bool   $testMode           use test server
+     * @param string  $culture
      */
-    public function __construct($login, $paymentPassword, $validationPassword, $algo = 'sha512', $testMode = false)
+    public function __construct($login, $paymentPassword, $validationPassword, $algo = 'sha512', $testMode = false, $culture = self::CULTURE_RU)
     {
         $this->login              = $login;
         $this->paymentPassword    = $paymentPassword;
