@@ -1,5 +1,5 @@
 <script type="text/javascript">
     $('#page-content').trumbowyg({
-        lang: 'ru'
+        lang: '{{ \App::getLocale() }}'
     });
 </script>

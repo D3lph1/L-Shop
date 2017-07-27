@@ -2,13 +2,13 @@
 @extends('layouts.shop')
 
 @section('title')
-    Редактировать пользователя
+    @lang('content.admin.users.edit.title', ['username' => $user->username])
 @endsection
 
 @section('content')
     <div id="content-container">
         <div class="z-depth-1 content-header text-center">
-            <h1><i class="fa fa-user fa-lg fa-left-big"></i>Редактировать пользователя {{ $user->username }}</h1>
+            <h1><i class="fa fa-user fa-lg fa-left-big"></i>@lang('content.admin.users.edit.title', ['username' => $user->username])</h1>
         </div>
 
         <form id="admin-users-edit-already-ban" method="post" action="{{ route('admin.users.unblock', ['server' => $currentServer->id, 'user' => $user->id]) }}" @if(!$ban->isBanned()) class="d-none" @endif>
@@ -18,7 +18,7 @@
                 @endif
                 <span></span>
                 {{ csrf_field() }}
-                <button class="btn btn-info btn-sm">Разблокировать</button>
+                <button class="btn btn-info btn-sm">@lang('content.admin.users.edit.unblock')</button>
             </div>
         </form>
 
@@ -30,7 +30,7 @@
                             <div class="md-form text-left">
                                 <i class="fa fa-user prefix"></i>
                                 <input type="text" name="username" id="user-name" class="form-control" value="{{ $user->username }}">
-                                <label for="user-name">Имя пользователя</label>
+                                <label for="user-name">@lang('content.admin.users.edit.username')</label>
                             </div>
                         </div>
                     </div>
@@ -44,21 +44,21 @@
                                 <div class="md-form text-left">
                                     <i class="fa fa-envelope-o prefix"></i>
                                     <input type="text" name="email" id="user-email" class="form-control" value="{{ $user->email }}">
-                                    <label for="user-email">Адрес электронной почты</label>
+                                    <label for="user-email">@lang('content.admin.users.edit.email')</label>
                                 </div>
                             </div>
                             <div class="plus-category">
                                 <div class="md-form text-left">
                                     <i class="fa fa-money prefix"></i>
                                     <input type="text" name="balance" id="user-balance" class="form-control" value="{{ $user->balance }}">
-                                    <label for="user-balance">Баланс</label>
+                                    <label for="user-balance">@lang('content.admin.users.edit.balance')</label>
                                 </div>
                             </div>
                             <div class="plus-category">
                                 <div class="md-form text-left">
                                     <i class="fa fa-lock prefix"></i>
                                     <input type="password" name="password" id="user-password" class="form-control">
-                                    <label for="user-password">Новый пароль</label>
+                                    <label for="user-password">@lang('content.admin.users.edit.password')</label>
                                 </div>
                             </div>
                             <div class="plus-category">
@@ -66,7 +66,7 @@
                                     <input type="checkbox" name="admin" id="user-admin" @if($user->hasAccess('user.admin')) checked="checked" @endif value="1">
                                     <label for="user-admin" class="ckeckbox-label">
                                         <span class='ui'></span>
-                                        Администратор
+                                        @lang('content.admin.users.list.table.admin')
                                     </label>
                                 </div>
                             </div>
@@ -74,19 +74,19 @@
                             <div class="plus-category text-center">
                                 <p>
                                     <a class="btn btn-info" data-toggle="collapse" data-target="#collapseOtherUserActions" aria-expanded="false" aria-controls="collapseOtherUserActions">
-                                        Другое
+                                        @lang('content.admin.users.edit.other.title')
                                     </a>
                                 </p>
                                 <div class="collapse" id="collapseOtherUserActions">
                                     <div class="md-form text-left">
-                                        <a href="#" class="btn btn-warning btn-sm btn-block" data-toggle="modal" data-target="#admin-users-edit-show-cart">Просмотр внутриигровой корзины</a>
+                                        <a href="#" class="btn btn-warning btn-sm btn-block" data-toggle="modal" data-target="#admin-users-edit-show-cart">@lang('content.admin.users.edit.other.in_game_cart')</a>
                                     </div>
                                     <div class="md-form text-left">
-                                        <a href="{{ route('admin.users.edit.destroy_sessions', ['server' => $currentServer->id, 'user' => $user->id]) }}" class="btn danger-color btn-sm btn-block">Сбросить все логин - сессии данного пользователя</a>
+                                        <a href="{{ route('admin.users.edit.destroy_sessions', ['server' => $currentServer->id, 'user' => $user->id]) }}" class="btn danger-color btn-sm btn-block">@lang('content.admin.users.edit.other.sessions')</a>
                                     </div>
                                     @if($user->getUserId() !== \Sentinel::getUser()->getUserId())
                                         <div class="md-form text-left mb-3">
-                                            <a id="admin-users-edit-ban-open-modal" class="btn btn-warning btn-sm btn-block" data-toggle="modal" data-target="#admin-users-edit-ban-modal">Заблокировать пользователя</a>
+                                            <a id="admin-users-edit-ban-open-modal" class="btn btn-warning btn-sm btn-block" data-toggle="modal" data-target="#admin-users-edit-ban-modal">@lang('content.admin.users.edit.other.block')</a>
                                         </div>
                                     @endif
                                 </div>
@@ -95,10 +95,10 @@
                         </div>
                         <div class="col-sm-6 offset-sm-3 col-12 save-and-del text-center">
                             {{ csrf_field() }}
-                            <button class="btn btn-info"><i class="fa fa-check fa-left"></i>Сохранить</button>
+                            <button class="btn btn-info"><i class="fa fa-check fa-left"></i>@lang('content.all.save')</button>
 
                             @if($user->getUserId() !== \Sentinel::getUser()->getUserId())
-                                <a href="{{ route('admin.users.edit.remove', ['server' => $currentServer->id, 'user' => $user->id]) }}" class="btn danger-color"><i class="fa fa-user-times fa-left"></i>Удалить пользователя</a>
+                                <a href="{{ route('admin.users.edit.remove', ['server' => $currentServer->id, 'user' => $user->id]) }}" class="btn danger-color"><i class="fa fa-user-times fa-left"></i>@lang('content.admin.users.edit.remove')</a>
                             @endif
                         </div>
                     </div>
@@ -120,14 +120,14 @@
         <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Отменить</button>
     @endslot
     <div class="md-form text-left">
-        <i class="fa fa-calendar-times-o prefix"  data-toggle="popover" data-placement="right" data-trigger="hover" title="Подсказка" data-content="Здесь указывается длительность блокировки пользователя в днях. Для того, чтобы заблокировать пользователя навсегда, введите нуль (0)."></i>
+        <i class="fa fa-calendar-times-o prefix"  data-toggle="popover" data-placement="right" data-trigger="hover" title="@lang('components.popover.title')" data-content="@lang('content.admin.users.edit.block_modal.duration_popover')"></i>
         <input type="text" id="admin-users-edit-ban-duration" class="form-control" value="0">
-        <label for="admin-users-edit-ban-duration" class="ckeckbox-label">Длительность блокировки</label>
+        <label for="admin-users-edit-ban-duration" class="ckeckbox-label">@lang('content.admin.users.edit.block_modal.duration')</label>
     </div>
     <div class="md-form text-left">
-        <i class="fa fa-pencil prefix"  data-toggle="popover" data-placement="right" data-trigger="hover" title="Подсказка" data-content="Причина блокировки указывается, дабы вы и сам пользователь знали о том, за что его аккаунт заблокировали. Это поле необязательно для заполнения."></i>
+        <i class="fa fa-pencil prefix"  data-toggle="popover" data-placement="right" data-trigger="hover" title="@lang('components.popover.title')" data-content="@lang('content.admin.users.edit.block_modal.reason_popover')"></i>
         <input type="text" id="admin-users-edit-ban-reason" class="form-control">
-        <label for="admin-users-edit-ban-reason" class="ckeckbox-label">Причина блокировки</label>
+        <label for="admin-users-edit-ban-reason" class="ckeckbox-label">@lang('content.admin.users.edit.block_modal.reason')</label>
     </div>
 @endcomponent
 
@@ -136,10 +136,10 @@
         admin-users-edit-show-cart
     @endslot
     @slot('title')
-        Просмотр внутриигровой корзины
+        @lang('content.admin.users.edit.cart_modal.title')
     @endslot
     @slot('buttons')
-        <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Понятно</button>
+        <button type="button" class="btn btn-outline-warning" data-dismiss="modal">@lang('content.admin.users.edit.cart_modal.btn')</button>
     @endslot
     <div class="md-form text-left">
         @if($cart->count())
@@ -147,10 +147,10 @@
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>Изображение</th>
-                        <th>Предмет</th>
-                        <th>Количество / длительность</th>
-                        <th>Сервер</th>
+                        <th>@lang('content.admin.users.edit.cart_modal.table.image')</th>
+                        <th>@lang('content.admin.users.edit.cart_modal.table.item')</th>
+                        <th>@lang('content.admin.users.edit.cart_modal.table.count')</th>
+                        <th>@lang('content.admin.users.edit.cart_modal.table.server')</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -171,7 +171,7 @@
             </div>
         @else
             <div class="text-center">
-                <h3>Корзина пуста</h3>
+                <h3>@lang('content.admin.users.edit.cart_modal.empty')</h3>
             </div>
         @endif
     </div>

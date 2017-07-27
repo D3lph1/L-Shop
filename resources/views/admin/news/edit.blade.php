@@ -2,20 +2,20 @@
 @extends('layouts.shop')
 
 @section('title')
-    Редактировать новость
+    @lang('content.admin.news.edit.title')
 @endsection
 
 @section('content')
     <div id="content-container">
         <div class="z-depth-1 content-header text-center">
-            <h1><i class="fa fa-newspaper-o fa-left-big"></i>Редактировать новость</h1>
+            <h1><i class="fa fa-newspaper-o fa-left-big"></i>@lang('content.admin.news.edit.title')</h1>
         </div>
         <div class="product-container">
             <form method="post" action="{{ route('admin.news.edit.save', ['currentServer' => $currentServer->id, 'id' => $news->id]) }}">
                 <div class="md-form mt-1">
                     <i class="fa fa-font prefix"></i>
                     <input type="text" name="news_title" id="news-title" class="form-control" value="{{ $news->title }}">
-                    <label for="news-title">Заголовок новости</label>
+                    <label for="news-title">@lang('content.admin.news.add.name')</label>
                 </div>
 
                 <textarea name="news_content" id="page-content">{{ $news->content }}</textarea>
@@ -23,8 +23,8 @@
                 <div class="card card-block mt-3">
                     <div class="flex-row">
                         {{ csrf_field() }}
-                        <button class="btn btn-info">Сохранить изменения</button>
-                        <a href="{{ route('admin.news.remove', ['server' => $currentServer->id, 'id' => $news->id]) }}" class="btn danger-color">Удалить новость</a>
+                        <button class="btn btn-info">@lang('content.admin.save')</button>
+                        <a href="{{ route('admin.news.remove', ['server' => $currentServer->id, 'id' => $news->id]) }}" class="btn danger-color">@lang('content.admin.news.edit.remove')</a>
                     </div>
                 </div>
             </form>

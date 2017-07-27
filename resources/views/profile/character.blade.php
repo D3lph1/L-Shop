@@ -3,13 +3,13 @@
 
 
 @section('title')
-    Персонаж
+    @lang('content.profile.character.title')
 @endsection
 
 @section('content')
     <div id="content-container">
         <div id="cart-header" class="z-depth-1">
-            <h1><i class="fa fa-user fa-lg fa-left-big"></i>Персонаж</h1>
+            <h1><i class="fa fa-user fa-lg fa-left-big"></i>@lang('content.profile.character.title')</h1>
         </div>
         <div class="product-container">
             <div id="change-skin" class="row">
@@ -23,7 +23,7 @@
                             <div class="col-12" id="skin-upload">
                                 <form id="skin-form" enctype="multipart/form-data">
                                     {{ csrf_field() }}
-                                    <label for="upload-skin" class="btn btn-primary" style="display: inline-block;">Выбрать файл<i class="fa fa-download fa-right"></i></label><br/>
+                                    <label for="upload-skin" class="btn btn-primary" style="display: inline-block;">@lang('content.profile.character.select_file')<i class="fa fa-download fa-right"></i></label><br/>
                                     <input style="display: none;" type="file" name="skin" id="upload-skin" accept="image/png" onchange="$('#skin-location').val($('#upload-skin').val());
                                if ($('#skin-location').val() !== '')
                                     $('#profile-update-skin').prop('disabled', false).removeClass('disabled');
@@ -33,15 +33,15 @@
                                 <input type="text" readonly id="skin-location">
                             </div>
                             <div class="col-12">
-                                <button id="profile-update-skin" class="btn green disabled" disabled="disabled" data-url="{{ route('profile.character.skin.upload') }}"><i class="fa fa-refresh fa-left"></i>Обновить</button>
+                                <button id="profile-update-skin" class="btn green disabled" disabled="disabled" data-url="{{ route('profile.character.skin.upload') }}"><i class="fa fa-refresh fa-left"></i>@lang('content.profile.character.update')</button>
                                 <div class="alert alert-info mt-3">
-                                    Максимальный размер файла - <strong>{{ s_get('profile.character.skin.max_size') }}</strong> КБ.
+                                    @lang('content.profile.character.max_file_size', ['size' => s_get('profile.character.skin.max_size')])
                                 </div>
                                 <div class="alert alert-info">
                                     @if(s_get('profile.character.skin.hd'))
-                                        Максимальные размеры изображения - <strong>1024x512</strong>
+                                        @lang('content.profile.character.skin.max_image_size_hd')
                                     @else
-                                        Размер изображения - <strong>64x32</strong>
+                                        @lang('content.profile.character.skin.max_image_size')
                                     @endif
                                 </div>
                             </div>
@@ -57,14 +57,14 @@
                                     <img src="{{ route('cloak.front', ['user' => username()]) }}" alt="skin" class="skin-img">
                                 @else
                                     <div class="alert alert-info">
-                                        Плащ не установлен
+                                        @lang('content.profile.character.clock.not_set')
                                     </div>
                                 @endif
                             </div>
                             <div class="col-12" id="cloak-upload">
                                 <form id="cloak-form" enctype="multipart/form-data">
                                     {{ csrf_field() }}
-                                    <label for="upload-cloak" class="btn btn-primary" style="display: inline-block;">Выбрать файл<i class="fa fa-download fa-right"></i></label><br/>
+                                    <label for="upload-cloak" class="btn btn-primary" style="display: inline-block;">@lang('content.profile.character.select_file')<i class="fa fa-download fa-right"></i></label><br/>
                                     <input style="display: none;" type="file" name="cloak" id="upload-cloak" accept="image/png" onchange="$('#cloak-location').val($('#upload-cloak').val());
                                if ($('#cloak-location').val() !== '')
                                     $('#profile-update-cloak').prop('disabled', false).removeClass('disabled');
@@ -74,15 +74,15 @@
                                 <input type="text" readonly id="cloak-location">
                             </div>
                             <div class="col-12">
-                                <button id="profile-update-cloak" class="btn green disabled" disabled="disabled" data-url="{{ route('profile.character.cloak.upload') }}"><i class="fa fa-refresh fa-left"></i>Обновить</button>
+                                <button id="profile-update-cloak" class="btn green disabled" disabled="disabled" data-url="{{ route('profile.character.cloak.upload') }}"><i class="fa fa-refresh fa-left"></i>@lang('content.profile.character.update')</button>
                                 <div class="alert alert-info mt-3">
-                                    Максимальный размер файла - <strong>{{ s_get('profile.character.cloak.max_size') }}</strong> КБ.
+                                    @lang('content.profile.character.max_file_size', ['size' => s_get('profile.character.cloak.max_size')])
                                 </div>
                                 <div class="alert alert-info">
                                     @if(s_get('profile.character.cloak.hd'))
-                                        Максимальные размеры изображения - <strong>1024x512</strong>
+                                        @lang('content.profile.character.clock.max_image_size_hd')
                                     @else
-                                        Размер изображения - <strong>22x17</strong>
+                                        @lang('content.profile.character.clock.max_image_size')
                                     @endif
                                 </div>
                             </div>

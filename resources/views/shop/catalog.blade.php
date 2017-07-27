@@ -2,7 +2,7 @@
 @extends('layouts.shop')
 
 @section('title')
-    Каталог товаров
+    @lang('content.shop.catalog.title')
 @endsection
 
 @section('content')
@@ -37,7 +37,7 @@
                     {{ $goods->links('components.pagination') }}
                 @else
                     <div class="alert alert-info text-center">
-                        Категория пуста
+                        @lang('content.shop.catalog.category_empty')
                     </div>
                 @endif
             </div>
@@ -48,15 +48,15 @@
             catalog-to-buy-modal
         @endslot
         @slot('title')
-            Быстрая покупка (<span id="catalog-to-buy-name"></span>)
+            @lang('content.shop.catalog.fast_buy_modal.title') (<span id="catalog-to-buy-name"></span>)
         @endslot
         @slot('buttons')
-            <button type="button" class="btn btn-warning" id="catalog-to-buy-accept">Продолжить</button>
-            <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Отменить</button>
+            <button type="button" class="btn btn-warning" id="catalog-to-buy-accept">@lang('content.shop.catalog.fast_buy_modal.next_btn')</button>
+            <button type="button" class="btn btn-outline-warning" data-dismiss="modal">@lang('content.shop.catalog.fast_buy_modal.cancel_btn')</button>
         @endslot
         <div class="md-form">
             @if(!$isAuth)
-                <input type="text" class="form-control text-center" id="catalog-to-buy-username" placeholder="Имя пользователя">
+                <input type="text" class="form-control text-center" id="catalog-to-buy-username" placeholder="@lang('content.shop.catalog.fast_buy_modal.username')">
             @endif
             <input type="text" class="form-control text-center" id="catalog-to-buy-count-input">
 
@@ -67,11 +67,9 @@
         </div>
         <div class="alert alert-info">
             @if($isAuth)
-                С вашего счёта будет списана сумма в размере <span id="catalog-to-buy-summ"></span> {!! $currency !!}
-                Если же средств недостаточно, вы будете автоматически перенаправлены на страницу оплаты.
+                @lang('content.shop.catalog.fast_buy_modal.auth', ['span' => '<span id="catalog-to-buy-summ"></span>', 'currency' => $currency])
             @else
-                Вы будете перенаправлены на страницу выбора способа оплаты. Сумма заказа:
-                <span id="catalog-to-buy-summ"></span> {!! $currency !!}
+                @lang('content.shop.catalog.fast_buy_modal.guest', ['span' => '<span id="catalog-to-buy-summ">', 'currency' => $currency])
             @endif
         </div>
         {!! \ReCaptcha::render() !!}

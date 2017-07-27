@@ -2,23 +2,23 @@
 @extends('layouts.shop')
 
 @section('title')
-    Просмотр статистики
+    @lang('content.admin.other.statistics.show.title')
 @endsection
 
 @section('content')
     <div id="content-container">
         <div id="cart-header" class="z-depth-1">
-            <h1><i class="fa fa-pencil fa-lg fa-left-big"></i>Просмотр статистики</h1>
+            <h1><i class="fa fa-pencil fa-lg fa-left-big"></i>@lang('content.admin.other.statistics.show.title')</h1>
         </div>
         <div class="product-container">
             <div class="row">
                 <div class="col-md-6">
-                    <h4 class="text-center">Динамика совершенных заказов за этот год:</h4>
+                    <h4 class="text-center">@lang('content.admin.other.statistics.show.orders_per_year')</h4>
                     <canvas id="paymentsCountPerYear"></canvas>
                 </div>
                 <div class="col-md-6">
                     <h4 class="text-center">
-                        Динамика совершенных заказов за
+                        @lang('content.admin.other.statistics.show.orders_per_month')
                             <div class="btn-group">
                                 <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ $currentMonthWord }}</button>
 
@@ -28,18 +28,18 @@
                                     @endforeach
                                 </div>
                             </div>
-                        месяц:</h4>
+                        </h4>
                     <canvas id="paymentsCountPerMonth"></canvas>
                 </div>
 
                 <div class="col-md-6 mt-3">
-                    <h4 class="text-center">Динамика получения прибыли за этот год:</h4>
+                    <h4 class="text-center">@lang('content.admin.other.statistics.show.profit_per_year')</h4>
                     <canvas id="profitPerYear"></canvas>
                 </div>
 
                 <div class="col-md-6 mt-3">
                     <h4 class="text-center">
-                        Динамика получения прибыли за
+                        @lang('content.admin.other.statistics.show.profit_per_month')
                         <div class="btn-group">
                             <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ $currentMonthWord }}</button>
 
@@ -49,12 +49,12 @@
                                 @endforeach
                             </div>
                         </div>
-                        месяц:</h4>
+                    </h4>
                     <canvas id="profitPerMonth"></canvas>
                 </div>
                 <div class="col-md-12 mt-2">
                     <hr>
-                    <h3 class="text-center">Общая прибыль: {{ $profit }} {!! $currency !!}</h3>
+                    <h3 class="text-center">@lang('content.admin.other.statistics.show.profit', ['profit' => $profit, 'currency' => $currency])</h3>
                     <hr>
                 </div>
             </div>
@@ -63,7 +63,7 @@
                 <div class="flex-row">
                     <form method="post" action="{{ route('admin.statistic.flush_cache', ['server' => $currentServer->id]) }}">
                         {{ csrf_field() }}
-                        <button class="btn btn-warning">Очистить кэш статистики</button>
+                        <button class="btn btn-warning">@lang('content.admin.other.statistics.show.clear_cache')</button>
                     </form>
                 </div>
             </div>
@@ -80,22 +80,13 @@
         var paymentsCountPerYear = document.getElementById("paymentsCountPerYear").getContext('2d');
 
         var data = {
-            labels: ["Январь",
-                "Февраль",
-                "Март",
-                "Апрель",
-                "Май",
-                "Июнь",
-                "Июль",
-                "Август",
-                "Сентябрь",
-                "Октябрь",
-                "Ноябрь",
-                "Декабрь"
+            labels: [
+                @foreach(__('content.months') as $month)
+                    {!! '"' . $month . '",' !!}
+                @endforeach
             ],
             datasets: [
                 {
-                    label: "Динамика совершенных заказов за этот год",
                     fillColor: "rgba(151,187,205,0.2)",
                     strokeColor: "rgba(151,187,205,1)",
                     pointColor: "rgba(151,187,205,1)",
@@ -126,7 +117,6 @@
             labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"],
             datasets: [
                 {
-                    label: "Динамика совершенных заказов за месяц",
                     fillColor: "rgba(151,187,205,0.2)",
                     strokeColor: "rgba(151,187,205,1)",
                     pointColor: "rgba(151,187,205,1)",
@@ -157,22 +147,13 @@
         var profitPerYear = document.getElementById("profitPerYear").getContext('2d');
 
         data = {
-            labels: ["Январь",
-                "Февраль",
-                "Март",
-                "Апрель",
-                "Май",
-                "Июнь",
-                "Июль",
-                "Август",
-                "Сентябрь",
-                "Октябрь",
-                "Ноябрь",
-                "Декабрь"
+            labels: [
+                @foreach(__('content.months') as $month)
+                    {!! '"' . $month . '",' !!}
+                @endforeach
             ],
             datasets: [
                 {
-                    label: "Динамика получения прибыли за этот год",
                     fillColor: "rgba(151,187,205,0.2)",
                     strokeColor: "rgba(151,187,205,1)",
                     pointColor: "rgba(151,187,205,1)",
@@ -203,7 +184,6 @@
             labels: ["1", "2", "3", "4", "5", "6", "7", "8", "9", "10", "11", "12", "13", "14", "15", "16", "17", "18", "19", "20", "21", "22", "23", "24", "25", "26", "27", "28", "29", "30", "31"],
             datasets: [
                 {
-                    label: "Динамика получения прибыли за месяц",
                     fillColor: "rgba(151,187,205,0.2)",
                     strokeColor: "rgba(151,187,205,1)",
                     pointColor: "rgba(151,187,205,1)",

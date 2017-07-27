@@ -2,92 +2,87 @@
 @extends('layouts.shop')
 
 @section('title')
-    Безопасность
+    @lang('content.admin.control.security.title')
 @endsection
 
 @section('content')
     <div id="content-container">
         <div class="z-depth-1 content-header text-center">
-            <h1><i class="fa fa-lock fa-left-big"></i>Безопасность</h1>
+            <h1><i class="fa fa-lock fa-left-big"></i>@lang('content.admin.control.security.title')</h1>
         </div>
 
         @if(config('app.debug'))
             <div class="alert alert-danger">
                 <button id="admin-security-debug-alert-close" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <p><strong>Внимание!</strong> У вас включен режим отладки. Посетители вашего сайта могут видеть отладочную
-                информацию, а также, ошибки. В обязательном порядке отключите этот режим в "продакшене", выставив значение
-                элемента <code>APP_DEBUG</code> в файле <code>.env</code> в значение <code>false</code>.</p>
-                Чтобы получилось так: <code>APP_DEBUG=false</code>
+                @lang('content.admin.control.security.debug_mode_alert')
             </div>
         @endif
 
         <form method="post" action="{{ route('admin.control.security.save', ['currentServer' => $currentServer->id]) }}">
             <div class="card card-block">
-                <h4 class="card-title">Генератор ключей</h4>
+                <h4 class="card-title">@lang('content.admin.control.security.generator.title')</h4>
                 <p class="card-text">
-                    <p>Этот инструмент поможет создать ключ приложения:</p>
+                    <p>@lang('content.admin.control.security.generator.description_app_key')</p>
                     <div class="form-inline">
                         <input type="text" class="form-control" value="{{ $key = 'base64:' . base64_encode(str_random(32)) }}" readonly>
-                        <a class="btn btn-info" onclick="prompt('Скопировать', '{{ $key }}')"><i class="fa fa-copy"></i> Копировать</a>
+                        <a class="btn btn-info" onclick="prompt('Скопировать', '{{ $key }}')"><i class="fa fa-copy"></i> @lang('content.all.copy')</a>
                     </div>
                     <div class="alert alert-info">
-                        <p>Установите этот ключ значением элемента <code>APP_KEY</code> в файле <code>.env</code></p>
-                        Должно получиться так: <code>APP_KEY={{ $key }}</code>
+                        @lang('content.admin.control.security.generator.description_app_key_instruction')
                     </div>
                     <div class="alert alert-warning">
-                        <strong>Внимание!</strong> После изменения ключа приложения все пользователи (в том числе и вы) будут разлогинены.
+                        @lang('content.admin.control.security.generator.description_app_key_notify')
                     </div>
 
-                    <p class="mt-2">А этот - ключ сессии:</p>
+                    <p class="mt-2">@lang('content.admin.control.security.generator.description_app_auth_key')</p>
                     <div class="form-inline">
                         <input type="text" class="form-control" value="{{ $key = str_random(32) }}" readonly>
-                        <a class="btn btn-info" onclick="prompt('Скопировать', '{{ $key }}')"><i class="fa fa-copy"></i> Копировать</a>
+                        <a class="btn btn-info" onclick="prompt('Скопировать', '{{ $key }}')"><i class="fa fa-copy"></i> @lang('content.all.copy')</a>
                     </div>
                     <div class="alert alert-info">
-                        <p>Установите этот ключ значением элемента <code>APP_AUTH_KEY</code> в файле <code>.env</code></p>
-                        Должно получиться так: <code>APP_AUTH_KEY={{ $key }}</code>
+                        @lang('content.admin.control.security.generator.description_app_key')
                     </div>
                     <div class="alert alert-warning">
-                        Никогда и никому не сообщайте эти ключи! В противном случае, безопасность приложения будет под угрозой.
+                        @lang('content.admin.control.security.generator.description_app_auth_key_notify')
                     </div>
                 </p>
             </div>
 
             <div class="card card-block mt-2">
-                <h4 class="card-title">reCAPTCHA</h4>
+                <h4 class="card-title">@lang('content.admin.control.security.recaptcha.title')</h4>
                 <p class="card-text">
-                    <p>Изменение ключей сервиса reCAPTCHA.</p>
+                    <p>@lang('content.admin.control.security.recaptcha.description')</p>
                     <div class="md-form mt-1">
                         <i class="fa fa-google prefix"></i>
                         <input type="text" name="recaptcha_public_key" id="sec-recaptcha-public-key" class="form-control" value="{{ $recaptchaPublicKey }}">
-                        <label for="sec-recaptcha-public-key">Публичный ключ</label>
+                        <label for="sec-recaptcha-public-key">@lang('content.admin.control.security.recaptcha.public_key')</label>
                     </div>
                     <div class="md-form">
                         <i class="fa fa-google prefix"></i>
                         <input type="text" name="recaptcha_secret_key" id="sec-recaptcha-secret-key" class="form-control" value="{{ $recaptchaSecretKey }}">
-                        <label for="sec-recaptcha-secret-key">Секретный ключ</label>
+                        <label for="sec-recaptcha-secret-key">@lang('content.admin.control.security.recaptcha.secret_key')</label>
                     </div>
                 </p>
                 <div class="flex-row">
-                    <a class="btn btn-info" data-toggle="modal" data-target="#recaptcha-example-modal">Проверить</a>
+                    <a class="btn btn-info" data-toggle="modal" data-target="#recaptcha-example-modal">@lang('content.admin.control.security.recaptcha.check')</a>
                 </div>
             </div>
 
             <div class="card card-block mt-2">
-                <h4 class="card-title">Пользователь</h4>
+                <h4 class="card-title">@lang('content.admin.control.security.user.title')</h4>
                 <p class="card-text">
                 <div class="md-form mt-1">
                     <input type="checkbox" name="enable_change_password" id="enable-change-password" @if($enabledChangePassword) checked="checked" @endif value="1">
                     <label for="enable-change-password" class="ckeckbox-label">
                         <span class='ui'></span>
-                        Разрешить пользователю менять пароль от своего аккаунта
+                        @lang('content.admin.control.security.user.allow_change_password')
                     </label>
                 </div>
                 <div class="md-form mt-1">
                     <input type="checkbox" name="enable_reset_password" id="enable-reset-password" @if($enabledResetPassword) checked="checked" @endif value="1">
                     <label for="enable-reset-password" class="ckeckbox-label">
                         <span class='ui'></span>
-                        Разрешить пользователю "сбрасывать" пароль
+                        @lang('content.admin.control.security.user.allow_reset_password')
                     </label>
                 </div>
                 </p>
@@ -96,7 +91,7 @@
             <div class="card card-block mt-5">
                 <div class="flex-row">
                     {{ csrf_field() }}
-                    <button class="btn btn-info">Сохранить изменения</button>
+                    <button class="btn btn-info">@lang('content.admin.save')</button>
                 </div>
             </div>
         </form>
@@ -105,13 +100,13 @@
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
-                    <h4 class="modal-title w-100" id="myModalLabel">Проверка ReCAPTCHA</h4>
+                    <h4 class="modal-title w-100" id="myModalLabel">@lang('content.admin.control.security.recaptcha.modal.title')</h4>
                 </div>
                 <div class="modal-body">
                     {!! ReCaptcha::render() !!}
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-warning" data-dismiss="modal">Понятно</button>
+                    <button type="button" class="btn btn-warning" data-dismiss="modal">@lang('content.admin.control.security.recaptcha.modal.btn')</button>
                 </div>
             </div>
         </div>

@@ -16,7 +16,7 @@
     </div>
     <div class="c-2-info">
         @if($product->stack !== 0)
-            <p class="c-p-count">@if($product->type == 'item') Количество @elseif($product->type == 'permgroup') Длительность (Дн.) @endif</p>
+            <p class="c-p-count">@if($product->type == 'item') @lang('content.shop.cart.item.count') @elseif($product->type == 'permgroup') @lang('content.shop.cart.item.duration') @endif</p>
             <div class="md-form">
                 <input type="text" class="form-control text-center c-p-count-input" value="@if($product->type == 'permgroup') {{ $product->stack }} @else {{ $product->stack }} @endif">
             </div>
@@ -27,11 +27,11 @@
             </div>
         @else
             <div class="alert alert-info alerts">
-                Этот товар приобретается навсегда.
+                @lang('content.shop.cart.item.forever')
             </div>
         @endif
 
-        <p class="c-p-pay">К оплате:</p>
+        <p class="c-p-pay">@lang('content.shop.cart.item.total')</p>
         <p class="c-p-pay-money"><span>{{ $product->price }}</span> {!! s_get('shop.currency_html', 'руб.') !!}</p>
 
     </div>

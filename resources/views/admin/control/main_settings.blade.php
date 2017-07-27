@@ -76,14 +76,14 @@
                         </p>
                         <p>
                             <input type="checkbox" name="enable_email_activation" id="m-s-enable-email-activation" @if($enableEmailActivation) checked="checked" @endif value="1">
-                            <label for="m-s-enable-email-activation" class="ckeckbox-label" data-toggle="popover" data-placement="top" data-trigger="hover" title="Подсказка" data-content="Если опция включена, то после регистрации пользователю будет отправляться письмо на указанный им email. Это необходимо, дабы подтвердить валидность адреса электронной почты.">
+                            <label for="m-s-enable-email-activation" class="ckeckbox-label" data-toggle="popover" data-placement="top" data-trigger="hover" title="@lang('components.popover.title')" data-content="Если опция включена, то после регистрации пользователю будет отправляться письмо на указанный им email. Это необходимо, дабы подтвердить валидность адреса электронной почты.">
                                 <span class='ui'></span>
                                 @lang('content.admin.control.main_settings.register.send_mail')
                             </label>
                         </p>
                         <p>
                             <input type="checkbox" name="signup_redirect" id="m-s-signup-redirect" @if($signupRedirect) checked="checked" @endif value="1">
-                            <label for="m-s-signup-redirect" class="ckeckbox-label" data-toggle="popover" data-placement="top" data-trigger="hover" title="Подсказка" data-content="Если опция включена, то после регистрации пользователь будет перенаправлен на URL, который указан в поле ниже.">
+                            <label for="m-s-signup-redirect" class="ckeckbox-label" data-toggle="popover" data-placement="top" data-trigger="hover" title="@lang('components.popover.title')" data-content="Если опция включена, то после регистрации пользователь будет перенаправлен на URL, который указан в поле ниже.">
                                 <span class='ui'></span>
                                 @lang('content.admin.control.main_settings.register.redirect')
                             </label>
@@ -104,7 +104,7 @@
                     <p>
                     <p>
                         <input type="checkbox" name="character_skin_enabled" id="m-s-character-skin-enabled" @if($skinEnabled) checked="checked" @endif value="1">
-                        <label for="m-s-character-skin-enabled" class="ckeckbox-label" data-toggle="popover" data-placement="top" data-trigger="hover" title="Подсказка" data-html="true" data-content="@lang('content.admin.control.main_settings.skins.enable_popover')">
+                        <label for="m-s-character-skin-enabled" class="ckeckbox-label" data-toggle="popover" data-placement="top" data-trigger="hover" title="@lang('components.popover.title')" data-html="true" data-content="@lang('content.admin.control.main_settings.skins.enable_popover')">
                             <span class='ui'></span>
                             @lang('content.admin.control.main_settings.skins.enable')
                         </label>
@@ -112,21 +112,21 @@
 
                     <p>
                         <input type="checkbox" name="character_hd_skin_enabled" id="m-s-character-hd-skin-enabled" @if($hdSkinEnabled) checked="checked" @endif value="1">
-                        <label for="m-s-character-hd-skin-enabled" class="ckeckbox-label" data-toggle="popover" data-placement="top" data-trigger="hover" title="Подсказка" data-html="true" data-content="@lang('content.admin.control.main_settings.skins.hd_popover')">
+                        <label for="m-s-character-hd-skin-enabled" class="ckeckbox-label" data-toggle="popover" data-placement="top" data-trigger="hover" title="@lang('components.popover.title')" data-html="true" data-content="@lang('content.admin.control.main_settings.skins.hd_popover')">
                             <span class='ui'></span>
                             @lang('content.admin.control.main_settings.skins.hd')
                         </label>
                     </p>
 
                     <div class="md-form mt-2">
-                        <i class="fa fa-archive prefix" data-toggle="popover" data-placement="right" data-trigger="hover" title="Подсказка" data-html="true" data-content="@lang('content.admin.control.main_settings.skins.size_popover')"></i>
+                        <i class="fa fa-archive prefix" data-toggle="popover" data-placement="right" data-trigger="hover" title="@lang('components.popover.title')" data-html="true" data-content="@lang('content.admin.control.main_settings.skins.size_popover')"></i>
                         <input type="text" name="character_skin_max_file_size" id="m-s-character-skin-max-file-size" class="form-control" value="{{ $skinMaxFileSize }}">
                         <label for="m-s-character-skin-max-file-size">@lang('content.admin.control.main_settings.skins.size')</label>
                     </div>
 
                     <p class="mt-4">
                         <input type="checkbox" name="character_cloak_enabled" id="m-s-character-cloak-enabled" @if($cloakEnabled) checked="checked" @endif value="1">
-                        <label for="m-s-character-cloak-enabled" class="ckeckbox-label" data-toggle="popover" data-placement="top" data-trigger="hover" title="Подсказка" data-html="true" data-content="@lang('content.admin.control.main_settings.cloaks.enable_popover')">
+                        <label for="m-s-character-cloak-enabled" class="ckeckbox-label" data-toggle="popover" data-placement="top" data-trigger="hover" title="@lang('components.popover.title')" data-html="true" data-content="@lang('content.admin.control.main_settings.cloaks.enable_popover')">
                             <span class='ui'></span>
                             @lang('content.admin.control.main_settings.cloaks.enable')
                         </label>
@@ -134,14 +134,14 @@
 
                     <p>
                         <input type="checkbox" name="character_hd_cloak_enabled" id="m-s-character-hd-cloak-enabled" @if($hdCloakEnabled) checked="checked" @endif value="1">
-                        <label for="m-s-character-hd-cloak-enabled" class="ckeckbox-label" data-toggle="popover" data-placement="top" data-trigger="hover" title="Подсказка" data-html="true" data-content="@lang('content.admin.control.main_settings.cloaks.hd_popover')">
+                        <label for="m-s-character-hd-cloak-enabled" class="ckeckbox-label" data-toggle="popover" data-placement="top" data-trigger="hover" title="@lang('components.popover.title')" data-html="true" data-content="@lang('content.admin.control.main_settings.cloaks.hd_popover')">
                             <span class='ui'></span>
                             @lang('content.admin.control.main_settings.cloaks.hd')
                         </label>
                     </p>
 
                     <div class="md-form mt-2">
-                        <i class="fa fa-archive prefix" data-toggle="popover" data-placement="right" data-trigger="hover" title="Подсказка" data-html="true" data-content="@lang('content.admin.control.main_settings.cloaks.size_popover')"></i>
+                        <i class="fa fa-archive prefix" data-toggle="popover" data-placement="right" data-trigger="hover" title="@lang('components.popover.title')" data-html="true" data-content="@lang('content.admin.control.main_settings.cloaks.size_popover')"></i>
                         <input type="text" name="character_cloak_max_file_size" id="m-s-character-cloak-max-file-size" class="form-control" value="{{ $cloakMaxFileSize }}">
                         <label for="m-s-character-cloak-max-file-size">@lang('content.admin.control.main_settings.cloaks.size')</label>
                     </div>
@@ -246,7 +246,7 @@
 
                     <p>
                         <div class="md-form mt-2">
-                            <i class="fa fa-clock-o prefix" data-toggle="popover" data-placement="right" data-trigger="hover" title="Подсказка" data-html="true" data-content="@lang('content.admin.control.main_settings.monitoring.timeout_popover')"></i>
+                            <i class="fa fa-clock-o prefix" data-toggle="popover" data-placement="right" data-trigger="hover" title="@lang('components.popover.title')" data-html="true" data-content="@lang('content.admin.control.main_settings.monitoring.timeout_popover')"></i>
                             <input type="text" name="rcon_connection_timeout" id="m-s-rcon-connection-timeout" class="form-control" value="{{ $rconConnectionTimeout }}">
                             <label for="m-s-rcon-connection-timeout">@lang('content.admin.control.main_settings.monitoring.timeout')</label>
                         </div>

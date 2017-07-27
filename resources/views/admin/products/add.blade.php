@@ -19,7 +19,7 @@
                         <div class="col-sm-6 offset-sm-3 col-12 text-center">
                             <h4>Привязать предмет:</h4>
                             <div class="btn-group mb-2 mt-1">
-                                <button id="edit-products-clip" class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Выбрать</button>
+                                <button id="edit-products-clip" class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@lang('content.all.select')</button>
 
                                 <div class="dropdown-menu dropdown-overflow">
                                     @foreach($items as $item)
@@ -40,29 +40,29 @@
                                 <div class="md-form text-left">
                                     <i class="fa fa-cubes prefix"></i>
                                     <input type="text" name="stack" id="stack" class="form-control" value="{{ old('stack') }}">
-                                    <label for="stack">Количество товара в 1 стаке</label>
+                                    <label for="stack">@lang('content.admin.products.add.products_in_stack')</label>
                                 </div>
                             </div>
                             <div class="plus-category">
                                 <div class="md-form text-left">
                                     <i class="fa fa-money prefix"></i>
                                     <input type="text" name="price" id="price" class="form-control" value="{{ old('price') }}">
-                                    <label for="price">Цена за стак товара</label>
+                                    <label for="price">@lang('content.admin.products.add.products_price')</label>
                                 </div>
                             </div>
                             <div class="plus-category">
                                 <div class="md-form text-left">
-                                    <i class="fa fa-sort-amount-desc prefix" data-toggle="popover" data-placement="right" data-trigger="hover" title="Подсказка" data-html="true" data-content="Приоритет сортировки - это дробное или целое, положительное или отрицательное число. По этому значению будет происходить сортировка товаров в каталоге (Этот режим можно включить/отключить в <strong>Управление > Основные настройки</strong>)."></i>
+                                    <i class="fa fa-sort-amount-desc prefix" data-toggle="popover" data-placement="right" data-trigger="hover" title="@lang('components.popover.title')" data-html="true" data-content="@lang('content.admin.products.add.sort_priority_popover')"></i>
                                     <input type="text" name="sort_priority" id="admin-product-sort-priority" class="form-control" value="0">
-                                    <label for="admin-product-sort-priority">Приоритет сортировки</label>
+                                    <label for="admin-product-sort-priority">@lang('content.admin.products.add.sort_priority')</label>
                                 </div>
                             </div>
                         </div>
 
                         <div class="col-sm-6 offset-sm-3 col-12 text-center">
-                            <h4>Привязать к серверу/категории:</h4>
+                            <h4>@lang('content.admin.products.add.attach_server_category')</h4>
                             <div class="btn-group mb-2 mt-1">
-                                <button id="edit-categories-clip" class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Выбрать</button>
+                                <button id="edit-categories-clip" class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@lang('content.all.select')</button>
 
                                 <div class="dropdown-menu dropdown-overflow">
                                     <div class="dropdown-divider"></div>
@@ -77,7 +77,7 @@
 
                         <div class="col-sm-6 offset-sm-3 col-12 save-and-del text-center">
                             {{ csrf_field() }}
-                            <button class="btn btn-info"><i class="fa fa-check fa-left"></i>Сохранить</button>
+                            <button class="btn btn-info"><i class="fa fa-check fa-left"></i>@lang('content.admin.products.add.save')</button>
                         </div>
                     </div>
                 </div>
