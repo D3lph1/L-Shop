@@ -51,8 +51,9 @@ class ProductItemTest extends TestCase
         $item = $this->adminItems->create('Test item', '', 'item', null, 1337, null);
         $this->assertInstanceOf(Item::class, $item);
         $itemId = (int)$item->id;
+        $dto = new \App\DataTransferObjects\Admin\Product(0.01, 64, $itemId, 1, 1, 0);
 
-        $product = $this->adminProduct->create(0.01, 64, $itemId, 1, 1, 0);
+        $product = $this->adminProduct->create($dto);
         $this->assertInstanceOf(Product::class, $product);
 
         $this->assertTrue($this->adminItems->delete($itemId));

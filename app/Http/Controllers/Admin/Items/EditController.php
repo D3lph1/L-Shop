@@ -54,7 +54,7 @@ class EditController extends Controller
         ]);
 
         if (!$item) {
-            \App::abort(404);
+            $this->app->abort(404);
         }
 
         $data = [
@@ -86,9 +86,9 @@ class EditController extends Controller
         $result = $this->adminItems->saveEdited($itemId, $name, $description, $type, $imageMode, $image, $item, $extra);
 
         if ($result) {
-            \Message::success('Изменения успешно сохранены');
+            $this->msg->success(__('messages.admin.items.edit.success'));
         } else {
-            \Message::danger('Не удалось сохранить изменения');
+            $this->msg->danger(__('messages.admin.items.edit.fail'));
         }
 
         return response()->redirectToRoute('admin.items.list', ['server' => $request->get('currentServer')->id]);
@@ -107,9 +107,9 @@ class EditController extends Controller
         $result = $this->adminItems->delete($itemId);
 
         if ($result) {
-            \Message::info('Предмет удален вместе с товарами, привязанными к нему');
+            $this->msg->info(__('messages.admin.items.remove.success'));
         } else {
-            \Message::danger('Не удалось удалить предмет');
+            $this->msg->danger(__('messages.admin.items.remove.fail'));
         }
 
         return response()->redirectToRoute('admin.items.list', ['server' => $request->get('currentServer')->id]);

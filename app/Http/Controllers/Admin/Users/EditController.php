@@ -36,7 +36,7 @@ class EditController extends Controller
         /** @var User $user */
         $user = $this->sentinel->getUserRepository()->findById((int)$request->route('edit'));
         if (!$user) {
-            \App::abort(404);
+            $this->app->abort(404);
         }
 
         $ban = $this->app->makeWith(Ban::class, ['user' => $user, 'repository' => $banRepository]);
@@ -136,15 +136,15 @@ class EditController extends Controller
         if ($user) {
 
             if ($user->getUserId() === $this->sentinel->getUser()->getUserId()) {
-                $this->msg->warning('Вы не можите удалить самого себя');
+                $this->msg->warning(__('messages.admin.users.edit.remove.self'));
 
                 return back();
             }
 
             $user->delete();
-            $this->msg->info('Пользователь удален');
+            $this->msg->info(__('messages.admin.users.edit.remove.success'));
         }else {
-            $this->msg->danger('Пользователь с таким идентификатором не найден');
+            $this->msg->danger(__('messages.admin.users.edit.remove.not_found'));
         }
 
         return response()->redirectToRoute('admin.users.list', ['server' => $request->get('currentServer')->id]);
@@ -162,7 +162,7 @@ class EditController extends Controller
         $user = $this->sentinel->getUserRepository()->findById($request->route('user'));
 
         if (!$user) {
-            $this->msg->danger('Пользователь не найден');
+            $this->msg->danger(__('messages.admin.users.edit.remove.not_found'));
 
             return back();
         }
@@ -170,9 +170,9 @@ class EditController extends Controller
         $result = $this->sentinel->logout($user, true);
 
         if ($result) {
-            $this->msg->info('Логин-сессии данного пользователя успешно сброшены!');
+            $this->msg->info(__('messages.admin.users.edit.sessions.success'));
         }else {
-            $this->msg->danger('Не удалось сбросить логин-сессии данного пользователя!');
+            $this->msg->danger(__('messages.admin.users.edit.sessions.fail'));
         }
 
         return back();

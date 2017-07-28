@@ -40,7 +40,7 @@ class SashokLauncher extends ApiController
     public function auth(Request $request, \App\Services\SashokLauncher $handler)
     {
         if (!$this->isEnabled('launcher.sashok.auth')) {
-            return response('Функция отключена');
+            return response(__('messages.api.disabled'));
         }
 
         $username = $request->get('username');
@@ -55,9 +55,9 @@ class SashokLauncher extends ApiController
                 s_get('api.launcher.sashok.auth.ips_white_list')
             );
         } catch (SashokLauncherAuthWhiteListException $e) {
-            return response('Доступ запрещен');
+            return response(__('messages.api.forbidden'), 403);
         } catch (NotActivatedException $e) {
-            return response('Аккаунт пользователя не активирован');
+            return response(__('messages.auth.signin.not_activated'));
         } catch (BannedException $e) {
             return response(build_ban_message($e->getUntil(), $e->getReason()));
         }

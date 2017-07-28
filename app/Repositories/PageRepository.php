@@ -65,4 +65,15 @@ class PageRepository extends BaseRepository
             ->where('id', '<>', $id)
             ->count();
     }
+
+    /**
+     * @param string $url
+     *
+     * @return bool
+     */
+    public function isUrlUniqueAll($url)
+    {
+        return !(bool)Page::where('url', $url)
+            ->count();
+    }
 }

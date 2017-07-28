@@ -21,7 +21,7 @@ class SuccessController extends Controller
      */
     public function robokassa(Request $request)
     {
-        $this->msg->success('Оплата проведена успешна.');
+        $this->msg->success(__('messages.payments.success'));
 
         return response()->redirectToRoute('servers');
     }

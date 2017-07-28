@@ -68,9 +68,9 @@ class AddController extends Controller
         $result = $this->adminItems->create($name, $description, $type, $image, $item, $extra);
 
         if ($result) {
-            \Message::success('Предмет создан успешно');
+            $this->msg->success(__('messages.admin.items.add.success'));
         }else {
-            \Message::danger('Не удалось создать предмет');
+            $this->msg->danger(__('messages.admin.items.add.fail'));
         }
 
         return response()->redirectToRoute('admin.items.list', ['server' => $request->get('currentServer')->id]);

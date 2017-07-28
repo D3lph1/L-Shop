@@ -40,7 +40,7 @@ class ActivationController extends Controller
         $user = $sentinel->getUserRepository()->findById($userId);
 
         if (!$user) {
-            \Message::danger('Пользователь не найден');
+            $this->msg->danger('Пользователь не найден');
 
             return response()->redirectToRoute('signin');
         }

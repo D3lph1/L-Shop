@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Statistic;
 
 use App\Services\Statistic;
 use Carbon\Carbon;
+use Illuminate\Cache\Repository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -20,24 +21,6 @@ class ShowController extends Controller
      * @var Statistic
      */
     private $statistic;
-
-    /**
-     * @var array
-     */
-    protected $months = [
-        1 => 'Январь',
-        2 => 'Февраль',
-        3 => 'Март',
-        4 => 'Апрель',
-        5 => 'Май',
-        6 => 'Июнь',
-        7 => 'Июль',
-        8 => 'Август',
-        9 => 'Сентябрь',
-        10 => 'Октябрь',
-        11 => 'Ноябрь',
-        12 => 'Декабрь'
-    ];
 
     /**
      * ShowController constructor.
@@ -72,7 +55,7 @@ class ShowController extends Controller
         $data = [
             'currentServer' => $request->get('currentServer'),
             'payments' => $payments,
-            'months' => $this->months,
+            'months' => __('content.months'),
             'currentMonth' => $currentMonth,
             'currentMonthWord' => $currentMonthWord,
             'profit' => $profit,
@@ -85,13 +68,15 @@ class ShowController extends Controller
     /**
      * Flush all statistic cache.
      *
+     * @param Repository $cache
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function flushCache()
+    public function flushCache(Repository $cache)
     {
-        \Cache::forget('admin.statistic.for_the_last_year_completed');
-        \Cache::forget('admin.statistic.profit');
-        \Message::info('Кэш статистики очищен!');
+        $cache->forget('admin.statistic.for_the_last_year_completed');
+        $cache->forget('admin.statistic.profit');
+        $this->msg->info(__('messages.admin.statistics.show.clear_cache_success'));
 
         return back();
     }

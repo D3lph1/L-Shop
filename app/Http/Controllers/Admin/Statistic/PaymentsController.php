@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Statistic;
 use App\Repositories\PaymentRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\UserRepository;
+use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -105,19 +106,20 @@ class PaymentsController extends Controller
      * Complete given payment request.
      *
      * @param Request $request
+     * @param Kernel  $artisan
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function complete(Request $request)
+    public function complete(Request $request, Kernel $artisan)
     {
-        $result = \Artisan::call('payment:complete', ['id' => $request->route('payment')]);
+        $result = $artisan->call('payment:complete', ['id' => $request->route('payment')]);
 
         if ($result === 1) {
-            \Message::danger('Платеж не найден');
+            $this->msg->danger(__('messages.admin.statistics.payments.complete.not_found'));
         }elseif ($result === 2) {
-            \Message::warning('Платеж уже завершен');
+            $this->msg->warning(__('messages.admin.statistics.payments.complete.already_complete'));
         }else {
-            \Message::success('Платеж успешно подтвержден');
+            $this->msg->success(__('messages.admin.statistics.payments.complete.success'));
         }
 
         return back();

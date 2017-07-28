@@ -40,7 +40,7 @@ class SignInController extends ApiController
             return $this->redirectToSignin();
         }
 
-        $user = \Sentinel::getUserRepository()->findByCredentials([
+        $user = $this->sentinel->getUserRepository()->findByCredentials([
             'username' => $username
         ]);
 
@@ -54,13 +54,13 @@ class SignInController extends ApiController
         }
 
         try {
-            if (\Sentinel::authenticate($user, (bool)s_get('api.signin.remember_user'))) {
-                \Message::success("Добро пожаловать, $username");
+            if ($this->sentinel->authenticate($user, (bool)s_get('api.signin.remember_user'))) {
+                $this->msg->success(__('messages.auth.signin.welcome', ['username' => $username]));
 
                 return $this->redirectToServers();
             }
         } catch (BannedException $e) {
-            \Message::danger(build_ban_message($e->getUntil(), $e->getReason()));
+            $this->msg->danger(build_ban_message($e->getUntil(), $e->getReason()));
 
             return $this->redirectToServers();
         }

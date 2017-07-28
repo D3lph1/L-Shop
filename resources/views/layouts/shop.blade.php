@@ -99,7 +99,7 @@
             <div id="news-block">
                 @if(!count($news))
                     <div class="alert alert-info text-center">
-                        Новости отстуствуют
+                        @lang('content.shop.news.empty')
                     </div>
                 @endif
 
@@ -160,10 +160,10 @@
             monitoring-modal
         @endslot
         @slot('title')
-            Мониторинг серверов
+            @lang('content.monitoring.title')
         @endslot
         @slot('buttons')
-            <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Отменить</button>
+            <button type="button" class="btn btn-outline-warning" data-dismiss="modal">@lang('content.monitoring.cancel')</button>
         @endslot
 
         @foreach($monitoring as $server)
@@ -172,7 +172,7 @@
                 <div class="progress">
                     @if($server->getNow() === -1)
                         <div class="progress-bar progress-bar-danger danger-color" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
-                            Сервер отключен
+                            @lang('content.monitoring.server_disabled')
                         </div>
                     @else
                         <div class="progress-bar info-color" role="progressbar" aria-valuenow="{{ $server->getNow() }}" aria-valuemin="0" aria-valuemax="{{ $server->getTotal() }}" style="min-width: 12%; width: {{ ($server->getNow() / $server->getTotal()) * 100 }}%;">

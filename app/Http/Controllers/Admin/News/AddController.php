@@ -2,11 +2,11 @@
 
 namespace App\Http\Controllers\Admin\News;
 
-use App\Exceptions\News\UnableToCreate;
+use App\DataTransferObjects\Admin\News as DTO;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveAddedNewsRequest;
 use App\Services\News;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 /**
  * Class AddController
@@ -34,7 +34,7 @@ class AddController extends Controller
     }
 
     /**
-     * Save added news.
+     * Save the added news.
      *
      * @param SaveAddedNewsRequest $request
      * @param News                 $news Service - handler
@@ -43,20 +43,19 @@ class AddController extends Controller
      */
     public function save(SaveAddedNewsRequest $request, News $news)
     {
-        $title = $request->get('news_title');
-        $content = $request->get('news_content');
-        $userId = \Sentinel::getUser()->getUserId();
+        $dto = new DTO(
+            $request->get('news_title'),
+            $request->get('news_content')
+        );
+        $dto->setUserId($this->sentinel->getUser()->getUserId());
 
-        try {
-            $news->add($title, $content, $userId);
-        } catch (UnableToCreate $e) {
-            \Log::error($e);
-            \Message::danger('Не удалось опубликовать новость');
+        if (!$news->add($dto)) {
+            $this->msg->success(__('messages.admin.news.add.success'));
 
-            return back();
+            return response()->redirectToRoute('admin.news.list', ['server' => $request->get('currentServer')->id]);
         }
-        \Message::success('Новость успешно опубликована!');
+        $this->msg->danger(__('messages.admin.news.add.fail'));
 
-        return response()->redirectToRoute('admin.news.list', ['server' => $request->get('currentServer')->id]);
+        return back();
     }
 }

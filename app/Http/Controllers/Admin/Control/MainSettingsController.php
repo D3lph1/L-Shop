@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin\Control;
 
 use App\Services\News;
+use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveMainSettingsRequest;
@@ -105,7 +106,7 @@ class MainSettingsController extends Controller
         s_save();
 
         $this->maintenance((bool)$request->get('maintenance'));
-        \Message::success('Изменения успешно сохранены!');
+        $this->msg->success(__('messages.admin.changes_saved'));
 
         return back();
     }
@@ -117,10 +118,12 @@ class MainSettingsController extends Controller
      */
     public function maintenance($maintenance)
     {
+        $artisan = $this->app->make(Kernel::class);
+
         if ($maintenance) {
-            \Artisan::call('down');
+            $artisan->call('down');
         }else {
-            \Artisan::call('up');
+            $artisan->call('up');
         }
     }
 }

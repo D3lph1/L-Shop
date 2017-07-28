@@ -2,12 +2,12 @@
 
 namespace App\Http\Controllers\Admin\News;
 
-use App\Exceptions\News\UnableToUpdate;
+use App\DataTransferObjects\Admin\News as DTO;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveEditedNewsRequest;
 use App\Repositories\NewsRepository;
 use App\Services\News;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 /**
  * Class EditController
@@ -32,7 +32,7 @@ class EditController extends Controller
         $news = $newsRepository->find($id);
 
         if (!$news) {
-            \App::abort(404);
+            $this->app->abort(404);
         }
 
         $data = [
@@ -53,21 +53,20 @@ class EditController extends Controller
      */
     public function save(SaveEditedNewsRequest $request, News $news)
     {
-        $id = (int)$request->route('id');
-        $title = $request->get('news_title');
-        $content = $request->get('news_content');
+        $dto = new DTO(
+            $request->get('news_title'),
+            $request->get('news_content')
+        );
+        $dto->setId($request->route('id'));
 
-        try {
-            $news->update($id, $title, $content);
-        } catch (UnableToUpdate $e) {
-            \Log::error($e);
-            \Message::danger('Не удалось обновить новость');
+        if ($news->update($dto)) {
+            $this->msg->success(__('messages.admin.news.edit.success'));
 
-            return back();
+            return response()->redirectToRoute('admin.news.list', ['server' => $request->get('currentServer')->id]);
         }
-        \Message::success('Новость успешно обновлена!');
+        $this->msg->danger(__('messages.admin.news.edit.fail'));
 
-        return response()->redirectToRoute('admin.news.list', ['server' => $request->get('currentServer')->id]);
+        return back();
     }
 
     /**
@@ -82,12 +81,10 @@ class EditController extends Controller
     {
         $id = (int)$request->route('id');
         if ($news->delete($id)) {
-            \Message::info('Новость удалена');
+            $this->msg->info(__('messages.admin.news.remove.success'));
         } else {
-            \Message::danger('Не удалось удалить новость');
+            $this->msg->danger(__('messages.admin.news.remove.fail'));
         }
-        $news->forgetNews();
-        $news->forgetCount();
 
         return response()->redirectToRoute('admin.news.list', ['server' => $request->get('currentServer')->id]);
     }

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DataTransferObjects\Admin\Product;
 use App\Exceptions\ItemNotFoundException;
 use App\Repositories\ItemRepository;
 use App\Repositories\ProductRepository;
@@ -39,29 +40,24 @@ class AdminProducts
     /**
      * Create new product
      *
-     * @param double $price        New product price.
-     * @param int    $stack        New product stack. Stack - the amount of goods sold for one purchase.
-     * @param int    $itemId       The identifier of the object to which the product is attached.
-     * @param int    $serverId     The identifier of the server on which the product is sold.
-     * @param int    $categoryId   The identifier of the category in which the product is sold.
-     * @param float  $sortPriority Priority of products sorting.
+     * @param Product $dto
      *
      * @return mixed
      */
-    public function create($price, $stack, $itemId, $serverId, $categoryId, $sortPriority)
+    public function create(Product $dto)
     {
-        if (!$this->itemRepository->exists($itemId)) {
-            throw new ItemNotFoundException($itemId);
+        if (!$this->itemRepository->exists($dto->getItemId())) {
+            throw new ItemNotFoundException($dto->getItemId());
         }
 
-        return \DB::transaction(function () use ($price, $stack, $itemId, $serverId, $categoryId, $sortPriority) {
+        return \DB::transaction(function () use ($dto) {
             return $this->productRepository->create([
-                'price' => $price,
-                'stack' => $stack,
-                'item_id' => $itemId,
-                'server_id' => $serverId,
-                'category_id' => $categoryId,
-                'sort_priority' => $sortPriority
+                'price' => $dto->getPrice(),
+                'stack' => $dto->getStack(),
+                'item_id' => $dto->getItemId(),
+                'server_id' => $dto->getServerId(),
+                'category_id' => $dto->getCategoryId(),
+                'sort_priority' => $dto->getSortPriority()
             ]);
         });
     }
@@ -69,26 +65,20 @@ class AdminProducts
     /**
      * Edit given product
      *
-     * @param int    $productId    Updated product identifier.
-     * @param double $price        Product price
-     * @param int    $stack        Updated product stack. Stack - the amount of goods sold for one purchase.
-     * @param int    $itemId       The identifier of the object to which the product is attached.
-     * @param int    $serverId     The identifier of the server on which the product is sold.
-     * @param int    $categoryId   The identifier of the category in which the product is sold.
-     * @param float  $sortPriority Priority of products sorting.
+     * @param Product $dto
      *
      * @return bool
      */
-    public function edit($productId, $price, $stack, $itemId, $serverId, $categoryId, $sortPriority)
+    public function edit(Product $dto)
     {
-        return \DB::transaction(function () use ($productId, $price, $stack, $itemId, $serverId, $categoryId, $sortPriority) {
-            return $this->productRepository->update($productId, [
-                'price' => $price,
-                'stack' => $stack,
-                'item_id' => $itemId,
-                'server_id' => $serverId,
-                'category_id' => $categoryId,
-                'sort_priority' => $sortPriority
+        return \DB::transaction(function () use ($dto) {
+            return $this->productRepository->update($dto->getId(), [
+                'price' => $dto->getPrice(),
+                'stack' => $dto->getStack(),
+                'item_id' => $dto->getItemId(),
+                'server_id' => $dto->getServerId(),
+                'category_id' => $dto->getCategoryId(),
+                'sort_priority' => $dto->getSortPriority()
             ]);
         });
     }

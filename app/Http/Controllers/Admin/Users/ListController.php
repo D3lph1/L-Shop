@@ -51,13 +51,13 @@ class ListController extends Controller
         $user = $this->sentinel->findById((int)$request->route('user'));
         $activation = $this->sentinel->getActivationRepository()->completed($user);
         if ($activation) {
-            $this->msg->info('Аккаунт пользователя уже подтвержден');
+            $this->msg->info(__('messages.admin.users.list.activate.already'));
 
             return back();
         }
 
         $this->sentinel->activate($user);
-        $this->msg->success('Аккаунт пользователя подтвержден');
+        $this->msg->success(__('messages.admin.users.list.activate.success'));
 
         return back();
     }

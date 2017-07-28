@@ -3,7 +3,8 @@
 namespace App\Http\Controllers\Admin\Control;
 
 use App\Http\Requests\Admin\SaveOptimizationRequest;
-use Illuminate\Filesystem\Filesystem;
+use Illuminate\Cache\Repository;
+use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -52,7 +53,7 @@ class OptimizationController extends Controller
             'caching.monitoring.ttl' => $request->get('ttl_monitoring')
         ]);
         s_save();
-        \Message::success('Изменения успешно сохранены!');
+        $this->msg->success(__('messages.admin.changes_saved'));
 
         return back();
     }
@@ -60,12 +61,14 @@ class OptimizationController extends Controller
     /**
      * Handle update routes cache request.
      *
+     * @param Kernel $artisan
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function updateRoutesCache()
+    public function updateRoutesCache(Kernel $artisan)
     {
-        \Artisan::call('route:cache');
-        \Message::info('Кэш маршрутов успешно обновлен');
+        $artisan->call('route:cache');
+        $this->msg->info(__('messages.admin.control.optimization.update_routes_cache_success'));
 
         return back();
     }
@@ -73,12 +76,14 @@ class OptimizationController extends Controller
     /**
      * Handle update config cache request.
      *
+     * @param Kernel $artisan
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function updateConfigCache()
+    public function updateConfigCache(Kernel $artisan)
     {
-        \Artisan::call('config:cache');
-        \Message::info('Кэш конфигурации успешно обновлен!');
+        $artisan->call('config:cache');
+        $this->msg->info(__('messages.admin.control.optimization.update_config_cache_success'));
 
         return back();
     }
@@ -86,12 +91,14 @@ class OptimizationController extends Controller
     /**
      * Handle clear view cache request.
      *
+     * @param Kernel $artisan
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function clearViewCache()
+    public function clearViewCache(Kernel $artisan)
     {
-        \Artisan::call('view:clear');
-        \Message::info('Кэш шаблонизатора успешно очищен!');
+        $artisan->call('view:clear');
+        $this->msg->info(__('messages.admin.control.optimization.update_view_cache_success'));
 
         return back();
     }
@@ -99,14 +106,16 @@ class OptimizationController extends Controller
     /**
      * Handle clear app cache request.
      *
+     * @param Repository $cache
+     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function clearAppCache()
+    public function clearAppCache(Repository $cache)
     {
-        if (\Cache::flush()) {
-            \Message::info('Кэш приложения успешно очищен!');
+        if ($cache->flush()) {
+            $this->msg->info(__('messages.admin.control.optimization.update_app_cache_success'));
         } else {
-            \Message::danger('Не удалось очистить кэш приложения');
+            $this->msg->danger(__('messages.admin.control.optimization.update_app_cache_fail'));
         }
 
         return back();
