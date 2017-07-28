@@ -3,7 +3,9 @@
 namespace App\Http\Middleware;
 
 use App\Facades\ReCaptcha;
+use App\Services\Message;
 use Closure;
+use Illuminate\Contracts\Container\Container;
 
 /**
  * Class Captcha
@@ -14,6 +16,13 @@ use Closure;
  */
 class Captcha
 {
+    private $container;
+
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
+
     /**
      * Handle an incoming request.
      *
@@ -39,7 +48,7 @@ class Captcha
         if ($request->ajax()) {
             return json_response('invalid captcha');
         }
-        \Message::danger('Вы должны подтвердить то, что не являетесь роботом');
+        $this->container->make(Message::class)->danger(__('messages.captcha_required'));
 
         return back();
     }

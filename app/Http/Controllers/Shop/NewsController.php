@@ -41,7 +41,7 @@ class NewsController extends Controller
     public function render(Request $request)
     {
         if (!s_get('news.enabled')) {
-            \Message::warning(__('messages.shop.catalog.news.disabled'));
+            $this->msg->warning(__('messages.shop.catalog.news.disabled'));
 
             return back();
         }

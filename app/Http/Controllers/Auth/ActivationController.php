@@ -47,9 +47,9 @@ class ActivationController extends Controller
 
         $code = $request->route('code');
         if ($sentinel->getActivationRepository()->complete($user, $code)) {
-            $this->msg->success('Ваш аккаунт успешно активирован!');
+            $this->msg->success(__('messages.auth.activation.success'));
         } else {
-            $this->msg->danger('Код активации недействителен или устарел');
+            $this->msg->danger(__('messages.auth.activation.fail'));
         }
 
         return response()->redirectToRoute('signin');
@@ -68,7 +68,7 @@ class ActivationController extends Controller
         $user = $sentinel->getUserRepository()->findByCredentials(['email' => $email]);
 
         if (!$user) {
-            $this->msg->danger('Пользователь с таким адресом электронной почты не найден');
+            $this->msg->danger(__('messages.auth.activation.user_not_found'));
 
             return back();
         }
@@ -77,7 +77,7 @@ class ActivationController extends Controller
             $this->msg->info('Этот аккаунт уже подтвержден');
         } else {
             $activator->createAndSend($user);
-            $this->msg->info('Сообщение на почту отправлено повторно');
+            $this->msg->info(__('messages.auth.activation.repeat'));
         }
 
         return back();

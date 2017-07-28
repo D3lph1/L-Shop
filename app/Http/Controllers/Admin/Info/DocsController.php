@@ -96,10 +96,22 @@ class DocsController extends Controller
         ]);
     }
 
+    /**
+     * Load file with documentations.
+     *
+     * @param string $name
+     *
+     * @return string
+     */
     private function load($name)
     {
         $locale = $this->app->getLocale();
+        $path = $this->app->resourcePath("documentation/{$locale}/{$name}.md");
+        if ($this->file->exists($path)) {
+            return $this->file->get($path);
+        }
+        $fallback = 'ru';
 
-        return $this->file->get($this->app->resourcePath("documentation/{$locale}/{$name}.md"));
+        return $this->file->get($this->app->resourcePath("documentation/{$fallback}/{$name}.md"));
     }
 }

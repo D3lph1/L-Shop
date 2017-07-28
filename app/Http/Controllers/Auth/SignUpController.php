@@ -32,7 +32,7 @@ class SignUpController extends Controller
         if ((bool)s_get('shop.enable_signup')) {
             return view('auth.signup');
         }
-        $this->msg->warning('Функция регистрации отключена');
+        $this->msg->warning(__('messages.auth.signup.disabled'));
 
         return response()->redirectToRoute('servers');
     }

@@ -147,7 +147,7 @@ class ForgotPasswordController extends Controller
     private function isDisabled()
     {
         if (!s_get('shop.enable_password_reset')) {
-            $this->msg->warning('Администрация проекта отключила возможность восстановления пароля');
+            $this->msg->warning(__('messages.auth.forgot.disabled'));
 
             return true;
         }

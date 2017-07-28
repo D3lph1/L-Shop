@@ -2,7 +2,7 @@
 @extends('layouts.auth')
 
 @section('title')
-    Регистрация
+    @lang('content.auth.signup.title')
 @endsection
 
 @section('content')
@@ -12,46 +12,46 @@
             <form method="post" id="signup-form" action="{{ route('signup.handle') }}">
                 <div class="card-block" id="sign-up">
                     <div class="card-header d_orange text-center white-text z-depth-2">
-                        <h1>Регистрация<i class="fa fa-sign-in fa-lg fa-right"></i></h1>
+                        <h1>@lang('content.auth.signup.title')<i class="fa fa-sign-in fa-lg fa-right"></i></h1>
                     </div>
                     <div class="md-form">
                         <i class="fa fa-user fa-lg prefix"></i>
                         <input type="text" name="username" id="su-username" class="form-control">
-                        <label for="su-username">Имя пользователя</label>
+                        <label for="su-username">@lang('content.all.username')</label>
                     </div>
                     <div class="md-form">
                         <i class="fa fa-envelope fa-lg prefix"></i>
                         <input type="text" name="email" id="su-email" class="form-control">
-                        <label for="su-email">Адрес электронной почты</label>
+                        <label for="su-email">@lang('content.all.email')</label>
                     </div>
                     <div class="md-form">
                         <i class="fa fa-unlock-alt fa-lg prefix"></i>
                         <input type="password" name="password" id="su-password" class="form-control">
-                        <label for="su-password">Пароль</label>
+                        <label for="su-password">@lang('content.all.password')</label>
                     </div>
                     <div class="md-form">
                         <i class="fa fa-unlock-alt fa-lg prefix"></i>
                         <input type="password" name="password_confirmation" id="su-password-confirm" class="form-control">
-                        <label for="su-password-confirm">Повторите пароль</label>
+                        <label for="su-password-confirm">@lang('content.all.password_confirmation')</label>
                     </div>
                     <div class="md-form">
                         {!! \ReCaptcha::render() !!}
                     </div>
                     <div class="col-12 text-center">
                         {{ csrf_field() }}
-                        <button class="btn btn-warning btn-lg" id="btn-sign-up">Зарегистрироваться</button>
+                        <button class="btn btn-warning btn-lg" id="btn-sign-up">@lang('content.auth.signup.btn')</button>
                     </div>
                 </div>
                 <div class="card-footer">
                     <div class="row">
                         @if(access_mode_any() or access_mode_auth())
                             <div class="col-12 text-center">
-                                <a href="{{ route('signin') }}"><i class="fa fa-plus fa-left"></i> Вход</a>
+                                <a href="{{ route('signin') }}"><i class="fa fa-plus fa-left"></i> @lang('content.auth.signup.signin')</a>
                             </div>
                         @endif
                         @if(access_mode_any())
                             <div class="col-12 text-center">
-                                <a href="{{ route('servers') }}"><i class="fa fa-shopping-cart"></i> Покупка без аутентификации</a>
+                                <a href="{{ route('servers') }}"><i class="fa fa-shopping-cart"></i> @lang('content.auth.signin.guest')</a>
                             </div>
                         @endif
                     </div>

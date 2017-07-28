@@ -10,7 +10,7 @@
     <p class="product-price"><span class="catalog-price-span">{{ $product->price }}</span> {!! s_get('shop.currency_html', 'руб.') !!}</p>
     <p class="product-count">
         @if(!($product->type == 'permgroup' and $product->stack === 0))
-            за
+            @lang('content.shop.catalog.item.for')
         @endif
         <span class="number">
             @if($product->type == 'item')
