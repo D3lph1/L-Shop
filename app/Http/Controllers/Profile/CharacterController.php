@@ -22,7 +22,7 @@ class CharacterController extends Controller
     public function render(Request $request)
     {
         if (!(s_get('profile.character.skin.enabled', 0) or s_get('profile.character.cloak.enabled', 0))) {
-            abort(403);
+            $this->app->abort(403);
         }
 
         $data = [
@@ -33,6 +33,8 @@ class CharacterController extends Controller
     }
 
     /**
+     * Handles a skin change request.
+     *
      * @param UploadSkinRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
@@ -40,7 +42,12 @@ class CharacterController extends Controller
     public function uploadSkin(UploadSkinRequest $request)
     {
         if (!s_get('profile.character.skin.enabled', 0)) {
-            return json_response('disabled');
+            return json_response('disabled', [
+                'message' => [
+                    'type' => 'warning',
+                    'text' => __('messages.profile.character.skin.disabled')
+                ]
+            ]);
         }
 
         $uploadedSkin = new UploadedSkin($request->file('skin'));
@@ -48,14 +55,26 @@ class CharacterController extends Controller
         try {
             $uploadedSkin->validate(s_get('profile.character.skin.hd', false));
         } catch (InvalidImageSizeException $e) {
-            return json_response('invalid ratio');
+            return json_response('invalid_ratio', [
+                'message' => [
+                    'type' => 'warning',
+                    'text' => __('messages.profile.character.skin.invalid_ratio')
+                ]
+            ]);
         }
         $uploadedSkin->move(username());
 
-        return json_response('success');
+        return json_response('success', [
+            'message' => [
+                'type' => 'success',
+                'text' => __('messages.profile.character.skin.success')
+            ]
+        ]);
     }
 
     /**
+     * Handles a cloak change request.
+     *
      * @param UploadCloakRequest $request
      *
      * @return \Illuminate\Http\JsonResponse
@@ -63,7 +82,12 @@ class CharacterController extends Controller
     public function uploadCloak(UploadCloakRequest $request)
     {
         if (!s_get('profile.character.cloak.enabled', 0)) {
-            return json_response('disabled');
+            return json_response('disabled', [
+                'message' => [
+                    'type' => 'warning',
+                    'text' => __('messages.profile.character.cloak.disabled')
+                ]
+            ]);
         }
 
         $uploadedCloak = new UploadedCloak($request->file('cloak'));
@@ -71,10 +95,20 @@ class CharacterController extends Controller
         try {
             $uploadedCloak->validate(s_get('profile.character.cloak.hd'));
         } catch (InvalidImageSizeException $e) {
-            return json_response('invalid ratio');
+            return json_response('invalid_ratio', [
+                'message' => [
+                    'type' => 'warning',
+                    'text' => __('messages.profile.character.cloak.invalid_ratio')
+                ]
+            ]);
         }
         $uploadedCloak->move(username());
 
-        return json_response('success');
+        return json_response('success', [
+            'message' => [
+                'type' => 'success',
+                'text' => __('messages.profile.character.cloak.success')
+            ]
+        ]);
     }
 }

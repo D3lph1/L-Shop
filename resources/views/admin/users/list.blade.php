@@ -2,38 +2,43 @@
 @extends('layouts.shop')
 
 @section('title')
-    Редактировать пользователей
+    @lang('content.admin.users.list.title')
 @endsection
 
 @section('content')
+    <div style="display: none;">
+        <div id="search-lets-typing">@lang('content.admin.users.list.search.lets_typing')</div>
+        <div id="search-wait">@lang('content.admin.users.list.search.wait')</div>
+        <div id="search-nothing">@lang('content.admin.users.list.search.nothing')</div>
+    </div>
+
     <div id="content-container">
         <div class="z-depth-1 content-header text-center">
-            <h1><i class="fa fa-users fa-lg fa-left-big"></i>Редактировать пользователей</h1>
+            <h1><i class="fa fa-users fa-lg fa-left-big"></i>@lang('content.admin.users.list.title')</h1>
         </div>
         <div class="product-container">
             <div class="md-form" style="margin-top: 30px;">
-                <i class="fa fa-search prefix" aria-hidden="true" data-toggle="popover" data-placement="right" data-trigger="hover" data-html="true" title="Подсказка"
-                   data-content="Введите сюда логин, почту, баланс, дабы осуществить поиск по пользователям. Так же, вы можете искать пользователей, используя спец. правила.
-                   Так, запрос <strong>&gt;520</strong> выберет всех пользователей, баланс которых больше 520. <strong>&lt;100</strong> - меньше 100. <strong>=0</strong> - Тех, у кого на балансе нет средств."></i>
+                <i class="fa fa-search prefix" aria-hidden="true" data-toggle="popover" data-placement="right" data-trigger="hover" data-html="true" title="@lang('components.popover.title')"
+                   data-content="@lang('content.admin.users.list.search.popover')"></i>
 
                 <input type="text" id="admin-users-search" class="form-control" data-toggle="dropdown"  data-url="{{ route('admin.users.search', ['server' => $currentServer->id]) }}">
-                <label for="admin-users-search">Искать пользователей</label>
+                <label for="admin-users-search">@lang('content.admin.users.list.search.placeholder')</label>
 
                 <div id="admin-users-search-results" class="dropdown-menu" style="width: 100%; max-height: 400px; overflow: auto">
-                    <a class="dropdown-item disabled">Начните вводить...</a>
+                    <a class="dropdown-item disabled">@lang('content.admin.users.list.search.lets_typing')</a>
                 </div>
             </div>
             <div class="table-responsive">
                 <table class="table">
                     <thead>
                     <tr>
-                        <th>ID</th>
-                        <th>Имя пользователя</th>
-                        <th>Почта</th>
-                        <th>Баланс</th>
-                        <th>Администратор</th>
-                        <th>Редактировать</th>
-                        <th>Статус аккаунта</th>
+                        <th>@lang('content.admin.users.list.table.id')</th>
+                        <th>@lang('content.admin.users.list.table.username')</th>
+                        <th>@lang('content.admin.users.list.table.email')</th>
+                        <th>@lang('content.admin.users.list.table.balance')</th>
+                        <th>@lang('content.admin.users.list.table.admin')</th>
+                        <th>@lang('content.admin.users.list.table.edit')</th>
+                        <th>@lang('content.admin.users.list.table.status')</th>
                     </tr>
                     </thead>
                     <tbody>
@@ -43,19 +48,21 @@
                             <td>{{ $user->username }}</td>
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->balance }}</td>
-                            <td>@if($user->hasAccess('user.admin')) <strong>Да</strong> @else Нет @endif</td>
-                            <td><a href="{{ route('admin.users.edit', ['server' => $currentServer->id, 'edit' => $user->id]) }}" class="btn btn-info btn-sm">Редактировать</a></td>
+                            <td>@if($user->hasAccess('user.admin')) <strong>@lang('content.all.yes')</strong> @else @lang('content.all.no') @endif</td>
+                            <td><a href="{{ route('admin.users.edit', ['server' => $currentServer->id, 'edit' => $user->id]) }}" class="btn btn-info btn-sm">@lang('content.admin.users.list.table.edit')</a></td>
                             <td>
-                                @php($ban = app(App\Services\Ban::class, ['user' => $user, 'repository' => app(\App\Repositories\BanRepository::class)]))
-                                @php($ban->setBan($user->ban))
+                                <?php
+                                    $ban = app(App\Services\Ban::class, ['user' => $user, 'repository' => app(\App\Repositories\BanRepository::class)]);
+                                    $ban->setBan($user->ban);
+                                ?>
 
                                 @if($ban->isBanned())
-                                    <span class="banned_span" data-toggle="popover" data-placement="left" data-trigger="hover" title="Информация о блокировке" data-content="{{ build_ban_message($ban->getBan()->until, $ban->getBan()->reason) }}">Заблокирован</span>
+                                    <span class="banned_span" data-toggle="popover" data-placement="left" data-trigger="hover" title="@lang('content.admin.users.list.table.blocked_popover_title')" data-content="{{ build_ban_message($ban->getBan()->until, $ban->getBan()->reason) }}">@lang('content.admin.users.list.table.blocked')</span>
                                 @else
                                     @if(\Activation::completed($user))
-                                        <span class="activated_span" data-toggle="popover" data-placement="left" data-trigger="hover" title="Информация о подтверждении" data-content="Аккаунт этого пользователя подтвержден {{ dt($user->activations[count($user->activations) - 1]->completed_at) }}.">Подтвержден</span>
+                                        <span class="activated_span" data-toggle="popover" data-placement="left" data-trigger="hover" title="@lang('content.admin.users.list.table.activated_popover_title')" data-content="Аккаунт этого пользователя подтвержден {{ dt($user->activations[count($user->activations) - 1]->completed_at) }}.">@lang('content.admin.users.list.table.activated')</span>
                                     @else
-                                        <a href="{{ route('admin.users.complete', ['server' => $currentServer->id, 'user' => $user->id]) }}" class="btn green btn-sm">Подтвердить</a>
+                                        <a href="{{ route('admin.users.complete', ['server' => $currentServer->id, 'user' => $user->id]) }}" class="btn green btn-sm">@lang('content.admin.users.list.table.activate')</a>
                                     @endif
                                 @endif
                             </td>

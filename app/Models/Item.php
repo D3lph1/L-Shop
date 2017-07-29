@@ -37,4 +37,14 @@ class Item extends Model
      * @var string
      */
     protected $table = 'items';
+
+    /**
+     * Get all products tied to the item.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'item_id', 'id');
+    }
 }

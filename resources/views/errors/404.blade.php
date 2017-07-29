@@ -2,14 +2,14 @@
 @extends('layouts.auth')
 
 @section('title')
-    404 | Не найдено
+    @lang('content.errors.404.title')
 @endsection
 
 @section('content')
     <div class="text-center mt-6">
         <div class="alert alert-danger">
-            <h1>Запрашиваемая вами страница не найдена</h1>
+            <h1>@lang('content.errors.404.content')</h1>
         </div>
-        <a href="{{ route('index') }}" class="btn danger-color">На главную</a>
+        <a href="{{ route('index') }}" class="btn danger-color">@lang('content.errors.404.btn')</a>
     </div>
 @endsection

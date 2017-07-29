@@ -2,13 +2,13 @@
 @extends('layouts.shop')
 
 @section('title')
-    О проекте L-Shop
+    @lang('content.admin.other.info.about.title')
 @endsection
 
 @section('content')
     <div id="content-container">
         <div class="z-depth-1 content-header text-center">
-            <h1><i class="fa fa-info fa-lg fa-left-big"></i>О системе L-Shop</h1>
+            <h1><i class="fa fa-info fa-lg fa-left-big"></i> @lang('content.admin.other.info.about.title')</h1>
         </div>
         <div id="logo-block">
             <div class="logo-img">
@@ -20,24 +20,24 @@
         </div>
 
         <div class="mt-3 mb-5 ml-5 mr-5">
-            <p><strong>L - Shop</strong> - это проект с открытым исходным кодом, целая система, призванная помочь администраторам игровых серверов Minecraft упростить процесс продажи виртуальных товаров.</p>
+            <p>@lang('content.admin.other.info.about.description')</p>
             <div class="table-responsive">
                 <table class="table table-sm">
                     <tbody>
                     <tr>
-                        <td>Версия системы L - Shop</td>
-                        <td>0.4.1 (BETA)</td>
+                        <td>@lang('content.admin.other.info.about.lshop_version')</td>
+                        <td>0.4.2 (BETA)</td>
                     </tr>
                     <tr>
-                        <td>Версия фреймворка Laravel</td>
+                        <td>@lang('content.admin.other.info.about.laravel_version')</td>
                         <td>5.4.24</td>
                     </tr>
                     <tr>
-                        <td>GitHub репозиторий</td>
+                        <td>@lang('content.admin.other.info.about.github')</td>
                         <td><a href="https://github.com/D3lph1/L-shop" target="_blank">https://github.com/D3lph1/L-shop</a></td>
                     </tr>
                     <tr>
-                        <td>Топик на RuBukkit.org</td>
+                        <td>@lang('content.admin.other.info.about.rubukkit')</td>
                         <td><a href="http://rubukkit.org/threads/l-shop-open-source.133265/" target="_blank">http://rubukkit.org/threads/l-shop-open-source.133265/</a></td>
                     </tr>
                     </tbody>
@@ -46,7 +46,7 @@
         </div>
         <div class="col-md-12">
             <div class="text-center mb-3">
-                <h4>Разработчики</h4>
+                <h4>@lang('content.admin.other.info.about.developers')</h4>
                 <hr>
             </div>
 
@@ -56,7 +56,7 @@
                 </a>
                 <div class="media-body">
                     <h4 class="media-heading">D3lph1 <a href="https://vk.com/d3lph1" target="_blank" class="btn btn-primary btn-sm"><i class="fa fa-vk"></i></a><a href="https://github.com/D3lph1" target="_blank" class="btn btn-primary btn-sm"><i class="fa fa-github"></i></a><a href="http://rubukkit.org/members/d3lph1.94641/" target="_blank" class="btn btn-primary btn-sm">RuBukkit.org</a></h4>
-                    <p><strong>Программный код</strong>. Вы можете обратиться ко мне за техничекой поддержкой.</p>
+                    <p>@lang('content.admin.other.info.about.d3lph1_description')</p>
                 </div>
             </div>
 
@@ -66,7 +66,7 @@
                 </a>
                 <div class="media-body">
                     <h4 class="media-heading">WhilD0S <a href="https://vk.com/whiled0s" target="_blank" class="btn btn-primary btn-sm"><i class="fa fa-vk"></i></a></h4>
-                    <p><strong>Дизайн и верстка</strong>. Вы можете обратиться ко мне для того, чтобы заказть разработку уникального дизайна для вашего сайта, в том числе, для сайта, базирующегося на системе L-Shop.</p>
+                    <p>@lang('content.admin.other.info.about.whiled0s_description')</p>
                 </div>
             </div>
         </div>

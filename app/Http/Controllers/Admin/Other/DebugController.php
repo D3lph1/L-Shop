@@ -6,11 +6,13 @@ use App\Http\Requests\Admin\TestMailRequest;
 use App\Services\Mailer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Session\SessionManager;
+use Psr\Log\LoggerInterface;
 
 /**
  * Class DebugController
  *
- * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
  *
  * @package App\Http\Controllers\Admin\Other
  */
@@ -37,10 +39,12 @@ class DebugController extends Controller
      *
      * @param TestMailRequest $request
      * @param Mailer          $mailer
+     * @param LoggerInterface $logger
+     * @param SessionManager  $session
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function testMail(TestMailRequest $request, Mailer $mailer)
+    public function testMail(TestMailRequest $request, Mailer $mailer, LoggerInterface $logger, SessionManager $session)
     {
         $address = $request->get('test_mail_address');
         $error = false;
@@ -48,16 +52,16 @@ class DebugController extends Controller
         try {
             $mailer->sendTest($address);
         } catch (\Exception $e) {
-            \Log::error($e);
+            $logger->error($e);
             // Write debug information in the flash session for user.
-            \Session::flash('test_mail_exception', $e->getMessage());
+            $session->flash('test_mail_exception', $e->getMessage());
             $error = true;
         }
 
         if ($error) {
-            \Message::danger('Сообщение отправить не удалось.');
+            $this->msg->danger(__('messages.admin.other.debug.mail.fail'));
         } else {
-            \Message::success('Сообщение успешно отправлено!');
+            $this->msg->success(__('messages.admin.other.debug.mail.success'));
         }
 
         return back();

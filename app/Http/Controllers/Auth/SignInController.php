@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Auth;
 use App\Exceptions\User\BannedException;
 use App\Services\Message;
 use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
+use Cartalyst\Sentinel\Sentinel;
 use Illuminate\Http\Request;
 use App\Http\Requests\SignInRequest;
 use App\Http\Controllers\Controller;
@@ -13,7 +14,7 @@ use Cartalyst\Sentinel\Checkpoints\ThrottlingException;
 /**
  * Class SignInController
  *
- * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
  *
  * @package App\Http\Controllers\Auth
  */
@@ -23,6 +24,7 @@ class SignInController extends Controller
      * Render the sign in page
      *
      * @param Request $request
+     *
      * @return mixed
      */
     public function render(Request $request)
@@ -41,6 +43,7 @@ class SignInController extends Controller
      * Handle the user signin
      *
      * @param SignInRequest $request
+     *
      * @return \Illuminate\Http\JsonResponse
      */
     public function signin(SignInRequest $request)
@@ -54,48 +57,61 @@ class SignInController extends Controller
             $user = \Sentinel::authenticate($credentials, true);
         } catch (ThrottlingException $e) {
             return json_response('frozen', [
-                'delay' => $e->getDelay()
+                'message' => [
+                    'type' => 'danger',
+                    'text' => __('messages.auth.signin.frozen', ['delay' => $e->getDelay()])
+                ]
             ]);
         } catch (NotActivatedException $e) {
-            return json_response('not activated');
+            return json_response('not activated', [
+                'message' => [
+                    'type' => 'danger',
+                    'text' => __('messages.auth.signin.not_activated')
+                ]
+            ]);
         } catch (BannedException $e) {
             return json_response('banned', [
-                'message' => build_ban_message($e->getUntil(), $e->getReason())
+                'message' => [
+                    'type' => 'danger',
+                    'text' => build_ban_message($e->getUntil(), $e->getReason())
+                ]
             ]);
         }
 
         if ($user) {
             if ($request->get('onlyForAdmins') and !$user->hasAccess(['user.admin'])) {
-                // If is not admin
-                return response()->json([
-                    'status' => 'only for admins'
+                // If is not admin.
+                return json_response('only_for_admins', [
+                    'message' => [
+                        'type' => 'danger',
+                        'text' => __('messages.auth.signin.only_for_admins')
+                    ]
                 ]);
             }
-            \Message::success("Добро пожаловать, $credentials[username]!");
+            $this->msg->success(__('messages.auth.signin.welcome', ['username' => $user->getUserLogin()]));
 
-            return response()->json([
-                'status' => 'success'
-            ]);
+            return json_response('success');
         }
 
-        return response()->json(['status' => 'invalid_credentials']);
+        return json_response('invalid_credentials', [
+            'message' => [
+                'type' => 'danger',
+                'text' => __('messages.auth.signin.invalid_credentials')
+            ]
+        ]);
     }
 
     /**
-     * Authorizes the user by transmitting him credentials in GET-request
+     * Logout current user.
      *
-     * @param SignInRequest $request
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @param Sentinel $sentinel
+     *
+     * @return \Illuminate\Http\RedirectResponse
      */
-    public function get(SignInRequest $request)
+    public function logout(Sentinel $sentinel)
     {
-        //
-    }
-
-    public function logout()
-    {
-        \Sentinel::logout();
-        \Message::info('Вы вышли из аккаунта');
+        $sentinel->logout();
+        $this->msg->info(__('messages.auth.logout'));
 
         return response()->redirectToRoute('signin');
     }

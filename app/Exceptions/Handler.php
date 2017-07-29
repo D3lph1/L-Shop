@@ -8,6 +8,7 @@ use App\Exceptions\User\EmailAlreadyExistsException;
 use App\Exceptions\User\NotFoundException;
 use App\Exceptions\User\RemindCodeNotFound;
 use App\Exceptions\User\UsernameAlreadyExistsException;
+use App\Services\Message;
 use Exception;
 use Illuminate\Auth\AuthenticationException;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
@@ -94,7 +95,7 @@ class Handler extends ExceptionHandler
     {
         $until = $e->getUntil();
         $reason = $e->getReason();
-        \Message::danger(build_ban_message($until, $reason));
+        $this->container->make(Message::class)->danger(build_ban_message($until, $reason));
 
         return redirect()->route('index');
     }

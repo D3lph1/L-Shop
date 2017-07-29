@@ -17,7 +17,7 @@ use App\Http\Controllers\Controller;
 class PaymentsController extends Controller
 {
     /**
-     * Render the profile payments history page
+     * Render the profile payments history page.
      *
      * @param Request           $request
      * @param PaymentRepository $pr
@@ -35,6 +35,8 @@ class PaymentsController extends Controller
     }
 
     /**
+     * Get more information about given payment.
+     *
      * @param Request           $request
      * @param PaymentRepository $paymentRepository
      * @param ProductRepository $productRepository

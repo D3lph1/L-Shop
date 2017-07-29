@@ -51,13 +51,9 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        $this->app->bind('message', function () {
-            return new Message();
-        });
+        $this->app->alias(Message::class, 'message');
 
-        $this->app->bind('cart', function () {
-            return new Cart();
-        });
+        $this->app->alias(Cart::class, 'cart');
 
         $this->app->bind('recaptcha', function () {
             return new ReCaptcha(
@@ -66,29 +62,17 @@ class AppServiceProvider extends ServiceProvider
             );
         });
 
-        $this->app->bind('activator', function () {
-            return new Activator();
-        });
+        $this->app->alias(Activator::class, 'activator');
 
-        $this->app->bind('reminder', function () {
-            return new Activator();
-        });
+        $this->app->alias(Activator::class, 'reminder');
 
-        $this->app->bind('registrar', function () {
-            return new Registrar();
-        });
+        $this->app->alias(Registrar::class, 'registrar');
 
-        $this->app->bind('catalog.buy', function () {
-            return new CatalogBuy();
-        });
+        $this->app->alias(CatalogBuy::class,'catalog.buy');
 
-        $this->app->bind('cart.buy', function () {
-            return new CartBuy();
-        });
+        $this->app->alias(CartBuy::class, 'cart.buy');
 
-        $this->app->bind('launcher.sashok', function () {
-            return new SashokLauncher();
-        });
+        $this->app->alias(SashokLauncher::class, 'launcher.sashok');
 
         $this->app->singleton(Rcon::class, function (Application $app) {
             $request = $app->make('request');

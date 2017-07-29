@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Info;
 
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
@@ -14,6 +15,23 @@ use App\Http\Controllers\Controller;
  */
 class DocsController extends Controller
 {
+    /**
+     * @var Filesystem
+     */
+    private $file;
+
+    /**
+     * @var \Parsedown
+     */
+    private $parsedown;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->file = $this->app->make('files');
+        $this->parsedown = $this->app->make(\Parsedown::class);
+    }
+
     /**
      * Render the documentation menu page.
      *
@@ -37,7 +55,9 @@ class DocsController extends Controller
      */
     public function main()
     {
-        return view('admin.info.docs.main');
+        return view('admin.info.docs.main', [
+            'data' => $this->parsedown->parse($this->load('main'))
+        ]);
     }
 
     /**
@@ -47,7 +67,9 @@ class DocsController extends Controller
      */
     public function api()
     {
-        return view('admin.info.docs.api');
+        return view('admin.info.docs.api', [
+            'data' => $this->parsedown->parse($this->load('api'))
+        ]);
     }
 
     /**
@@ -57,7 +79,9 @@ class DocsController extends Controller
      */
     public function sashokLauncherIntegration()
     {
-        return view('admin.info.docs.sashok_launcher_intagration');
+        return view('admin.info.docs.sashok_launcher_integration', [
+            'data' => $this->parsedown->parse($this->load('sashok_launcher_integration'))
+        ]);
     }
 
     /**
@@ -67,6 +91,27 @@ class DocsController extends Controller
      */
     public function cli()
     {
-        return view('admin.info.docs.cli');
+        return view('admin.info.docs.cli', [
+            'data' => $this->parsedown->parse($this->load('cli'))
+        ]);
+    }
+
+    /**
+     * Load file with documentations.
+     *
+     * @param string $name
+     *
+     * @return string
+     */
+    private function load($name)
+    {
+        $locale = $this->app->getLocale();
+        $path = $this->app->resourcePath("documentation/{$locale}/{$name}.md");
+        if ($this->file->exists($path)) {
+            return $this->file->get($path);
+        }
+        $fallback = 'ru';
+
+        return $this->file->get($this->app->resourcePath("documentation/{$fallback}/{$name}.md"));
     }
 }

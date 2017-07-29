@@ -26,7 +26,7 @@ class SaveEditedUserRequest extends FormRequest
         return [
             'username' => 'required',
             'email' => 'required',
-            'balance' => 'required|numeric|min:0.01',
+            'balance' => 'required|numeric|min:0',
             'admin' => 'boolean',
             'password' => 'sometimes'
         ];

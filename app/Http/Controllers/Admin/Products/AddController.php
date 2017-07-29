@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Products;
 
+use App\DataTransferObjects\Admin\Product;
 use App\Exceptions\ItemNotFoundException;
 use App\Http\Requests\Admin\SaveAddedProductRequest;
 use App\Repositories\ItemRepository;
@@ -76,24 +77,26 @@ class AddController extends Controller
      */
     public function save(SaveAddedProductRequest $request)
     {
-        $price = (double)$request->get('price');
-        $stack = (int)$request->get('stack');
-        $itemId = (int)$request->get('item');
-        $serverId = (int)$request->get('server');
-        $categoryId = (int)$request->get('category');
-        $sortPriority = (float)$request->get('sort_priority');
-        $result = false;
+        $result = null;
+        $dto = new Product(
+            $request->get('price'),
+            $request->get('stack'),
+            $request->get('item'),
+            $request->get('server'),
+            $request->get('category'),
+            $request->get('sort_priority')
+        );
 
         try {
-            $result = $this->adminProducts->create($price, $stack, $itemId, $serverId, $categoryId, $sortPriority);
+            $result = $this->adminProducts->create($dto);
         } catch (ItemNotFoundException $e) {
-            \Message::danger("Предмет с идентификатором {$itemId} не найден");
+            $this->msg->danger(__('messages.admin.products.add.item_not_found', ['id' => $dto->getItemId()]));
         }
 
         if ($result) {
-            \Message::success('Товар добавлен');
+            $this->msg->success(__('messages.admin.products.add.success'));
         }else {
-            \Message::danger('Не удалось добавить товар');
+            $this->msg->danger(__('messages.admin.products.add.fail'));
         }
 
         return response()->redirectToRoute('admin.products.list', ['server' => $request->get('currentServer')->id]);

@@ -38,7 +38,7 @@ class ListParent extends Controller
      */
     protected function checkOrderBy($orderBy)
     {
-        $orderBy = strtolower($orderBy);
+        $orderBy = mb_strtolower($orderBy);
 
         if (in_array($orderBy, $this->orderByAvailable)) {
             return $orderBy;

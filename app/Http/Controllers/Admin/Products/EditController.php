@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Products;
 
+use App\DataTransferObjects\Admin\Product;
 use App\Repositories\ItemRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\ServerRepository;
@@ -57,7 +58,7 @@ class EditController extends Controller
         ]);
 
         if (!$product) {
-            \App::abort(404);
+            $this->app->abort(404);
         }
 
         $items = $itemRepository->all([
@@ -109,27 +110,29 @@ class EditController extends Controller
      */
     public function save(SaveEditedProductRequest $request)
     {
-        $productId = (int)$request->route('product');
-        $serverId = (int)$request->get('server');
-        $categoryId = (int)$request->get('category');
-        $price = (double)$request->get('price');
-        $stack = (int)$request->get('stack');
-        $itemId = (int)$request->get('item');
-        $sortPriority = (float)$request->get('sort_priority');
+        $dto = new Product(
+            $request->get('price'),
+            $request->get('stack'),
+            $request->get('item'),
+            $request->get('server'),
+            $request->get('category'),
+            $request->get('sort_priority')
+        );
+        $dto->setId($request->route('product'));
 
-        $result = $this->adminProducts->edit($productId, $price, $stack, $itemId, $serverId, $categoryId, $sortPriority);
+        $result = $this->adminProducts->edit($dto);
 
         if ($result) {
-            \Message::success(trans('messages.success.changes'));
+            $this->msg->success(__('messages.admin.products.edit.success'));
         } else {
-            \Message::danger(trans('messages.error.changes'));
+            $this->msg->danger(__('messages.admin.products.edit.fail'));
         }
 
         return response()->redirectToRoute('admin.products.list', ['server' => $request->get('currentServer')->id]);
     }
 
     /**
-     * Remove product
+     * Remove product.
      *
      * @param Request $request
      *
@@ -141,9 +144,9 @@ class EditController extends Controller
         $result = $this->adminProducts->delete($productId);
 
         if ($result) {
-            \Message::info('Товар удален');
+            $this->msg->info(__('messages.admin.products.remove.success'));
         } else {
-            \Message::danger('Не удалось удалить товар');
+            $this->msg->danger(__('messages.admin.products.remove.fail'));
         }
 
         return response()->redirectToRoute('admin.products.list', ['server' => $request->get('currentServer')->id]);

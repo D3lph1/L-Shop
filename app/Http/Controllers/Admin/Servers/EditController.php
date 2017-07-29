@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin\Servers;
 
+use App\DataTransferObjects\Admin\Category;
+use App\DataTransferObjects\Admin\Server;
 use App\Exceptions\Server\AttemptToDeleteTheLastCategoryException;
 use App\Exceptions\Server\AttemptToDeleteTheLastServerException;
 use App\Http\Requests\Admin\SaveEditedServerRequest;
@@ -36,7 +38,7 @@ class EditController extends BaseController
         }
 
         if (!$server) {
-            \App::abort(404);
+            $this->app->abort(404);
         }
 
         $categories = $serverRepository->categories($server->first()->id, [
@@ -60,13 +62,12 @@ class EditController extends BaseController
      */
     public function addCategory(Request $request)
     {
-        $name = $request->get('category');
-        $serverId = (int)$request->route('edit');
+        $category = new Category($request->get('category'));
+        $category->setServerId($request->route('edit'));
 
-        // ~~~~~~~~~~ MAIN METHOD ~~~~~~~~~~ //
-        $this->serverService->createCategory($serverId, $name);
+        $this->serverService->createCategory($category);
 
-        \Message::success("Категория \"{$request->get('category')}\" создана");
+        $this->msg->success(__('messages.admin.servers.add.category.add.success', ['name' => $category->getName()]));
 
         return json_response('success');
     }
@@ -82,15 +83,14 @@ class EditController extends BaseController
         $categoryId = (int)$request->get('category');
 
         try {
-            // ~~~~~~~~~~ MAIN METHOD ~~~~~~~~~~ //
             $this->serverService->removeCategory($serverId, $categoryId);
         } catch (AttemptToDeleteTheLastCategoryException $e) {
-            \Message::warning('Должна остаться хотя бы одна категория для данного сервера.');
+            $this->msg->warning(__('messages.admin.servers.add.category.remove.last'));
 
             return json_response('must stay at least one category');
         }
 
-        \Message::info('Категория удалена');
+        $this->msg->info(__('messages.admin.servers.add.category.remove.success'));
 
         return json_response('success');
     }
@@ -102,19 +102,26 @@ class EditController extends BaseController
      */
     public function save(SaveEditedServerRequest $request)
     {
-        $serverId = (int)$request->route('edit');
-        $name = $request->get('server_name');
-        $enabled = (bool)$request->get('enabled');
-        $categories = $request->get('categories');
-        $ip = $request->get('server_ip');
-        $port = $request->get('server_port');
-        $password = $request->get('server_password');
-        $monitoringEnabled = (bool)$request->get('server_monitoring_enabled');
+        $categories = [];
+        foreach ($request->get('categories') as $key => $category) {
+            $t = new Category($category[0]);
+            $t->setId($key);
+            $categories[] = $t;
+        }
 
-        // ~~~~~~~~~~ MAIN METHOD ~~~~~~~~~~ //
-        $this->serverService->updateServer($serverId, $name, $enabled, $categories, $ip, $port, $password, $monitoringEnabled);
+        $dto = new Server(
+            $request->get('server_name'),
+            $request->get('enabled'),
+            $categories,
+            $request->get('server_ip'),
+            $request->get('server_port'),
+            $request->get('server_password'),
+            $request->get('server_monitoring_enabled')
+        );
+        $dto->setId($request->route('edit'));
 
-        \Message::success('Изменения успешно сохранены.');
+        $this->serverService->updateServer($dto);
+        $this->msg->success(__('messages.admin.changes_saved'));
 
         return back();
     }
@@ -131,15 +138,14 @@ class EditController extends BaseController
         $serverId = (int)$request->route('remove');
 
         try {
-            // ~~~~~~~~~~ MAIN METHOD ~~~~~~~~~~ //
             $this->serverService->removeServer($serverId);
         }catch (AttemptToDeleteTheLastServerException $e) {
-            \Message::warning('Удалить последний сервер невозможно!');
+            $this->msg->warning(__('messages.admin.servers.remove.last'));
 
             return redirect()->route('admin.servers.list', $request->get('currentServer')->id);
         }
 
-        \Message::info('Сервер удален.');
+        $this->msg->info(__('messages.admin.servers.remove.success'));
 
         return redirect()->route('servers');
     }

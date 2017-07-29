@@ -48,4 +48,12 @@ class Cart extends Model
         'item_id',
         'server'
     ];
+
+    /**
+     * @return \Illuminate\Database\Eloquent\Relations\HasOne
+     */
+    public function user()
+    {
+        return $this->hasOne(User::class, 'username', 'player');
+    }
 }

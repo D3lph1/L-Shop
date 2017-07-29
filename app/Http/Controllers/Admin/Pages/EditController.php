@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin\Pages;
 
+use App\DataTransferObjects\Admin\Page as DTO;
+use App\Exceptions\Page\UrlAlreadyExistsException;
 use App\Http\Requests\Admin\SaveEditedPageRequest;
 use App\Services\Page;
 use Illuminate\Http\Request;
@@ -45,7 +47,7 @@ class EditController extends Controller
         $page = $this->page->getById($id, ['title', 'content', 'url']);
 
         if (!$page) {
-            \App::abort(404);
+            $this->app->abort(404);
         }
 
         $data = [
@@ -66,27 +68,24 @@ class EditController extends Controller
      */
     public function save(SaveEditedPageRequest $request)
     {
-        $id = (int)$request->route('id');
-        $title = $request->get('page_title');
-        $content = $request->get('page_content');
-        $url = $request->get('page_url');
+        $page = new DTO(
+            $request->get('page_title'),
+            $request->get('page_content'),
+            $request->get('page_url')
+        );
+        $page->setId($request->route('id'));
+        $result = null;
 
-        if (!$this->page->isUrlUnique($id, $url)) {
-            \Message::danger('Страница с таким адресом уже существует!');
+        try {
+            if ($this->page->update($page)) {
+                $this->msg->success(__('messages.admin.pages.edit.success'));
 
-            return back();
-        }
-
-        $result = $this->page->update($id, [
-            'title' => $title,
-            'content' => $content,
-            'url' => $url
-        ]);
-
-        if ($result) {
-            \Message::success('Страница успешно обновлена');
-        } else {
-            \Message::danger('Не удалось обновить страницу');
+                return response()->redirectToRoute('admin.pages.list', ['server' => $request->get('currentServer')->id]);
+            } else {
+                $this->msg->danger(__('messages.admin.pages.edit.fail'));
+            }
+        } catch (UrlAlreadyExistsException $e) {
+            $this->msg->warning(__('messages.admin.pages.url_already_exists'));
         }
 
         return back();
@@ -103,11 +102,11 @@ class EditController extends Controller
     {
         $id = (int)$request->route('id');
         if ($this->page->delete($id)) {
-            \Message::info('Страница удалена');
+            $this->msg->info(__('messages.admin.pages.delete.success'));
 
             return response()->redirectToRoute('admin.pages.list', ['server' => $request->get('currentServer')->id]);
         }
-        \Message::danger('Не удалось удалить страницу');
+        $this->msg->danger(__('messages.admin.pages.delete.fail'));
 
         return back();
     }

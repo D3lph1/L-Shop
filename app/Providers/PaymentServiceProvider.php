@@ -41,7 +41,8 @@ class PaymentServiceProvider extends ServiceProvider
                 s_get('payment.method.robokassa.password1'),
                 s_get('payment.method.robokassa.password2'),
                 s_get('payment.method.robokassa.algo'),
-                (bool)s_get('payment.method.robokassa.test')
+                (bool)s_get('payment.method.robokassa.test'),
+                $this->app->getLocale() === 'ru' ? Payment::CULTURE_RU : Payment::CULTURE_EN
             );
         });
     }

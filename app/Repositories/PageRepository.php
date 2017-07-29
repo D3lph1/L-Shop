@@ -16,7 +16,7 @@ class PageRepository extends BaseRepository
     const MODEL = Page::class;
 
     /**
-     * Get static page from database or cache
+     * Get static page from database or cache.
      *
      * @param string $url
      * @param array  $columns
@@ -42,13 +42,15 @@ class PageRepository extends BaseRepository
     }
 
     /**
-     * Get all static pages paginated
+     * Get all static pages paginated.
+     *
+     * @param array $columns
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getPaginated()
+    public function getPaginated($columns = [])
     {
-        return Page::paginate(50, ['id', 'title', 'url', 'created_at', 'updated_at']);
+        return Page::paginate(50, $this->prepareColumns($columns));
     }
 
     /**
@@ -61,6 +63,17 @@ class PageRepository extends BaseRepository
     {
         return !(bool)Page::where('url', $url)
             ->where('id', '<>', $id)
+            ->count();
+    }
+
+    /**
+     * @param string $url
+     *
+     * @return bool
+     */
+    public function isUrlUniqueAll($url)
+    {
+        return !(bool)Page::where('url', $url)
             ->count();
     }
 }

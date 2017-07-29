@@ -66,6 +66,12 @@ class Manager
      */
     private $cost = 0;
 
+    /**
+     * Manager constructor.
+     *
+     * @param PaymentRepository $paymentRepository
+     * @param ProductRepository $productRepository
+     */
     public function __construct(PaymentRepository $paymentRepository, ProductRepository $productRepository)
     {
         $this->paymentRepository = $paymentRepository;
@@ -108,6 +114,7 @@ class Manager
         }
 
         $this->username = \Sentinel::getUser()->getUserId();
+
         return $this->updateBalance();
     }
 

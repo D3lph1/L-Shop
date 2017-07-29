@@ -52,7 +52,7 @@ class SecurityController extends Controller
         ]);
         s_save();
 
-        \Message::success('Изменения успешно сохранены!');
+        $this->msg->success(__('messages.admin.changes_saved'));
 
         return back();
     }

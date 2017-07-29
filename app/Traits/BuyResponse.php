@@ -35,7 +35,11 @@ trait BuyResponse
     {
         return json_response('success', [
             'quick' => true,
-            'new_balance' => \Sentinel::getUser()->getBalance()
+            'new_balance' => \Sentinel::getUser()->getBalance(),
+            'message' => [
+                'type' => 'success',
+                'text' => __('messages.shop.catalog.buy.success')
+            ]
         ]);
     }
 

@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\DataTransferObjects\Admin\News as DTO;
 use App\Exceptions\News\UnableToCreate;
 use App\Exceptions\News\UnableToUpdate;
 use App\Repositories\NewsRepository;
@@ -29,49 +30,43 @@ class News
     }
 
     /**
-     * @param string $title   News title.
-     * @param string $content News content.
-     * @param int    $userId  Author identifier.
+     * @param DTO $dto
      *
-     * @throws UnableToCreate
+     * @return bool
      */
-    public function add($title, $content, $userId)
+    public function add(DTO $dto)
     {
         $result = $this->newsRepository->create([
-            'title' => $title,
-            'content' => $content,
-            'user_id' => $userId
+            'title' => $dto->getTitle(),
+            'content' => $dto->getContent(),
+            'user_id' => $dto->getUserId()
         ]);
 
-        if (!$result) {
-            throw new UnableToCreate();
-        }
-
-        // Remove new data from cache
+        // Remove new data from cache.
         $this->forgetNews();
         $this->forgetCount();
+
+        return (bool)$result;
     }
 
     /**
-     * @param int $id      Updated news identifier.
-     * @param int $title   New title.
-     * @param int $content New content.
+     * Update given news.
      *
-     * @throws UnableToUpdate
+     * @param DTO $dto
+     *
+     * @return bool
      */
-    public function update($id, $title, $content)
+    public function update(DTO $dto)
     {
-        $result = $this->newsRepository->update($id, [
-            'title' => $title,
-            'content' => $content
+        $result = $this->newsRepository->update($dto->getId(), [
+            'title' => $dto->getTitle(),
+            'content' => $dto->getContent()
         ]);
-
-        if (!$result) {
-            throw new UnableToUpdate();
-        }
 
         // Remove new data from cache
         $this->forgetNews();
+
+        return $result;
     }
 
     /**
@@ -98,7 +93,7 @@ class News
 
         if ($count) {
             if ($count < s_get('news.per_page', 15)) {
-                $status = 'last portion';
+                $status = 'last_portion';
             } else {
                 $status = 'success';
             }
@@ -108,7 +103,12 @@ class News
             ]);
         }
 
-        return json_response('no more news');
+        return json_response('no_more_news', [
+            'message' => [
+                'type' => 'info',
+                'text' => __('messages.shop.catalog.news.no_more'),
+            ]
+        ]);
     }
 
     /**
@@ -135,7 +135,15 @@ class News
     public function delete($id)
     {
         if ($this->newsRepository->exists($id)) {
-            return $this->newsRepository->delete($id);
+            $result = $this->newsRepository->delete($id);
+            if ($result) {
+                $this->forgetNews();
+                $this->forgetCount();
+
+                return true;
+            }
+
+            return false;
         }
 
         return false;

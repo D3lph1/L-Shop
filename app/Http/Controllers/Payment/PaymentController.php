@@ -30,30 +30,29 @@ class PaymentController extends Controller
      */
     public function render(Request $request, PaymentRepository $paymentRepository)
     {
-        $this->server = (int)$request->route('server');
         $this->payment = (int)$request->route('payment');
         $this->payment = $paymentRepository->find($this->payment, ['id', 'cost', 'user_id', 'username', 'completed']);
 
         // If payment with this ID does not exist, exit
         if (!$this->payment) {
-            \App::abort(404);
+            $this->app->abort(404);
         }
 
         // If the payment is completed, deny access
         if ($this->payment->completed) {
-            \App::abort(403);
+            $this->app->abort(403);
         }
 
         // Verification of whether the payment the user belongs
         if (is_null($this->payment->username)) {
             if (!is_auth()) {
                 // If it is not, deny access
-                \App::abort(403);
+                $this->app->abort(403);
             }
 
             if ($this->payment->user_id != \Sentinel::getUser()->getUserId()) {
                 // If it is not, deny access
-                \App::abort(403);
+                $this->app->abort(403);
             }
         }
 
@@ -112,7 +111,7 @@ class PaymentController extends Controller
      */
     private function robokassa()
     {
-        $robokassa = \App::make('payment.robokassa');
+        $robokassa = $this->app->make('payment.robokassa');
         $robokassa
             ->setInvoiceId($this->payment->id)
             ->setSum($this->payment->cost)

@@ -2,7 +2,7 @@
 @extends('layouts.auth')
 
 @section('title')
-    Выбор сервера
+    @lang('content.auth.servers.title')
 @endsection
 
 @section('content')
@@ -12,7 +12,7 @@
 
             <div class="card-block">
                 <div class="card-header d_orange text-center white-text z-depth-2">
-                    <h1><i class="fa fa-check-square-o fa-lg fa-left"></i>Сервер</h1>
+                    <h1><i class="fa fa-check-square-o fa-lg fa-left"></i>@lang('content.all.server')</h1>
                 </div>
                 <div class="list-group no-shadow">
                     @foreach($servers as $server)
@@ -24,9 +24,9 @@
             </div>
             <div class="card-footer text-center">
                 @if($canExit)
-                    <a href="{{ route('logout', []) }}" class="btn btn-primary btn-lg">Выйти<i class="fa fa-sign-out fa-right"></i></a>
+                    <a href="{{ route('logout', []) }}" class="btn btn-primary btn-lg">@lang('content.all.logout')<i class="fa fa-sign-out fa-right"></i></a>
                 @elseif($canEnter)
-                    <a href="signin" class="btn btn-primary btn-lg">Войти<i class="fa fa-sign-out fa-right"></i></a>
+                    <a href="signin" class="btn btn-primary btn-lg">@lang('content.auth.servers.signin')<i class="fa fa-sign-out fa-right"></i></a>
                 @endif
             </div>
         </div>

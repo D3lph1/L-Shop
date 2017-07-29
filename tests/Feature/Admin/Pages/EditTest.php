@@ -8,17 +8,17 @@ class EditTest extends Future
 {
     public function testVisitAdmin()
     {
-        $this->visitAdmin('admin.pages.edit', ['server' => 1, 'id' => 2], 200);
+        $this->visitAdmin('admin.pages.edit', ['server' => 1, 'id' => 1], 200);
     }
 
     public function testVisitUser()
     {
-        $this->visitUser('admin.pages.edit', ['server' => 1, 'id' => 2], 403);
+        $this->visitUser('admin.pages.edit', ['server' => 1, 'id' => 1], 403);
     }
 
     public function testVisitGuest()
     {
-        $this->visitGuest('admin.pages.edit', ['server' => 1, 'id' => 2], 403);
+        $this->visitGuest('admin.pages.edit', ['server' => 1, 'id' => 1], 403);
     }
 
     public function testNotFound()

@@ -6,6 +6,7 @@ use App\Events\UserWasRegistered;
 use App\Exceptions\User\EmailAlreadyExistsException;
 use App\Exceptions\User\UnableToCreateUser;
 use App\Exceptions\User\UsernameAlreadyExistsException;
+use Cartalyst\Sentinel\Roles\EloquentRole;
 use Cartalyst\Sentinel\Users\UserInterface;
 
 /**
@@ -49,7 +50,7 @@ class Registrar
      */
     private function findByUsername($username)
     {
-        if (\Sentinel::findByCredentials(['username' => $username])) {
+        if (\Sentinel::getUserRepository()->findByCredentials(['username' => $username])) {
             throw new UsernameAlreadyExistsException();
         }
     }
@@ -63,7 +64,7 @@ class Registrar
      */
     private function findByEmail($email)
     {
-        if (\Sentinel::findByCredentials(['email' => $email])) {
+        if (\Sentinel::getUserRepository()->findByCredentials(['email' => $email])) {
             throw new EmailAlreadyExistsException();
         }
     }
@@ -108,17 +109,19 @@ class Registrar
     }
 
     /**
-     * Attaches a role to a new user
+     * Attaches a role to a new user.
      *
      * @param UserInterface $user
      * @param bool          $admin
      */
     private function attachRole(UserInterface $user, $admin)
     {
-        $adminRole = \Sentinel::findRoleBySlug('admin');
-        $userRole = \Sentinel::findRoleBySlug('user');
+        /** @var EloquentRole $adminRole */
+        $adminRole = \Sentinel::getRoleRepository()->findBySlug('admin');
+        /** @var EloquentRole $userRole */
+        $userRole = \Sentinel::getRoleRepository()->findBySlug('user');
 
-        // Detach all roles if user keu already exists in `role_users` table
+        // Detach all roles if user identifier already exists in `role_users` table
         $adminRole->users()->detach($user);
         $userRole->users()->detach($user);
 

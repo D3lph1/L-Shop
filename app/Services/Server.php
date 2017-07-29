@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\DataTransferObjects\Admin\Category;
+use App\DataTransferObjects\Admin\Server as DTO;
 use App\Exceptions\Server\AttemptToDeleteTheLastCategoryException;
 use App\Exceptions\Server\AttemptToDeleteTheLastServerException;
 use App\Repositories\CategoryRepository;
@@ -38,7 +40,7 @@ class Server
     }
 
     /**
-     * Enables the server
+     * Enables the server.
      *
      * @param int $serverId Server identifier.
      *
@@ -62,34 +64,26 @@ class Server
     }
 
     /**
-     * Create a new server with attached categories
+     * Create a new server with attached categories.
      *
-     * @param string $name              Server name.
-     * @param bool   $enabled           Enable the server after creation.
-     * @param array  $categories        Attached server categories.
-     * @param string $ip                Server ip address.
-     * @param int    $port              Server RCON port.
-     * @param string $password          Server RCON password.
-     * @param bool   $monitoringEnabled Enable the server monitoring after creation.
+     * @param DTO $dto
      */
-    public function createServer($name, $enabled, array $categories, $ip, $port, $password, $monitoringEnabled)
+    public function createServer(DTO $dto)
     {
-        \DB::transaction(function () use ($name, $enabled, $categories, $ip, $port, $password, $monitoringEnabled) {
+        \DB::transaction(function () use ($dto) {
             $server = $this->serverRepository->create([
-                'name' => $name,
-                'enabled' => $enabled,
-                'ip' => $ip,
-                'port' => $port,
-                'password' => $password,
-                'monitoring_enabled' => $monitoringEnabled
+                'name' => $dto->getName(),
+                'enabled' => $dto->isEnabled(),
+                'ip' => $dto->getIp(),
+                'port' => $dto->getPort(),
+                'password' => $dto->getPassword(),
+                'monitoring_enabled' => $dto->isMonitoringEnabled()
             ]);
 
-            foreach ($categories as $category) {
+            foreach ($dto->getCategories() as $category) {
                 $query = [
                     'name' => $category,
-                    'server_id' => $server->id,
-                    'created_at' => Carbon::now()->toDateTimeString(),
-                    'updated_at' => null
+                    'server_id' => $server->id
                 ];
 
                 $this->categoryRepository->create($query);
@@ -100,30 +94,23 @@ class Server
     /**
      * Update given server with categories.
      *
-     * @param int    $serverId          Updated server identifier.
-     * @param string $name              Updated server name.
-     * @param bool   $enabled           Enable this server after the update.
-     * @param array  $categories        New categories attached to this server.
-     * @param string $ip                Updated server ip address.
-     * @param int    $port              Updated server RCON port.
-     * @param string $password          Updated server RCON password.
-     * @param bool   $monitoringEnabled Enable monitoring for this server after the update.
+     * @param DTO $dto
      */
-    public function updateServer($serverId, $name, $enabled, array $categories, $ip, $port, $password, $monitoringEnabled)
+    public function updateServer(DTO $dto)
     {
-        \DB::transaction(function () use ($serverId, $name, $enabled, $categories, $ip, $port, $password, $monitoringEnabled) {
-            $this->serverRepository->update($serverId, [
-                'name' => $name,
-                'enabled' => $enabled,
-                'ip' => $ip,
-                'port' => $port,
-                'password' => $password,
-                'monitoring_enabled' => $monitoringEnabled
+        \DB::transaction(function () use ($dto) {
+            $this->serverRepository->update($dto->getId(), [
+                'name' => $dto->getName(),
+                'enabled' => $dto->isEnabled(),
+                'ip' => $dto->getIp(),
+                'port' => $dto->getPort(),
+                'password' => $dto->getPassword(),
+                'monitoring_enabled' => $dto->isMonitoringEnabled()
             ]);
 
-            foreach ($categories as $key => $value) {
-                $this->categoryRepository->update((int)$key, [
-                    'name' => $value[0]
+            foreach ($dto->getCategories() as $category) {
+                $this->categoryRepository->update($category->getId(), [
+                    'name' => $category->getName()
                 ]);
             }
         });
@@ -153,15 +140,14 @@ class Server
     /**
      * Create a new category for the given server.
      *
-     * @param int    $serverId The server identifier to which the category will be bound.
-     * @param string $name New category name.
+     * @param Category $dto
      */
-    public function createCategory($serverId, $name)
+    public function createCategory(Category $dto)
     {
-        \DB::transaction(function () use ($serverId, $name) {
+        \DB::transaction(function () use ($dto) {
             $this->categoryRepository->create([
-                'name' => $name,
-                'server_id' => $serverId
+                'name' => $dto->getName(),
+                'server_id' => $dto->getServerId()
             ]);
         });
     }

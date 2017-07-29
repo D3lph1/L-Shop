@@ -2,6 +2,8 @@
 
 namespace App\Http\Controllers\Admin\Pages;
 
+use App\DataTransferObjects\Admin\Page as DTO;
+use App\Exceptions\Page\UrlAlreadyExistsException;
 use App\Services\Page;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -42,14 +44,22 @@ class AddController extends Controller
      */
     public function save(SaveAddedPageRequest $request, Page $handler)
     {
-        $title = $request->get('page_title');
-        $content = $request->get('page_content');
-        $url = $request->get('page_url');
+        $page = new DTO(
+            $request->get('page_title'),
+            $request->get('page_content'),
+            $request->get('page_url')
+        );
 
-        if ($handler->create($title, $content, $url)) {
-            \Message::success('Страница успешно создана');
-        } else {
-            \Message::danger('Не удалось создать страницу');
+        try {
+            if ($handler->create($page)) {
+                $this->msg->success(__('messages.admin.pages.add.success'));
+            } else {
+                $this->msg->danger(__('messages.admin.pages.add.fail'));
+            }
+        } catch (UrlAlreadyExistsException $e) {
+            $this->msg->warning(__('messages.admin.pages.url_already_exists'));
+
+            return back();
         }
 
         return response()->redirectToRoute('admin.pages.list', ['server' => $request->get('currentServer')->id]);

@@ -68,13 +68,11 @@ class PaymentsController extends Controller
         try {
             $this->robokassa($request);
         } catch (\UnexpectedValueException $e) {
-            if ($e->getCode() === 1) {
-                \Message::danger('Такого алгоритма расчета контрольной суммы нет в списке');
+            $this->msg->danger(__('messages.admin.control.payments.robokassa.unknowns_algo'));
 
-                return back();
-            }
+            return back();
         }
-        \Message::success('Изменения успешно сохранены!');
+        $this->msg->success(__('messages.admin.changes_saved'));
 
         return back();
     }
@@ -82,9 +80,9 @@ class PaymentsController extends Controller
     /**
      * Save all settings.
      *
-     * @param $request
+     * @param Request $request
      */
-    private function all($request)
+    private function all(Request $request)
     {
         s_set('payment.fillupbalance.minsum', $request->get('min_sum'));
         s_save();
@@ -95,7 +93,7 @@ class PaymentsController extends Controller
      *
      * @param Request $request
      */
-    private function robokassa($request)
+    private function robokassa(Request $request)
     {
         $login = $request->get('robokassa_login');
         $password1 = $request->get('robokassa_password1');
@@ -104,7 +102,7 @@ class PaymentsController extends Controller
         $isTest = (bool)$request->get('robokassa_test');
 
         if (!$this->checkAlgo($algo, 'robokassa')) {
-            throw New \UnexpectedValueException('', 1);
+            throw New \UnexpectedValueException();
         }
 
         s_set([

@@ -54,7 +54,7 @@ class CatalogController extends Controller
 
         // If a category with this ID does not exist.
         if (!$f) {
-            \App::abort(404);
+            $this->app->abort(404);
         }
 
         $data = [
@@ -83,9 +83,19 @@ class CatalogController extends Controller
         try {
             return $handler->buy($request->route('product'), $count, $server, $ip, $username);
         } catch (InvalidUsernameException $e) {
-            return json_response('invalid username');
+            return json_response('invalid_username', [
+                'message' => [
+                    'type' => 'danger',
+                    'text' => __('messages.shop.catalog.buy.invalid_username')
+                ]
+            ]);
         } catch (InvalidProductsCountException $e) {
-            return json_response('invalid products count');
+            return json_response('invalid_products_count', [
+                'message' => [
+                    'type' => 'danger',
+                    'text' => __('messages.shop.catalog.buy.invalid_count')
+                ]
+            ]);
         }
     }
 }

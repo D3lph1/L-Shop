@@ -118,7 +118,6 @@ class BuyTest extends TestCase
 
             $this->assertTrue(true);
         } else {
-            echo $status;
 
             $this->assertTrue(false);
         }

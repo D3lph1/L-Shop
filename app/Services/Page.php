@@ -2,6 +2,8 @@
 
 namespace App\Services;
 
+use App\DataTransferObjects\Admin\Page as DTO;
+use App\Exceptions\Page\UrlAlreadyExistsException;
 use App\Repositories\PageRepository;
 
 /**
@@ -26,40 +28,54 @@ class Page
         $this->pageRepository = $pageRepository;
     }
 
+    /**
+     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     */
     public function all()
     {
-        return $this->pageRepository->getPaginated();
+        return $this->pageRepository->getPaginated(['id', 'title', 'url', 'created_at', 'updated_at']);
     }
 
     /**
      * Create new static page.
      *
-     * @param string $title   Static page title.
-     * @param string $content Static page content.
-     * @param string $url     Static page url.
+     * @param DTO $page
      *
      * @return \Illuminate\Database\Eloquent\Model
      */
-    public function create($title, $content, $url)
+    public function create(DTO $page)
     {
-        return $this->pageRepository->create([
-            'title' => $title,
-            'content' => $content,
-            'url' => $url
-        ]);
+        if ($this->isUrlUniqueAll($page->getUrl())) {
+            return $this->pageRepository->create([
+                'title' => $page->getTitle(),
+                'content' => $page->getContent(),
+                'url' => $page->getUrl()
+            ]);
+        }
+
+        throw new UrlAlreadyExistsException($page->getUrl());
     }
 
     /**
-     * @param int   $id         Updated static page identifier.
-     * @param array $attributes New static page attributes.
+     * Update static page.
+     *
+     * @param DTO $page
      *
      * @return bool
      */
-    public function update($id, array $attributes)
+    public function update(DTO $page)
     {
-        \Cache::forget("page.{$attributes['url']}");
+        if ($this->isUrlUnique($page->getId(), $page->getUrl())) {
+            \Cache::forget("page.{$page->getUrl()}");
 
-        return $this->pageRepository->update($id, $attributes);
+            return $this->pageRepository->update($page->getId(), [
+                'title' => $page->getTitle(),
+                'content' => $page->getContent(),
+                'url' => $page->getUrl(),
+            ]);
+        }
+
+        throw new UrlAlreadyExistsException($page->getUrl());
     }
 
     /**
@@ -72,6 +88,18 @@ class Page
     public function delete($id)
     {
         return $this->pageRepository->delete($id);
+    }
+
+    /**
+     * Checks whether the transmitted URL is unique of all records.
+     *
+     * @param string $url Verifiable URL.
+     *
+     * @return bool
+     */
+    public function isUrlUniqueAll($url)
+    {
+        return $this->pageRepository->isUrlUniqueAll($url);
     }
 
     /**

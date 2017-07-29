@@ -2,7 +2,10 @@
 
 namespace App\Http\Controllers;
 
+use App\Services\Message;
 use App\Traits\Validator;
+use Cartalyst\Sentinel\Sentinel;
+use Illuminate\Container\Container;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Foundation\Bus\DispatchesJobs;
 use Illuminate\Routing\Controller as BaseController;
@@ -25,18 +28,19 @@ class Controller extends BaseController
     protected $app;
 
     /**
-     * @var \App\Services\Cart
+     * @var Sentinel
      */
-    protected $cart;
+    protected $sentinel;
 
     /**
-     * @var int
+     * @var Message
      */
-    protected $server;
+    protected $msg;
 
     public function __construct()
     {
-        $this->cart = \App::make('cart');
-        $this->app = \App::make('app');
+        $this->app = Container::getInstance()->make('app');
+        $this->sentinel = $this->app->make('sentinel');
+        $this->msg = $this->app->make('message');
     }
 }

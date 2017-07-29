@@ -2,7 +2,9 @@
 
 namespace App\Http\Middleware;
 
+use App\Services\Message;
 use Closure;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Http\Request;
 
 /**
@@ -15,6 +17,11 @@ use Illuminate\Http\Request;
 class Auth
 {
     /**
+     * @var Container
+     */
+    protected $container;
+
+    /**
      * List of except routes
      *
      * @var array
@@ -24,6 +31,16 @@ class Auth
         'api.signin',
         'signin'
     ];
+
+    /**
+     * Auth constructor.
+     *
+     * @param Container $container
+     */
+    public function __construct(Container $container)
+    {
+        $this->container = $container;
+    }
 
     /**
      * Handle an incoming request.
@@ -71,15 +88,19 @@ class Auth
 
             case 'admin':
                 if (!is_admin()) {
-                    \App::abort(403);
+                    $this->container->make('app')->abort(403);
                 }
 
                 return $next($request);
         }
+
+        throw new \InvalidArgumentException(
+            'mode(auth) must be has next values: "guest", "soft", "hard", "admin". ' . $mode . ' given'
+        );
     }
 
     /**
-     * Construct response
+     * Construct response.
      *
      * @param Request $request
      * @param string  $redirect
@@ -94,7 +115,7 @@ class Auth
             return json_response($jsonResponse);
         }
         if (!is_null($message)) {
-            \Message::warning($message);
+            $this->container->make(Message::class)->warning($message);
         }
 
         return response()->redirectToRoute($redirect);

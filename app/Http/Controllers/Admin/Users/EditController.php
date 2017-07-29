@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin\Users;
 
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\BlockUserRequest;
 use App\Http\Requests\Admin\SaveEditedUserRequest;
 use App\Models\User;
@@ -11,7 +12,6 @@ use App\Services\Ban;
 use Cartalyst\Sentinel\Roles\EloquentRole;
 use Cartalyst\Sentinel\Users\UserInterface;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 
 /**
  * Class EditController
@@ -34,12 +34,12 @@ class EditController extends Controller
     public function render(Request $request, BanRepository $banRepository, CartRepository $cartRepository)
     {
         /** @var User $user */
-        $user = \Sentinel::findById((int)$request->route('edit'));
+        $user = $this->sentinel->getUserRepository()->findById((int)$request->route('edit'));
         if (!$user) {
-            \App::abort(404);
+            $this->app->abort(404);
         }
 
-        $ban = app(Ban::class, ['user' => $user, 'repository' => $banRepository]);
+        $ban = $this->app->makeWith(Ban::class, ['user' => $user, 'repository' => $banRepository]);
 
         $data = [
             'currentServer' => $request->get('currentServer'),
@@ -66,9 +66,9 @@ class EditController extends Controller
         $email = $request->get('email');
 
         /** @var User $user */
-        $user = \Sentinel::findById($id);
+        $user = $this->sentinel->getUserRepository()->findById($id);
         if (!$user) {
-            \Message::danger('Пользователь не найден');
+            $this->msg->danger(__('messages.admin.users.edit.save.not_found'));
 
             return response()->redirectToRoute('admin.users.list', ['server' => $request->get('currentServer')->id]);
         }
@@ -80,16 +80,16 @@ class EditController extends Controller
             'balance' => (double)$request->get('balance')
         ];
 
-        $other = \Sentinel::findByCredentials(['username' => $username]);
-        if ($other and $other->id !== $id) {
-            \Message::danger('Пользователь с таким именем уже существует');
+        $other = $this->sentinel->getUserRepository()->findByCredentials(['username' => $username]);
+        if ($other and $other->getUserId() !== $id) {
+            $this->msg->danger(__('messages.admin.users.edit.save.username_already_exists', compact('username')));
 
             return back();
         }
 
-        $other = \Sentinel::findByCredentials(['email' => $email]);
-        if ($other and $other->id !== $id) {
-            \Message::danger('Пользователь с такой почтой уже существует');
+        $other = $this->sentinel->getUserRepository()->findByCredentials(['email' => $email]);
+        if ($other and $other->getUserId() !== $id) {
+            $this->msg->danger(__('messages.admin.users.edit.save.email_already_exists', compact('email')));
 
             return back();
         }
@@ -99,10 +99,10 @@ class EditController extends Controller
         }
         if ($user->update($update)) {
             /** @var EloquentRole $adminRole */
-            $adminRole = \Sentinel::findRoleBySlug('admin');
+            $adminRole = $this->sentinel->getRoleRepository()->findBySlug('admin');
 
             /** @var EloquentRole $userRole */
-            $userRole = \Sentinel::findRoleBySlug('user');
+            $userRole = $this->sentinel->getRoleRepository()->findBySlug('user');
             if ($admin) {
                 if (!$user->inRole($adminRole)) {
                     $userRole->users()->detach($user);
@@ -114,9 +114,9 @@ class EditController extends Controller
                     $userRole->users()->attach($user);
                 }
             }
-            \Message::info('Пользователь изменен');
+            $this->msg->success(__('messages.admin.users.edit.save.success'));
         }else {
-            \Message::danger('Изменения не сохранены');
+            $this->msg->danger(__('messages.admin.users.edit.save.fail'));
         }
 
         return response()->redirectToRoute('admin.users.list', ['server' => $request->get('currentServer')->id]);
@@ -132,19 +132,19 @@ class EditController extends Controller
     public function remove(Request $request)
     {
         /** @var UserInterface|User $user */
-        $user = \Sentinel::findById((int)$request->route('user'));
+        $user = $this->sentinel->getUserRepository()->findById((int)$request->route('user'));
         if ($user) {
 
-            if ($user->getUserId() === \Sentinel::getUser()->getUserId()) {
-                \Message::warning('Вы не можите удалить самого себя');
+            if ($user->getUserId() === $this->sentinel->getUser()->getUserId()) {
+                $this->msg->warning(__('messages.admin.users.edit.remove.self'));
 
                 return back();
             }
 
             $user->delete();
-            \Message::info('Пользователь удален');
+            $this->msg->info(__('messages.admin.users.edit.remove.success'));
         }else {
-            \Message::danger('Пользователь с таким идентификатором не найден');
+            $this->msg->danger(__('messages.admin.users.edit.remove.not_found'));
         }
 
         return response()->redirectToRoute('admin.users.list', ['server' => $request->get('currentServer')->id]);
@@ -159,20 +159,20 @@ class EditController extends Controller
      */
     public function destroySessions(Request $request)
     {
-        $user = \Sentinel::getUserRepository()->findById($request->route('user'));
+        $user = $this->sentinel->getUserRepository()->findById($request->route('user'));
 
         if (!$user) {
-            \Message::danger('Пользователь не найден');
+            $this->msg->danger(__('messages.admin.users.edit.remove.not_found'));
 
             return back();
         }
 
-        $result = \Sentinel::logout($user, true);
+        $result = $this->sentinel->logout($user, true);
 
         if ($result) {
-            \Message::info('Логин-сессии данного пользователя успешно сброшены!');
+            $this->msg->info(__('messages.admin.users.edit.sessions.success'));
         }else {
-            \Message::danger('Не удалось сбросить логин-сессии данного пользователя!');
+            $this->msg->danger(__('messages.admin.users.edit.sessions.fail'));
         }
 
         return back();
@@ -189,32 +189,48 @@ class EditController extends Controller
     public function block(BlockUserRequest $request, BanRepository $banRepository)
     {
         /** @var User|UserInterface $user */
-        $user = \Sentinel::findById((int)$request->route('user'));
-        $duration = (int)$request->get('duration');
+        $user = $this->sentinel->getUserRepository()->findById((int)$request->route('user'));
+        $duration = (int)$request->get('block_duration');
         $reason = $request->get('reason');
 
         if (!$user) {
-            json_response('user not found');
-
-            return json_response('user not found');
+            return json_response('user_not_found', [
+                'message' => [
+                    'type' => 'danger',
+                    'text' => __('messages.admin.users.edit.block.not_found')
+                ]
+            ]);
         }
 
         if ($user->getUserId() === \Sentinel::getUser()->getUserId()) {
-            return json_response('You can not block yourself');
+            return json_response('cannot_block_yourself', [
+                'message' => [
+                    'type' => 'warning',
+                    'text' => __('messages.admin.users.edit.block.cannot_block_yourself'),
+                ]
+            ]);
         }
 
         /** @var Ban $ban */
-        $ban = app(Ban::class, ['user' => $user, 'repository' => $banRepository]);
+        $ban = $this->app->makeWith(Ban::class, ['user' => $user, 'repository' => $banRepository]);
 
         $result = $ban->banForDays($duration, $reason);
 
         if ($result) {
             return json_response('success', [
-                'unblock' => build_ban_message($result->until, $result->reason)
+                'message' => [
+                    'type' => 'info',
+                    'text' => build_ban_message($duration === 0 ? null : $result->until->toDateTimeString(), $result->reason)
+                ]
             ]);
         }
 
-        return json_response('failed');
+        return json_response('fail', [
+            'message' => [
+                'type' => 'danger',
+                'text' => __('messages.admin.users.edit.block.fail')
+            ]
+        ]);
     }
 
     /**
@@ -228,21 +244,21 @@ class EditController extends Controller
     public function unblock(Request $request, BanRepository $banRepository)
     {
         /** @var User|UserInterface $user */
-        $user = \Sentinel::findById((int)$request->route('user'));
+        $user = $this->sentinel->getUserRepository()->findById((int)$request->route('user'));
 
         if (!$user) {
-            \Message::danger('Пользователь не найден');
+            $this->msg->danger(__('messages.admin.users.edit.unblock.not_found'));
 
             return response()->redirectToRoute('admin.users.list', ['server' => $request->get('currentServer')->id]);
         }
 
         /** @var Ban $ban */
-        $ban = app(Ban::class, ['user' => $user, 'repository' => $banRepository]);
+        $ban = $this->app->makeWith(Ban::class, ['user' => $user, 'repository' => $banRepository]);
 
         if ($ban->unblock()) {
-            \Message::info('Пользователь разблокирован');
+            $this->msg->info(__('messages.admin.users.edit.unblock.success'));
         } else {
-            \Message::danger('Неудалось разблокировать пользователя');
+            $this->msg->danger(__('messages.admin.users.edit.unblock.fail'));
         }
 
         return back();

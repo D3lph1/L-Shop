@@ -2,13 +2,13 @@
 @extends('layouts.shop')
 
 @section('title')
-    Добавить статическую страницу
+    @lang('content.admin.pages.add.title')
 @endsection
 
 @section('content')
     <div id="content-container">
         <div class="z-depth-1 content-header text-center">
-            <h1><i class="fa fa-file fa-left-big"></i>Добавить статическую страницу</h1>
+            <h1><i class="fa fa-file fa-left-big"></i>@lang('content.admin.pages.add.title')</h1>
         </div>
         <div class="product-container">
             <form method="post" action="{{ route('admin.pages.add.save', ['currentServer' => $currentServer->id]) }}">
@@ -18,7 +18,7 @@
                     <label for="page-title">Заголовок страницы</label>
                 </div>
 
-                <textarea name="page_content" id="page-content">@if(old('page_content')) {{ old('page_content') }} @else Начните придумывать что-то невероятное...@endif</textarea>
+                <textarea name="page_content" id="page-content">@if(old('page_content')) {{ old('page_content') }} @else @lang('content.admin.pages.add.placeholder')@endif</textarea>
 
                 <div class="mt-1">
                     <input type="checkbox" name="page_url_auto" id="page-url-auto" checked="checked" value="1">
@@ -35,13 +35,13 @@
                 </div>
 
                 <div class="alert alert-info">
-                    Вы сможете получить доступ к странице, перейдя по ссылке: <strong>{{ urldecode(route('page', ['server' => $currentServer->id,'page' => '<строка, указанная выше>'])) }}</strong>
+                    @lang('content.admin.pages.add.access', ['url' => urldecode(route('page', ['server' => $currentServer->id,'page' => '<строка, указанная выше>']))])
                 </div>
 
                 <div class="card card-block mt-3">
                     <div class="flex-row">
                         {{ csrf_field() }}
-                        <button class="btn btn-info">Сохранить страницу</button>
+                        <button class="btn btn-info">@lang('content.admin.pages.add.save')</button>
                     </div>
                 </div>
             </form>

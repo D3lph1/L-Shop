@@ -19,7 +19,7 @@ class ErrorController extends Controller
      */
     public function robokassa()
     {
-        \Message::danger('Оплата не удалась');
+        $this->msg->danger(__('messages.payments.error'));
 
         return response()->redirectToRoute('servers');
     }

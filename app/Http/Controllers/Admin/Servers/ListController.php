@@ -49,10 +49,10 @@ class ListController extends BaseController
         $serverId = (int)$request->route('enable');
 
         if ($this->serverService->enableServer($serverId)) {
-            \Message::info('Сервер включен');
+            $this->msg->info(__('messages.admin.servers.list.enable.success'));
             $code = 302;
         } else {
-            \Message::danger('Не удалось включить сервер!');
+            $this->msg->danger(__('messages.admin.servers.list.enable.fail'));
             $code = 400;
         }
 
@@ -71,9 +71,9 @@ class ListController extends BaseController
         $serverId = (int)$request->route('disable');
 
         if ($this->serverService->disableServer($serverId)) {
-            \Message::info('Сервер отключен');
+            $this->msg->info(__('messages.admin.servers.list.disable.success'));
         } else {
-            \Message::danger('Не удалось отключить сервер!');
+            $this->msg->danger(__('messages.admin.servers.list.disable.fail'));
         }
 
         return back();
