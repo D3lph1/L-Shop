@@ -198,22 +198,7 @@ if (!function_exists('humanize_month')) {
      */
     function humanize_month($month)
     {
-        $list = [
-            'January' => 'Январь',
-            'February' => 'Февраль',
-            'March' => 'Март',
-            'April' => 'Апрель',
-            'May' => 'Май',
-            'June' => 'Июнь',
-            'July' => 'Июль',
-            'August' => 'Август',
-            'September' => 'Сентябрь',
-            'October' => 'Октябрь',
-            'Novemver' => 'Ноябрь',
-            'December' => 'Декабрь'
-        ];
-
-        return strtr($month, $list);
+        return strtr($month, __('content.months'));
     }
 }
 
