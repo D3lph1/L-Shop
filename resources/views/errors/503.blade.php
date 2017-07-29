@@ -2,13 +2,13 @@
 @extends('layouts.auth')
 
 @section('title')
-    503 | Сервис временно недоступен
+    @lang('content.errors.503.title')
 @endsection
 
 @section('content')
     <div class="text-center mt-6">
         <div class="alert alert-danger">
-            <h1>Сервис временно недоступен</h1>
+            <h1>@lang('content.errors.503.content')</h1>
         </div>
     </div>
 @endsection

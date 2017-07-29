@@ -171,7 +171,7 @@
             </div>
 
             <div class="card card-block mt-2">
-                <h4 class="card-title">Пагинация</h4>
+                <h4 class="card-title">@lang('content.admin.control.main_settings.pagination.title')</h4>
                 <p class="card-text">
                     <div class="md-form mt-1">
                         <i class="fa fa-cubes prefix"></i>

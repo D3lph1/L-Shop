@@ -25,6 +25,7 @@ class ResultController extends Controller
     public function __construct()
     {
         parent::__construct();
+        \Debugbar::disable();
         $this->logger = $this->app->make(LoggerInterface::class);
     }
 

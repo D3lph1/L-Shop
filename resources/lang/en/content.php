@@ -709,6 +709,27 @@ return [
         ]
     ],
 
+    'errors' => [
+        '403' => [
+            'title' => '403 | Forbidden',
+            'content' => 'Forbidden',
+            'btn' => 'To index page',
+        ],
+        '404' => [
+            'title' => '404 | Not found',
+            'content' => 'The page you requested could not be found.',
+            'btn' => 'To index page',
+        ],
+        '500' => [
+            'title' => '500 | Internal server error',
+            'content' => 'Whoops, looks like something went wrong.'
+        ],
+        '503' => [
+            'title' => '503 | Service is temporarily unavailable',
+            'content' => 'Service is temporarily unavailable'
+        ]
+    ],
+
     'all' => [
         'save' => 'Save',
         'update' => 'Update',

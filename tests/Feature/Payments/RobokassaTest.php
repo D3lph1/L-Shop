@@ -19,7 +19,6 @@ class RobokassaTest extends TestCase
         $userId = 1;
         $user = \Sentinel::getUserRepository()->findById($userId);
         $balance = $user->balance;
-        echo $balance;
 
         $payment = $paymentRepository->create([
             'cost' => 33,

@@ -41,17 +41,17 @@
                 <p class="card-text">
                 @lang('content.admin.control.payments.aggregators.robokassa.change_data')
                     <div class="md-form">
-                        <i class="fa fa-money prefix"></i>
+                        <i class="fa fa-user prefix"></i>
                         <input type="text" name="robokassa_login" id="robokassa-login" class="form-control" value="{{ $robokassaLogin }}">
                         <label for="robokassa-login">@lang('content.admin.control.payments.aggregators.robokassa.login')</label>
                     </div>
                     <div class="md-form">
-                        <i class="fa fa-money prefix"></i>
+                        <i class="fa fa-lock prefix"></i>
                         <input type="text" name="robokassa_password1" id="robokassa-password1" class="form-control" value="{{ $robokassaPassword1 }}">
                         <label for="robokassa-password1">@lang('content.admin.control.payments.aggregators.robokassa.password1')</label>
                     </div>
                     <div class="md-form">
-                        <i class="fa fa-money prefix"></i>
+                        <i class="fa fa-lock prefix"></i>
                         <input type="text" name="robokassa_password2" id="robokassa-password2" class="form-control" value="{{ $robokassaPassword2 }}">
                         <label for="robokassa-password2">@lang('content.admin.control.payments.aggregators.robokassa.password2')</label>
                     </div>
