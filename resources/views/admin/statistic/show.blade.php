@@ -23,7 +23,7 @@
                                 <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ $currentMonthWord }}</button>
 
                                 <div class="dropdown-menu">
-                                    @foreach($months as $key => $value)
+                                    @foreach(__('content.months') as $key => $value)
                                         <a class="dropdown-item" href="{{ route('admin.statistic.show', ['server' => $currentServer->id, 'month' => $key]) }}">{{ $value }}</a>
                                     @endforeach
                                 </div>
@@ -44,7 +44,7 @@
                             <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ $currentMonthWord }}</button>
 
                             <div class="dropdown-menu">
-                                @foreach($months as $key => $value)
+                                @foreach(__('content.months') as $key => $value)
                                     <a class="dropdown-item" href="{{ route('admin.statistic.show', ['server' => $currentServer->id, 'month' => $key]) }}">{{ $value }}</a>
                                 @endforeach
                             </div>

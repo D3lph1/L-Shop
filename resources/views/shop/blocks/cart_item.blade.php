@@ -10,7 +10,7 @@
 
         <button class="btn danger-color btn-sm btn-block cart-remove" data-url="{{ route('cart.remove', ['server' => $currentServer->id, 'product' => $product->id]) }}">
             <i class="fa fa-times fa-left"></i>
-            Убрать
+            @lang('content.shop.cart.item.remove')
         </button>
 
     </div>

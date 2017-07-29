@@ -568,6 +568,7 @@ return [
             'pay' => 'Form and pay',
             'empty' => 'Your cart is empty',
             'item' => [
+                'remove' => 'Remove',
                 'count' => 'Count',
                 'duration' => 'duration (day(s))',
                 'forever' => 'This product is purchased forever.',
