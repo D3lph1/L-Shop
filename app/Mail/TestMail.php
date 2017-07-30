@@ -11,14 +11,17 @@ class TestMail extends Mailable
 {
     use SerializesModels;
 
-    public $subject = 'Тестовое сообщение';
+    /**
+     * @var string
+     */
+    public $subject;
 
     /**
      * Create a new message instance.
      */
     public function __construct()
     {
-        //
+        $this->subject = __('mail.test.subject');
     }
 
     /**

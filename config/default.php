@@ -4,7 +4,7 @@ return [
     'shop.name' => 'L - Shop',
     'shop.access_mode' => 'any',
     'shop.enable_signup' => '1',
-    'shop.enable_password_reset' => '0',
+    'shop.enable_password_reset' => '1',
     'catalog.products_per_page' => '30',
     'shop.currency' => 'rub',
     'shop.currency_html' => '<i class="fa fa-rub"></i>',
@@ -53,6 +53,6 @@ return [
     'caching.monitoring.ttl' => '10',
     'monitoring.rcon.timeout' => '1',
     'monitoring.enabled' => '1',
-    'auth.signup.redirect' => '1',
+    'auth.signup.redirect' => '0',
     'auth.signup.redirect_url' => 'http://l-shop.ru/servers'
 ];

@@ -57,7 +57,7 @@ class Reminder
      */
     public function checkCode($userId, $code)
     {
-        $user = \Sentinel::findById($userId);
+        $user = \Sentinel::getUserRepository()->findById($userId);
 
         return \Reminder::exists($user, $code);
     }
@@ -73,7 +73,7 @@ class Reminder
      */
     private function complete($userId, $code, $password)
     {
-        $user = \Sentinel::findById($userId);
+        $user = \Sentinel::getUserRepository()->findById($userId);
 
         return \Reminder::complete($user, $code, $password);
     }
@@ -89,7 +89,7 @@ class Reminder
      */
     private function user($email)
     {
-        $user = \Sentinel::findByCredentials(['email' => $email]);
+        $user = \Sentinel::getUserRepository()->findByCredentials(['email' => $email]);
 
         if (!$user) {
             throw new NotFoundException();

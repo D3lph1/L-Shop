@@ -1,5 +1,1 @@
-Привет, {{ $username }}!
-Кто-то (Возможно, вы) отправил запрос на восстановление пароля. Для сброса пароля перейдите по ссылке ниже.<br>
-<a href="{{ route('reset_password', ['user' => $userId, 'code' => $code]) }}">СБРОСИТЬ</a><br>
-Если это были не вы, проигнорируйте сообщение.<br><br>
-<p>IP - адрес устройства, с которого был произведен запрос: {{ $ip }}</p>
+@lang('mail.forgot_password.content', ['username' => $username, 'link' => route('reset_password', ['user' => $userId, 'code' => $code]), 'ip' => $ip])
