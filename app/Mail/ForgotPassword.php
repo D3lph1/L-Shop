@@ -14,7 +14,7 @@ class ForgotPassword extends Mailable
     /**
      * @var string
      */
-    public $subject = 'Сброс пароля';
+    public $subject;
 
     /**
      * @var int
@@ -46,6 +46,7 @@ class ForgotPassword extends Mailable
      */
     public function __construct($userId, $username, $code, $ip)
     {
+        $this->subject = __('mail.forgot_password.subject');
         $this->userId = $userId;
         $this->username = $username;
         $this->code = $code;

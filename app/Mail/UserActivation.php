@@ -21,7 +21,7 @@ class UserActivation extends Mailable
     /**
      * @var string
      */
-    public $subject = 'Активация аккаунта';
+    public $subject;
 
     /**
      * @var int
@@ -40,9 +40,14 @@ class UserActivation extends Mailable
 
     /**
      * Create a new message instance.
+     *
+     * @param int $userId
+     * @param string $username
+     * @param string $code
      */
     public function __construct($userId, $username, $code)
     {
+        $this->subject = __('mail.user_activation.subject');
         $this->userId = $userId;
         $this->username = $username;
         $this->code = $code;
