@@ -9,17 +9,17 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Services\Payments\Robokassa\Exception;
+namespace App\Exceptions\Payment\Robokassa;
 
 /**
- * Class EmptyDescriptionException
+ * Class InvalidSumException
  *
  * @author JhaoDa <jhaoda@gmail.com>
  *
  * @package Idma\Robokassa\Exception
  */
-class EmptyDescriptionException extends PaymentException {
+class InvalidSumException extends PaymentException {
     public function __construct($message = '', $code = 0, \Exception $previous = null) {
-        parent::__construct('Invoice description is required and cannot be empty.', $code, $previous);
+        parent::__construct('Invoice sum is required and cannot be less or equals zero.', $code, $previous);
     }
 }

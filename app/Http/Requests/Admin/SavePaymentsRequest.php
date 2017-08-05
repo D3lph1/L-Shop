@@ -27,25 +27,19 @@ class SavePaymentsRequest extends FormRequest
             'min_sum' => 'required|numeric|min:1',
             'currency' => 'required|min:1',
             'currency_html' => 'required|min:1',
+
             'robokassa_login' => 'required',
             'robokassa_password1' => 'required',
             'robokassa_password2' => 'required',
             'robokassa_algo' => 'required',
             'robokassa_test' => 'boolean',
-        ];
-    }
 
-    /**
-     * @return array
-     */
-    public function messages()
-    {
-        $minSum = ['attribute' => 'Минимальная сумма пополнения баланса'];
-
-        return [
-            'min_sum.required' => trans('validation.required', $minSum),
-            'min_sum.numeric' => trans('validation.numeric', $minSum),
-            'min_sum.min' => trans('validation.min', $minSum),
+            'interkassa_checkout_id' => 'required',
+            'interkassa_key' => 'required',
+            'interkassa_test_key' => 'required',
+            'interkassa_currency' => 'nullable',
+            'interkassa_algo' => 'required',
+            'interkassa_test' => 'boolean',
         ];
     }
 }

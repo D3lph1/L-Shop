@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Хост: 127.0.0.1:3306
--- Время создания: Июл 30 2017 г., 14:45
+-- Время создания: Авг 05 2017 г., 21:29
 -- Версия сервера: 5.7.16-log
 -- Версия PHP: 7.1.0
 
@@ -41,8 +41,8 @@ CREATE TABLE `lshop_activations` (
 --
 
 INSERT INTO `lshop_activations` (`id`, `user_id`, `code`, `completed`, `completed_at`, `created_at`, `updated_at`) VALUES
-(1, 1, 'zy1GnvYLocrMGnBfq4PxzTXq5zo3oxue', 1, '2017-07-30 08:45:07', '2017-07-30 08:45:07', '2017-07-30 08:45:07'),
-(2, 2, '9AGIgCpjwFiYizFGdZY5JRkguNh05PbS', 1, '2017-07-30 08:45:07', '2017-07-30 08:45:07', '2017-07-30 08:45:07');
+(1, 1, 'tRkoAWg4pMOZrIjdrgrq0RpXx7J6JqF0', 1, '2017-08-05 15:28:51', '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(2, 2, 'u9zZslMD7lsiG7Zd5gpvhoqWBWqW7fq5', 1, '2017-08-05 15:28:51', '2017-08-05 15:28:51', '2017-08-05 15:28:51');
 
 -- --------------------------------------------------------
 
@@ -97,11 +97,11 @@ CREATE TABLE `lshop_categories` (
 --
 
 INSERT INTO `lshop_categories` (`id`, `name`, `server_id`, `created_at`, `updated_at`) VALUES
-(1, 'Blocks', 1, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(2, 'Items', 1, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(3, 'Armor', 2, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(4, 'Items', 3, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(5, 'Privileges', 1, '2017-07-30 08:45:08', '2017-07-30 08:45:08');
+(1, 'Blocks', 1, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(2, 'Items', 1, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(3, 'Armor', 2, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(4, 'Items', 3, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(5, 'Privileges', 1, '2017-08-05 15:28:51', '2017-08-05 15:28:51');
 
 -- --------------------------------------------------------
 
@@ -126,13 +126,13 @@ CREATE TABLE `lshop_items` (
 --
 
 INSERT INTO `lshop_items` (`id`, `name`, `description`, `type`, `item`, `image`, `extra`, `created_at`, `updated_at`) VALUES
-(5, 'Block of grass', '', 'item', '2', NULL, NULL, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(6, 'TNT', '', 'item', '46', '784a013771bdf825d1cf26b49897a605.png', NULL, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(7, 'Chest', '', 'item', '54', 'd6c6adf53d0145708ec54a41e8a4e3d8.png', NULL, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(8, 'Furnace', '', 'item', '61', '4a69519aa46ee6b5b15bab8abd5139f3.png', NULL, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(9, 'Diamond sword', '', 'item', '276', '9d8feda602d70231f0297a3b7e436d4b.png', NULL, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(10, 'Diamond helmet', '', 'item', '310', 'd2714c56c81bcc4ff35798832226967f.png', NULL, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(11, 'VIP', '', 'permgroup', 'vip', 'f0c9755f2685d55b7540c941b6f29ff9.png', NULL, '2017-07-30 08:45:08', '2017-07-30 08:45:08');
+(5, 'Block of grass', '', 'item', '2', NULL, NULL, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(6, 'TNT', '', 'item', '46', '784a013771bdf825d1cf26b49897a605.png', NULL, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(7, 'Chest', '', 'item', '54', 'd6c6adf53d0145708ec54a41e8a4e3d8.png', NULL, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(8, 'Furnace', '', 'item', '61', '4a69519aa46ee6b5b15bab8abd5139f3.png', NULL, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(9, 'Diamond sword', '', 'item', '276', '9d8feda602d70231f0297a3b7e436d4b.png', NULL, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(10, 'Diamond helmet', '', 'item', '310', 'd2714c56c81bcc4ff35798832226967f.png', NULL, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(11, 'VIP', '', 'permgroup', 'vip', 'f0c9755f2685d55b7540c941b6f29ff9.png', NULL, '2017-08-05 15:28:51', '2017-08-05 15:28:51');
 
 -- --------------------------------------------------------
 
@@ -184,16 +184,16 @@ CREATE TABLE `lshop_news` (
 --
 
 INSERT INTO `lshop_news` (`id`, `title`, `content`, `user_id`, `created_at`, `updated_at`) VALUES
-(1, 'News 846', 'Quidem sunt optio numquam aspernatur. Tempora voluptates et eos beatae. Veritatis voluptatem voluptates laboriosam.\nBeatae non occaecati architecto et similique rerum vel. Rem autem et cupiditate enim non. Ut nam et iusto voluptates. Aut debitis velit enim laborum iste velit voluptatem minus. Eos aspernatur quia exercitationem quia provident.\nUnde commodi corporis ipsam numquam recusandae delectus est dolore. Rerum est nisi temporibus.\nAdipisci perspiciatis cupiditate accusamus. Veniam aut quia adipisci omnis quisquam architecto voluptate. Cumque minus aut debitis iure.\nEnim quam non aut corporis repudiandae id soluta sit. Ipsum omnis saepe eum qui architecto neque consequuntur eos. Eum nesciunt architecto nobis hic voluptatem.\nQuis aut nisi est illo perspiciatis quas. Magnam necessitatibus vero consequuntur odit. Est sunt corrupti accusantium saepe sed consequatur et. Aut possimus quae totam non labore repellat aliquid aperiam.', 1, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(2, 'News 514', 'Illo aspernatur dolores sapiente dolorem aut soluta. Aut recusandae harum similique asperiores reprehenderit fugiat.\nEos aut qui qui magnam error nihil. Ea et similique in aperiam itaque qui iure blanditiis. Temporibus excepturi veniam deserunt blanditiis molestiae.\nOfficia consectetur voluptatum doloremque. Qui impedit voluptas aut non nam. Harum sed tempora numquam numquam maxime odio ducimus.\nHic saepe voluptatem deleniti ipsa quo dolores dolorem. Magnam nihil est architecto modi dolor. Eius est ut quia iure quisquam quaerat. Soluta sit nobis sed beatae.\nVoluptates consequatur molestias aut veritatis. Maiores voluptatem dolorem minus earum odio ut quia. Ipsum cupiditate aut corporis et quae.\nNihil ducimus rem distinctio et sit. Consequatur cupiditate ducimus et pariatur ab ad error. Eum minima soluta aut voluptatibus minus doloremque omnis.', 1, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(3, 'News 702', 'Unde dolor enim ab. Iste rerum iure et eum quia molestiae explicabo. Voluptas nisi ut dolorum consectetur aut.\nSunt inventore molestias id. Enim fuga nemo in qui et rerum. Omnis et et consequuntur. Eum dolor deleniti repudiandae aut.\nDoloremque illum ratione ea pariatur eveniet illo voluptatem odio. Qui accusantium vero soluta nesciunt. Voluptatum beatae nulla aut tempore.\nNisi et corrupti neque saepe enim itaque. Ut impedit velit fuga eos expedita pariatur ducimus. Vitae rerum ducimus libero voluptas est culpa quis. Labore corporis at consequatur culpa et.\nSed minus tempore hic cum explicabo voluptas quis. Cumque consectetur sit fuga modi pariatur culpa.\nVoluptatem iusto omnis ex earum maiores corporis. Nulla eveniet natus corrupti et vel. Autem ratione sint sint aut sapiente adipisci illo. Non et eos id corrupti.\nOdio ratione reiciendis quia est. Ea perferendis nesciunt id ut. Dolorum nemo autem porro.', 1, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(4, 'News 607', 'Id odio velit omnis labore quis placeat magnam. Et explicabo veritatis voluptate dolor nihil iusto. Explicabo velit consequatur voluptate reprehenderit sed. Veritatis ut vero fuga consequatur esse.\nVoluptatum eveniet omnis qui assumenda saepe. Dolorem est et quia et aut sed aliquam. Quaerat minima dignissimos debitis harum rerum totam voluptatem veniam. Voluptas quibusdam sit blanditiis quis porro occaecati quos.\nPlaceat ut nihil est eligendi. Consequatur exercitationem nihil illo velit cum. Est itaque maxime nulla accusamus unde. Ipsum sit nihil provident nam voluptas.\nCumque aspernatur quibusdam officia iusto sunt eligendi est quas. Nostrum possimus repellat quaerat ut illo quidem porro. A et vel qui suscipit omnis maxime. Aut voluptates aperiam et.\nAut rem ipsum iure aliquam. Dolorum voluptas occaecati illo vitae at et. Voluptatum accusamus nostrum et. Hic ad eligendi nam quo. Officiis beatae modi mollitia eum nobis quam aut.', 1, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(5, 'News 892', 'Ut temporibus tempora nam praesentium velit labore nihil. Id fugit et eveniet hic voluptatem suscipit. Modi aliquid corporis facere reprehenderit qui quia adipisci. Quos et porro quas est. Libero odio et beatae perferendis.\nOfficiis quaerat rerum aspernatur dicta voluptatibus id magnam. Quas sint occaecati voluptatem amet. Et distinctio tempora distinctio. Aut cumque omnis deleniti praesentium tempora cumque dicta. Nulla dolor et aut velit expedita quis est.\nOptio exercitationem sapiente praesentium. Ea et sint quia qui beatae quibusdam sequi. Cumque voluptates est voluptatum numquam ex. Eius quos aut doloremque dolorum aut porro dicta.\nAut libero pariatur ut fugit nostrum suscipit. Deserunt a enim repellat fugit non.\nIpsa est nulla suscipit. Ipsam voluptate maxime molestias beatae. Error ea voluptatum sit esse saepe animi.\nEa ut alias quod iusto quasi sit enim. Nobis non ex debitis distinctio. Doloribus velit molestiae sint commodi enim. Quas nisi exercitationem voluptates.', 1, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(6, 'News 402', 'Debitis aut sit perspiciatis est et voluptatum accusantium. Accusamus incidunt dolor modi dignissimos et et quaerat. Labore magnam quia impedit reiciendis aspernatur occaecati et.\nEt consectetur iusto aperiam qui porro ut natus. Possimus unde iure perferendis blanditiis modi sint autem. Nulla sint quibusdam est error non aut ut.\nAccusantium qui minus sit illum molestias. Voluptates ipsam tempora voluptatum praesentium unde vero sunt. Non officiis consequuntur illo voluptate porro consequatur maxime.\nNulla quibusdam voluptas possimus cupiditate animi incidunt. Aliquam doloribus rerum ipsam sit ut qui. Et vel nobis cumque facere doloremque sit officiis.\nDistinctio et ea corrupti non fugiat quo ut. Perspiciatis consequuntur sit eligendi amet rerum dolorum rerum. Aut quos sed ut officia sint fuga.', 1, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(7, 'News 177', 'Et id sunt aut. Dolores quas non expedita voluptas a. Animi veritatis eligendi porro non.\nIpsum velit nam repudiandae qui sit. Esse nisi corporis quia modi nulla ullam dolorem. Aspernatur consequatur ducimus sint quae rerum sed. Eligendi dolorem consequuntur eaque sit quae sint.\nBlanditiis et ut quam expedita suscipit. Impedit nihil omnis quo. Mollitia et architecto dolorem omnis maiores quis. Fugiat dolorem officiis aspernatur quia.\nDolore omnis est eveniet dignissimos sed dolores aut omnis. Accusantium nulla voluptas a aut. Reiciendis voluptatibus quasi ut doloribus magnam et.\nEt et iste enim sed omnis saepe soluta. Autem ea vel dolores. Suscipit eligendi aliquam est qui dolorum.\nTotam ut repudiandae aliquid voluptatum omnis est. Ab excepturi voluptas nobis aperiam accusantium. Ratione aut non cupiditate nihil tempore quibusdam.\nAmet suscipit at commodi tenetur. Tenetur facilis aut est quia cupiditate. Non vel sint dolores ipsum.', 1, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(8, 'News 623', 'Quis eum inventore ipsa in assumenda et sed. Hic recusandae iure quidem natus doloribus. Doloribus maxime cum reiciendis nulla ducimus odit.\nNam ut sint in inventore. Aut vel voluptatem officia et sed in et. In incidunt voluptatem veniam labore.\nDeleniti nisi accusantium ut error. Ea veritatis odit consequatur necessitatibus eligendi. Cupiditate non excepturi velit neque autem sint vitae.\nSequi eius molestias soluta eos numquam reprehenderit. Numquam ea enim autem dolores. Sed eaque distinctio laborum repellat dolorem harum. Corporis quas eos alias at et odio voluptatem.\nInventore possimus accusantium vero dolores. Est fugiat explicabo velit facere dicta et et. Cupiditate necessitatibus animi qui iste voluptatem aliquid nesciunt.\nPorro similique asperiores sed aut nulla. Provident ipsum voluptate eos.\nBeatae aut quidem et. Soluta exercitationem voluptas tenetur vero sit. Aut occaecati accusamus ullam et facilis placeat ducimus.', 1, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(9, 'News 327', 'Nam soluta sequi animi optio commodi. Omnis quo sed qui qui perferendis odio. Assumenda voluptas placeat recusandae commodi omnis. Repellendus et ea pariatur illo dolorem eum sunt.\nProvident ratione ab similique nostrum sunt. Ipsum error pariatur eos deleniti. In atque non doloremque quos.\nPerferendis amet voluptates autem architecto ut non omnis. Dolores nisi eum autem veritatis. Molestiae totam unde quo molestiae cumque et.\nOmnis est aut magni. Id vel earum minima unde fugit eos quaerat. Praesentium eum porro maiores sapiente.\nEst voluptatem vero sit consectetur eos aut sit. Et porro vitae reprehenderit sit quos dolorem fugiat. Minima quia neque et odit laudantium. Laboriosam explicabo non repellat maiores natus omnis ut. Pariatur quis aut incidunt minus.\nSaepe repellendus qui repudiandae. Est minus ratione minus molestiae sint voluptatem ullam. Qui neque cumque et temporibus.', 1, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(10, 'News 731', 'Ipsum pariatur totam ut perferendis. Qui assumenda dolorem eum soluta aliquid eos consectetur.\nQui non et dolorem voluptatem iusto facere et. Nam aspernatur minus qui quos occaecati. Laborum provident quia aut veritatis quia omnis perspiciatis. Eum odio ut magni est eaque.\nExplicabo omnis odit mollitia et ab. Qui ea id rerum optio ducimus molestias. Harum minima unde deserunt iste et magnam non.\nEx minus omnis vero suscipit repellat minima vitae accusamus. Enim soluta blanditiis at inventore. Nam commodi ducimus porro aut porro voluptas.\nHic aut adipisci consectetur delectus est. Est ut ad quasi eos. Ut sed fuga voluptatem voluptate dolorem praesentium asperiores. Corrupti in voluptatum aut sunt.\nDebitis ut illum assumenda voluptatem perspiciatis voluptas. Quo consequatur hic sed. Commodi mollitia pariatur sit nihil sint voluptate aut.', 1, '2017-07-30 08:45:08', '2017-07-30 08:45:08');
+(1, 'News 532', 'Veniam vel exercitationem cupiditate placeat suscipit. Vitae reprehenderit non ipsum dolorem excepturi. Enim provident expedita officiis consequatur eius dolores vel. Ullam ut fuga modi ipsum quis sit.\nQuia nobis rerum dicta in officia illo recusandae. Doloribus placeat sunt nesciunt exercitationem soluta dolores cum. Odit cumque asperiores eligendi dolore.\nUt in dolor facilis aut similique ea. Aliquid dolores alias similique. Rerum sed veniam saepe qui quaerat nobis quo aut. Laborum tempore nobis eos esse.\nUt veritatis voluptatem eveniet necessitatibus qui. Rerum iusto qui autem. Porro doloremque quaerat non excepturi ut. Nostrum ut reprehenderit error sed est ut.\nCum incidunt non odit amet. Dicta autem rerum quasi earum nisi quam.\nEum atque saepe corporis vitae. Quas non velit distinctio quasi minima non vel.\nEos qui corrupti in libero voluptas autem facere. Ducimus quod tempora quia rerum. Cumque iure ducimus molestiae maxime consequuntur explicabo. Facere natus libero omnis suscipit minima quaerat porro.', 1, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(2, 'News 84', 'Modi temporibus in sint commodi eaque quis repellendus. Quo rem delectus est impedit quos incidunt ut. Quia sequi eos est voluptas rerum aliquam aut impedit.\nAt doloremque est similique quo in repellat necessitatibus culpa. Ipsa et reiciendis ratione aut. Et sit ut reprehenderit et et ut eum. Saepe dolores et omnis quo.\nQuo qui aliquid minus sint et harum. Voluptas minus id ab molestiae ea est quo. Autem aperiam totam et voluptatem temporibus omnis.\nAdipisci explicabo quisquam quo aut id sed repellendus. Qui enim quasi corporis rem. Veniam est animi porro nostrum sed itaque inventore. Ut excepturi dolor cupiditate modi cum.\nDolores nesciunt mollitia repellendus iste commodi. Voluptatem labore voluptatem asperiores itaque. Eos laudantium fugit repellat in culpa amet. Ipsam aut perspiciatis sapiente quo.\nLabore at ut ullam error. Quis totam voluptas velit nam quae. Autem eaque eum voluptate sunt corporis inventore sequi et. Ea aut est molestiae molestiae suscipit.', 1, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(3, 'News 273', 'Est voluptatum eos rem eligendi dignissimos voluptas rem sunt. Quia molestiae perferendis non aut dicta. Ab odio et officia vitae sint ea recusandae. Magnam iure excepturi quibusdam aspernatur.\nCum est laborum ullam eos sequi. Totam in possimus velit voluptatem quidem.\nSed quia quidem id voluptatem atque tempora. Eum iste reprehenderit vel.\nBeatae quo necessitatibus alias. Occaecati officia et alias et quo non. Dolores illo quod voluptatem. Consequatur vero voluptates delectus consequatur saepe.\nAsperiores quo consequatur omnis sit facere corrupti non dolor. Sint amet sed eligendi omnis et illum. Aperiam voluptas soluta est iusto. Dicta dolorem in at.\nAut sed culpa quo voluptates eum nam mollitia. Quam distinctio voluptas ipsa similique laborum. Cum ad occaecati enim quia et excepturi eum.\nEt ut consectetur cumque tenetur id. Aliquid accusantium sed quia saepe modi. In eos dolorem velit aut ex.', 1, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(4, 'News 955', 'Et deserunt quia ut facilis. Dolorem voluptatem qui voluptatibus ut. Enim at quo fugiat deserunt at.\nConsequatur illum dolorem sint ipsa illum sint. Inventore consequatur quisquam qui enim velit quas. Laboriosam necessitatibus ea culpa sapiente possimus velit voluptates. Quia delectus et aut voluptatem nobis.\nConsequatur ut tempore esse natus eaque dolorem error. Molestias aut hic facere voluptatem accusantium aperiam.\nVoluptatem autem voluptatum quidem maxime rem dolor eum. Voluptatem at voluptatem ratione non nobis qui assumenda. Incidunt ut consequatur blanditiis dolor harum nihil qui non.\nCorporis dolorem dolorem et dolores corporis. Dolore quo aut laboriosam sint. Non vitae ipsum incidunt velit eligendi dolor aliquam. Alias inventore sit fugiat excepturi enim aspernatur.\nEius quaerat aut atque expedita aut voluptatibus in deleniti. Error eum dolore in autem. Quam sunt corrupti necessitatibus est.\nUt sed accusantium inventore natus beatae. Enim ipsam cum aperiam saepe nihil aspernatur.', 1, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(5, 'News 728', 'Optio esse ipsa corporis. Et ut eius dolorem eum tempore ea assumenda. Qui laborum molestiae excepturi sint necessitatibus consectetur eos. Et sed repellat voluptas est.\nIncidunt distinctio corrupti placeat dolores. Consectetur doloremque aut enim ut.\nQuod earum labore ullam qui dolorem est vero. Necessitatibus id voluptatem iusto. Eum iste dolorum quod ea animi. Qui qui nostrum numquam ex voluptatem rerum debitis laudantium.\nOptio ratione similique officiis veniam. Quam quos minus voluptatum quaerat cum. Aperiam quo vitae vitae qui. Praesentium perspiciatis voluptatem autem adipisci enim aliquid nostrum.\nIpsa veniam reprehenderit optio. Doloremque quisquam adipisci aut illo vero delectus facere. Doloribus ducimus iste dicta consectetur ut.\nCommodi et illo culpa rerum possimus. Ex voluptatem magnam deleniti voluptates. Facere aut earum saepe voluptas. Sit sit beatae ut.', 1, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(6, 'News 250', 'Fugiat earum unde ratione quasi est. Tempore eligendi aut voluptatem assumenda aut amet quo. Fugit consequatur officia mollitia eum pariatur. Eaque optio cum a accusantium impedit accusamus.\nEaque veniam ad nulla ipsa reiciendis dicta. Enim voluptatibus officiis in ipsum assumenda molestias.\nOccaecati voluptatem harum fugiat qui fugiat aut esse. Repellat vero natus commodi recusandae optio aut. Rem ut repellat incidunt quae ea. Aut ab eos sit.\nOfficiis est esse soluta aut. Ut eligendi autem non dolorum exercitationem deleniti. Quasi omnis iure iure repellat dolor modi.\nEst numquam dolores ipsa et rerum. Officia natus non temporibus aliquam quisquam sapiente blanditiis laudantium. Vero ad iste deserunt sed. Vel non in laborum repellendus totam iusto.\nEst dolore impedit soluta voluptatem. Deleniti vel quas aut tempore ad voluptatem iusto sequi. Magnam unde ut nesciunt.\nDolorem consequuntur voluptate est sed optio et perferendis. Amet consectetur inventore nobis voluptate esse.', 1, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(7, 'News 248', 'Voluptatem ut officiis et sint vel quos aperiam. Inventore labore accusantium rerum ea dolor id ratione alias. At dolorum est adipisci magni dolor voluptatibus. Temporibus non eum sint omnis et provident expedita.\nDistinctio facilis dolorem aut nisi et. Accusantium placeat qui quae deserunt beatae. Ullam soluta officia assumenda nisi incidunt saepe. Laborum ipsum ut nobis ut.\nDolores fuga debitis asperiores explicabo non reprehenderit aut. Quas hic nam ea. Et non ea itaque est. Ullam quam sequi enim. Architecto in ad ut minima recusandae quaerat.\nCorporis veritatis doloribus dolor repellat tempora iure ut. Sunt omnis rerum tenetur quibusdam enim et. Aut deserunt et magnam rerum voluptas.\nEt minus eos aut non voluptatibus impedit. Qui vel accusamus quae. Tempore et occaecati non enim sit. Dignissimos harum aut labore eum. Vero accusantium ipsum perferendis quo beatae ducimus.\nFacilis repudiandae est aut et. Molestiae et sit ipsam facilis consequatur. Nulla magnam id voluptas deleniti fugiat.', 1, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(8, 'News 37', 'Aliquam est nam deleniti reiciendis. Dolorem et qui illo suscipit qui enim earum. Corrupti minus dolores officiis provident architecto. Dolores animi fuga sit possimus ut tenetur similique.\nTotam et quaerat tenetur. Unde quo recusandae reiciendis sunt magnam molestias. Natus eos sit sint nisi in. Exercitationem natus quaerat voluptatem blanditiis sunt dolorem.\nExplicabo expedita molestias sed rerum ab et minus. Sed enim quod repellendus quo nam ut. Nihil voluptates perferendis enim quisquam distinctio adipisci et.\nExpedita cupiditate facilis ab soluta eum consectetur eaque. Alias saepe ipsa voluptatibus iure praesentium. Vel nesciunt consequatur libero autem sunt dicta unde.\nEt dolore ea dicta hic ab ducimus. Deserunt sunt magnam architecto illum qui. Laudantium inventore sunt laborum tenetur.\nId tenetur debitis ea sit. Enim impedit consequatur adipisci autem blanditiis. Cumque voluptas aliquid quis voluptatum alias est.', 1, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(9, 'News 313', 'Quae eaque labore eos et. Dignissimos suscipit sequi sit similique qui in similique. Et occaecati iure maiores est. Ipsa autem vero harum consequatur.\nSit illum omnis exercitationem aut laudantium. Et a iure facere saepe non quidem iusto.\nSunt voluptatem sed esse laudantium aspernatur. Perferendis vel non dolorem nihil laudantium architecto. Rerum tempora ut numquam ut nemo minima.\nNobis minima enim eligendi dignissimos. Accusantium ut nihil error. Adipisci expedita qui dignissimos dolorem est et. Voluptas ut quae rem dolore ut harum. Esse eius enim voluptatem deserunt totam ipsa voluptas dolorem.\nIpsam aut unde dolores neque. Vel inventore velit itaque eum. Molestiae eligendi ipsam et repellendus reiciendis voluptate. Est qui molestiae temporibus est ullam alias ullam.\nSit ea reprehenderit animi nemo voluptatem sunt. Ad non rem eveniet et ipsa dolores itaque aut. Laboriosam illum ut natus quasi qui velit. Et deserunt rerum distinctio aut aliquid aspernatur.', 1, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(10, 'News 725', 'Alias voluptas non veniam omnis ipsum aut a. Debitis qui placeat aliquid aut. Tempore laboriosam expedita aut quis.\nQuo accusamus iusto porro. Natus itaque porro reiciendis voluptatem praesentium quo officia. Nostrum et excepturi aut numquam rerum et.\nAmet commodi esse et excepturi. Recusandae autem ut molestiae tempore. Eos vero qui commodi facilis vel. Qui voluptas consequatur aut quo. Unde repellat repudiandae modi architecto corrupti atque voluptatum.\nArchitecto placeat aut enim veritatis at nemo. Quisquam nulla qui et quia asperiores maxime est. Eum ut animi iure doloremque.\nAtque alias autem est unde error ad. Libero aut qui hic soluta suscipit. Cupiditate est et id recusandae dolor.\nDelectus modi consequatur quod dolor. Et quia ipsum ratione iste harum non et adipisci. Autem ut aut minus doloremque ut consequatur in. Et occaecati dicta est rem.', 1, '2017-08-05 15:28:51', '2017-08-05 15:28:51');
 
 -- --------------------------------------------------------
 
@@ -215,7 +215,7 @@ CREATE TABLE `lshop_pages` (
 --
 
 INSERT INTO `lshop_pages` (`id`, `title`, `content`, `url`, `created_at`, `updated_at`) VALUES
-(1, 'Welcome to L-Shop!', '<h1 style=\"text-align: center;\">Modern trading system for Minecraft</h1><br><p style=\"text-align: center; \"><img src=\"http://i90.fastpic.ru/big/2017/0309/9c/1cebb8e0e70a432b71102bf20334459c.png\" alt=\"Логотип L-Shop\"><br></p><p style=\"margin-right: 0px; margin-bottom: 15px; margin-left: 0px; padding: 0px; text-align: justify; color: rgb(0, 0, 0); font-family: \" open=\"\" sans\",=\"\" arial,=\"\" sans-serif;=\"\" font-size:=\"\" 14px;=\"\" background-color:=\"\" rgb(255,=\"\" 255,=\"\" 255);\"=\"\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce condimentum nibh quis lorem malesuada, lobortis accumsan felis consequat. Fusce ac tortor gravida, dignissim quam sit amet, laoreet sapien. Nam ultricies libero in dignissim accumsan. Fusce ac lacinia quam. Integer convallis neque ac tortor sollicitudin, ac mollis erat malesuada. Suspendisse sapien turpis, mollis et nibh non, mollis venenatis augue. Aenean et leo sed mi tristique fringilla.</p><p style=\"margin-right: 0px; margin-bottom: 15px; margin-left: 0px; padding: 0px; text-align: justify; color: rgb(0, 0, 0); font-family: \" open=\"\" sans\",=\"\" arial,=\"\" sans-serif;=\"\" font-size:=\"\" 14px;=\"\" background-color:=\"\" rgb(255,=\"\" 255,=\"\" 255);\"=\"\">Donec in nibh turpis. Phasellus tincidunt tristique scelerisque. Sed aliquam pretium mauris a mattis. Sed ante magna, facilisis vel lorem eget, rhoncus ullamcorper ligula. Nunc venenatis dolor nec libero interdum, non lobortis libero molestie. Vivamus aliquet lacus non eros ullamcorper, quis convallis nisl aliquet. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nunc posuere ipsum quam, in commodo dui auctor nec.</p><p style=\"margin-right: 0px; margin-bottom: 15px; margin-left: 0px; padding: 0px; text-align: justify; color: rgb(0, 0, 0); font-family: \" open=\"\" sans\",=\"\" arial,=\"\" sans-serif;=\"\" font-size:=\"\" 14px;=\"\" background-color:=\"\" rgb(255,=\"\" 255,=\"\" 255);\"=\"\">Praesent dapibus velit eu leo aliquam, accumsan interdum ex laoreet. Etiam nec vehicula odio. Sed aliquam bibendum convallis. Proin sodales id ligula et pellentesque. Ut ullamcorper magna nec convallis pulvinar. Aenean nunc eros, consequat non nibh in, bibendum convallis eros. Vestibulum elit neque, elementum at egestas a, ultricies eget nisi. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed dapibus metus nec nisi semper, eu fringilla diam aliquam. Fusce accumsan gravida justo, sit amet sollicitudin erat suscipit ac. Nulla rhoncus non elit in tempor. Vestibulum at ligula vitae diam dapibus lobortis at a nulla.</p><p style=\"margin-right: 0px; margin-bottom: 15px; margin-left: 0px; padding: 0px; text-align: justify; color: rgb(0, 0, 0); font-family: \" open=\"\" sans\",=\"\" arial,=\"\" sans-serif;=\"\" font-size:=\"\" 14px;=\"\" background-color:=\"\" rgb(255,=\"\" 255,=\"\" 255);\"=\"\">Curabitur ac cursus tortor. Donec posuere magna sit amet felis condimentum cursus et vitae dolor. Curabitur vitae mauris a leo consequat sagittis at at tortor. Fusce dui mi, pretium ut tincidunt at, vestibulum et velit. Quisque posuere eleifend velit, nec mattis leo viverra non. Curabitur placerat, neque in sodales eleifend, nisi tortor lacinia nunc, in varius neque ipsum fringilla urna. Morbi nec ipsum diam. Vestibulum tincidunt augue eleifend dictum rutrum. Etiam vel nibh scelerisque, tincidunt mauris et, lacinia orci. Sed consectetur pellentesque malesuada. Suspendisse eget lectus velit.</p><p style=\"margin-right: 0px; margin-bottom: 15px; margin-left: 0px; padding: 0px; text-align: justify; color: rgb(0, 0, 0); font-family: \" open=\"\" sans\",=\"\" arial,=\"\" sans-serif;=\"\" font-size:=\"\" 14px;=\"\" background-color:=\"\" rgb(255,=\"\" 255,=\"\" 255);\"=\"\">Donec viverra vehicula nunc, eget fringilla justo rutrum eget. Duis convallis convallis dapibus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse placerat sagittis lacus. Mauris in aliquet urna, id posuere nisl. Phasellus accumsan in metus vel ullamcorper. Praesent pulvinar iaculis mauris vitae vehicula. Nunc vehicula risus massa, a accumsan turpis ornare in. Suspendisse non mauris eu diam convallis finibus ut et ex. Fusce ut dui massa.</p>', 'welcome-to-L-Shop', '2017-07-30 08:45:08', '2017-07-30 08:45:08');
+(1, 'Welcome to L-Shop!', '<h1 style=\"text-align: center;\">Modern trading system for Minecraft</h1><br><p style=\"text-align: center; \"><img src=\"http://i90.fastpic.ru/big/2017/0309/9c/1cebb8e0e70a432b71102bf20334459c.png\" alt=\"Логотип L-Shop\"><br></p><p style=\"margin-right: 0px; margin-bottom: 15px; margin-left: 0px; padding: 0px; text-align: justify; color: rgb(0, 0, 0); font-family: \" open=\"\" sans\",=\"\" arial,=\"\" sans-serif;=\"\" font-size:=\"\" 14px;=\"\" background-color:=\"\" rgb(255,=\"\" 255,=\"\" 255);\"=\"\">Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce condimentum nibh quis lorem malesuada, lobortis accumsan felis consequat. Fusce ac tortor gravida, dignissim quam sit amet, laoreet sapien. Nam ultricies libero in dignissim accumsan. Fusce ac lacinia quam. Integer convallis neque ac tortor sollicitudin, ac mollis erat malesuada. Suspendisse sapien turpis, mollis et nibh non, mollis venenatis augue. Aenean et leo sed mi tristique fringilla.</p><p style=\"margin-right: 0px; margin-bottom: 15px; margin-left: 0px; padding: 0px; text-align: justify; color: rgb(0, 0, 0); font-family: \" open=\"\" sans\",=\"\" arial,=\"\" sans-serif;=\"\" font-size:=\"\" 14px;=\"\" background-color:=\"\" rgb(255,=\"\" 255,=\"\" 255);\"=\"\">Donec in nibh turpis. Phasellus tincidunt tristique scelerisque. Sed aliquam pretium mauris a mattis. Sed ante magna, facilisis vel lorem eget, rhoncus ullamcorper ligula. Nunc venenatis dolor nec libero interdum, non lobortis libero molestie. Vivamus aliquet lacus non eros ullamcorper, quis convallis nisl aliquet. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Nunc posuere ipsum quam, in commodo dui auctor nec.</p><p style=\"margin-right: 0px; margin-bottom: 15px; margin-left: 0px; padding: 0px; text-align: justify; color: rgb(0, 0, 0); font-family: \" open=\"\" sans\",=\"\" arial,=\"\" sans-serif;=\"\" font-size:=\"\" 14px;=\"\" background-color:=\"\" rgb(255,=\"\" 255,=\"\" 255);\"=\"\">Praesent dapibus velit eu leo aliquam, accumsan interdum ex laoreet. Etiam nec vehicula odio. Sed aliquam bibendum convallis. Proin sodales id ligula et pellentesque. Ut ullamcorper magna nec convallis pulvinar. Aenean nunc eros, consequat non nibh in, bibendum convallis eros. Vestibulum elit neque, elementum at egestas a, ultricies eget nisi. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Sed dapibus metus nec nisi semper, eu fringilla diam aliquam. Fusce accumsan gravida justo, sit amet sollicitudin erat suscipit ac. Nulla rhoncus non elit in tempor. Vestibulum at ligula vitae diam dapibus lobortis at a nulla.</p><p style=\"margin-right: 0px; margin-bottom: 15px; margin-left: 0px; padding: 0px; text-align: justify; color: rgb(0, 0, 0); font-family: \" open=\"\" sans\",=\"\" arial,=\"\" sans-serif;=\"\" font-size:=\"\" 14px;=\"\" background-color:=\"\" rgb(255,=\"\" 255,=\"\" 255);\"=\"\">Curabitur ac cursus tortor. Donec posuere magna sit amet felis condimentum cursus et vitae dolor. Curabitur vitae mauris a leo consequat sagittis at at tortor. Fusce dui mi, pretium ut tincidunt at, vestibulum et velit. Quisque posuere eleifend velit, nec mattis leo viverra non. Curabitur placerat, neque in sodales eleifend, nisi tortor lacinia nunc, in varius neque ipsum fringilla urna. Morbi nec ipsum diam. Vestibulum tincidunt augue eleifend dictum rutrum. Etiam vel nibh scelerisque, tincidunt mauris et, lacinia orci. Sed consectetur pellentesque malesuada. Suspendisse eget lectus velit.</p><p style=\"margin-right: 0px; margin-bottom: 15px; margin-left: 0px; padding: 0px; text-align: justify; color: rgb(0, 0, 0); font-family: \" open=\"\" sans\",=\"\" arial,=\"\" sans-serif;=\"\" font-size:=\"\" 14px;=\"\" background-color:=\"\" rgb(255,=\"\" 255,=\"\" 255);\"=\"\">Donec viverra vehicula nunc, eget fringilla justo rutrum eget. Duis convallis convallis dapibus. Orci varius natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus. Suspendisse placerat sagittis lacus. Mauris in aliquet urna, id posuere nisl. Phasellus accumsan in metus vel ullamcorper. Praesent pulvinar iaculis mauris vitae vehicula. Nunc vehicula risus massa, a accumsan turpis ornare in. Suspendisse non mauris eu diam convallis finibus ut et ex. Fusce ut dui massa.</p>', 'welcome-to-L-Shop', '2017-08-05 15:28:51', '2017-08-05 15:28:51');
 
 -- --------------------------------------------------------
 
@@ -274,14 +274,14 @@ CREATE TABLE `lshop_products` (
 --
 
 INSERT INTO `lshop_products` (`id`, `price`, `item_id`, `server_id`, `stack`, `category_id`, `sort_priority`, `created_at`, `updated_at`) VALUES
-(14, 2, 5, 1, 64, 1, 0, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(15, 20, 6, 1, 16, 1, 0, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(16, 15, 7, 1, 16, 1, 0, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(17, 15, 8, 1, 32, 1, 0, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(18, 67, 9, 1, 1, 2, 0, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(19, 54, 10, 2, 1, 3, 0, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(20, 15, 11, 1, 1, 5, 0, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(21, 100, 11, 1, 0, 5, 0, '2017-07-30 08:45:08', '2017-07-30 08:45:08');
+(14, 2, 5, 1, 64, 1, 0, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(15, 20, 6, 1, 16, 1, 0, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(16, 15, 7, 1, 16, 1, 0, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(17, 15, 8, 1, 32, 1, 0, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(18, 67, 9, 1, 1, 2, 0, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(19, 54, 10, 2, 1, 3, 0, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(20, 15, 11, 1, 1, 5, 0, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(21, 100, 11, 1, 0, 5, 0, '2017-08-05 15:28:51', '2017-08-05 15:28:51');
 
 -- --------------------------------------------------------
 
@@ -319,8 +319,8 @@ CREATE TABLE `lshop_roles` (
 --
 
 INSERT INTO `lshop_roles` (`id`, `slug`, `name`, `permissions`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'Администратор', '{\"user.admin\":true}', '2017-07-30 08:45:07', '2017-07-30 08:45:07'),
-(2, 'user', 'Пользователь', '{\"user.admin\":false}', '2017-07-30 08:45:07', '2017-07-30 08:45:07');
+(1, 'admin', 'Administrator', '{\"user.admin\":true}', '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(2, 'user', 'User', '{\"user.admin\":false}', '2017-08-05 15:28:51', '2017-08-05 15:28:51');
 
 -- --------------------------------------------------------
 
@@ -340,8 +340,8 @@ CREATE TABLE `lshop_role_users` (
 --
 
 INSERT INTO `lshop_role_users` (`user_id`, `role_id`, `created_at`, `updated_at`) VALUES
-(1, 1, '2017-07-30 08:45:07', '2017-07-30 08:45:07'),
-(2, 2, '2017-07-30 08:45:07', '2017-07-30 08:45:07');
+(1, 1, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(2, 2, '2017-08-05 15:28:51', '2017-08-05 15:28:51');
 
 -- --------------------------------------------------------
 
@@ -366,9 +366,9 @@ CREATE TABLE `lshop_servers` (
 --
 
 INSERT INTO `lshop_servers` (`id`, `name`, `enabled`, `ip`, `port`, `password`, `monitoring_enabled`, `created_at`, `updated_at`) VALUES
-(1, 'MMO', 1, '127.0.0.1', 25575, 123456, 0, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(2, 'Hi-Tech (PvP)', 1, '127.0.0.1', 25564, 123456, 0, '2017-07-30 08:45:08', '2017-07-30 08:45:08'),
-(3, 'Hi-Tech (PvE)', 1, NULL, NULL, NULL, 0, '2017-07-30 08:45:08', '2017-07-30 08:45:08');
+(1, 'MMO', 1, '127.0.0.1', 25575, 123456, 0, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(2, 'Hi-Tech (PvP)', 1, '127.0.0.1', 25564, 123456, 0, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(3, 'Hi-Tech (PvE)', 1, NULL, NULL, NULL, 0, '2017-08-05 15:28:51', '2017-08-05 15:28:51');
 
 -- --------------------------------------------------------
 
@@ -404,43 +404,50 @@ INSERT INTO `lshop_settings` (`id`, `key`, `value`) VALUES
 (15, 'payment.method.robokassa.algo', 'sha512'),
 (16, 'payment.method.robokassa.password2', ''),
 (17, 'payment.method.robokassa.test', '1'),
-(18, 'payment.fillupbalance.minsum', '25'),
-(19, 'distributor.name', 'ShoppingCart'),
-(20, 'recaptcha.public_key', ''),
-(21, 'recaptcha.secret_key', ''),
-(22, 'profile.payments_per_page', '25'),
-(23, 'profile.cart_items_per_page', '25'),
-(24, 'profile.character.skin.enabled', '1'),
-(25, 'profile.character.skin.hd', '1'),
-(26, 'profile.character.skin.max_size', '768'),
-(27, 'profile.character.cloak.enabled', '1'),
-(28, 'profile.character.cloak.hd', '1'),
-(29, 'profile.character.cloak.max_size', '512'),
-(30, 'auth.email_activation', '0'),
-(31, 'auth.signup.redirect', '0'),
-(32, 'auth.signup.redirect_url', 'http://l-shop.ru/servers'),
-(33, 'user.enable_change_password', '1'),
-(34, 'api.launcher.sashok.auth.error_message', 'User with this credentials not found'),
-(35, 'api.launcher.sashok.auth.enabled', '1'),
-(36, 'api.launcher.sashok.auth.ips_white_list', '[]'),
-(37, 'api.launcher.sashok.auth.format', 'OK:{username}'),
-(38, 'api.key', 'pIkHkipkTKhpeC$ZY)OlnFH$fZWUullL'),
-(39, 'api.algo', 'sha512'),
-(40, 'api.signin.remember_user', '1'),
-(41, 'api.signin.enabled', '0'),
-(42, 'api.enabled', '0'),
-(43, 'api.separator', ':'),
-(44, 'api.salt', '0'),
-(45, 'api.signup.enabled', '1'),
-(46, 'caching.statistic.ttl', '60'),
-(47, 'caching.pages.ttl', '3600'),
-(48, 'caching.news.ttl', '600'),
-(49, 'caching.monitoring.ttl', '10'),
-(50, 'news.first_portion', '15'),
-(51, 'news.per_page', '15'),
-(52, 'news.enabled', '1'),
-(53, 'monitoring.rcon.timeout', '1'),
-(54, 'monitoring.enabled', '1');
+(18, 'payment.method.interkassa.key', ''),
+(19, 'payment.method.interkassa.test', '0'),
+(20, 'payment.method.interkassa.algo', 'sha256'),
+(21, 'payment.method.interkassa.checkout_id', ''),
+(22, 'payment.method.interkassa.test_key', ''),
+(23, 'payment.method.interkassa.enabled', '1'),
+(24, 'payment.method.interkassa.currency', ''),
+(25, 'payment.fillupbalance.minsum', '25'),
+(26, 'distributor.name', 'ShoppingCart'),
+(27, 'recaptcha.public_key', ''),
+(28, 'recaptcha.secret_key', ''),
+(29, 'profile.payments_per_page', '25'),
+(30, 'profile.cart_items_per_page', '25'),
+(31, 'profile.character.skin.enabled', '1'),
+(32, 'profile.character.skin.hd', '1'),
+(33, 'profile.character.skin.max_size', '768'),
+(34, 'profile.character.cloak.enabled', '1'),
+(35, 'profile.character.cloak.hd', '1'),
+(36, 'profile.character.cloak.max_size', '512'),
+(37, 'auth.email_activation', '0'),
+(38, 'auth.signup.redirect', '0'),
+(39, 'auth.signup.redirect_url', 'http://l-shop.ru/servers'),
+(40, 'user.enable_change_password', '1'),
+(41, 'api.launcher.sashok.auth.error_message', 'User with this credentials not found'),
+(42, 'api.launcher.sashok.auth.enabled', '1'),
+(43, 'api.launcher.sashok.auth.ips_white_list', '[]'),
+(44, 'api.launcher.sashok.auth.format', 'OK:{username}'),
+(45, 'api.key', 'pIkHkipkTKhpeC$ZY)OlnFH$fZWUullL'),
+(46, 'api.algo', 'sha512'),
+(47, 'api.signin.remember_user', '1'),
+(48, 'api.signin.enabled', '0'),
+(49, 'api.enabled', '0'),
+(50, 'api.separator', ':'),
+(51, 'api.salt', '0'),
+(52, 'api.signup.enabled', '1'),
+(53, 'caching.statistic.ttl', '60'),
+(54, 'caching.pages.ttl', '3600'),
+(55, 'caching.news.ttl', '600'),
+(56, 'caching.monitoring.ttl', '10'),
+(57, 'news.first_portion', '15'),
+(58, 'news.per_page', '15'),
+(59, 'news.enabled', '1'),
+(60, 'monitoring.rcon.timeout', '1'),
+(61, 'monitoring.enabled', '1');
 
 -- --------------------------------------------------------
 
@@ -483,8 +490,8 @@ CREATE TABLE `lshop_users` (
 --
 
 INSERT INTO `lshop_users` (`id`, `username`, `email`, `password`, `permissions`, `last_login`, `balance`, `uuid`, `accessToken`, `serverID`, `created_at`, `updated_at`) VALUES
-(1, 'admin', 'admin@example.com', '$2y$10$OzoH6VZeIQg7O6FwFmWepu3qncGF2J/tnw/noklJrJ/MEONL0lDne', NULL, NULL, 1000, '892e1f70-751c-11e7-b05c-0a0027000016', NULL, NULL, '2017-07-30 08:45:07', '2017-07-30 08:45:07'),
-(2, 'user', 'user@example.com', '$2y$10$j/mgVF2MlYsuXCtIx9bVCOZK7XHnguPXLjl.Ck9ISxLuf48L5XL0e', NULL, NULL, 0, '893a5616-751c-11e7-b05c-0a0027000016', NULL, NULL, '2017-07-30 08:45:07', '2017-07-30 08:45:07');
+(1, 'admin', 'admin@example.com', '$2y$10$Is2kXKNLK4ggAiSwMYI1u.EwnpDmcSDyB402WKAw2WtSMDdkMlZSG', NULL, NULL, 1000, 'edfad55c-7a0b-11e7-8ca0-0a002700000e', NULL, NULL, '2017-08-05 15:28:51', '2017-08-05 15:28:51'),
+(2, 'user', 'user@example.com', '$2y$10$nbn7tbH.a3Ak4Mxe45ozPeNVNBgDovHpNqG6Vo0ZwyA5c8QSoKYiC', NULL, NULL, 0, 'ee071b18-7a0b-11e7-8ca0-0a002700000e', NULL, NULL, '2017-08-05 15:28:51', '2017-08-05 15:28:51');
 
 --
 -- Триггеры `lshop_users`
@@ -701,7 +708,7 @@ ALTER TABLE `lshop_servers`
 -- AUTO_INCREMENT для таблицы `lshop_settings`
 --
 ALTER TABLE `lshop_settings`
-  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=55;
+  MODIFY `id` int(10) UNSIGNED NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=62;
 --
 -- AUTO_INCREMENT для таблицы `lshop_throttle`
 --

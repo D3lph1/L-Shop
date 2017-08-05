@@ -4,6 +4,11 @@ use App\Repositories\ItemRepository;
 use App\Repositories\ProductRepository;
 use Illuminate\Database\Seeder;
 
+/**
+ * Class ItemsAndProductsSeeder
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ */
 class ItemsAndProductsSeeder extends Seeder
 {
     private $itemRepository;

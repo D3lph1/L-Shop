@@ -106,13 +106,25 @@ return [
                     'title' => 'Payment aggregators',
                     'robokassa' => [
                         'title' => 'Robokassa',
+                        'enabled' => 'Enable Robokassa',
                         'change_data' => 'Changing the personal data of the Robokassa service',
                         'login' => 'Login',
                         'password1' => 'Password №1',
                         'password2' => 'Password №2',
                         'algo' => 'Algorithm for calculating the checksum',
                         'is_test' => 'Test mode',
-                    ]
+                    ],
+                    'interkassa' => [
+                        'title' => 'Interkassa',
+                        'enabled' => 'Enable Interkassa',
+                        'change_data' => 'Changing the personal data of the Interkassa service',
+                        'login' => 'Checkout identifier',
+                        'key' => 'Key',
+                        'currency' => 'Currency',
+                        'test_key' => 'Test key',
+                        'algo' => 'Algorithm for calculating the checksum',
+                        'is_test' => 'Test mode',
+                    ],
                 ]
             ],
             'api' => [

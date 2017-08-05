@@ -9,7 +9,7 @@
  * file that was distributed with this source code.
  */
 
-namespace App\Services\Payments\Robokassa\Exception;
+namespace App\Exceptions\Payment\Robokassa;
 
 /**
  * Class InvalidInvoiceIdException

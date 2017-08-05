@@ -3,6 +3,11 @@
 use Cartalyst\Sentinel\Sentinel;
 use Illuminate\Database\Seeder;
 
+/**
+ * Class UsersSeeder
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ */
 class UsersSeeder extends Seeder
 {
     /**
@@ -38,7 +43,7 @@ class UsersSeeder extends Seeder
         $role = $this->sentinel->getRoleRepository()->createModel()->create([
             'id' => 1,
             'slug' => 'admin',
-            'name' => 'Администратор',
+            'name' => __('seeding.roles.admin'),
             'permissions' => [
                 'user.admin' => true
             ]
@@ -59,7 +64,7 @@ class UsersSeeder extends Seeder
         $role = $this->sentinel->getRoleRepository()->createModel()->create([
             'id' => 2,
             'slug' => 'user',
-            'name' => 'Пользователь',
+            'name' => __('seeding.roles.user'),
             'permissions' => [
                 'user.admin' => false
             ]

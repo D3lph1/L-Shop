@@ -181,10 +181,16 @@ Route::group(['namespace' => 'Payment'], function () {
             'captcha'
         ]);
 
-
+    // Robokassa services.
     Route::any('/payment/result/robokassa', 'ResultController@robokassa');
     Route::any('/payment/success/robokassa', 'SuccessController@robokassa');
     Route::any('/payment/error/robokassa', 'ErrorController@robokassa');
+
+    // Interkassa services.
+    Route::any('/payment/result/interkassa', 'ResultController@interkassa');
+    Route::any('/payment/success/interkassa', 'SuccessController@interkassa');
+    Route::any('/payment/error/interkassa', 'ErrorController@interkassa');
+    Route::any('/payment/wait/interkassa', 'WaitController@interkassa');
 });
 
 Route::group(['namespace' => 'Profile', 'where' => ['server' => '\d+']], function () {

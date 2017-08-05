@@ -108,13 +108,25 @@ return [
                     'title' => 'Платежные агрегаторы',
                     'robokassa' => [
                         'title' => 'Robokassa',
+                        'enabled' => 'Использовать Robokassa',
                         'change_data' => 'Изменение персональных данных сервиса Robokassa',
                         'login' => 'Логин',
                         'password1' => 'Пароль №1',
                         'password2' => 'Пароль №2',
                         'algo' => 'Алгоритм расчета контрольной суммы:',
                         'is_test' => 'Тестовый режим',
-                    ]
+                    ],
+                    'interkassa' => [
+                        'title' => 'Interkassa',
+                        'enabled' => 'Использовать Interkassa',
+                        'change_data' => 'Изменение персональных данных сервиса Interkassa',
+                        'login' => 'Идентификатор кассы',
+                        'key' => 'Ключ',
+                        'currency' => 'Валюта',
+                        'test_key' => 'Тестовый ключ',
+                        'algo' => 'Алгоритм расчета контрольной суммы:',
+                        'is_test' => 'Тестовый режим',
+                    ],
                 ]
             ],
             'api' => [

@@ -4,6 +4,11 @@ use App\Repositories\CategoryRepository;
 use App\Repositories\ServerRepository;
 use Illuminate\Database\Seeder;
 
+/**
+ * Class ServersSeeder
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ */
 class ServersSeeder extends Seeder
 {
     /**

@@ -128,19 +128,33 @@ return [
         'skin' => 'Скин',
         'cloak' => 'Плащ',
         'block_duration' => 'Длительность блокировки',
+
+        'min_sum' => 'Минимальная сумма пополнения баланса',
         'currency' => 'Название валюты',
         'currency_html' => 'HTML представление валюты',
+
         'robokassa_login' => 'Robkassa. Логин',
         'robokassa_password1' => 'Robkassa. Пароль №1',
         'robokassa_password2' => 'Robkassa. Пароль №2',
         'robokassa_algo' => 'Robkassa. Алгоритм расчета контрольной суммы',
         'robokassa_test' => 'Robokassa. Тестовый режим',
+
+        'interkassa_checkout_id' => 'Interkassa. Логин',
+        'interkassa_key' => 'Interkassa. Пароль №1',
+        'interkassa_test_key' => 'Interkassa. Пароль №2',
+        'interkassa_currency' => 'Interkassa. Валюта',
+        'interkassa_algo' => 'Interkassa. Алгоритм расчета контрольной суммы',
+        'interkassa_test' => 'Interkassa. Тестовый режим',
+
         'page_title' => 'Заголовок страницы',
         'page_content' => 'Содержимое страницы',
         'page_url' => 'Адрес страницы',
+
         'news_title' => 'Заголовок новости',
         'news_content' => 'Содержимое новости',
+
         'server_name' => 'Имя сервера',
+
         'products_per_page' => 'Количество товара на 1 странице магазина',
         'payments_per_page' => 'Количество элементов на 1 странице истории платежей в профиле пользователя',
         'cart_per_page' => 'Количество элементов на 1 странице внутриигровой корзины в профиле пользователя',

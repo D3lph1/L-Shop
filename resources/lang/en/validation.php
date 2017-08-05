@@ -125,19 +125,33 @@ return [
         'skin' => 'Skin',
         'cloak' => 'Cloak',
         'block_duration' => 'Duration of blocking',
+
+        'min_sum' => 'Minimum balance recharge amount',
         'currency' => 'Currency name',
         'currency_html' => 'HTML representation of currency',
+
         'robokassa_login' => 'Robkassa. Login',
         'robokassa_password1' => 'Robkassa. Password №1',
         'robokassa_password2' => 'Robkassa. Password №2',
         'robokassa_algo' => 'Robkassa. Algorithm for calculating the checksum',
         'robokassa_test' => 'Robokassa. Test mode',
+
+        'interkassa_checkout_id' => 'Interkassa. Checkout identifier',
+        'interkassa_key' => 'Interkassa. Key',
+        'interkassa_test_key' => 'Interkassa. Test key',
+        'interkassa_currency' => 'Interkassa. Currency',
+        'interkassa_algo' => 'Interkassa. Algorithm for calculating the checksum',
+        'interkassa_test' => 'Interkassa. Test mode',
+
         'page_title' => 'Page title',
         'page_content' => 'Contents of the page',
         'page_url' => 'Page address',
+
         'news_title' => 'News title',
         'news_content' => 'Content of news',
+
         'server_name' => 'Server name',
+
         'products_per_page' => 'Quantity of goods on 1 page of the store',
         'payments_per_page' => 'Number of items on the payment history page in the user profile',
         'cart_per_page' => 'Number of items on the page of the in-game shopping cart in the user\'s profile',

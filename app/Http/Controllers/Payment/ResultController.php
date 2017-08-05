@@ -7,6 +7,7 @@ use App\Exceptions\Payment\NotFoundException;
 use App\Exceptions\Payment\UnableToCompleteException;
 use App\Http\Controllers\Controller;
 use App\Services\Handlers\Payments\AbstractPayment;
+use App\Services\Handlers\Payments\Interkassa;
 use App\Services\Handlers\Payments\Robokassa;
 use Illuminate\Http\Request;
 use Psr\Log\LoggerInterface;
@@ -40,6 +41,19 @@ class ResultController extends Controller
     public function robokassa(Request $request, Robokassa $handler)
     {
         return $this->handle($request->all(), $handler);
+    }
+
+    /**
+     * Handle request payment request from interkassa service.
+     *
+     * @param Request    $request
+     * @param Interkassa $interkassa
+     *
+     * @return \Illuminate\Http\Response
+     */
+    public function interkassa(Request $request, Interkassa $interkassa)
+    {
+        return $this->handle($request->all(), $interkassa);
     }
 
     /**

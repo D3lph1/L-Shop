@@ -15,11 +15,25 @@ use App\Http\Controllers\Controller;
 class SuccessController extends Controller
 {
     /**
-     * @param Request $request
-     *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function robokassa(Request $request)
+    public function robokassa()
+    {
+        return $this->handle();
+    }
+
+    /**
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function interkassa()
+    {
+        return $this->handle();
+    }
+
+    /**
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function handle()
     {
         $this->msg->success(__('messages.payments.success'));
 
