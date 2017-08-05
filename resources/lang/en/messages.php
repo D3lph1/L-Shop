@@ -13,8 +13,11 @@ return [
             ],
             'payments' => [
                 'robokassa' => [
-                    'unknowns_algo' => 'Such an algorithm for calculating the checksum is not in the list.'
-                ]
+                    'unknowns_algo' => 'Such an algorithm for calculating the checksum for Robokassa is not in the list.'
+                ],
+                'interkassa' => [
+                    'unknowns_algo' => 'Such an algorithm for calculating the checksum for Interkassa is not in the list.'
+                ],
             ]
         ],
         'servers' => [
@@ -280,6 +283,7 @@ return [
         ],
         'success' => 'The payment was successful.',
         'error' => 'Payment failed.',
+        'wait' => 'The payment is processed. Please wait.'
     ],
 
     'request_error' => 'An error occurred while executing the request.',

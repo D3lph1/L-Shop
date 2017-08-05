@@ -2,6 +2,11 @@
 
 use Illuminate\Database\Seeder;
 
+/**
+ * Class SettingsSeeder
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ */
 class SettingsSeeder extends Seeder
 {
     /**
@@ -11,7 +16,9 @@ class SettingsSeeder extends Seeder
      */
     public function run()
     {
-        s_set(config('default'));
+        $config = config('default');
+        ksort($config);
+        s_set($config);
         s_set([
             'shop.currency' => __('seeding.settings.currency'),
             'shop.currency_html' => __('seeding.settings.currency_html'),

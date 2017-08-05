@@ -879,9 +879,14 @@ $('#item-set-uploaded-image').change(function () {
     $('#item-load-image-block').fadeIn('fast');
 });
 
-// Dropdown
+// Dropdown for select hash algo for robokassa.
 $('.robokassa-algo-item').click(function () {
     $('#robokassa-algo-input').val($(this).text());
+});
+
+// Dropdown for select hash algo for interkassa
+$('.interkassa-algo-item').click(function () {
+    $('#interkassa-algo-input').val($(this).text());
 });
 
 // Dropdown

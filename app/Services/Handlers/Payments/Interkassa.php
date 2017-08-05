@@ -7,31 +7,23 @@ use App\Exceptions\Payment\InvalidRequestDataException;
 use App\Exceptions\Payment\NotFoundException;
 use App\Exceptions\Payment\UnableToCompleteException;
 use App\Repositories\PaymentRepository;
-use App\Services\Payments\Robokassa\Checkout;
-use Illuminate\Container\Container;
+use App\Services\Payments\Interkassa\Checkout;
 
-/**
- * Class Robokassa
- *
- * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
- * @package App\Services\Handlers\Payments
- */
-class Robokassa extends AbstractPayment
+class Interkassa extends AbstractPayment
 {
-    const SERVICE_NAME = 'robokassa';
+    const SERVICE_NAME = 'interkassa';
 
     /**
      * @var Checkout
      */
-    private $robokassa;
+    private $checkout;
 
     /**
      * @param PaymentRepository $paymentRepository
      */
     public function __construct(PaymentRepository $paymentRepository)
     {
-        $this->robokassa = app(Checkout::class);
+        $this->checkout = app(Checkout::class);
         $this->paymentRepository = $paymentRepository;
     }
 
@@ -53,14 +45,14 @@ class Robokassa extends AbstractPayment
             $id = $testingPaymentId;
         } else {
             $this->validateRequestData($requestData);
-            $id = $requestData['InvId'];
+            $id = $requestData['ik_pm_no'];
         }
 
         $payment = $this->payment($id);
         $this->validatePayment($payment);
         $this->give($payment);
 
-        return $this->robokassa->getSuccessAnswer($id);
+        return $this->checkout->getSuccessAnswer();
     }
 
     /**
@@ -72,7 +64,7 @@ class Robokassa extends AbstractPayment
      */
     private function validateRequestData(array $requestData)
     {
-        if (!$this->robokassa->validate($requestData)) {
+        if (!$this->checkout->validate($requestData)) {
             throw new InvalidRequestDataException();
         }
     }

@@ -2,6 +2,11 @@
 
 use Illuminate\Database\Seeder;
 
+/**
+ * Class NewsSeeder
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ */
 class NewsSeeder extends Seeder
 {
     /**

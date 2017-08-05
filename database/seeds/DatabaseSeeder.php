@@ -2,6 +2,11 @@
 
 use Illuminate\Database\Seeder;
 
+/**
+ * Class DatabaseSeeder
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ */
 class DatabaseSeeder extends Seeder
 {
     public function __construct(

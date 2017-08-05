@@ -3,7 +3,12 @@
 namespace App\Http\Controllers\Payment;
 
 use App\Http\Controllers\Controller;
+use App\Models\Payment;
 use App\Repositories\PaymentRepository;
+use App\Services\Payments\Interkassa\Checkout as InterkassaCheckout;
+use App\Services\Payments\Interkassa\Payment as InterkassaPayment;
+use App\Services\Payments\Robokassa\Checkout as RobokassaCheckout;
+use App\Services\Payments\Robokassa\Payment as RobokassaPayment;
 use Illuminate\Http\Request;
 
 /**
@@ -16,7 +21,7 @@ use Illuminate\Http\Request;
 class PaymentController extends Controller
 {
     /**
-     * @var
+     * @var Payment
      */
     private $payment;
 
@@ -33,31 +38,32 @@ class PaymentController extends Controller
         $this->payment = (int)$request->route('payment');
         $this->payment = $paymentRepository->find($this->payment, ['id', 'cost', 'user_id', 'username', 'completed']);
 
-        // If payment with this ID does not exist, exit
+        // If payment with this ID does not exist, exit.
         if (!$this->payment) {
             $this->app->abort(404);
         }
 
-        // If the payment is completed, deny access
+        // If the payment is completed, deny access.
         if ($this->payment->completed) {
             $this->app->abort(403);
         }
 
-        // Verification of whether the payment the user belongs
+        // Verification of whether the payment the user belongs.
         if (is_null($this->payment->username)) {
             if (!is_auth()) {
-                // If it is not, deny access
+                // If it is not, deny access.
                 $this->app->abort(403);
             }
 
-            if ($this->payment->user_id != \Sentinel::getUser()->getUserId()) {
-                // If it is not, deny access
+            if ($this->payment->user_id != $this->sentinel->getUser()->getUserId()) {
+                // If it is not, deny access.
                 $this->app->abort(403);
             }
         }
 
         $data = [
-            'robokassa' => $this->robokassa() ?: null
+            'robokassa' => $this->robokassa(),
+            'interkassa' => $this->interkassa(),
         ];
 
         return view('payment.methods', $data);
@@ -91,7 +97,7 @@ class PaymentController extends Controller
             'service' => null,
             'products' => null,
             'cost' => $sum,
-            'user_id' => \Sentinel::getUser()->getUserId(),
+            'user_id' => $this->sentinel->getUser()->getUserId(),
             'username' => null,
             'server_id' => $server,
             'ip' => $request->ip(),
@@ -107,16 +113,37 @@ class PaymentController extends Controller
     }
 
     /**
-     * @return mixed
+     * @return string
      */
     private function robokassa()
     {
-        $robokassa = $this->app->make('payment.robokassa');
-        $robokassa
-            ->setInvoiceId($this->payment->id)
-            ->setSum($this->payment->cost)
-            ->setDescription(s_get('shop.name'));
+        if (!s_get('payment.method.robokassa.enabled')) {
+            return null;
+        }
 
-        return $robokassa->getPaymentUrl();
+        /** @var RobokassaCheckout $checkout */
+        $checkout = $this->app->make(RobokassaCheckout::class);
+        $payment = new RobokassaPayment($this->payment->id, $this->payment->cost);
+        $payment->setDescription(s_get('shop.name'));
+
+        return $checkout->getPaymentUrl($payment);
+    }
+
+    /**
+     * @return string
+     */
+    private function interkassa()
+    {
+        if (!s_get('payment.method.interkassa.enabled')) {
+            return null;
+        }
+
+        /** @var InterkassaCheckout $checkout */
+        $checkout = $this->app->make(InterkassaCheckout::class);
+        $payment = new InterkassaPayment($this->payment->id, $this->payment->cost);
+        $payment->setDescription(s_get('shop.name'));
+        $payment->setCurrency(s_get('payment.method.interkassa.currency'));
+
+        return $checkout->getPaymentUrl($payment);
     }
 }

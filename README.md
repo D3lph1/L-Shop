@@ -32,7 +32,7 @@
 * The store itself is assynchronous a little less than completely.
 * Sale of in-game blocks, items, grafts.
 * The delivery of goods occurs through the means of the plug-in shopping cart reloaded.
-* Integration with the payment aggregator robokassa.
+* Integration with the payment aggregator **robokassa** and **interkassa**.
 * Multiserver.
 * Multi language (English and russian).
 * Separation of goods on each server by category.
@@ -90,6 +90,13 @@ Information for robokassa:
 Result URL: http://example.ru/payment/result/robokassa
 Success Url: http://example.ru/payment/success/robokassa
 Fail Url: http://example.ru/payment/error/robokassa
+Method of sending data: any.
+
+Information for interkassa:
+Interaction url: http://example.ru/payment/result/interkassa
+Success Url: http://example.ru/payment/success/interkassa
+Fail Url: http://example.ru/payment/error/interkassa
+Wait Url: http://example.ru/payment/wait/interkassa
 Method of sending data: any.
 
 If you plan to use the L-Shop API, be sure to change the secret key. You can do this in the Administration> Management> API section.
