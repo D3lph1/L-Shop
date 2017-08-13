@@ -51,16 +51,11 @@
                             <td>@if($user->hasAccess('user.admin')) <strong>@lang('content.all.yes')</strong> @else @lang('content.all.no') @endif</td>
                             <td><a href="{{ route('admin.users.edit', ['server' => $currentServer->id, 'edit' => $user->id]) }}" class="btn btn-info btn-sm">@lang('content.admin.users.list.table.edit')</a></td>
                             <td>
-                                <?php
-                                    $ban = app(App\Services\Ban::class, ['user' => $user, 'repository' => app(\App\Repositories\BanRepository::class)]);
-                                    $ban->setBan($user->ban);
-                                ?>
-
-                                @if($ban->isBanned())
-                                    <span class="banned_span" data-toggle="popover" data-placement="left" data-trigger="hover" title="@lang('content.admin.users.list.table.blocked_popover_title')" data-content="{{ build_ban_message($ban->getBan()->until, $ban->getBan()->reason) }}">@lang('content.admin.users.list.table.blocked')</span>
+                                @if($ban->isBanned($user))
+                                    <span class="banned_span" data-toggle="popover" data-placement="left" data-trigger="hover" title="@lang('content.admin.users.list.table.blocked_popover_title')" data-content="{{ build_ban_message($ban->get($user)->getUntil(), $ban->get($user)->getReason()) }}">@lang('content.admin.users.list.table.blocked')</span>
                                 @else
                                     @if(\Activation::completed($user))
-                                        <span class="activated_span" data-toggle="popover" data-placement="left" data-trigger="hover" title="@lang('content.admin.users.list.table.activated_popover_title')" data-content="Аккаунт этого пользователя подтвержден {{ dt($user->activations[count($user->activations) - 1]->completed_at) }}.">@lang('content.admin.users.list.table.activated')</span>
+                                        <span class="activated_span" data-toggle="popover" data-placement="left" data-trigger="hover" title="@lang('content.admin.users.list.table.activated_popover_title')" data-content="@lang('content.admin.users.list.table.activated_info', ['date' => dt($user->activations[count($user->activations) - 1]->completed_at)])">@lang('content.admin.users.list.table.activated')</span>
                                     @else
                                         <a href="{{ route('admin.users.complete', ['server' => $currentServer->id, 'user' => $user->id]) }}" class="btn green btn-sm">@lang('content.admin.users.list.table.activate')</a>
                                     @endif

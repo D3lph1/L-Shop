@@ -486,6 +486,7 @@ return [
                     'activated' => 'Подтвержден',
                     'activated_popover_title' => 'Информация о подтверждении',
                     'activate' => 'Подтвердить',
+                    'activated_info' => 'Аккаунт этого пользователя подтвержден :date.'
                 ]
             ]
         ],

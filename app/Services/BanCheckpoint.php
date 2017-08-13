@@ -3,7 +3,6 @@
 namespace App\Services;
 
 use App\Exceptions\User\BannedException;
-use App\Repositories\BanRepository;
 use Carbon\Carbon;
 use Cartalyst\Sentinel\Checkpoints\CheckpointInterface;
 use Cartalyst\Sentinel\Users\UserInterface;
@@ -18,18 +17,18 @@ use Cartalyst\Sentinel\Users\UserInterface;
 class BanCheckpoint implements CheckpointInterface
 {
     /**
-     * @var BanRepository
+     * @var Ban
      */
-    protected $repository;
+    protected $ban;
 
     /**
      * BanCheckpoint constructor.
      *
-     * @param BanRepository $repository
+     * @param Ban $ban
      */
-    public function __construct(BanRepository $repository)
+    public function __construct(Ban $ban)
     {
-        $this->repository = $repository;
+        $this->ban = $ban;
     }
 
     /**
@@ -71,7 +70,7 @@ class BanCheckpoint implements CheckpointInterface
     }
 
     /**
-     * Check if the user is locked.
+     * Check if the user is blocked.
      *
      * @param UserInterface $user
      *
@@ -79,24 +78,10 @@ class BanCheckpoint implements CheckpointInterface
      */
     protected function checkBanStatus(UserInterface $user)
     {
-        $ban = $this->repository->findByUser($user);
-        if (!$ban) {
-            return true;
-        }
+        if ($this->ban->isBanned($user)) {
+            $ban = $this->ban->get($user);
 
-        if (is_null($ban->until)) {
-            $this->logout();
-
-            throw new BannedException(null, $ban->reason);
-        }
-
-        $untilDate = $ban->until;
-        $nowDate = new Carbon(Carbon::now());
-
-        if ($untilDate > $nowDate) {
-            $this->logout();
-
-            throw new BannedException($untilDate, $ban->reason);
+            throw new BannedException($ban->getUntil(), $ban->getReason());
         }
 
         return true;

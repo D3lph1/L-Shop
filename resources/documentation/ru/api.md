@@ -69,7 +69,7 @@ PHP - код, который составляет ссылку для автор
 $key = 'kR6rrpgUO2Hn3*aI?1~vHwvd~KcVUFIB:d3lph1';   // Секретный ключ. Должен соответствовать секретному ключу в магазине.
 $delimiter = ':';   // Разделитель параметров
 $algo = 'sha256';   // Алгоритм расчета контрольной суммы
-$url = 'http://l-shop.ru/api/signin?';  // Адрес API-авторизации
+$url = 'http://example.ru/api/signin?';  // Адрес API-авторизации
 $username = 'D3lph1';   // Имя пользователя, которого необходимо авторизовать
 $str = sprintf('%s%s%s', $key, $delimiter, $username);
 $hash = hash($algo, $str);
@@ -77,7 +77,7 @@ $paramsStr = http_build_query([
     'username' => $username,
     'hash' => $hash
 ]);
-$link = $url . $paramStr;   // Ссылка по переходу по которой, пользователь будет авторизован
+$link = $url . $paramsStr;   // Ссылка по переходу по которой, пользователь будет авторизован
 ```
 
 ### Ответ

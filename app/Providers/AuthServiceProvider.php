@@ -2,7 +2,6 @@
 
 namespace App\Providers;
 
-use App\Repositories\BanRepository;
 use App\Services\BanCheckpoint;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
@@ -26,7 +25,7 @@ class AuthServiceProvider extends ServiceProvider
     {
         // $this->registerPolicies();
 
-        $banCheckpoint = new BanCheckpoint($this->app->make(BanRepository::class));
+        $banCheckpoint = $this->app->make(BanCheckpoint::class);
         \Sentinel::addCheckpoint('ban', $banCheckpoint);
     }
 }

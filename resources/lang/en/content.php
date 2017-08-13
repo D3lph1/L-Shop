@@ -484,6 +484,7 @@ return [
                     'activated' => 'Confirmed',
                     'activated_popover_title' => 'Confirmation Information',
                     'activate' => 'Confirm',
+                    'activated_info' => 'Account of this user confirmed at :date.'
                 ]
             ]
         ],
