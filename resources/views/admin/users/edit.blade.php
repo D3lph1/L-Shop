@@ -11,10 +11,10 @@
             <h1><i class="fa fa-user fa-lg fa-left-big"></i>@lang('content.admin.users.edit.title', ['username' => $user->username])</h1>
         </div>
 
-        <form id="admin-users-edit-already-ban" method="post" action="{{ route('admin.users.unblock', ['server' => $currentServer->id, 'user' => $user->id]) }}" @if(!$ban->isBanned()) class="d-none" @endif>
+        <form id="admin-users-edit-already-ban" method="post" action="{{ route('admin.users.unblock', ['server' => $currentServer->id, 'user' => $user->id]) }}" @if(!$isBanned) class="d-none" @endif>
             <div class="alert alert-warning text-center">
-                @if($ban->isBanned())
-                    {{ build_ban_message($ban->getBan()->until, $ban->getBan()->reason) }}
+                @if($isBanned)
+                    {{ build_ban_message($ban->get($user)->getUntil(), $ban->get($user)->getReason()) }}
                 @endif
                 <span></span>
                 {{ csrf_field() }}
@@ -84,7 +84,7 @@
                                     <div class="md-form text-left">
                                         <a href="{{ route('admin.users.edit.destroy_sessions', ['server' => $currentServer->id, 'user' => $user->id]) }}" class="btn danger-color btn-sm btn-block">@lang('content.admin.users.edit.other.sessions')</a>
                                     </div>
-                                    @if($user->getUserId() !== \Sentinel::getUser()->getUserId())
+                                    @if(($user->getUserId() !== \Sentinel::getUser()->getUserId()) and !$isBanned)
                                         <div class="md-form text-left mb-3">
                                             <a id="admin-users-edit-ban-open-modal" class="btn btn-warning btn-sm btn-block" data-toggle="modal" data-target="#admin-users-edit-ban-modal">@lang('content.admin.users.edit.other.block')</a>
                                         </div>
@@ -113,11 +113,11 @@
         admin-users-edit-ban-modal
     @endslot
     @slot('title')
-        Заблокировать пользователя
+        @lang('content.admin.users.edit.block_modal.title')
     @endslot
     @slot('buttons')
-        <button type="button" class="btn btn-warning" id="admin-users-edit-ban" data-url="{{ route('admin.users.block', ['server' => $currentServer->id, 'user' => $user->getUserId()]) }}">Заблокировать</button>
-        <button type="button" class="btn btn-outline-warning" data-dismiss="modal">Отменить</button>
+        <button type="button" class="btn btn-warning" id="admin-users-edit-ban" data-url="{{ route('admin.users.block', ['server' => $currentServer->id, 'user' => $user->getUserId()]) }}">@lang('content.admin.users.edit.block_modal.btn')</button>
+        <button type="button" class="btn btn-outline-warning" data-dismiss="modal">@lang('content.admin.users.edit.block_modal.cancel')</button>
     @endslot
     <div class="md-form text-left">
         <i class="fa fa-calendar-times-o prefix"  data-toggle="popover" data-placement="right" data-trigger="hover" title="@lang('components.popover.title')" data-content="@lang('content.admin.users.edit.block_modal.duration_popover')"></i>

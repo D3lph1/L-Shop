@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Users;
 
 use App\Models\User;
 use App\Repositories\UserRepository;
+use App\Services\Ban;
 use Cartalyst\Sentinel\Sentinel;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
@@ -24,15 +25,17 @@ class ListController extends Controller
      * Render the users list page.
      *
      * @param Request $request
+     * @param Ban     $ban
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request, Ban $ban)
     {
         $users = $this->sentinel->getUserRepository()->with(['roles', 'activations', 'ban'])->paginate(50);
 
         $data = [
             'currentServer' => $request->get('currentServer'),
+            'ban' => $ban,
             'users' => $users
         ];
 

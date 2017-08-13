@@ -2,10 +2,9 @@
 
 namespace App\Services;
 
-use App\Exceptions\InvalidArgumentTypeException;
 use App\Repositories\BanRepository;
+use App\Services\Support\Time;
 use Carbon\Carbon;
-use Carbon\CarbonInterval;
 use Cartalyst\Sentinel\Users\UserInterface;
 
 /**
@@ -28,149 +27,95 @@ class Ban
     protected $repository;
 
     /**
-     * @var null|\App\Models\Ban
-     */
-    protected $ban = null;
-
-    /**
      * Ban constructor.
      *
-     * @param UserInterface $user The user under which the operations of blocking, unlocking, checking and so on will
-     *                            occur.
      * @param BanRepository $repository
      */
-    public function __construct(UserInterface $user, BanRepository $repository)
+    public function __construct(BanRepository $repository)
     {
-        $this->user = $user;
         $this->repository = $repository;
     }
 
     /**
      * Check if the current user is blocked.
      *
+     * @param UserInterface $user
+     *
      * @return bool
      */
-    public function isBanned()
+    public function isBanned(UserInterface $user)
     {
-        $ban = $this->getBan();
-        if (is_null($ban)) {
-            return false;
-        }
-
-        $until = $ban->until;
-        if (is_null($until)) {
-            return true;
-        }
-        $now = Carbon::now();
-
-        return $until > $now ? true : false;
-    }
-
-    /**
-     * Block user for a certain number of days.
-     *
-     * @param int    $days   Term of blocking.
-     * @param string $reason Reason for blocking.
-     *
-     * @return \App\Models\Ban
-     */
-    public function banForDays($days, $reason)
-    {
-        if ($days) {
-            $date = Carbon::now()->addDay($days);
-        } else {
-            $date = null;
-        }
-
-        return $this->banUntil($date, $reason);
+        return $this->repository->isBanned($user);
     }
 
     /**
      * Blocks the user until a certain date.
      *
-     * @param null|Carbon $date
-     * @param string      $reason Reason for blocking.
+     * @param UserInterface $user
+     * @param Carbon|null   $until
+     * @param string        $reason Reason for blocking.
      *
      * @return \App\Models\Ban
      */
-    public function banUntil($date, $reason)
+    public function until(UserInterface $user, $until, $reason = null)
     {
-        $this->repository->deleteByUser($this->user);
+        $this->pardon($user);
 
         return $this->repository->create([
-            'user_id' => $this->user->getUserId(),
-            'until' => $date ? $date->toDateTimeString() : null,
+            'user_id' => $user->getUserId(),
+            'until' => $until,
             'reason' => $reason
         ]);
     }
 
     /**
+     * Block user for a certain number of days.
+     *
+     * @param UserInterface $user
+     * @param int           $days   Term of blocking.
+     * @param string        $reason Reason for blocking.
+     *
+     * @return \App\Models\Ban
+     */
+    public function forDays(UserInterface $user, $days, $reason = null)
+    {
+        $until = Time::nowAddInterval($days * 60 * 24);
+
+        return $this->until($user, $until, $reason);
+    }
+
+    /**
      * Blocks the user forever.
      *
-     * @param string $reason Reason for blocking.
+     * @param UserInterface $user
+     * @param string        $reason Reason for blocking.
      *
      * @return \App\Models\Ban
      */
-    public function banPermanently($reason)
+    public function permanently(UserInterface $user, $reason)
     {
-        return $this->banUntil(null, $reason);
+        return $this->until($user, null, $reason);
     }
 
     /**
-     * Set ban model.
+     * Unblock given user.
      *
-     * @param $ban
-     */
-    public function setBan($ban)
-    {
-        if (is_null($ban)) {
-            return;
-        }
-
-        if (!($ban instanceof \App\Models\Ban)) {
-            throw new InvalidArgumentTypeException('\App\Models\Ban', $ban);
-        }
-
-        if ($ban->user_id !== $this->user->getUserId()) {
-            throw new \InvalidArgumentException(
-                sprintf(
-                    "This ban belongs to the user with id %d, and not to the user with id %d",
-                    $ban->user_id,
-                    $this->user->getUserId()
-                )
-            );
-        }
-
-        $this->ban = $ban;
-    }
-
-    /**
-     * @return UserInterface
-     */
-    public function getUser()
-    {
-        return $this->user;
-    }
-
-    /**
-     * @return \App\Models\Ban
-     */
-    public function getBan()
-    {
-        if (is_null($this->ban)) {
-            $this->ban = $this->repository->findByUser($this->user);
-        }
-
-        return $this->ban;
-    }
-
-    /**
-     * Unblock current user.
+     * @param UserInterface $user
      *
      * @return bool
      */
-    public function unblock()
+    public function pardon(UserInterface $user)
     {
-        return $this->repository->deleteByUser($this->user);
+        return $this->repository->deleteByUser($user);
+    }
+
+    /**
+     * @param UserInterface $user
+     *
+     * @return \App\Models\Ban
+     */
+    public function get(UserInterface $user)
+    {
+        return $this->repository->findByUser($user);
     }
 }

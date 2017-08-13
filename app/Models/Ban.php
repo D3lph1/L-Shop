@@ -48,4 +48,28 @@ class Ban extends Model
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
+
+    /**
+     * @return int
+     */
+    public function getUserId()
+    {
+        return $this->user_id;
+    }
+
+    /**
+     * @return \Carbon\Carbon|null
+     */
+    public function getUntil()
+    {
+        return $this->until;
+    }
+
+    /**
+     * @return string|null
+     */
+    public function getReason()
+    {
+        return $this->reason;
+    }
 }

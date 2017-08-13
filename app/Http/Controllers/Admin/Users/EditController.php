@@ -31,7 +31,7 @@ class EditController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function render(Request $request, BanRepository $banRepository, CartRepository $cartRepository)
+    public function render(Request $request, BanRepository $banRepository, CartRepository $cartRepository, Ban $ban)
     {
         /** @var User $user */
         $user = $this->sentinel->getUserRepository()->findById((int)$request->route('edit'));
@@ -39,13 +39,12 @@ class EditController extends Controller
             $this->app->abort(404);
         }
 
-        $ban = $this->app->makeWith(Ban::class, ['user' => $user, 'repository' => $banRepository]);
-
         $data = [
             'currentServer' => $request->get('currentServer'),
             'servers' => $request->get('servers'),
             'user' => $user,
             'ban' => $ban,
+            'isBanned' => $ban->isBanned($user),
             'cart' => $cartRepository->getByPlayerWithItems($user->username)
         ];
 
@@ -182,11 +181,11 @@ class EditController extends Controller
      * Block this user.
      *
      * @param BlockUserRequest $request
-     * @param BanRepository            $banRepository
+     * @param Ban              $ban
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function block(BlockUserRequest $request, BanRepository $banRepository)
+    public function block(BlockUserRequest $request, Ban $ban)
     {
         /** @var User|UserInterface $user */
         $user = $this->sentinel->getUserRepository()->findById((int)$request->route('user'));
@@ -202,7 +201,7 @@ class EditController extends Controller
             ]);
         }
 
-        if ($user->getUserId() === \Sentinel::getUser()->getUserId()) {
+        if ($user->getUserId() === $this->sentinel->getUser()->getUserId()) {
             return json_response('cannot_block_yourself', [
                 'message' => [
                     'type' => 'warning',
@@ -211,10 +210,11 @@ class EditController extends Controller
             ]);
         }
 
-        /** @var Ban $ban */
-        $ban = $this->app->makeWith(Ban::class, ['user' => $user, 'repository' => $banRepository]);
-
-        $result = $ban->banForDays($duration, $reason);
+        if ($duration === 0) {
+            $result = $ban->permanently($user, $reason);
+        } else {
+            $result = $ban->forDays($user, $duration, $reason);
+        }
 
         if ($result) {
             return json_response('success', [
@@ -236,14 +236,14 @@ class EditController extends Controller
     /**
      * Unblock this user.
      *
-     * @param Request       $request
-     * @param BanRepository $banRepository
+     * @param Request $request
+     * @param Ban     $ban
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function unblock(Request $request, BanRepository $banRepository)
+    public function unblock(Request $request, Ban $ban)
     {
-        /** @var User|UserInterface $user */
+        /** @var UserInterface $user */
         $user = $this->sentinel->getUserRepository()->findById((int)$request->route('user'));
 
         if (!$user) {
@@ -252,10 +252,7 @@ class EditController extends Controller
             return response()->redirectToRoute('admin.users.list', ['server' => $request->get('currentServer')->id]);
         }
 
-        /** @var Ban $ban */
-        $ban = $this->app->makeWith(Ban::class, ['user' => $user, 'repository' => $banRepository]);
-
-        if ($ban->unblock()) {
+        if ($ban->pardon($user)) {
             $this->msg->info(__('messages.admin.users.edit.unblock.success'));
         } else {
             $this->msg->danger(__('messages.admin.users.edit.unblock.fail'));

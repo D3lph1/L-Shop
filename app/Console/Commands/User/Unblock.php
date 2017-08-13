@@ -56,15 +56,15 @@ class Unblock extends Command
         }
 
         /** @var Ban $ban */
-        $ban = app(Ban::class, ['user' => $user]);
-        $result = $ban->unblock();
+        $ban = app(Ban::class);
+        $result = $ban->pardon($user);
 
         if ($result) {
-            $this->info('User unbanned successfully!');
+            $this->info('User unblocked successfully!');
 
             return 0;
         }
-        $this->error('User has not been unbanned.');
+        $this->error('User has not been unblocked.');
 
         return 1;
     }

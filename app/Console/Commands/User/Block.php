@@ -49,7 +49,7 @@ class Block extends Command
     public function handle()
     {
         $username = $this->argument('username');
-        $duration = $this->argument('duration') ?: null;
+        $duration = (int)$this->argument('duration');
         $reason = $this->option('reason');
 
         $user = \Sentinel::getUserRepository()->findByCredentials(['username' => $username]);
@@ -61,8 +61,12 @@ class Block extends Command
         }
 
         /** @var Ban $ban */
-        $ban = app(Ban::class, ['user' => $user]);
-        $result = $ban->banForDays($duration, $reason);
+        $ban = app(Ban::class);
+        if ($duration === 0) {
+            $result = $ban->permanently($user, $reason);
+        } else {
+            $result = $ban->forDays($user, $duration, $reason);
+        }
 
         if ($result) {
 
