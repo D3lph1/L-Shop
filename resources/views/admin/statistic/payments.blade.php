@@ -46,7 +46,7 @@
                                 <td>{{ $payment->created_at }}</td>
                                 <td>@if($payment->completed) {{ $payment->updated_at }} @endif</td>
                                 <td>@if($payment->service) {{ $payment->service }} @endif</td>
-                                <td>@if(!$payment->completed) <a href="{{ route('admin.statistic.payments.complete', ['server' => $payment->server_id, 'payment' => $payment->id]) }}" class="btn success-color btn-sm">@lang('content.profile.payments.table.complete')</a> @endif</td>
+                                <td>@if(!$payment->completed) <a href="{{ route('admin.statistic.payments.complete', ['server' => $payment->server_id, 'payment' => $payment->id]) }}" class="btn green btn-sm">@lang('content.profile.payments.table.complete')</a> @endif</td>
                             </tr>
                         @endforeach
                         </tbody>

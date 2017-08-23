@@ -6,10 +6,9 @@ namespace App\Exceptions;
  * Class DistributorNotFoundException
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Exceptions
  */
-class DistributorNotFoundException extends UnexpectedSettingsValueException
+class DistributorNotFoundException extends UnexpectedSettingsValueException implements LShopException
 {
     public function __construct($distributor)
     {

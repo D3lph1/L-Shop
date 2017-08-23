@@ -121,11 +121,11 @@ class PaymentsController extends Controller
      */
     private function robokassa(Request $request)
     {
-        $enabled = $request->get('robokassa_enabled');
-        $login = $request->get('robokassa_login');
-        $password1 = $request->get('robokassa_password1');
-        $password2 = $request->get('robokassa_password2');
-        $algo = $request->get('robokassa_algo');
+        $enabled = (bool)$request->get('robokassa_enabled');
+        $login = (string)$request->get('robokassa_login');
+        $password1 = (string)$request->get('robokassa_password1');
+        $password2 = (string)$request->get('robokassa_password2');
+        $algo = (string)$request->get('robokassa_algo');
         $isTest = (bool)$request->get('robokassa_test');
 
         if (!$this->checkAlgo($algo, 'robokassa')) {
@@ -150,12 +150,12 @@ class PaymentsController extends Controller
      */
     private function interkassa(Request $request)
     {
-        $enabled = $request->get('interkassa_enabled');
-        $login = $request->get('interkassa_checkout_id');
-        $key = $request->get('interkassa_key');
-        $testKey = $request->get('interkassa_test_key');
-        $currency = $request->get('interkassa_currency');
-        $algo = $request->get('interkassa_algo');
+        $enabled = (bool)$request->get('interkassa_enabled');
+        $login = (string)$request->get('interkassa_checkout_id');
+        $key = (string)$request->get('interkassa_key');
+        $testKey = (string)$request->get('interkassa_test_key');
+        $currency = (string)$request->get('interkassa_currency');
+        $algo = (string)$request->get('interkassa_algo');
         $isTest = (bool)$request->get('interkassa_test');
 
         if (!$this->checkAlgo($algo, 'interkassa')) {
