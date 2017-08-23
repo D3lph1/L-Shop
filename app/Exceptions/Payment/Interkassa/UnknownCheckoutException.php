@@ -2,16 +2,16 @@
 
 namespace App\Exceptions\Payment\Interkassa;
 
+use App\Exceptions\LShopException;
 use Throwable;
 
 /**
  * Class UnknownCheckoutException
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Exceptions\Payment\Interkassa
  */
-class UnknownCheckoutException extends \RuntimeException
+class UnknownCheckoutException extends \RuntimeException implements LShopException
 {
     public function __construct($checkoutId, $code = 0, Throwable $previous = null)
     {

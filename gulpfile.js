@@ -90,6 +90,8 @@ gulp.task('build', [
     'build:img'
 ]);
 
+gulp.task('default', ['build']);
+
 gulp.task('watch', ['build:styles', 'build:js', 'build:img'], function () {
     gulp.watch(path.styles.watch, ['build:styles']);
     gulp.watch(path.js.watch, ['build:js']);

@@ -11,6 +11,8 @@
 
 namespace App\Exceptions\Payment\Robokassa;
 
+use App\Exceptions\LShopException;
+
 /**
  * Class InvalidSumException
  *
@@ -18,7 +20,8 @@ namespace App\Exceptions\Payment\Robokassa;
  *
  * @package Idma\Robokassa\Exception
  */
-class InvalidSumException extends PaymentException {
+class InvalidSumException extends PaymentException implements LShopException
+{
     public function __construct($message = '', $code = 0, \Exception $previous = null) {
         parent::__construct('Invoice sum is required and cannot be less or equals zero.', $code, $previous);
     }

@@ -10,7 +10,7 @@ namespace App\Exceptions;
  *
  * @package App\Exceptions
  */
-class InvalidArgumentTypeException extends \InvalidArgumentException
+class InvalidArgumentTypeException extends \InvalidArgumentException implements LShopException
 {
     /**
      * @param string|array $expected

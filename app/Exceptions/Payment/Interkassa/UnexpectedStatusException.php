@@ -2,16 +2,16 @@
 
 namespace App\Exceptions\Payment\Interkassa;
 
+use App\Exceptions\LShopException;
 use Throwable;
 
 /**
  * Class UnexpectedStatusException
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Exceptions\Payment\Interkassa
  */
-class UnexpectedStatusException extends \RuntimeException
+class UnexpectedStatusException extends \RuntimeException implements LShopException
 {
     public function __construct($status, $code = 0, Throwable $previous = null)
     {

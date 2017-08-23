@@ -28,7 +28,7 @@ if (!function_exists('s_get')) {
 
 if (!function_exists('s_set')) {
     /**
-     * Set the option value
+     * Set the option value.
      *
      * @param string|array $option Option name or array `option` => `value`
      * @param mixed        $value  Option value
@@ -41,7 +41,7 @@ if (!function_exists('s_set')) {
 
 if (!function_exists('s_save')) {
     /**
-     * Save the settings
+     * Save the settings.
      */
     function s_save()
     {
@@ -51,7 +51,7 @@ if (!function_exists('s_save')) {
 
 if (!function_exists('is_auth')) {
     /**
-     * Checking whether a user is logged in at the moment
+     * Checking whether a user is logged in at the moment.
      *
      * @return bool|\Cartalyst\Sentinel\Users\UserInterface
      */
@@ -63,7 +63,7 @@ if (!function_exists('is_auth')) {
 
 if (!function_exists('is_admin')) {
     /**
-     * Checks user for administrator rights
+     * Checks user for administrator rights.
      *
      * @return bool
      */
@@ -81,7 +81,7 @@ if (!function_exists('is_admin')) {
 
 if (!function_exists('access_mode_auth')) {
     /**
-     * Checks shopping mode
+     * Checks shopping mode.
      *
      * @return bool
      */
@@ -93,7 +93,7 @@ if (!function_exists('access_mode_auth')) {
 
 if (!function_exists('access_mode_guest')) {
     /**
-     * Checks shopping mode
+     * Checks shopping mode.
      *
      * @return bool
      */
@@ -105,7 +105,7 @@ if (!function_exists('access_mode_guest')) {
 
 if (!function_exists('access_mode_any')) {
     /**
-     * Checks shopping mode
+     * Checks shopping mode.
      *
      * @return bool
      */
@@ -117,7 +117,7 @@ if (!function_exists('access_mode_any')) {
 
 if (!function_exists('is_enable')) {
     /**
-     * Checks for the specific rights the shop
+     * Checks for the specific rights the shop.
      *
      * @return bool
      */
@@ -129,7 +129,7 @@ if (!function_exists('is_enable')) {
 
 if (!function_exists('img_path')) {
     /**
-     * Return path to images folder
+     * Return path to images folder.
      *
      * @return bool
      */
@@ -141,7 +141,7 @@ if (!function_exists('img_path')) {
 
 if (!function_exists('json_response')) {
     /**
-     * Return filled json response object
+     * Return filled json response object.
      *
      * @param       $status
      * @param array $data
@@ -164,7 +164,7 @@ if (!function_exists('json_response')) {
 
 if (!function_exists('refill_user_balance')) {
     /**
-     * Adds an given sum to the user's account
+     * Adds an given sum to the user's account.
      *
      * @param int  $sum
      * @param null $userId

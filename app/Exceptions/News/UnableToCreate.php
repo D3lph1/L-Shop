@@ -2,14 +2,15 @@
 
 namespace App\Exceptions\News;
 
+use App\Exceptions\LShopException;
+
 /**
  * Class UnableToCreate
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Exceptions\News
  */
-class UnableToCreate extends \RuntimeException
+class UnableToCreate extends \RuntimeException implements LShopException
 {
     //
 }

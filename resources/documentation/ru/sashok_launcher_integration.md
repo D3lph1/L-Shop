@@ -34,7 +34,7 @@ authHandlerConfig: {
 authProvider: "request";
 authProviderConfig: {
 	url: "http://example.com/api/launcher/sashok/auth?username=%login%&password=%password%"; # Url по которому будет идти обращение к L-Shop для проверки введенных данных, введенных пользователем
-	response: "OK:(?&lt;username&gt;.+)"; # Формат ответа
+	response: "OK:(?<username>.+)"; # Формат ответа
 };
 # Настраиваем систему скинов и плащей
 textureProvider: "request";
