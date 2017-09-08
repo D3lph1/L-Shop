@@ -82,7 +82,7 @@ class Server
 
             foreach ($dto->getCategories() as $category) {
                 $query = [
-                    'name' => $category,
+                    'name' => $category->getName(),
                     'server_id' => $server->id
                 ];
 
