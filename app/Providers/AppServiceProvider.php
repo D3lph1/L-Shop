@@ -51,6 +51,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        if (!Schema::hasTable('servers')) {
+            return;
+        }
+
         $this->app->alias(Message::class, 'message');
 
         $this->app->alias(Cart::class, 'cart');
