@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\DataTransferObjects;
 
@@ -34,33 +35,24 @@ final class MonitoringPlayers
      * @param int $now Count of players at the moment.
      * @param int $total Count of available slots.
      */
-    public function __construct($serverId, $now, $total)
+    public function __construct(int $serverId, int $now, int $total)
     {
         $this->serverId = $serverId;
         $this->now = $now;
         $this->total = $total;
     }
 
-    /**
-     * @return int
-     */
-    public function getServerId()
+    public function getServerId(): int
     {
         return $this->serverId;
     }
 
-    /**
-     * @return int
-     */
-    public function getNow()
+    public function getNow(): int
     {
         return $this->now;
     }
 
-    /**
-     * @return int
-     */
-    public function getTotal()
+    public function getTotal(): int
     {
         return $this->total;
     }

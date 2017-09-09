@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\DataTransferObjects\Admin;
 
@@ -31,48 +32,33 @@ class Category
      *
      * @param string $name
      */
-    public function __construct($name)
+    public function __construct(string $name)
     {
         $this->name = $name;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return int
-     */
-    public function getServerId()
+    public function getServerId(): ?int
     {
         return $this->serverId;
     }
 
-    /**
-     * @param int $serverId
-     */
-    public function setServerId($serverId)
+    public function setServerId(int $serverId): void
     {
-        $this->serverId = (int)$serverId;
+        $this->serverId = $serverId;
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     */
-    public function setId($id)
+    public function setId(int $id): void
     {
-        $this->id = (int)$id;
+        $this->id = $id;
     }
 }

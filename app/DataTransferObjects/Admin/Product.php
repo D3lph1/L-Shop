@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\DataTransferObjects\Admin;
 
@@ -12,7 +13,7 @@ namespace App\DataTransferObjects\Admin;
 class Product
 {
     /**
-     * @var int
+     * @var int Product identifier
      */
     private $id;
 
@@ -22,7 +23,7 @@ class Product
     private $price;
 
     /**
-     * @var int
+     * @var float
      */
     private $stack;
 
@@ -46,87 +47,59 @@ class Product
      */
     private $sortPriority;
 
-    /**
-     * Product constructor.
-     *
-     * @param float $price
-     * @param int|float $stack
-     * @param int $itemId
-     * @param int $serverId
-     * @param int $categoryId
-     * @param float $sortPriority
-     */
-    public function __construct($price, $stack, $itemId, $serverId, $categoryId, $sortPriority)
+    public function __construct(
+        float $price,
+        float $stack,
+        int $itemId,
+        int $serverId,
+        int $categoryId,
+        float $sortPriority)
     {
-        $this->price = (float)$price;
+        $this->price = $price;
         $this->stack = $stack;
-        $this->itemId = (int)$itemId;
-        $this->serverId = (int)$serverId;
-        $this->categoryId = (int)$categoryId;
-        $this->sortPriority = (float)$sortPriority;
+        $this->itemId = $itemId;
+        $this->serverId = $serverId;
+        $this->categoryId = $categoryId;
+        $this->sortPriority = $sortPriority;
     }
 
-    /**
-     * @return float
-     */
-    public function getPrice()
+    public function getPrice(): float
     {
         return $this->price;
     }
 
-    /**
-     * @return int
-     */
-    public function getStack()
+    public function getStack(): float
     {
         return $this->stack;
     }
 
-    /**
-     * @return int
-     */
-    public function getItemId()
+    public function getItemId(): int
     {
         return $this->itemId;
     }
 
-    /**
-     * @return int
-     */
-    public function getServerId()
+    public function getServerId(): int
     {
         return $this->serverId;
     }
 
-    /**
-     * @return int
-     */
-    public function getCategoryId()
+    public function getCategoryId(): int
     {
         return $this->categoryId;
     }
 
-    /**
-     * @return float
-     */
-    public function getSortPriority()
+    public function getSortPriority(): float
     {
         return $this->sortPriority;
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     */
-    public function setId($id)
+    public function setId(int $id): void
     {
-        $this->id = (int)$id;
+        $this->id = $id;
     }
 }

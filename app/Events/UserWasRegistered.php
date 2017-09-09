@@ -2,21 +2,14 @@
 
 namespace App\Events;
 
-use Cartalyst\Sentinel\Users\UserInterface;
-use Illuminate\Broadcasting\Channel;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Broadcasting\PrivateChannel;
-use Illuminate\Broadcasting\PresenceChannel;
-use Illuminate\Foundation\Events\Dispatchable;
-use Illuminate\Broadcasting\InteractsWithSockets;
-use Illuminate\Contracts\Broadcasting\ShouldBroadcast;
+use Cartalyst\Sentinel\Users\UserInterface;
 
 /**
  * Class UserWasRegistered
  * Event triggered when a new user is created.
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Events
  */
 class UserWasRegistered
@@ -39,24 +32,18 @@ class UserWasRegistered
      * @param UserInterface $user
      * @param bool          $needSendActivationMail
      */
-    public function __construct(UserInterface $user, $needSendActivationMail)
+    public function __construct(UserInterface $user, bool $needSendActivationMail)
     {
         $this->user = $user;
         $this->needSendActivationMail = $needSendActivationMail;
     }
 
-    /**
-     * @return UserInterface
-     */
-    public function getUser()
+    public function getUser(): UserInterface
     {
         return $this->user;
     }
 
-    /**
-     * @return bool
-     */
-    public function isNeedSendActivationMail()
+    public function isNeedSendActivationMail(): bool
     {
         return $this->needSendActivationMail;
     }

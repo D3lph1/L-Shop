@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\DataTransferObjects\Admin;
 
@@ -37,57 +38,39 @@ class News
      * @param string $title
      * @param string $content
      */
-    public function __construct($title, $content)
+    public function __construct(string $title, string $content)
     {
         $this->title = $title;
         $this->content = $content;
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     */
-    public function setId($id)
+    public function setId(int $id): void
     {
         $this->id = (int)$id;
     }
 
-    /**
-     * @return string
-     */
-    public function getTitle()
+    public function getTitle(): string
     {
         return $this->title;
     }
 
-    /**
-     * @return string
-     */
-    public function getContent()
+    public function getContent(): string
     {
         return $this->content;
     }
 
-    /**
-     * @return int
-     */
-    public function getUserId()
+    public function getUserId(): ?int
     {
         return $this->userId;
     }
 
-    /**
-     * @param int $userId
-     */
-    public function setUserId($userId)
+    public function setUserId(int $userId): void
     {
-        $this->userId = (int)$userId;
+        $this->userId = $userId;
     }
 }

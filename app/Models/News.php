@@ -1,7 +1,9 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -40,5 +42,35 @@ class News extends Model
     public function author()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function getContent(): string
+    {
+        return $this->content;
+    }
+
+    public function getUserId(): int
+    {
+        return $this->user_id;
+    }
+
+    public function getCreatedAt(): Carbon
+    {
+        return $this->created_at;
+    }
+
+    public function getUpdatedAt(): Carbon
+    {
+        return $this->updated_at;
     }
 }
