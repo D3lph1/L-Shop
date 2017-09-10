@@ -1,9 +1,11 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Api;
 
 use App\Services\Registrar;
 use Illuminate\Http\Request;
+use Illuminate\Http\JsonResponse;
 use App\Exceptions\User\UnableToCreateUser;
 use App\Exceptions\User\EmailAlreadyExistsException;
 use App\Exceptions\User\UsernameAlreadyExistsException;
@@ -12,20 +14,14 @@ use App\Exceptions\User\UsernameAlreadyExistsException;
  * Class SignupController
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Api
  */
 class SignupController extends ApiController
 {
     /**
      * Signup user by API.
-     *
-     * @param Request   $request
-     * @param Registrar $registrar
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function signup(Request $request, Registrar $registrar)
+    public function signup(Request $request, Registrar $registrar): JsonResponse
     {
         $username = $request->get('username');
         $email = $request->get('email');

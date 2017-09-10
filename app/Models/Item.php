@@ -1,7 +1,9 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -31,7 +33,14 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Item extends Model
 {
-    protected $fillable = ['name', 'description', 'type', 'item', 'image', 'extra'];
+    protected $fillable = [
+        'name',
+        'description',
+        'type',
+        'item',
+        'image',
+        'extra'
+    ];
 
     /**
      * @var string
@@ -46,5 +55,50 @@ class Item extends Model
     public function products()
     {
         return $this->hasMany(Product::class, 'item_id', 'id');
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getDescription(): ?string
+    {
+        return $this->description;
+    }
+
+    public function getType(): string
+    {
+        return $this->type;
+    }
+
+    public function getItem(): string
+    {
+        return $this->item;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function getExtra(): ?string
+    {
+        return $this->extra;
+    }
+
+    public function getCreatedAt(): Carbon
+    {
+        return $this->created_at;
+    }
+
+    public function getUpdatedAt(): ?Carbon
+    {
+        return $this->updated_at;
     }
 }

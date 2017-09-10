@@ -1,29 +1,25 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Products;
 
 use App\Repositories\ProductRepository;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\ListParent;
+use Illuminate\View\View;
 
 /**
  * Class ListController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Products
  */
 class ListController extends ListParent
 {
     /**
      * Render the page with products list.
-     *
-     * @param Request           $request
-     * @param ProductRepository $productRepository
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request, ProductRepository $productRepository)
+    public function render(Request $request, ProductRepository $productRepository): View
     {
         $orderBy = $this->checkOrderBy($request->get('orderBy'));
         $orderType = $this->checkOrderType($request->get('orderType'));

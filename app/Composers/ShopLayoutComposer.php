@@ -7,6 +7,7 @@ use App\DataTransferObjects\MonitoringPlayers;
 use App\Models\Server;
 use App\Repositories\NewsRepository;
 use App\Services\Monitoring\MonitoringInterface;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -67,17 +68,15 @@ class ShopLayoutComposer implements ComposerContract
     /**
      * {@inheritdoc}
      */
-    public function compose(View $view)
+    public function compose(View $view): void
     {
         $view->with($this->getData());
     }
 
     /**
      * Obtain information for subsequent composing.
-     *
-     * @return array
      */
-    private function getData()
+    private function getData(): array
     {
         if (s_get('news.enabled')) {
             $news = $this->news();
@@ -116,20 +115,16 @@ class ShopLayoutComposer implements ComposerContract
 
     /**
      * Get first portion of news list.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection
      */
-    private function news()
+    private function news(): Collection
     {
         return $this->newsRepository->getFirstPortion();
     }
 
     /**
      * Get all news count.
-     *
-     * @return int
      */
-    private function newsCount()
+    private function newsCount(): int
     {
         return $this->newsRepository->count();
     }
@@ -139,7 +134,7 @@ class ShopLayoutComposer implements ComposerContract
      *
      * @return MonitoringPlayers[]
      */
-    private function monitoring()
+    private function monitoring(): array
     {
         if (s_get('monitoring.enabled')) {
             $servers = $this->request->get('servers');

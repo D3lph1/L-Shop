@@ -5,7 +5,7 @@ namespace Tests\Feature\Admin;
 use Tests\TestCase;
 use App\Models\Item;
 use App\Models\Product;
-use App\Services\AdminItems;
+use App\Services\Admin;
 use App\Services\AdminProducts;
 use Illuminate\Container\Container;
 
@@ -19,7 +19,7 @@ use Illuminate\Container\Container;
 class ProductItemTest extends TestCase
 {
     /**
-     * @var AdminItems
+     * @var Admin
      */
     private $adminItems;
 
@@ -35,7 +35,7 @@ class ProductItemTest extends TestCase
      */
     public function __construct($name = null, array $data = [], $dataName = '')
     {
-        $this->adminItems = Container::getInstance()->make('App\Services\AdminItems');
+        $this->adminItems = Container::getInstance()->make('App\Services\Admin');
         $this->adminProduct = Container::getInstance()->make('App\Services\AdminProducts');
 
         parent::__construct($name, $data, $dataName);

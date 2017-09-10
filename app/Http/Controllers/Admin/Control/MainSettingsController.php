@@ -1,30 +1,28 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Control;
 
 use App\Services\News;
 use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveMainSettingsRequest;
+use Illuminate\View\View;
 
 /**
  * Class MainSettingsController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Control
  */
 class MainSettingsController extends Controller
 {
     /**
      * Render the main settings page.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request): View
     {
         $data = [
             'currentServer' => $request->get('currentServer'),
@@ -62,12 +60,8 @@ class MainSettingsController extends Controller
 
     /**
      * Save main settings options.
-     *
-     * @param SaveMainSettingsRequest $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(SaveMainSettingsRequest $request, News $news)
+    public function save(SaveMainSettingsRequest $request, News $news): RedirectResponse
     {
         $newsFirstPortion = (int)$request->get('news_first_portion');
 
@@ -113,10 +107,8 @@ class MainSettingsController extends Controller
 
     /**
      * Enable/disable maintenance mode.
-     *
-     * @param bool $maintenance
      */
-    public function maintenance($maintenance)
+    public function maintenance(bool $maintenance)
     {
         $artisan = $this->app->make(Kernel::class);
 

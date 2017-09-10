@@ -1,7 +1,9 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -63,5 +65,60 @@ class Payment extends Model
     public function user()
     {
         return $this->belongsTo(User::class, 'user_id', 'id');
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getService(): string
+    {
+        return $this->service;
+    }
+
+    public function getProducts(): \stdClass
+    {
+        return json_decode($this->products);
+    }
+
+    public function getCost(): float
+    {
+        return $this->cost;
+    }
+
+    public function getUserId(): ?int
+    {
+        return $this->user_id;
+    }
+
+    public function getUsername(): ?string
+    {
+        return $this->username;
+    }
+
+    public function getServerId(): int
+    {
+        return $this->server_id;
+    }
+
+    public function getIp(): ?string
+    {
+        return $this->ip;
+    }
+
+    public function isCompleted(): bool
+    {
+        return $this->completed;
+    }
+
+    public function getCreatedAt(): Carbon
+    {
+        return $this->created_at;
+    }
+
+    public function getUpdatedAt(): ?Carbon
+    {
+        return $this->updated_at;
     }
 }

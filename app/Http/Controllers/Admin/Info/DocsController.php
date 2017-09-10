@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Info;
 use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\View\View;
 
 /**
  * Class DocsController
@@ -34,12 +35,8 @@ class DocsController extends Controller
 
     /**
      * Render the documentation menu page.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request): View
     {
         $data = [
             'currentServer' => $request->get('currentServer')
@@ -50,10 +47,8 @@ class DocsController extends Controller
 
     /**
      * Render page with main documentation.
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function main()
+    public function main(): View
     {
         return view('admin.info.docs.main', [
             'data' => $this->parsedown->parse($this->load('main'))
@@ -62,10 +57,8 @@ class DocsController extends Controller
 
     /**
      * Render page with L-Shop API documentation.
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function api()
+    public function api(): View
     {
         return view('admin.info.docs.api', [
             'data' => $this->parsedown->parse($this->load('api'))
@@ -74,10 +67,8 @@ class DocsController extends Controller
 
     /**
      * Render page with Sashok724's integration guide.
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function sashokLauncherIntegration()
+    public function sashokLauncherIntegration(): View
     {
         return view('admin.info.docs.sashok_launcher_integration', [
             'data' => $this->parsedown->parse($this->load('sashok_launcher_integration'))
@@ -86,10 +77,8 @@ class DocsController extends Controller
 
     /**
      * Render page with L-Shop CLI documentation.
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function cli()
+    public function cli(): View
     {
         return view('admin.info.docs.cli', [
             'data' => $this->parsedown->parse($this->load('cli'))
@@ -103,7 +92,7 @@ class DocsController extends Controller
      *
      * @return string
      */
-    private function load($name)
+    private function load(string $name): string
     {
         $locale = $this->app->getLocale();
         $path = $this->app->resourcePath("documentation/{$locale}/{$name}.md");

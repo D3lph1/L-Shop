@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin;
 
@@ -8,7 +9,6 @@ use App\Http\Controllers\Controller;
  * Class ListParent
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin
  */
 class ListParent extends Controller
@@ -31,12 +31,7 @@ class ListParent extends Controller
         'X', 'Y', 'Z'
     ];
 
-    /**
-     * @param string $orderBy
-     *
-     * @return null|string
-     */
-    protected function checkOrderBy($orderBy)
+    protected function checkOrderBy(string $orderBy): ?string
     {
         $orderBy = mb_strtolower($orderBy);
 
@@ -47,12 +42,7 @@ class ListParent extends Controller
         return null;
     }
 
-    /**
-     * @param string $orderType
-     *
-     * @return null|string
-     */
-    protected function checkOrderType($orderType)
+    protected function checkOrderType(string $orderType): ?string
     {
         $orderType = strtolower($orderType);
 

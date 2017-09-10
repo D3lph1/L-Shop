@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\DataTransferObjects\Admin;
 
@@ -51,56 +52,40 @@ class Server
      */
     private $monitoringEnabled;
 
-    /**
-     * Server constructor.
-     *
-     * @param string     $name
-     * @param bool       $enabled
-     * @param Category[] $categories
-     * @param string     $ip
-     * @param int        $port
-     * @param string     $password
-     * @param bool       $monitoringEnabled
-     */
-    public function __construct($name, $enabled, array $categories, $ip, $port, $password, $monitoringEnabled)
+    public function __construct(
+        string $name,
+        bool $enabled,
+        array $categories,
+        string $ip,
+        int $port,
+        string $password,
+        bool $monitoringEnabled)
     {
         $this->name = $name;
-        $this->enabled = (bool)$enabled;
+        $this->enabled = $enabled;
         $this->categories = $categories;
         $this->ip = $ip;
-        $this->port = (int)$port;
+        $this->port = $port;
         $this->password = $password;
-        $this->monitoringEnabled = (bool)$monitoringEnabled;
+        $this->monitoringEnabled = $monitoringEnabled;
     }
 
-    /**
-     * @return int
-     */
-    public function getId()
+    public function getId(): ?int
     {
         return $this->id;
     }
 
-    /**
-     * @param int $id
-     */
-    public function setId($id)
+    public function setId(int $id): void
     {
-        $this->id = (int)$id;
+        $this->id = $id;
     }
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @return bool
-     */
-    public function isEnabled()
+    public function isEnabled(): bool
     {
         return $this->enabled;
     }
@@ -108,39 +93,27 @@ class Server
     /**
      * @return Category[]
      */
-    public function getCategories()
+    public function getCategories(): array
     {
         return $this->categories;
     }
 
-    /**
-     * @return string
-     */
-    public function getIp()
+    public function getIp(): string
     {
         return $this->ip;
     }
 
-    /**
-     * @return int
-     */
-    public function getPort()
+    public function getPort(): int
     {
         return $this->port;
     }
 
-    /**
-     * @return string
-     */
-    public function getPassword()
+    public function getPassword(): string
     {
         return $this->password;
     }
 
-    /**
-     * @return bool
-     */
-    public function isMonitoringEnabled()
+    public function isMonitoringEnabled(): bool
     {
         return $this->monitoringEnabled;
     }

@@ -58,4 +58,34 @@ class Server extends Model
     {
         return $this->hasMany(Category::class, 'server_id', 'id');
     }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getIp(): ?string
+    {
+        return $this->ip;
+    }
+
+    public function getPort(): ?int
+    {
+        return $this->port;
+    }
+
+    public function getPassword(): ?string
+    {
+        return $this->password;
+    }
+
+    public function isMonitoringEnabled(): bool
+    {
+        return $this->monitoring_enabled;
+    }
 }

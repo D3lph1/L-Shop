@@ -1,18 +1,20 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Statistic;
 
 use App\Services\Statistic;
 use Carbon\Carbon;
 use Illuminate\Cache\Repository;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\View\View;
 
 /**
  * Class ShowController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Statistic
  */
 class ShowController extends Controller
@@ -35,12 +37,8 @@ class ShowController extends Controller
 
     /**
      * Render the "show L-Shop statistic" page.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request): View
     {
         $payments = $this->statistic->forTheLastYearCompleted();
 
@@ -67,12 +65,8 @@ class ShowController extends Controller
 
     /**
      * Flush all statistic cache.
-     *
-     * @param Repository $cache
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function flushCache(Repository $cache)
+    public function flushCache(Repository $cache): RedirectResponse
     {
         $cache->forget('admin.statistic.for_the_last_year_completed');
         $cache->forget('admin.statistic.profit');

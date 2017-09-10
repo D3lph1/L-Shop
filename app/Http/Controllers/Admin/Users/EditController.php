@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Users;
 
@@ -11,27 +12,22 @@ use App\Repositories\CartRepository;
 use App\Services\Ban;
 use Cartalyst\Sentinel\Roles\EloquentRole;
 use Cartalyst\Sentinel\Users\UserInterface;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 /**
  * Class EditController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Users
  */
 class EditController extends Controller
 {
     /**
      * Render the edit given user page.
-     *
-     * @param Request        $request
-     * @param BanRepository  $banRepository
-     * @param CartRepository $cartRepository
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function render(Request $request, BanRepository $banRepository, CartRepository $cartRepository, Ban $ban)
+    public function render(Request $request, BanRepository $banRepository, CartRepository $cartRepository, Ban $ban): View
     {
         /** @var User $user */
         $user = $this->sentinel->getUserRepository()->findById((int)$request->route('edit'));
@@ -53,12 +49,8 @@ class EditController extends Controller
 
     /**
      * Handle the save editable user request.
-     *
-     * @param SaveEditedUserRequest $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(SaveEditedUserRequest $request)
+    public function save(SaveEditedUserRequest $request): RedirectResponse
     {
         $id = (int)$request->route('edit');
         $username = $request->get('username');
@@ -123,12 +115,8 @@ class EditController extends Controller
 
     /**
      * Remove given user request.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function remove(Request $request)
+    public function remove(Request $request): RedirectResponse
     {
         /** @var UserInterface|User $user */
         $user = $this->sentinel->getUserRepository()->findById((int)$request->route('user'));
@@ -151,12 +139,8 @@ class EditController extends Controller
 
     /**
      * Destroy all login-sessions for given user.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function destroySessions(Request $request)
+    public function destroySessions(Request $request): RedirectResponse
     {
         $user = $this->sentinel->getUserRepository()->findById($request->route('user'));
 
@@ -179,13 +163,8 @@ class EditController extends Controller
 
     /**
      * Block this user.
-     *
-     * @param BlockUserRequest $request
-     * @param Ban              $ban
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function block(BlockUserRequest $request, Ban $ban)
+    public function block(BlockUserRequest $request, Ban $ban): RedirectResponse
     {
         /** @var User|UserInterface $user */
         $user = $this->sentinel->getUserRepository()->findById((int)$request->route('user'));
@@ -235,13 +214,8 @@ class EditController extends Controller
 
     /**
      * Unblock this user.
-     *
-     * @param Request $request
-     * @param Ban     $ban
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function unblock(Request $request, Ban $ban)
+    public function unblock(Request $request, Ban $ban): RedirectResponse
     {
         /** @var UserInterface $user */
         $user = $this->sentinel->getUserRepository()->findById((int)$request->route('user'));

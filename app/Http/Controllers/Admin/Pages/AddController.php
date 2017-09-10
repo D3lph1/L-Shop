@@ -1,31 +1,29 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Pages;
 
 use App\DataTransferObjects\Admin\Page as DTO;
 use App\Exceptions\Page\UrlAlreadyExistsException;
 use App\Services\Page;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveAddedPageRequest;
+use Illuminate\View\View;
 
 /**
  * Class AddController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Pages
  */
 class AddController extends Controller
 {
     /**
      * Render add static page.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request): View
     {
         $data = [
             'currentServer' => $request->get('currentServer')
@@ -36,13 +34,8 @@ class AddController extends Controller
 
     /**
      * Save new static page.
-     *
-     * @param SaveAddedPageRequest $request
-     * @param Page                 $handler
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(SaveAddedPageRequest $request, Page $handler)
+    public function save(SaveAddedPageRequest $request, Page $handler): RedirectResponse
     {
         $page = new DTO(
             $request->get('page_title'),

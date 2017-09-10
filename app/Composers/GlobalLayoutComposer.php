@@ -17,7 +17,7 @@ class GlobalLayoutComposer implements ComposerContract
     /**
      * {@inheritdoc}
      */
-    public function compose(View $view)
+    public function compose(View $view): void
     {
         $view->with($this->getData());
     }
@@ -25,7 +25,7 @@ class GlobalLayoutComposer implements ComposerContract
     /**
      * @return array
      */
-    private function getData()
+    private function getData(): array
     {
         return [
             'shopDescription' => s_get('shop.description'),

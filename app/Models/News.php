@@ -69,7 +69,7 @@ class News extends Model
         return $this->created_at;
     }
 
-    public function getUpdatedAt(): Carbon
+    public function getUpdatedAt(): ?Carbon
     {
         return $this->updated_at;
     }

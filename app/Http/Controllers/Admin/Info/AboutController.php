@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin\Info;
 
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\View\View;
 
 /**
  * Class AboutController
@@ -16,10 +17,8 @@ class AboutController extends Controller
 {
     /**
      * Render the about page.
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render()
+    public function render(): View
     {
         return view('admin.info.about');
     }

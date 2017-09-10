@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Models;
 
@@ -32,7 +33,13 @@ use Illuminate\Database\Eloquent\Model;
  */
 class Product extends Model
 {
-    protected $fillable = ['price', 'item_id', 'server_id', 'stack', 'category_id'];
+    protected $fillable = [
+        'price',
+        'item_id',
+        'server_id',
+        'stack',
+        'category_id'
+    ];
 
     /**
      * @var string
@@ -45,5 +52,35 @@ class Product extends Model
     public function item()
     {
         return $this->hasOne(Item::class, 'id', 'item_id');
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getPrice(): float
+    {
+        return $this->price;
+    }
+
+    public function getItemId(): int
+    {
+        return $this->item_id;
+    }
+
+    public function getServerId(): int
+    {
+        return $this->server_id;
+    }
+
+    public function getStack(): float
+    {
+        return $this->stack;
+    }
+
+    public function getCategoryId(): int
+    {
+        return $this->category_id;
     }
 }

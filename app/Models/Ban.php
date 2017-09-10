@@ -1,7 +1,9 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -9,10 +11,10 @@ use Illuminate\Database\Eloquent\Model;
  *
  * @property int $id
  * @property int $user_id
- * @property \Carbon\Carbon $until
+ * @property Carbon $until
  * @property string $reason
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @property-read \App\Models\User $user
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Ban whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Ban whereId($value)
@@ -49,26 +51,22 @@ class Ban extends Model
         return $this->belongsTo(User::class, 'user_id', 'id');
     }
 
-    /**
-     * @return int
-     */
-    public function getUserId()
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getUserId(): int
     {
         return $this->user_id;
     }
 
-    /**
-     * @return \Carbon\Carbon|null
-     */
-    public function getUntil()
+    public function getUntil(): ?Carbon
     {
         return $this->until;
     }
 
-    /**
-     * @return string|null
-     */
-    public function getReason()
+    public function getReason(): ?string
     {
         return $this->reason;
     }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Servers;
 
@@ -6,26 +7,23 @@ use App\DataTransferObjects\Admin\Category;
 use App\DataTransferObjects\Admin\Server;
 use App\Http\Requests\Admin\SaveAddedServerRequest;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\View\View;
 
 /**
  * Class AddController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Server
  */
 class AddController extends BaseController
 {
     /**
      * Render the add new server page
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request): View
     {
         $data = [
             'currentServer' => $request->get('currentServer')
@@ -34,12 +32,7 @@ class AddController extends BaseController
         return view('admin.servers.add', $data);
     }
 
-    /**
-     * @param SaveAddedServerRequest $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function save(SaveAddedServerRequest $request)
+    public function save(SaveAddedServerRequest $request): RedirectResponse
     {
         $categories = [];
         foreach ($request->get('categories') as $category) {

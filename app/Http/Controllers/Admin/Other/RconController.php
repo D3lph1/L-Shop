@@ -1,16 +1,25 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Other;
 
 use D3lph1\MinecraftRconManager\Connector;
 use D3lph1\MinecraftRconManager\Exceptions\ConnectSocketException;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Collection;
+use Illuminate\View\View;
 
+/**
+ * Class RconController
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Http\Controllers\Admin\Other
+ */
 class RconController extends Controller
 {
-    public function render(Request $request)
+    public function render(Request $request): View
     {
         /** @var Collection $servers */
         $servers = $request->get('servers');
@@ -29,7 +38,7 @@ class RconController extends Controller
         return view('admin.other.rcon', $data);
     }
 
-    public function send(Request $request, Connector $rconConnector)
+    public function send(Request $request, Connector $rconConnector): JsonResponse
     {
         $server = (int) $request->route('send');
         $cmd = $request->get('cmd');

@@ -1,14 +1,15 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Repositories;
 
 use App\Models\Page;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 /**
  * Class PageRepository
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Repositories
  */
 class PageRepository extends BaseRepository
@@ -17,13 +18,8 @@ class PageRepository extends BaseRepository
 
     /**
      * Get static page from database or cache.
-     *
-     * @param string $url
-     * @param array  $columns
-     *
-     * @return mixed
      */
-    public function findByUrl($url, $columns = [])
+    public function findByUrl(string $url, array $columns = []): Page
     {
         $key = "page.{$url}";
         $columns = $this->prepareColumns($columns);
@@ -43,35 +39,20 @@ class PageRepository extends BaseRepository
 
     /**
      * Get all static pages paginated.
-     *
-     * @param array $columns
-     *
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function getPaginated($columns = [])
+    public function getPaginated(array $columns = []): LengthAwarePaginator
     {
         return Page::paginate(50, $this->prepareColumns($columns));
     }
 
-    /**
-     * @param int    $id
-     * @param string $url
-     *
-     * @return bool
-     */
-    public function isUrlUnique($id, $url)
+    public function isUrlUnique(int $id, string $url): bool
     {
         return !(bool)Page::where('url', $url)
             ->where('id', '<>', $id)
             ->count();
     }
 
-    /**
-     * @param string $url
-     *
-     * @return bool
-     */
-    public function isUrlUniqueAll($url)
+    public function isUrlUniqueAll(string $url): bool
     {
         return !(bool)Page::where('url', $url)
             ->count();

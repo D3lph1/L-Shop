@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Repositories;
 
@@ -16,7 +17,7 @@ class UserRepository extends BaseRepository
 {
     const MODEL = 'App\Models\User';
 
-    public function search($search, array $searchSpecials)
+    public function search(string $search, array $searchSpecials): array
     {
         /** @var Builder $builder */
         $builder = User::select(['id', 'username', 'email', 'balance']);

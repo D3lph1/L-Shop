@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Products;
 
@@ -7,15 +8,16 @@ use App\Repositories\ItemRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\ServerRepository;
 use App\Services\AdminProducts;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveEditedProductRequest;
+use Illuminate\View\View;
 
 /**
  * Class EditController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Products
  */
 class EditController extends Controller
@@ -36,15 +38,8 @@ class EditController extends Controller
 
     /**
      * Render the edit given product page.
-     *
-     * @param Request           $request
-     * @param ItemRepository    $itemRepository
-     * @param ProductRepository $productRepository
-     * @param ServerRepository  $serverRepository
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request, ItemRepository $itemRepository, ProductRepository $productRepository, ServerRepository $serverRepository)
+    public function render(Request $request, ItemRepository $itemRepository, ProductRepository $productRepository, ServerRepository $serverRepository): View
     {
         $product = $productRepository->forEditProducts($request->route('product'), [
             'products.id',
@@ -103,12 +98,8 @@ class EditController extends Controller
 
     /**
      * Save edited product.
-     *
-     * @param SaveEditedProductRequest $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(SaveEditedProductRequest $request)
+    public function save(SaveEditedProductRequest $request): RedirectResponse
     {
         $dto = new Product(
             $request->get('price'),
@@ -133,12 +124,8 @@ class EditController extends Controller
 
     /**
      * Remove product.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function remove(Request $request)
+    public function remove(Request $request): RedirectResponse
     {
         $productId = (int)$request->route('product');
         $result = $this->adminProducts->delete($productId);

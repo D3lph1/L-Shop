@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Traits;
 
@@ -7,7 +8,6 @@ namespace App\Traits;
  * Check data on valid.
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Traits
  */
 trait Validator
@@ -25,7 +25,7 @@ trait Validator
      *
      * @return bool
      */
-    public function validateUsername($username, $required = true)
+    public function validateUsername(?string $username, bool $required = true): bool
     {
         $min = $this->getOption('username.min', 4);
         $max = $this->getOption('username.max', 32);
@@ -48,12 +48,9 @@ trait Validator
     }
 
     /**
-     * @param int  $sum
-     * @param bool $required
-     *
      * @return bool|\Illuminate\Http\JsonResponse
      */
-    public function validateFillUpBalanceSum($sum, $required = true)
+    public function validateFillUpBalanceSum(float $sum, bool $required = true)
     {
 
         $required = $required ? 'required|' : 'sometimes|';
@@ -78,13 +75,7 @@ trait Validator
         return true;
     }
 
-    /**
-     * @param string     $option
-     * @param null|mixed $default
-     *
-     * @return mixed
-     */
-    private function getOption($option, $default = null)
+    private function getOption(string $option, $default = null)
     {
         return config("{$this->path}.$option", $default);
     }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Repositories;
 
@@ -21,17 +22,11 @@ abstract class BaseRepository
      * @param int   $id      Record identifier.
      * @param array $columns Columns for sampling.
      *
-     * @throws InvalidArgumentTypeException
-     *
      * @return mixed
      */
-    public function find($id, $columns = [])
+    public function find(int $id, $columns = [])
     {
         $columns = $this->prepareColumns($columns);
-
-        if (!is_int($id)) {
-            throw new InvalidArgumentTypeException('integer', $id);
-        }
 
         return $this->query()->find($id, $columns);
     }
@@ -43,13 +38,13 @@ abstract class BaseRepository
      *
      * @return mixed
      */
-    public function last($column = 'created_at')
+    public function last(string $column = 'created_at')
     {
-        return $this->query()->latest()->first();
+        return $this->query()->latest($column)->first();
     }
 
     /**
-     * Get all rows where id contains in array
+     * Get all rows where id contains in array.
      *
      * @param array $ids
      * @param array $columns
@@ -70,7 +65,7 @@ abstract class BaseRepository
      *
      * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function all($columns = [])
+    public function all(array $columns = [])
     {
         $columns = $this->prepareColumns($columns);
 
@@ -111,12 +106,8 @@ abstract class BaseRepository
      *
      * @return bool
      */
-    public function update($id, array $attributes)
+    public function update(int $id, array $attributes)
     {
-        if (!is_int($id)) {
-            throw new InvalidArgumentTypeException('integer', $id);
-        }
-
         return $this->query()->where('id', $id)
             ->update($attributes);
     }
@@ -162,12 +153,8 @@ abstract class BaseRepository
      *
      * @return bool
      */
-    public function exists($id)
+    public function exists(int $id)
     {
-        if (!is_int($id)) {
-            throw new InvalidArgumentTypeException('integer', $id);
-        }
-
         return $this->query()->where('id', $id)->exists();
     }
 

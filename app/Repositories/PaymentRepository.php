@@ -1,16 +1,18 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Repositories;
 
 use App\Models\Payment;
 use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Database\Query\Builder;
 
 /**
  * Class PaymentRepository
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Repositories
  */
 class PaymentRepository extends BaseRepository
@@ -19,12 +21,8 @@ class PaymentRepository extends BaseRepository
 
     /**
      * Receives completed payments created within one year from this moment.
-     *
-     * @param string|array $columns
-     *
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
      */
-    public function forTheLastYearCompleted($columns)
+    public function forTheLastYearCompleted(array $columns): Collection
     {
         $columns = $this->prepareColumns($columns);
 
@@ -43,10 +41,8 @@ class PaymentRepository extends BaseRepository
 
     /**
      * Summarizes the income received from the sale of products for all time.
-     *
-     * @return double
      */
-    public function profit()
+    public function profit(): float
     {
         return \Cache::get('admin.statistic.profit', function () {
             $result = Payment::where('completed', 1)
@@ -75,7 +71,7 @@ class PaymentRepository extends BaseRepository
      *
      * @return bool
      */
-    public function complete($id, $serviceName)
+    public function complete(int $id, string $serviceName): bool
     {
         return Payment::where('id', $id)
             ->update([
@@ -91,9 +87,9 @@ class PaymentRepository extends BaseRepository
      * @param int   $userId  User identifier.
      * @param array $columns Columns for sampling.
      *
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return LengthAwarePaginator
      */
-    public function historyForUser($userId, array $columns = [])
+    public function historyForUser(int $userId, array $columns = []): LengthAwarePaginator
     {
         $columns = $this->prepareColumns($columns);
 
@@ -108,9 +104,9 @@ class PaymentRepository extends BaseRepository
      *
      * @param array $columns Columns for sampling.
      *
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
+     * @return LengthAwarePaginator
      */
-    public function allHistory(array $columns = [])
+    public function allHistory(array $columns = []): LengthAwarePaginator
     {
         $columns = $this->prepareColumns($columns);
 

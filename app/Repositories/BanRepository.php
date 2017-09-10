@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Repositories;
 
@@ -18,12 +19,7 @@ class BanRepository extends BaseRepository
 {
     const MODEL = Ban::class;
 
-    /**
-     * @param UserInterface $user
-     *
-     * @return Ban
-     */
-    public function findByUser(UserInterface $user)
+    public function findByUser(UserInterface $user): ?Ban
     {
         return $this
             ->query()
@@ -31,12 +27,7 @@ class BanRepository extends BaseRepository
             ->first();
     }
 
-    /**
-     * @param UserInterface $user
-     *
-     * @return bool
-     */
-    public function deleteByUser(UserInterface $user)
+    public function deleteByUser(UserInterface $user): bool
     {
         return $this
             ->query()
@@ -44,12 +35,7 @@ class BanRepository extends BaseRepository
             ->delete();
     }
 
-    /**
-     * @param UserInterface $user
-     *
-     * @return bool
-     */
-    public function isBanned(UserInterface $user)
+    public function isBanned(UserInterface $user): bool
     {
         return (bool)$this
             ->query()

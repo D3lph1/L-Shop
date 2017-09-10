@@ -3,37 +3,30 @@
 namespace App\Repositories;
 
 use App\Models\Item;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Model;
 
 /**
  * Class ItemRepository
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Repositories
  */
 class ItemRepository extends BaseRepository
 {
     const MODEL = 'App\Models\Item';
 
-    /**
-     * @param array $attributes
-     *
-     * @return \Illuminate\Database\Eloquent\Model
-     */
-    public function create(array $attributes)
+    public function create(array $attributes): Model
     {
         return Item::create($attributes);
     }
 
-    /**
-     * @param array       $columns
-     * @param null|string $orderBy
-     * @param string      $orderType
-     * @param null|string $filter
-     *
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
-     */
-    public function forAdmin($columns = [], $orderBy = null, $orderType = 'ASC', $filter = null)
+    public function forAdmin(
+        array $columns = [],
+        ?string $orderBy = null,
+        ?string $orderType = 'ASC',
+        ?string $filter = null
+    ): LengthAwarePaginator
     {
         $columns = $this->prepareColumns($columns);
         $builder = Item::select($columns);

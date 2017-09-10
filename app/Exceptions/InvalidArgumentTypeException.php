@@ -15,7 +15,6 @@ class InvalidArgumentTypeException extends \InvalidArgumentException implements 
     /**
      * @param string|array $expected
      * @param mixed $given
-     * @internal param array|string $excpected
      */
     public function __construct($expected, $given)
     {

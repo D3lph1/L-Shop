@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Servers;
 
@@ -8,26 +9,23 @@ use App\Exceptions\Server\AttemptToDeleteTheLastCategoryException;
 use App\Exceptions\Server\AttemptToDeleteTheLastServerException;
 use App\Http\Requests\Admin\SaveEditedServerRequest;
 use App\Repositories\ServerRepository;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 /**
  * Class EditController
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Server
  */
 class EditController extends BaseController
 {
     /**
      * Render edit server page.
-     *
-     * @param Request          $request
-     * @param ServerRepository $serverRepository
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request, ServerRepository $serverRepository)
+    public function render(Request $request, ServerRepository $serverRepository): View
     {
         $server = null;
         foreach ($request->get('servers') as $s) {
@@ -55,12 +53,7 @@ class EditController extends BaseController
         return view('admin.servers.edit', $data);
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function addCategory(Request $request)
+    public function addCategory(Request $request): JsonResponse
     {
         $category = new Category($request->get('category'));
         $category->setServerId($request->route('edit'));
@@ -72,12 +65,7 @@ class EditController extends BaseController
         return json_response('success');
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function removeCategory(Request $request)
+    public function removeCategory(Request $request): JsonResponse
     {
         $serverId = (int)$request->route('edit');
         $categoryId = (int)$request->get('category');
@@ -95,12 +83,7 @@ class EditController extends BaseController
         return json_response('success');
     }
 
-    /**
-     * @param SaveEditedServerRequest $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function save(SaveEditedServerRequest $request)
+    public function save(SaveEditedServerRequest $request): RedirectResponse
     {
         $categories = [];
         foreach ($request->get('categories') as $key => $category) {
@@ -128,12 +111,8 @@ class EditController extends BaseController
 
     /**
      * Attempt to delete given server with categories
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function removeServer(Request $request)
+    public function removeServer(Request $request): RedirectResponse
     {
         $serverId = (int)$request->route('remove');
 

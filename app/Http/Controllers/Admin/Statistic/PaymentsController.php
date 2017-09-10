@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Statistic;
 
@@ -6,28 +7,24 @@ use App\Repositories\PaymentRepository;
 use App\Repositories\ProductRepository;
 use App\Repositories\UserRepository;
 use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\View\View;
 
 /**
  * Class PaymentsController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Statistic
  */
 class PaymentsController extends Controller
 {
     /**
      * Render the payments list page.
-     *
-     * @param Request           $request
-     * @param PaymentRepository $pr
-     * @param UserRepository    $ur
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request, PaymentRepository $pr, UserRepository $ur)
+    public function render(Request $request, PaymentRepository $pr, UserRepository $ur): View
     {
         $payments = $pr->allHistory();
         $users = [];
@@ -59,14 +56,8 @@ class PaymentsController extends Controller
 
     /**
      * Get detail information about concrete payment.
-     *
-     * @param Request           $request
-     * @param PaymentRepository $paymentRepository
-     * @param ProductRepository $productRepository
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function info(Request $request, PaymentRepository $paymentRepository, ProductRepository $productRepository)
+    public function info(Request $request, PaymentRepository $paymentRepository, ProductRepository $productRepository): JsonResponse
     {
         $payment = $paymentRepository->find((int)$request->route('payment'), ['products']);
 
@@ -104,13 +95,8 @@ class PaymentsController extends Controller
 
     /**
      * Complete given payment request.
-     *
-     * @param Request $request
-     * @param Kernel  $artisan
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function complete(Request $request, Kernel $artisan)
+    public function complete(Request $request, Kernel $artisan): RedirectResponse
     {
         $result = $artisan->call('payment:complete', ['id' => $request->route('payment')]);
 

@@ -1,27 +1,24 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Api;
 
 use App\Exceptions\User\BannedException;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
 /**
  * Class SignInController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Api
  */
 class SignInController extends ApiController
 {
     /**
      * Authenticate user by request to API.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function signin(Request $request)
+    public function signin(Request $request): RedirectResponse
     {
         if (is_auth() or !$this->isEnabled('signin')) {
             return $this->redirectToSignin();
@@ -68,18 +65,12 @@ class SignInController extends ApiController
         return $this->redirectToSignin();
     }
 
-    /**
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    private function redirectToServers()
+    private function redirectToServers(): RedirectResponse
     {
         return response()->redirectToRoute('servers');
     }
 
-    /**
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    private function redirectToSignin()
+    private function redirectToSignin(): RedirectResponse
     {
         return response()->redirectTo('signin');
     }

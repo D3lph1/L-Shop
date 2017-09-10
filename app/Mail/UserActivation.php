@@ -11,7 +11,6 @@ use Illuminate\Contracts\Queue\ShouldQueue;
  * Class UserActivation
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Mail
  */
 class UserActivation extends Mailable
@@ -40,12 +39,8 @@ class UserActivation extends Mailable
 
     /**
      * Create a new message instance.
-     *
-     * @param int $userId
-     * @param string $username
-     * @param string $code
      */
-    public function __construct($userId, $username, $code)
+    public function __construct(int $userId, string $username, string $code)
     {
         $this->subject = __('mail.user_activation.subject');
         $this->userId = $userId;

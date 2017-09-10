@@ -1,34 +1,34 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Items;
 
+use App\DataTransferObjects\Admin\Item;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveEditedItemRequest;
 use App\Repositories\ItemRepository;
-use App\Services\AdminItems;
+use App\Services\Handlers\Items\Admin;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use Illuminate\Http\UploadedFile;
 
 /**
  * Class EditController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Items
  */
 class EditController extends Controller
 {
     /**
-     * @var AdminItems
+     * @var Admin
      */
-    private $adminItems;
+    private $adminHandler;
 
     /**
-     * @param AdminItems $adminItems
+     * @param Admin $adminItems
      */
-    public function __construct(AdminItems $adminItems)
+    public function __construct(Admin $adminItems)
     {
-        $this->adminItems = $adminItems;
+        $this->adminHandler = $adminItems;
         parent::__construct();
     }
 
@@ -36,30 +36,14 @@ class EditController extends Controller
      * Render the edit item page.
      *
      * @param Request        $request
-     * @param ItemRepository $itemRepository
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request, ItemRepository $itemRepository)
+    public function render(Request $request)
     {
-        $itemId = (int)$request->route('item');
-
-        $item = $itemRepository->find($itemId, [
-            'id',
-            'name',
-            'type',
-            'item',
-            'image',
-            'extra'
-        ]);
-
-        if (!$item) {
-            $this->app->abort(404);
-        }
-
         $data = [
             'currentServer' => $request->get('currentServer'),
-            'item' => $item
+            'item' => $this->adminHandler->find((int)$request->route('item'))
         ];
 
         return view('admin.items.edit', $data);
@@ -74,16 +58,17 @@ class EditController extends Controller
      */
     public function save(SaveEditedItemRequest $request)
     {
-        $itemId = (int)$request->route('item');
-        $name = $request->get('name');
-        $description = '';
-        $imageMode = $request->get('image_mode');
-        $image = $request->file('image');
-        $type = $request->get('item_type');
-        $item = $request->get('item');
-        $extra = $request->get('extra');
+        $dto = (new Item())
+            ->setId((int)$request->route('item'))
+            ->setName($request->get('name'))
+            ->setDescription('')
+            ->setImageMode($request->get('image_mode'))
+            ->setImage($request->file('image'))
+            ->setType($request->get('item_type'))
+            ->setItemId($request->get('item'))
+            ->setExtra($request->get('extra'));
 
-        $result = $this->adminItems->saveEdited($itemId, $name, $description, $type, $imageMode, $image, $item, $extra);
+        $result = $this->adminHandler->update($dto);
 
         if ($result) {
             $this->msg->success(__('messages.admin.items.edit.success'));
@@ -103,8 +88,7 @@ class EditController extends Controller
      */
     public function remove(Request $request)
     {
-        $itemId = (int)$request->route('item');
-        $result = $this->adminItems->delete($itemId);
+        $result = $this->adminHandler->delete((int)$request->route('item'));
 
         if ($result) {
             $this->msg->info(__('messages.admin.items.remove.success'));

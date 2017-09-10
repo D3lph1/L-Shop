@@ -1,26 +1,23 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 
 /**
  * Class ApiController
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Api
  */
-class ApiController extends Controller
+abstract class ApiController extends Controller
 {
     /**
-     * Check given api param for enabled status.
-     *
-     * @param null|string $option
-     *
-     * @return bool
+     * Check given api parameter for enabled status.
      */
-    protected function isEnabled($option = null)
+    protected function isEnabled(?string $option = null): bool
     {
         if (is_null($option)) {
             return (bool)s_get('api.enabled');
@@ -31,13 +28,8 @@ class ApiController extends Controller
 
     /**
      * It checks whether the hash transmitted in the request matches the calculated hash of the query parameters.
-     *
-     * @param string $hash
-     * @param array  ...$params
-     *
-     * @return bool
      */
-    protected function validateHash($hash, ...$params)
+    protected function validateHash(string $hash, ...$params): bool
     {
         $key = s_get('api.key');
         $algo = s_get('api.algo');
@@ -58,7 +50,7 @@ class ApiController extends Controller
      *
      * @return string
      */
-    private function buildStringForHashing($key, $separator, array $params)
+    private function buildStringForHashing(string $key, string $separator, array $params): string
     {
         $string = $key;
         foreach ($params as $param) {
@@ -70,20 +62,16 @@ class ApiController extends Controller
 
     /**
      * Build response if option disabled.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    protected function optionDisabledResponse()
+    protected function optionDisabledResponse(): JsonResponse
     {
         return json_response('option disabled', ['code' => -1]);
     }
 
     /**
      * Build response if hash is not valid.
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    protected function invalidHashResponse()
+    protected function invalidHashResponse(): JsonResponse
     {
         return json_response('invalid hash', ['code' => -2]);
     }

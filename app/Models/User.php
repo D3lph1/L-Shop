@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Models;
 
@@ -52,8 +53,6 @@ class User extends EloquentUser
         'username',
         'email',
         'password',
-        'last_name',
-        'first_name',
         'permissions',
         'balance'
     ];
@@ -65,14 +64,6 @@ class User extends EloquentUser
         'username',
         'email'
     ];
-
-    /**
-     * @return double
-     */
-    public function getBalance()
-    {
-        return $this->balance;
-    }
 
     /**
      * @return \Illuminate\Database\Eloquent\Relations\HasMany
@@ -96,5 +87,30 @@ class User extends EloquentUser
     public function ban()
     {
         return $this->hasOne(Ban::class, 'user_id', 'id');
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getUsername(): string
+    {
+        return $this->username;
+    }
+
+    public function getEmail(): string
+    {
+        return $this->email;
+    }
+
+    public function getPassword(): string
+    {
+        return $this->password;
+    }
+
+    public function getBalance(): float
+    {
+        return $this->balance;
     }
 }

@@ -10,7 +10,7 @@ namespace App\Exceptions;
  */
 class UnexpectedSettingsValueException extends \Exception implements LShopException
 {
-    public function __construct($message = "")
+    public function __construct(string $message = "")
     {
         $message = "Value '$message' is unexpected";
         parent::__construct($message);

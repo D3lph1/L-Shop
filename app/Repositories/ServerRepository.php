@@ -1,9 +1,11 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Repositories;
 
 use App\Models\Category;
 use App\Models\Server;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class ServerRepository
@@ -16,12 +18,7 @@ class ServerRepository extends BaseRepository
 {
     const MODEL = Server::class;
 
-    /**
-     * @param array $columns
-     *
-     * @return array|\Illuminate\Database\Eloquent\Collection|static[]
-     */
-    public function getWithCategories($columns = [])
+    public function getWithCategories(array $columns = []): array
     {
         $columns = $this->prepareColumns($columns);
 
@@ -41,12 +38,7 @@ class ServerRepository extends BaseRepository
         return $servers;
     }
 
-    /**
-     * @param array $columns
-     *
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
-     */
-    public function allWithCategories($columns = [])
+    public function allWithCategories(array $columns = []): Collection
     {
         $columns = $this->prepareColumns($columns);
 
@@ -59,9 +51,9 @@ class ServerRepository extends BaseRepository
      * @param int|array $serverId
      * @param array     $columns
      *
-     * @return \Illuminate\Database\Eloquent\Collection|static[]
+     * @return Collection
      */
-    public function categories($serverId, $columns = [])
+    public function categories($serverId, array $columns = []): Collection
     {
         $columns = $this->prepareColumns($columns);
 
@@ -75,44 +67,27 @@ class ServerRepository extends BaseRepository
     }
 
     /**
-     * Enables the server
-     *
-     * @param int $serverId
-     *
-     * @return bool
+     * Enables the server.
      */
-    public function enable($serverId)
+    public function enable(int $serverId): bool
     {
         return $this->changeEnabledServerMode($serverId, true);
     }
 
     /**
-     * Disables the server
-     *
-     * @param int $serverId
-     *
-     * @return bool
+     * Disables the server.
      */
-    public function disable($serverId)
+    public function disable(int $serverId): bool
     {
         return $this->changeEnabledServerMode($serverId, false);
     }
 
-    /**
-     * @return int
-     */
-    public function count()
+    public function count(): int
     {
         return Server::count('id');
     }
 
-    /**
-     * @param int  $id
-     * @param bool $mode
-     *
-     * @return bool
-     */
-    private function changeEnabledServerMode($id, $mode)
+    private function changeEnabledServerMode(int $id, bool $mode): bool
     {
         return Server::where('id', $id)->update(['enabled' => $mode]);
     }

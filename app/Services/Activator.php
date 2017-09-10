@@ -20,7 +20,7 @@ class Activator
      *
      * @param UserInterface $user Activation letter recipient.
      */
-    public function createAndSend(UserInterface $user)
+    public function createAndSend(UserInterface $user): void
     {
         $activation = \Activation::create($user);
 
@@ -36,7 +36,7 @@ class Activator
      * @param string $email    Activation user email.
      * @param string $code     Activation code.
      */
-    private function mail($userId, $username, $email, $code)
+    private function mail(int $userId, string $username, string $email, string $code): void
     {
         \Mail::to($email)->queue(new UserActivation($userId, $username, $code));
     }

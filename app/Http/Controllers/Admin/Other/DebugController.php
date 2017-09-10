@@ -1,31 +1,29 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Other;
 
 use App\Http\Requests\Admin\TestMailRequest;
 use App\Services\Mailer;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Session\SessionManager;
+use Illuminate\View\View;
 use Psr\Log\LoggerInterface;
 
 /**
  * Class DebugController
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Other
  */
 class DebugController extends Controller
 {
     /**
      * Render debug page.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request): View
     {
         $data = [
             'currentServer' => $request->get('currentServer')
@@ -36,15 +34,8 @@ class DebugController extends Controller
 
     /**
      * Send test message on given email.
-     *
-     * @param TestMailRequest $request
-     * @param Mailer          $mailer
-     * @param LoggerInterface $logger
-     * @param SessionManager  $session
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function testMail(TestMailRequest $request, Mailer $mailer, LoggerInterface $logger, SessionManager $session)
+    public function testMail(TestMailRequest $request, Mailer $mailer, LoggerInterface $logger, SessionManager $session): RedirectResponse
     {
         $address = $request->get('test_mail_address');
         $error = false;

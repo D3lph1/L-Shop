@@ -1,33 +1,36 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Items;
 
-use App\Services\AdminItems;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
+use App\DataTransferObjects\Admin\Item;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveAddedItemRequest;
+use App\Services\Handlers\Items\Admin;
+use App\Services\Items\ImageMode;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 /**
  * Class AddController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Items
  */
 class AddController extends Controller
 {
     /**
-     * @var AdminItems
+     * @var Admin
      */
     private $adminItems;
 
     /**
      * AddController constructor.
      *
-     * @param AdminItems $adminItems
+     * @param Admin $adminItems
      */
-    public function __construct(AdminItems $adminItems)
+    public function __construct(Admin $adminItems)
     {
         $this->adminItems = $adminItems;
         parent::__construct();
@@ -35,12 +38,8 @@ class AddController extends Controller
 
     /**
      * Render the add new item page.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request): View
     {
         $data = [
             'currentServer' => $request->get('currentServer')
@@ -51,21 +50,21 @@ class AddController extends Controller
 
     /**
      * Handle the add new item request.
-     *
-     * @param SaveAddedItemRequest $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(SaveAddedItemRequest $request)
+    public function save(SaveAddedItemRequest $request): RedirectResponse
     {
-        $name = $request->get('name');
-        $description = '';
-        $type = $request->get('item_type');
         $image = $request->file('image');
-        $item = $request->get('item');
-        $extra = $request->get('extra');
 
-        $result = $this->adminItems->create($name, $description, $type, $image, $item, $extra);
+        $dto = (new Item())
+            ->setName($request->get('name'))
+            ->setDescription('')
+            ->setType($request->get('item_type'))
+            ->setImageMode(is_null($image) ? ImageMode::DEFAULT : ImageMode::UPLOAD)
+            ->setImage($image)
+            ->setItemId((int)$request->get('item'))
+            ->setExtra($request->get('extra'));
+
+        $result = $this->adminItems->create($dto);
 
         if ($result) {
             $this->msg->success(__('messages.admin.items.add.success'));

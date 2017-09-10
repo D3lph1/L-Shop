@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Products;
 
@@ -9,14 +10,15 @@ use App\Repositories\ItemRepository;
 use App\Repositories\ServerRepository;
 use App\Services\AdminProducts;
 use Carbon\Carbon;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\View\View;
 
 /**
  * Class AddController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Products
  */
 class AddController extends Controller
@@ -26,9 +28,6 @@ class AddController extends Controller
      */
     private $adminProducts;
 
-    /**
-     * @param AdminProducts $adminProducts
-     */
     public function __construct(AdminProducts $adminProducts)
     {
         $this->adminProducts = $adminProducts;
@@ -38,13 +37,8 @@ class AddController extends Controller
 
     /**
      * Render the add product page.
-     *
-     * @param Request        $request
-     * @param ItemRepository $itemRepository
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request, ItemRepository $itemRepository, ServerRepository $serverRepository)
+    public function render(Request $request, ItemRepository $itemRepository, ServerRepository $serverRepository): View
     {
         $items = $itemRepository->all([
             'id',
@@ -70,12 +64,8 @@ class AddController extends Controller
 
     /**
      * Save new product request.
-     *
-     * @param SaveAddedProductRequest $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(SaveAddedProductRequest $request)
+    public function save(SaveAddedProductRequest $request): RedirectResponse
     {
         $result = null;
         $dto = new Product(

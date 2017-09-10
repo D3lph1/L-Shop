@@ -1,7 +1,9 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Models;
 
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -14,8 +16,8 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $title
  * @property string $content
  * @property string $url
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
+ * @property Carbon $created_at
+ * @property Carbon $updated_at
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Page whereContent($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Page whereCreatedAt($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Page whereId($value)
@@ -27,5 +29,39 @@ class Page extends Model
 {
     protected $table = 'pages';
 
-    protected $fillable = ['title', 'content', 'url'];
+    protected $fillable = [
+        'title',
+        'content',
+        'url'
+    ];
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getTitle(): string
+    {
+        return $this->title;
+    }
+
+    public function getContent(): string
+    {
+        return $this->content;
+    }
+
+    public function getUrl(): string
+    {
+        return $this->url;
+    }
+
+    public function getCreatedAt(): Carbon
+    {
+        return $this->created_at;
+    }
+
+    public function getUpdatedAt(): ?Carbon
+    {
+        return $this->updated_at;
+    }
 }

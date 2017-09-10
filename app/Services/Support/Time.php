@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Services\Support;
 
@@ -8,29 +9,18 @@ use Carbon\Carbon;
  * Class Time
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Services\Support
  */
 class Time
 {
-    /**
-     * @param int $minutes
-     *
-     * @return Carbon
-     */
-    public static function nowAddInterval($minutes)
+    public static function nowAddInterval(int $minutes): Carbon
     {
         $interval = \DateInterval::createFromDateString("$minutes minutes");
 
         return Carbon::now()->add($interval);
     }
 
-    /**
-     * @param int $minutes
-     *
-     * @return Carbon
-     */
-    public static function nowSubInterval($minutes)
+    public static function nowSubInterval(int $minutes): Carbon
     {
         $interval = \DateInterval::createFromDateString("$minutes minutes");
 

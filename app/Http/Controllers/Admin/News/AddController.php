@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\News;
 
@@ -6,25 +7,22 @@ use App\DataTransferObjects\Admin\News as DTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveAddedNewsRequest;
 use App\Services\News;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 /**
  * Class AddController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\News
  */
 class AddController extends Controller
 {
     /**
      * Render the add news page.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request): View
     {
         $data = [
             'currentServer' => $request->get('currentServer')
@@ -35,13 +33,8 @@ class AddController extends Controller
 
     /**
      * Save the added news.
-     *
-     * @param SaveAddedNewsRequest $request
-     * @param News                 $news Service - handler
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(SaveAddedNewsRequest $request, News $news)
+    public function save(SaveAddedNewsRequest $request, News $news): RedirectResponse
     {
         $dto = new DTO(
             $request->get('news_title'),

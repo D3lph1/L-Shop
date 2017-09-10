@@ -1,20 +1,20 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Users;
 
-use App\Models\User;
+use App\Http\Controllers\Controller;
 use App\Repositories\UserRepository;
 use App\Services\Ban;
-use Cartalyst\Sentinel\Sentinel;
-use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use Illuminate\View\View;
 
 /**
  * Class ListController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Users
  */
 class ListController extends Controller
@@ -29,7 +29,7 @@ class ListController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request, Ban $ban)
+    public function render(Request $request, Ban $ban): View
     {
         $users = $this->sentinel->getUserRepository()->with(['roles', 'activations', 'ban'])->paginate(50);
 
@@ -44,12 +44,8 @@ class ListController extends Controller
 
     /**
      * Activate given user.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function complete(Request $request)
+    public function complete(Request $request): RedirectResponse
     {
         $user = $this->sentinel->findById((int)$request->route('user'));
         $activation = $this->sentinel->getActivationRepository()->completed($user);
@@ -67,12 +63,8 @@ class ListController extends Controller
 
     /**
      * Search given user.
-     *
-     * @param Request  $request
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function search(Request $request)
+    public function search(Request $request): JsonResponse
     {
         $search = $request->get('search');
         $result = $this->getResult($search);
@@ -100,12 +92,8 @@ class ListController extends Controller
 
     /**
      * Get user search result.
-     *
-     * @param string $search Query string.
-     *
-     * @return array
      */
-    protected function getResult($search)
+    protected function getResult(string $search): array
     {
         return $this->app->make(UserRepository::class)->search($search, $this->searchSpecials);
     }

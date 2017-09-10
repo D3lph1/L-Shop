@@ -1,28 +1,26 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Control;
 
 use App\Http\Requests\Admin\SaveApiRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\View\View;
 
 /**
  * Class ApiController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
-
  * @package App\Http\Controllers\Admin\Control
  */
 class ApiController extends Controller
 {
     /**
      * Render API settings page.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request): View
     {
         $data = [
             'currentServer' => $request->get('currentServer'),
@@ -46,12 +44,8 @@ class ApiController extends Controller
 
     /**
      * Save API settings.
-     *
-     * @param SaveApiRequest $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(SaveApiRequest $request)
+    public function save(SaveApiRequest $request): RedirectResponse
     {
         $whiteList = $this->convertSashokLauncerAuthWhiteList($request->get('sashok_launcher_auth_white_list'));
 
@@ -78,12 +72,8 @@ class ApiController extends Controller
 
     /**
      * Convert given whitelist string in needed format.
-     *
-     * @param $whiteList
-     *
-     * @return string
      */
-    private function convertSashokLauncerAuthWhiteList($whiteList)
+    private function convertSashokLauncerAuthWhiteList(string $whiteList): string
     {
         $whiteList = preg_replace('/(\s+)/ui', '', $whiteList);
         $whiteList = explode(',', $whiteList);

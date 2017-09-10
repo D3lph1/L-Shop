@@ -1,27 +1,25 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Servers;
 
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\View\View;
 
 /**
  * Class ListController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Server
  */
 class ListController extends BaseController
 {
     /**
      * Render page with servers list
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request): View
     {
         $servers = $this->serverRepository->getWithCategories([
             'servers.id',
@@ -39,12 +37,8 @@ class ListController extends BaseController
 
     /**
      * Enable given server
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function enable(Request $request)
+    public function enable(Request $request): RedirectResponse
     {
         $serverId = (int)$request->route('enable');
 
@@ -61,12 +55,8 @@ class ListController extends BaseController
 
     /**
      * Disable given server
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function disable(Request $request)
+    public function disable(Request $request): RedirectResponse
     {
         $serverId = (int)$request->route('disable');
 

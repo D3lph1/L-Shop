@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Pages;
 
@@ -6,14 +7,15 @@ use App\DataTransferObjects\Admin\Page as DTO;
 use App\Exceptions\Page\UrlAlreadyExistsException;
 use App\Http\Requests\Admin\SaveEditedPageRequest;
 use App\Services\Page;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\View\View;
 
 /**
  * Class EditController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Pages
  */
 class EditController extends Controller
@@ -36,12 +38,8 @@ class EditController extends Controller
 
     /**
      * Render the edit static page request.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request): View
     {
         $id = (int)$request->route('id');
         $page = $this->page->getById($id, ['title', 'content', 'url']);
@@ -61,12 +59,8 @@ class EditController extends Controller
 
     /**
      * Handle save edited static page request.
-     *
-     * @param SaveEditedPageRequest $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(SaveEditedPageRequest $request)
+    public function save(SaveEditedPageRequest $request): RedirectResponse
     {
         $page = new DTO(
             $request->get('page_title'),
@@ -93,12 +87,8 @@ class EditController extends Controller
 
     /**
      * Delete given static page.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function delete(Request $request)
+    public function delete(Request $request): RedirectResponse
     {
         $id = (int)$request->route('id');
         if ($this->page->delete($id)) {

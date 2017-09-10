@@ -1,14 +1,16 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Repositories;
 
 use App\Models\News;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Collection;
 
 /**
  * Class NewsRepository
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Repositories
  */
 class NewsRepository extends BaseRepository
@@ -17,10 +19,8 @@ class NewsRepository extends BaseRepository
 
     /**
      * Get first portion of the news.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection
      */
-    public function getFirstPortion()
+    public function getFirstPortion(): Collection
     {
         return \Cache::get('news', function () {
             $result = News::select(['id', 'title', 'content'])
@@ -36,14 +36,11 @@ class NewsRepository extends BaseRepository
 
     /**
      * Get all news count.
-     *
-     * @return int
      */
-    public function count()
+    public function count(): int
     {
         return \Cache::get('news.count', function () {
             $result = News::count();
-
             \Cache::add('news.count', $result, 1);
 
             return $result;
@@ -55,9 +52,9 @@ class NewsRepository extends BaseRepository
      *
      * @param int $count Count of news for load.
      *
-     * @return \Illuminate\Database\Eloquent\Collection
+     * @return Collection
      */
-    public function load($count)
+    public function load(int $count): Collection
     {
         return News::select(['id', 'title', 'content'])
             ->orderBy('created_at', 'DESC')
@@ -74,7 +71,7 @@ class NewsRepository extends BaseRepository
      *
      * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
      */
-    public function paginate($perPage, $columns = [])
+    public function paginate(int $perPage, array $columns = []): LengthAwarePaginator
     {
         $columns = $this->prepareColumns($columns);
 

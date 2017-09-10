@@ -1,10 +1,10 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Repositories;
 
 use App\Models\Product;
-use App\Exceptions\InvalidArgumentTypeException;
-use Carbon\Carbon;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 /**
  * Class ProductRepository
@@ -19,15 +19,9 @@ class ProductRepository extends BaseRepository
 
     /**
      * Create new product.
-     *
-     * @param array $attributes
-     *
-     * @return \Illuminate\Database\Eloquent\Model
      */
-    public function create(array $attributes)
+    public function create(array $attributes): Product
     {
-        $attributes = array_merge($attributes, ['created_at' => Carbon::now()->toDateTimeString()]);
-
         return Product::create($attributes);
     }
 
@@ -39,7 +33,7 @@ class ProductRepository extends BaseRepository
      *
      * @return \Illuminate\Database\Eloquent\Collection|mixed|static[]
      */
-    public function getWithItems($id, $columns = [])
+    public function getWithItems($id, array $columns = [])
     {
         $columns = $this->prepareColumns($columns);
         $builder = Product::select($columns)
@@ -52,13 +46,7 @@ class ProductRepository extends BaseRepository
         }
     }
 
-    /**
-     * @param $serverId
-     * @param $category
-     *
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
-     */
-    public function forCatalog($serverId, $category)
+    public function forCatalog(int $serverId, int $category): LengthAwarePaginator
     {
         $orderBy = s_get('shop.sort');
 
@@ -84,15 +72,12 @@ class ProductRepository extends BaseRepository
             ->paginate(s_get('catalog.products_per_page', 10));
     }
 
-    /**
-     * @param array       $columns
-     * @param null|string $orderBy
-     * @param string      $orderType
-     * @param null|string $filter
-     *
-     * @return \Illuminate\Contracts\Pagination\LengthAwarePaginator
-     */
-    public function forAdmin($columns = [], $orderBy = null, $orderType = 'ASC', $filter = null)
+    public function forAdmin(
+        array $columns = [],
+        ?string $orderBy = null,
+        string $orderType = 'ASC',
+        ?string $filter = null
+    ): LengthAwarePaginator
     {
         $columns = $this->prepareColumns($columns);
 
@@ -113,13 +98,7 @@ class ProductRepository extends BaseRepository
             ->paginate(50);
     }
 
-    /**
-     * @param int   $id
-     * @param array $columns
-     *
-     * @return mixed
-     */
-    public function forEditProducts($id, $columns = [])
+    public function forEditProducts(int $id, array $columns = []): ?Product
     {
         $columns = $this->prepareColumns($columns);
 
@@ -131,17 +110,9 @@ class ProductRepository extends BaseRepository
 
     /**
      * Delete item with given identifier.
-     *
-     * @param int $itemId
-     *
-     * @return bool|null
      */
-    public function deleteByItemId($itemId)
+    public function deleteByItemId(int $itemId): bool
     {
-        if (!is_int($itemId)) {
-            throw new InvalidArgumentTypeException('integer', $itemId);
-        }
-
-        return Product::where('item_id', $itemId)->delete();
+        return (bool)Product::where('item_id', $itemId)->delete();
     }
 }

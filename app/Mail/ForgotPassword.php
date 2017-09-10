@@ -1,12 +1,18 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Mail;
 
 use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
+/**
+ * Class ForgotPassword
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Mail
+ */
 class ForgotPassword extends Mailable
 {
     use Queueable, SerializesModels;
@@ -38,13 +44,8 @@ class ForgotPassword extends Mailable
 
     /**
      * Create a new message instance.
-     *
-     * @param int $userId
-     * @param string $username
-     * @param string $code
-     * @param string $ip
      */
-    public function __construct($userId, $username, $code, $ip)
+    public function __construct(int $userId, string $username, string $code, string $ip)
     {
         $this->subject = __('mail.forgot_password.subject');
         $this->userId = $userId;

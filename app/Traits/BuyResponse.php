@@ -1,25 +1,20 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Traits;
 
 use App\Models\Payment;
+use Illuminate\Http\JsonResponse;
 
 /**
  * Trait BuyResponse
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Traits
  */
 trait BuyResponse
 {
-    /**
-     * @param int $serverId
-     * @param Payment $payment
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    private function buildResponse($serverId, $payment)
+    private function buildResponse(int $serverId, Payment $payment): JsonResponse
     {
         if ($payment->completed) {
             return $this->buildQuickResponse();
@@ -28,10 +23,7 @@ trait BuyResponse
         return $this->buildNotQuickResponse($serverId, $payment->id);
     }
 
-    /**
-     * @return \Illuminate\Http\JsonResponse
-     */
-    private function buildQuickResponse()
+    private function buildQuickResponse(): JsonResponse
     {
         return json_response('success', [
             'quick' => true,
@@ -43,13 +35,7 @@ trait BuyResponse
         ]);
     }
 
-    /**
-     * @param int $serverId
-     * @param int $paymentId
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    private function buildNotQuickResponse($serverId, $paymentId)
+    private function buildNotQuickResponse(int $serverId, int $paymentId): JsonResponse
     {
         return json_response('success', [
             'quick' => false,

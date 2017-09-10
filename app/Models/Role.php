@@ -1,7 +1,9 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Models;
 
+use stdClass;
 use Illuminate\Database\Eloquent\Model;
 
 /**
@@ -29,4 +31,30 @@ class Role extends Model
      * @var string
      */
     protected $table = 'roles';
+
+    protected $fillable = [
+        'slug',
+        'name',
+        'permissions'
+    ];
+
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function getSlug(): string
+    {
+        return $this->slug;
+    }
+
+    public function getName(): string
+    {
+        return $this->name;
+    }
+
+    public function getPermissions(): ?stdClass
+    {
+        return json_decode($this->permissions);
+    }
 }
