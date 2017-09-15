@@ -11,9 +11,19 @@ interface ItemRepositoryInterface
 {
     public function create(Item $dto): ItemInterface;
 
+    public function find(int $id, array $columns): ?ItemInterface;
+
+    public function update(int $id, array $attributes): bool;
+
+    public function delete(int $id): bool;
+
     public function exists(int $id): bool;
 
     public function all(array $columns): iterable;
 
-    public function forAdmin($columns, ?string $orderBy = null, ?string $orderType = 'ASC', ?string $filter = null): LengthAwarePaginator;
+    public function forAdmin(
+        array $columns,
+        string $orderBy,
+        string $orderType = 'ASC',
+        ?string $filter): LengthAwarePaginator;
 }

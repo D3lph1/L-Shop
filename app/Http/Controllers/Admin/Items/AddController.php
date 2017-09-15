@@ -6,8 +6,8 @@ namespace App\Http\Controllers\Admin\Items;
 use App\DataTransferObjects\Item;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveAddedItemRequest;
-use App\Services\Handlers\Items\Admin;
 use App\Services\Items\ImageMode;
+use App\TransactionScripts\Items;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -21,37 +21,19 @@ use Illuminate\View\View;
 class AddController extends Controller
 {
     /**
-     * @var Admin
-     */
-    private $adminItems;
-
-    /**
-     * AddController constructor.
-     *
-     * @param Admin $adminItems
-     */
-    public function __construct(Admin $adminItems)
-    {
-        $this->adminItems = $adminItems;
-        parent::__construct();
-    }
-
-    /**
      * Render the add new item page.
      */
     public function render(Request $request): View
     {
-        $data = [
+        return view('admin.items.add', [
             'currentServer' => $request->get('currentServer')
-        ];
-
-        return view('admin.items.add', $data);
+        ]);
     }
 
     /**
      * Handle the add new item request.
      */
-    public function save(SaveAddedItemRequest $request): RedirectResponse
+    public function save(SaveAddedItemRequest $request, Items $items): RedirectResponse
     {
         $image = $request->file('image');
 
@@ -64,7 +46,7 @@ class AddController extends Controller
             ->setItem((int)$request->get('item'))
             ->setExtra($request->get('extra'));
 
-        $result = $this->adminItems->create($dto);
+        $result = $items->create($dto);
 
         if ($result) {
             $this->msg->success(__('messages.admin.items.add.success'));

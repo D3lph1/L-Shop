@@ -142,14 +142,14 @@ class Item
         return $this->image;
     }
 
-    public function setItem(int $item): self
+    public function setItem(string $item): self
     {
         $this->item = $item;
 
         return $this;
     }
 
-    public function getItem(): int
+    public function getItem(): string
     {
         return $this->item;
     }

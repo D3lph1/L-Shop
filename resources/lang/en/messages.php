@@ -56,6 +56,7 @@ return [
             ],
             'edit' => [
                 'success' => 'Item changed successfully.',
+                'not_found' => 'Item not found.',
                 'fail' => 'The item could not be edited.'
             ],
             'remove' => [

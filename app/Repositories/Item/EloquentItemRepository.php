@@ -22,6 +22,16 @@ class EloquentItemRepository implements ItemRepositoryInterface
         ]);
     }
 
+    public function find(int $id, array $columns): ?ItemInterface
+    {
+        return EloquentItem::find($id, $columns);
+    }
+
+    public function update(int $id, array $attributes): bool
+    {
+        return (bool)EloquentItem::where('id', $id)->update($attributes);
+    }
+
     public function exists(int $id): bool
     {
         return EloquentItem::where('id', $id)->exists();
@@ -32,7 +42,11 @@ class EloquentItemRepository implements ItemRepositoryInterface
         return EloquentItem::all($columns);
     }
 
-    public function forAdmin($columns, ?string $orderBy = null, ?string $orderType = 'ASC', ?string $filter = null): LengthAwarePaginator
+    public function forAdmin(
+        array $columns,
+        string $orderBy,
+        string $orderType = 'ASC',
+        ?string $filter): LengthAwarePaginator
     {
         {
             $builder = EloquentItem::select($columns);
@@ -47,5 +61,10 @@ class EloquentItemRepository implements ItemRepositoryInterface
 
             return $builder->paginate(50);
         }
+    }
+
+    public function delete(int $id): bool
+    {
+        return (bool)EloquentItem::where('id', $id)->delete();
     }
 }
