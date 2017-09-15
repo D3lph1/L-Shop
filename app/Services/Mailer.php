@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Services;
 
@@ -18,7 +19,7 @@ class Mailer
      *
      * @param string $address Email to which the letter will be sent.
      */
-    public function sendTest($address)
+    public function sendTest(string $address): void
     {
         \Mail::to($address)->sendNow(new TestMail());
     }

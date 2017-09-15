@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 /**
@@ -17,10 +17,6 @@ class SelectServerController extends Controller
 {
     /**
      * Render the select server page.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
     public function render(Request $request): View
     {

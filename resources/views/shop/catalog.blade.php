@@ -17,24 +17,24 @@
         </div>
         <div id="categories" class="col-12">
             @foreach($categories as $category)
-                <a href="{{ route('catalog', ['server' => $currentServer->id, 'category' => $category->id]) }}"
-                   @if($category->id == $currentCategory)
+                <a href="{{ route('catalog', ['server' => $currentServer->getId(), 'category' => $category->getId()]) }}"
+                   @if($category->getId() == $currentCategory->getId())
                         style="background-color: #FF8800"
                    @endif
                    class="cat-btn waves-effect z-depth-1">
-                    <span>{{ $category->name }}</span>
+                    <span>{{ $category->getName() }}</span>
                 </a>
             @endforeach
         </div>
         <div id="p-containers">
             <div class="product-container">
-                @if($goods->count())
+                @if($products->count())
                     <div class="m-products">
-                        @foreach($goods as $product)
+                        @foreach($products as $product)
                             @include('shop.blocks.catalog_item')
                         @endforeach
                     </div>
-                    {{ $goods->links('components.pagination') }}
+                    {{ $products->links('components.pagination') }}
                 @else
                     <div class="alert alert-info text-center">
                         @lang('content.shop.catalog.category_empty')

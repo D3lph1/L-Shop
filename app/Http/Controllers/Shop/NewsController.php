@@ -1,74 +1,57 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Shop;
 
-use App\Repositories\NewsRepository;
-use App\Services\News;
-use Illuminate\Http\Request;
+use App\Exceptions\News\DisabledException;
+use App\Exceptions\News\NotFoundExceptions;
 use App\Http\Controllers\Controller;
+use App\TransactionScripts\Shop\News;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 /**
  * Class NewsController
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Shop
  */
 class NewsController extends Controller
 {
     /**
-     * @var NewsRepository
-     */
-    private $newsRepository;
-
-    /**
-     * @param NewsRepository $newsRepository
-     */
-    public function __construct(NewsRepository $newsRepository)
-    {
-        $this->newsRepository = $newsRepository;
-        parent::__construct();
-    }
-
-
-    /**
      * Render news page
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request, News $news): View
     {
-        if (!s_get('news.enabled')) {
+        $concrete = null;
+
+        try {
+            $concrete = $news->find((int)$request->route('id'));
+        } catch (DisabledException $exception) {
             $this->msg->warning(__('messages.shop.catalog.news.disabled'));
 
             return back();
-        }
-
-        $id = (int)$request->route('id');
-        $news = $this->newsRepository->find($id);
-
-        if (!$news) {
+        } catch (NotFoundExceptions $e) {
             $this->app->abort(404);
         }
 
         $data = [
             'currentServer' => $request->get('currentServer'),
-            'news' => $news
+            'news' => $concrete
         ];
 
         return view('shop.news', $data);
     }
 
-    /**
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function load(Request $request, News $news)
+    public function load(Request $request, News $news): JsonResponse
     {
-        if (!s_get('news.enabled')) {
+        try {
+            $serverId = $request->get('currentServer')->getId();
+            $count = (int)$request->get('count');
+
+            return $news->load($serverId, $count);
+        } catch (DisabledException $e) {
             return json_response('news disabled', [
                 'more' => __('content.shop.news.read_more'),
                 'message' => [
@@ -77,10 +60,5 @@ class NewsController extends Controller
                 ]
             ]);
         }
-
-        $count = (int)$request->get('count');
-        $serverId = $request->get('currentServer')->id;
-
-        return $news->load($count, $serverId);
     }
 }

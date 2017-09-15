@@ -1,18 +1,20 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers;
 
 use App\Services\Character\Skin;
 use Illuminate\Http\Request;
 
+/**
+ * Class SkinController
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Http\Controllers
+ */
 class SkinController extends Controller
 {
-    /**
-     * @param string $player
-     *
-     * @return Skin
-     */
-    protected function skin($player)
+    protected function skin(string $player): Skin
     {
         return $this->app->makeWith(Skin::class, ['player' => $player]);
     }

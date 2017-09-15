@@ -2,7 +2,7 @@
 
 namespace App\Services;
 
-use App\DataTransferObjects\Admin\Page as DTO;
+use App\DataTransferObjects\Page as DTO;
 use App\Exceptions\Page\UrlAlreadyExistsException;
 use App\Repositories\PageRepository;
 

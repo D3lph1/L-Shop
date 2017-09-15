@@ -3,13 +3,13 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Pages;
 
-use App\DataTransferObjects\Admin\Page as DTO;
+use App\DataTransferObjects\Page as DTO;
 use App\Exceptions\Page\UrlAlreadyExistsException;
+use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\SaveAddedPageRequest;
 use App\Services\Page;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\SaveAddedPageRequest;
 use Illuminate\View\View;
 
 /**
@@ -37,11 +37,10 @@ class AddController extends Controller
      */
     public function save(SaveAddedPageRequest $request, Page $handler): RedirectResponse
     {
-        $page = new DTO(
-            $request->get('page_title'),
-            $request->get('page_content'),
-            $request->get('page_url')
-        );
+        $page = (new DTO())
+            ->setTitle($request->get('page_title'))
+            ->setContent($request->get('page_content'))
+            ->setUrl($request->get('page_url'));
 
         try {
             if ($handler->create($page)) {

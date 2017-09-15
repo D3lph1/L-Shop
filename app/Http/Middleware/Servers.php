@@ -1,8 +1,10 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Middleware;
 
-use App\Repositories\ServerRepository;
+use App\Models\Server\ServerInterface;
+use App\Repositories\Server\ServerRepositoryInterface;
 use Closure;
 use Illuminate\Http\Request;
 
@@ -10,43 +12,33 @@ use Illuminate\Http\Request;
  * Class Server
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Middleware
  */
 class Servers
 {
     /**
-     * @var ServerRepository
+     * @var ServerRepositoryInterface
      */
     private $serverRepository;
 
-    /**
-     * @param ServerRepository $repository
-     */
-    public function __construct(ServerRepository $repository)
+    public function __construct(ServerRepositoryInterface $repository)
     {
         $this->serverRepository = $repository;
     }
 
     /**
      * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure                 $next
-     * @param  string                   $mode
-     *
-     * @return mixed
      */
-    public function handle(Request $request, Closure $next, $mode)
+    public function handle(Request $request, Closure $next, string $mode)
     {
         if ($mode == 'one') {
-            $currentServer = $this->getCurrentServer($request->route('server'));
+            $currentServer = $this->getCurrentServer((int)$request->route('server'));
 
             if (!$currentServer) {
                 \App::abort(404);
             }
 
-            if (!$currentServer->enabled and !is_admin()) {
+            if (!$currentServer->isEnabled() and !is_admin()) {
                 \App::abort(403);
             }
             $request->merge([
@@ -82,24 +74,20 @@ class Servers
         }
 
         \App::abort(403);
+
+        // Unreachable statement. For IDE.
+        return $next($request);
     }
 
-    /**
-     * @param $server
-     *
-     * @return mixed
-     */
-    private function getCurrentServer($server)
+    private function getCurrentServer(int $server): ?ServerInterface
     {
         return $this->serverRepository->find((int)$server, ['id', 'name', 'enabled', 'ip', 'port', 'password', 'monitoring_enabled']);
     }
 
     /**
      * Get all enabled servers
-     *
-     * @return mixed
      */
-    private function getServers()
+    private function getServers(): iterable
     {
         return $this->serverRepository->all(['id', 'name', 'enabled', 'ip', 'port', 'password', 'monitoring_enabled']);
     }

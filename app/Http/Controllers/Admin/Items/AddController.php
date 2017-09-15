@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Items;
 
-use App\DataTransferObjects\Admin\Item;
+use App\DataTransferObjects\Item;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveAddedItemRequest;
 use App\Services\Handlers\Items\Admin;
@@ -61,7 +61,7 @@ class AddController extends Controller
             ->setType($request->get('item_type'))
             ->setImageMode(is_null($image) ? ImageMode::DEFAULT : ImageMode::UPLOAD)
             ->setImage($image)
-            ->setItemId((int)$request->get('item'))
+            ->setItem((int)$request->get('item'))
             ->setExtra($request->get('extra'));
 
         $result = $this->adminItems->create($dto);

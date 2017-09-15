@@ -1,17 +1,22 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Requests\Auth;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class ResetPasswordRequest
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Http\Requests\Auth
+ */
 class ResetPasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -25,18 +30,6 @@ class ResetPasswordRequest extends FormRequest
     {
         return [
             'password' => 'required|confirmed|max:191|min:' . config('l-shop.validation.password.min')
-        ];
-    }
-
-    public function messages()
-    {
-        $password = ['attribute' => 'Новый пароль'];
-
-        return [
-            'password.required' => trans('validation.required', $password),
-            'password.min' => trans('validation.min.string', $password),
-            'password.max' => trans('validation.max.string', $password),
-            'password.confirmed' => trans('validation.confirmed', $password)
         ];
     }
 }

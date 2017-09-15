@@ -53,7 +53,7 @@ return [
 
     'users' => [
 
-        'model' => 'App\Models\User',
+        'model' => \App\Models\User\EloquentUser::class,
 
     ],
 

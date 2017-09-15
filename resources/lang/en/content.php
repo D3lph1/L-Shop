@@ -288,6 +288,7 @@ return [
         ],
         'products' => [
             'add' => [
+                'title' => 'Add product',
                 'attach_item' => 'Assign item/privilege',
                 'products_in_stack' => 'Quantity of products in 1 stack',
                 'perm_duration' => 'Duration of the privilege (in days). 0 - forever',

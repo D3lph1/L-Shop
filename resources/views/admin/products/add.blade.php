@@ -2,7 +2,7 @@
 @extends('layouts.shop')
 
 @section('title')
-    Добавить товар
+    @lang('content.admin.products.add.title')
 @endsection
 
 @section('content')
@@ -10,20 +10,20 @@
 
     <div id="content-container">
         <div class="z-depth-1 content-header text-center">
-            <h1><i class="fa fa-cube fa-lg fa-left-big"></i>Добавить товар</h1>
+            <h1><i class="fa fa-cube fa-lg fa-left-big"></i>@lang('content.admin.products.add.title')</h1>
         </div>
-        <form method="post" action="{{ route('admin.products.add.save', ['server' => $currentServer->id]) }}">
+        <form method="post" action="{{ route('admin.products.add.save', ['server' => $currentServer->getId()]) }}">
             <div id="s-change-name" class="mt-3">
                 <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-12 offset-xs-0">
                     <div class="row">
                         <div class="col-sm-6 offset-sm-3 col-12 text-center">
-                            <h4>Привязать предмет:</h4>
+                            <h4>@lang('content.admin.products.add.attach_item')</h4>
                             <div class="btn-group mb-2 mt-1">
                                 <button id="edit-products-clip" class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@lang('content.all.select')</button>
 
                                 <div class="dropdown-menu dropdown-overflow">
                                     @foreach($items as $item)
-                                        <a class="dropdown-item edit-products-clip-item change" data-item="{{ $item->id }}" data-item-type="{{ $item->type }}" data-parent="edit-products-clip">[{{ $item->id }}] {{ $item->name }}</a>
+                                        <a class="dropdown-item edit-products-clip-item change" data-item="{{ $item->getId() }}" data-item-type="{{ $item->getType() }}" data-parent="edit-products-clip">[{{ $item->getId() }}] {{ $item->getName() }}</a>
                                     @endforeach
                                 </div>
                                 <input type="hidden" name="item" id="item">
@@ -66,8 +66,10 @@
 
                                 <div class="dropdown-menu dropdown-overflow">
                                     <div class="dropdown-divider"></div>
-                                    @foreach($categories as $category)
-                                        <a class="dropdown-item edit-categories-clip-item change" data-server="{{ $category->server_id }}" data-category="{{ $category->category_id }}" data-parent="edit-categories-clip">{{ $category->server }} / {{ $category->category }}</a>
+                                    @foreach($servers as $server)
+                                        @foreach($server->getCategories() as $category)
+                                            <a class="dropdown-item edit-categories-clip-item change" data-server="{{ $server->getId() }}" data-category="{{ $category->getId() }}" data-parent="edit-categories-clip">{{ $server->getName() }} / {{ $category->getName() }}</a>
+                                        @endforeach
                                     @endforeach
                                 </div>
                                 <input type="hidden" name="server" id="server">

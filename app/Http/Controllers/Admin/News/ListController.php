@@ -3,9 +3,9 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\News;
 
-use App\Repositories\NewsRepository;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\TransactionScripts\Shop\News;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 /**
@@ -19,9 +19,9 @@ class ListController extends Controller
     /**
      * Render page with news list.
      */
-    public function render(Request $request, NewsRepository $newsRepository): View
+    public function render(Request $request, News $news): View
     {
-        $news = $newsRepository->paginate(50, ['id', 'title', 'user_id', 'created_at', 'updated_at']);
+        $news = $news->adminList();
 
         $data = [
             'currentServer' => $request->get('currentServer'),

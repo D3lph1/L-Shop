@@ -3,13 +3,11 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Servers;
 
-use App\DataTransferObjects\Admin\Category;
-use App\DataTransferObjects\Admin\Server;
+use App\DataTransferObjects\Category;
+use App\DataTransferObjects\Server;
 use App\Http\Requests\Admin\SaveAddedServerRequest;
-use Carbon\Carbon;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\View\View;
 
 /**
@@ -39,15 +37,13 @@ class AddController extends BaseController
             $categories[] = new Category($category);
         }
 
-        $dto = new Server(
-            $request->get('server_name'),
-            $request->get('enabled'),
-            $categories,
-            $request->get('server_ip'),
-            $request->get('server_port'),
-            $request->get('server_password'),
-            $request->get('server_monitoring_enabled')
-        );
+        $dto = (new Server())
+            ->setName($request->get('server_name'))
+            ->setCategories($categories)
+            ->setIp($request->get('server_ip'))
+            ->setPort($request->get('server_port'))
+            ->setPassword($request->get('server_password'))
+            ->setMonitoringEnabled($request->get('server_monitoring_enabled'));
 
         $this->serverService->createServer($dto);
 

@@ -1,15 +1,18 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Auth;
 
 use App\Exceptions\User\BannedException;
-use App\Services\Message;
-use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
-use Cartalyst\Sentinel\Sentinel;
-use Illuminate\Http\Request;
-use App\Http\Requests\SignInRequest;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SignInRequest;
+use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
 use Cartalyst\Sentinel\Checkpoints\ThrottlingException;
+use Cartalyst\Sentinel\Sentinel;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 /**
  * Class SignInController
@@ -22,12 +25,8 @@ class SignInController extends Controller
 {
     /**
      * Render the sign in page
-     *
-     * @param Request $request
-     *
-     * @return mixed
      */
-    public function render(Request $request)
+    public function render(Request $request): View
     {
         $data = [
             'onlyForAdmins' => $request->get('onlyForAdmins'),
@@ -41,12 +40,8 @@ class SignInController extends Controller
 
     /**
      * Handle the user signin
-     *
-     * @param SignInRequest $request
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function signin(SignInRequest $request)
+    public function signin(SignInRequest $request): JsonResponse
     {
         $credentials = [
             'username' => $request->get('username'),
@@ -103,12 +98,8 @@ class SignInController extends Controller
 
     /**
      * Logout current user.
-     *
-     * @param Sentinel $sentinel
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function logout(Sentinel $sentinel)
+    public function logout(Sentinel $sentinel): RedirectResponse
     {
         $sentinel->logout();
         $this->msg->info(__('messages.auth.logout'));

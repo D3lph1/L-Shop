@@ -6,12 +6,10 @@ namespace App\Http\Controllers\Admin\Users;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\BlockUserRequest;
 use App\Http\Requests\Admin\SaveEditedUserRequest;
-use App\Models\User;
-use App\Repositories\BanRepository;
-use App\Repositories\CartRepository;
+use App\Models\User\UserInterface;
+use App\Repositories\Cart\CartRepositoryInterface;
 use App\Services\Ban;
 use Cartalyst\Sentinel\Roles\EloquentRole;
-use Cartalyst\Sentinel\Users\UserInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -27,9 +25,9 @@ class EditController extends Controller
     /**
      * Render the edit given user page.
      */
-    public function render(Request $request, BanRepository $banRepository, CartRepository $cartRepository, Ban $ban): View
+    public function render(Request $request, CartRepositoryInterface $cartRepository, Ban $ban): View
     {
-        /** @var User $user */
+        /** @var UserInterface $user */
         $user = $this->sentinel->getUserRepository()->findById((int)$request->route('edit'));
         if (!$user) {
             $this->app->abort(404);
@@ -41,7 +39,7 @@ class EditController extends Controller
             'user' => $user,
             'ban' => $ban,
             'isBanned' => $ban->isBanned($user),
-            'cart' => $cartRepository->getByPlayerWithItems($user->username)
+            'cart' => $cartRepository->getByPlayerWithItems($user->getUsername(), [])
         ];
 
         return view('admin.users.edit', $data);
@@ -56,7 +54,7 @@ class EditController extends Controller
         $username = $request->get('username');
         $email = $request->get('email');
 
-        /** @var User $user */
+        /** @var UserInterface $user */
         $user = $this->sentinel->getUserRepository()->findById($id);
         if (!$user) {
             $this->msg->danger(__('messages.admin.users.edit.save.not_found'));
@@ -118,11 +116,11 @@ class EditController extends Controller
      */
     public function remove(Request $request): RedirectResponse
     {
-        /** @var UserInterface|User $user */
+        /** @var UserInterface $user */
         $user = $this->sentinel->getUserRepository()->findById((int)$request->route('user'));
         if ($user) {
 
-            if ($user->getUserId() === $this->sentinel->getUser()->getUserId()) {
+            if ($user->getId() === $this->sentinel->getUser()->getId()) {
                 $this->msg->warning(__('messages.admin.users.edit.remove.self'));
 
                 return back();
@@ -166,7 +164,7 @@ class EditController extends Controller
      */
     public function block(BlockUserRequest $request, Ban $ban): RedirectResponse
     {
-        /** @var User|UserInterface $user */
+        /** @var UserInterface $user */
         $user = $this->sentinel->getUserRepository()->findById((int)$request->route('user'));
         $duration = (int)$request->get('block_duration');
         $reason = $request->get('reason');
@@ -180,7 +178,7 @@ class EditController extends Controller
             ]);
         }
 
-        if ($user->getUserId() === $this->sentinel->getUser()->getUserId()) {
+        if ($user->getId() === $this->sentinel->getUser()->getId()) {
             return json_response('cannot_block_yourself', [
                 'message' => [
                     'type' => 'warning',
@@ -199,7 +197,7 @@ class EditController extends Controller
             return json_response('success', [
                 'message' => [
                     'type' => 'info',
-                    'text' => build_ban_message($duration === 0 ? null : $result->until->toDateTimeString(), $result->reason)
+                    'text' => build_ban_message($duration === 0 ? null : $result->getUntil()->toDateTimeString(), $result->reason)
                 ]
             ]);
         }

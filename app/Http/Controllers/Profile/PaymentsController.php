@@ -1,30 +1,27 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Profile;
 
+use App\Http\Controllers\Controller;
 use App\Repositories\PaymentRepository;
 use App\Repositories\ProductRepository;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
+use Illuminate\View\View;
 
 /**
  * Class PaymentsController
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Profile
  */
 class PaymentsController extends Controller
 {
     /**
      * Render the profile payments history page.
-     *
-     * @param Request           $request
-     * @param PaymentRepository $pr
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request, PaymentRepository $pr)
+    public function render(Request $request, PaymentRepository $pr): View
     {
         $data = [
             'servers' => $request->get('servers'),
@@ -36,14 +33,8 @@ class PaymentsController extends Controller
 
     /**
      * Get more information about given payment.
-     *
-     * @param Request           $request
-     * @param PaymentRepository $paymentRepository
-     * @param ProductRepository $productRepository
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function info(Request $request, PaymentRepository $paymentRepository, ProductRepository $productRepository)
+    public function info(Request $request, PaymentRepository $paymentRepository, ProductRepository $productRepository): JsonResponse
     {
         $payment = $paymentRepository->find((int)$request->route('payment'), ['products', 'user_id']);
 

@@ -2,9 +2,9 @@
 
 namespace Tests\Feature;
 
-use Tests\TestCase;
-use App\Models\User;
+use App\Models\User\EloquentUser;
 use Illuminate\Container\Container;
+use Tests\TestCase;
 
 class CreateUserTest extends TestCase
 {
@@ -23,6 +23,6 @@ class CreateUserTest extends TestCase
         $registrar->register($username, $username . '@example.com', $password, 0, true, false);
 
         $this->assertDatabaseHas('users', ['username' => $username]);
-        User::where('username', $username)->delete();
+        EloquentUser::where('username', $username)->delete();
     }
 }

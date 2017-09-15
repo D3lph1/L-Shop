@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Servers;
 
-use App\DataTransferObjects\Admin\Category;
-use App\DataTransferObjects\Admin\Server;
+use App\DataTransferObjects\Category;
+use App\DataTransferObjects\Server;
 use App\Exceptions\Server\AttemptToDeleteTheLastCategoryException;
 use App\Exceptions\Server\AttemptToDeleteTheLastServerException;
 use App\Http\Requests\Admin\SaveEditedServerRequest;
@@ -92,16 +92,15 @@ class EditController extends BaseController
             $categories[] = $t;
         }
 
-        $dto = new Server(
-            $request->get('server_name'),
-            $request->get('enabled'),
-            $categories,
-            $request->get('server_ip'),
-            $request->get('server_port'),
-            $request->get('server_password'),
-            $request->get('server_monitoring_enabled')
-        );
-        $dto->setId($request->route('edit'));
+        $dto = (new Server())
+            ->setId((int)$request->route('edit'))
+            ->setName($request->get('server_name'))
+            ->setEnabled($request->get('enabled'))
+            ->setCategories($categories)
+            ->setIp($request->get('server_ip'))
+            ->setPort($request->get('server_port'))
+            ->setPassword($request->get('server_password'))
+            ->setMonitoringEnabled($request->get('server_monitoring_enabled'));
 
         $this->serverService->updateServer($dto);
         $this->msg->success(__('messages.admin.changes_saved'));

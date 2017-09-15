@@ -5,9 +5,9 @@ namespace App\Composers;
 use App\Contracts\ComposerContract;
 use App\DataTransferObjects\MonitoringPlayers;
 use App\Models\Server;
+use App\Repositories\News\NewsRepositoryInterface;
 use App\Repositories\NewsRepository;
 use App\Services\Monitoring\MonitoringInterface;
-use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -42,7 +42,7 @@ class ShopLayoutComposer implements ComposerContract
     private $servers;
 
     /**
-     * @var NewsRepository
+     * @var NewsRepositoryInterface
      */
     private $newsRepository;
 
@@ -51,12 +51,7 @@ class ShopLayoutComposer implements ComposerContract
      */
     private $monitoring;
 
-    /**
-     * @param Request             $request
-     * @param NewsRepository      $newsRepository
-     * @param MonitoringInterface $monitoring
-     */
-    public function __construct(Request $request, NewsRepository $newsRepository, MonitoringInterface $monitoring)
+    public function __construct(Request $request, NewsRepositoryInterface $newsRepository, MonitoringInterface $monitoring)
     {
         $this->request = $request;
         $this->currentServer = $request->get('currentServer');
@@ -116,9 +111,9 @@ class ShopLayoutComposer implements ComposerContract
     /**
      * Get first portion of news list.
      */
-    private function news(): Collection
+    private function news(): iterable
     {
-        return $this->newsRepository->getFirstPortion();
+        return $this->newsRepository->getFirstPortion(['title', 'content', 'user_id', 'created_at']);
     }
 
     /**

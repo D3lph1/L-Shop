@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Services;
 
@@ -33,7 +34,7 @@ class Registrar
      * @throws EmailAlreadyExistsException
      * @throws UnableToCreateUser
      */
-    public function register($username, $email, $password, $balance = 0, $forceActivate = false, $admin = false)
+    public function register(string $username, string $email, string $password, float $balance = 0, bool $forceActivate = false, bool $admin = false)
     {
         $this->findByUsername($username);
         $this->findByEmail($email);
@@ -42,13 +43,13 @@ class Registrar
     }
 
     /**
-     * Check for the existence user with given username
+     * Check for the existence user with given username.
      *
      * @param string $username
      *
      * @throws UsernameAlreadyExistsException
      */
-    private function findByUsername($username)
+    private function findByUsername(string $username)
     {
         if (\Sentinel::getUserRepository()->findByCredentials(['username' => $username])) {
             throw new UsernameAlreadyExistsException();
@@ -56,13 +57,13 @@ class Registrar
     }
 
     /**
-     * Check for the existence user with given email
+     * Check for the existence user with given email.
      *
      * @param string $email
      *
      * @throws EmailAlreadyExistsException
      */
-    private function findByEmail($email)
+    private function findByEmail(string $email)
     {
         if (\Sentinel::getUserRepository()->findByCredentials(['email' => $email])) {
             throw new EmailAlreadyExistsException();
@@ -70,7 +71,7 @@ class Registrar
     }
 
     /**
-     * Insert new user in database and activate it if necessary
+     * Insert new user in database and activate it if necessary.
      *
      * @param string $username
      * @param string $email
@@ -81,7 +82,7 @@ class Registrar
      *
      * @throws UnableToCreateUser
      */
-    private function create($username, $email, $password, $balance, $forceActivate, $admin)
+    private function create(string $username, string $email, string $password, float $balance, bool $forceActivate, bool $admin)
     {
         $credentials = [
             'username' => $username,
@@ -114,14 +115,14 @@ class Registrar
      * @param UserInterface $user
      * @param bool          $admin
      */
-    private function attachRole(UserInterface $user, $admin)
+    private function attachRole(UserInterface $user, bool $admin)
     {
         /** @var EloquentRole $adminRole */
         $adminRole = \Sentinel::getRoleRepository()->findBySlug('admin');
         /** @var EloquentRole $userRole */
         $userRole = \Sentinel::getRoleRepository()->findBySlug('user');
 
-        // Detach all roles if user identifier already exists in `role_users` table
+        // Detach all roles if user identifier already exists in `role_users` table.
         $adminRole->users()->detach($user);
         $userRole->users()->detach($user);
 

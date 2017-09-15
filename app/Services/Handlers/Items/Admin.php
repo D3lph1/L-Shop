@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Services\Handlers\Items;
 
-use App\DataTransferObjects\Admin\Item;
+use App\DataTransferObjects\Item;
 use App\Exceptions\UnexpectedValueException;
 use App\Repositories\ItemRepository;
 use App\Repositories\ProductRepository;
@@ -76,7 +76,7 @@ class Admin
                 'description' => $dto->getDescription(),
                 'type' => $dto->getType(),
                 'image' => $image,
-                'item' => $dto->getItemId(),
+                'item' => $dto->getItem(),
                 'extra' => $dto->getExtra()
             ]);
         });
@@ -92,7 +92,7 @@ class Admin
             'description' => $dto->getDescription(),
             'type' => $dto->getType(),
             'image' => $dto->getImage(),
-            'item' => $dto->getItemId(),
+            'item' => $dto->getItem(),
             'extra' => $dto->getExtra()
         ];
 

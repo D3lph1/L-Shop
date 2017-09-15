@@ -3,11 +3,12 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\News;
 
-use App\DataTransferObjects\Admin\News as DTO;
+use App\DataTransferObjects\News as DTO;
+use App\Exceptions\News\DisabledException;
+use App\Exceptions\News\NotFoundExceptions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveEditedNewsRequest;
-use App\Repositories\NewsRepository;
-use App\Services\News;
+use App\TransactionScripts\Shop\News;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -23,21 +24,24 @@ class EditController extends Controller
     /**
      * Render the edit news page.
      */
-    public function render(Request $request, NewsRepository $newsRepository): View
+    public function render(Request $request, News $news): View
     {
-        $id = (int)$request->route('id');
-        $news = $newsRepository->find($id);
+        $concrete = null;
 
-        if (!$news) {
+        try {
+            $concrete = $news->find((int)$request->route('id'));
+        } catch (DisabledException $exception) {
+            $this->msg->warning(__('messages.shop.catalog.news.disabled'));
+
+            return back();
+        } catch (NotFoundExceptions $e) {
             $this->app->abort(404);
         }
 
-        $data = [
+        return view('admin.news.edit', [
             'currentServer' => $request->get('currentServer'),
-            'news' => $news
-        ];
-
-        return view('admin.news.edit', $data);
+            'news' => $concrete
+        ]);
     }
 
     /**
@@ -45,10 +49,10 @@ class EditController extends Controller
      */
     public function save(SaveEditedNewsRequest $request, News $news): RedirectResponse
     {
-        $dto = new DTO(
-            $request->get('news_title'),
-            $request->get('news_content')
-        );
+        $dto = (new DTO())
+            ->setTitle($request->get('news_title'))
+            ->setContent($request->get('news_content'));
+
         $dto->setId((int)$request->route('id'));
 
         if ($news->update($dto)) {

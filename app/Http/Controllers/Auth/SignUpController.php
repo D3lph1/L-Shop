@@ -1,22 +1,20 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Auth;
 
-use App\Exceptions\User\UsernameAlreadyExistsException;
 use App\Exceptions\User\EmailAlreadyExistsException;
 use App\Exceptions\User\UnableToCreateUser;
-use App\Http\Requests\SignUpRequest;
+use App\Exceptions\User\UsernameAlreadyExistsException;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\SignUpRequest;
 use App\Services\Registrar;
-use App\Traits\Validator;
-use Illuminate\Container\Container;
-use Illuminate\Http\Request;
+use Illuminate\Http\RedirectResponse;
 
 /**
  * Class SignUpController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Auth
  */
 class SignUpController extends Controller
@@ -24,10 +22,9 @@ class SignUpController extends Controller
     /**
      * Render the sign up page.
      *
-     * @param Request $request
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render()
     {
         if ((bool)s_get('shop.enable_signup')) {
             return view('auth.signup');
@@ -39,12 +36,8 @@ class SignUpController extends Controller
 
     /**
      * Register new user.
-     *
-     * @param SignUpRequest $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function signup(SignUpRequest $request)
+    public function signup(SignUpRequest $request): RedirectResponse
     {
         if (!s_get('shop.enable_signup')) {
             return response()->redirectToRoute('signin');
@@ -81,12 +74,7 @@ class SignUpController extends Controller
         return $this->redirect(!$forceActivate);
     }
 
-    /**
-     * @param bool $activate
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    private function redirect($activate)
+    private function redirect(bool $activate): RedirectResponse
     {
         if (s_get('auth.signup.redirect')) {
             return response()->redirectTo(s_get('auth.signup.redirect_url'));

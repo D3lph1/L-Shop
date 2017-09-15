@@ -183,6 +183,8 @@ return [
         'character_hd_cloak_enabled' => 'Allow users to set HD cloaks',
         'character_skin_max_file_size' => 'Maximum size of the skin file',
         'character_cloak_max_file_size' => 'Maximum size of the cloak file',
+
+        'categories.*.*' => 'Category name'
     ],
 
 ];

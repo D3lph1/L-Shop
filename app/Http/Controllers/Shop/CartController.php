@@ -1,21 +1,21 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Shop;
 
 use App\Exceptions\Payment\InvalidProductsCountException;
 use App\Exceptions\User\InvalidUsernameException;
 use App\Http\Controllers\Controller;
-use App\Repositories\ProductRepository;
 use App\Services\Cart;
-use Illuminate\Http\Request;
 use App\Traits\BuyResponse;
-use App\Services\CartBuy;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 /**
  * Class CartController
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Components
  */
 class CartController extends Controller
@@ -35,43 +35,22 @@ class CartController extends Controller
 
     /**
      * Render the cart page.
-     *
-     * @param ProductRepository $productRepository
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(ProductRepository $productRepository)
+    public function render(\App\TransactionScripts\Shop\Cart $cart): View
     {
-        $products = [];
-        $cost = 0;
-        $fromCart = $this->cart->products();
-        if ($fromCart) {
-            $ids = array_keys($fromCart);
-            $products = $productRepository->getWithItems(
-                $ids,
-                ['products.id as id', 'items.name', 'items.image', 'products.price', 'products.stack']
-            );
+        $products = $cart->products();
+        $cost = $cart->cost($products);
 
-            foreach ($products as $product) {
-                $cost += $product->price;
-            }
-        }
         $data = [
-            'cart' => $this->cart,
             'products' => $products,
-            'cost' => $cost
+            'cost' => $cost,
+            'cart' => $this->cart
         ];
 
         return view('shop.cart', $data);
     }
 
-    /**
-     * @param Request $request
-     * @param CartBuy $handler
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function buy(Request $request, CartBuy $handler)
+    public function buy(Request $request, \App\TransactionScripts\Shop\Cart $cart): JsonResponse
     {
         $server = (int)$request->route('server');
         $ip = $request->ip();
@@ -79,7 +58,7 @@ class CartController extends Controller
         $products = $request->get('products');
 
         try {
-            return $handler->buy($products, $this->cart, $server, $ip, $username);
+            return $cart->purchase($products, $server, $ip, $username);
         } catch (InvalidUsernameException $e) {
             return json_response('invalid_username', [
                 'message' => [
@@ -98,13 +77,9 @@ class CartController extends Controller
     }
 
     /**
-     * Put item in cart
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\JsonResponse
+     * Put item in cart.
      */
-    public function put(Request $request)
+    public function put(Request $request): JsonResponse
     {
         $product = (int)$request->route('product');
 
@@ -139,12 +114,8 @@ class CartController extends Controller
 
     /**
      * Remove item from cart
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function remove(Request $request)
+    public function remove(Request $request): JsonResponse
     {
         $product = (int)$request->route('product');
 

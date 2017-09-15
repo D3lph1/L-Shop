@@ -1,17 +1,18 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Services;
 
-use App\Repositories\BanRepository;
+use App\Models\Ban\BanInterface;
+use App\Models\User\UserInterface;
+use App\Repositories\Ban\BanRepositoryInterface;
 use App\Services\Support\Time;
 use Carbon\Carbon;
-use Cartalyst\Sentinel\Users\UserInterface;
 
 /**
  * Class Ban
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Services
  */
 class Ban
@@ -22,16 +23,11 @@ class Ban
     protected $user;
 
     /**
-     * @var BanRepository
+     * @var BanRepositoryInterface
      */
     protected $repository;
 
-    /**
-     * Ban constructor.
-     *
-     * @param BanRepository $repository
-     */
-    public function __construct(BanRepository $repository)
+    public function __construct(BanRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
@@ -51,33 +47,34 @@ class Ban
     /**
      * Blocks the user until a certain date.
      *
-     * @param UserInterface $user
-     * @param Carbon|null   $until
-     * @param string        $reason Reason for blocking.
+     * @param UserInterface $user   User you want to block.
+     * @param Carbon|null   $until  Time to which the user will be blocked.
+     * @param string|null   $reason Reason for blocking.
      *
-     * @return \App\Models\Ban
+     * @return BanInterface
      */
-    public function until(UserInterface $user, $until, $reason = null)
+    public function until(UserInterface $user, ?Carbon $until, ?string $reason = null): BanInterface
     {
         $this->pardon($user);
 
-        return $this->repository->create([
-            'user_id' => $user->getUserId(),
-            'until' => $until,
-            'reason' => $reason
-        ]);
+        return $this->repository->create(
+            (new \App\DataTransferObjects\Ban())
+                ->setUserId($user->getUserId())
+                ->setUntil($until)
+                ->setReason($reason)
+        );
     }
 
     /**
      * Block user for a certain number of days.
      *
-     * @param UserInterface $user
+     * @param UserInterface $user   User you want to block.
      * @param int           $days   Term of blocking.
      * @param string        $reason Reason for blocking.
      *
      * @return \App\Models\Ban
      */
-    public function forDays(UserInterface $user, $days, $reason = null)
+    public function forDays(UserInterface $user, $days, $reason = null): BanInterface
     {
         $until = Time::nowAddInterval($days * 60 * 24);
 
@@ -87,34 +84,28 @@ class Ban
     /**
      * Blocks the user forever.
      *
-     * @param UserInterface $user
+     * @param UserInterface $user   User you want to block.
      * @param string        $reason Reason for blocking.
      *
-     * @return \App\Models\Ban
+     * @return BanInterface
      */
-    public function permanently(UserInterface $user, $reason)
+    public function permanently(UserInterface $user, $reason): BanInterface
     {
         return $this->until($user, null, $reason);
     }
 
     /**
      * Unblock given user.
-     *
-     * @param UserInterface $user
-     *
-     * @return bool
      */
-    public function pardon(UserInterface $user)
+    public function pardon(UserInterface $user): bool
     {
         return $this->repository->deleteByUser($user);
     }
 
     /**
-     * @param UserInterface $user
-     *
-     * @return \App\Models\Ban
+     * Get ban by user.
      */
-    public function get(UserInterface $user)
+    public function get(UserInterface $user): BanInterface
     {
         return $this->repository->findByUser($user);
     }

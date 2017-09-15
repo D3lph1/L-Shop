@@ -3,9 +3,8 @@
 namespace App\Services;
 
 use App\Exceptions\SashokLauncherAuthWhiteListException;
-use App\Models\User;
+use App\Models\User\UserInterface;
 use Cartalyst\Sentinel\Checkpoints\ActivationCheckpoint;
-use Cartalyst\Sentinel\Users\UserInterface;
 
 /**
  * Class SashokLauncher
@@ -27,20 +26,20 @@ class SashokLauncher
      *
      * @return mixed
      */
-    public function auth($username, $password, $ip, $whiteList)
+    public function auth(string $username, string $password, string $ip, string $whiteList)
     {
         if (!$this->whiteList($ip, $whiteList)) {
             throw new SashokLauncherAuthWhiteListException();
         }
 
-        /** @var User $user */
+        /** @var UserInterface $user */
         $user = \Sentinel::authenticate([
             'username' => $username,
             'password' => $password
         ]);
 
         if ($user) {
-            return $user->username;
+            return $user->getUsername();
         }
 
         return false;
@@ -54,7 +53,7 @@ class SashokLauncher
      *
      * @return bool
      */
-    private function whiteList($ip, $whiteList)
+    private function whiteList(string $ip, string $whiteList): bool
     {
         $whiteList = json_decode($whiteList, true);
 

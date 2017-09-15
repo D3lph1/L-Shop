@@ -8,10 +8,9 @@ namespace App\DataTransferObjects;
  * It serves to transfer information about players on the server between parts of the application.
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\DataTransferObjects
  */
-final class MonitoringPlayers
+class MonitoringPlayers
 {
     /**
      * @var int Server identifier.

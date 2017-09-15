@@ -3,7 +3,26 @@
 namespace App\Providers;
 
 use App\Models\Server;
-use App\Repositories\ServerRepository;
+use App\Repositories\Ban\BanRepositoryInterface;
+use App\Repositories\Ban\EloquentBanRepository;
+use App\Repositories\Cart\CartRepositoryInterface;
+use App\Repositories\Cart\EloquentCartRepository;
+use App\Repositories\Category\CategoryRepositoryInterface;
+use App\Repositories\Category\EloquentCategoryRepository;
+use App\Repositories\EloquentPageRepository;
+use App\Repositories\Item\EloquentItemRepository;
+use App\Repositories\Item\ItemRepositoryInterface;
+use App\Repositories\News\EloquentNewsRepository;
+use App\Repositories\News\NewsRepositoryInterface;
+use App\Repositories\Page\PageRepositoryInterface;
+use App\Repositories\Payment\EloquentPaymentRepository;
+use App\Repositories\Payment\PaymentRepositoryInterface;
+use App\Repositories\Product\EloquentProductRepository;
+use App\Repositories\Product\ProductRepositoryInterface;
+use App\Repositories\Server\EloquentServerRepository;
+use App\Repositories\Server\ServerRepositoryInterface;
+use App\Repositories\User\EloquentUserRepository;
+use App\Repositories\User\UserRepositoryInterface;
 use App\Services\Activator;
 use App\Services\Cart;
 use App\Services\CartBuy;
@@ -79,7 +98,8 @@ class AppServiceProvider extends ServiceProvider
             $servers = $request->get('servers');
 
             if (!$servers) {
-                $servers = $app->make(ServerRepository::class)->all();
+                // TODO: fix it
+                $servers = $app->make(ServerRepositoryInterface::class)->all(['*']);
             }
 
             $rcon = new Connector();
@@ -98,5 +118,16 @@ class AppServiceProvider extends ServiceProvider
             return new RconMonitoring($app->make(Rcon::class));
         });
         $this->app->alias(MonitoringInterface::class, 'monitoring');
+
+        $this->app->singleton(BanRepositoryInterface::class, EloquentBanRepository::class);
+        $this->app->singleton(PageRepositoryInterface::class, EloquentPageRepository::class);
+        $this->app->singleton(NewsRepositoryInterface::class, EloquentNewsRepository::class);
+        $this->app->singleton(ServerRepositoryInterface::class, EloquentServerRepository::class);
+        $this->app->singleton(CategoryRepositoryInterface::class, EloquentCategoryRepository::class);
+        $this->app->singleton(CartRepositoryInterface::class, EloquentCartRepository::class);
+        $this->app->singleton(ItemRepositoryInterface::class, EloquentItemRepository::class);
+        $this->app->singleton(UserRepositoryInterface::class, EloquentUserRepository::class);
+        $this->app->singleton(PaymentRepositoryInterface::class, EloquentPaymentRepository::class);
+        $this->app->singleton(ProductRepositoryInterface::class, EloquentProductRepository::class);
     }
 }

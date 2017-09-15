@@ -7,7 +7,6 @@ namespace App\Services;
  * BuyResponse for working with alert messages.
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Services
  */
 class Message

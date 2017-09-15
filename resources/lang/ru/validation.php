@@ -186,5 +186,7 @@ return [
         'character_hd_cloak_enabled' => 'Разрешить пользователям устанавливать HD плащи',
         'character_skin_max_file_size' => 'Максимальный размер файла скина',
         'character_cloak_max_file_size' => 'Максимальный размер файла плаща',
+
+        'categories.*.*' => 'Имя категории'
     ],
 ];

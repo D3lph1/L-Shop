@@ -2,12 +2,12 @@
 
 namespace Tests\Feature\Admin;
 
-use Tests\TestCase;
 use App\Models\Item;
 use App\Models\Product;
 use App\Services\Admin;
 use App\Services\AdminProducts;
 use Illuminate\Container\Container;
+use Tests\TestCase;
 
 /**
  * Class ProductItemTest
@@ -51,7 +51,7 @@ class ProductItemTest extends TestCase
         $item = $this->adminItems->create('Test item', '', 'item', null, 1337, null);
         $this->assertInstanceOf(Item::class, $item);
         $itemId = (int)$item->id;
-        $dto = new \App\DataTransferObjects\Admin\Product(0.01, 64, $itemId, 1, 1, 0);
+        $dto = new \App\DataTransferObjects\Product(0.01, 64, $itemId, 1, 1, 0);
 
         $product = $this->adminProduct->create($dto);
         $this->assertInstanceOf(Product::class, $product);

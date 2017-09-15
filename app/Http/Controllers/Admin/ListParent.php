@@ -30,26 +30,4 @@ class ListParent extends Controller
         'H', 'I', 'J', 'K', 'L', 'K', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
         'X', 'Y', 'Z'
     ];
-
-    protected function checkOrderBy(string $orderBy): ?string
-    {
-        $orderBy = mb_strtolower($orderBy);
-
-        if (in_array($orderBy, $this->orderByAvailable)) {
-            return $orderBy;
-        }
-
-        return null;
-    }
-
-    protected function checkOrderType(string $orderType): ?string
-    {
-        $orderType = strtolower($orderType);
-
-        if ($orderType == 'asc' or $orderType == 'desc') {
-            return $orderType;
-        }
-
-        return null;
-    }
 }

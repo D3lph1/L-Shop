@@ -3,13 +3,13 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Pages;
 
-use App\DataTransferObjects\Admin\Page as DTO;
+use App\DataTransferObjects\Page as DTO;
 use App\Exceptions\Page\UrlAlreadyExistsException;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveEditedPageRequest;
 use App\Services\Page;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\View\View;
 
 /**
@@ -62,12 +62,12 @@ class EditController extends Controller
      */
     public function save(SaveEditedPageRequest $request): RedirectResponse
     {
-        $page = new DTO(
-            $request->get('page_title'),
-            $request->get('page_content'),
-            $request->get('page_url')
-        );
-        $page->setId($request->route('id'));
+        $page = (new DTO())
+            ->setId((int)$request->route('id'))
+            ->setTitle($request->get('page_title'))
+            ->setContent($request->get('page_content'))
+            ->setUrl($request->get('page_url'));
+
         $result = null;
 
         try {

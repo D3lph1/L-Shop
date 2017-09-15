@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Items;
 
-use App\DataTransferObjects\Admin\Item;
+use App\DataTransferObjects\Item;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveEditedItemRequest;
 use App\Repositories\ItemRepository;
@@ -65,7 +65,7 @@ class EditController extends Controller
             ->setImageMode($request->get('image_mode'))
             ->setImage($request->file('image'))
             ->setType($request->get('item_type'))
-            ->setItemId($request->get('item'))
+            ->setItem($request->get('item'))
             ->setExtra($request->get('extra'));
 
         $result = $this->adminHandler->update($dto);

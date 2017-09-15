@@ -1,39 +1,38 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Services;
 
-use App\DataTransferObjects\Admin\Category;
-use App\DataTransferObjects\Admin\Server as DTO;
+use App\DataTransferObjects\Category;
+use App\DataTransferObjects\Server as DTO;
 use App\Exceptions\Server\AttemptToDeleteTheLastCategoryException;
 use App\Exceptions\Server\AttemptToDeleteTheLastServerException;
-use App\Repositories\CategoryRepository;
-use App\Repositories\ServerRepository;
-use Carbon\Carbon;
+use App\Repositories\Category\CategoryRepositoryInterface;
+use App\Repositories\Server\ServerRepositoryInterface;
 
 /**
  * Class Server
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Services
  */
 class Server
 {
     /**
-     * @var ServerRepository
+     * @var ServerRepositoryInterface
      */
     private $serverRepository;
 
     /**
-     * @var CategoryRepository
+     * @var CategoryRepositoryInterface
      */
     private $categoryRepository;
 
     /**
-     * @param ServerRepository   $serverRepository
-     * @param CategoryRepository $categoryRepository
+     * @param ServerRepositoryInterface   $serverRepository
+     * @param CategoryRepositoryInterface $categoryRepository
      */
-    public function __construct(ServerRepository $serverRepository, CategoryRepository $categoryRepository)
+    public function __construct(ServerRepositoryInterface $serverRepository, CategoryRepositoryInterface $categoryRepository)
     {
         $this->serverRepository = $serverRepository;
         $this->categoryRepository = $categoryRepository;
@@ -71,47 +70,28 @@ class Server
     public function createServer(DTO $dto)
     {
         \DB::transaction(function () use ($dto) {
-            $server = $this->serverRepository->create([
-                'name' => $dto->getName(),
-                'enabled' => $dto->isEnabled(),
-                'ip' => $dto->getIp(),
-                'port' => $dto->getPort(),
-                'password' => $dto->getPassword(),
-                'monitoring_enabled' => $dto->isMonitoringEnabled()
-            ]);
+            $server = $this->serverRepository->create($dto);
 
             foreach ($dto->getCategories() as $category) {
-                $query = [
-                    'name' => $category->getName(),
-                    'server_id' => $server->id
-                ];
-
-                $this->categoryRepository->create($query);
+                $this->categoryRepository->create(
+                    (new Category())
+                        ->setName($category->getName())
+                        ->setServerId($server->getId())
+                );
             }
         });
     }
 
     /**
      * Update given server with categories.
-     *
-     * @param DTO $dto
      */
     public function updateServer(DTO $dto)
     {
         \DB::transaction(function () use ($dto) {
-            $this->serverRepository->update($dto->getId(), [
-                'name' => $dto->getName(),
-                'enabled' => $dto->isEnabled(),
-                'ip' => $dto->getIp(),
-                'port' => $dto->getPort(),
-                'password' => $dto->getPassword(),
-                'monitoring_enabled' => $dto->isMonitoringEnabled()
-            ]);
+            $this->serverRepository->update($dto->getId(), $dto);
 
             foreach ($dto->getCategories() as $category) {
-                $this->categoryRepository->update($category->getId(), [
-                    'name' => $category->getName()
-                ]);
+                $this->categoryRepository->update($category->getId(), $category);
             }
         });
     }
@@ -119,11 +99,9 @@ class Server
     /**
      * Remove given server with attached categories.
      *
-     * @param int $serverId Removing server identifier.
-     *
      * @throws AttemptToDeleteTheLastServerException
      */
-    public function removeServer($serverId)
+    public function removeServer(int $serverId): void
     {
         $count = $this->serverRepository->count();
 
@@ -145,10 +123,7 @@ class Server
     public function createCategory(Category $dto)
     {
         \DB::transaction(function () use ($dto) {
-            $this->categoryRepository->create([
-                'name' => $dto->getName(),
-                'server_id' => $dto->getServerId()
-            ]);
+            $this->categoryRepository->create($dto);
         });
     }
 

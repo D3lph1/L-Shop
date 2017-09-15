@@ -3,10 +3,10 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\News;
 
-use App\DataTransferObjects\Admin\News as DTO;
+use App\DataTransferObjects\News as DTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveAddedNewsRequest;
-use App\Services\News;
+use App\TransactionScripts\Shop\News;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -24,11 +24,9 @@ class AddController extends Controller
      */
     public function render(Request $request): View
     {
-        $data = [
+        return view('admin.news.add', [
             'currentServer' => $request->get('currentServer')
-        ];
-
-        return view('admin.news.add', $data);
+        ]);
     }
 
     /**
@@ -36,13 +34,12 @@ class AddController extends Controller
      */
     public function save(SaveAddedNewsRequest $request, News $news): RedirectResponse
     {
-        $dto = new DTO(
-            $request->get('news_title'),
-            $request->get('news_content')
-        );
-        $dto->setUserId($this->sentinel->getUser()->getUserId());
+        $dto = (new DTO())
+            ->setTitle($request->get('news_title'))
+            ->setContent($request->get('news_content'))
+            ->setUserId($this->sentinel->getUser()->getUserId());
 
-        if (!$news->add($dto)) {
+        if ($news->create($dto)) {
             $this->msg->success(__('messages.admin.news.add.success'));
 
             return response()->redirectToRoute('admin.news.list', ['server' => $request->get('currentServer')->id]);

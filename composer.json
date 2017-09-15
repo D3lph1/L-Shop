@@ -6,7 +6,7 @@
     "type": "project",
     "require": {
         "php": ">=7.1.0",
-        "laravel/framework": "5.5.3",
+        "laravel/framework": "5.5.4",
         "laravel/tinker": "~1.0",
         "fideloper/proxy": "3.3.4",
         "anlutro/l4-settings": "0.4.9",
