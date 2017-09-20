@@ -17,6 +17,12 @@ interface PageRepositoryInterface
 {
     public function create(Page $dto): PageInterface;
 
+    public function update(int $id, Page $dto): bool;
+
+    public function paginated(): LengthAwarePaginator;
+
+    public function find(int $id, array $columns): ?PageInterface;
+
     public function findByUrl(string $url, array $columns): PageInterface;
 
     public function getPaginated(array $columns): LengthAwarePaginator;
@@ -24,4 +30,6 @@ interface PageRepositoryInterface
     public function isUrlUnique(int $pageId, string $url): bool;
 
     public function isUrlUniqueAll(string $url): bool;
+
+    public function delete(int $id): bool;
 }

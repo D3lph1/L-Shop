@@ -31,7 +31,7 @@ class EloquentServerRepository implements ServerRepositoryInterface
 
     public function update(int $serverId, Server $dto): bool
     {
-        return EloquentServer::where('id', $serverId)->update([
+        return (bool)EloquentServer::where('id', $serverId)->update([
             'name' => $dto->getName(),
             'enabled' => $dto->isEnabled(),
             'ip' => $dto->getIp(),
@@ -53,18 +53,14 @@ class EloquentServerRepository implements ServerRepositoryInterface
 
     public function getWithCategories(array $columns): iterable
     {
-        $servers = EloquentServer::select($columns)->get();
-        $categories = EloquentCategory::select()->get();
-        $servers = $servers->toArray();
-
-        foreach ($servers as &$server) {
-            foreach ($categories as $category) {
-                if ($category->server_id == $server['id']) {
-                    $server['categories'][] = $category->name;
+        $servers = EloquentServer::select($columns)
+            ->with([
+                'categories' => function ($query) {
+                    /** @var Builder $query */
+                    return $query->select(['*']);
                 }
-            }
-            $server = (object)$server;
-        }
+            ])
+            ->get();
 
         return $servers;
     }
@@ -109,11 +105,11 @@ class EloquentServerRepository implements ServerRepositoryInterface
 
     private function changeEnabledServerMode(int $id, bool $mode): bool
     {
-        return EloquentServer::where('id', $id)->update(['enabled' => $mode]);
+        return (bool)EloquentServer::where('id', $id)->update(['enabled' => $mode]);
     }
 
-    public function delete(int $serverId): void
+    public function delete(int $serverId): bool
     {
-        EloquentServer::where('id', $serverId)->delete();
+        return (bool)EloquentServer::where('id', $serverId)->delete();
     }
 }

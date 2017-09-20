@@ -26,7 +26,7 @@ class EloquentCategoryRepository implements CategoryRepositoryInterface
 
     public function update(int $categoryId, Category $dto): bool
     {
-        return EloquentCategory::where('id', $categoryId)->update([
+        return (bool)EloquentCategory::where('id', $categoryId)->update([
             'name' => $dto->getName(),
             'server_id' => $dto->getServerId()
         ]);
@@ -46,7 +46,7 @@ class EloquentCategoryRepository implements CategoryRepositoryInterface
 
     public function deleteByServerId(int $serverId): bool
     {
-        return EloquentCategory::where('server_id', $serverId)->delete();
+        return (bool)EloquentCategory::where('server_id', $serverId)->delete();
     }
 
     public function countWithServer(int $serverId): int
@@ -54,8 +54,8 @@ class EloquentCategoryRepository implements CategoryRepositoryInterface
         return EloquentCategory::where('server_id', $serverId)->count();
     }
 
-    public function delete(int $categoryId): void
+    public function delete(int $categoryId): bool
     {
-        EloquentCategory::where('id', $categoryId)->delete();
+        return (bool)EloquentCategory::where('id', $categoryId)->delete();
     }
 }

@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace App\Models\Cart;
 
+use App\Models\Item\EloquentItem;
+use App\Models\Item\ItemInterface;
 use App\Models\User\EloquentUser;
 use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
@@ -57,6 +59,16 @@ class EloquentCart extends Model implements CartInterface
     public function user(): HasOne
     {
         return $this->hasOne(EloquentUser::class, 'username', 'player');
+    }
+
+    public function item_(): HasOne
+    {
+        return $this->hasOne(EloquentItem::class, 'id', 'item_id');
+    }
+
+    public function getRelatedItem(): ItemInterface
+    {
+        return $this->item_;
     }
 
     public function getId(): int

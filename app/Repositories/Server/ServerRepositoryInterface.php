@@ -34,5 +34,5 @@ interface ServerRepositoryInterface
 
     public function count(): int;
 
-    public function delete(int $serverId): void;
+    public function delete(int $serverId): bool;
 }

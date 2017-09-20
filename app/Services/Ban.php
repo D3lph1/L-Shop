@@ -59,7 +59,7 @@ class Ban
 
         return $this->repository->create(
             (new \App\DataTransferObjects\Ban())
-                ->setUserId($user->getUserId())
+                ->setUserId($user->getId())
                 ->setUntil($until)
                 ->setReason($reason)
         );
@@ -74,7 +74,7 @@ class Ban
      *
      * @return \App\Models\Ban
      */
-    public function forDays(UserInterface $user, $days, $reason = null): BanInterface
+    public function forDays(UserInterface $user, int $days, ?string $reason = null): BanInterface
     {
         $until = Time::nowAddInterval($days * 60 * 24);
 
@@ -89,7 +89,7 @@ class Ban
      *
      * @return BanInterface
      */
-    public function permanently(UserInterface $user, $reason): BanInterface
+    public function permanently(UserInterface $user, ?string $reason = null): BanInterface
     {
         return $this->until($user, null, $reason);
     }

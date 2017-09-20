@@ -1,12 +1,11 @@
 <?php
 declare(strict_types = 1);
 
-namespace App\Repositories;
+namespace App\Repositories\Page;
 
 use App\DataTransferObjects\Page;
 use App\Models\Page\EloquentPage;
 use App\Models\Page\PageInterface;
-use App\Repositories\Page\PageRepositoryInterface;
 use Cache;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -25,6 +24,25 @@ class EloquentPageRepository implements PageRepositoryInterface
             'content' => $dto->getContent(),
             'url' => $dto->getUrl()
         ]);
+    }
+
+    public function update(int $id, Page $dto): bool
+    {
+        return (bool)EloquentPage::where('id', $id)->update([
+            'title' => $dto->getTitle(),
+            'content' => $dto->getContent(),
+            'url' => $dto->getUrl()
+        ]);
+    }
+
+    public function paginated(): LengthAwarePaginator
+    {
+        return EloquentPage::paginate(50);
+    }
+
+    public function find(int $id, array $columns): ?PageInterface
+    {
+        return EloquentPage::find($id, $columns);
     }
 
     public function findByUrl(string $url, array $columns): PageInterface
@@ -59,5 +77,10 @@ class EloquentPageRepository implements PageRepositoryInterface
     public function isUrlUniqueAll(string $url): bool
     {
         return !EloquentPage::where('url', $url)->exists();
+    }
+
+    public function delete(int $id): bool
+    {
+        return (bool)EloquentPage::where('id', $id)->delete();
     }
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 use Cartalyst\Sentinel\Sentinel;
 use Illuminate\Database\Seeder;
@@ -22,16 +23,14 @@ class UsersSeeder extends Seeder
 
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         $this->createAdmin();
         $this->createUser();
     }
 
-    private function createAdmin()
+    private function createAdmin(): void
     {
         $user = $this->sentinel->registerAndActivate([
             'username' => 'admin',
@@ -52,7 +51,7 @@ class UsersSeeder extends Seeder
         $role->users()->attach($user);
     }
 
-    private function createUser()
+    private function createUser(): void
     {
         $user = $this->sentinel->registerAndActivate([
             'username' => 'user',

@@ -4,22 +4,48 @@ declare(strict_types = 1);
 namespace App\Repositories\User;
 
 use App\Models\User\EloquentUser;
+use Cartalyst\Sentinel\Users\IlluminateUserRepository;
 use Illuminate\Database\Eloquent\Builder;
 
-class EloquentUserRepository implements UserRepositoryInterface
+class EloquentUserRepository extends IlluminateUserRepository implements UserRepositoryInterface
 {
-    public function search(string $search, array $searchSpecials): array
+    public function withRolesActivationsBanPaginated(
+        array $userColumns,
+        array $rolesColumns,
+        array $activationsColumns,
+        array $banColumns,
+        int $perPage = 50)
+    {
+        return EloquentUser::select(array_merge($userColumns, ['id']))
+            ->with([
+                'roles' => function ($query) use ($rolesColumns) {
+                    /** @var Builder $query */
+                    $query->select($rolesColumns);
+                },
+                'activations' => function ($query) use ($activationsColumns) {
+                    /** @var Builder $query */
+                    $query->select($activationsColumns);
+                },
+                'ban' => function ($query) use ($banColumns) {
+                    /** @var Builder $query */
+                    $query->select($banColumns);
+                }
+            ])
+            ->paginate($perPage);
+    }
+
+    public function search(string $query, array $searchSpecials): array
     {
         /** @var Builder $builder */
         $builder = EloquentUser::select(['id', 'username', 'email', 'balance']);
 
-        $first = $search[0];
+        $first = $query[0];
         if (in_array($first, $searchSpecials)) {
             $result = $builder
-                ->where('balance', $first, str_replace($first, '', $search))
+                ->where('balance', $first, str_replace($first, '', $query))
                 ->get();
         } else {
-            $pattern = '%' . $search . '%';
+            $pattern = '%' . $query . '%';
             $result = $builder
                 ->where('id', 'like', $pattern)
                 ->orWhere('username', 'like', $pattern)

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Models\Role;
 
-use Illuminate\Database\Eloquent\Model;
+use Cartalyst\Sentinel\Roles\EloquentRole as BaseRole;
 
 /**
  * Class Role
@@ -24,7 +24,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Role whereSlug($value)
  * @method static \Illuminate\Database\Query\Builder|\App\Models\Role whereUpdatedAt($value)
  */
-class EloquentRole extends Model implements RoleInterface
+class EloquentRole extends BaseRole implements RoleInterface
 {
     /**
      * @var string

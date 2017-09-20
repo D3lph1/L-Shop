@@ -7,7 +7,7 @@ use App\DataTransferObjects\Page as DTO;
 use App\Exceptions\Page\UrlAlreadyExistsException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveAddedPageRequest;
-use App\Services\Page;
+use App\TransactionScripts\Pages;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -25,17 +25,15 @@ class AddController extends Controller
      */
     public function render(Request $request): View
     {
-        $data = [
+        return view('admin.pages.add', [
             'currentServer' => $request->get('currentServer')
-        ];
-
-        return view('admin.pages.add', $data);
+        ]);
     }
 
     /**
      * Save new static page.
      */
-    public function save(SaveAddedPageRequest $request, Page $handler): RedirectResponse
+    public function save(SaveAddedPageRequest $request, Pages $script): RedirectResponse
     {
         $page = (new DTO())
             ->setTitle($request->get('page_title'))
@@ -43,7 +41,7 @@ class AddController extends Controller
             ->setUrl($request->get('page_url'));
 
         try {
-            if ($handler->create($page)) {
+            if ($script->create($page)) {
                 $this->msg->success(__('messages.admin.pages.add.success'));
             } else {
                 $this->msg->danger(__('messages.admin.pages.add.fail'));
@@ -54,6 +52,6 @@ class AddController extends Controller
             return back();
         }
 
-        return response()->redirectToRoute('admin.pages.list', ['server' => $request->get('currentServer')->id]);
+        return response()->redirectToRoute('admin.pages.list', ['server' => $request->get('currentServer')->getId()]);
     }
 }

@@ -11,7 +11,7 @@
             <h1><i class="fa fa-server fa-lg fa-left-big"></i>@lang('content.admin.servers.add.title')</h1>
         </div>
 
-        <form method="post" action="{{ route('admin.servers.add.save', ['server' => $currentServer->id]) }}">
+        <form method="post" action="{{ route('admin.servers.add.save', ['server' => $currentServer->getId()]) }}">
             <div id="s-change-name">
                 <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-12 offset-xs-0">
                     <div class="row">

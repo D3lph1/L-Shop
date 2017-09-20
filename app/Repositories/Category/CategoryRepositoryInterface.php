@@ -24,5 +24,5 @@ interface CategoryRepositoryInterface
 
     public function countWithServer(int $serverId): int;
 
-    public function delete(int $categoryId): void;
+    public function delete(int $categoryId): bool;
 }

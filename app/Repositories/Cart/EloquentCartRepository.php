@@ -7,6 +7,7 @@ use App\DataTransferObjects\Cart;
 use App\Models\Cart\CartInterface;
 use App\Models\Cart\EloquentCart;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use Illuminate\Database\Eloquent\Builder;
 
 /**
  * Class EloquentCartRepository
@@ -46,10 +47,15 @@ class EloquentCartRepository implements CartRepositoryInterface
             ->paginate(s_get('profile.cart_items_per_page', 10));
     }
 
-    public function getByPlayerWithItems(string $player, array $columns): iterable
+    public function getByPlayerWithItems(string $player, array $cartColumns, array $itemColumns): iterable
     {
-        return EloquentCart::select($columns)
-            ->join('items', 'items.id', 'cart.item_id')
+        return EloquentCart::select(array_merge($cartColumns, ['item_id']))
+            ->with([
+                'item_' => function ($query) use ($itemColumns) {
+                    /** @var Builder $query */
+                    $query->select(array_merge($itemColumns, ['id']));
+                }
+            ])
             ->where('player', $player)
             ->get();
     }

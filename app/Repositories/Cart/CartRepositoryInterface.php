@@ -19,5 +19,5 @@ interface CartRepositoryInterface
 
     public function historyForUser($userLogin, int $server, array $columns): LengthAwarePaginator;
 
-    public function getByPlayerWithItems(string $player, array $columns): iterable;
+    public function getByPlayerWithItems(string $player, array $cartColumns, array $itemColumns): iterable;
 }

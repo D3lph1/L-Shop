@@ -3,9 +3,11 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Users;
 
+use App\Exceptions\User\AlreadyActivatedException;
+use App\Exceptions\User\NotFoundException;
 use App\Http\Controllers\Controller;
-use App\Repositories\UserRepository;
 use App\Services\Ban;
+use App\TransactionScripts\Users;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,7 +21,16 @@ use Illuminate\View\View;
  */
 class ListController extends Controller
 {
-    private $searchSpecials = ['>', '<', '=', '>=', '<=', '!=', '<>'];
+    /**
+     * @var Users
+     */
+    private $script;
+
+    public function __construct(Users $script)
+    {
+        parent::__construct();
+        $this->script = $script;
+    }
 
     /**
      * Render the users list page.
@@ -31,15 +42,11 @@ class ListController extends Controller
      */
     public function render(Request $request, Ban $ban): View
     {
-        $users = $this->sentinel->getUserRepository()->with(['roles', 'activations', 'ban'])->paginate(50);
-
-        $data = [
+        return view('admin.users.list', [
             'currentServer' => $request->get('currentServer'),
             'ban' => $ban,
-            'users' => $users
-        ];
-
-        return view('admin.users.list', $data);
+            'users' => $this->script->informationForList()
+        ]);
     }
 
     /**
@@ -47,16 +54,17 @@ class ListController extends Controller
      */
     public function complete(Request $request): RedirectResponse
     {
-        $user = $this->sentinel->findById((int)$request->route('user'));
-        $activation = $this->sentinel->getActivationRepository()->completed($user);
-        if ($activation) {
+        try {
+            if ($this->script->activate((int)$request->route('user'))) {
+                $this->msg->success(__('messages.admin.users.list.activate.success'));
+            } else {
+                // TODO: make msg
+            }
+        } catch (NotFoundException $e) {
+            // TODO: make msg
+        } catch (AlreadyActivatedException $e) {
             $this->msg->info(__('messages.admin.users.list.activate.already'));
-
-            return back();
         }
-
-        $this->sentinel->activate($user);
-        $this->msg->success(__('messages.admin.users.list.activate.success'));
 
         return back();
     }
@@ -66,8 +74,12 @@ class ListController extends Controller
      */
     public function search(Request $request): JsonResponse
     {
-        $search = $request->get('search');
-        $result = $this->getResult($search);
+        $query = $request->get('search');
+        if (empty($query)) {
+            return json_response('not_found');
+        }
+
+        $result = $this->script->search($query);
 
         if (count($result) > 0) {
             $currency = s_get('shop.currency_html');
@@ -78,7 +90,7 @@ class ListController extends Controller
                         'server' => $request->get('currentServer')->id,
                         'edit' => $item['id'],
                     ]);
-            $item['currency'] = $currency;
+                $item['currency'] = $currency;
             }
             unset($item);
 
@@ -88,13 +100,5 @@ class ListController extends Controller
         }
 
         return json_response('not_found');
-    }
-
-    /**
-     * Get user search result.
-     */
-    protected function getResult(string $search): array
-    {
-        return $this->app->make(UserRepository::class)->search($search, $this->searchSpecials);
     }
 }

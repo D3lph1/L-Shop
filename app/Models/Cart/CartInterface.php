@@ -3,10 +3,14 @@ declare(strict_types = 1);
 
 namespace App\Models\Cart;
 
+use App\Models\Item\ItemInterface;
 use Carbon\Carbon;
 
 interface CartInterface
 {
+    public function getRelatedItem(): ItemInterface;
+
+
     public function getId(): int;
 
     public function getPlayer(): string;

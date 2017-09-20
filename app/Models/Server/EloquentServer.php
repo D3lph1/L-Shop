@@ -98,7 +98,7 @@ class EloquentServer extends Model implements ServerInterface
 
     public function isMonitoringEnabled(): bool
     {
-        return $this->monitoring_enabled;
+        return (bool)$this->monitoring_enabled;
     }
 
     public function getCreatedAt(): Carbon

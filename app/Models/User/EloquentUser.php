@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Models\User;
 
+use App\Models\Activation\EloquentActivation;
 use App\Models\Ban\EloquentBan;
 use App\Models\News\EloquentNews;
 use App\Models\Payment\EloquentPayment;
@@ -70,6 +71,8 @@ class EloquentUser extends BaseUser implements UserInterface
         'email'
     ];
 
+    protected static $activationsModel = EloquentActivation::class;
+
     public function news(): HasMany
     {
         return $this->hasMany(EloquentNews::class, 'user_id', 'id');
@@ -83,6 +86,11 @@ class EloquentUser extends BaseUser implements UserInterface
     public function ban(): HasOne
     {
         return $this->hasOne(EloquentBan::class, 'user_id', 'id');
+    }
+
+    public function getActivations(): iterable
+    {
+        return $this->activations;
     }
 
     public function getId(): int

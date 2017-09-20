@@ -86,7 +86,7 @@ class Server
 
     public function isEnabled(): bool
     {
-        return $this->enabled;
+        return (bool)$this->enabled;
     }
 
     /**

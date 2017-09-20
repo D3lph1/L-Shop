@@ -38,7 +38,7 @@ class Category
         return $this->name;
     }
 
-    public function getServerId(): int
+    public function getServerId(): ?int
     {
         return $this->serverId;
     }

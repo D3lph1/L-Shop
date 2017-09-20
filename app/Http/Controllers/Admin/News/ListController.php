@@ -23,11 +23,9 @@ class ListController extends Controller
     {
         $news = $news->adminList();
 
-        $data = [
+        return view('admin.news.list', [
             'currentServer' => $request->get('currentServer'),
             'news' => $news
-        ];
-
-        return view('admin.news.list', $data);
+        ]);
     }
 }

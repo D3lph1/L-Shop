@@ -3,22 +3,26 @@
 namespace App\Providers;
 
 use App\Models\Server;
+use App\Repositories\Activation\ActivationRepositoryInterface;
+use App\Repositories\Activation\EloquentActivationRepository;
 use App\Repositories\Ban\BanRepositoryInterface;
 use App\Repositories\Ban\EloquentBanRepository;
 use App\Repositories\Cart\CartRepositoryInterface;
 use App\Repositories\Cart\EloquentCartRepository;
 use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Repositories\Category\EloquentCategoryRepository;
-use App\Repositories\EloquentPageRepository;
 use App\Repositories\Item\EloquentItemRepository;
 use App\Repositories\Item\ItemRepositoryInterface;
 use App\Repositories\News\EloquentNewsRepository;
 use App\Repositories\News\NewsRepositoryInterface;
+use App\Repositories\Page\EloquentPageRepository;
 use App\Repositories\Page\PageRepositoryInterface;
 use App\Repositories\Payment\EloquentPaymentRepository;
 use App\Repositories\Payment\PaymentRepositoryInterface;
 use App\Repositories\Product\EloquentProductRepository;
 use App\Repositories\Product\ProductRepositoryInterface;
+use App\Repositories\Role\EloquentRoleRepository;
+use App\Repositories\Role\RoleRepositoryInterface;
 use App\Repositories\Server\EloquentServerRepository;
 use App\Repositories\Server\ServerRepositoryInterface;
 use App\Repositories\User\EloquentUserRepository;
@@ -129,5 +133,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(UserRepositoryInterface::class, EloquentUserRepository::class);
         $this->app->singleton(PaymentRepositoryInterface::class, EloquentPaymentRepository::class);
         $this->app->singleton(ProductRepositoryInterface::class, EloquentProductRepository::class);
+        $this->app->singleton(RoleRepositoryInterface::class, EloquentRoleRepository::class);
+        $this->app->singleton(ActivationRepositoryInterface::class, EloquentActivationRepository::class);
     }
 }

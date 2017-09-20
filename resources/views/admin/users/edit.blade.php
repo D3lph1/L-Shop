@@ -8,10 +8,10 @@
 @section('content')
     <div id="content-container">
         <div class="z-depth-1 content-header text-center">
-            <h1><i class="fa fa-user fa-lg fa-left-big"></i>@lang('content.admin.users.edit.title', ['username' => $user->username])</h1>
+            <h1><i class="fa fa-user fa-lg fa-left-big"></i>@lang('content.admin.users.edit.title', ['username' => $user->getUsername()])</h1>
         </div>
 
-        <form id="admin-users-edit-already-ban" method="post" action="{{ route('admin.users.unblock', ['server' => $currentServer->id, 'user' => $user->id]) }}" @if(!$isBanned) class="d-none" @endif>
+        <form id="admin-users-edit-already-ban" method="post" action="{{ route('admin.users.unblock', ['server' => $currentServer->getId(), 'user' => $user->getId()]) }}" @if(!$isBanned) class="d-none" @endif>
             <div class="alert alert-warning text-center">
                 @if($isBanned)
                     {{ build_ban_message($ban->get($user)->getUntil(), $ban->get($user)->getReason()) }}
@@ -22,14 +22,14 @@
             </div>
         </form>
 
-        <form method="post" action="{{ route('admin.users.edit.save', ['server' => $currentServer->id, 'edit' => $user->id]) }}">
+        <form method="post" action="{{ route('admin.users.edit.save', ['server' => $currentServer->getId(), 'edit' => $user->getId()]) }}">
             <div id="s-change-name" class="mt-3">
                 <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1 col-12 offset-xs-0">
                     <div class="row">
                         <div class="col-sm-6 offset-sm-3 col-12 text-center">
                             <div class="md-form text-left">
                                 <i class="fa fa-user prefix"></i>
-                                <input type="text" name="username" id="user-name" class="form-control" value="{{ $user->username }}">
+                                <input type="text" name="username" id="user-name" class="form-control" value="{{ $user->getUsername() }}">
                                 <label for="user-name">@lang('content.admin.users.edit.username')</label>
                             </div>
                         </div>
@@ -43,7 +43,7 @@
                             <div class="plus-category">
                                 <div class="md-form text-left">
                                     <i class="fa fa-envelope-o prefix"></i>
-                                    <input type="text" name="email" id="user-email" class="form-control" value="{{ $user->email }}">
+                                    <input type="text" name="email" id="user-email" class="form-control" value="{{ $user->getEmail() }}">
                                     <label for="user-email">@lang('content.admin.users.edit.email')</label>
                                 </div>
                             </div>
@@ -82,9 +82,9 @@
                                         <a href="#" class="btn btn-warning btn-sm btn-block" data-toggle="modal" data-target="#admin-users-edit-show-cart">@lang('content.admin.users.edit.other.in_game_cart')</a>
                                     </div>
                                     <div class="md-form text-left">
-                                        <a href="{{ route('admin.users.edit.destroy_sessions', ['server' => $currentServer->id, 'user' => $user->id]) }}" class="btn danger-color btn-sm btn-block">@lang('content.admin.users.edit.other.sessions')</a>
+                                        <a href="{{ route('admin.users.edit.destroy_sessions', ['server' => $currentServer->getId(), 'user' => $user->getId()]) }}" class="btn danger-color btn-sm btn-block">@lang('content.admin.users.edit.other.sessions')</a>
                                     </div>
-                                    @if(($user->getUserId() !== \Sentinel::getUser()->getUserId()) and !$isBanned)
+                                    @if(($user->getId() !== \Sentinel::getUser()->getId()) and !$isBanned)
                                         <div class="md-form text-left mb-3">
                                             <a id="admin-users-edit-ban-open-modal" class="btn btn-warning btn-sm btn-block" data-toggle="modal" data-target="#admin-users-edit-ban-modal">@lang('content.admin.users.edit.other.block')</a>
                                         </div>
@@ -97,8 +97,8 @@
                             {{ csrf_field() }}
                             <button class="btn btn-info"><i class="fa fa-check fa-left"></i>@lang('content.all.save')</button>
 
-                            @if($user->getUserId() !== \Sentinel::getUser()->getUserId())
-                                <a href="{{ route('admin.users.edit.remove', ['server' => $currentServer->id, 'user' => $user->id]) }}" class="btn danger-color"><i class="fa fa-user-times fa-left"></i>@lang('content.admin.users.edit.remove')</a>
+                            @if($user->getId() !== \Sentinel::getUser()->getId())
+                                <a href="{{ route('admin.users.edit.remove', ['server' => $currentServer->getId(), 'user' => $user->getId()]) }}" class="btn danger-color"><i class="fa fa-user-times fa-left"></i>@lang('content.admin.users.edit.remove')</a>
                             @endif
                         </div>
                     </div>
@@ -116,7 +116,7 @@
         @lang('content.admin.users.edit.block_modal.title')
     @endslot
     @slot('buttons')
-        <button type="button" class="btn btn-warning" id="admin-users-edit-ban" data-url="{{ route('admin.users.block', ['server' => $currentServer->id, 'user' => $user->getUserId()]) }}">@lang('content.admin.users.edit.block_modal.btn')</button>
+        <button type="button" class="btn btn-warning" id="admin-users-edit-ban" data-url="{{ route('admin.users.block', ['server' => $currentServer->getId(), 'user' => $user->getId()]) }}">@lang('content.admin.users.edit.block_modal.btn')</button>
         <button type="button" class="btn btn-outline-warning" data-dismiss="modal">@lang('content.admin.users.edit.block_modal.cancel')</button>
     @endslot
     <div class="md-form text-left">
@@ -156,12 +156,12 @@
                     <tbody>
                     @foreach($cart as $item)
                         <tr>
-                            <td><img height="35" width="35" src="@if(is_file(img_path("items/$item->image"))) {{ asset("img/items/{$item->image}") }} @else {{ asset("img/empty.png") }} @endif"></td>
-                            <td>{{ $item->name }}</td>
-                            <td>{{ $item->amount }}</td>
+                            <td><img height="35" width="35" src="{{ \App\Services\Image::getOrDefault("items/" . $item->getRelatedItem()->getImage(), 'img/empty.png') }}"></td>
+                            <td>{{ $item->getRelatedItem()->getName() }}</td>
+                            <td>{{ $item->getAmount() }}</td>
                             @foreach($servers as $server)
-                                @if($server->id == $item->server)
-                                    <td>{{ $server->name }}</td>
+                                @if($server->getId() === $item->getServerId())
+                                    <td>{{ $server->getName() }}</td>
                                 @endif
                             @endforeach
                         </tr>

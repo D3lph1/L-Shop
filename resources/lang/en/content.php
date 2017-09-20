@@ -276,6 +276,7 @@ return [
             'edit' => [
                 'title' => 'Edit :name server',
                 'new_category_name' => 'Name of the new category',
+                'add' => 'Add new category',
                 'remove' => 'Delete server'
             ],
             'list' => [

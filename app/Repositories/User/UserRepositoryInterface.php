@@ -3,7 +3,17 @@ declare(strict_types = 1);
 
 namespace App\Repositories\User;
 
-interface UserRepositoryInterface
+use Cartalyst\Sentinel\Users\UserRepositoryInterface as BaseUserRepositoryInterface;
+
+interface UserRepositoryInterface extends BaseUserRepositoryInterface
 {
-    public function search(string $search, array $searchSpecials): iterable;
+    public function withRolesActivationsBanPaginated(
+        array $userColumns,
+        array $rolesColumns,
+        array $activationsColumns,
+        array $banColumns,
+        int $perPage = 50
+    );
+
+    public function search(string $query, array $searchSpecials): iterable;
 }

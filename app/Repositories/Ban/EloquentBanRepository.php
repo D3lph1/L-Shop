@@ -34,7 +34,7 @@ class EloquentBanRepository implements BanRepositoryInterface
 
     public function deleteByUser(UserInterface $user): bool
     {
-        return EloquentBan::where('user_id', $user->getUserId())->delete();
+        return (bool)EloquentBan::where('user_id', $user->getUserId())->delete();
     }
 
     public function isBanned(UserInterface $user): bool

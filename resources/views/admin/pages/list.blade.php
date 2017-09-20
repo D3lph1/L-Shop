@@ -12,7 +12,7 @@
         </div>
         <div class="product-container">
             <div class="mb-1">
-                <a href="{{ route('admin.pages.add', ['server' => $currentServer->id]) }}" class="btn btn-info btn-block">@lang('content.admin.pages.list.add')</a>
+                <a href="{{ route('admin.pages.add', ['server' => $currentServer->getId()]) }}" class="btn btn-info btn-block">@lang('content.admin.pages.list.add')</a>
             </div>
             @if($pages->count())
                 <div class="table-responsive">
@@ -29,12 +29,12 @@
                         <tbody>
                         @foreach($pages as $page)
                             <tr>
-                                <th scope="row">{{ $page->id }}</th>
-                                <td>{{ $page->title }}</td>
-                                <td><a href="{{ route('page',['server' => $currentServer->id, 'page' => $page->url]) }}" target="_blank">{{ route('page',['server' => $currentServer->id, 'page' => $page->url]) }}</a></td>
-                                <td>{{ $page->created_at }}</td>
-                                <td>{{ $page->updated_at }}</td>
-                                <td><a href="{{ route('admin.pages.edit', ['server' => $currentServer->id, 'id' => $page->id]) }}" class="btn btn-info btn-sm">@lang('content.admin.pages.list.table.edit')</a></td>
+                                <th scope="row">{{ $page->getId() }}</th>
+                                <td>{{ $page->getTitle() }}</td>
+                                <td><a href="{{ route('page',['server' => $currentServer->getId(), 'page' => $page->getUrl()]) }}" target="_blank">{{ route('page',['server' => $currentServer->getId(), 'page' => $page->getUrl()]) }}</a></td>
+                                <td>{{ $page->getCreatedAt() }}</td>
+                                <td>{{ $page->getUpdatedAt() }}</td>
+                                <td><a href="{{ route('admin.pages.edit', ['server' => $currentServer->getId(), 'id' => $page->getId()]) }}" class="btn btn-info btn-sm">@lang('content.admin.pages.list.table.edit')</a></td>
                             </tr>
                         @endforeach
                         </tbody>

@@ -7,7 +7,7 @@ use App\DataTransferObjects\Page as DTO;
 use App\Exceptions\Page\UrlAlreadyExistsException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveEditedPageRequest;
-use App\Services\Page;
+use App\TransactionScripts\Pages;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -21,18 +21,18 @@ use Illuminate\View\View;
 class EditController extends Controller
 {
     /**
-     * @var Page
+     * @var Pages
      */
-    private $page;
+    private $pages;
 
     /**
      * EditController constructor.
      *
-     * @param Page $page
+     * @param Pages $page
      */
-    public function __construct(Page $page)
+    public function __construct(Pages $page)
     {
-        $this->page = $page;
+        $this->pages = $page;
         parent::__construct();
     }
 
@@ -42,19 +42,12 @@ class EditController extends Controller
     public function render(Request $request): View
     {
         $id = (int)$request->route('id');
-        $page = $this->page->getById($id, ['title', 'content', 'url']);
 
-        if (!$page) {
-            $this->app->abort(404);
-        }
-
-        $data = [
+        return view('admin.pages.edit', [
             'currentServer' => $request->get('currentServer'),
             'id' => $id,
-            'page' => $page
-        ];
-
-        return view('admin.pages.edit', $data);
+            'page' => $this->pages->informationForEdit($id)
+        ]);
     }
 
     /**
@@ -68,13 +61,11 @@ class EditController extends Controller
             ->setContent($request->get('page_content'))
             ->setUrl($request->get('page_url'));
 
-        $result = null;
-
         try {
-            if ($this->page->update($page)) {
+            if ($this->pages->update($page)) {
                 $this->msg->success(__('messages.admin.pages.edit.success'));
 
-                return response()->redirectToRoute('admin.pages.list', ['server' => $request->get('currentServer')->id]);
+                return response()->redirectToRoute('admin.pages.list', ['server' => $request->get('currentServer')->getId()]);
             } else {
                 $this->msg->danger(__('messages.admin.pages.edit.fail'));
             }
@@ -91,10 +82,10 @@ class EditController extends Controller
     public function delete(Request $request): RedirectResponse
     {
         $id = (int)$request->route('id');
-        if ($this->page->delete($id)) {
+        if ($this->pages->delete($id)) {
             $this->msg->info(__('messages.admin.pages.delete.success'));
 
-            return response()->redirectToRoute('admin.pages.list', ['server' => $request->get('currentServer')->id]);
+            return response()->redirectToRoute('admin.pages.list', ['server' => $request->get('currentServer')->getId()]);
         }
         $this->msg->danger(__('messages.admin.pages.delete.fail'));
 

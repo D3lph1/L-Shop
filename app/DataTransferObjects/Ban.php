@@ -43,7 +43,7 @@ class Ban
         return $this->until;
     }
 
-    public function setReason(string $reason): self
+    public function setReason(?string $reason): self
     {
         $this->reason = $reason;
 
