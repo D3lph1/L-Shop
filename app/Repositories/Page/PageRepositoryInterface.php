@@ -5,6 +5,7 @@ namespace App\Repositories\Page;
 
 use App\DataTransferObjects\Page;
 use App\Models\Page\PageInterface;
+use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 /**
@@ -13,7 +14,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
  * @author D3lph1 <d3lph1.contact@gmail.com>
  * @package App\Repositories\Page
  */
-interface PageRepositoryInterface
+interface PageRepositoryInterface extends BaseRepositoryInterface
 {
     public function create(Page $dto): PageInterface;
 

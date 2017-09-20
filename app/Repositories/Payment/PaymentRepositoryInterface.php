@@ -3,10 +3,14 @@ declare(strict_types = 1);
 
 namespace App\Repositories\Payment;
 
+use App\Models\Payment\PaymentInterface;
+use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-interface PaymentRepositoryInterface
+interface PaymentRepositoryInterface extends BaseRepositoryInterface
 {
+    public function find(int $id, array $columns): ?PaymentInterface;
+
     /**
      * Receives completed payments created within one year from this moment.
      */
@@ -18,5 +22,5 @@ interface PaymentRepositoryInterface
 
     public function historyForUser(int $userId, array $columns): LengthAwarePaginator;
 
-    public function allHistory(array $columns): LengthAwarePaginator;
+    public function withUserPaginated(array $paymentColumns, array $userColumns): LengthAwarePaginator;
 }

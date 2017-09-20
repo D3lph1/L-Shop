@@ -1,11 +1,15 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Services\Distributors;
 
 use App\Exceptions\FailedToUpdateTableException;
-use App\Models\Payment;
-use App\Repositories\PaymentRepository;
-use App\Repositories\ProductRepository;
+use App\Exceptions\UnexpectedValueException;
+use App\Models\Payment\PaymentInterface;
+use App\Repositories\Payment\PaymentRepositoryInterface;
+use App\Repositories\Product\ProductRepositoryInterface;
+use App\Traits\ContainerTrait;
+use Cartalyst\Sentinel\Sentinel;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
@@ -18,20 +22,22 @@ use Illuminate\Database\Eloquent\Collection;
  */
 abstract class Distributor
 {
+    use ContainerTrait;
+
     /**
-     * @var ProductRepository
+     * @var ProductRepositoryInterface
      */
     protected $productRepository;
 
     /**
-     * @var PaymentRepository
+     * @var PaymentRepositoryInterface
      */
     protected $paymentRepository;
 
     /**
-     * @var Payment
+     * @var Sentinel
      */
-    protected $payment;
+    protected $sentinel;
 
     /**
      * @var string
@@ -40,108 +46,79 @@ abstract class Distributor
 
     /**
      * Distributor constructor.
-     *
-     * @param ProductRepository $productRepository
-     * @param PaymentRepository $paymentRepository
      */
-    public function __construct(
-        ProductRepository $productRepository,
-        PaymentRepository $paymentRepository
-    )
+    public function __construct()
     {
-        $this->productRepository = $productRepository;
-        $this->paymentRepository = $paymentRepository;
+        $this->productRepository = $this->make(ProductRepositoryInterface::class);
+        $this->paymentRepository = $this->make(PaymentRepositoryInterface::class);
+        $this->sentinel = $this->make(Sentinel::class);
     }
 
     /**
-     * @param string $serialized
-     *
-     * @return Collection
+     * Gives products to the player.
      */
-    protected function productsWithItems($serialized)
+    abstract public function give(PaymentInterface $payment): void;
+
+    protected function productsWithItems(string $serialized): array
     {
         $unserialized = unserialize($serialized);
         // Array with products identifiers.
-        $ids = array_keys($unserialized);
+        $identifiers = array_keys($unserialized);
         $counts = array_values($unserialized);
 
         /** @var Collection $products */
-        $products = $this->productRepository->getWithItems($ids, [
-            'products.server_id as server',
-            'items.item as item',
-            'items.extra as extra',
-            'items.type as type',
-            'products.stack as stack',
-            'products.item_id as item_id'
-        ]);
+        $products = $this->productRepository->withItemsMultiple(
+            $identifiers,
+            ['server_id', 'stack', 'item_id'],
+            ['item', 'type', 'extra']
+        );
 
         return $this->setCounts($counts, $products);
     }
 
-    /**
-     * @param array      $counts
-     * @param Collection $products
-     *
-     * @return Collection
-     */
-    private function setCounts($counts, $products)
+    private function setCounts(array $counts, iterable $products): array
     {
-        $i = 0;
-        foreach ($products as &$product) {
-            $product->count = $counts[$i];
-            $i++;
+        $result = [];
+
+        for ($i = 0; $i < count($counts); $i++) {
+            $result['count'] = $counts[$i];
         }
 
-        return $products;
+        return $result;
     }
 
     /**
-     * Sets the user to whom the products will be issued.
+     *
      */
-    protected function setUser()
+    protected function getUsername(PaymentInterface $payment): string
     {
         // If the order was made by an NOT authorized user.
-        if ($this->payment->username) {
-            $this->user = $this->payment->username;
-
-            return;
+        if ($payment->getUsername()) {
+            return $payment->getUsername();
         }
 
         // If the order was made by an authorized user.
-        if ($this->payment->user_id) {
-            $this->user = \Sentinel::getUserRepository()->findById($this->payment->user_id)['username'];
-
-            return;
+        if ($payment->getUserId()) {
+            return $payment->getUser()->getUsername();
         }
 
         // If for some reason both fields are empty.
-        throw new \UnexpectedValueException(
-            "Columns `user_id` and `username` is empty in row with id {$this->payment->id}"
+        throw new UnexpectedValueException(
+            "Columns `user_id` and `username` is empty in row with id {$payment->getId()}"
         );
     }
 
     /**
      * Completes the current payment.
-     *
-     * @throws FailedToUpdateTableException
      */
-    protected function complete()
+    protected function complete(PaymentInterface $payment)
     {
-        if (!$this->payment->completed) {
-            if (!$this->paymentRepository->complete($this->payment->id, $this->payment->service)) {
+        if (!$payment->isCompleted()) {
+            if (!$this->paymentRepository->complete($payment->getId(), $payment->getService())) {
                 throw new FailedToUpdateTableException(
-                    "Can not complete the payment with id {$this->payment->id}"
+                    "Can not complete the payment with id {$payment->getId()}"
                 );
             }
         }
     }
-
-    /**
-     * Gives products to the player.
-     *
-     * @param Payment $payment
-     *
-     * @return void
-     */
-    abstract public function give(Payment $payment);
 }

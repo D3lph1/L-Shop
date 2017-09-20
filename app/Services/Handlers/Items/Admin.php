@@ -58,7 +58,7 @@ class Admin
         return $item;
     }
 
-    public function create(Item $dto): ?\App\Models\Item
+    public function create(Item $dto): ?\App\Repositories\Item
     {
         if ($dto->getImageMode() === ImageMode::UPLOAD) {
             $image = $this->moveImageAndGetName($dto->getImage());

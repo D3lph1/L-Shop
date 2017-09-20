@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\DataTransferObjects\Admin;
 
-use App\Models\Server\ServerInterface;
+use App\Repositories\Server\ServerInterface;
 
 class EditedServer
 {

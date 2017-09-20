@@ -4,7 +4,6 @@ namespace App\Services\Payments;
 
 use App\Exceptions\InvalidArgumentTypeException;
 use App\Exceptions\Payment\InvalidProductsCountException;
-use App\Models\Payment;
 use App\Repositories\PaymentRepository;
 use App\Repositories\ProductRepository;
 

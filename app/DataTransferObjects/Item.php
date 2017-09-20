@@ -44,10 +44,15 @@ class Item
     /**
      * @var string
      */
+    private $imageName;
+
+    /**
+     * @var string
+     */
     private $imageMode;
 
     /**
-     * @var int
+     * @var string
      */
     private $item;
 
@@ -137,9 +142,21 @@ class Item
         return $this;
     }
 
+    public function setImageName(?string $imageName): self
+    {
+        $this->imageName = $imageName;
+
+        return $this;
+    }
+
     public function getImage(): ?UploadedFile
     {
         return $this->image;
+    }
+
+    public function getImageName(): ?string
+    {
+        return $this->imageName;
     }
 
     public function setItem(string $item): self

@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Payment;
 
-use App\Exceptions\Payment\AlreadyCompleteException;
+use App\Exceptions\Payment\AlreadyCompletedException;
 use App\Exceptions\Payment\NotFoundException;
 use App\Exceptions\Payment\UnableToCompleteException;
 use App\Http\Controllers\Controller;
@@ -72,7 +72,7 @@ class ResultController extends Controller
             $this->logger->warning($e);
 
             return response()->make('Payment not found', 404);
-        } catch (AlreadyCompleteException $e) {
+        } catch (AlreadyCompletedException $e) {
             $this->logger->warning($e);
 
             return response()->make('Already complete', 400);

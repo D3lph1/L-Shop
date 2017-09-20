@@ -68,7 +68,7 @@ return [
 
     'roles' => [
 
-        'model' => 'Cartalyst\Sentinel\Roles\EloquentRole',
+        'model' => \App\Models\Role\EloquentRole::class,
 
     ],
 
@@ -111,7 +111,7 @@ return [
 
     'persistences' => [
 
-        'model' => 'Cartalyst\Sentinel\Persistences\EloquentPersistence',
+        'model' => \App\Models\Persistence\EloquentPersistence::class,
 
         'single' => false,
 

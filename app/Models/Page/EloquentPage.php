@@ -18,12 +18,12 @@ use Illuminate\Database\Eloquent\Model;
  * @property string $url
  * @property Carbon $created_at
  * @property Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Page whereContent($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Page whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Page whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Page whereTitle($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Page whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Page whereUrl($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Page whereContent($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Page whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Page whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Page whereTitle($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Page whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Page whereUrl($value)
  */
 class EloquentPage extends Model implements PageInterface
 {

@@ -1,13 +1,12 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Services\Distributors;
 
-use App\Repositories\CartRepository;
-use App\Repositories\PaymentRepository;
-use App\Repositories\ProductRepository;
-use Carbon\Carbon;
-use App\Models\Payment;
 use App\Exceptions\FailedToInsertException;
+use App\Repositories\Cart\CartRepositoryInterface;
+use App\Repositories\Payment\PaymentInterface;
+use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Collection;
 
 /**
@@ -15,40 +14,28 @@ use Illuminate\Database\Eloquent\Collection;
  * It produces products issue in the player shopping cart plugin table.
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Services\Distributors
  */
 class ShoppingCart extends Distributor
 {
     /**
-     * @var CartRepository
+     * @var CartRepositoryInterface
      */
-    protected $cartRepository;
+    private $cartRepository;
 
-    /**
-     * ShoppingCart constructor.
-     *
-     * @param CartRepository    $cartRepository
-     * @param ProductRepository $productRepository
-     * @param PaymentRepository $paymentRepository
-     */
-    public function __construct(
-        CartRepository $cartRepository,
-        ProductRepository $productRepository,
-        PaymentRepository $paymentRepository
-    )
+    public function __construct(CartRepositoryInterface $cartRepository)
     {
         $this->cartRepository = $cartRepository;
-        parent::__construct($productRepository, $paymentRepository);
+        parent::__construct();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function give(Payment $payment)
+    public function give(PaymentInterface $payment): void
     {
-        $this->payment = $payment;
-        $this->setUser();
+        $username = $this->getUsername($payment);
+
         \DB::transaction(function () use ($payment) {
             $products = $this->productsWithItems($payment->products);
             $this->putInTable($this->prepareInsertData($products));
@@ -111,14 +98,9 @@ class ShoppingCart extends Distributor
         return $insertData;
     }
 
-    /**
-     * @param array $insertData
-     *
-     * @throws FailedToInsertException
-     */
-    private function putInTable($insertData)
+    private function putInTable(array $data): void
     {
-        if (!$this->cartRepository->insert($insertData)) {
+        if (!$this->cartRepository->create($data)) {
             throw new FailedToInsertException();
         }
     }

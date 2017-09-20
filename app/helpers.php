@@ -147,6 +147,8 @@ if (!function_exists('refill_user_balance')) {
      */
     function refill_user_balance(float $sum, ?int $userId = null)
     {
+        // TODO: Remove this func
+
         if (is_null($userId)) {
             if (is_auth()) {
                 $balance = \Sentinel::getUser()->getBalance();

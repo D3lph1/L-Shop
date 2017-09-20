@@ -26,15 +26,15 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property \Carbon\Carbon      $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @property int                 $server
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Cart whereAmount($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Cart whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Cart whereExtra($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Cart whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Cart whereItem($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Cart whereItemId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Cart wherePlayer($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Cart whereServer($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Cart whereType($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Cart whereAmount($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Cart whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Cart whereExtra($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Cart whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Cart whereItem($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Cart whereItemId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Cart wherePlayer($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Cart whereServer($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Cart whereType($value)
  */
 class EloquentCart extends Model implements CartInterface
 {

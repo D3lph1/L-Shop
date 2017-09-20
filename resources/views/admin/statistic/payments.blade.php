@@ -31,22 +31,22 @@
                         </thead>
                         <tbody>
                         @foreach($payments as $payment)
-                            <tr @if($payment->completed) class="table-success" @endif>
-                                <td>{{ $payment->id }}</td>
-                                <td>@if($payment->products) @lang('content.profile.payments.table.shopping') @else @lang('content.profile.payments.table.fillupbalance') @endif</td>
-                                <td>@if($payment->products)<a class="btn btn-info btn-sm profile-payments-info" data-url="{{ route('admin.statistic.payments.info', ['server' => $payment->server_id, 'payment' => $payment->id]) }}">@lang('content.profile.payments.table.more')</a> @endif</td>
-                                <td>{{ $payment->username }}</td>
-                                <td>{{ $payment->cost }} {!! $currency !!}</td>
+                            <tr @if($payment->isCompleted()) class="table-success" @endif>
+                                <td>{{ $payment->getId() }}</td>
+                                <td>@if($payment->getProducts()) @lang('content.profile.payments.table.shopping') @else @lang('content.profile.payments.table.fillupbalance') @endif</td>
+                                <td>@if($payment->getProducts())<a class="btn btn-info btn-sm profile-payments-info" data-url="{{ route('admin.statistic.payments.info', ['server' => $payment->getServerId(), 'payment' => $payment->getId()]) }}">@lang('content.profile.payments.table.more')</a> @endif</td>
+                                <td>@if($payment->getUserId()){{ $payment->getUser()->getUsername() }}@else {{ $payment->getUsername() }} @endif</td>
+                                <td>{{ $payment->getCost() }} {!! $currency !!}</td>
                                 @foreach($servers as $server)
-                                    @if($server->id == $payment->server_id)
-                                        <td>{{ $server->name }}</td>
+                                    @if($server->getId() == $payment->getServerId())
+                                        <td>{{ $server->getName() }}</td>
                                     @endif
                                 @endforeach
-                                <td>@if($payment->completed) @lang('content.profile.payments.table.completed') @else @lang('content.profile.payments.table.not_completed') @endif</td>
-                                <td>{{ $payment->created_at }}</td>
-                                <td>@if($payment->completed) {{ $payment->updated_at }} @endif</td>
-                                <td>@if($payment->service) {{ $payment->service }} @endif</td>
-                                <td>@if(!$payment->completed) <a href="{{ route('admin.statistic.payments.complete', ['server' => $payment->server_id, 'payment' => $payment->id]) }}" class="btn green btn-sm">@lang('content.profile.payments.table.complete')</a> @endif</td>
+                                <td>@if($payment->isCompleted()) @lang('content.profile.payments.table.completed') @else @lang('content.profile.payments.table.not_completed') @endif</td>
+                                <td>{{ $payment->getCreatedAt() }}</td>
+                                <td>@if($payment->isCompleted()) {{ $payment->getUpdatedAt() }} @endif</td>
+                                <td>@if($payment->getService()) {{ $payment->getService() }} @endif</td>
+                                <td>@if(!$payment->isCompleted()) <a href="{{ route('admin.statistic.payments.complete', ['server' => $payment->getServerId(), 'payment' => $payment->getId()]) }}" class="btn green btn-sm">@lang('content.profile.payments.table.complete')</a> @endif</td>
                             </tr>
                         @endforeach
                         </tbody>

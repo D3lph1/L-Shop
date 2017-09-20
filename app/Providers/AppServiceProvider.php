@@ -1,8 +1,9 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Providers;
 
-use App\Models\Server;
+use App\Models\Server\ServerInterface;
 use App\Repositories\Activation\ActivationRepositoryInterface;
 use App\Repositories\Activation\EloquentActivationRepository;
 use App\Repositories\Ban\BanRepositoryInterface;
@@ -19,6 +20,8 @@ use App\Repositories\Page\EloquentPageRepository;
 use App\Repositories\Page\PageRepositoryInterface;
 use App\Repositories\Payment\EloquentPaymentRepository;
 use App\Repositories\Payment\PaymentRepositoryInterface;
+use App\Repositories\Persistence\EloquentPersistenceRepository;
+use App\Repositories\Persistence\PersistenceRepositoryInterface;
 use App\Repositories\Product\EloquentProductRepository;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\Role\EloquentRoleRepository;
@@ -29,8 +32,6 @@ use App\Repositories\User\EloquentUserRepository;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Services\Activator;
 use App\Services\Cart;
-use App\Services\CartBuy;
-use App\Services\CatalogBuy;
 use App\Services\Message;
 use App\Services\Monitoring\MonitoringInterface;
 use App\Services\Monitoring\RconMonitoring;
@@ -70,10 +71,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        if (!Schema::hasTable('servers')) {
-            return;
-        }
-
         $this->app->alias(Message::class, 'message');
 
         $this->app->alias(Cart::class, 'cart');
@@ -91,13 +88,14 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->alias(Registrar::class, 'registrar');
 
-        $this->app->alias(CatalogBuy::class,'catalog.buy');
-
-        $this->app->alias(CartBuy::class, 'cart.buy');
-
         $this->app->alias(SashokLauncher::class, 'launcher.sashok');
 
         $this->app->singleton(Rcon::class, function (Application $app) {
+            // To successfully carry out the migration procedure.
+            if (!Schema::hasTable('servers')) {
+                return new Connector();
+            }
+
             $request = $app->make('request');
             $servers = $request->get('servers');
 
@@ -108,9 +106,9 @@ class AppServiceProvider extends ServiceProvider
 
             $rcon = new Connector();
 
-            /** @var Server $server */
+            /** @var ServerInterface $server */
             foreach ($servers as $server) {
-                $rcon->add($server->id, $server->ip, $server->port, $server->password, s_get('monitoring.rcon.timeout', 1));
+                $rcon->add($server->getId(), $server->getIp(), $server->getPort(), $server->getPassword(), s_get('monitoring.rcon.timeout', 1));
             }
 
             return $rcon;
@@ -135,5 +133,6 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(ProductRepositoryInterface::class, EloquentProductRepository::class);
         $this->app->singleton(RoleRepositoryInterface::class, EloquentRoleRepository::class);
         $this->app->singleton(ActivationRepositoryInterface::class, EloquentActivationRepository::class);
+        $this->app->singleton(PersistenceRepositoryInterface::class, EloquentPersistenceRepository::class);
     }
 }

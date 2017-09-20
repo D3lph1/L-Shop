@@ -1,7 +1,10 @@
 <?php
+declare(strict_types = 1);
 
-use App\Repositories\CategoryRepository;
-use App\Repositories\ServerRepository;
+use App\DataTransferObjects\Server;
+use App\Models\Server\ServerInterface;
+use App\Repositories\Category\CategoryRepositoryInterface;
+use App\Repositories\Server\ServerRepositoryInterface;
 use Illuminate\Database\Seeder;
 
 /**
@@ -12,22 +15,22 @@ use Illuminate\Database\Seeder;
 class ServersSeeder extends Seeder
 {
     /**
-     * @var ServerRepository
+     * @var ServerRepositoryInterface
      */
     private $serverRepository;
 
     /**
-     * @var CategoryRepository
+     * @var CategoryRepositoryInterface
      */
     private $categoryRepository;
 
     /**
      * ServersSeeder constructor.
      *
-     * @param ServerRepository   $serverRepository
-     * @param CategoryRepository $categoryRepository
+     * @param ServerRepositoryInterface   $serverRepository
+     * @param CategoryRepositoryInterface $categoryRepository
      */
-    public function __construct(ServerRepository $serverRepository, CategoryRepository $categoryRepository)
+    public function __construct(ServerRepositoryInterface $serverRepository, CategoryRepositoryInterface $categoryRepository)
     {
         $this->serverRepository = $serverRepository;
         $this->categoryRepository = $categoryRepository;
@@ -47,71 +50,79 @@ class ServersSeeder extends Seeder
 
     private function createMmoServer()
     {
-        /** @var \App\Models\Server $server */
-        $server = $this->serverRepository->create([
-            'id' => 1,
-            'name' => 'MMO',
-            'enabled' => true,
-            'ip' => '127.0.0.1',
-            'port' => '25575',
-            'password' => '123456',
-            'monitoring_enabled' => false,
-        ]);
+        /** @var ServerInterface $server */
+        $server = $this->serverRepository->create(
+            (new Server())
+                ->setId(1)
+                ->setName('MMO')
+                ->setEnabled(true)
+                ->setIp('127.0.0.1')
+                ->setPort(25575)
+                ->setPassword('123456')
+                ->setMonitoringEnabled(false)
+        );
 
-        $this->categoryRepository->create([
-            'id' => 1,
-            'name' => __('seeding.categories.1'),
-            'server_id' => $server->id
-        ]);
-        $this->categoryRepository->create([
-            'id' => 2,
-            'name' => __('seeding.categories.2'),
-            'server_id' => $server->id
-        ]);
-        $this->categoryRepository->create([
-            'id' => 5,
-            'name' => __('seeding.categories.5'),
-            'server_id' => $server->id
-        ]);
+        $this->categoryRepository->create(
+            (new \App\DataTransferObjects\Category())
+                ->setId(1)
+                ->setName(__('seeding.categories.1'))
+                ->setServerId($server->getId())
+        );
+        $this->categoryRepository->create(
+            (new \App\DataTransferObjects\Category())
+                ->setId(2)
+                ->setName(__('seeding.categories.2'))
+                ->setServerId($server->getId())
+        );
+        $this->categoryRepository->create(
+            (new \App\DataTransferObjects\Category())
+                ->setId(5)
+                ->setName(__('seeding.categories.5'))
+                ->setServerId($server->getId())
+        );
     }
 
     private function createHiTechPvPServer()
     {
-        /** @var \App\Models\Server $server */
-        $server = $this->serverRepository->create([
-            'id' => 2,
-            'name' => 'Hi-Tech (PvP)',
-            'enabled' => true,
-            'ip' => '127.0.0.1',
-            'port' => '25564',
-            'password' => '123456',
-            'monitoring_enabled' => false,
-        ]);
+        /** @var ServerInterface $server */
+        $server = $this->serverRepository->create(
+            (new Server())
+                ->setId(2)
+                ->setName('Hi-Tech (PvP)')
+                ->setEnabled(true)
+                ->setIp('127.0.0.1')
+                ->setPort(25564)
+                ->setPassword('123456')
+                ->setMonitoringEnabled(false)
+        );
 
-        $this->categoryRepository->create([
-            'id' => 3,
-            'name' => __('seeding.categories.3'),
-            'server_id' => $server->id,
-        ]);
+        $this->categoryRepository->create(
+            (new \App\DataTransferObjects\Category())
+                ->setId(3)
+                ->setName(__('seeding.categories.3'))
+                ->setServerId($server->getId())
+        );
     }
 
     private function createHiTechPvEServer()
     {
-        /** @var \App\Models\Server $server */
-        $server = $this->serverRepository->create([
-            'id' => 3,
-            'name' => 'Hi-Tech (PvE)',
-            'enabled' => true,
-            'ip' => null,
-            'port' => null,
-            'password' => null,
-            'monitoring_enabled' => false,
-        ]);
+        /** @var ServerInterface $server */
+        $server = $this->serverRepository->create(
+            (new Server())
+                ->setId(2)
+                ->setName('Hi-Tech (PvE)')
+                ->setEnabled(true)
+                ->setIp(null)
+                ->setPort(null)
+                ->setPassword(null)
+                ->setMonitoringEnabled(false)
+        );
 
-        $this->categoryRepository->create([
-            'id' => 4,
-            'name' => __('seeding.categories.4'),
-            'server_id' => $server->id,
-        ]);
+        $this->categoryRepository->create(
+            (new \App\DataTransferObjects\Category())
+                ->setId(4)
+                ->setName(__('seeding.categories.4'))
+                ->setServerId($server->getId())
+        );
     }
 }

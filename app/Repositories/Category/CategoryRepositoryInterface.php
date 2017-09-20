@@ -5,6 +5,7 @@ namespace App\Repositories\Category;
 
 use App\DataTransferObjects\Category;
 use App\Models\Category\CategoryInterface;
+use App\Repositories\BaseRepositoryInterface;
 
 /**
  * Interface CategoryRepositoryInterface
@@ -12,7 +13,7 @@ use App\Models\Category\CategoryInterface;
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  * @package App\Repositories\Category
  */
-interface CategoryRepositoryInterface
+interface CategoryRepositoryInterface extends BaseRepositoryInterface
 {
     public function create(Category $category): CategoryInterface;
 

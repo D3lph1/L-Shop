@@ -17,12 +17,12 @@ use Cartalyst\Sentinel\Roles\EloquentRole as BaseRole;
  * @property string $permissions
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Role whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Role whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Role whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Role wherePermissions($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Role whereSlug($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Role whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Role whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Role whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Role whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Role wherePermissions($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Role whereSlug($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Role whereUpdatedAt($value)
  */
 class EloquentRole extends BaseRole implements RoleInterface
 {

@@ -3,14 +3,9 @@
 namespace Tests\Feature\Payments;
 
 use App\Exceptions\Payment\InvalidProductsCountException;
-use App\Models\Cart;
-use App\Models\Payment;
 use App\Services\CatalogBuy;
 use Illuminate\Container\Container;
 use Tests\TestCase;
-use Illuminate\Foundation\Testing\WithoutMiddleware;
-use Illuminate\Foundation\Testing\DatabaseMigrations;
-use Illuminate\Foundation\Testing\DatabaseTransactions;
 
 class BuyTest extends TestCase
 {

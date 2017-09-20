@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace App\Traits;
 
-use App\Models\Payment;
 use Illuminate\Http\JsonResponse;
 
 /**

@@ -2,8 +2,6 @@
 
 namespace Tests\Feature\Payments;
 
-use App\Models\Cart;
-use App\Models\Payment;
 use App\Repositories\CartRepository;
 use App\Services\Handlers\Payments\Robokassa;
 use Tests\TestCase;

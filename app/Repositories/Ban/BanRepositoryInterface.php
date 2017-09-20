@@ -5,6 +5,7 @@ namespace App\Repositories\Ban;
 
 use App\DataTransferObjects\Ban;
 use App\Models\Ban\BanInterface;
+use App\Repositories\BaseRepositoryInterface;
 use Cartalyst\Sentinel\Users\UserInterface;
 
 /**
@@ -13,7 +14,7 @@ use Cartalyst\Sentinel\Users\UserInterface;
  * @author D3lph1 <d3lph1.contact@gmail.com>
  * @package App\Repositories\Ban
  */
-interface BanRepositoryInterface
+interface BanRepositoryInterface extends BaseRepositoryInterface
 {
     public function create(Ban $dto): BanInterface;
 

@@ -83,4 +83,9 @@ class EloquentPageRepository implements PageRepositoryInterface
     {
         return (bool)EloquentPage::where('id', $id)->delete();
     }
+
+    public function truncate(): void
+    {
+        EloquentPage::truncate();
+    }
 }

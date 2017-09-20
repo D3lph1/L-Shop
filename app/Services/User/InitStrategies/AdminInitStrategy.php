@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace App\Services\User\InitStrategies;
 
-use App\Models\Role\RoleInterface;
 use App\Models\User\UserInterface;
+use App\Repositories\Role\RoleInterface;
 use Cartalyst\Sentinel\Sentinel;
 
 class AdminInitStrategy implements InitStrategyInterface

@@ -4,14 +4,20 @@ declare(strict_types = 1);
 namespace App\Repositories\Payment;
 
 use App\Models\Payment\EloquentPayment;
+use App\Models\Payment\PaymentInterface;
 use Cache;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 
 class EloquentPaymentRepository implements PaymentRepositoryInterface
 {
+    public function find(int $id, array $columns): ?PaymentInterface
+    {
+        return EloquentPayment::find($id, $columns);
+    }
+
     /**
-     * Receives completed payments created within one year from this moment.
+     * {@inheritdoc}
      */
     public function forTheLastYearCompleted(array $columns): iterable
     {
@@ -66,10 +72,21 @@ class EloquentPaymentRepository implements PaymentRepositoryInterface
             ->paginate(s_get('profile.payments_per_page', 10));
     }
 
-    public function allHistory(array $columns): LengthAwarePaginator
+    public function withUserPaginated(array $paymentColumns, array $userColumns): LengthAwarePaginator
     {
-        return EloquentPayment::select($columns)
+        return EloquentPayment::select(array_merge($paymentColumns, ['user_id']))
+            ->with([
+                'user' => function ($query) use ($userColumns) {
+                    /** @var Builder $query */
+                    $query->select(array_merge($userColumns, ['id']));
+                }
+            ])
             ->orderBy('created_at', 'DESC')
             ->paginate(50);
+    }
+
+    public function truncate(): void
+    {
+        EloquentPayment::truncate();
     }
 }

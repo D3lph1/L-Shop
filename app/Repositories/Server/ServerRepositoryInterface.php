@@ -5,6 +5,7 @@ namespace App\Repositories\Server;
 
 use App\DataTransferObjects\Server;
 use App\Models\Server\ServerInterface;
+use App\Repositories\BaseRepositoryInterface;
 
 /**
  * Interface ServerRepositoryInterface
@@ -12,7 +13,7 @@ use App\Models\Server\ServerInterface;
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  * @package App\Repositories\Server
  */
-interface ServerRepositoryInterface
+interface ServerRepositoryInterface extends BaseRepositoryInterface
 {
     public function create(Server $dto): ServerInterface;
 

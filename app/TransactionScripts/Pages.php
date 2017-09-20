@@ -6,7 +6,7 @@ namespace App\TransactionScripts;
 use App\DataTransferObjects\Page;
 use App\Exceptions\Page\NotFoundException;
 use App\Exceptions\Page\UrlAlreadyExistsException;
-use App\Models\Page\PageInterface;
+use App\Repositories\Page\PageInterface;
 use App\Repositories\Page\PageRepositoryInterface;
 use Cache;
 

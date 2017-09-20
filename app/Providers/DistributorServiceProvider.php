@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App\Contracts\Distributor;
 use App\Exceptions\DistributorNotFoundException;
-use App\Exceptions\UnexpectedSettingsValueException;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -29,7 +28,7 @@ class DistributorServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->bind('distributor', function () {
+        $this->app->bind(\App\Services\Distributors\Distributor::class, function () {
             $distributor = s_get('distributor.name');
             $full = "App\\Services\\Distributors\\$distributor";
             if (class_exists($full)) {
@@ -46,5 +45,7 @@ class DistributorServiceProvider extends ServiceProvider
 
             throw new DistributorNotFoundException($distributor);
         });
+
+        $this->app->alias(\App\Services\Distributors\Distributor::class, 'distributor');
     }
 }

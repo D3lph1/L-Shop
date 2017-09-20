@@ -2,10 +2,10 @@
 
 namespace App\Services\Handlers\Payments;
 
-use App\Repositories\PaymentRepository;
+use App\Exceptions\Payment\AlreadyCompletedException;
 use App\Exceptions\Payment\NotFoundException;
-use App\Exceptions\Payment\AlreadyCompleteException;
 use App\Exceptions\Payment\UnableToCompleteException;
+use App\Repositories\PaymentRepository;
 
 /**
  * Class AbstractPayment
@@ -37,7 +37,7 @@ abstract class AbstractPayment
     {
         // If payment has already been completed.
         if ($payment->completed) {
-            throw new AlreadyCompleteException();
+            throw new AlreadyCompletedException();
         }
 
         // If payment with this ID does not exist, exit.
@@ -67,9 +67,9 @@ abstract class AbstractPayment
     /**
      * Give items or money.
      *
-     * @param \App\Models\Payment $payment
+     * @param \App\Repositories\Payment $payment
      */
-    protected function give(\App\Models\Payment $payment)
+    protected function give(\App\Repositories\Payment $payment)
     {
         \DB::transaction(function () use ($payment) {
             if ($payment->products) {
@@ -87,9 +87,9 @@ abstract class AbstractPayment
     /**
      * Outstanding product player.
      *
-     * @param \App\Models\Payment $payment
+     * @param \App\Repositories\Payment $payment
      */
-    private function giveProducts(\App\Models\Payment $payment)
+    private function giveProducts(\App\Repositories\Payment $payment)
     {
         $distributor = \App::make('distributor');
         $distributor->give($payment);
@@ -98,9 +98,9 @@ abstract class AbstractPayment
     /**
      * Outstanding money player.
      *
-     * @param \App\Models\Payment $payment
+     * @param \App\Repositories\Payment $payment
      */
-    private function giveMoney(\App\Models\Payment $payment)
+    private function giveMoney(\App\Repositories\Payment $payment)
     {
         refill_user_balance($payment->cost, $payment->user_id);
     }

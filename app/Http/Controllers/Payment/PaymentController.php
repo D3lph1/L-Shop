@@ -3,7 +3,6 @@
 namespace App\Http\Controllers\Payment;
 
 use App\Http\Controllers\Controller;
-use App\Models\Payment;
 use App\Repositories\PaymentRepository;
 use App\Services\Payments\Interkassa\Checkout as InterkassaCheckout;
 use App\Services\Payments\Interkassa\Payment as InterkassaPayment;

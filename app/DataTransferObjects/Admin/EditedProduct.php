@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace App\DataTransferObjects\Admin;
 
 use App\Models\Category\CategoryInterface;
-use App\Models\Product\ProductInterface;
+use App\Repositories\Product\ProductInterface;
 
 class EditedProduct
 {

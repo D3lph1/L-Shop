@@ -97,4 +97,9 @@ class EloquentNewsRepository implements NewsRepositoryInterface
             ->orderBy('created_at', 'DESC')
             ->paginate($perPage);
     }
+
+    public function truncate(): void
+    {
+        EloquentNews::truncate();
+    }
 }

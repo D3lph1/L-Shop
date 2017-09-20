@@ -2,7 +2,7 @@
 
 namespace App\Services\Handlers\Payments;
 
-use App\Exceptions\Payment\AlreadyCompleteException;
+use App\Exceptions\Payment\AlreadyCompletedException;
 use App\Exceptions\Payment\InvalidRequestDataException;
 use App\Exceptions\Payment\NotFoundException;
 use App\Exceptions\Payment\UnableToCompleteException;
@@ -33,7 +33,7 @@ class Interkassa extends AbstractPayment
      * @param null|int $testingPaymentId
      *
      * @throws InvalidRequestDataException
-     * @throws AlreadyCompleteException
+     * @throws AlreadyCompletedException
      * @throws NotFoundException
      * @throws UnableToCompleteException
      *

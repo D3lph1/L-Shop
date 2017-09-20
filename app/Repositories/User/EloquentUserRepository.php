@@ -5,6 +5,7 @@ namespace App\Repositories\User;
 
 use App\Models\User\EloquentUser;
 use Cartalyst\Sentinel\Users\IlluminateUserRepository;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 
 class EloquentUserRepository extends IlluminateUserRepository implements UserRepositoryInterface
@@ -14,7 +15,7 @@ class EloquentUserRepository extends IlluminateUserRepository implements UserRep
         array $rolesColumns,
         array $activationsColumns,
         array $banColumns,
-        int $perPage = 50)
+        int $perPage = 50): LengthAwarePaginator
     {
         return EloquentUser::select(array_merge($userColumns, ['id']))
             ->with([
@@ -55,5 +56,15 @@ class EloquentUserRepository extends IlluminateUserRepository implements UserRep
         }
 
         return $result->toArray();
+    }
+
+    public function whereIdIn(array $identifiers, array $columns): iterable
+    {
+        return EloquentUser::whereIn('id', $identifiers)->get();
+    }
+
+    public function truncate(): void
+    {
+        EloquentUser::truncate();
     }
 }

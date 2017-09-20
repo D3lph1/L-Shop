@@ -5,9 +5,10 @@ namespace App\Repositories\Item;
 
 use App\DataTransferObjects\Item;
 use App\Models\Item\ItemInterface;
+use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-interface ItemRepositoryInterface
+interface ItemRepositoryInterface extends BaseRepositoryInterface
 {
     public function create(Item $dto): ItemInterface;
 

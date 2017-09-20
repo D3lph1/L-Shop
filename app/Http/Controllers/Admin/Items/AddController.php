@@ -43,7 +43,7 @@ class AddController extends Controller
             ->setType($request->get('item_type'))
             ->setImageMode(is_null($image) ? ImageMode::DEFAULT : ImageMode::UPLOAD)
             ->setImage($image)
-            ->setItem((int)$request->get('item'))
+            ->setItem($request->get('item'))
             ->setExtra($request->get('extra'));
 
         $result = $items->create($dto);

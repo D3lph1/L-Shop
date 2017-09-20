@@ -72,7 +72,7 @@ class Ban
      * @param int           $days   Term of blocking.
      * @param string        $reason Reason for blocking.
      *
-     * @return \App\Models\Ban
+     * @return \App\Repositories\Ban
      */
     public function forDays(UserInterface $user, int $days, ?string $reason = null): BanInterface
     {

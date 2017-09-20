@@ -6,7 +6,7 @@ namespace App\TransactionScripts\Shop;
 use App\DataTransferObjects\News as DTO;
 use App\Exceptions\News\DisabledException;
 use App\Exceptions\News\NotFoundExceptions;
-use App\Models\News\NewsInterface;
+use App\Repositories\News\NewsInterface;
 use App\Repositories\News\NewsRepositoryInterface;
 use App\Traits\ContainerTrait;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;

@@ -648,6 +648,7 @@ return [
                 'more' => 'Show more ...',
                 'completed' => 'Completed',
                 'not_completed' => 'Not completed',
+                'completed_by_admin' => 'Completed by administrator',
                 'complete' => 'Complete',
                 'pay' => 'Pay now',
                 'empty' => 'Payment history is empty',

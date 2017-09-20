@@ -1,8 +1,11 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Console\Commands\Payment;
 
-use App\Repositories\PaymentRepository;
+use App\Exceptions\Payment\AlreadyCompletedException;
+use App\Exceptions\Payment\NotFoundException;
+use App\TransactionScripts\Payments;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -10,7 +13,6 @@ use Symfony\Component\Console\Input\InputArgument;
  * Class Complete
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Console\Commands\Payment
  */
 class Complete extends Command
@@ -30,62 +32,44 @@ class Complete extends Command
     protected $description = 'Complete payment and give products or money to user';
 
     /**
-     * @var PaymentRepository
+     * @var Payments
      */
-    protected $paymentRepository;
+    protected $script;
 
     /**
      * Create a new command instance.
      *
-     * @param PaymentRepository $paymentRepository
+     * @param Payments $script
      */
-    public function __construct(PaymentRepository $paymentRepository)
+    public function __construct(Payments $script)
     {
-        $this->paymentRepository = $paymentRepository;
+        $this->script = $script;
         parent::__construct();
     }
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle()
+    public function handle(): int
     {
-        $id = (int)$this->argument('id');
-        $distributor = \App::make('distributor');
-        $payment = $this->paymentRepository->find($id);
-
-        if (!$payment) {
+        try {
+            $this->script->complete((int)$this->argument('id'));
+        } catch (NotFoundException $e) {
             $this->error('Payment not found');
 
             return 1;
-        }
-
-        if ($payment->completed) {
+        } catch (AlreadyCompletedException $e) {
             $this->error('Payment already completed');
 
             return 2;
         }
 
-        if (!$payment->products) {
-            refill_user_balance((int)$payment->cost, $payment->user_id);
-            $this->paymentRepository->complete($payment->id, 'Завершен администратором');
-            $this->info('Payment successfully completed and user balance updated');
-
-            return 0;
-        }
-
-        $distributor->give($payment);
         $this->info('Payment successfully completed and products given');
 
         return 0;
     }
 
-    /**
-     * @return array
-     */
-    public function getArguments()
+    public function getArguments(): array
     {
         return [
             ['id', InputArgument::REQUIRED, 'Payment id']

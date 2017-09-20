@@ -5,6 +5,7 @@ namespace App\Repositories\News;
 
 use App\DataTransferObjects\News;
 use App\Models\News\NewsInterface;
+use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 /**
@@ -13,7 +14,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
  * @author D3lph1 <d3lph1.contact@gmail.com>
  * @package App\Repositories\News
  */
-interface NewsRepositoryInterface
+interface NewsRepositoryInterface extends BaseRepositoryInterface
 {
     public function create(News $dto): ?NewsInterface;
 

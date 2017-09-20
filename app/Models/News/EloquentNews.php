@@ -20,12 +20,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @property int $user_id
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\Models\News whereContent($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\News whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\News whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\News whereTitle($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\News whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\News whereUserId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\News whereContent($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\News whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\News whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\News whereTitle($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\News whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\News whereUserId($value)
  */
 class EloquentNews extends Model implements NewsInterface
 {

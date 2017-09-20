@@ -112,4 +112,9 @@ class EloquentServerRepository implements ServerRepositoryInterface
     {
         return (bool)EloquentServer::where('id', $serverId)->delete();
     }
+
+    public function truncate(): void
+    {
+        EloquentServer::truncate();
+    }
 }

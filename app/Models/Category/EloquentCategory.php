@@ -20,11 +20,11 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int                 $server_id
  * @property \Carbon\Carbon      $created_at
  * @property \Carbon\Carbon|null $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Category whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Category whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Category whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Category whereServerId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Category whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Category whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Category whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Category whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Category whereServerId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Category whereUpdatedAt($value)
  */
 class EloquentCategory extends Model implements CategoryInterface
 {

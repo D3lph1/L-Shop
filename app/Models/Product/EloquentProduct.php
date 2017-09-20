@@ -26,16 +26,16 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property int $category_id
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Product whereCategoryId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Product whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Product whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Product whereItemId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Product wherePrice($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Product whereServerId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Product whereStack($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Product whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Product whereCategoryId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Product whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Product whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Product whereItemId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Product wherePrice($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Product whereServerId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Product whereStack($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Product whereUpdatedAt($value)
  * @property float $sort_priority
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Product whereSortPriority($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Product whereSortPriority($value)
  */
 class EloquentProduct extends Model implements ProductInterface
 {

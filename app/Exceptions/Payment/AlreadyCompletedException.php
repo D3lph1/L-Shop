@@ -4,20 +4,19 @@ declare(strict_types = 1);
 namespace App\Exceptions\Payment;
 
 use App\Exceptions\LShopException;
-use RuntimeException;
 use Throwable;
 
 /**
- * Class NotFoundException
- * An exception intended for cases where you can not select from the payment database.
+ * Class AlreadyCompleteException
+ * An exception is thrown when trying to complete an already completed payment.
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  * @package App\Exceptions\Payment
  */
-class NotFoundException extends RuntimeException implements LShopException
+class AlreadyCompletedException extends \LogicException implements LShopException
 {
     public function __construct(int $paymentId, int $code = 0, Throwable $previous = null)
     {
-        parent::__construct("Payment with id `$paymentId` not found", $code, $previous);
+        parent::__construct("Payment with id `$paymentId` already completed", $code, $previous);
     }
 }

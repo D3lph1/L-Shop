@@ -53,7 +53,7 @@ class Items
     {
         $item = $this->itemRepository->find($itemId, ['id', 'name', 'type', 'item', 'image', 'extra']);
 
-        if (!$item) {
+        if (is_null($item)) {
             throw new NotFoundException($itemId);
         }
 
@@ -62,6 +62,12 @@ class Items
 
     public function create(Item $dto): bool
     {
+        if ($dto->getImageMode() === ImageMode::UPLOAD) {
+            $dto->setImageName($this->moveImageAndGetName($dto->getImage()));
+        } else if ($dto->getImageMode() === ImageMode::DEFAULT) {
+            $dto->setImageName(null);
+        }
+
         return (bool)$this->itemRepository->create($dto);
     }
 

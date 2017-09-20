@@ -59,4 +59,9 @@ class EloquentCartRepository implements CartRepositoryInterface
             ->where('player', $player)
             ->get();
     }
+
+    public function truncate(): void
+    {
+        EloquentCart::truncate();
+    }
 }

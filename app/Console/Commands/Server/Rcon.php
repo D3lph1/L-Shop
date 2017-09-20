@@ -2,8 +2,7 @@
 
 namespace App\Console\Commands\Server;
 
-use App\Models\Server;
-use App\Repositories\ServerRepository;
+use App\Repositories\Server\ServerRepositoryInterface;
 use Cartalyst\Support\Collection;
 use D3lph1\MinecraftRconManager\Connector;
 use D3lph1\MinecraftRconManager\Exceptions\ConnectSocketException;
@@ -34,7 +33,7 @@ class Rcon extends Command
     protected $description = 'Send command to server using RCON.';
 
     /**
-     * @var ServerRepository
+     * @var ServerRepositoryInterface
      */
     private $serverRepository;
     /**
@@ -44,11 +43,8 @@ class Rcon extends Command
 
     /**
      * Create a new command instance.
-     *
-     * @param ServerRepository $serverRepository
-     * @param Connector        $rconConnector
      */
-    public function __construct(ServerRepository $serverRepository, Connector $rconConnector)
+    public function __construct(ServerRepositoryInterface $serverRepository, Connector $rconConnector)
     {
         parent::__construct();
 

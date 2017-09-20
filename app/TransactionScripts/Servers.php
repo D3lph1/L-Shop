@@ -9,8 +9,8 @@ use App\DataTransferObjects\Server;
 use App\Exceptions\Server\AttemptToDeleteTheLastCategoryException;
 use App\Exceptions\Server\AttemptToDeleteTheLastServerException;
 use App\Exceptions\Server\NotFoundException;
-use App\Models\Server\ServerInterface;
 use App\Repositories\Category\CategoryRepositoryInterface;
+use App\Repositories\Server\ServerInterface;
 use App\Repositories\Server\ServerRepositoryInterface;
 use Illuminate\Support\Facades\DB;
 

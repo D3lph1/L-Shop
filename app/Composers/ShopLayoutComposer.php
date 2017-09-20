@@ -4,9 +4,8 @@ namespace App\Composers;
 
 use App\Contracts\ComposerContract;
 use App\DataTransferObjects\MonitoringPlayers;
-use App\Models\Server;
+use App\Models\Server\ServerInterface;
 use App\Repositories\News\NewsRepositoryInterface;
-use App\Repositories\NewsRepository;
 use App\Services\Monitoring\MonitoringInterface;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -30,14 +29,14 @@ class ShopLayoutComposer implements ComposerContract
     /**
      * Data about current server
      *
-     * @var Server
+     * @var ServerInterface
      */
     private $currentServer;
 
     /**
-     * Data about all enabled servers
+     * Data about all enabled servers.
      *
-     * @var Server
+     * @var ServerInterface[]
      */
     private $servers;
 
@@ -84,7 +83,7 @@ class ShopLayoutComposer implements ComposerContract
         return [
             'isAuth' => is_auth(),
             'isAdmin' => is_admin(),
-            'username' => is_auth() ? \Sentinel::getUser()->getUserLogin() : null,
+            'username' => is_auth() ? \Sentinel::getUser()->getUsername() : null,
             'balance' => is_auth() ? \Sentinel::getUser()->getBalance() : null,
             'currency' => s_get('shop.currency_html', 'руб.'),
             'currentServer' => $this->currentServer,
@@ -135,10 +134,10 @@ class ShopLayoutComposer implements ComposerContract
             $servers = $this->request->get('servers');
             $monitoring = [];
 
-            /** @var Server $server */
+            /** @var ServerInterface $server */
             foreach ($servers as $server) {
-                if ($server->monitoring_enabled) {
-                    $monitoring[] = $this->monitoring->getPlayers($server->id);
+                if ($server->isMonitoringEnabled()) {
+                    $monitoring[] = $this->monitoring->getPlayers($server->getId());
                 }
             }
 

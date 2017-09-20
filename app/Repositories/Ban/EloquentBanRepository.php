@@ -48,4 +48,9 @@ class EloquentBanRepository implements BanRepositoryInterface
             ->where('user_id', $user->getUserId())
             ->exists();
     }
+
+    public function truncate(): void
+    {
+        EloquentBan::truncate();
+    }
 }

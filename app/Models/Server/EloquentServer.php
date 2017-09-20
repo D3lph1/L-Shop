@@ -13,26 +13,26 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
  * @package App\Models
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Category[] $categories
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Repositories\Category[] $categories
  * @mixin \Eloquent
- * @property int $id
- * @property string $name
- * @property bool $enabled
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Server whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Server whereEnabled($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Server whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Server whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Server whereUpdatedAt($value)
- * @property string $ip
- * @property int $port
- * @property bool $monitoring_enabled
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Server whereIp($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Server whereMonitoringEnabled($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Server wherePort($value)
- * @property string $password
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Server wherePassword($value)
+ * @property int                                                                        $id
+ * @property string                                                                     $name
+ * @property bool                                                                       $enabled
+ * @property \Carbon\Carbon                                                             $created_at
+ * @property \Carbon\Carbon                                                             $updated_at
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Server whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Server whereEnabled($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Server whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Server whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Server whereUpdatedAt($value)
+ * @property string                                                                     $ip
+ * @property int                                                                        $port
+ * @property bool                                                                       $monitoring_enabled
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Server whereIp($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Server whereMonitoringEnabled($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Server wherePort($value)
+ * @property string                                                                     $password
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Server wherePassword($value)
  */
 class EloquentServer extends Model implements ServerInterface
 {

@@ -1,7 +1,10 @@
 <?php
+declare(strict_types = 1);
 
-use App\Repositories\ItemRepository;
-use App\Repositories\ProductRepository;
+use App\DataTransferObjects\Item;
+use App\DataTransferObjects\Product;
+use App\Repositories\Item\ItemRepositoryInterface;
+use App\Repositories\Product\ProductRepositoryInterface;
 use Illuminate\Database\Seeder;
 
 /**
@@ -11,14 +14,17 @@ use Illuminate\Database\Seeder;
  */
 class ItemsAndProductsSeeder extends Seeder
 {
+    /**
+     * @var ItemRepositoryInterface
+     */
     private $itemRepository;
 
     /**
-     * @var ProductRepository
+     * @var ProductRepositoryInterface
      */
     private $productRepository;
 
-    public function __construct(ItemRepository $repository, ProductRepository $productRepository)
+    public function __construct(ItemRepositoryInterface $repository, ProductRepositoryInterface $productRepository)
     {
         $this->itemRepository = $repository;
         $this->productRepository = $productRepository;
@@ -26,10 +32,8 @@ class ItemsAndProductsSeeder extends Seeder
 
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         $this->createGrassBlock();
         $this->createTnt();
@@ -40,181 +44,196 @@ class ItemsAndProductsSeeder extends Seeder
         $this->createVip();
     }
 
-    private function createGrassBlock()
+    private function createGrassBlock(): void
     {
-        /** @var \App\Models\Item $item */
-        $item = $this->itemRepository->create([
-            'id' => 5,
-            'name' => __('seeding.items.grass'),
-            'description' => '',
-            'type' => 'item',
-            'item' => 2,
-            'image' => null,
-            'extra' => null
-        ]);
+        /** @var \App\Models\Item\ItemInterface $item */
+        $item = $this->itemRepository->create(
+            (new Item())
+                ->setId(5)
+                ->setName(__('seeding.items.grass'))
+                ->setDescription('')
+                ->setType('item')
+                ->setItem('2')
+                ->setImage(null)
+                ->setExtra(null)
+        );
 
-        $this->productRepository->create([
-            'id' => 14,
-            'price' => 2,
-            'item_id' => $item->id,
-            'server_id' => 1,
-            'stack' => 64,
-            'category_id' => 1,
-            'sort_priority' => 0
-        ]);
+        $this->productRepository->create(
+            (new Product())
+                ->setId(14)
+                ->setPrice(2)
+                ->setItemId($item->getId())
+                ->setServerId(1)
+                ->setStack(64)
+                ->setCategoryId(1)
+                ->setSortPriority(0)
+        );
     }
 
-    private function createTnt()
+    private function createTnt(): void
     {
-        /** @var \App\Models\Item $item */
-        $item = $this->itemRepository->create([
-            'id' => 6,
-            'name' => __('seeding.items.tnt'),
-            'description' => '',
-            'type' => 'item',
-            'item' => 46,
-            'image' => '784a013771bdf825d1cf26b49897a605.png',
-            'extra' => null
-        ]);
+        /** @var \App\Models\Item\ItemInterface $item */
+        $item = $this->itemRepository->create(
+            (new Item())
+                ->setId(6)
+                ->setName(__('seeding.items.tnt'))
+                ->setDescription('')
+                ->setType('item')
+                ->setItem('46')
+                ->setImageName('784a013771bdf825d1cf26b49897a605.png')
+                ->setExtra(null)
+        );
 
-        $this->productRepository->create([
-            'id' => 15,
-            'price' => 20,
-            'item_id' => $item->id,
-            'server_id' => 1,
-            'stack' => 16,
-            'category_id' => 1,
-            'sort_priority' => 0
-        ]);
+        $this->productRepository->create(
+            (new Product())
+                ->setId(15)
+                ->setPrice(20)
+                ->setItemId($item->getId())
+                ->setServerId(1)
+                ->setStack(16)
+                ->setCategoryId(1)
+                ->setSortPriority(0)
+            );
     }
 
-    private function createChest()
+    private function createChest(): void
     {
-        /** @var \App\Models\Item $item */
-        $item = $this->itemRepository->create([
-            'id' => 7,
-            'name' => __('seeding.items.chest'),
-            'description' => '',
-            'type' => 'item',
-            'item' => 54,
-            'image' => 'd6c6adf53d0145708ec54a41e8a4e3d8.png',
-            'extra' => null
-        ]);
+        /** @var \App\Models\Item\ItemInterface $item */
+        $item = $this->itemRepository->create(
+            (new Item())
+                ->setId(7)
+                ->setName(__('seeding.items.chest'))
+                ->setDescription('')
+                ->setType('item')
+                ->setItem('54')
+                ->setImageName('d6c6adf53d0145708ec54a41e8a4e3d8.png')
+                ->setExtra(null)
+        );
 
-        $this->productRepository->create([
-            'id' => 16,
-            'price' => 15,
-            'item_id' => $item->id,
-            'server_id' => 1,
-            'stack' => 16,
-            'category_id' => 1,
-            'sort_priority' => 0
-        ]);
+        $this->productRepository->create(
+            (new Product())
+                ->setId(16)
+                ->setPrice(15)
+                ->setItemId($item->getId())
+                ->setServerId(1)
+                ->setStack(16)
+                ->setCategoryId(1)
+                ->setSortPriority(0)
+        );
     }
 
-    private function createFurnace()
+    private function createFurnace(): void
     {
-        /** @var \App\Models\Item $item */
-        $item = $this->itemRepository->create([
-            'id' => 8,
-            'name' => __('seeding.items.furnace'),
-            'description' => '',
-            'type' => 'item',
-            'item' => 61,
-            'image' => '4a69519aa46ee6b5b15bab8abd5139f3.png',
-            'extra' => null
-        ]);
+        /** @var \App\Models\Item\ItemInterface $item */
+        $item = $this->itemRepository->create(
+            (new Item())
+                ->setId(8)
+                ->setName(__('seeding.items.furnace'))
+                ->setDescription('')
+                ->setType('item')
+                ->setItem('61')
+                ->setImageName('4a69519aa46ee6b5b15bab8abd5139f3.png')
+                ->setExtra(null)
+        );
 
-        $this->productRepository->create([
-            'id' => 17,
-            'price' => 15,
-            'item_id' => $item->id,
-            'server_id' => 1,
-            'stack' => 32,
-            'category_id' => 1,
-            'sort_priority' => 0
-        ]);
+        $this->productRepository->create(
+            (new Product())
+                ->setId(17)
+                ->setPrice(15)
+                ->setItemId($item->getId())
+                ->setServerId(1)
+                ->setStack(32)
+                ->setCategoryId(1)
+                ->setSortPriority(0)
+        );
     }
 
-    private function createSword()
+    private function createSword(): void
     {
-        /** @var \App\Models\Item $item */
-        $item = $this->itemRepository->create([
-            'id' => 9,
-            'name' => __('seeding.items.diamond_sword'),
-            'description' => '',
-            'type' => 'item',
-            'item' => 276,
-            'image' => '9d8feda602d70231f0297a3b7e436d4b.png',
-            'extra' => null
-        ]);
+        /** @var \App\Models\Item\ItemInterface $item */
+        $item = $this->itemRepository->create(
+            (new Item())
+                ->setId(9)
+                ->setName(__('seeding.items.diamond_sword'))
+                ->setDescription('')
+                ->setType('item')
+                ->setItem('276')
+                ->setImageName('9d8feda602d70231f0297a3b7e436d4b.png')
+                ->setExtra(null)
+        );
 
-        $this->productRepository->create([
-            'id' => 18,
-            'price' => 67,
-            'item_id' => $item->id,
-            'server_id' => 1,
-            'stack' => 1,
-            'category_id' => 2,
-            'sort_priority' => 0
-        ]);
+        $this->productRepository->create(
+            (new Product())
+                ->setId(18)
+                ->setPrice(67)
+                ->setItemId($item->getId())
+                ->setServerId(1)
+                ->setStack(1)
+                ->setCategoryId(2)
+                ->setSortPriority(0)
+        );
     }
 
-    private function createHelmet()
+    private function createHelmet(): void
     {
-        /** @var \App\Models\Item $item */
-        $item = $this->itemRepository->create([
-            'id' => 10,
-            'name' => __('seeding.items.diamond_helmet'),
-            'description' => '',
-            'type' => 'item',
-            'item' => 310,
-            'image' => 'd2714c56c81bcc4ff35798832226967f.png',
-            'extra' => null
-        ]);
+        /** @var \App\Models\Item\ItemInterface $item */
+        $item = $this->itemRepository->create(
+            (new Item())
+                ->setId(10)
+                ->setName(__('seeding.items.diamond_helmet'))
+                ->setDescription('')
+                ->setType('item')
+                ->setItem('310')
+                ->setImageName('d2714c56c81bcc4ff35798832226967f.png')
+                ->setExtra(null)
+        );
 
-        $this->productRepository->create([
-            'id' => 19,
-            'price' => 54,
-            'item_id' => $item->id,
-            'server_id' => 2,
-            'stack' => 1,
-            'category_id' => 3,
-            'sort_priority' => 0
-        ]);
+        $this->productRepository->create(
+            (new Product())
+                ->setId(19)
+                ->setPrice(54)
+                ->setItemId($item->getId())
+                ->setServerId(2)
+                ->setStack(1)
+                ->setCategoryId(3)
+                ->setSortPriority(0)
+        );
     }
 
-    private function createVip()
+    private function createVip(): void
     {
-        /** @var \App\Models\Item $item */
-        $item = $this->itemRepository->create([
-            'id' => 11,
-            'name' => __('seeding.items.vip'),
-            'description' => '',
-            'type' => 'permgroup',
-            'item' => 'vip',
-            'image' => 'f0c9755f2685d55b7540c941b6f29ff9.png',
-            'extra' => null
-        ]);
+        /** @var \App\Models\Item\ItemInterface $item */
+        $item = $this->itemRepository->create(
+            (new Item())
+                ->setId(11)
+                ->setName(__('seeding.items.vip'))
+                ->setDescription('')
+                ->setType('permgroup')
+                ->setItem('vip')
+                ->setImageName('f0c9755f2685d55b7540c941b6f29ff9.png')
+                ->setExtra(null)
+        );
 
-        $this->productRepository->create([
-            'id' => 20,
-            'price' => 15,
-            'item_id' => $item->id,
-            'server_id' => 1,
-            'stack' => 1,
-            'category_id' => 5,
-            'sort_priority' => 0
-        ]);
+        $this->productRepository->create(
+            (new Product())
+                ->setId(20)
+                ->setPrice(15)
+                ->setItemId($item->getId())
+                ->setServerId(1)
+                ->setStack(1)
+                ->setCategoryId(5)
+                ->setSortPriority(0)
+        );
 
-        $this->productRepository->create([
-            'id' => 21,
-            'price' => 100,
-            'item_id' => $item->id,
-            'server_id' => 1,
-            'stack' => 0,
-            'category_id' => 5,
-            'sort_priority' => 0
-        ]);
+        $this->productRepository->create(
+            (new Product())
+                ->setId(21)
+                ->setPrice(100)
+                ->setItemId($item->getId())
+                ->setServerId(1)
+                ->setStack(0)
+                ->setCategoryId(5)
+                ->setSortPriority(0)
+        );
     }
 }

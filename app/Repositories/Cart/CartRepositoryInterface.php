@@ -5,6 +5,7 @@ namespace App\Repositories\Cart;
 
 use App\DataTransferObjects\Cart;
 use App\Models\Cart\CartInterface;
+use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 /**
@@ -13,7 +14,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  * @package App\Repositories\Cart
  */
-interface CartRepositoryInterface
+interface CartRepositoryInterface extends BaseRepositoryInterface
 {
     public function create(Cart $dto): CartInterface;
 

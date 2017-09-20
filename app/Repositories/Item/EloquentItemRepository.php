@@ -17,7 +17,7 @@ class EloquentItemRepository implements ItemRepositoryInterface
             'description' => $dto->getDescription(),
             'type' => $dto->getType(),
             'item' => $dto->getItem(),
-            'image' => $dto->getImage(), // TODO: Image name
+            'image' => $dto->getImageName(),
             'extra' => $dto->getExtra()
         ]);
     }
@@ -66,5 +66,10 @@ class EloquentItemRepository implements ItemRepositoryInterface
     public function delete(int $id): bool
     {
         return (bool)EloquentItem::where('id', $id)->delete();
+    }
+
+    public function truncate(): void
+    {
+        EloquentItem::truncate();
     }
 }

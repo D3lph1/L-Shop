@@ -5,9 +5,10 @@ namespace App\Repositories\Product;
 
 use App\DataTransferObjects\Product;
 use App\Models\Product\ProductInterface;
+use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-interface ProductRepositoryInterface
+interface ProductRepositoryInterface extends BaseRepositoryInterface
 {
     public function create(Product $dto): ProductInterface;
 

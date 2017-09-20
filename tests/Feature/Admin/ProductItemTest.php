@@ -2,8 +2,6 @@
 
 namespace Tests\Feature\Admin;
 
-use App\Models\Item;
-use App\Models\Product;
 use App\Services\Admin;
 use App\Services\AdminProducts;
 use Illuminate\Container\Container;

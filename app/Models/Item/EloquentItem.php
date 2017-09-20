@@ -23,15 +23,15 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property string $extra
  * @property \Carbon\Carbon $created_at
  * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Item whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Item whereDescription($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Item whereExtra($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Item whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Item whereImage($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Item whereItem($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Item whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Item whereType($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Models\Item whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Item whereCreatedAt($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Item whereDescription($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Item whereExtra($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Item whereId($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Item whereImage($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Item whereItem($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Item whereName($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Item whereType($value)
+ * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Item whereUpdatedAt($value)
  */
 class EloquentItem extends Model implements ItemInterface
 {
