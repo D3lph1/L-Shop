@@ -30,6 +30,11 @@ class EloquentCartRepository implements CartRepositoryInterface
         ]);
     }
 
+    public function insert(array $attributes): bool
+    {
+        return EloquentCart::insert($attributes);
+    }
+
     public function historyForUser($userLogin, ?int $server, array $columns): LengthAwarePaginator
     {
         if ($server) {

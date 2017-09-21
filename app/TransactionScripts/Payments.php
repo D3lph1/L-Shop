@@ -5,8 +5,8 @@ namespace App\TransactionScripts;
 
 use App\Exceptions\Payment\AlreadyCompletedException;
 use App\Exceptions\Payment\NotFoundException;
+use App\Models\Product\ProductInterface;
 use App\Repositories\Payment\PaymentRepositoryInterface;
-use App\Repositories\Product\ProductInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Services\Distributors\Distributor;

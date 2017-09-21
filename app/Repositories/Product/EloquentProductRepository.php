@@ -13,14 +13,15 @@ class EloquentProductRepository implements ProductRepositoryInterface
 {
     public function create(Product $dto): ProductInterface
     {
-        return EloquentProduct::create([
+        return EloquentProduct::create(trim_nullable([
+            'id' => $dto->getId(),
             'price' => $dto->getPrice(),
             'item_id' => $dto->getItemId(),
             'server_id' => $dto->getServerId(),
             'stack' => $dto->getStack(),
             'category_id' => $dto->getCategoryId(),
             'sort_priority' => $dto->getSortPriority()
-        ]);
+        ]));
     }
 
     public function update(int $productId, Product $dto): bool

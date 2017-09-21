@@ -33,6 +33,7 @@ class UsersSeeder extends Seeder
     private function createAdmin(): void
     {
         $user = $this->sentinel->registerAndActivate([
+            'id' => 1,
             'username' => 'admin',
             'email' => 'admin@example.com',
             'password' => 'admin',
@@ -54,6 +55,7 @@ class UsersSeeder extends Seeder
     private function createUser(): void
     {
         $user = $this->sentinel->registerAndActivate([
+            'id' => 2,
             'username' => 'user',
             'email' => 'user@example.com',
             'password' => 'user',

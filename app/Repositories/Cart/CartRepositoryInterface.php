@@ -18,6 +18,8 @@ interface CartRepositoryInterface extends BaseRepositoryInterface
 {
     public function create(Cart $dto): CartInterface;
 
+    public function insert(array $attributes): bool;
+
     public function historyForUser($userLogin, int $server, array $columns): LengthAwarePaginator;
 
     public function getByPlayerWithItems(string $player, array $cartColumns, array $itemColumns): iterable;

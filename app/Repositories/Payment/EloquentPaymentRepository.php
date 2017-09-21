@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Repositories\Payment;
 
+use App\DataTransferObjects\Payment;
 use App\Models\Payment\EloquentPayment;
 use App\Models\Payment\PaymentInterface;
 use Cache;
@@ -11,6 +12,20 @@ use Illuminate\Database\Eloquent\Builder;
 
 class EloquentPaymentRepository implements PaymentRepositoryInterface
 {
+    public function create(Payment $dto): ?PaymentInterface
+    {
+        return EloquentPayment::create(trim_nullable([
+            'service' => $dto->getService(),
+            'products' => $dto->getProducts(),
+            'cost' => $dto->getCost(),
+            'user_id' => $dto->getUserId(),
+            'username' => $dto->getUsername(),
+            'server_id' => $dto->getServerId(),
+            'ip' => $dto->getIp(),
+            'completed' => $dto->isCompleted()
+        ]));
+    }
+
     public function find(int $id, array $columns): ?PaymentInterface
     {
         return EloquentPayment::find($id, $columns);
@@ -57,7 +72,7 @@ class EloquentPaymentRepository implements PaymentRepositoryInterface
 
     public function complete(int $id, string $serviceName): bool
     {
-        return EloquentPayment::where('id', $id)
+        return (bool)EloquentPayment::where('id', $id)
             ->update([
                 'service' => $serviceName,
                 'completed' => true

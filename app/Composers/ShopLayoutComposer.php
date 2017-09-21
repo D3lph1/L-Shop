@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Composers;
 
@@ -7,6 +8,9 @@ use App\DataTransferObjects\MonitoringPlayers;
 use App\Models\Server\ServerInterface;
 use App\Repositories\News\NewsRepositoryInterface;
 use App\Services\Monitoring\MonitoringInterface;
+use App\Traits\ContainerTrait;
+use App\TransactionScripts\Monitoring;
+use App\TransactionScripts\Shop\News;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -16,11 +20,12 @@ use Illuminate\View\View;
  * on each child page of this template.
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Composers
  */
 class ShopLayoutComposer implements ComposerContract
 {
+    use ContainerTrait;
+
     /**
      * @var Request
      */
@@ -41,21 +46,15 @@ class ShopLayoutComposer implements ComposerContract
     private $servers;
 
     /**
-     * @var NewsRepositoryInterface
-     */
-    private $newsRepository;
-
-    /**
      * @var MonitoringInterface
      */
     private $monitoring;
 
-    public function __construct(Request $request, NewsRepositoryInterface $newsRepository, MonitoringInterface $monitoring)
+    public function __construct(Request $request, MonitoringInterface $monitoring)
     {
         $this->request = $request;
         $this->currentServer = $request->get('currentServer');
         $this->servers = $request->get('servers');
-        $this->newsRepository = $newsRepository;
         $this->monitoring = $monitoring;
     }
 
@@ -112,7 +111,10 @@ class ShopLayoutComposer implements ComposerContract
      */
     private function news(): iterable
     {
-        return $this->newsRepository->getFirstPortion(['title', 'content', 'user_id', 'created_at']);
+        /** @var News $script */
+        $script = $this->make(News::class);
+
+        return $script->firstPortion();
     }
 
     /**
@@ -120,7 +122,10 @@ class ShopLayoutComposer implements ComposerContract
      */
     private function newsCount(): int
     {
-        return $this->newsRepository->count();
+        /** @var NewsRepositoryInterface $repository */
+        $repository = $this->make(NewsRepositoryInterface::class);
+
+        return $repository->count();
     }
 
     /**
@@ -130,20 +135,9 @@ class ShopLayoutComposer implements ComposerContract
      */
     private function monitoring(): array
     {
-        if (s_get('monitoring.enabled')) {
-            $servers = $this->request->get('servers');
-            $monitoring = [];
+        /** @var Monitoring $monitoring */
+        $monitoring = $this->make(Monitoring::class);
 
-            /** @var ServerInterface $server */
-            foreach ($servers as $server) {
-                if ($server->isMonitoringEnabled()) {
-                    $monitoring[] = $this->monitoring->getPlayers($server->getId());
-                }
-            }
-
-            return $monitoring;
-        }
-
-        return [];
+        return $monitoring->forServers($this->request->get('servers'));
     }
 }

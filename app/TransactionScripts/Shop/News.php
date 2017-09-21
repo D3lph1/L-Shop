@@ -6,7 +6,7 @@ namespace App\TransactionScripts\Shop;
 use App\DataTransferObjects\News as DTO;
 use App\Exceptions\News\DisabledException;
 use App\Exceptions\News\NotFoundExceptions;
-use App\Repositories\News\NewsInterface;
+use App\Models\News\NewsInterface;
 use App\Repositories\News\NewsRepositoryInterface;
 use App\Traits\ContainerTrait;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -45,6 +45,11 @@ class News
                 ['id', 'title', 'user_id', 'created_at', 'updated_at'],
                 ['username']
             );
+    }
+
+    public function firstPortion(): iterable
+    {
+        return $this->newsRepository->getFirstPortion(['id', 'title', 'content', 'user_id', 'created_at']);
     }
 
     public function load(int $serverId, int $count)

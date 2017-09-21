@@ -6,6 +6,7 @@ namespace App\Services\Distributors;
 use App\Exceptions\FailedToUpdateTableException;
 use App\Exceptions\UnexpectedValueException;
 use App\Models\Payment\PaymentInterface;
+use App\Models\Product\ProductInterface;
 use App\Repositories\Payment\PaymentRepositoryInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Traits\ContainerTrait;
@@ -59,9 +60,8 @@ abstract class Distributor
      */
     abstract public function give(PaymentInterface $payment): void;
 
-    protected function productsWithItems(string $serialized): array
+    protected function productsWithItems(array $unserialized): array
     {
-        $unserialized = unserialize($serialized);
         // Array with products identifiers.
         $identifiers = array_keys($unserialized);
         $counts = array_values($unserialized);
@@ -73,22 +73,44 @@ abstract class Distributor
             ['item', 'type', 'extra']
         );
 
-        return $this->setCounts($counts, $products);
+        return $this->format($counts, $products);
     }
 
-    private function setCounts(array $counts, iterable $products): array
+    /**
+     * Output array:
+     *               [
+     *                  [
+     *                      'product' => <instanceof ProductInterface>,
+     *                      'count' => 64
+     *                  ],
+     *                  [
+     *                      'product' => <instanceof ProductInterface>,
+     *                      'count' => 1
+     *                  ],
+     *                  [
+     *                      //
+     *                  ]
+     *               ]
+     */
+    private function format(array $counts, iterable $products): array
     {
         $result = [];
+        $i = 0;
 
-        for ($i = 0; $i < count($counts); $i++) {
-            $result['count'] = $counts[$i];
+        /** @var ProductInterface $product */
+        foreach ($products as $product) {
+            $t = [];
+            $t['product'] = $product;
+            $t['count'] = $counts[$i];
+            $result[] = $t;
+            $i++;
         }
 
         return $result;
     }
 
     /**
-     *
+     * Get the name of the user who needs to provide the products.
      */
     protected function getUsername(PaymentInterface $payment): string
     {
@@ -109,9 +131,11 @@ abstract class Distributor
     }
 
     /**
-     * Completes the current payment.
+     * Completes the given payment.
+     *
+     * @throws FailedToUpdateTableException
      */
-    protected function complete(PaymentInterface $payment)
+    protected function complete(PaymentInterface $payment): void
     {
         if (!$payment->isCompleted()) {
             if (!$this->paymentRepository->complete($payment->getId(), $payment->getService())) {

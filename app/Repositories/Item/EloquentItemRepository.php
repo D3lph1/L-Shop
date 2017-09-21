@@ -12,14 +12,15 @@ class EloquentItemRepository implements ItemRepositoryInterface
 {
     public function create(Item $dto): ItemInterface
     {
-        return EloquentItem::create([
+        return EloquentItem::create(trim_nullable([
+            'id' => $dto->getId(),
             'name' => $dto->getName(),
             'description' => $dto->getDescription(),
             'type' => $dto->getType(),
             'item' => $dto->getItem(),
             'image' => $dto->getImageName(),
             'extra' => $dto->getExtra()
-        ]);
+        ]));
     }
 
     public function find(int $id, array $columns): ?ItemInterface

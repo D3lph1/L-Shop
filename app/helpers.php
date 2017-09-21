@@ -399,3 +399,13 @@ if (!function_exists('colorize_rcon')) {
         return $returnStr . '</span>';
     }
 }
+
+if (!function_exists('trim_nullable')) {
+
+    function trim_nullable(array $arr): array
+    {
+        return array_filter($arr, function ($val) {
+            return $val !== null;
+        });
+    }
+}

@@ -15,7 +15,7 @@
                 <h4 class="card-title">@lang('content.admin.other.debug.mail.title')</h4>
                 <p class="card-text">
                 @lang('content.admin.other.debug.mail.description')
-                <form method="post" action="{{ route('admin.other.test_mail', ['server' => $currentServer->id]) }}">
+                <form method="post" action="{{ route('admin.other.test_mail', ['server' => $currentServer->getId()]) }}">
                     <div class="md-form mt-1">
                         <i class="fa fa-envelope-o prefix"></i>
                         <input type="text" name="test_mail_address" id="debug-test-mail-address" class="form-control">

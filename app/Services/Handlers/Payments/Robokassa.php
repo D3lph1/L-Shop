@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Services\Handlers\Payments;
 
@@ -6,6 +7,7 @@ use App\Exceptions\Payment\AlreadyCompletedException;
 use App\Exceptions\Payment\InvalidRequestDataException;
 use App\Exceptions\Payment\NotFoundException;
 use App\Exceptions\Payment\UnableToCompleteException;
+use App\Repositories\Payment\PaymentRepositoryInterface;
 use App\Repositories\PaymentRepository;
 use App\Services\Payments\Robokassa\Checkout;
 
@@ -26,19 +28,15 @@ class Robokassa extends AbstractPayment
     private $robokassa;
 
     /**
-     * @param PaymentRepository $paymentRepository
+     * @param PaymentRepositoryInterface $paymentRepository
      */
-    public function __construct(PaymentRepository $paymentRepository)
+    public function __construct(PaymentRepositoryInterface $paymentRepository, Checkout $checkout)
     {
-        $this->robokassa = app(Checkout::class);
+        $this->robokassa = $checkout;
         $this->paymentRepository = $paymentRepository;
     }
 
     /**
-     * @param array    $requestData
-     * @param bool     $testing
-     * @param null|int $testingPaymentId
-     *
      * @throws InvalidRequestDataException
      * @throws AlreadyCompletedException
      * @throws NotFoundException
@@ -46,7 +44,7 @@ class Robokassa extends AbstractPayment
      *
      * @return string
      */
-    public function handle(array $requestData, $testing, $testingPaymentId = null)
+    public function handle(array $requestData, bool $testing, ?int $testingPaymentId = null): string
     {
         if ($testing) {
             $id = $testingPaymentId;
@@ -56,6 +54,12 @@ class Robokassa extends AbstractPayment
         }
 
         $payment = $this->payment($id);
+
+        // If payment with this ID does not exist, exit.
+        if (is_null($payment)) {
+            throw new NotFoundException($id);
+        }
+
         $this->validatePayment($payment);
         $this->give($payment);
 

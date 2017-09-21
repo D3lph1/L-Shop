@@ -15,7 +15,7 @@
 * **WhileD0S** - Design and layout.
 
 ## Requirements
-* PHP >= 5.6.4
+* PHP >= 7.1.0
 * OpenSSL PHP Extension
 * PDO PHP Extension
 * Mbstring PHP Extension
@@ -23,7 +23,7 @@
 * XML PHP Extension
 * GD Library
 
-> System based on **Laravel** framework (Version 5.4.24).
+> System based on **Laravel** framework (Version 5.5.4).
 
 ## Why L-Shop?
 * Full adaptability. Even on small screens use the store conveniently

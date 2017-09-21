@@ -26,11 +26,11 @@
                     <tbody>
                     <tr>
                         <td>@lang('content.admin.other.info.about.lshop_version')</td>
-                        <td>0.4.3b (BETA)</td>
+                        <td>0.5.0 (BETA)</td>
                     </tr>
                     <tr>
                         <td>@lang('content.admin.other.info.about.laravel_version')</td>
-                        <td>5.4.24</td>
+                        <td>5.5.4</td>
                     </tr>
                     <tr>
                         <td>@lang('content.admin.other.info.about.github')</td>

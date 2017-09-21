@@ -22,11 +22,11 @@
                         <i class="fa fa-list fa-lg fa-left"></i>
                         @lang('sidebar.main.catalog')
                     </a>
-                    <a href="{{ route('cart', ['server' => $currentServer->id]) }}" class="btn info-color btn-block">
+                    <a href="{{ route('cart', ['server' => $currentServer->getId()]) }}" class="btn info-color btn-block">
                         <i class="fa fa-shopping-cart fa-left fa-lg"></i>
                         @lang('sidebar.main.cart')
                     </a>
-                    <a href="{{ route('fillupbalance', ['server' => $currentServer->id]) }}" class="btn btn-warning btn-block">
+                    <a href="{{ route('fillupbalance', ['server' => $currentServer->getId()]) }}" class="btn btn-warning btn-block">
                         <i class="fa fa-credit-card fa-left fa-lg"></i>
                         @lang('sidebar.main.fillupbalance')
                     </a>
@@ -59,17 +59,17 @@
                     <p class="a-b-header">@lang('sidebar.profile.title')</p>
                     @if($character)
                         <p>
-                            <a href="{{ route('profile.character', ['server' => $currentServer->id]) }}" class="btn btn-info btn-block"><i class="fa fa-user left"></i>@lang('sidebar.profile.character')</a>
+                            <a href="{{ route('profile.character', ['server' => $currentServer->getId()]) }}" class="btn btn-info btn-block"><i class="fa fa-user left"></i>@lang('sidebar.profile.character')</a>
                         </p>
                     @endif
                     <p>
-                        <a href="{{ route('profile.settings', ['server' => $currentServer->id]) }}" class="btn btn-info btn-block"><i class="fa fa-gear left"></i>@lang('sidebar.profile.settings')</a>
+                        <a href="{{ route('profile.settings', ['server' => $currentServer->getId()]) }}" class="btn btn-info btn-block"><i class="fa fa-gear left"></i>@lang('sidebar.profile.settings')</a>
                     </p>
                     <div class="ad-btn-block">
                         <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-info left"></i>@lang('sidebar.profile.information.name')</button>
                         <ul class="ad-btn-list">
-                            <a href="{{ route('profile.payments', ['server' => $currentServer->id]) }}" class="waves-effect">@lang('sidebar.profile.information.nodes.payments')</a>
-                            <a href="{{ route('profile.cart', ['server' => $currentServer->id]) }}" class="waves-effect">@lang('sidebar.profile.information.nodes.cart')</a>
+                            <a href="{{ route('profile.payments', ['server' => $currentServer->getId()]) }}" class="waves-effect">@lang('sidebar.profile.information.nodes.payments')</a>
+                            <a href="{{ route('profile.cart', ['server' => $currentServer->getId()]) }}" class="waves-effect">@lang('sidebar.profile.information.nodes.cart')</a>
                         </ul>
                     </div>
                 </div>
@@ -84,8 +84,8 @@
                 </button>
                 <div id="server-list" class="servers text-left">
                     @foreach($servers as $server)
-                        @if($server->enabled or is_admin())
-                            <a class="waves-effect white-text" href="{{ route('catalog', ['server' => $server->id]) }}"> @if(!$server->enabled) <i class="fa fa-power-off fa-left" title="Сервер отключен"></i> @endif {{ $server->name }}</a>
+                        @if($server->isEnabled() or is_admin())
+                            <a class="waves-effect white-text" href="{{ route('catalog', ['server' => $server->getId()]) }}"> @if(!$server->isEnabled()) <i class="fa fa-power-off fa-left" title="Сервер отключен"></i> @endif {{ $server->getName() }}</a>
                         @endif
                     @endforeach
                 </div>
@@ -105,14 +105,14 @@
 
                 @foreach($news as $one)
                     <div class="news-preview z-depth-1">
-                        <h3 class="news-pre-header">{{ $one->title }}</h3>
-                        <p class="news-pre-text">{{ short_string($one->content, 150) }}</p>
-                        <a href="{{ route('news', ['server' => $currentServer->id, 'id' => $one->id]) }}" class="btn btn-info btn-sm btn-block mt-1">@lang('content.shop.news.read_more')</a>
+                        <h3 class="news-pre-header">{{ $one->getTitle() }}</h3>
+                        <p class="news-pre-text">{{ short_string($one->getContent(), 150) }}</p>
+                        <a href="{{ route('news', ['server' => $currentServer->getId(), 'id' => $one->getId()]) }}" class="btn btn-info btn-sm btn-block mt-1">@lang('content.shop.news.read_more')</a>
                     </div>
                 @endforeach
             </div>
             @if($newsCount >= s_get('news.first_portion', 15))
-                <button id="news-load-more" class="btn btn-blue-grey btn-block mt-1" data-url="{{ route('news.load_more', ['server' => $currentServer->id]) }}"><i class="fa fa-plus"></i></button>
+                <button id="news-load-more" class="btn btn-blue-grey btn-block mt-1" data-url="{{ route('news.load_more', ['server' => $currentServer->getId()]) }}"><i class="fa fa-plus"></i></button>
             @endif
         </div>
     @endif
@@ -123,7 +123,7 @@
                 <div class="col-8" id="topbar-content-1">
                     <button id="btn-menu" class="btn"><i class="fa fa-bars"></i></button>
                     <a href="{{ route('servers') }}">
-                        <span id="topbar-server">@lang('content.shop.server_name') <span id="tbs-name">{{ $currentServer->name }}</span></span>
+                        <span id="topbar-server">@lang('content.shop.server_name') <span id="tbs-name">{{ $currentServer->getName() }}</span></span>
                     </a>
                 </div>
 
@@ -168,7 +168,7 @@
 
         @foreach($monitoring as $server)
             <div class="md-form text-left">
-                <h4>{{ get_server_by_id($servers, $server->getServerId())->name }}</h4>
+                <h4>{{ get_server_by_id($servers, $server->getServerId())->getName() }}</h4>
                 <div class="progress">
                     @if($server->getNow() === -1)
                         <div class="progress-bar progress-bar-danger danger-color" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">

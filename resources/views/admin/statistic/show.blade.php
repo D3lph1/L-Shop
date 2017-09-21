@@ -20,11 +20,11 @@
                     <h4 class="text-center">
                         @lang('content.admin.other.statistics.show.orders_per_month')
                             <div class="btn-group">
-                                <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ $currentMonthWord }}</button>
+                                <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ humanize_month($currentMonth) }}</button>
 
                                 <div class="dropdown-menu">
                                     @foreach(__('content.months') as $key => $value)
-                                        <a class="dropdown-item" href="{{ route('admin.statistic.show', ['server' => $currentServer->id, 'month' => $key]) }}">{{ $value }}</a>
+                                        <a class="dropdown-item" href="{{ route('admin.statistic.show', ['server' => $currentServer->getId(), 'month' => $key]) }}">{{ $value }}</a>
                                     @endforeach
                                 </div>
                             </div>
@@ -41,11 +41,11 @@
                     <h4 class="text-center">
                         @lang('content.admin.other.statistics.show.profit_per_month')
                         <div class="btn-group">
-                            <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ $currentMonthWord }}</button>
+                            <button class="btn btn-info btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{ humanize_month($currentMonth) }}</button>
 
                             <div class="dropdown-menu">
                                 @foreach(__('content.months') as $key => $value)
-                                    <a class="dropdown-item" href="{{ route('admin.statistic.show', ['server' => $currentServer->id, 'month' => $key]) }}">{{ $value }}</a>
+                                    <a class="dropdown-item" href="{{ route('admin.statistic.show', ['server' => $currentServer->getId(), 'month' => $key]) }}">{{ $value }}</a>
                                 @endforeach
                             </div>
                         </div>
@@ -61,7 +61,7 @@
 
             <div class="card card-block mt-5">
                 <div class="flex-row">
-                    <form method="post" action="{{ route('admin.statistic.flush_cache', ['server' => $currentServer->id]) }}">
+                    <form method="post" action="{{ route('admin.statistic.flush_cache', ['server' => $currentServer->getId()]) }}">
                         {{ csrf_field() }}
                         <button class="btn btn-warning">@lang('content.admin.other.statistics.show.clear_cache')</button>
                     </form>
@@ -97,7 +97,7 @@
                         @for($i = 1; $i <= 12; $i++)
                             <?php $k = 0; ?>
                             @foreach($payments as $payment)
-                                @if((new \DateTime($payment->updated_at))->format('n') == $i)
+                                @if((int)(new \DateTime($payment->getUpdatedAt()))->format('n') === $i)
                                     <?php $k++; ?>
                                 @endif
                             @endforeach
@@ -127,8 +127,8 @@
                         @for($i = 1; $i <= 31; $i++)
                             <?php $k = 0; ?>
                             @foreach($payments as $payment)
-                                @if((new \DateTime($payment->updated_at))->format('n') == $currentMonth)
-                                    @if((new \DateTime($payment->updated_at))->format('j') == $i)
+                                @if((int)(new \DateTime($payment->getUpdatedAt()))->format('n') === $currentMonth)
+                                    @if((int)(new \DateTime($payment->getUpdatedAt()))->format('j') === $i)
                                         <?php $k++; ?>
                                     @endif
                                 @endif
@@ -164,8 +164,8 @@
                         @for($i = 1; $i <= 12; $i++)
                             <?php $k = 0; ?>
                             @foreach($payments as $payment)
-                                @if((new \DateTime($payment->updated_at))->format('n') == $i)
-                                    <?php $k += $payment->cost; ?>
+                                @if((int)(new \DateTime($payment->updated_at))->format('n') === $i)
+                                    <?php $k += $payment->getCost(); ?>
                                 @endif
                             @endforeach
                             {{ $k . ','}}
@@ -194,9 +194,9 @@
                         @for($i = 1; $i <= 31; $i++)
                             <?php $k = 0; ?>
                             @foreach($payments as $payment)
-                                @if((new \DateTime($payment->updated_at))->format('n') == $currentMonth)
-                                    @if((new \DateTime($payment->updated_at))->format('j') == $i)
-                                        <?php $k += $payment->cost; ?>
+                                @if((int)(new \DateTime($payment->updated_at))->format('n') === $currentMonth)
+                                    @if((int)(new \DateTime($payment->updated_at))->format('j') === $i)
+                                        <?php $k += $payment->getCost(); ?>
                                     @endif
                                 @endif
                             @endforeach

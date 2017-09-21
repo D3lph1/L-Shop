@@ -3,12 +3,10 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Statistic;
 
-use App\Services\Statistic;
-use Carbon\Carbon;
-use Illuminate\Cache\Repository;
+use App\Http\Controllers\Controller;
+use App\TransactionScripts\Statistic;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\View\View;
 
 /**
@@ -22,17 +20,17 @@ class ShowController extends Controller
     /**
      * @var Statistic
      */
-    private $statistic;
+    private $script;
 
     /**
      * ShowController constructor.
      *
      * @param Statistic $statistic
      */
-    public function __construct(Statistic $statistic)
+    public function __construct(Statistic $script)
     {
-        $this->statistic = $statistic;
         parent::__construct();
+        $this->script = $script;
     }
 
     /**
@@ -40,23 +38,15 @@ class ShowController extends Controller
      */
     public function render(Request $request): View
     {
-        $payments = $this->statistic->forTheLastYearCompleted();
-
-        $currentMonth = $request->get('month') ?: (new \DateTime())->format('n');
-
-        $currentMonthWord = new Carbon();
-        $currentMonthWord->month = $currentMonth;
-        $currentMonthWord = humanize_month($currentMonthWord->formatLocalized('%B'));
-
-        $profit = $this->statistic->profit();
+        $dto = $this->script->statistic($request->get('month'));
 
         $data = [
             'currentServer' => $request->get('currentServer'),
-            'payments' => $payments,
+            'payments' => $dto->getCompletedForYear(),
             'months' => __('content.months'),
-            'currentMonth' => $currentMonth,
-            'currentMonthWord' => $currentMonthWord,
-            'profit' => $profit,
+            'currentMonth' => $dto->getCurrentMonth(),
+            'currentMonthWord' => $dto->getCurrentMonthHumanized(),
+            'profit' => $dto->getProfit(),
             'currency' => s_get('shop.currency_html')
         ];
 
@@ -66,10 +56,9 @@ class ShowController extends Controller
     /**
      * Flush all statistic cache.
      */
-    public function flushCache(Repository $cache): RedirectResponse
+    public function flushCache(): RedirectResponse
     {
-        $cache->forget('admin.statistic.for_the_last_year_completed');
-        $cache->forget('admin.statistic.profit');
+        $this->script->flushCache();
         $this->msg->info(__('messages.admin.statistics.show.clear_cache_success'));
 
         return back();

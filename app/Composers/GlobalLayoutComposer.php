@@ -1,15 +1,15 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Composers;
 
-use Illuminate\View\View;
 use App\Contracts\ComposerContract;
+use Illuminate\View\View;
 
 /**
  * Class GlobalLayoutComposer
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Composers
  */
 class GlobalLayoutComposer implements ComposerContract

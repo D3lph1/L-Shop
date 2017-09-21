@@ -1,11 +1,14 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Services\Handlers\Payments;
 
 use App\Exceptions\Payment\AlreadyCompletedException;
-use App\Exceptions\Payment\NotFoundException;
 use App\Exceptions\Payment\UnableToCompleteException;
-use App\Repositories\PaymentRepository;
+use App\Models\Payment\PaymentInterface;
+use App\Repositories\Payment\PaymentRepositoryInterface;
+use App\Services\Distributors\Distributor;
+use App\Traits\ContainerTrait;
 
 /**
  * Class AbstractPayment
@@ -16,33 +19,23 @@ use App\Repositories\PaymentRepository;
  */
 abstract class AbstractPayment
 {
+    use ContainerTrait;
+
     /**
-     * @var PaymentRepository
+     * @var PaymentRepositoryInterface
      */
     protected $paymentRepository;
 
-    /**
-     * @param array    $requestData
-     * @param bool     $testing
-     * @param null|int $testingPaymentId
-     *
-     * @return mixed
-     */
-    abstract public function handle(array $requestData, $testing, $testingPaymentId = null);
+    abstract public function handle(array $requestData, bool $testing, ?int $testingPaymentId = null): string;
 
     /**
-     * @param mixed $payment
+     * @throws AlreadyCompletedException
      */
-    protected function validatePayment($payment)
+    protected function validatePayment(PaymentInterface $payment)
     {
         // If payment has already been completed.
-        if ($payment->completed) {
-            throw new AlreadyCompletedException();
-        }
-
-        // If payment with this ID does not exist, exit.
-        if (!$payment) {
-            throw new NotFoundException();
+        if ($payment->isCompleted()) {
+            throw new AlreadyCompletedException($payment->getId());
         }
     }
 
@@ -67,18 +60,18 @@ abstract class AbstractPayment
     /**
      * Give items or money.
      *
-     * @param \App\Repositories\Payment $payment
+     * @throws UnableToCompleteException
      */
-    protected function give(\App\Repositories\Payment $payment)
+    protected function give(PaymentInterface $payment): void
     {
         \DB::transaction(function () use ($payment) {
-            if ($payment->products) {
+            if ($payment->getProducts()) {
                 $this->giveProducts($payment);
             } else {
                 $this->giveMoney($payment);
             }
 
-            if (!$this->paymentRepository->complete($payment->id, static::SERVICE_NAME)) {
+            if (!$this->paymentRepository->complete($payment->getId(), static::SERVICE_NAME)) {
                 throw new UnableToCompleteException();
             }
         });
@@ -86,22 +79,19 @@ abstract class AbstractPayment
 
     /**
      * Outstanding product player.
-     *
-     * @param \App\Repositories\Payment $payment
      */
-    private function giveProducts(\App\Repositories\Payment $payment)
+    private function giveProducts(PaymentInterface $payment): void
     {
-        $distributor = \App::make('distributor');
+        /** @var Distributor $distributor */
+        $distributor = $this->make(Distributor::class);
         $distributor->give($payment);
     }
 
     /**
      * Outstanding money player.
-     *
-     * @param \App\Repositories\Payment $payment
      */
-    private function giveMoney(\App\Repositories\Payment $payment)
+    private function giveMoney(PaymentInterface $payment): void
     {
-        refill_user_balance($payment->cost, $payment->user_id);
+        refill_user_balance($payment->getCost(), $payment->getUserId());
     }
 }

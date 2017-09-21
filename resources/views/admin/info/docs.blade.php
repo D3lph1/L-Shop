@@ -14,28 +14,28 @@
             <h4 class="card-title">@lang('content.admin.other.info.docs.main')</h4>
             <p class="card-text"></p>
             <div class="flex-row">
-                <a href="{{ route('admin.info.docs.main', ['server' => $currentServer->id]) }}" class="btn btn-info">@lang('content.admin.other.info.docs.read')</a>
+                <a href="{{ route('admin.info.docs.main', ['server' => $currentServer->getId()]) }}" class="btn btn-info">@lang('content.admin.other.info.docs.read')</a>
             </div>
         </div>
         <div class="card card-block mt-2">
             <h4 class="card-title">@lang('content.admin.other.info.docs.api')</h4>
             <p class="card-text"></p>
             <div class="flex-row">
-                <a href="{{ route('admin.info.docs.api', ['server' => $currentServer->id]) }}" class="btn btn-info">@lang('content.admin.other.info.docs.read')</a>
+                <a href="{{ route('admin.info.docs.api', ['server' => $currentServer->getId()]) }}" class="btn btn-info">@lang('content.admin.other.info.docs.read')</a>
             </div>
         </div>
         <div class="card card-block mt-2">
             <h4 class="card-title">@lang('content.admin.other.info.docs.sashok')</h4>
             <p class="card-text"></p>
             <div class="flex-row">
-                <a href="{{ route('admin.info.docs.sashok_launcher_integration', ['server' => $currentServer->id]) }}" class="btn btn-info">@lang('content.admin.other.info.docs.read')</a>
+                <a href="{{ route('admin.info.docs.sashok_launcher_integration', ['server' => $currentServer->getId()]) }}" class="btn btn-info">@lang('content.admin.other.info.docs.read')</a>
             </div>
         </div>
         <div class="card card-block mt-2">
             <h4 class="card-title">@lang('content.admin.other.info.docs.cli')</h4>
             <p class="card-text"></p>
             <div class="flex-row">
-                <a href="{{ route('admin.info.docs.cli', ['server' => $currentServer->id]) }}" class="btn btn-info">@lang('content.admin.other.info.docs.read')</a>
+                <a href="{{ route('admin.info.docs.cli', ['server' => $currentServer->getId()]) }}" class="btn btn-info">@lang('content.admin.other.info.docs.read')</a>
             </div>
         </div>
     </div>

@@ -33,10 +33,10 @@
                             <h4 class="text-center">@lang('content.admin.items.add.type.title')</h4>
                             <div class="plus-category text-center mt-1 mb-3">
                                 <div class="btn-group" data-toggle="buttons">
-                                    <label class="btn btn-info @if($item->getType() === 'item') active @endif">
+                                    <label class="btn btn-info @if($item->getType() === \App\Services\Items\Type::ITEM) active @endif">
                                         <input type="radio" name="item_type" id="item-set-item-type" autocomplete="off" value="item" @if($item->getType() === 'item') checked @endif> @lang('content.admin.items.add.type.item')
                                     </label>
-                                    <label class="btn btn-info @if($item->getType() === 'permgroup') active @endif">
+                                    <label class="btn btn-info @if($item->getType() === \App\Services\Items\Type::PERMGROUP) active @endif">
                                         <input type="radio" name="item_type" id="item-set-permgroup-type" autocomplete="off" value="permgroup" @if($item->getType() === 'permgroup') checked @endif> @lang('content.admin.items.add.type.perm')
                                     </label>
                                 </div>
@@ -68,11 +68,11 @@
                                 <div class="md-form text-left">
                                     <i class="fa fa-list prefix"></i>
                                     <input type="text" name="item" id="item" class="form-control" value="{{ $item->getItem() }}">
-                                    <label for="item">@if($item->getType() === 'item') @lang('content.admin.items.add.item_id') @elseif($item->getType() === 'permgroup') @lang('content.admin.items.add.perm_id') @endif</label>
+                                    <label for="item">@if($item->getType() === \App\Services\Items\Type::ITEM) @lang('content.admin.items.add.item_id') @elseif($item->getType() === 'permgroup') @lang('content.admin.items.add.perm_id') @endif</label>
                                 </div>
                             </div>
                             <div class="plus-category">
-                                <div class="md-form text-left" @if($item->getType() === 'permgroup') style="display: none;" @endif>
+                                <div class="md-form text-left" @if($item->getType() === \App\Services\Items\Type::PERMGROUP) style="display: none;" @endif>
                                     <i class="fa fa-list prefix"></i>
                                     <input type="text" name="extra" id="extra" class="form-control" value="{{ $item->getExtra() }}">
                                     <label for="extra">@lang('content.admin.items.add.extra')</label>

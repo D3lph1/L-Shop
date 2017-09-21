@@ -38,7 +38,7 @@
                                 <td>@if($payment->getUserId()){{ $payment->getUser()->getUsername() }}@else {{ $payment->getUsername() }} @endif</td>
                                 <td>{{ $payment->getCost() }} {!! $currency !!}</td>
                                 @foreach($servers as $server)
-                                    @if($server->getId() == $payment->getServerId())
+                                    @if($server->getId() === $payment->getServerId())
                                         <td>{{ $server->getName() }}</td>
                                     @endif
                                 @endforeach
@@ -81,7 +81,7 @@
                 </tr>
                 </thead>
                 <tbody id="profile-payments-modal-products">
-
+                    {{-- Here, the content is inserted using ajax.  --}}
                 </tbody>
             </table>
         </div>

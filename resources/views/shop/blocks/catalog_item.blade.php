@@ -6,13 +6,13 @@
 
     <p class="product-price"><span class="catalog-price-span">{{ $product->getPrice() }}</span> {!! s_get('shop.currency_html', 'руб.') !!}</p>
     <p class="product-count">
-        @if(!($product->getItem()->getType() == 'permgroup' and $product->getStack() === 0))
+        @if(!($product->getItem()->getType() === \App\Services\Items\Type::PERMGROUP and $product->getStack() === 0))
             @lang('content.shop.catalog.item.for')
         @endif
         <span class="number">
-            @if($product->getItem()->getType() == 'item')
+            @if($product->getItem()->getType() === \App\Services\Items\Type::ITEM)
                 {{ $product->getStack() }}
-            @elseif($product->getItem()->getType() == 'permgroup')
+            @elseif($product->getItem()->getType() === \App\Services\Items\Type::PERMGROUP)
                 @if($product->getStack() === 0)
                     @lang('content.shop.catalog.item.forever')
                 @else
@@ -20,7 +20,7 @@
                 @endif
             @endif
         </span>
-        @if($product->getItem()->getType() == 'item')
+        @if($product->getItem()->getType() === \App\Services\Items\Type::ITEM)
                 @lang('content.shop.catalog.item.items')
         @else
             @if($product->getStack() !== 0)

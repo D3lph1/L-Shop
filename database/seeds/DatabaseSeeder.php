@@ -21,7 +21,8 @@ class DatabaseSeeder extends Seeder
         \App\Repositories\Product\ProductRepositoryInterface $product,
         \App\Repositories\Server\ServerRepositoryInterface $server,
         \App\Repositories\Persistence\PersistenceRepositoryInterface $persistence,
-        \Cartalyst\Sentinel\Sentinel $sentinel
+        \Cartalyst\Sentinel\Sentinel $sentinel,
+        \Illuminate\Cache\CacheManager $cache
     )
     {
         // Truncate storage data.
@@ -49,6 +50,8 @@ class DatabaseSeeder extends Seeder
         DB::table('reminders')->truncate();
         DB::table('throttle')->truncate();
         DB::table('role_users')->truncate();
+
+        $cache->flush();
     }
 
     /**
@@ -62,5 +65,6 @@ class DatabaseSeeder extends Seeder
         $this->call(PagesSeeder::class);
         $this->call(ServersSeeder::class);
         $this->call(ItemsAndProductsSeeder::class);
+        $this->call(PaymentsSeeder::class);
     }
 }

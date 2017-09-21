@@ -19,14 +19,15 @@ class EloquentServerRepository implements ServerRepositoryInterface
 {
     public function create(Server $dto): ServerInterface
     {
-        return EloquentServer::create([
+        return EloquentServer::create(trim_nullable([
+            'id' => $dto->getId(),
             'name' => $dto->getName(),
             'enabled' => $dto->isEnabled(),
             'ip' => $dto->getIp(),
             'port' => $dto->getPort(),
             'password' => $dto->getPassword(),
             'monitoring_enabled' => $dto->isMonitoringEnabled()
-        ]);
+        ]));
     }
 
     public function update(int $serverId, Server $dto): bool

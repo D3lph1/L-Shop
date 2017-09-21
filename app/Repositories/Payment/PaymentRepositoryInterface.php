@@ -3,12 +3,15 @@ declare(strict_types = 1);
 
 namespace App\Repositories\Payment;
 
+use App\DataTransferObjects\Payment;
 use App\Models\Payment\PaymentInterface;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface PaymentRepositoryInterface extends BaseRepositoryInterface
 {
+    public function create(Payment $dto): ?PaymentInterface;
+
     public function find(int $id, array $columns): ?PaymentInterface;
 
     /**

@@ -109,7 +109,7 @@ class ServersSeeder extends Seeder
         /** @var ServerInterface $server */
         $server = $this->serverRepository->create(
             (new Server())
-                ->setId(2)
+                ->setId(3)
                 ->setName('Hi-Tech (PvE)')
                 ->setEnabled(true)
                 ->setIp(null)
