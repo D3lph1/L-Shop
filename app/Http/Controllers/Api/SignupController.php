@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Services\Registrar;
+use App\Services\Registrator;
 use Illuminate\Http\Request;
 use Illuminate\Http\JsonResponse;
 use App\Exceptions\User\UnableToCreateUser;
@@ -21,7 +21,7 @@ class SignupController extends ApiController
     /**
      * Signup user by API.
      */
-    public function signup(Request $request, Registrar $registrar): JsonResponse
+    public function signup(Request $request, Registrator $registrar): JsonResponse
     {
         $username = $request->get('username');
         $email = $request->get('email');

@@ -1,25 +1,42 @@
 <?php
 declare(strict_types = 1);
 
-namespace App\Services;
+namespace App\TransactionScripts;
 
 use App\Events\UserWasRegistered;
 use App\Exceptions\User\EmailAlreadyExistsException;
 use App\Exceptions\User\UnableToCreateUser;
 use App\Exceptions\User\UsernameAlreadyExistsException;
-use Cartalyst\Sentinel\Roles\EloquentRole;
-use Cartalyst\Sentinel\Users\UserInterface;
+use App\Models\User\UserInterface;
+use App\Services\User\InitStrategies\AdminInitStrategy;
+use App\Services\User\InitStrategies\CommonUserInitStrategy;
+use App\Services\User\InitStrategies\InitStrategyInterface;
+use App\Traits\ContainerTrait;
+use Cartalyst\Sentinel\Sentinel;
+use Psr\Log\LoggerInterface;
 
-/**
- * Class Registrar
- * BuyResponse for creating new users
- *
- * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
- * @package App\Services
- */
-class Registrar
+class Authentication
 {
+    use ContainerTrait;
+
+    /**
+     * @var Sentinel
+     */
+    private $sentinel;
+
+    public function __construct(Sentinel $sentinel)
+    {
+        $this->sentinel = $sentinel;
+    }
+
+    public function authenticate(string $username, string $password): ?UserInterface
+    {
+        /** @var UserInterface $result */
+        $result = $this->sentinel->authenticate(compact('username', 'password'), true);
+
+        return $result ?: null;
+    }
+
     /**
      * Register new user in a system.
      *
@@ -51,8 +68,8 @@ class Registrar
      */
     private function findByUsername(string $username)
     {
-        if (\Sentinel::getUserRepository()->findByCredentials(['username' => $username])) {
-            throw new UsernameAlreadyExistsException();
+        if ($this->sentinel->getUserRepository()->findByCredentials(['username' => $username])) {
+            throw new UsernameAlreadyExistsException($username);
         }
     }
 
@@ -65,8 +82,8 @@ class Registrar
      */
     private function findByEmail(string $email)
     {
-        if (\Sentinel::getUserRepository()->findByCredentials(['email' => $email])) {
-            throw new EmailAlreadyExistsException();
+        if ($this->sentinel->getUserRepository()->findByCredentials(['email' => $email])) {
+            throw new EmailAlreadyExistsException($email);
         }
     }
 
@@ -92,44 +109,29 @@ class Registrar
         ];
 
         try {
-            $user = \Sentinel::register($credentials, $forceActivate);
+            /** @var UserInterface $user */
+            $user = $this->sentinel->register($credentials, $forceActivate);
         } catch (\Throwable $e) {
-            \Log::error($e);
+            $this->make(LoggerInterface::class)->error($e);
 
             throw new UnableToCreateUser();
         }
 
         if (!$user) {
-            \Log::error('Method \Sentinel::register() returned a boolean value');
+            $this->make(LoggerInterface::class)->error('Method \Sentinel::register() returned a boolean value');
 
             throw new UnableToCreateUser();
         }
 
-        $this->attachRole($user, $admin);
-        event(new UserWasRegistered($user, !$forceActivate));
-    }
-
-    /**
-     * Attaches a role to a new user.
-     *
-     * @param UserInterface $user
-     * @param bool          $admin
-     */
-    private function attachRole(UserInterface $user, bool $admin)
-    {
-        /** @var EloquentRole $adminRole */
-        $adminRole = \Sentinel::getRoleRepository()->findBySlug('admin');
-        /** @var EloquentRole $userRole */
-        $userRole = \Sentinel::getRoleRepository()->findBySlug('user');
-
-        // Detach all roles if user identifier already exists in `role_users` table.
-        $adminRole->users()->detach($user);
-        $userRole->users()->detach($user);
-
         if ($admin) {
-            $adminRole->users()->attach($user);
+            /** @var InitStrategyInterface $strategy */
+            $strategy = $this->make(AdminInitStrategy::class);
         } else {
-            $userRole->users()->attach($user);
+            /** @var InitStrategyInterface $strategy */
+            $strategy = $this->make(CommonUserInitStrategy::class);
         }
+        $strategy->init($user);
+
+        event(new UserWasRegistered($user, !$forceActivate));
     }
 }

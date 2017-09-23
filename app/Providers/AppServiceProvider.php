@@ -36,7 +36,7 @@ use App\Services\Message;
 use App\Services\Monitoring\MonitoringInterface;
 use App\Services\Monitoring\RconMonitoring;
 use App\Services\ReCaptcha;
-use App\Services\Registrar;
+use App\Services\Registrator;
 use App\Services\SashokLauncher;
 use D3lph1\MinecraftRconManager\Connector;
 use D3lph1\MinecraftRconManager\Rcon;
@@ -83,10 +83,6 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->alias(Activator::class, 'activator');
-
-        $this->app->alias(Activator::class, 'reminder');
-
-        $this->app->alias(Registrar::class, 'registrar');
 
         $this->app->alias(SashokLauncher::class, 'launcher.sashok');
 

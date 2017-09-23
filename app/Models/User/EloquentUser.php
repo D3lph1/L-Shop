@@ -34,21 +34,6 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @property string                                                                                                $serverID
  * @property \Carbon\Carbon                                                                                        $created_at
  * @property \Carbon\Carbon                                                                                        $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\User whereAccessToken($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\User whereBalance($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\User whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\User whereEmail($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\User whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\User whereLastLogin($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\User wherePassword($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\User wherePermissions($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\User whereServerID($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\User whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\User whereUsername($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\User whereUuid($value)
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Repositories\News[]                                $news
- * @property-read \Illuminate\Database\Eloquent\Collection|\App\Repositories\Payment[]                             $payments
- * @property-read \App\Repositories\Ban                                                                            $ban
  */
 class EloquentUser extends BaseUser implements UserInterface
 {

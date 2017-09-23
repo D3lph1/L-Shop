@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Traits;
 
+use App\Models\Payment\PaymentInterface;
 use Illuminate\Http\JsonResponse;
 
 /**
@@ -13,13 +14,13 @@ use Illuminate\Http\JsonResponse;
  */
 trait BuyResponse
 {
-    private function buildResponse(int $serverId, Payment $payment): JsonResponse
+    private function buildResponse(int $serverId, PaymentInterface $payment): JsonResponse
     {
-        if ($payment->completed) {
+        if ($payment->isCompleted()) {
             return $this->buildQuickResponse();
         }
 
-        return $this->buildNotQuickResponse($serverId, $payment->id);
+        return $this->buildNotQuickResponse($serverId, $payment->getId());
     }
 
     private function buildQuickResponse(): JsonResponse

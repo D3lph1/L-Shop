@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace App\TransactionScripts\Shop;
 
 use App\Exceptions\User\InvalidUsernameException;
-use App\Repositories\Product\ProductInterface;
+use App\Models\Product\ProductInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Services\Distributors\Distributor;
 use App\Services\Payments\Manager;

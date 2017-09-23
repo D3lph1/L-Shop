@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Auth;
 use App\Exceptions\User\BannedException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SignInRequest;
+use App\TransactionScripts\Authentication;
 use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
 use Cartalyst\Sentinel\Checkpoints\ThrottlingException;
 use Cartalyst\Sentinel\Sentinel;
@@ -18,7 +19,6 @@ use Illuminate\View\View;
  * Class SignInController
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Auth
  */
 class SignInController extends Controller
@@ -28,28 +28,21 @@ class SignInController extends Controller
      */
     public function render(Request $request): View
     {
-        $data = [
+        return view('auth.signin', [
             'onlyForAdmins' => $request->get('onlyForAdmins'),
             'downForMaintenance' => $this->app->isDownForMaintenance(),
             'enable_signup' => is_enable('shop.enable_signup'),
             'enablePasswordReset' => is_enable('shop.enable_password_reset'),
-        ];
-
-        return view('auth.signin', $data);
+        ]);
     }
 
     /**
      * Handle the user signin
      */
-    public function signin(SignInRequest $request): JsonResponse
+    public function signin(SignInRequest $request, Authentication $script): JsonResponse
     {
-        $credentials = [
-            'username' => $request->get('username'),
-            'password' => $request->get('password')
-        ];
-
         try {
-            $user = \Sentinel::authenticate($credentials, true);
+            $user = $script->authenticate($request->get('username'), $request->get('password'));
         } catch (ThrottlingException $e) {
             return json_response('frozen', [
                 'message' => [
@@ -73,8 +66,8 @@ class SignInController extends Controller
             ]);
         }
 
-        if ($user) {
-            if ($request->get('onlyForAdmins') and !$user->hasAccess(['user.admin'])) {
+        if (!is_null($user)) {
+            if ($request->get('onlyForAdmins') and !is_admin()) {
                 // If is not admin.
                 return json_response('only_for_admins', [
                     'message' => [
@@ -83,7 +76,7 @@ class SignInController extends Controller
                     ]
                 ]);
             }
-            $this->msg->success(__('messages.auth.signin.welcome', ['username' => $user->getUserLogin()]));
+            $this->msg->success(__('messages.auth.signin.welcome', ['username' => $user->getUsername()]));
 
             return json_response('success');
         }
@@ -99,9 +92,9 @@ class SignInController extends Controller
     /**
      * Logout current user.
      */
-    public function logout(Sentinel $sentinel): RedirectResponse
+    public function logout(): RedirectResponse
     {
-        $sentinel->logout();
+        $this->sentinel->logout();
         $this->msg->info(__('messages.auth.logout'));
 
         return response()->redirectToRoute('signin');

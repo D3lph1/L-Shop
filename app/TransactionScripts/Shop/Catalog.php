@@ -13,6 +13,7 @@ use App\Services\Payments\Manager;
 use App\Traits\BuyResponse;
 use App\Traits\ContainerTrait;
 use App\Traits\Validator;
+use DB;
 
 class Catalog
 {
@@ -86,7 +87,7 @@ class Catalog
         }
 
         $payment = null;
-        \DB::transaction(function () use ($manager, $productId, $productCount, &$payment) {
+        DB::transaction(function () use ($manager, $productId, $productCount, &$payment) {
             $payment = $manager->createPayment($productId, $productCount, Manager::COUNT_TYPE_NUMBER);
             if ($payment->completed) {
                 /** @var Distributor $distributor */

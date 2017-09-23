@@ -54,7 +54,7 @@ class Payment
         return $this;
     }
 
-    public function getService(): string
+    public function getService(): ?string
     {
         return $this->service;
     }

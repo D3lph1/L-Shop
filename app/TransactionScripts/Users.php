@@ -13,7 +13,7 @@ use App\Exceptions\User\NotFoundException;
 use App\Exceptions\User\UsernameAlreadyExistsException;
 use App\Models\User\UserInterface;
 use App\Repositories\Activation\ActivationRepositoryInterface;
-use App\Repositories\Ban\BanInterface;
+use App\Models\Ban\BanInterface;
 use App\Repositories\Cart\CartRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Services\Ban;
@@ -23,6 +23,7 @@ use App\Services\User\InitStrategies\InitStrategyInterface;
 use App\Traits\ContainerTrait;
 use Cartalyst\Sentinel\Hashing\HasherInterface;
 use Cartalyst\Sentinel\Sentinel;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class Users
 {
@@ -55,7 +56,7 @@ class Users
         return new Listed($user, $cartContent);
     }
 
-    public function informationForList(): iterable
+    public function informationForList(): LengthAwarePaginator
     {
         /** @var UserRepositoryInterface $userRepository */
         $userRepository = $this->sentinel->getUserRepository();

@@ -50,7 +50,7 @@ class CatalogController extends Controller
         $server = (int)$request->route('server');
         $ip = $request->ip();
         $username = $request->get('username');
-        $count = $request->get('count');
+        $count = (float)$request->get('count');
 
         try {
             return $catalog->purchase($productId, $count, $server, $ip, $username);

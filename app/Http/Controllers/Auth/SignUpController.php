@@ -8,7 +8,8 @@ use App\Exceptions\User\UnableToCreateUser;
 use App\Exceptions\User\UsernameAlreadyExistsException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SignUpRequest;
-use App\Services\Registrar;
+use App\Services\Registrator;
+use App\TransactionScripts\Authentication;
 use Illuminate\Http\RedirectResponse;
 
 /**
@@ -37,7 +38,7 @@ class SignUpController extends Controller
     /**
      * Register new user.
      */
-    public function signup(SignUpRequest $request): RedirectResponse
+    public function signup(SignUpRequest $request, Authentication $script): RedirectResponse
     {
         if (!s_get('shop.enable_signup')) {
             return response()->redirectToRoute('signin');
@@ -48,27 +49,27 @@ class SignUpController extends Controller
         $password = $request->get('password');
         $forceActivate = !(bool)s_get('auth.email_activation');
 
-        // Get registrar service from container.
-        /** @var Registrar $registrar */
-        $registrar = $this->app->make('registrar');
-
-        try {;
+        try {
             // Call registrar service method.
-            $registrar->register($username, $email, $password, 0, $forceActivate, false);
+            $script->register($username, $email, $password, 0, $forceActivate, false);
         } catch (UsernameAlreadyExistsException $e) {
 
             $this->msg->danger(__('messages.auth.signup.username_already_exists', ['username' => $username]));
+
             return back();
 
         } catch (EmailAlreadyExistsException $e) {
 
             $this->msg->danger(__('messages.auth.signup.email_already_exists', ['email' => $email]));
+
             return back();
 
         } catch (UnableToCreateUser $e) {
 
             $this->msg->danger(__('messages.auth.signup.fail'));
+
             return back();
+
         }
 
         return $this->redirect(!$forceActivate);

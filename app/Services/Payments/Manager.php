@@ -1,12 +1,17 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Services\Payments;
 
+use App\DataTransferObjects\Payment;
 use App\Exceptions\InvalidArgumentTypeException;
+use App\Exceptions\LogicException;
 use App\Exceptions\Payment\InvalidProductsCountException;
-use App\Repositories\PaymentRepository;
-use App\Repositories\ProductRepository;
+use App\Models\Payment\PaymentInterface;
+use App\Repositories\Payment\PaymentRepositoryInterface;
+use App\Repositories\Product\ProductRepositoryInterface;
 use App\Services\Items\Type;
+use Cartalyst\Sentinel\Sentinel;
 
 /**
  * Class Manager
@@ -22,14 +27,19 @@ class Manager
     const COUNT_TYPE_NUMBER = 1;
 
     /**
-     * @var PaymentRepository
+     * @var PaymentRepositoryInterface
      */
     private $paymentRepository;
 
     /**
-     * @var ProductRepository
+     * @var ProductRepositoryInterface
      */
     private $productRepository;
+
+    /**
+     * @var Sentinel
+     */
+    private $sentinel;
 
     /**
      * @var null|int
@@ -68,14 +78,15 @@ class Manager
 
     /**
      * Manager constructor.
-     *
-     * @param PaymentRepository $paymentRepository
-     * @param ProductRepository $productRepository
      */
-    public function __construct(PaymentRepository $paymentRepository, ProductRepository $productRepository)
+    public function __construct(
+        PaymentRepositoryInterface $paymentRepository,
+        ProductRepositoryInterface $productRepository,
+        Sentinel $sentinel)
     {
         $this->paymentRepository = $paymentRepository;
         $this->productRepository = $productRepository;
+        $this->sentinel = $sentinel;
     }
 
     /**
@@ -86,7 +97,7 @@ class Manager
      * @return mixed
      *
      */
-    public function createPayment(array $productsId, array $productsCount, $productsCountType = self::COUNT_TYPE_STACKS)
+    public function createPayment(array $productsId, array $productsCount, int $productsCountType = self::COUNT_TYPE_STACKS)
     {
         $this->productsCountType = $productsCountType;
         $this->setHandledProductsAndCost($productsId, $productsCount);
@@ -99,60 +110,47 @@ class Manager
     }
 
     /**
-     * @throws \LogicException
-     *
-     * @return bool
+     * @throws LogicException
      */
-    private function checkOnQuick()
+    private function checkOnQuick(): bool
     {
         if (!is_null($this->username)) {
             return false;
         }
 
         if (!is_auth()) {
-            throw new \LogicException('Username is not set and the user is not authorized');
+            throw new LogicException('Username is not set and the user is not authorized');
         }
 
-        $this->username = \Sentinel::getUser()->getUserId();
+        $this->username = $this->sentinel->getUser()->getId();
 
         return $this->updateBalance();
     }
 
-    /**
-     * @return Payment
-     */
-    private function makeQuick()
+    private function makeQuick(): PaymentInterface
     {
         return $this->insert(true);
     }
 
-    /**
-     * @return Payment
-     */
-    private function makeNotQuick()
+    private function makeNotQuick(): PaymentInterface
     {
         return $this->insert(false);
     }
 
     /**
      * Create new payment in database.
-     *
-     * @param bool $isQuick
-     *
-     * @return Payment
      */
-    private function insert($isQuick)
+    private function insert(bool $isQuick): PaymentInterface
     {
-        return $this->paymentRepository->create([
-            'service' => null,
-            'products' => serialize($this->products),
-            'cost' => $this->cost,
-            'user_id' => is_int($this->username) ? $this->username : null,
-            'username' => is_string($this->username) ? $this->username : null,
-            'server_id' => $this->server,
-            'ip' => $this->ip,
-            'completed' => (bool)$isQuick
-        ]);
+        return $this->paymentRepository->create(
+            (new Payment())
+                ->setProducts($this->products)
+                ->setCost($this->cost)
+                ->setUserId(is_int($this->username) ? $this->username : null)
+                ->setServerId($this->server)
+                ->setIp($this->ip)
+                ->setCompleted($isQuick)
+        );
     }
 
     /**
@@ -160,9 +158,9 @@ class Manager
      * @param array $count Array with product counts.
      *
      * @throws InvalidProductsCountException
-     * @throws \LogicException
+     * @throws LogicException
      */
-    private function setHandledProductsAndCost($ids, $count)
+    private function setHandledProductsAndCost(array $ids, array $count): void
     {
         $products = $this->getProducts($ids);
         $idsAndCount = array_combine($ids, $count);
@@ -211,7 +209,7 @@ class Manager
         }
 
         if (!$result) {
-            throw new \LogicException('Products referred to arguments not found');
+            throw new LogicException('Products referred to arguments not found');
         }
 
         $this->products = $result;
@@ -220,16 +218,14 @@ class Manager
 
     /**
      * Update the user's balance if there are enough funds on his balance sheet.
-     *
-     * @return bool
      */
-    private function updateBalance()
+    private function updateBalance(): bool
     {
-        $this->userBalance = \Sentinel::getUser()->getBalance();
+        $this->userBalance = $this->sentinel->getUser()->getBalance();
         if ($this->userBalance - $this->cost < 0 ) {
             return false;
         }
-        \Sentinel::update(\Sentinel::getUser(), [
+        $this->sentinel->getUserRepository()->update(\Sentinel::getUser()->getId(), [
             'balance' => $this->userBalance - $this->cost
         ]);
 
@@ -238,46 +234,24 @@ class Manager
 
     /**
      * Retrieve products with items from database by given identifiers.
-     *
-     * @param array $ids Array with product identifiers.
-     *
-     * @return mixed
      */
-    private function getProducts($ids)
+    private function getProducts(array $ids): iterable
     {
-        return $this->productRepository->getWithItems($ids, [
-            'products.id',
-            'items.type',
-            'products.price',
-            'products.stack'
-        ]);
+        return $this->productRepository->withItemsMultiple(
+            $ids,
+            ['id', 'price', 'stack'],
+            ['type']
+        );
     }
 
-    /**
-     * @param int $server Server identifier.
-     *
-     * @throws InvalidArgumentTypeException
-     *
-     * @return Manager
-     */
-    public function setServer($server)
+    public function setServer(int $server): self
     {
-        if (!is_int($server)) {
-            throw new InvalidArgumentTypeException('integer', $server);
-        }
         $this->server = $server;
 
         return $this;
     }
 
-    /**
-     * @param string $username
-     *
-     * @throws InvalidArgumentTypeException
-     *
-     * @return Manager
-     */
-    public function setUsername($username)
+    public function setUsername(string $username): self
     {
         if (!is_string($username)) {
             throw new InvalidArgumentTypeException('string', $username);
@@ -289,18 +263,9 @@ class Manager
 
     /**
      * It sets ip address from which the order was made.
-     *
-     * @param string $ip Ip address.
-     *
-     * @throws InvalidArgumentTypeException
-     *
-     * @return Manager
      */
-    public function setIp($ip)
+    public function setIp(string $ip): self
     {
-        if (!is_string($ip)) {
-            throw new InvalidArgumentTypeException('string', $ip);
-        }
         $this->ip = $ip;
 
         return $this;
