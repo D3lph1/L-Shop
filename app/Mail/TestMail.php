@@ -3,10 +3,8 @@ declare(strict_types = 1);
 
 namespace App\Mail;
 
-use Illuminate\Bus\Queueable;
 use Illuminate\Mail\Mailable;
 use Illuminate\Queue\SerializesModels;
-use Illuminate\Contracts\Queue\ShouldQueue;
 
 /**
  * Class TestMail
@@ -36,7 +34,7 @@ class TestMail extends Mailable
      *
      * @return $this
      */
-    public function build()
+    public function build(): self
     {
         return $this->view('mail.test', ['site' => config('app.url')]);
     }

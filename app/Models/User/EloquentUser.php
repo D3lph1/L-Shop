@@ -12,28 +12,43 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * Class User
+ * App\Models\User\EloquentUser
  *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Models
- * @property-read \Illuminate\Database\Eloquent\Collection|\Cartalyst\Sentinel\Activations\EloquentActivation[]    $activations
- * @property array                                                                                                 $permissions
- * @property-read \Illuminate\Database\Eloquent\Collection|\Cartalyst\Sentinel\Persistences\EloquentPersistence[]  $persistences
+ * @property int $id
+ * @property string $username
+ * @property string $email
+ * @property string $password
+ * @property array $permissions
+ * @property string|null $last_login
+ * @property float $balance
+ * @property string|null $uuid
+ * @property string|null $accessToken
+ * @property string|null $serverID
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Activation\EloquentActivation[] $activations
+ * @property-read \App\Models\Ban\EloquentBan $ban
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\News\EloquentNews[] $news
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Payment\EloquentPayment[] $payments
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Persistence\EloquentPersistence[] $persistences
  * @property-read \Illuminate\Database\Eloquent\Collection|\Cartalyst\Sentinel\Reminders\EloquentReminder[] $reminders
- * @property-read \Illuminate\Database\Eloquent\Collection|\Cartalyst\Sentinel\Roles\EloquentRole[] $roles
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Role\EloquentRole[] $roles
  * @property-read \Illuminate\Database\Eloquent\Collection|\Cartalyst\Sentinel\Throttling\EloquentThrottle[] $throttle
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\EloquentUser whereAccessToken($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\EloquentUser whereBalance($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\EloquentUser whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\EloquentUser whereEmail($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\EloquentUser whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\EloquentUser whereLastLogin($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\EloquentUser wherePassword($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\EloquentUser wherePermissions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\EloquentUser whereServerID($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\EloquentUser whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\EloquentUser whereUsername($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\EloquentUser whereUuid($value)
  * @mixin \Eloquent
- * @property int                                                                                                   $id
- * @property string                                                                                                $username
- * @property string                                                                                                $email
- * @property string                                                                                                $password
- * @property string                                                                                                $last_login
- * @property float                                                                                                 $balance
- * @property string                                                                                                $uuid
- * @property string                                                                                                $accessToken
- * @property string                                                                                                $serverID
- * @property \Carbon\Carbon                                                                                        $created_at
- * @property \Carbon\Carbon                                                                                        $updated_at
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
  */
 class EloquentUser extends BaseUser implements UserInterface
 {

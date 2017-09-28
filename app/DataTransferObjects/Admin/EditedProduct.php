@@ -6,6 +6,12 @@ namespace App\DataTransferObjects\Admin;
 use App\Models\Category\CategoryInterface;
 use App\Repositories\Product\ProductInterface;
 
+/**
+ * Class EditedProduct
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\DataTransferObjects\Admin
+ */
 class EditedProduct
 {
     private $product;

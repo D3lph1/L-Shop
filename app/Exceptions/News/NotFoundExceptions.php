@@ -1,12 +1,12 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Exceptions\News;
 
-use App\Exceptions\LShopException;
-use RuntimeException;
+use App\Exceptions\RuntimeException;
 use Throwable;
 
-class NotFoundExceptions extends RuntimeException implements LShopException
+class NotFoundExceptions extends RuntimeException
 {
     public function __construct(int $newsId, $code = 0, Throwable $previous = null)
     {

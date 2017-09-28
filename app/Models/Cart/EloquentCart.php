@@ -11,30 +11,33 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * Class Cart
+ * App\Models\Cart\EloquentCart
+ *
+ * @property int $id
+ * @property int $server
+ * @property string $player
+ * @property string $type
+ * @property string $item
+ * @property int $amount
+ * @property string|null $extra
+ * @property int $item_id
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property-read \App\Models\Item\EloquentItem $item_
+ * @property-read \App\Models\User\EloquentUser $user
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Cart\EloquentCart whereAmount($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Cart\EloquentCart whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Cart\EloquentCart whereExtra($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Cart\EloquentCart whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Cart\EloquentCart whereItem($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Cart\EloquentCart whereItemId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Cart\EloquentCart wherePlayer($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Cart\EloquentCart whereServer($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Cart\EloquentCart whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Cart\EloquentCart whereUpdatedAt($value)
+ * @mixin \Eloquent
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Models
- * @mixin \Eloquent
- * @property int                 $id
- * @property string              $player
- * @property string              $type
- * @property string              $item
- * @property int                 $amount
- * @property string              $extra
- * @property int                 $item_id
- * @property \Carbon\Carbon      $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @property int                 $server
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Cart whereAmount($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Cart whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Cart whereExtra($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Cart whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Cart whereItem($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Cart whereItemId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Cart wherePlayer($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Cart whereServer($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Cart whereType($value)
  */
 class EloquentCart extends Model implements CartInterface
 {

@@ -14,7 +14,7 @@ use Illuminate\Http\RedirectResponse;
 class IndexController extends Controller
 {
     /**
-     * The action responsible for processing the request for URL "/"
+     * The action responsible for processing the request for URL "/".
      */
     public function index(): RedirectResponse
     {

@@ -20,6 +20,12 @@ use Cartalyst\Sentinel\Sentinel;
 use Cartalyst\Sentinel\Sessions\SessionInterface;
 use Illuminate\Foundation\Support\Providers\AuthServiceProvider as ServiceProvider;
 
+/**
+ * Class AuthServiceProvider
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Providers
+ */
 class AuthServiceProvider extends ServiceProvider
 {
     /**

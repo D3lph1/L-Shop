@@ -7,6 +7,12 @@ use App\Models\Category\CategoryInterface;
 use App\Models\Item\ItemInterface;
 use Carbon\Carbon;
 
+/**
+ * Interface ProductInterface
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Models\Product
+ */
 interface ProductInterface
 {
     public function getItem(): ItemInterface;

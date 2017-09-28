@@ -3,6 +3,12 @@ declare(strict_types = 1);
 
 namespace App\DataTransferObjects\Admin\User;
 
+/**
+ * Class Edited
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\DataTransferObjects\Admin\User
+ */
 class Edited
 {
     /**

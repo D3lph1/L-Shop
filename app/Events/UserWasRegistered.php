@@ -1,9 +1,10 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Events;
 
-use Illuminate\Queue\SerializesModels;
 use Cartalyst\Sentinel\Users\UserInterface;
+use Illuminate\Queue\SerializesModels;
 
 /**
  * Class UserWasRegistered

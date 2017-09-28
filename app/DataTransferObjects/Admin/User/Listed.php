@@ -5,6 +5,12 @@ namespace App\DataTransferObjects\Admin\User;
 
 use App\Models\User\UserInterface;
 
+/**
+ * Class Listed
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\DataTransferObjects\Admin\User
+ */
 class Listed
 {
     /**

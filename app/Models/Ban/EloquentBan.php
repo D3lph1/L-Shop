@@ -9,22 +9,24 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * App\Models\Ban
+ * App\Models\Ban\EloquentBan
  *
- * @property int                         $id
- * @property int                         $user_id
- * @property Carbon                      $until
- * @property string                      $reason
- * @property Carbon                      $created_at
- * @property Carbon                      $updated_at
- * @property-read \App\Repositories\User $user
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Ban whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Ban whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Ban whereReason($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Ban whereUntil($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Ban whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Ban whereUserId($value)
+ * @property int $id
+ * @property int $user_id
+ * @property \Carbon\Carbon|null $until
+ * @property string|null $reason
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property-read \App\Models\User\EloquentUser $user
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Ban\EloquentBan whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Ban\EloquentBan whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Ban\EloquentBan whereReason($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Ban\EloquentBan whereUntil($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Ban\EloquentBan whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Ban\EloquentBan whereUserId($value)
  * @mixin \Eloquent
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
  */
 class EloquentBan extends Model implements BanInterface
 {

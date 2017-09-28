@@ -12,30 +12,31 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * Class Product
+ * App\Models\Product\EloquentProduct
  *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Models
- * @property-read ItemInterface $item_
- * @mixin \Eloquent
  * @property int $id
  * @property int $price
  * @property int $item_id
  * @property int $server_id
  * @property int $stack
  * @property int $category_id
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Product whereCategoryId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Product whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Product whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Product whereItemId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Product wherePrice($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Product whereServerId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Product whereStack($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Product whereUpdatedAt($value)
  * @property float $sort_priority
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Product whereSortPriority($value)
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property-read \App\Models\Category\EloquentCategory $category
+ * @property-read \App\Models\Item\EloquentItem $item_
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product\EloquentProduct whereCategoryId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product\EloquentProduct whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product\EloquentProduct whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product\EloquentProduct whereItemId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product\EloquentProduct wherePrice($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product\EloquentProduct whereServerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product\EloquentProduct whereSortPriority($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product\EloquentProduct whereStack($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Product\EloquentProduct whereUpdatedAt($value)
+ * @mixin \Eloquent
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
  */
 class EloquentProduct extends Model implements ProductInterface
 {

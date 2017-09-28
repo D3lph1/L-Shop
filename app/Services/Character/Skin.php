@@ -1,9 +1,15 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Services\Character;
 
+use App\Exceptions\RuntimeException;
+use App\Exceptions\User\Character\InvalidImageSizeException;
+
 /**
  * Class Skin
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
  * @package App\Services\Character
  */
 class Skin
@@ -33,13 +39,13 @@ class Skin
      *
      * @param string $player
      */
-    public function __construct($player)
+    public function __construct(string $player)
     {
-        $skinPath = Skin::getSkinPath($player);
+        $skinPath = self::getSkinPath($player);
         if (!$skinPath) {
             $skinPath = $local = config('l-shop.profile.skins.default');
         }
-        $cloakPath = Skin::getCloakPath($player);
+        $cloakPath = self::getCloakPath($player);
 
         $this->loadSkin($skinPath);
         if ($cloakPath) {
@@ -49,10 +55,10 @@ class Skin
 
     public function __destructor()
     {
-        if ($this->skin != null) {
+        if (!is_null($this->skin)) {
             imagedestroy($this->skin);
         }
-        if ($this->cloak != null) {
+        if (!is_null($this->cloak)) {
             imagedestroy($this->cloak);
         }
     }
@@ -61,42 +67,38 @@ class Skin
      * Load new skin.
      *
      * @param string $file Path or URL to the cloak.
-     *
-     * @throws \Exception Error in case the file did not boot or the skin failed.
      */
-    public function loadSkin($file)
+    public function loadSkin(string $file): void
     {
-        if ($this->skin != null) {
+        if (!is_null($this->skin)) {
             imagedestroy($this->skin);
         }
 
-
-        if (($this->skin = imagecreatefrompng($file)) == false) {
-            throw new \Exception("Невозможно загрузить скин.");
+        if (($this->skin = imagecreatefrompng($file)) === false) {
+            throw new RuntimeException("Unable to load skin");
         }
         if (!$this->validSkin()) {
-            throw new \Exception("Неправильный формат скина.");
+            throw new InvalidImageSizeException("Invalid skin format");
         }
-
     }
 
     /**
      * Load new cloak.
      *
      * @param string $file Path or URL to the cloak.
-     *
-     * @throws \Exception Error in case the file did not boot or the cloak failed.
      */
-    public function loadCloak($file)
+    public function loadCloak(string $file): void
     {
-        if ($this->cloak != null) {
+        if (!is_null($this->cloak)) {
             imagedestroy($this->cloak);
         }
-        if (($this->cloak = imagecreatefrompng($file)) == false) {
-            throw new \Exception("Невозможно загрузить плащ.");
+
+        if (($this->cloak = imagecreatefrompng($file)) === false) {
+            throw new RuntimeException("Unable to load cloak");
         }
+
         if (!$this->validCloak()) {
-            throw new \Exception("Неправильный формат плаща.");
+            throw new InvalidImageSizeException("Invalid cloak format");
         }
     }
 
@@ -106,15 +108,14 @@ class Skin
      * @param resource $image Image.
      *
      * @return int Image width in pixels.
-     * @throws \Exception If no picture is specified.
      */
-    private function width($image)
+    private function width($image): int
     {
-        if ($image != null) {
+        if (!is_null($image)) {
             return imagesx($image);
         }
 
-        throw new \Exception("Файл не загружен.");
+        throw new RuntimeException("File not load");
     }
 
     /**
@@ -123,38 +124,33 @@ class Skin
      * @param resource $image Image.
      *
      * @return int Image height in pixels.
-     * @throws \Exception If no picture is specified.
      */
-    private function height($image)
+    private function height($image): int
     {
         if ($image != null) {
             return imagesy($image);
         }
 
-        throw new \Exception("Файл не загружен.");
+        throw new RuntimeException("File not load");
     }
 
     /**
      * Checks whether the skin is valid.
-     *
-     * @return bool
      */
-    protected function validSkin()
+    protected function validSkin(): bool
     {
         $this->skinRatio = (int)($this->width($this->skin) / 64);
 
-        $validWidth = $this->width($this->skin) / $this->skinRatio == 64;
-        $validHeight = $this->height($this->skin) / $this->skinRatio == 32;
+        $validWidth = $this->width($this->skin) / $this->skinRatio === 64;
+        $validHeight = $this->height($this->skin) / $this->skinRatio === 32;
 
         return ($validWidth && $validHeight) ? true : false;
     }
 
     /**
      * Checks whether the cloak is valid.
-     *
-     * @return bool
      */
-    protected function validCloak()
+    protected function validCloak(): bool
     {
         $this->cloakRatio = (int)($this->width($this->cloak) / 64);
 
@@ -162,15 +158,15 @@ class Skin
         $validHeight = 0;
 
         if ($this->cloakRatio != 0) {
-            $validWidth = $this->width($this->cloak) / $this->cloakRatio == 64;
-            $validHeight = $this->height($this->cloak) / $this->cloakRatio == 32;
+            $validWidth = $this->width($this->cloak) / $this->cloakRatio === 64;
+            $validHeight = $this->height($this->cloak) / $this->cloakRatio === 32;
         }
 
         if (!($validWidth && $validHeight)) {
             $this->cloakRatio = (int)($this->width($this->cloak) / 17);
 
-            $validWidth = $this->width($this->cloak) / $this->cloakRatio == 22;
-            $validHeight = $this->height($this->cloak) / $this->cloakRatio == 17;
+            $validWidth = $this->width($this->cloak) / $this->cloakRatio === 22;
+            $validHeight = $this->height($this->cloak) / $this->cloakRatio === 17;
         }
 
         return ($validWidth && $validHeight) ? true : false;
@@ -191,16 +187,14 @@ class Skin
 
     /**
      * Builds the front of the head.
-     *
-     * @return ReadySkin Object with a ready head.
      */
-    public function getFrontHead()
+    public function getFrontHead(): ReadySkin
     {
         $newImage = $this->getBackground(8, 8, $this->skinRatio);
 
-        //Лицо
+        // Face
         imagecopy($newImage, $this->skin, 0, 0, 8 * $this->skinRatio, 8 * $this->skinRatio, 8 * $this->skinRatio, 8 * $this->skinRatio);
-        //Область вокруг головы
+        // Area around the head
         $this->imageCopyAlpha($newImage, $this->skin, 0, 0, 40 * $this->skinRatio, 8 * $this->skinRatio, 8 * $this->skinRatio, 8 * $this->skinRatio, imagecolorat($this->skin, 63 * $this->skinRatio, 0));
 
         return new ReadySkin($newImage);
@@ -208,16 +202,14 @@ class Skin
 
     /**
      * Builds the back of the head.
-     *
-     * @return ReadySkin Object with a ready head.
      */
-    public function getBackHead()
+    public function getBackHead(): ReadySkin
     {
         $newImage = $this->getBackground(8, 8, $this->skinRatio);
 
-        //Лицо
+        // Face
         imagecopy($newImage, $this->skin, 0, 0, 24 * $this->skinRatio, 8 * $this->skinRatio, 8 * $this->skinRatio, 8 * $this->skinRatio);
-        //Область вокруг головы
+        // Area around the head
         $this->imageCopyAlpha($newImage, $this->skin, 0, 0, 56 * $this->skinRatio, 8 * $this->skinRatio, 8 * $this->skinRatio, 8 * $this->skinRatio, imagecolorat($this->skin, 63 * $this->skinRatio, 0));
 
         return new ReadySkin($newImage);
@@ -225,23 +217,21 @@ class Skin
 
     /**
      * Builds the front of the skin.
-     *
-     * @return ReadySkin Object with a ready skin.
      */
-    public function getFrontSkin()
+    public function getFrontSkin(): ReadySkin
     {
         $newImage = $this->getBackground(16, 32, $this->skinRatio);
 
-        //Лицо
+        // Face
         imagecopy($newImage, $this->skin, 4 * $this->skinRatio, 0, 8 * $this->skinRatio, 8 * $this->skinRatio, 8 * $this->skinRatio, 8 * $this->skinRatio);
-        //Область вокруг головы
+        // Area around the head
         $this->imageCopyAlpha($newImage, $this->skin, 4 * $this->skinRatio, 0, 40 * $this->skinRatio, 8 * $this->skinRatio, 8 * $this->skinRatio, 8 * $this->skinRatio, imagecolorat($this->skin, 63 * $this->skinRatio, 0));
-        //Туловище
+        // Body
         imagecopy($newImage, $this->skin, 4 * $this->skinRatio, 8 * $this->skinRatio, 20 * $this->skinRatio, 20 * $this->skinRatio, 8 * $this->skinRatio, 12 * $this->skinRatio);
-        //Ноги
+        // Legs
         imagecopyresampled($newImage, $this->skin, 8 * $this->skinRatio, 20 * $this->skinRatio, (4 * $this->skinRatio + 4 * $this->skinRatio - 1), 20 * $this->skinRatio, 4 * $this->skinRatio, 12 * $this->skinRatio, 0 - 4 * $this->skinRatio, 12 * $this->skinRatio);
         imagecopy($newImage, $this->skin, 4 * $this->skinRatio, 20 * $this->skinRatio, 4 * $this->skinRatio, 20 * $this->skinRatio, 4 * $this->skinRatio, 12 * $this->skinRatio);
-        //Руки
+        // Arms
         imagecopyresampled($newImage, $this->skin, 12 * $this->skinRatio, 8 * $this->skinRatio, (44 * $this->skinRatio + 4 * $this->skinRatio - 1), 20 * $this->skinRatio, 4 * $this->skinRatio, 12 * $this->skinRatio, 0 - 4 * $this->skinRatio, 12 * $this->skinRatio);
         imagecopy($newImage, $this->skin, 0, 8 * $this->skinRatio, 44 * $this->skinRatio, 20 * $this->skinRatio, 4 * $this->skinRatio, 12 * $this->skinRatio);
 
@@ -250,23 +240,21 @@ class Skin
 
     /**
      * Builds the back of the skin.
-     *
-     * @return ReadySkin Object with a ready skin.
      */
-    public function getBackSkin()
+    public function getBackSkin(): ReadySkin
     {
         $newImage = $this->getBackground(16, 32, $this->skinRatio);
 
-        //Лицо
+        // Face
         imagecopy($newImage, $this->skin, 4 * $this->skinRatio, 0, 24 * $this->skinRatio, 8 * $this->skinRatio, 8 * $this->skinRatio, 8 * $this->skinRatio);
-        //Область вокруг головы
+        // Area around the head
         $this->imageCopyAlpha($newImage, $this->skin, 4 * $this->skinRatio, 0, 56 * $this->skinRatio, 8 * $this->skinRatio, 8 * $this->skinRatio, 8 * $this->skinRatio, imagecolorat($this->skin, 63 * $this->skinRatio, 0));
-        //Туловище
+        // Body
         imagecopy($newImage, $this->skin, 4 * $this->skinRatio, 8 * $this->skinRatio, 32 * $this->skinRatio, 20 * $this->skinRatio, 8 * $this->skinRatio, 12 * $this->skinRatio);
-        //Ноги
+        // Legs
         imagecopy($newImage, $this->skin, 8 * $this->skinRatio, 20 * $this->skinRatio, 12 * $this->skinRatio, 20 * $this->skinRatio, 4 * $this->skinRatio, 12 * $this->skinRatio);
         imagecopyresampled($newImage, $this->skin, 4 * $this->skinRatio, 20 * $this->skinRatio, (12 * $this->skinRatio + 4 * $this->skinRatio - 1), 20 * $this->skinRatio, 4 * $this->skinRatio, 12 * $this->skinRatio, 0 - 4 * $this->skinRatio, 12 * $this->skinRatio);
-        //Руки
+        // Arms
         imagecopy($newImage, $this->skin, 12 * $this->skinRatio, 8 * $this->skinRatio, 52 * $this->skinRatio, 20 * $this->skinRatio, 4 * $this->skinRatio, 12 * $this->skinRatio);
         imagecopyresampled($newImage, $this->skin, 0 * $this->skinRatio, 8 * $this->skinRatio, (52 * $this->skinRatio + 4 * $this->skinRatio - 1), 20 * $this->skinRatio, 4 * $this->skinRatio, 12 * $this->skinRatio, 0 - 4 * $this->skinRatio, 12 * $this->skinRatio);
 
@@ -275,13 +263,11 @@ class Skin
 
     /**
      * Builds the front of the cloak.
-     *
-     * @return ReadySkin|false Object with a ready cloak.
      */
-    public function getFrontCloak()
+    public function getFrontCloak(): ?ReadySkin
     {
-        if ($this->cloak == null) {
-            return false;
+        if (is_null($this->cloak)) {
+            return null;
         }
 
         $newImage = $this->getBackground(10, 16, $this->cloakRatio);
@@ -293,13 +279,11 @@ class Skin
 
     /**
      * Builds the back of the cloak.
-     *
-     * @return ReadySkin|false Object with a ready cloak or false if the cloak does not exists.
      */
-    public function getBackCloak()
+    public function getBackCloak(): ?ReadySkin
     {
-        if ($this->cloak == null) {
-            return false;
+        if (is_null($this->cloak)) {
+            return null;
         }
 
         $newImage = $this->getBackground(10, 16, $this->cloakRatio);
@@ -310,13 +294,13 @@ class Skin
     }
 
 
-    private function imageCopyAlpha($dst, $src, $dst_x, $dst_y, $src_x, $src_y, $w, $h, $bg)
+    private function imageCopyAlpha($dst, $src, $dst_x, $dst_y, $src_x, $src_y, $w, $h, $bg): void
     {
         for ($i = 0; $i < $w; $i++) {
             for ($j = 0; $j < $h; $j++) {
                 $rgb = imagecolorat($src, $src_x + $i, $src_y + $j);
 
-                if (($rgb & 0xFFFFFF) == ($bg & 0xFFFFFF)) {
+                if (($rgb & 0xFFFFFF) === ($bg & 0xFFFFFF)) {
                     $alpha = 127;
                 } else {
                     $colors = imagecolorsforindex($src, $rgb);
@@ -332,17 +316,17 @@ class Skin
      *
      * @param string $player Player username.
      *
-     * @return bool|string Path to skin or false if skin does not exists.
+     * @return bool|string Path to skin or null if skin does not exists.
      */
-    public static function getSkinPath($player)
+    public static function getSkinPath(string $player): ?string
     {
-        $file = config('l-shop.profile.skins.path') . '/' . $player . '.png';
+        $file = config('l-shop.profile.skins.path') . DIRECTORY_SEPARATOR . $player . '.png';
 
         if (file_exists($file)) {
             return $file;
         }
 
-        return false;
+        return null;
     }
 
     /**
@@ -350,16 +334,16 @@ class Skin
      *
      * @param string $player Player username.
      *
-     * @return bool|string Path to cloak or false if cloak does not exists.
+     * @return null|string Path to cloak or null if cloak does not exists.
      */
-    public static function getCloakPath($player)
+    public static function getCloakPath(string $player): ?string
     {
-        $file = config('l-shop.profile.cloaks.path') . '/' . $player . '.png';
+        $file = config('l-shop.profile.cloaks.path') . DIRECTORY_SEPARATOR . $player . '.png';
 
         if (file_exists($file)) {
             return $file;
         }
 
-        return false;
+        return null;
     }
 }

@@ -9,29 +9,30 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * Class Item
+ * App\Models\Item\EloquentItem
  *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Models
- * @mixin \Eloquent
  * @property int $id
  * @property string $name
- * @property string $description
+ * @property string|null $description
  * @property string $type
  * @property string $item
- * @property string $image
- * @property string $extra
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Item whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Item whereDescription($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Item whereExtra($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Item whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Item whereImage($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Item whereItem($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Item whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Item whereType($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Item whereUpdatedAt($value)
+ * @property string|null $image
+ * @property string|null $extra
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\Product\EloquentProduct[] $products
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Item\EloquentItem whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Item\EloquentItem whereDescription($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Item\EloquentItem whereExtra($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Item\EloquentItem whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Item\EloquentItem whereImage($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Item\EloquentItem whereItem($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Item\EloquentItem whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Item\EloquentItem whereType($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Item\EloquentItem whereUpdatedAt($value)
+ * @mixin \Eloquent
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
  */
 class EloquentItem extends Model implements ItemInterface
 {

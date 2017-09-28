@@ -10,21 +10,22 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
 /**
- * Class Category
+ * App\Models\Category\EloquentCategory
+ *
+ * @property int $id
+ * @property string $name
+ * @property int $server_id
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property-read \App\Models\Server\EloquentServer $server
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category\EloquentCategory whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category\EloquentCategory whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category\EloquentCategory whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category\EloquentCategory whereServerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Category\EloquentCategory whereUpdatedAt($value)
+ * @mixin \Eloquent
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Models
- * @mixin \Eloquent
- * @property int                 $id
- * @property string              $name
- * @property int                 $server_id
- * @property \Carbon\Carbon      $created_at
- * @property \Carbon\Carbon|null $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Category whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Category whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Category whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Category whereServerId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Category whereUpdatedAt($value)
  */
 class EloquentCategory extends Model implements CategoryInterface
 {

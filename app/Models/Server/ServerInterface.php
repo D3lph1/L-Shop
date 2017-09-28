@@ -5,6 +5,12 @@ namespace App\Models\Server;
 
 use Carbon\Carbon;
 
+/**
+ * Interface ServerInterface
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Models\Server
+ */
 interface ServerInterface
 {
     public function getCategories(): iterable;

@@ -1,6 +1,9 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Exceptions;
+
+use Throwable;
 
 /**
  * Class UnexpectedSettingsValueException
@@ -8,11 +11,10 @@ namespace App\Exceptions;
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  * @package App\Exceptions
  */
-class UnexpectedSettingsValueException extends \Exception implements LShopException
+class UnexpectedSettingsValueException extends UnexpectedValueException
 {
-    public function __construct(string $message = "")
+    public function __construct(?string $value, int $code = 0, Throwable $previous = null)
     {
-        $message = "Value '$message' is unexpected";
-        parent::__construct($message);
+        parent::__construct("Value '$value' is unexpected", $code, $previous);
     }
 }

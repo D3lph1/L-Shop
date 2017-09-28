@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Exceptions;
 
@@ -7,10 +8,9 @@ namespace App\Exceptions;
  * An exception is thrown if the arguments passed to a function or method have an extraneous type.
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Exceptions
  */
-class InvalidArgumentTypeException extends \InvalidArgumentException implements LShopException
+class InvalidArgumentTypeException extends InvalidArgumentException
 {
     /**
      * @param string|array $expected

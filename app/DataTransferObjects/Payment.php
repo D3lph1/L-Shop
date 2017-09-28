@@ -5,6 +5,12 @@ namespace App\DataTransferObjects;
 
 use App\Exceptions\InvalidArgumentTypeException;
 
+/**
+ * Class Payment
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\DataTransferObjects
+ */
 class Payment
 {
     /**

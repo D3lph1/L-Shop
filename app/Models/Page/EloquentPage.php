@@ -7,23 +7,23 @@ use Carbon\Carbon;
 use Illuminate\Database\Eloquent\Model;
 
 /**
- * Class Page
+ * App\Models\Page\EloquentPage
  *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Models
- * @mixin \Eloquent
  * @property int $id
  * @property string $title
  * @property string $content
  * @property string $url
- * @property Carbon $created_at
- * @property Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Page whereContent($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Page whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Page whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Page whereTitle($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Page whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Page whereUrl($value)
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Page\EloquentPage whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Page\EloquentPage whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Page\EloquentPage whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Page\EloquentPage whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Page\EloquentPage whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Page\EloquentPage whereUrl($value)
+ * @mixin \Eloquent
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
  */
 class EloquentPage extends Model implements PageInterface
 {

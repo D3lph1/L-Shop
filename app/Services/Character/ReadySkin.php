@@ -1,9 +1,14 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Services\Character;
 
+use Intervention\Image\Image;
+
 /**
  * Class ReadySkin
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
  * @package App\Services\Character
  */
 class ReadySkin
@@ -32,12 +37,8 @@ class ReadySkin
 
     /**
      * Change size of skin or cloak.
-     *
-     * @param int $maxHeight New image height.
-     *
-     * @return $this
      */
-    public function resizeImage($maxHeight)
+    public function resizeImage(int $maxHeight): self
     {
         $height = imagesy($this->readySkin);
         $width = imagesx($this->readySkin);
@@ -65,18 +66,12 @@ class ReadySkin
         return $this->readySkin;
     }
 
-    /**
-     * @param string $path Save image path.
-     */
-    public function saveImage($path)
+    public function saveImage(string $path): void
     {
         imagepng($this->readySkin, $path);
     }
 
-    /**
-     * @return \Intervention\Image\Image
-     */
-    public function saveImageAsTmpAndGet()
+    public function saveImageAsTmpAndGet(): Image
     {
         return \Image::make($this->getImage());
     }

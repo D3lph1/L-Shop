@@ -3,10 +3,15 @@ declare(strict_types = 1);
 
 namespace App\Exceptions\User;
 
-use App\Exceptions\LShopException;
-use LogicException;
+use App\Exceptions\LogicException;
 
-class AttemptToDeleteYourselfException extends LogicException implements LShopException
+/**
+ * Class AttemptToDeleteYourselfException
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Exceptions\User
+ */
+class AttemptToDeleteYourselfException extends LogicException
 {
     //
 }

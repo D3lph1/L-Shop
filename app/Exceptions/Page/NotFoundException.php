@@ -3,13 +3,18 @@ declare(strict_types = 1);
 
 namespace App\Exceptions\Page;
 
-use App\Exceptions\LShopException;
-use RuntimeException;
+use App\Exceptions\RuntimeException;
 use Throwable;
 
-class NotFoundException extends RuntimeException implements LShopException
+/**
+ * Class NotFoundException
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Exceptions\Page
+ */
+class NotFoundException extends RuntimeException
 {
-    public function __construct(int $pageId, $code = 0, Throwable $previous = null)
+    public function __construct(int $pageId, int $code = 0, Throwable $previous = null)
     {
         parent::__construct("Product with id `$pageId` not found", $code, $previous);
     }

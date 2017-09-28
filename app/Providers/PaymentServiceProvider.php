@@ -1,17 +1,17 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Providers;
 
+use App\Services\Payments\Interkassa\Checkout as InterkassaCheckout;
 use App\Services\Payments\Manager;
 use App\Services\Payments\Robokassa\Checkout as RobokassaCheckout;
-use App\Services\Payments\Interkassa\Checkout as InterkassaCheckout;
 use Illuminate\Support\ServiceProvider;
 
 /**
  * Class PaymentServiceProvider
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Providers
  */
 class PaymentServiceProvider extends ServiceProvider

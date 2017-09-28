@@ -5,6 +5,12 @@ namespace App\Models\Page;
 
 use Carbon\Carbon;
 
+/**
+ * Interface PageInterface
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Models\Page
+ */
 interface PageInterface
 {
     public function getId(): int;

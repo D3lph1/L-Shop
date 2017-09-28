@@ -5,6 +5,12 @@ namespace App\Models\Item;
 
 use Carbon\Carbon;
 
+/**
+ * Interface ItemInterface
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Models\Item
+ */
 interface ItemInterface
 {
     public function getId(): int;

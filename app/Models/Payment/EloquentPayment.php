@@ -10,34 +10,34 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * Class Payment
+ * App\Models\Payment\EloquentPayment
  *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Models\Payment
+ * @property int $id
+ * @property string|null $service
+ * @property string|null $products
+ * @property float|null $cost
+ * @property int|null $user_id
+ * @property string|null $username
+ * @property int|null $server_id
+ * @property string $ip
+ * @property int $completed
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property-read \App\Models\User\EloquentUser|null $user
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\EloquentPayment whereCompleted($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\EloquentPayment whereCost($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\EloquentPayment whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\EloquentPayment whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\EloquentPayment whereIp($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\EloquentPayment whereProducts($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\EloquentPayment whereServerId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\EloquentPayment whereService($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\EloquentPayment whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\EloquentPayment whereUserId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\EloquentPayment whereUsername($value)
  * @mixin \Eloquent
- * @property int                                       $id
- * @property string                                    $service
- * @property string                                    $products
- * @property float                                     $cost
- * @property int                                       $user_id
- * @property string                                    $username
- * @property int                                       $server_id
- * @property string                                    $ip
- * @property bool                                      $completed
- * @property \Carbon\Carbon                            $created_at
- * @property \Carbon\Carbon                            $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Payment whereCompleted($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Payment whereCost($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Payment whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Payment whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Payment whereIp($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Payment whereProducts($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Payment whereServerId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Payment whereService($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Payment whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Payment whereUserId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Payment whereUsername($value)
- * @property-read \App\Models\User\UserInterface $user
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
  */
 class EloquentPayment extends Model implements PaymentInterface
 {

@@ -1,17 +1,15 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Console\Commands\User;
 
 use App\Services\Ban;
 use Illuminate\Console\Command;
-use Symfony\Component\Console\Input\InputArgument;
-use Symfony\Component\Console\Input\InputOption;
 
 /**
  * Class Block
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Console\Commands\User
  */
 class Block extends Command

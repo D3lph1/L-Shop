@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Exceptions\Payment;
 
-use App\Exceptions\LShopException;
+use App\Exceptions\LogicException;
 use Throwable;
 
 /**
@@ -13,7 +13,7 @@ use Throwable;
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  * @package App\Exceptions\Payment
  */
-class AlreadyCompletedException extends \LogicException implements LShopException
+class AlreadyCompletedException extends LogicException
 {
     public function __construct(int $paymentId, int $code = 0, Throwable $previous = null)
     {

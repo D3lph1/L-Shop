@@ -1,10 +1,17 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Providers;
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
+use Illuminate\Support\Facades\Route;
 
+/**
+ * Class RouteServiceProvider
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Providers
+ */
 class RouteServiceProvider extends ServiceProvider
 {
     /**

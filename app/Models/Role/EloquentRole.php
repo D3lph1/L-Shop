@@ -6,23 +6,24 @@ namespace App\Models\Role;
 use Cartalyst\Sentinel\Roles\EloquentRole as BaseRole;
 
 /**
- * Class Role
+ * App\Models\Role\EloquentRole
  *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Models
- * @mixin \Eloquent
  * @property int $id
  * @property string $slug
  * @property string $name
- * @property string $permissions
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Role whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Role whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Role whereName($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Role wherePermissions($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Role whereSlug($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\Role whereUpdatedAt($value)
+ * @property array $permissions
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property-read \Illuminate\Database\Eloquent\Collection|\App\Models\User\EloquentUser[] $users
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Role\EloquentRole whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Role\EloquentRole whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Role\EloquentRole whereName($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Role\EloquentRole wherePermissions($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Role\EloquentRole whereSlug($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Role\EloquentRole whereUpdatedAt($value)
+ * @mixin \Eloquent
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
  */
 class EloquentRole extends BaseRole implements RoleInterface
 {

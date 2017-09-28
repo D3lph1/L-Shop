@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Exceptions;
 
@@ -10,12 +11,10 @@ use Throwable;
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  * @package App\Exceptions
  */
-class ItemNotFoundException extends \LogicException implements LShopException
+class ItemNotFoundException extends LogicException
 {
-    public function __construct($id, $code = 0, Throwable $previous = null)
+    public function __construct(int $id, int $code = 0, Throwable $previous = null)
     {
-        $message = "Item with id {$id} not found";
-
-        parent::__construct($message, $code, $previous);
+        parent::__construct("Item with id `$id` not found", $code, $previous);
     }
 }

@@ -1,11 +1,19 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Exceptions\User;
 
+use App\Exceptions\RuntimeException;
 use Carbon\Carbon;
 use Throwable;
 
-class BannedException extends \RuntimeException
+/**
+ * Class BannedException
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Exceptions\User
+ */
+class BannedException extends RuntimeException
 {
     /**
      * @var null|Carbon
@@ -13,36 +21,19 @@ class BannedException extends \RuntimeException
     protected $until;
 
     /**
-     * @var string
+     * @var null|string
      */
     protected $reason;
 
     /**
      * BannedException constructor.
-     *
-     * @param null|Carbon         $until
-     * @param null|string    $reason
-     * @param int            $code
-     * @param Throwable|null $previous
      */
-    public function __construct($until, $reason = null, $code = 0, Throwable $previous = null)
+    public function __construct(?Carbon $until, ?string $reason = null, int $code = 0, Throwable $previous = null)
     {
         $this->until = $until;
         $this->reason = $reason;
 
-        if (is_null($until)) {
-            $until = "permanently";
-        } else {
-            $until = "until $until";
-        }
-
-        if ($reason) {
-            $reason = "due to `$reason`";
-        }
-
-        $message = "User banned $until $reason";
-
-        parent::__construct($message, $code, $previous);
+        parent::__construct(build_ban_message($until, $reason), $code, $previous);
     }
 
     /**

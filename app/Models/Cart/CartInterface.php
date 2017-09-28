@@ -6,6 +6,12 @@ namespace App\Models\Cart;
 use App\Models\Item\ItemInterface;
 use Carbon\Carbon;
 
+/**
+ * Interface CartInterface
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Models\Cart
+ */
 interface CartInterface
 {
     public function getRelatedItem(): ItemInterface;

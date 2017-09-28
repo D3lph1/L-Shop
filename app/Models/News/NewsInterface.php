@@ -6,6 +6,12 @@ namespace App\Models\News;
 use App\Models\User\UserInterface;
 use Carbon\Carbon;
 
+/**
+ * Interface NewsInterface
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Models\News
+ */
 interface NewsInterface
 {
     public function getUser(): UserInterface;

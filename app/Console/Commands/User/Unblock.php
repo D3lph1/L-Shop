@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Console\Commands\User;
 
@@ -10,7 +11,6 @@ use Illuminate\Console\Command;
  * Class Unblock
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Console\Commands\User
  */
 class Unblock extends Command

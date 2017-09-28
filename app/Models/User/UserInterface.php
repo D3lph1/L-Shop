@@ -5,6 +5,12 @@ namespace App\Models\User;
 
 use Cartalyst\Sentinel\Users\UserInterface as BaseUserInterface;
 
+/**
+ * Interface UserInterface
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Models\User
+ */
 interface UserInterface extends BaseUserInterface
 {
     public function getActivations(): iterable;

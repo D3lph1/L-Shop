@@ -1,21 +1,21 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Console\Commands\User;
 
-use App\Exceptions\User\UsernameAlreadyExistsException;
 use App\Exceptions\User\EmailAlreadyExistsException;
+use App\Exceptions\User\UnableToCreateUser;
+use App\Exceptions\User\UsernameAlreadyExistsException;
+use Illuminate\Console\Command;
+use Illuminate\Container\Container;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputOption;
-use App\Exceptions\User\UnableToCreateUser;
-use Illuminate\Container\Container;
-use Illuminate\Console\Command;
 
 /**
  * Class CreateUser
  * Creates a new user with the specified credentials
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Console\Commands
  */
 class Create extends Command

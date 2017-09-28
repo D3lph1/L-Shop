@@ -10,22 +10,24 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 /**
- * App\Models\News
+ * App\Models\News\EloquentNews
  *
- * @property-read UserInterface $author
- * @mixin \Eloquent
  * @property int $id
  * @property string $title
  * @property string $content
  * @property int $user_id
- * @property \Carbon\Carbon $created_at
- * @property \Carbon\Carbon $updated_at
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\News whereContent($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\News whereCreatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\News whereId($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\News whereTitle($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\News whereUpdatedAt($value)
- * @method static \Illuminate\Database\Query\Builder|\App\Repositories\News whereUserId($value)
+ * @property \Carbon\Carbon|null $created_at
+ * @property \Carbon\Carbon|null $updated_at
+ * @property-read \App\Models\User\EloquentUser $author
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\News\EloquentNews whereContent($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\News\EloquentNews whereCreatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\News\EloquentNews whereId($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\News\EloquentNews whereTitle($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\News\EloquentNews whereUpdatedAt($value)
+ * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\News\EloquentNews whereUserId($value)
+ * @mixin \Eloquent
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
  */
 class EloquentNews extends Model implements NewsInterface
 {
