@@ -18,7 +18,6 @@ use Illuminate\Database\Eloquent\Collection;
  * Parent class for all distributors.
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Services\Distributors
  */
 abstract class Distributor

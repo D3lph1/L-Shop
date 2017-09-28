@@ -13,9 +13,9 @@ interface PaymentInterface
 
     public function getId(): int;
 
-    public function getService(): string;
+    public function getService(): ?string;
 
-    public function getProducts(): array;
+    public function getProducts(): ?array;
 
     public function getCost(): float;
 

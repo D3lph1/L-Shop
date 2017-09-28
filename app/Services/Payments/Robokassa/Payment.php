@@ -1,7 +1,14 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Services\Payments\Robokassa;
 
+/**
+ * Class Payment
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Services\Payments\Robokassa
+ */
 class Payment
 {
     /**
@@ -10,7 +17,7 @@ class Payment
     protected $number;
 
     /**
-     * @var string
+     * @var float
      */
     protected $amount;
 
@@ -41,96 +48,60 @@ class Payment
 
     /**
      * Payment constructor.
-     *
-     * @param int   $number
-     * @param float $amount
      */
-    public function __construct($number, $amount)
+    public function __construct(int $number, float $amount)
     {
         $this->number = $number;
-        $this->amount = number_format($amount, 2, '.', '');
+        $this->amount = $amount;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getNumber()
+    public function getNumber(): int
     {
         return $this->number;
     }
 
-    /**
-     * @return float
-     */
-    public function getAmount()
+    public function getAmount(): float
     {
         return $this->amount;
     }
 
-    /**
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     *
-     * @return $this
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getCulture()
+    public function getCulture(): ?string
     {
         return $this->culture;
     }
 
-    /**
-     * @param string $culture
-     *
-     * @return $this
-     */
-    public function setCulture($culture)
+    public function setCulture(string $culture): self
     {
         $this->culture = $culture;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getCurrencyLabel()
+    public function getCurrencyLabel(): ?string
     {
         return $this->currencyLabel;
     }
 
-    /**
-     * @param string $currencyLabel
-     *
-     * @return $this
-     */
-    public function setCurrencyLabel($currencyLabel)
+    public function setCurrencyLabel(string $currencyLabel): self
     {
         $this->currencyLabel = $currencyLabel;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getEmail()
+    public function getEmail(): ?string
     {
         return $this->email;
     }
@@ -140,28 +111,24 @@ class Payment
      *
      * @return $this
      */
-    public function setEmail($email)
+    public function setEmail(string $email): self
     {
         $this->email = $email;
 
         return $this;
     }
 
-    /**
-     * @param string $name
-     * @param string $value
-     */
-    public function addCustomParam($name, $value)
+    public function addCustomParam(string $name, string $value)
     {
         $this->customParams['shp_' . $name] = $value;
     }
 
-    public function hasCustomParam($name)
+    public function hasCustomParam(string $name): bool
     {
         return isset($this->customParams['shp_' . $name]);
     }
 
-    public function getCustomParam($name)
+    public function getCustomParam(string $name): ?string
     {
         if ($this->hasCustomParam($name)) {
             return $this->customParams['shp_' . $name];
@@ -170,7 +137,7 @@ class Payment
         return null;
     }
 
-    public function getCustomParams()
+    public function getCustomParams(): array
     {
         return $this->customParams;
     }

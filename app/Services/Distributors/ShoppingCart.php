@@ -40,7 +40,6 @@ class ShoppingCart extends Distributor
             $username = $this->getUsername($payment);
             $products = $this->productsWithItems($payment->getProducts());
             $this->putInTable($this->prepareInsertData($payment, $products, $username));
-            $this->complete($payment);
         });
     }
 

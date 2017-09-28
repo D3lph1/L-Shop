@@ -13,7 +13,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * Class Payment
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Models
+ * @package App\Models\Payment
  * @mixin \Eloquent
  * @property int                                       $id
  * @property string                                    $service
@@ -77,14 +77,14 @@ class EloquentPayment extends Model implements PaymentInterface
         return $this->id;
     }
 
-    public function getService(): string
+    public function getService(): ?string
     {
         return $this->service;
     }
 
-    public function getProducts(): array
+    public function getProducts(): ?array
     {
-        return json_decode($this->products, true);
+        return is_null($this->products) ? null : json_decode($this->products, true);
     }
 
     public function getCost(): float

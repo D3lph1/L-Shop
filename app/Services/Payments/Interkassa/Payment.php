@@ -1,11 +1,20 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Services\Payments\Interkassa;
 
+use Carbon\Carbon;
+
+/**
+ * Class Payment
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Services\Payments\Interkassa
+ */
 class Payment
 {
     /**
-     * @var int|string Payment number
+     * @var int Payment number
      */
     protected $number;
 
@@ -43,7 +52,7 @@ class Payment
      * account in the Interkassa system. The parameter is used if the payment is tied
      * to an order, which quickly loses its relevance with the expiration of time.
      *
-     * @var \DateTime
+     * @var Carbon
      */
     protected $expired;
 
@@ -89,27 +98,21 @@ class Payment
     /**
      * Payment constructor.
      *
-     * @param int|string $number Payment number
+     * @param string $number Payment number
      * @param float      $amount Amount of payment
      */
-    public function __construct($number, $amount)
+    public function __construct(int $number, float $amount)
     {
         $this->number = $number;
-        $this->amount = (float)$amount;
+        $this->amount = $amount;
     }
 
-    /**
-     * @return int|string
-     */
-    public function getNumber()
+    public function getNumber(): int
     {
         return $this->number;
     }
 
-    /**
-     * @return float
-     */
-    public function getAmount()
+    public function getAmount(): float
     {
         return $this->amount;
     }
@@ -117,198 +120,125 @@ class Payment
     /**
      * @return string
      */
-    public function getAmountType()
+    public function getAmountType(): ?string
     {
         return $this->amountType;
     }
 
-    /**
-     * @param string $amountType
-     *
-     * @return $this
-     */
-    public function setAmountType($amountType)
+    public function setAmountType(string $amountType): self
     {
         $this->amountType = $amountType;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getCurrency()
+    public function getCurrency(): string
     {
         return $this->currency;
     }
 
-    /**
-     * @param string $currency
-     *
-     * @return $this
-     */
-    public function setCurrency($currency)
+    public function setCurrency(string $currency): self
     {
         $this->currency = $currency;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getDescription()
+    public function getDescription(): ?string
     {
         return $this->description;
     }
 
-    /**
-     * @param string $description
-     *
-     * @return $this
-     */
-    public function setDescription($description)
+    public function setDescription(string $description): self
     {
         $this->description = $description;
 
         return $this;
     }
 
-    /**
-     * @return \DateTime
-     */
-    public function getExpired()
+    public function getExpired(): ?Carbon
     {
         return $this->expired;
     }
 
-    /**
-     * @param \DateTime $expired
-     *
-     * @return $this
-     */
-    public function setExpired($expired)
+    public function setExpired(Carbon $expired): self
     {
         $this->expired = $expired;
 
         return $this;
     }
 
-    /**
-     * @return int
-     */
-    public function getLifetime()
+    public function getLifetime(): ?int
     {
         return $this->lifetime;
     }
 
-    /**
-     * @param int $lifetime
-     *
-     * @return $this
-     */
-    public function setLifetime($lifetime)
+    public function setLifetime(int $lifetime): self
     {
         $this->lifetime = $lifetime;
 
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    public function getPaywayOn()
+    public function getPaywayOn(): array
     {
         return $this->paywayOn;
     }
 
-    /**
-     * @param array $paywayOn
-     *
-     * @return $this
-     */
-    public function setPaywayOn($paywayOn)
+    public function setPaywayOn(array $paywayOn): self
     {
         $this->paywayOn = $paywayOn;
 
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    public function getPaywayOff()
+    public function getPaywayOff(): array
     {
         return $this->paywayOff;
     }
 
-    /**
-     * @param array $paywayOff
-     *
-     * @return $this
-     */
-    public function setPaywayOff($paywayOff)
+    public function setPaywayOff(array $paywayOff): self
     {
         $this->paywayOff = $paywayOff;
 
         return $this;
     }
 
-    /**
-     * @return array
-     */
-    public function getPaywayVia()
+    public function getPaywayVia(): array
     {
         return $this->paywayVia;
     }
 
-    /**
-     * @param array $paywayVia
-     *
-     * @return $this
-     */
-    public function setPaywayVia($paywayVia)
+    public function setPaywayVia(array $paywayVia): self
     {
         $this->paywayVia = $paywayVia;
 
         return $this;
     }
 
-    /**
-     * @return string
-     */
-    public function getLocale()
+    public function getLocale(): ?string
     {
         return $this->locale;
     }
 
-    /**
-     * @param string $locale
-     *
-     * @return $this
-     */
-    public function setLocale($locale)
+    public function setLocale(string $locale): self
     {
         $this->locale = $locale;
 
         return $this;
     }
 
-    /**
-     * @param string $name
-     * @param string $value
-     */
-    public function addCustomParam($name, $value)
+    public function addCustomParam(string $name, string $value): void
     {
         $this->customParams['ik_x_' . $name] = $value;
     }
 
-    public function hasCustomParam($name)
+    public function hasCustomParam(string $name): bool
     {
         return isset($this->customParams['ik_x_' . $name]);
     }
 
-    public function getCustomParam($name)
+    public function getCustomParam(string $name): ?string
     {
         if ($this->hasCustomParam($name)) {
             return $this->customParams['ik_x_' . $name];
@@ -317,7 +247,7 @@ class Payment
         return null;
     }
 
-    public function getCustomParams()
+    public function getCustomParams(): array
     {
         return $this->customParams;
     }

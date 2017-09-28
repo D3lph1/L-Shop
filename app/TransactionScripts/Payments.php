@@ -3,16 +3,25 @@ declare(strict_types = 1);
 
 namespace App\TransactionScripts;
 
+use App\DataTransferObjects\Methods;
+use App\DataTransferObjects\Payment;
+use App\Exceptions\LogicException;
 use App\Exceptions\Payment\AlreadyCompletedException;
 use App\Exceptions\Payment\NotFoundException;
+use App\Models\Payment\PaymentInterface;
 use App\Models\Product\ProductInterface;
 use App\Repositories\Payment\PaymentRepositoryInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Services\Distributors\Distributor;
 use App\Services\Image;
+use App\Services\Payments\Interkassa\Checkout as InterkassaCheckout;
+use App\Services\Payments\Interkassa\Payment as InterkassaPayment;
+use App\Services\Payments\Robokassa\Checkout as RobokassaCheckout;
+use App\Services\Payments\Robokassa\Payment as RobokassaPayment;
 use App\Traits\ContainerTrait;
 use Cartalyst\Sentinel\Sentinel;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class Payments
 {
@@ -42,7 +51,10 @@ class Payments
 
     public function informationForList()
     {
-        return $this->paymentRepository->withUserPaginated(['*'], ['*']);
+        return $this->paymentRepository->withUserPaginated(
+            ['id', 'service', 'products', 'cost', 'server_id', 'completed', 'created_at', 'updated_at'],
+            ['username']
+        );
     }
 
     public function informationForHistory(int $paymentId): array
@@ -74,6 +86,14 @@ class Payments
         return $result;
     }
 
+    public function informationForUser(int $userId): LengthAwarePaginator
+    {
+        return $this->paymentRepository->historyForUser(
+            $userId,
+            ['id', 'service', 'products', 'user_id', 'cost', 'user_id', 'username', 'server_id', 'ip', 'completed', 'created_at', 'updated_at']
+        );
+    }
+
     public function complete(int $paymentId): bool
     {
         /** @var Distributor $distributor */
@@ -90,11 +110,87 @@ class Payments
 
         if (count($payment->getProducts()) === 0) {
             refill_user_balance((float)$payment->getCost(), $payment->getUserId());
-            $this->paymentRepository->complete($payment->getId(), __('content.profile.payments.table.completed_by_admin'));
         }
 
+        $this->paymentRepository->complete($payment->getId(), __('content.profile.payments.table.completed_by_admin'));
         $distributor->give($payment);
 
         return true;
+    }
+
+    public function methods(int $paymentId): Methods
+    {
+        /** @var PaymentInterface $payment */
+        $payment = $this->paymentRepository->find($paymentId, ['id', 'cost', 'user_id', 'username', 'completed']);
+
+        if (is_null($payment)) {
+            throw new NotFoundException($paymentId);
+        }
+
+        // If the payment is completed, deny access.
+        if ($payment->isCompleted()) {
+            throw new AlreadyCompletedException($paymentId);
+        }
+
+        // Verification of whether the payment the user belongs.
+        if (is_null($payment->getUsername())) {
+            if (!is_auth()) {
+                // If it is not, deny access.
+                throw new LogicException();
+            }
+
+            if ($payment->getUserId() != $payment->getUser()->getId()) {
+                // If it is not, deny access.
+                throw new LogicException();
+            }
+        }
+
+        return new Methods($this->robokassa($payment), $this->interkassa($payment));
+    }
+
+    private function robokassa(PaymentInterface $payment): ?string
+    {
+        if (!s_get('payment.method.robokassa.enabled')) {
+            return null;
+        }
+
+        /** @var RobokassaCheckout $checkout */
+        $checkout = $this->make(RobokassaCheckout::class);
+        $payment = new RobokassaPayment($payment->getId(), $payment->getCost());
+        $payment->setDescription(s_get('shop.name'));
+
+        return $checkout->getPaymentUrl($payment);
+    }
+
+    private function interkassa(PaymentInterface $payment): ?string
+    {
+        if (!s_get('payment.method.interkassa.enabled')) {
+            return null;
+        }
+
+        /** @var InterkassaCheckout $checkout */
+        $checkout = $this->make(InterkassaCheckout::class);
+        $payment = new InterkassaPayment($payment->getId(), $payment->getCost());
+        $payment->setDescription(s_get('shop.name'));
+        $payment->setCurrency(s_get('payment.method.interkassa.currency'));
+
+        return $checkout->getPaymentUrl($payment);
+    }
+
+    public function fillupbalance(int $userId, float $sum, int $serverId, string $ip): ?PaymentInterface
+    {
+        $sum = (float)abs($sum);
+
+        $payment = $this->paymentRepository->create(
+            (new Payment())
+                ->setProducts(null)
+                ->setCost($sum)
+                ->setUserId($userId)
+                ->setServerId($serverId)
+                ->setIp($ip)
+                ->setCompleted(false)
+        );
+
+        return $payment;
     }
 }

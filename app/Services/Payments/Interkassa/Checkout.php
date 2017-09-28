@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Services\Payments\Interkassa;
 
@@ -6,6 +7,12 @@ use App\Exceptions\Payment\Interkassa\EmptyDescriptionException;
 use App\Exceptions\Payment\Interkassa\UnexpectedStatusException;
 use App\Exceptions\Payment\Interkassa\UnknownCheckoutException;
 
+/**
+ * Class Checkout
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Services\Payments\Interkassa
+ */
 class Checkout
 {
     protected $url = 'https://sci.interkassa.com';
@@ -37,14 +44,8 @@ class Checkout
 
     /**
      * Checkout constructor.
-     *
-     * @param string $id      Checkout identifier.
-     * @param string $key     Sign key.
-     * @param string $testKey Sign test key.
-     * @param bool   $isTest
-     * @param string $algo
      */
-    public function __construct($id, $key, $testKey, $isTest = false, $algo = 'sha256')
+    public function __construct(string $id, string $key, ?string $testKey, bool $isTest = false, string $algo = 'sha256')
     {
         $this->id = $id;
         $this->key = $key;
@@ -53,12 +54,7 @@ class Checkout
         $this->algo = $algo;
     }
 
-    /**
-     * @param Payment $payment
-     *
-     * @return string Payment reference(link).
-     */
-    public function getPaymentUrl(Payment $payment)
+    public function getPaymentUrl(Payment $payment): string
     {
         if (empty($payment->getDescription())) {
             throw new EmptyDescriptionException();
@@ -77,12 +73,7 @@ class Checkout
         return $this->url . '?' . http_build_query($array);
     }
 
-    /**
-     * @param Payment $payment
-     *
-     * @return array
-     */
-    protected function buildArray(Payment $payment)
+    protected function buildArray(Payment $payment): array
     {
         $arr = [
             'ik_co_id' => $this->getId(),
@@ -104,12 +95,7 @@ class Checkout
         return $this->filterArray($arr);
     }
 
-    /**
-     * @param array $arr
-     *
-     * @return array
-     */
-    protected function filterArray(array $arr)
+    protected function filterArray(array $arr): array
     {
         $filtered = array_filter($arr);
         foreach ($filtered as &$item) {
@@ -121,14 +107,7 @@ class Checkout
         return $filtered;
     }
 
-    /**
-     * @param array $request
-     *
-     * @return bool
-     * @throws UnknownCheckoutException
-     * @throws UnexpectedStatusException
-     */
-    public function validate(array $request)
+    public function validate(array $request): bool
     {
         if ($request['ik_co_id'] !== s_get('payment.method.interkassa.checkout_id')) {
             throw new UnknownCheckoutException($request['ik_co_id']);
@@ -149,44 +128,32 @@ class Checkout
         return $hash === $sign;
     }
 
-    public function getSuccessAnswer()
+    public function getSuccessAnswer(): string
     {
         return 'OK';
     }
 
-    protected function key()
+    protected function key(): ?string
     {
         return $this->isTest() ? $this->getTestKey() : $this->getKey();
     }
 
-    /**
-     * @return string
-     */
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
 
-    /**
-     * @return string
-     */
-    public function getKey()
+    public function getKey(): string
     {
         return $this->key;
     }
 
-    /**
-     * @return string
-     */
-    public function getTestKey()
+    public function getTestKey(): ?string
     {
         return $this->testKey;
     }
 
-    /**
-     * @return bool
-     */
-    public function isTest()
+    public function isTest(): bool
     {
         return $this->isTest;
     }

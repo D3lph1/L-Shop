@@ -62,9 +62,11 @@ class Payment
     public function setProducts($products): self
     {
         if (is_array($products)) {
-            $this->products = json_encode($products);
+            $this->products = is_null($products) ? null : json_encode($products);
         } else if (is_string($products)) {
             $this->products = $products;
+        } else if (is_null($products)) {
+            $this->products = null;
         } else {
             throw new InvalidArgumentTypeException(['array', 'string'], $products);
         }
@@ -72,7 +74,7 @@ class Payment
         return $this;
     }
 
-    public function getProducts(): string
+    public function getProducts(): ?string
     {
         return $this->products;
     }
