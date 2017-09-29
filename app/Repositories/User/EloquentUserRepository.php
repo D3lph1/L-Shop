@@ -21,15 +21,15 @@ class EloquentUserRepository extends IlluminateUserRepository implements UserRep
             ->with([
                 'roles' => function ($query) use ($rolesColumns) {
                     /** @var Builder $query */
-                    $query->select($rolesColumns);
+                    $query->select(array_merge($rolesColumns));
                 },
                 'activations' => function ($query) use ($activationsColumns) {
                     /** @var Builder $query */
-                    $query->select($activationsColumns);
+                    $query->select(array_merge($activationsColumns, ['user_id']));
                 },
                 'ban' => function ($query) use ($banColumns) {
                     /** @var Builder $query */
-                    $query->select($banColumns);
+                    $query->select(array_merge($banColumns, ['user_id']));
                 }
             ])
             ->paginate($perPage);

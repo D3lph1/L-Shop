@@ -48,7 +48,7 @@ class Kernel extends ConsoleKernel
     /**
      * Register the Closure based commands for the application.
      */
-    protected function commands(): string
+    protected function commands(): void
     {
         require base_path('routes/console.php');
     }

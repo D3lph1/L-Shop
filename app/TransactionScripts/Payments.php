@@ -23,6 +23,12 @@ use App\Traits\ContainerTrait;
 use Cartalyst\Sentinel\Sentinel;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
+/**
+ * Class Payments
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\TransactionScripts
+ */
 class Payments
 {
     use ContainerTrait;

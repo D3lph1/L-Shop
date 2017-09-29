@@ -5,6 +5,11 @@ use App\DataTransferObjects\Payment;
 use App\Repositories\Payment\PaymentRepositoryInterface;
 use Illuminate\Database\Seeder;
 
+/**
+ * Class PaymentsSeeder
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ */
 class PaymentsSeeder extends Seeder
 {
     /**
@@ -34,7 +39,7 @@ class PaymentsSeeder extends Seeder
                 ->setUserId(1)
                 ->setServerId(1)
                 ->setIp('127.0.0.1')
-                ->setCompleted(false)
+                ->setCompleted(true)
         );
 
         $this->paymentRepository->create(
@@ -49,12 +54,11 @@ class PaymentsSeeder extends Seeder
                 ->setUserId(1)
                 ->setServerId(1)
                 ->setIp('127.0.0.1')
-                ->setCompleted(false)
+                ->setCompleted(true)
         );
 
         $this->paymentRepository->create(
             (new Payment())
-                ->setService('Database seeder')
                 ->setProducts([
                     20 => 365,
                     21 => 0

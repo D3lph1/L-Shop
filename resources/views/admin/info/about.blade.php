@@ -65,7 +65,7 @@
                     <img class="rounded-circle" src="{{ asset('img/admin/developers/WhileD0S.png') }}" alt="Generic placeholder image" height="100" width="100">
                 </a>
                 <div class="media-body">
-                    <h4 class="media-heading">WhilD0S <a href="https://vk.com/whiled0s" target="_blank" class="btn btn-primary btn-sm"><i class="fa fa-vk"></i></a></h4>
+                    <h4 class="media-heading">WhileD0S <a href="https://vk.com/whiled0s" target="_blank" class="btn btn-primary btn-sm"><i class="fa fa-vk"></i></a></h4>
                     <p>@lang('content.admin.other.info.about.whiled0s_description')</p>
                 </div>
             </div>

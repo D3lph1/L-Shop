@@ -34,7 +34,7 @@ class MonitoringPlayers
      * @param int $now Count of players at the moment.
      * @param int $total Count of available slots.
      */
-    public function __construct(int $serverId, int $now, int $total)
+    public function __construct(int $serverId, ?int $now = null, ?int $total = null)
     {
         $this->serverId = $serverId;
         $this->now = $now;
@@ -46,12 +46,12 @@ class MonitoringPlayers
         return $this->serverId;
     }
 
-    public function getNow(): int
+    public function getNow(): ?int
     {
         return $this->now;
     }
 
-    public function getTotal(): int
+    public function getTotal(): ?int
     {
         return $this->total;
     }

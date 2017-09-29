@@ -8,6 +8,12 @@ use App\Models\Item\ItemInterface;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
+/**
+ * Interface ItemRepositoryInterface
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Repositories\Item
+ */
 interface ItemRepositoryInterface extends BaseRepositoryInterface
 {
     public function create(Item $dto): ItemInterface;

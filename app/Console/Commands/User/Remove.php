@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Console\Commands\User;
 
+use Cartalyst\Sentinel\Sentinel;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -30,31 +31,38 @@ class Remove extends Command
     protected $description = 'Remove given user';
 
     /**
+     * @var Sentinel
+     */
+    private $sentinel;
+
+    /**
      * Create a new command instance.
      */
-    public function __construct()
+    public function __construct(Sentinel $sentinel)
     {
         parent::__construct();
+        $this->sentinel = $sentinel;
     }
 
     /**
      * Execute the console command.
-     *
-     * @return void
      */
-    public function handle()
+    public function handle(): int
     {
         $username = $this->argument('username');
-        $user = \Sentinel::findByCredentials(['username' => $username]);
+        $user = $this->sentinel->getUserRepository()->findByCredentials(['username' => $username]);
 
         if (!$user) {
             $this->error("User with username $username not found");
 
-            return;
+            return 1;
         }
 
+        // TODO: Refactor it!
         $user->delete();
         $this->info('User has been successfully removed!');
+
+        return 0;
     }
 
     /**

@@ -1,10 +1,17 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Foundation\Http\Exceptions\MaintenanceModeException;
 
+/**
+ * Class CheckForMaintenanceMode
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Http\Middleware
+ */
 class CheckForMaintenanceMode extends \Illuminate\Foundation\Http\Middleware\CheckForMaintenanceMode
 {
     /**

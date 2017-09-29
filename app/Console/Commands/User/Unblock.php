@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Console\Commands\User;
 
+use App\Models\User\UserInterface;
 use App\Services\Ban;
 use Cartalyst\Sentinel\Sentinel;
 use Illuminate\Console\Command;
@@ -47,6 +48,7 @@ class Unblock extends Command
     public function handle(Sentinel $sentinel)
     {
         $username = $this->argument('username');
+        /** @var UserInterface $user */
         $user = $sentinel->getUserRepository()->findByCredentials(['username' => $username]);
 
         if (is_null($user)) {

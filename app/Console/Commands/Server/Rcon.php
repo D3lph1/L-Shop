@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Console\Commands\Server;
 
+use App\Models\Server\ServerInterface;
 use App\Repositories\Server\ServerRepositoryInterface;
 use Cartalyst\Support\Collection;
 use D3lph1\MinecraftRconManager\Connector;
@@ -14,7 +15,6 @@ use Illuminate\Http\Request;
  * Class Rcon
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Console\Commands\Server
  */
 class Rcon extends Command
@@ -58,20 +58,22 @@ class Rcon extends Command
      *
      * @return mixed
      */
-    public function handle(Request $request)
+    public function handle(Request $request): int
     {
         $this->info($request->method());
 
-        $servers = $this->serverRepository->all();
+        $servers = collect($this->serverRepository->all(['id', 'name']));
         $names = $servers->map(function ($item) {
-            return $item->name;
+            /** @var ServerInterface $item */
+            return $item->getName();
         });
 
         $selected = $this->choice('Select server', $names->toArray());
 
         /** @var Collection $filtered */
         $filtered = $servers->filter(function ($item) use ($selected) {
-            return $selected === $item->name;
+            /** @var ServerInterface $item */
+            return $selected === $item->getName();
         });
 
         if (!$filtered) {
@@ -79,9 +81,10 @@ class Rcon extends Command
 
             return 1;
         }
-        /** @var Server $filtered */
+
         $filtered = $filtered->first();
-        $this->info("The {$filtered->name} server is selected. Start typing commands. To stop typing, \"exit\".");
+        /** @var ServerInterface $filtered */
+        $this->info("The {$filtered->getName()} server is selected. Start typing commands. To stop typing, \"exit\".");
 
         while (true) {
             $cmd = $this->ask('Command');
@@ -90,7 +93,7 @@ class Rcon extends Command
             }
 
             try {
-                $rcon = $this->rconConnector->get($filtered->id);
+                $rcon = $this->rconConnector->get($filtered->getId());
             } catch (ConnectSocketException $e) {
                 $this->error('Connection failed!');
 
@@ -100,5 +103,7 @@ class Rcon extends Command
             $result = $rcon->send($cmd);
             $this->line($result);
         }
+
+        return 0;
     }
 }

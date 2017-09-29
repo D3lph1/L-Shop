@@ -150,6 +150,7 @@ return [
             'list' => [
                 'activate' => [
                     'success' => 'User account verified.',
+                    'fail' => 'Unable to activate user.',
                     'already' => 'The user account has already been verified.',
                 ]
             ]

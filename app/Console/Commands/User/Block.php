@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Console\Commands\User;
 
+use App\Models\User\UserInterface;
 use App\Services\Ban;
 use Illuminate\Console\Command;
 
@@ -41,15 +42,14 @@ class Block extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle()
+    public function handle(): int
     {
         $username = $this->argument('username');
         $duration = (int)$this->argument('duration');
         $reason = $this->option('reason');
 
+        /** @var UserInterface $user */
         $user = \Sentinel::getUserRepository()->findByCredentials(['username' => $username]);
 
         if (is_null($user)) {
@@ -67,14 +67,7 @@ class Block extends Command
         }
 
         if ($result) {
-
-            if (empty($duration)) {
-                $duration = 'permanently';
-            } else {
-                $duration = "on $duration day(s)";
-            }
-
-            $this->info("User $username has been banned $duration.");
+            $this->info(build_ban_message($result->getUntil(), $reason));
 
             return 0;
         }

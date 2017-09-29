@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace App\TransactionScripts;
 
 use App\Events\UserWasRegistered;
+use App\Exceptions\User\AlreadyActivatedException;
 use App\Exceptions\User\EmailAlreadyExistsException;
 use App\Exceptions\User\UnableToCreateUser;
 use App\Exceptions\User\UsernameAlreadyExistsException;
@@ -15,6 +16,12 @@ use App\Traits\ContainerTrait;
 use Cartalyst\Sentinel\Sentinel;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class Authentication
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\TransactionScripts
+ */
 class Authentication
 {
     use ContainerTrait;
@@ -133,5 +140,30 @@ class Authentication
         $strategy->init($user);
 
         event(new UserWasRegistered($user, !$forceActivate));
+    }
+
+    public function activateByUsername(string $username): bool
+    {
+        /** @var UserInterface $user */
+        $user = $this->sentinel->getUserRepository()->findByCredentials(['username' => $username]);
+
+        return $this->activate($user);
+    }
+
+    public function activateById(int $userId): bool
+    {
+        /** @var UserInterface $user */
+        $user = $this->sentinel->getUserRepository()->findById($userId);
+
+        return $this->activate($user);
+    }
+
+    protected function activate(UserInterface $user): bool
+    {
+        if ($this->sentinel->getActivationRepository()->completed($user)) {
+            throw new AlreadyActivatedException($user->getId());
+        }
+
+        return $this->sentinel->activate($user);
     }
 }

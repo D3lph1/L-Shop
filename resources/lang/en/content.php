@@ -81,6 +81,8 @@ return [
                     'enable' => 'Enable server monitoring',
                     'timeout' => 'Connection timeout',
                     'timeout_popover' => 'The time after which the connection to the server socket will be automatically disconnected. (If there is no connection). Specify in seconds.',
+                    'pattern' => 'Response format',
+                    'pattern_popover' => 'Here you need to enter a regular expression that will parse the response string. It must necessarily include a capture-group ?&lt;now&gt; (To mark the current online) and ?&lt;total&gt; (For marking the total number of slots on the server).',
                 ],
                 'maintenance' => [
                     'title' => 'Maintenance mode',
@@ -539,7 +541,7 @@ return [
                     'rubukkit' => 'Topic on RuBukkit.org',
                     'developers' => 'Developers',
                     'd3lph1_description' => '<strong>Software code</strong>. You can contact me for technical support.',
-                    'whiled0s_description' => '<strong>Design and layout</strong>. You can apply to me in order to order the development of a unique design for your site, including for a site based on the L-Shop system.',
+                    'whiled0s_description' => '<strong>Design and layout</strong>. You can apply to me in order to order the development of a unique design for your site, including for a app based on the L-Shop system.',
                 ],
                 'docs' => [
                     'title' => 'Documentation',
@@ -679,7 +681,8 @@ return [
     'monitoring' => [
         'title' => 'Server monitoring',
         'cancel' => 'Cancel',
-        'server_disabled' => 'Server is disabled'
+        'server_disabled' => 'Server is disabled',
+        'error' => 'Unable to receive information from server.'
     ],
 
     'payments' => [

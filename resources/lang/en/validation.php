@@ -173,6 +173,7 @@ return [
         'server_port' => 'Server port',
         'server_password' => 'RCON password',
         'rcon_connection_timeout' => 'Connection timeout',
+        'rcon_monitoring_pattern' => 'Response format',
         'enable_monitoring' => 'Enable server monitoring',
         'signup_redirect' => 'Redirect user to custom URL after registration',
         'signup_redirect_url' => 'Custom URL',

@@ -156,7 +156,7 @@
                     <tbody>
                     @foreach($cart as $item)
                         <tr>
-                            <td><img height="35" width="35" src="{{ \App\Services\Image::getOrDefault("items/" . $item->getRelatedItem()->getImage(), 'img/empty.png') }}"></td>
+                            <td><img height="35" width="35" src="{{ \App\Services\Image::getOrDefault("items/" . $item->getRelatedItem()->getImage(), 'empty.png') }}"></td>
                             <td>{{ $item->getRelatedItem()->getName() }}</td>
                             <td>{{ $item->getAmount() }}</td>
                             @foreach($servers as $server)

@@ -176,6 +176,7 @@ return [
         'server_port' => 'Порт сервера',
         'server_password' => 'RCON пароль',
         'rcon_connection_timeout' => 'Таймаут соединения',
+        'rcon_monitoring_pattern' => 'Формат ответа',
         'enable_monitoring' => 'Включить мониторинг серверов',
         'signup_redirect' => 'Перенаправлять пользователя на кастомный URL после регистрации',
         'signup_redirect_url' => 'Кастомный URL',

@@ -1,10 +1,17 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Support\Facades\Auth;
 
+/**
+ * Class RedirectIfAuthenticated
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Http\Middleware
+ */
 class RedirectIfAuthenticated
 {
     /**

@@ -51,6 +51,7 @@ class SaveMainSettingsRequest extends FormRequest
             'monitoring.enabled' => 'bool',
             'cart_capacity' => 'required|integer|min:1',
             'rcon_connection_timeout' => 'required|numeric|min:0.01',
+            'rcon_monitoring_pattern' => 'required',
             'maintenance' => 'boolean',
         ];
     }

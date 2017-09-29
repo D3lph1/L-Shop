@@ -8,6 +8,12 @@ use App\Models\Payment\PaymentInterface;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
+/**
+ * Interface PaymentRepositoryInterface
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Repositories\Payment
+ */
 interface PaymentRepositoryInterface extends BaseRepositoryInterface
 {
     public function create(Payment $dto): ?PaymentInterface;

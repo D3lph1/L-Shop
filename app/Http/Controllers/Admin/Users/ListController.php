@@ -58,10 +58,10 @@ class ListController extends Controller
             if ($this->script->activate((int)$request->route('user'))) {
                 $this->msg->success(__('messages.admin.users.list.activate.success'));
             } else {
-                // TODO: make msg
+                $this->msg->success(__('messages.admin.users.list.activate.fail'));
             }
         } catch (NotFoundException $e) {
-            // TODO: make msg
+            $this->msg->success(__('messages.admin.users.edit.remove.not_found'));
         } catch (AlreadyActivatedException $e) {
             $this->msg->info(__('messages.admin.users.list.activate.already'));
         }

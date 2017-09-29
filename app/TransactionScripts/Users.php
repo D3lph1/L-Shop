@@ -50,8 +50,9 @@ class Users
         $cartRepository = $this->make(CartRepositoryInterface::class);
         $cartContent = $cartRepository->getByPlayerWithItems(
             $user->getUsername(),
-            ['*'],
-            ['*']);
+            ['amount', 'server'],
+            ['name', 'image']
+        );
 
         return new Listed($user, $cartContent);
     }
@@ -61,10 +62,10 @@ class Users
         /** @var UserRepositoryInterface $userRepository */
         $userRepository = $this->sentinel->getUserRepository();
         $users = $userRepository->withRolesActivationsBanPaginated(
-            ['*'],
-            ['*'],
-            ['*'],
-            ['*']
+            ['username', 'email', 'balance'],
+            ['permissions'],
+            ['completed', 'completed_at'],
+            ['until', 'reason']
         );
 
         return $users;

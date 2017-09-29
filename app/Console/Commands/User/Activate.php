@@ -3,6 +3,9 @@ declare(strict_types = 1);
 
 namespace App\Console\Commands\User;
 
+use App\Exceptions\User\AlreadyActivatedException;
+use App\Exceptions\User\NotFoundException;
+use App\TransactionScripts\Authentication;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -29,40 +32,44 @@ class Activate extends Command
      */
     protected $description = 'Activate given user account';
 
+    private $authentication;
+
     /**
      * Create a new command instance.
      */
-    public function __construct()
+    public function __construct(Authentication $script)
     {
         parent::__construct();
+        $this->authentication = $script;
     }
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle()
+    public function handle(): int
     {
         $username = $this->argument('username');
-        $user = \Sentinel::findByCredentials(['username' => $username]);
 
-        if (!$user) {
-            $this->error('User with this username not found');
+        try {
+            $result = $this->authentication->activateByUsername($username);
+        } catch (NotFoundException $e) {
+            $this->error('User with this username not found.');
 
             return 1;
-        }
-
-        if (\Activation::completed($user)) {
-            $this->error('This user already activated');
+        } catch (AlreadyActivatedException $e) {
+            $this->error('This user already activated.');
 
             return 2;
         }
 
-        \Sentinel::activate($user);
-        $this->info("User $username has been successfully activated");
+        if ($result) {
+            $this->info("User $username has been successfully activated.");
 
-        return 0;
+            return 0;
+        }
+        $this->error('Unable to activate user.');
+
+        return 3;
     }
 
     /**

@@ -43,8 +43,8 @@ class Complete extends Command
      */
     public function __construct(Payments $script)
     {
-        $this->script = $script;
         parent::__construct();
+        $this->script = $script;
     }
 
     /**

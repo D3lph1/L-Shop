@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Control;
 
-use App\Services\News;
+use App\TransactionScripts\Shop\News;
 use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -51,6 +51,7 @@ class MainSettingsController extends Controller
             'productsSortType' => s_get('shop.sort', 'name'),
             'enableMonitoring' => s_get('monitoring.enabled'),
             'rconConnectionTimeout' => s_get('monitoring.rcon.timeout'),
+            'rconMonitoringPattern' => s_get('monitoring.rcon.pattern'),
             'cartCapacity' => s_get('cart.capacity'),
             'isDownForMaintenance' => $this->app->isDownForMaintenance()
         ];
@@ -88,6 +89,7 @@ class MainSettingsController extends Controller
             'shop.sort' => $request->get('products_sort_type'),
             'monitoring.enabled' => $request->get('enable_monitoring'),
             'monitoring.rcon.timeout' => $request->get('rcon_connection_timeout'),
+            'monitoring.rcon.pattern' => $request->get('rcon_monitoring_pattern'),
             'cart.capacity' => $request->get('cart_capacity'),
 
             'profile.character.skin.enabled' => (bool)$request->get('character_skin_enabled'),

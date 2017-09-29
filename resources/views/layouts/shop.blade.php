@@ -169,17 +169,26 @@
         @foreach($monitoring as $server)
             <div class="md-form text-left">
                 <h4>{{ get_server_by_id($servers, $server->getServerId())->getName() }}</h4>
-                <div class="progress">
-                    @if($server->getNow() === -1)
+
+                @if(is_null($server->getNow()) or is_null($server->getTotal()))
+                    <div class="progress">
                         <div class="progress-bar progress-bar-danger danger-color" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
-                            @lang('content.monitoring.server_disabled')
+                            @lang('content.monitoring.error')
                         </div>
-                    @else
-                        <div class="progress-bar info-color" role="progressbar" aria-valuenow="{{ $server->getNow() }}" aria-valuemin="0" aria-valuemax="{{ $server->getTotal() }}" style="min-width: 12%; width: {{ ($server->getNow() / $server->getTotal()) * 100 }}%;">
-                            {{ $server->getNow() }} / {{ $server->getTotal() }}
-                        </div>
-                    @endif
-                </div>
+                    </div>
+                @else
+                    <div class="progress">
+                        @if($server->getNow() === -1)
+                            <div class="progress-bar progress-bar-danger danger-color" role="progressbar" aria-valuenow="100" aria-valuemin="0" aria-valuemax="100" style="width: 100%;">
+                                @lang('content.monitoring.server_disabled')
+                            </div>
+                        @else
+                            <div class="progress-bar info-color" role="progressbar" aria-valuenow="{{ $server->getNow() }}" aria-valuemin="0" aria-valuemax="{{ $server->getTotal() }}" style="min-width: 12%; width: {{ ($server->getNow() / $server->getTotal()) * 100 }}%;">
+                                {{ $server->getNow() }} / {{ $server->getTotal() }}
+                            </div>
+                        @endif
+                    </div>
+                @endif
             </div>
         @endforeach
     @endcomponent

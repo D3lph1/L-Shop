@@ -136,7 +136,7 @@ class News
     /**
      * Remove news list from cache.
      */
-    private function forgetNews(): void
+    public function forgetNews(): void
     {
         \Cache::forget('news');
     }
@@ -144,7 +144,7 @@ class News
     /**
      * Remove news count from cache.
      */
-    private function forgetCount(): void
+    public function forgetCount(): void
     {
         \Cache::forget('news.count');
     }
