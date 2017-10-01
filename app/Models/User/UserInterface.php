@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace App\Models\User;
 
+use App\Services\User\Permissions;
+use App\Services\User\Roles;
 use Cartalyst\Sentinel\Users\UserInterface as BaseUserInterface;
 
 /**
@@ -15,6 +17,13 @@ interface UserInterface extends BaseUserInterface
 {
     public function getActivations(): iterable;
 
+    public function getRoles(): iterable;
+
+    public function getRolesManager(): Roles;
+
+    public function getPermissionsManager(): Permissions;
+
+
 
     public function getId(): int;
 
@@ -25,4 +34,6 @@ interface UserInterface extends BaseUserInterface
     public function getPassword(): string;
 
     public function getBalance(): float;
+
+    public function getPermissions(): ?array;
 }

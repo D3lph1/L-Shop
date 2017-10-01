@@ -55,6 +55,6 @@ class EloquentRole extends BaseRole implements RoleInterface
 
     public function getPermissions(): array
     {
-        return json_decode($this->permissions, true);
+        return $this->permissions;
     }
 }

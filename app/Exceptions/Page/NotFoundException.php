@@ -16,6 +16,6 @@ class NotFoundException extends RuntimeException
 {
     public function __construct(int $pageId, int $code = 0, Throwable $previous = null)
     {
-        parent::__construct("Product with id `$pageId` not found", $code, $previous);
+        parent::__construct("Page with id `$pageId` not found", $code, $previous);
     }
 }

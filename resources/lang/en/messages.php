@@ -26,10 +26,12 @@ return [
                 'fail' => 'Failed to create server.',
                 'category' => [
                     'add' => [
-                        'success' => 'The category ":name" is created.'
+                        'success' => 'The category ":name" is created.',
+                        'fail' => 'Unable to create category.'
                     ],
                     'remove' => [
                         'success' => 'Category removed.',
+                        'fail' => 'Unable to remove category.',
                         'last' => 'There must be at least one category for this server.'
                     ]
                 ]

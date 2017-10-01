@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Services\Items;
 
@@ -15,4 +16,9 @@ final class ImageMode
     public const DEFAULT = 'default';
 
     public const UPLOAD = 'upload';
+
+    private function __construct()
+    {
+        //
+    }
 }

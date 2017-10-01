@@ -13,7 +13,6 @@ class EloquentItemRepository implements ItemRepositoryInterface
     public function create(Item $dto): ItemInterface
     {
         return EloquentItem::create(trim_nullable([
-            'id' => $dto->getId(),
             'name' => $dto->getName(),
             'description' => $dto->getDescription(),
             'type' => $dto->getType(),

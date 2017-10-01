@@ -42,7 +42,7 @@ class EloquentProductRepository implements ProductRepositoryInterface
         return EloquentProduct::where('id', $id)->exists();
     }
 
-    public function withItems(int $id, array $productColumns, array $itemColumns): ProductInterface
+    public function withItems(int $id, array $productColumns, array $itemColumns): ?ProductInterface
     {
         return EloquentProduct::select($this->mergeProductColumns($productColumns))
             ->where('id', $id)

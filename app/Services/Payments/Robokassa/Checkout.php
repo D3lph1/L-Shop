@@ -171,7 +171,7 @@ class Checkout
         return $valid;
     }
 
-    public function getSuccessAnswer(string $invoiceId): string
+    public function getSuccessAnswer(int $invoiceId): string
     {
         return 'OK' . $invoiceId . "\n";
     }

@@ -3,8 +3,6 @@ declare(strict_types = 1);
 
 namespace App\Providers;
 
-use App\Models\Server\ServerInterface;
-use App\Repositories\Server\ServerRepositoryInterface;
 use App\Services\Activator;
 use App\Services\Cart;
 use App\Services\Message;
@@ -12,6 +10,7 @@ use App\Services\Monitoring\MonitoringInterface;
 use App\Services\Monitoring\RconMonitoring;
 use App\Services\ReCaptcha;
 use App\Services\SashokLauncher;
+use App\TransactionScripts\Monitoring;
 use D3lph1\MinecraftRconManager\Connector;
 use D3lph1\MinecraftRconManager\Rcon;
 use Illuminate\Contracts\Foundation\Application;
@@ -33,6 +32,8 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Schema::defaultStringLength(191);
+
+        $this->registerValidators();
     }
 
     /**
@@ -60,22 +61,7 @@ class AppServiceProvider extends ServiceProvider
                 return new Connector();
             }
 
-            $request = $app->make('request');
-            $servers = $request->get('servers');
-
-            if (!$servers) {
-                // TODO: fix it
-                $servers = $app->make(ServerRepositoryInterface::class)->all(['*']);
-            }
-
-            $rcon = new Connector();
-
-            /** @var ServerInterface $server */
-            foreach ($servers as $server) {
-                $rcon->add($server->getId(), $server->getIp(), $server->getPort(), $server->getPassword(), s_get('monitoring.rcon.timeout', 1));
-            }
-
-            return $rcon;
+            return $this->app->make(Monitoring::class)->init($app->make('request')->get('servers'));
         });
 
         $this->app->alias(Rcon::class, Connector::class);

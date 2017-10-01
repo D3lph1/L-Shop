@@ -16,7 +16,7 @@ interface ProductRepositoryInterface extends BaseRepositoryInterface
 
     public function exists(int $id): bool;
 
-    public function withItems(int $id, array $productColumns, array $itemColumns): ProductInterface;
+    public function withItems(int $id, array $productColumns, array $itemColumns): ?ProductInterface;
 
     public function withItemsMultiple(array $id, array $productColumns, array $itemColumns): iterable;
 

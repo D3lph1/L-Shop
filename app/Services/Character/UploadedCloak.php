@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Services\Character;
 
@@ -77,7 +78,7 @@ class UploadedCloak
      *
      * @param string $username
      */
-    public function move($username)
+    public function move(string $username)
     {
         $this->file->move(config('l-shop.profile.cloaks.path'), $username . '.png');
     }

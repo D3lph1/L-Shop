@@ -13,6 +13,20 @@ use Carbon\Carbon;
  */
 class Time
 {
+    protected static $defaultFormat = 'd-m-Y H:i:s';
+
+    /**
+     * It convert given datetime to default system format.
+     */
+    public static function default($datetime): string
+    {
+        if ($datetime instanceof Carbon) {
+            return $datetime->format(static::$defaultFormat);
+        }
+
+        return (new Carbon($datetime))->format(static::$defaultFormat);
+    }
+
     public static function nowAddInterval(int $minutes): Carbon
     {
         $interval = \DateInterval::createFromDateString("$minutes minutes");

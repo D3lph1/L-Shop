@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Services\Items;
 
@@ -13,4 +14,9 @@ final class Type
     public const ITEM = 'item';
 
     public const PERMGROUP = 'permgroup';
+
+    private function __construct()
+    {
+        //
+    }
 }

@@ -61,12 +61,12 @@ class EditController extends Controller
             ->setName($request->get('category'))
             ->setServerId((int)$request->route('edit'));
 
-        // TODO: Make response for failure situation.
         if ($this->script->createCategory($category)) {
-            $this->msg->success(__('messages.admin.servers.add.category.add.success', ['name' => $category->getName()]));
+            $this->msg->success(__('messages.admin.servers.add.category.add.success'));
 
             return json_response('success');
         }
+        $this->msg->danger(__('messages.admin.servers.add.category.add.fail'));
 
         return json_response('fail');
     }
@@ -84,12 +84,12 @@ class EditController extends Controller
             return json_response('must stay at least one category');
         }
 
-        // TODO: Make response for failure situation.
         if ($result) {
             $this->msg->info(__('messages.admin.servers.add.category.remove.success'));
 
             return json_response('success');
         }
+        $this->msg->danger(__('messages.admin.servers.add.category.remove.fail'));
 
         return json_response('fail');
     }

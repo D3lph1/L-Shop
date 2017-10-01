@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Services\Character;
 
@@ -76,7 +77,7 @@ class UploadedSkin
      *
      * @param string $username
      */
-    public function move($username)
+    public function move(string $username)
     {
         $this->file->move(config('l-shop.profile.skins.path'), $username . '.png');
     }

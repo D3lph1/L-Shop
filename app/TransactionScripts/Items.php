@@ -60,7 +60,7 @@ class Items
         return $item;
     }
 
-    public function create(Item $dto): bool
+    public function create(Item $dto): ?ItemInterface
     {
         if ($dto->getImageMode() === ImageMode::UPLOAD) {
             $dto->setImageName($this->moveImageAndGetName($dto->getImage()));
@@ -68,7 +68,7 @@ class Items
             $dto->setImageName(null);
         }
 
-        return (bool)$this->itemRepository->create($dto);
+        return $this->itemRepository->create($dto);
     }
 
     public function update(int $itemId, Item $dto): bool

@@ -23,7 +23,6 @@ interface ItemInterface
 
     public function getItem(): string;
 
-    // TODO: Create class for image.
     public function getImage(): ?string;
 
     public function getExtra(): ?string;

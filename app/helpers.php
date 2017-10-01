@@ -64,9 +64,10 @@ if (!function_exists('is_admin')) {
     function is_admin(): bool
     {
         if (is_auth()) {
+            /** @var \App\Models\User\UserInterface $user */
             $user = \Sentinel::getUser();
 
-            return $user->hasAccess(['user.admin']);
+            return $user->getPermissionsManager()->hasAccess(['user.admin']);
         }
 
         return false;
@@ -79,7 +80,7 @@ if (!function_exists('access_mode_auth')) {
      */
     function access_mode_auth(): bool
     {
-        return s_get('shop.access_mode', 'auth', true) === 'auth' ? true : false;
+        return s_get('shop.access_mode', 'auth', true) === \App\Services\Auth\AccessMode::AUTH;
     }
 }
 
@@ -89,7 +90,7 @@ if (!function_exists('access_mode_guest')) {
      */
     function access_mode_guest(): bool
     {
-        return s_get('shop.access_mode', 'auth', true) === 'guest' ? true : false;
+        return s_get('shop.access_mode', 'auth', true) === \App\Services\Auth\AccessMode::GUEST;
     }
 }
 
@@ -99,7 +100,7 @@ if (!function_exists('access_mode_any')) {
      */
     function access_mode_any(): bool
     {
-        return s_get('shop.access_mode', 'auth', true) === 'any' ? true : false;
+        return s_get('shop.access_mode', 'auth', true) === \App\Services\Auth\AccessMode::ANY;
     }
 }
 
@@ -185,27 +186,6 @@ if (!function_exists('short_string')) {
         }
 
         return mb_substr($string, 0, $length) . '...';
-    }
-}
-
-if (!function_exists('dt')) {
-    /**
-     * dt - default time.
-     * Formatted time to default format.
-     *
-     * @param string|Carbon $date
-     *
-     * @return string
-     */
-    function dt($date): string
-    {
-        $format = 'd-m-Y H:i:s';
-
-        if ($date instanceof Carbon) {
-            return $date->format($format);
-        }
-
-        return (new Carbon($date))->format($format);
     }
 }
 

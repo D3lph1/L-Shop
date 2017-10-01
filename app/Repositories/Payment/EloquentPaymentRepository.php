@@ -104,4 +104,9 @@ class EloquentPaymentRepository implements PaymentRepositoryInterface
     {
         EloquentPayment::truncate();
     }
+
+    public function delete(int $id): bool
+    {
+        return (bool)EloquentPayment::where('id', $id)->delete();
+    }
 }

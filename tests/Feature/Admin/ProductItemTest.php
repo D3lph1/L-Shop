@@ -15,7 +15,6 @@ use Tests\TestCase;
  * Class ProductItemTest
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package Tests\Feature\Admin
  */
 class ProductItemTest extends TestCase
@@ -30,20 +29,14 @@ class ProductItemTest extends TestCase
      */
     private $adminProduct;
 
-    /**
-     * @param null   $name
-     * @param array  $data
-     * @param string $dataName
-     */
-    public function __construct($name = null, array $data = [], $dataName = '')
+    public function setUp()
     {
+        parent::setUp();
         /** @var Items adminItems */
         $this->adminItems = $this->make(Items::class);
 
         /** @var Products adminItems */
         $this->adminProduct = $this->make(Products::class);
-
-        parent::__construct($name, $data, $dataName);
     }
 
     /**
@@ -51,6 +44,7 @@ class ProductItemTest extends TestCase
      */
     public function testCase(): void
     {
+
         $item = $this->adminItems->create(
             (new Item())
                 ->setName('Test item')
@@ -60,7 +54,7 @@ class ProductItemTest extends TestCase
                 ->setExtra(null)
         );
         $this->assertInstanceOf(ItemInterface::class, $item);
-        $itemId = (int)$item->id;
+        $itemId = (int)$item->getId();
         $dto = (new Product())
             ->setPrice(0.01)
             ->setStack(64)
@@ -70,7 +64,7 @@ class ProductItemTest extends TestCase
             ->setSortPriority(0);
 
         $product = $this->adminProduct->create($dto);
-        $this->assertInstanceOf(Product::class, $product);
+        $this->assertTrue($product);
 
         $this->assertTrue($this->adminItems->delete($itemId));
     }

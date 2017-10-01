@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace App\Http\Controllers\Admin\Pages;
 
 use App\DataTransferObjects\Page as DTO;
+use App\Exceptions\Page\NotFoundException;
 use App\Exceptions\Page\UrlAlreadyExistsException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveEditedPageRequest;
@@ -43,11 +44,18 @@ class EditController extends Controller
     {
         $id = (int)$request->route('id');
 
-        return view('admin.pages.edit', [
-            'currentServer' => $request->get('currentServer'),
-            'id' => $id,
-            'page' => $this->pages->informationForEdit($id)
-        ]);
+        try {
+            return view('admin.pages.edit', [
+                'currentServer' => $request->get('currentServer'),
+                'id' => $id,
+                'page' => $this->pages->informationForEdit($id)
+            ]);
+        } catch (NotFoundException $e) {
+            $this->app->abort(404);
+        }
+
+        // Unreachable statement. For IDE.
+        return null;
     }
 
     /**

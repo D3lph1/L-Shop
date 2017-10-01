@@ -8,6 +8,7 @@ use App\Exceptions\InvalidArgumentTypeException;
 use App\Exceptions\LogicException;
 use App\Exceptions\Payment\InvalidProductsCountException;
 use App\Models\Payment\PaymentInterface;
+use App\Models\Product\ProductInterface;
 use App\Repositories\Payment\PaymentRepositoryInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Services\Items\Type;
@@ -17,7 +18,6 @@ use Cartalyst\Sentinel\Sentinel;
  * Class Manager
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Services\Payments
  */
 class Manager
@@ -167,42 +167,43 @@ class Manager
         $result = [];
         $cost = 0;
 
+        /** @var ProductInterface $product */
         foreach ($products as $product) {
             foreach ($idsAndCount as $key => $value) {
-                if ($product->id === $key) {
+                if ($product->getId() === $key) {
                     if ($value < 0) {
                         throw new InvalidProductsCountException();
                     }
 
                     // If is item and count is 0
-                    if ($product->type === Type::ITEM and $value == 0) {
+                    if ($product->getItem()->getType() === Type::ITEM and $value == 0) {
                         throw new InvalidProductsCountException();
                     }
 
                     // If it is not permanent privilege but the quantity of goods is 0
-                    if ($product->type === Type::PERMGROUP) {
-                        if ($product->stack != 0 and $value == 0) {
+                    if ($product->getItem()->getType() === Type::PERMGROUP) {
+                        if ($product->getStack() != 0 and $value == 0) {
                             throw new InvalidProductsCountException();
                         }
                     }
 
-                    if ($product->type === Type::PERMGROUP and $product->stack === 0) {
-                        $result[$product->id] = 0;
-                        $cost += $product->price;
+                    if ($product->getItem()->getType() === Type::PERMGROUP and $product->getStack() == 0) {
+                        $result[$product->getId()] = 0;
+                        $cost += $product->getPrice();
 
                         continue;
                     }
 
-                    if ($value % $product->stack !== 0) {
+                    if ($value % $product->getStack() !== 0) {
                         throw new InvalidProductsCountException();
                     }
 
                     if ($this->productsCountType === self::COUNT_TYPE_STACKS) {
-                        $result[$product->id] = abs($value * $product->stack);
-                        $cost += abs($product->price * $value);
+                        $result[$product->getId()] = abs($value * $product->getStack());
+                        $cost += abs($product->getPrice() * $value);
                     } else {
-                        $result[$product->id] = abs($value);
-                        $cost += abs($product->price * ($value / $product->stack));
+                        $result[$product->getId()] = abs($value);
+                        $cost += abs($product->getPrice() * ($value / $product->getStack()));
                     }
                 }
             }

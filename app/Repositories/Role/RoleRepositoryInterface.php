@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace App\Repositories\Role;
 
+use App\Models\Role\RoleInterface;
+use App\Models\User\UserInterface;
 use App\Repositories\BaseRepositoryInterface;
 use Cartalyst\Sentinel\Roles\RoleRepositoryInterface as BaseRoleRepositoryInterface;
 
@@ -14,5 +16,5 @@ use Cartalyst\Sentinel\Roles\RoleRepositoryInterface as BaseRoleRepositoryInterf
  */
 interface RoleRepositoryInterface extends BaseRoleRepositoryInterface, BaseRepositoryInterface
 {
-    //
+    public function attachUser(RoleInterface $role, UserInterface $user): bool;
 }

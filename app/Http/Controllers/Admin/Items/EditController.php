@@ -46,9 +46,7 @@ class EditController extends Controller
         try {
             $item = $this->script->find((int)$request->route('item'));
         } catch (NotFoundException $e) {
-            $this->msg->danger(__('messages.admin.items.edit.not_found'));
-
-            return response()->redirectToRoute('admin.items.list', ['server' => $request->get('currentServer')->getId()]);
+            $this->app->abort(404);
         }
 
         return view('admin.items.edit', [

@@ -65,8 +65,15 @@ class Create extends Command
         }
 
         $email = $this->argument('email');
+
+        if (\Illuminate\Support\Facades\Validator::make(['email' => $email], ['email' => 'email'])->fails()) {
+            $this->error('Invalid email.');
+
+            return 2;
+        }
+
         $password = $this->argument('password');
-        $balance = (int)$this->hasOption('balance') ? $this->option('balance') : 0;
+        $balance = (float)($this->hasOption('balance') ? $this->option('balance') : 0);
         $forceActivate = (bool)$this->option('activate');
         $admin = (bool)$this->option('admin');
 
@@ -75,15 +82,15 @@ class Create extends Command
         } catch (UsernameAlreadyExistsException $e) {
             $this->error('User with this username already exists');
 
-            return 2;
+            return 3;
         } catch (EmailAlreadyExistsException $e) {
             $this->error('User with this email already exists');
 
-            return 3;
+            return 4;
         } catch (UnableToCreateUser $e) {
             $this->error('User has not been created. Error details: ' . $e->getMessage());
 
-            return 4;
+            return 5;
         }
 
         if ($forceActivate) {

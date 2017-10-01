@@ -3,11 +3,12 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Other;
 
+use App\Http\Controllers\Controller;
+use App\Services\Rcon\Colorizer\HtmlColorizer;
 use D3lph1\MinecraftRconManager\Connector;
 use D3lph1\MinecraftRconManager\Exceptions\ConnectSocketException;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Collection;
 use Illuminate\View\View;
 
@@ -38,7 +39,7 @@ class RconController extends Controller
         return view('admin.other.rcon', $data);
     }
 
-    public function send(Request $request, Connector $rconConnector): JsonResponse
+    public function send(Request $request, Connector $rconConnector, HtmlColorizer $colorizer): JsonResponse
     {
         $server = (int) $request->route('send');
         $cmd = $request->get('cmd');
@@ -61,7 +62,8 @@ class RconController extends Controller
         $result = str_replace("\n", '<br>', $result);
 
         if ($request->get('colorize')) {
-            $result = colorize_rcon($result);
+
+            $result = $colorizer->colorize($result);
         }
 
         $rcon->disconnect();

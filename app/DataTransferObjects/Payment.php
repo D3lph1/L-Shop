@@ -97,7 +97,7 @@ class Payment
         return $this->cost;
     }
 
-    public function setUserId(int $userId): self
+    public function setUserId(?int $userId): self
     {
         $this->userId = $userId;
 

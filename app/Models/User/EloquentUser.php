@@ -7,6 +7,8 @@ use App\Models\Activation\EloquentActivation;
 use App\Models\Ban\EloquentBan;
 use App\Models\News\EloquentNews;
 use App\Models\Payment\EloquentPayment;
+use App\Services\User\Permissions;
+use App\Services\User\Roles;
 use Cartalyst\Sentinel\Users\EloquentUser as BaseUser;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -93,6 +95,22 @@ class EloquentUser extends BaseUser implements UserInterface
         return $this->activations;
     }
 
+    public function getRoles(): iterable
+    {
+        return $this->roles;
+    }
+
+    public function getRolesManager(): Roles
+    {
+        return new Roles($this);
+    }
+
+    public function getPermissionsManager(): Permissions
+    {
+        return new Permissions($this);
+    }
+
+
     public function getId(): int
     {
         return $this->id;
@@ -116,5 +134,10 @@ class EloquentUser extends BaseUser implements UserInterface
     public function getBalance(): float
     {
         return $this->balance;
+    }
+
+    public function getPermissions(): ?array
+    {
+        return $this->permissions;
     }
 }

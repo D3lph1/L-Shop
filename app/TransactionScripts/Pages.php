@@ -6,10 +6,16 @@ namespace App\TransactionScripts;
 use App\DataTransferObjects\Page;
 use App\Exceptions\Page\NotFoundException;
 use App\Exceptions\Page\UrlAlreadyExistsException;
-use App\Repositories\Page\PageInterface;
+use App\Models\Page\PageInterface;
 use App\Repositories\Page\PageRepositoryInterface;
 use Cache;
 
+/**
+ * Class Pages
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\TransactionScripts
+ */
 class Pages
 {
     /**

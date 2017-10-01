@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace App\Console\Commands\User;
 
+use App\Models\User\UserInterface;
+use App\Repositories\User\UserRepositoryInterface;
 use Cartalyst\Sentinel\Sentinel;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -50,6 +52,7 @@ class Remove extends Command
     public function handle(): int
     {
         $username = $this->argument('username');
+        /** @var UserInterface $user */
         $user = $this->sentinel->getUserRepository()->findByCredentials(['username' => $username]);
 
         if (!$user) {
@@ -58,8 +61,9 @@ class Remove extends Command
             return 1;
         }
 
-        // TODO: Refactor it!
-        $user->delete();
+        /** @var UserRepositoryInterface $repository */
+        $repository = $this->sentinel->getUserRepository();
+        $repository->delete($user->getId());
         $this->info('User has been successfully removed!');
 
         return 0;

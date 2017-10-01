@@ -122,8 +122,10 @@ class Users
 
     public function delete(int $userId): bool
     {
+        /** @var UserRepositoryInterface $repository */
+        $repository = $this->sentinel->getUserRepository();
         /** @var UserInterface $user */
-        $user = $this->sentinel->getUserRepository()->findById($userId);
+        $user = $repository->findById($userId);
 
         if (is_null($user)) {
             throw new NotFoundException($userId);
@@ -133,8 +135,7 @@ class Users
             throw new AttemptToDeleteYourselfException();
         }
 
-        // TODO: refactor it!
-        $user->delete();
+        $repository->delete($user->getId());
 
         return true;
     }

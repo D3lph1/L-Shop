@@ -56,7 +56,7 @@
                                 @else
                                     @if(\Activation::completed($user))
                                         <span class="activated_span" data-toggle="popover" data-placement="left" data-trigger="hover" title="@lang('content.admin.users.list.table.activated_popover_title')"
-                                              data-content="@lang('content.admin.users.list.table.activated_info', ['date' => dt($user->getActivations()[count($user->getActivations()) - 1]->getCompletedAt())])">@lang('content.admin.users.list.table.activated')</span>
+                                              data-content="@lang('content.admin.users.list.table.activated_info', ['date' => App\Services\Support\Time::default($user->getActivations()[count($user->getActivations()) - 1]->getCompletedAt())])">@lang('content.admin.users.list.table.activated')</span>
                                     @else
                                         <a href="{{ route('admin.users.complete', ['server' => $currentServer->getId(), 'user' => $user->getId()]) }}" class="btn green btn-sm">@lang('content.admin.users.list.table.activate')</a>
                                     @endif

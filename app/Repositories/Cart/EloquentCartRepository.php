@@ -65,6 +65,11 @@ class EloquentCartRepository implements CartRepositoryInterface
             ->get();
     }
 
+    public function all(): iterable
+    {
+        return EloquentCart::all();
+    }
+
     public function truncate(): void
     {
         EloquentCart::truncate();

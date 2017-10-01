@@ -3,13 +3,23 @@ declare(strict_types = 1);
 
 namespace App\Repositories\User;
 
+use App\Models\Role\RoleInterface;
 use App\Models\User\EloquentUser;
+use App\Models\User\UserInterface;
+use Cartalyst\Sentinel\Hashing\HasherInterface;
 use Cartalyst\Sentinel\Users\IlluminateUserRepository;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Support\Facades\DB;
 
 class EloquentUserRepository extends IlluminateUserRepository implements UserRepositoryInterface
 {
+    public function __construct(HasherInterface $hasher, Dispatcher $dispatcher = null, $model = null)
+    {
+        parent::__construct($hasher, $dispatcher, EloquentUser::class);
+    }
+
     public function withRolesActivationsBanPaginated(
         array $userColumns,
         array $rolesColumns,
@@ -66,5 +76,23 @@ class EloquentUserRepository extends IlluminateUserRepository implements UserRep
     public function truncate(): void
     {
         EloquentUser::truncate();
+    }
+
+    public function hasRole(UserInterface $user, RoleInterface $role): bool
+    {
+        return DB::table('role_users')
+            ->where('user_id', $user->getId())
+            ->where('role_id', $role->getId())
+            ->exists();
+    }
+
+    public function delete(int $id): bool
+    {
+        return (bool)EloquentUser::where('id', $id)->delete();
+    }
+
+    public function deleteByUsername(string $username): bool
+    {
+        return (bool)EloquentUser::where('username', $username)->delete();
     }
 }

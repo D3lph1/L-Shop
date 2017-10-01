@@ -3,8 +3,10 @@ declare(strict_types = 1);
 
 namespace App\Services\User\InitStrategies;
 
+use App\Models\Role\RoleInterface;
 use App\Models\User\UserInterface;
-use App\Repositories\Role\RoleInterface;
+use App\Repositories\Role\RoleRepositoryInterface;
+use App\Repositories\User\UserRepositoryInterface;
 use Cartalyst\Sentinel\Sentinel;
 
 class AdminInitStrategy implements InitStrategyInterface
@@ -27,10 +29,15 @@ class AdminInitStrategy implements InitStrategyInterface
         /** @var RoleInterface $userRole */
         $userRole = $this->sentinel->getRoleRepository()->findBySlug('user');
 
-        // TODO: refactor it!
-        if (!$user->inRole($adminRole)) {
-            $userRole->users()->detach($user);
-            $adminRole->users()->attach($user);
+        /** @var UserRepositoryInterface $userRepository */
+        $userRepository = $this->sentinel->getUserRepository();
+
+        if (!$userRepository->hasRole($user, $adminRole)) {
+            /** @var RoleRepositoryInterface $roleRepository */
+            $roleRepository = $this->sentinel->getRoleRepository();
+
+            $roleRepository->attachUser($userRole, $user);
+            $roleRepository->attachUser($adminRole, $user);
         }
     }
 }

@@ -92,7 +92,7 @@ class Item
         return $this;
     }
 
-    public function getDescription(): string
+    public function getDescription(): ?string
     {
         return $this->description;
     }
@@ -130,7 +130,7 @@ class Item
         return $this;
     }
 
-    public function getImageMode(): string
+    public function getImageMode(): ?string
     {
         return $this->imageMode;
     }
