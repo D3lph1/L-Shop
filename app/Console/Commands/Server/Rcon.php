@@ -5,11 +5,12 @@ namespace App\Console\Commands\Server;
 
 use App\Models\Server\ServerInterface;
 use App\Repositories\Server\ServerRepositoryInterface;
+use App\Services\Rcon\Colorizers\ConsoleColorizer;
+use App\Traits\ContainerTrait;
 use Cartalyst\Support\Collection;
 use D3lph1\MinecraftRconManager\Connector;
 use D3lph1\MinecraftRconManager\Exceptions\ConnectSocketException;
 use Illuminate\Console\Command;
-use Illuminate\Http\Request;
 
 /**
  * Class Rcon
@@ -19,6 +20,8 @@ use Illuminate\Http\Request;
  */
 class Rcon extends Command
 {
+    use ContainerTrait;
+
     /**
      * The name and signature of the console command.
      *
@@ -55,12 +58,11 @@ class Rcon extends Command
 
     /**
      * Execute the console command.
-     *
-     * @return mixed
      */
-    public function handle(Request $request): int
+    public function handle(): int
     {
-        $this->info($request->method());
+        /** @var ConsoleColorizer $colorizer */
+        $colorizer = $this->make(ConsoleColorizer::class);
 
         $servers = collect($this->serverRepository->all(['id', 'name']));
         $names = $servers->map(function ($item) {
@@ -85,6 +87,8 @@ class Rcon extends Command
         $filtered = $filtered->first();
         /** @var ServerInterface $filtered */
         $this->info("The {$filtered->getName()} server is selected. Start typing commands. To stop typing, \"exit\".");
+        /** @var ConsoleColorizer $colorizer */
+        $colorizer = $this->make(ConsoleColorizer::class);
 
         while (true) {
             $cmd = $this->ask('Command');
@@ -100,8 +104,9 @@ class Rcon extends Command
                 continue;
             }
 
+            /** @var string $result */
             $result = $rcon->send($cmd);
-            $this->line($result);
+            $this->line($colorizer->colorize($result));
         }
 
         return 0;

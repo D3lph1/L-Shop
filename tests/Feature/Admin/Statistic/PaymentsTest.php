@@ -4,6 +4,12 @@ namespace Tests\Feature\Admin\Statistic;
 
 use Tests\Feature\Future;
 
+/**
+ * Class PaymentsTest
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @package Tests\Feature\Admin\Statistic
+ */
 class PaymentsTest extends Future
 {
     public function testVisitAdmin()

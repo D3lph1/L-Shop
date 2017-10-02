@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace App\Http\Controllers\Api;
 
 use App\Exceptions\User\BannedException;
+use App\Models\User\UserInterface;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
@@ -37,16 +38,17 @@ class SignInController extends ApiController
             return $this->redirectToSignin();
         }
 
+        /** @var UserInterface $user */
         $user = $this->sentinel->getUserRepository()->findByCredentials([
             'username' => $username
         ]);
 
-        // If user with given username not found
-        if (!$user) {
+        // If user with given username not found.
+        if (is_null($user)) {
             return $this->redirectToSignin();
         }
 
-        if (access_mode_guest() and !$user->hasAccess(['user.admin'])) {
+        if (access_mode_guest() and !$user->getPermissionsManager()->hasAccess(['user.admin'])) {
             return $this->redirectToServers();
         }
 

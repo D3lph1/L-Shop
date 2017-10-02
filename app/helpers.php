@@ -14,7 +14,7 @@ if (!function_exists('s_get')) {
     /**
      * Get the setting value
      */
-    function s_get(string $key, $default = null, bool $lower = false): string
+    function s_get(string $key, $default = null, bool $lower = false)
     {
         if ($lower) {
             return mb_strtolower(\Setting::get($key, $default));

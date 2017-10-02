@@ -6,9 +6,7 @@ namespace App\Http\Controllers\Shop;
 use App\Exceptions\Payment\InvalidProductsCountException;
 use App\Exceptions\User\InvalidUsernameException;
 use App\Http\Controllers\Controller;
-use App\Repositories\Product\ProductRepositoryInterface;
 use App\Services\Cart;
-use App\Services\CatalogBuy;
 use App\Traits\BuyResponse;
 use App\TransactionScripts\Shop\Catalog;
 use Illuminate\Http\JsonResponse;
@@ -28,7 +26,7 @@ class CatalogController extends Controller
     /**
      * Render the catalog page
      */
-    public function render(Request $request, Catalog $catalog, Cart $cart, ProductRepositoryInterface $r): View
+    public function render(Request $request, Catalog $catalog, Cart $cart): View
     {
         $server = $request->get('currentServer')->getId();
         $categories = $catalog->categories($server);

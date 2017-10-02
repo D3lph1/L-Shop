@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace App\Http\Controllers\Admin\Other;
 
 use App\Http\Controllers\Controller;
-use App\Services\Rcon\Colorizer\HtmlColorizer;
+use App\Services\Rcon\Colorizers\HtmlColorizer;
 use D3lph1\MinecraftRconManager\Connector;
 use D3lph1\MinecraftRconManager\Exceptions\ConnectSocketException;
 use Illuminate\Http\JsonResponse;
