@@ -19,6 +19,7 @@ use App\Services\Payments\Interkassa\Checkout as InterkassaCheckout;
 use App\Services\Payments\Interkassa\Payment as InterkassaPayment;
 use App\Services\Payments\Robokassa\Checkout as RobokassaCheckout;
 use App\Services\Payments\Robokassa\Payment as RobokassaPayment;
+use App\Services\User\Balance;
 use App\Traits\ContainerTrait;
 use Cartalyst\Sentinel\Sentinel;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -115,11 +116,14 @@ class Payments
         }
 
         if (count($payment->getProducts()) === 0) {
-            refill_user_balance((float)$payment->getCost(), $payment->getUserId());
+            Balance::add($payment->getUser(), $payment->getCost());
         }
 
         $this->paymentRepository->complete($payment->getId(), __('content.profile.payments.table.completed_by_admin'));
-        $distributor->give($payment);
+
+        if (count($payment->getProducts()) !== 0) {
+            $distributor->give($payment);
+        }
 
         return true;
     }

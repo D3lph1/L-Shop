@@ -17,6 +17,8 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
  */
 interface UserRepositoryInterface extends BaseUserRepositoryInterface, BaseRepositoryInterface
 {
+    public function findByUsername(string $username, array $columns): ?UserInterface;
+
     public function withRolesActivationsBanPaginated(
         array $userColumns,
         array $rolesColumns,
@@ -30,6 +32,8 @@ interface UserRepositoryInterface extends BaseUserRepositoryInterface, BaseRepos
     public function whereIdIn(array $identifiers, array $columns): iterable;
 
     public function hasRole(UserInterface $user, RoleInterface $role): bool;
+
+    public function incrementById(int $id, string $column, float $incValue = 1): void;
 
     public function delete(int $id): bool;
 

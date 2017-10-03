@@ -9,6 +9,12 @@ use App\Repositories\Role\RoleRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use Cartalyst\Sentinel\Sentinel;
 
+/**
+ * Class AdminInitStrategy
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Services\User\InitStrategies
+ */
 class AdminInitStrategy implements InitStrategyInterface
 {
     /**
@@ -21,13 +27,13 @@ class AdminInitStrategy implements InitStrategyInterface
         $this->sentinel = $sentinel;
     }
 
-    public function init(UserInterface $user)
+    /**
+     * {@inheritdoc}
+     */
+    public function init(UserInterface $user): void
     {
         /** @var RoleInterface $adminRole */
         $adminRole = $this->sentinel->getRoleRepository()->findBySlug('admin');
-
-        /** @var RoleInterface $userRole */
-        $userRole = $this->sentinel->getRoleRepository()->findBySlug('user');
 
         /** @var UserRepositoryInterface $userRepository */
         $userRepository = $this->sentinel->getUserRepository();
@@ -36,8 +42,7 @@ class AdminInitStrategy implements InitStrategyInterface
             /** @var RoleRepositoryInterface $roleRepository */
             $roleRepository = $this->sentinel->getRoleRepository();
 
-            $roleRepository->attachUser($userRole, $user);
-            $roleRepository->attachUser($adminRole, $user);
+            $roleRepository->attachUser($adminRole->getId(), $user->getId());
         }
     }
 }

@@ -11,9 +11,9 @@ use App\Exceptions\User\AttemptToDeleteYourselfException;
 use App\Exceptions\User\EmailAlreadyExistsException;
 use App\Exceptions\User\NotFoundException;
 use App\Exceptions\User\UsernameAlreadyExistsException;
+use App\Models\Ban\BanInterface;
 use App\Models\User\UserInterface;
 use App\Repositories\Activation\ActivationRepositoryInterface;
-use App\Models\Ban\BanInterface;
 use App\Repositories\Cart\CartRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Services\Ban;
@@ -25,6 +25,12 @@ use Cartalyst\Sentinel\Hashing\HasherInterface;
 use Cartalyst\Sentinel\Sentinel;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
+/**
+ * Class Users
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\TransactionScripts
+ */
 class Users
 {
     use ContainerTrait;

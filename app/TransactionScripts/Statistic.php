@@ -8,6 +8,12 @@ use App\Repositories\Payment\PaymentRepositoryInterface;
 use Carbon\Carbon;
 use Illuminate\Cache\Repository;
 
+/**
+ * Class Statistic
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\TransactionScripts
+ */
 class Statistic
 {
     private $paymentRepository;

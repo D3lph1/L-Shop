@@ -6,6 +6,11 @@ namespace App\Repositories\User;
 use App\Models\Role\RoleInterface;
 use App\Models\User\EloquentUser;
 use App\Models\User\UserInterface;
+use App\Repositories\Activation\ActivationRepositoryInterface;
+use App\Repositories\Persistence\PersistenceRepositoryInterface;
+use App\Repositories\Reminder\ReminderRepositoryInterface;
+use App\Repositories\Role\RoleRepositoryInterface;
+use App\Traits\ContainerTrait;
 use Cartalyst\Sentinel\Hashing\HasherInterface;
 use Cartalyst\Sentinel\Users\IlluminateUserRepository;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -13,8 +18,21 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class EloquentUserRepository
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Repositories\User
+ */
 class EloquentUserRepository extends IlluminateUserRepository implements UserRepositoryInterface
 {
+    use ContainerTrait;
+
+    public function findByUsername(string $username, array $columns): ?UserInterface
+    {
+        return EloquentUser::select($columns)->where('username', $username)->first();
+    }
+
     public function __construct(HasherInterface $hasher, Dispatcher $dispatcher = null, $model = null)
     {
         parent::__construct($hasher, $dispatcher, EloquentUser::class);
@@ -86,13 +104,47 @@ class EloquentUserRepository extends IlluminateUserRepository implements UserRep
             ->exists();
     }
 
+    public function incrementById(int $id, string $column, float $incValue = 1): void
+    {
+        EloquentUser::where('id', $id)->increment($column, $incValue);
+    }
+
     public function delete(int $id): bool
     {
+        $this->deleteRelated($id);
+
         return (bool)EloquentUser::where('id', $id)->delete();
     }
 
     public function deleteByUsername(string $username): bool
     {
+        $user = $this->findByUsername($username, ['id']);
+
+        if (is_null($user)) {
+            return false;
+        }
+
+        $this->deleteRelated($user->getId());
+
         return (bool)EloquentUser::where('username', $username)->delete();
+    }
+
+    protected function deleteRelated(int $userId)
+    {
+        /** @var ActivationRepositoryInterface $activationRepository */
+        $activationRepository = $this->make(ActivationRepositoryInterface::class);
+        $activationRepository->deleteByUser($userId);
+
+        /** @var PersistenceRepositoryInterface $persistenceRepository */
+        $persistenceRepository = $this->make(PersistenceRepositoryInterface::class);
+        $persistenceRepository->deleteByUser($userId);
+
+        /** @var ReminderRepositoryInterface $reminderRepository */
+        $reminderRepository = $this->make(ReminderRepositoryInterface::class);
+        $reminderRepository->deleteByUser($userId);
+
+        /** @var RoleRepositoryInterface $roleRepository */
+        $roleRepository = $this->make(RoleRepositoryInterface::class);
+        $roleRepository->detachAllUser($userId);
     }
 }

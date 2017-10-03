@@ -22,8 +22,7 @@ use Illuminate\Database\Eloquent\Model;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Page\EloquentPage whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Page\EloquentPage whereUrl($value)
  * @mixin \Eloquent
- *
- * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @author D3lph1 <d3lph1.contact@gmail.com>
  */
 class EloquentPage extends Model implements PageInterface
 {

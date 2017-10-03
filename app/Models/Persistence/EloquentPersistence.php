@@ -20,8 +20,7 @@ use Cartalyst\Sentinel\Persistences\EloquentPersistence as BasePersistence;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Persistence\EloquentPersistence whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Persistence\EloquentPersistence whereUserId($value)
  * @mixin \Eloquent
- *
- * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @author D3lph1 <d3lph1.contact@gmail.com>
  */
 class EloquentPersistence extends BasePersistence implements PersistenceInterface
 {

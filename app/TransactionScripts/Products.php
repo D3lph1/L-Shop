@@ -17,6 +17,12 @@ use App\Traits\ContainerTrait;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class Products
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\TransactionScripts
+ */
 class Products
 {
     use ContainerTrait;

@@ -11,6 +11,12 @@ use App\Repositories\News\NewsRepositoryInterface;
 use App\Traits\ContainerTrait;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
+/**
+ * Class News
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\TransactionScripts\Shop
+ */
 class News
 {
     use ContainerTrait;

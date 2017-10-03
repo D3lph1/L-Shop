@@ -36,8 +36,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\EloquentPayment whereUserId($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Payment\EloquentPayment whereUsername($value)
  * @mixin \Eloquent
- *
- * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @author D3lph1 <d3lph1.contact@gmail.com>
  */
 class EloquentPayment extends Model implements PaymentInterface
 {

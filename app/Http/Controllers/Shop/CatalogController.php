@@ -32,14 +32,12 @@ class CatalogController extends Controller
         $categories = $catalog->categories($server);
         $category = $catalog->currentCategory((int)$request->route('category'), $categories);
 
-        $data = [
+        return view('shop.catalog', [
             'categories' => $categories,
             'currentCategory' => $category,
             'products' => $catalog->products($server, $category->getId()),
             'cart' => $cart
-        ];
-
-        return view('shop.catalog', $data);
+        ]);
     }
 
     public function buy(Request $request, Catalog $catalog): JsonResponse

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Exceptions\User;
 
-use App\Exceptions\RuntimeException;
+use App\Exceptions\DomainException;
 use Throwable;
 
 /**
@@ -14,7 +14,7 @@ use Throwable;
  *
  * @package App\Exceptions\User
  */
-class NotFoundException extends RuntimeException
+class NotFoundException extends DomainException
 {
     public function __construct(int $userId, int $code = 0, Throwable $previous = null)
     {

@@ -24,8 +24,7 @@ use Cartalyst\Sentinel\Activations\EloquentActivation as BaseActivation;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Activation\EloquentActivation whereUpdatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Activation\EloquentActivation whereUserId($value)
  * @mixin \Eloquent
- *
- * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @author D3lph1 <d3lph1.contact@gmail.com>
  */
 class EloquentActivation extends BaseActivation implements ActivationInterface
 {

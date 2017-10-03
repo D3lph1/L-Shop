@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Providers;
 
+use App\Models\User\EloquentUser;
 use App\Repositories\Activation\ActivationRepositoryInterface;
 use App\Repositories\Activation\EloquentActivationRepository;
 use App\Repositories\Ban\BanRepositoryInterface;
@@ -23,12 +24,15 @@ use App\Repositories\Persistence\EloquentPersistenceRepository;
 use App\Repositories\Persistence\PersistenceRepositoryInterface;
 use App\Repositories\Product\EloquentProductRepository;
 use App\Repositories\Product\ProductRepositoryInterface;
+use App\Repositories\Reminder\EloquentReminderRepository;
+use App\Repositories\Reminder\ReminderRepositoryInterface;
 use App\Repositories\Role\EloquentRoleRepository;
 use App\Repositories\Role\RoleRepositoryInterface;
 use App\Repositories\Server\EloquentServerRepository;
 use App\Repositories\Server\ServerRepositoryInterface;
 use App\Repositories\User\EloquentUserRepository;
 use App\Repositories\User\UserRepositoryInterface;
+use Illuminate\Contracts\Container\Container;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -63,11 +67,15 @@ class RepositoryServiceProvider extends ServiceProvider
         $this->app->singleton(CategoryRepositoryInterface::class, EloquentCategoryRepository::class);
         $this->app->singleton(CartRepositoryInterface::class, EloquentCartRepository::class);
         $this->app->singleton(ItemRepositoryInterface::class, EloquentItemRepository::class);
-        $this->app->singleton(UserRepositoryInterface::class, EloquentUserRepository::class);
+        $this->app->singleton(UserRepositoryInterface::class, function ($app) {
+            /** @var Container $app */
+            return $app->make(EloquentUserRepository::class, ['model' => EloquentUser::class]);
+        });
         $this->app->singleton(PaymentRepositoryInterface::class, EloquentPaymentRepository::class);
         $this->app->singleton(ProductRepositoryInterface::class, EloquentProductRepository::class);
         $this->app->singleton(RoleRepositoryInterface::class, EloquentRoleRepository::class);
         $this->app->singleton(ActivationRepositoryInterface::class, EloquentActivationRepository::class);
         $this->app->singleton(PersistenceRepositoryInterface::class, EloquentPersistenceRepository::class);
+        $this->app->singleton(ReminderRepositoryInterface::class, EloquentReminderRepository::class);
     }
 }

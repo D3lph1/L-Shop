@@ -2,6 +2,8 @@
 
 namespace Tests\Feature\Api;
 
+use App\Repositories\User\UserRepositoryInterface;
+use Cartalyst\Sentinel\Sentinel;
 use Tests\TestCase;
 
 /**
@@ -21,13 +23,15 @@ class SignupTest extends TestCase
 
     public function testSuccess()
     {
+        $username = 'newbie';
+
         $key = s_get('api.key');
         $separator = s_get('api.separator');
-        $str = $key . $separator . 'newbie' . $separator . 'newbie@example.com' . $separator . 'newbie' . $separator . '15' . $separator . '1' . $separator . '0';
+        $str = $key . $separator . $username . $separator . 'newbie@example.com' . $separator . 'newbie' . $separator . '15' . $separator . '1' . $separator . '0';
         $hash = hash(s_get('api.algo'), $str);
 
         $result = $this->get(route('api.signup', [
-            'username' => 'newbie',
+            'username' => $username,
             'email' => 'newbie@example.com',
             'password' => 'newbie',
             'balance' => '15',
@@ -37,5 +41,11 @@ class SignupTest extends TestCase
         ]));
 
         $result->assertJson(['code' => 0, 'status' => 'success']);
+
+        if ($result->json()['code'] === 0) {
+            /** @var UserRepositoryInterface $userRepository */
+            $userRepository = $this->make(Sentinel::class)->getUserRepository();
+            $userRepository->deleteByUsername($username);
+        }
     }
 }

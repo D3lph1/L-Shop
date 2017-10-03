@@ -8,6 +8,12 @@ use App\Models\Item\EloquentItem;
 use App\Models\Item\ItemInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
+/**
+ * Class EloquentItemRepository
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Repositories\Item
+ */
 class EloquentItemRepository implements ItemRepositoryInterface
 {
     public function create(Item $dto): ItemInterface

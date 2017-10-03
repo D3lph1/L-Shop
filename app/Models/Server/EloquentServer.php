@@ -31,8 +31,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Server\EloquentServer wherePort($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Server\EloquentServer whereUpdatedAt($value)
  * @mixin \Eloquent
- *
- * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @author D3lph1 <d3lph1.contact@gmail.com>
  */
 class EloquentServer extends Model implements ServerInterface
 {

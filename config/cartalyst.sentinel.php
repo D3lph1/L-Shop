@@ -152,7 +152,7 @@ return [
 
     'activations' => [
 
-        'model' => 'Cartalyst\Sentinel\Activations\EloquentActivation',
+        'model' => \App\Models\Activation\EloquentActivation::class,
 
         'expires' => 259200,
 
@@ -174,7 +174,7 @@ return [
 
     'reminders' => [
 
-        'model' => 'Cartalyst\Sentinel\Reminders\EloquentReminder',
+        'model' => \App\Models\Reminder\EloquentReminder::class,
 
         'expires' => 14400,
 

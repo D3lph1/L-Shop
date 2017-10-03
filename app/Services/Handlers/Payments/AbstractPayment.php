@@ -8,6 +8,7 @@ use App\Exceptions\Payment\UnableToCompleteException;
 use App\Models\Payment\PaymentInterface;
 use App\Repositories\Payment\PaymentRepositoryInterface;
 use App\Services\Distributors\Distributor;
+use App\Services\User\Balance;
 use App\Traits\ContainerTrait;
 
 /**
@@ -92,6 +93,6 @@ abstract class AbstractPayment
      */
     private function giveMoney(PaymentInterface $payment): void
     {
-        refill_user_balance($payment->getCost(), $payment->getUserId());
+        Balance::add($payment->getUser(), $payment->getCost());
     }
 }

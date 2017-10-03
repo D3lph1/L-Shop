@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Exceptions\Payment;
 
-use RuntimeException;
+use App\Exceptions\DomainException;
 use Throwable;
 
 /**
@@ -13,7 +13,7 @@ use Throwable;
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  * @package App\Exceptions\Payment
  */
-class NotFoundException extends RuntimeException
+class NotFoundException extends DomainException
 {
     public function __construct(int $paymentId, int $code = 0, Throwable $previous = null)
     {

@@ -13,6 +13,12 @@ use App\Traits\ContainerTrait;
 use App\Traits\Validator;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class Cart
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\TransactionScripts\Shop
+ */
 class Cart
 {
     use ContainerTrait;

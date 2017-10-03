@@ -14,5 +14,5 @@ use Cartalyst\Sentinel\Activations\ActivationRepositoryInterface as BaseActivati
  */
 interface ActivationRepositoryInterface extends BaseActivationRepositoryInterface, BaseRepositoryInterface
 {
-    //
+    public function deleteByUser(int $userId): bool;
 }

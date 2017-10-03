@@ -14,5 +14,5 @@ use Cartalyst\Sentinel\Persistences\PersistenceRepositoryInterface as BasePersis
  */
 interface PersistenceRepositoryInterface extends BasePersistenceRepositoryInterface, BaseRepositoryInterface
 {
-    //
+    public function deleteByUser(int $userId): bool;
 }

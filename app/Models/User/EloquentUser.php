@@ -49,8 +49,7 @@ use Illuminate\Database\Eloquent\Relations\HasOne;
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\EloquentUser whereUsername($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\User\EloquentUser whereUuid($value)
  * @mixin \Eloquent
- *
- * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @author D3lph1 <d3lph1.contact@gmail.com>
  */
 class EloquentUser extends BaseUser implements UserInterface
 {

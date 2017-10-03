@@ -9,6 +9,12 @@ use App\Models\Product\ProductInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 
+/**
+ * Class EloquentProductRepository
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Repositories\Product
+ */
 class EloquentProductRepository implements ProductRepositoryInterface
 {
     public function create(Product $dto): ProductInterface

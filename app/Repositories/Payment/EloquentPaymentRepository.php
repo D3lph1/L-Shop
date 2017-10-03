@@ -10,6 +10,12 @@ use Cache;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Database\Eloquent\Builder;
 
+/**
+ * Class EloquentPaymentRepository
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Repositories\Payment
+ */
 class EloquentPaymentRepository implements PaymentRepositoryInterface
 {
     public function create(Payment $dto): ?PaymentInterface

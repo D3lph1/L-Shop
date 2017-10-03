@@ -14,6 +14,11 @@ use Cartalyst\Sentinel\Activations\IlluminateActivationRepository;
  */
 class EloquentActivationRepository extends IlluminateActivationRepository implements ActivationRepositoryInterface
 {
+    public function deleteByUser(int $userId): bool
+    {
+        return (bool)EloquentActivation::where('user_id', $userId)->delete();
+    }
+
     public function truncate(): void
     {
         EloquentActivation::truncate();
