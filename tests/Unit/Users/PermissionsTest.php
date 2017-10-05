@@ -4,7 +4,6 @@ namespace Tests\Unit\Users;
 
 use App\Models\User\UserInterface;
 use App\Repositories\User\UserRepositoryInterface;
-use App\Services\User\Permissions;
 use Tests\TestCase;
 
 /**
@@ -21,12 +20,10 @@ class PermissionsTest extends TestCase
         $repository = $this->make(UserRepositoryInterface::class);
         /** @var UserInterface $user */
         $user = $repository->findByCredentials(['username' => 'admin']);
-        $permissions = new Permissions($user);
-        $this->assertTrue($permissions->hasAccess(['user.admin']));
+        $this->assertTrue($user->getPermissionsManager()->hasAccess(['user.admin']));
 
         /** @var UserInterface $user */
         $user = $repository->findByCredentials(['username' => 'user']);
-        $permissions = new Permissions($user);
-        $this->assertFalse($permissions->hasAccess(['user.admin']));
+        $this->assertFalse($user->getPermissionsManager()->hasAccess(['user.admin']));
     }
 }
