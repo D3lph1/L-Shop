@@ -11,6 +11,12 @@ use App\Repositories\Payment\PaymentRepositoryInterface;
 use App\Repositories\PaymentRepository;
 use App\Services\Payments\Interkassa\Checkout;
 
+/**
+ * Class Interkassa
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Services\Handlers\Payments
+ */
 class Interkassa extends AbstractPayment
 {
     const SERVICE_NAME = 'interkassa';

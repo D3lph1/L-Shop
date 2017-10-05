@@ -16,8 +16,8 @@ use Throwable;
  */
 class NotFoundException extends DomainException
 {
-    public function __construct(int $userId, int $code = 0, Throwable $previous = null)
+    public function __construct($user, int $code = 0, Throwable $previous = null)
     {
-        parent::__construct("User with id `$userId` not found", $code, $previous);
+        parent::__construct("User [`$user`] with not found", $code, $previous);
     }
 }

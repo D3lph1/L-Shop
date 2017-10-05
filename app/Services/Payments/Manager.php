@@ -12,6 +12,7 @@ use App\Models\Product\ProductInterface;
 use App\Repositories\Payment\PaymentRepositoryInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Services\Items\Type;
+use App\Services\User\Balance;
 use Cartalyst\Sentinel\Sentinel;
 
 /**
@@ -226,9 +227,7 @@ class Manager
         if ($this->userBalance - $this->cost < 0 ) {
             return false;
         }
-        $this->sentinel->getUserRepository()->update(\Sentinel::getUser()->getId(), [
-            'balance' => $this->userBalance - $this->cost
-        ]);
+        Balance::sub(\Sentinel::getUser(), $this->cost);
 
         return true;
     }

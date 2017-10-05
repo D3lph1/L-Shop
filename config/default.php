@@ -52,7 +52,7 @@ return [
     'shop.sort' => 'name',
     'caching.monitoring.ttl' => '10',
     'monitoring.rcon.timeout' => '1',
-    'monitoring.rcon.pattern' => '/^.*(?<now>\d+)§6\sиз\s§c(?<total>\d+).*$/ui',
+    'monitoring.rcon.pattern' => '/^.*(?<now>\d+)\sиз\s(?<total>\d+).*$/ui',
     'monitoring.enabled' => '1',
     'auth.signup.redirect' => '0',
     'auth.signup.redirect_url' => 'http://l-shop.ru/servers',

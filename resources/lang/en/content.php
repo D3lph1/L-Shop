@@ -82,7 +82,7 @@ return [
                     'timeout' => 'Connection timeout',
                     'timeout_popover' => 'The time after which the connection to the server socket will be automatically disconnected. (If there is no connection). Specify in seconds.',
                     'pattern' => 'Response format',
-                    'pattern_popover' => 'Here you need to enter a regular expression that will parse the response string. It must necessarily include a capture-group ?&lt;now&gt; (To mark the current online) and ?&lt;total&gt; (For marking the total number of slots on the server).',
+                    'pattern_popover' => 'Here you need to enter a regular expression that will parse the response string. It must necessarily include a capture-group ?&lt;now&gt; (To mark the current online) and ?&lt;total&gt; (For marking the total number of slots on the server). Note that, before comparing with the regular expression, the response string from the server is cleared of special characters.',
                 ],
                 'maintenance' => [
                     'title' => 'Maintenance mode',

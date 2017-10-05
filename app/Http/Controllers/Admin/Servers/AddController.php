@@ -43,7 +43,8 @@ class AddController extends Controller
             ->setIp($request->get('server_ip'))
             ->setPort((int)$request->get('server_port'))
             ->setPassword($request->get('server_password'))
-            ->setMonitoringEnabled((bool)$request->get('server_monitoring_enabled'));
+            ->setMonitoringEnabled((bool)$request->get('server_monitoring_enabled'))
+            ->setEnabled((bool)$request->get('enabled'));
 
         $script->createServer($dto);
 

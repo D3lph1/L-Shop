@@ -15,7 +15,6 @@ use App\Services\Payments\Robokassa\Checkout;
  * Class Robokassa
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Services\Handlers\Payments
  */
 class Robokassa extends AbstractPayment
@@ -50,7 +49,7 @@ class Robokassa extends AbstractPayment
             $id = $testingPaymentId;
         } else {
             $this->validateRequestData($requestData);
-            $id = $requestData['InvId'];
+            $id = (int)$requestData['InvId'];
         }
 
         $payment = $this->payment($id);

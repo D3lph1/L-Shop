@@ -12,7 +12,7 @@
             <h1><i class="fa fa-shopping-cart fa-lg fa-left-big"></i>@lang('content.profile.cart.title')</h1>
         </div>
         <div class="product-container">
-            <div class="alert alert-info">
+            <div class="alert alert-info text-center">
                 @lang('content.profile.cart.description')
             </div>
             <div class="text-right">

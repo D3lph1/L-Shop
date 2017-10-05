@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Models\User;
 
-use App\Services\User\Permissions;
+use App\Services\User\Permissions\Permissions;
 use App\Services\User\Roles;
 use Cartalyst\Sentinel\Users\UserInterface as BaseUserInterface;
 

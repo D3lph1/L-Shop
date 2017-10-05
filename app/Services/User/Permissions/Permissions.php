@@ -1,40 +1,25 @@
 <?php
 declare(strict_types = 1);
 
-namespace App\Services\User;
+namespace App\Services\User\Permissions;
 
 use App\Models\Role\RoleInterface;
-use App\Models\User\UserInterface;
 
-/**
- * Class Permissions
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Services\User
- */
-class Permissions
+abstract class Permissions
 {
-    /**
-     * @var UserInterface
-     */
-    private $user;
-
     /**
      * @var array|null
      */
-    private $userPermissions;
+    protected $specifiedPermissions;
 
     /**
      * @var RoleInterface[]
      */
-    private $roles;
+    protected $roles;
 
-    public function __construct(UserInterface $user)
-    {
-        $this->user = $user;
-        $this->userPermissions = $user->getPermissions();
-        $this->roles = $this->user->getRoles();
-    }
+    abstract public function addPermission(string $name, $value): void;
+
+    abstract public function deletePermission(string $name): void;
 
     public function hasAccess(array $permissions): bool
     {
@@ -60,7 +45,7 @@ class Permissions
 
     private function check(string $permission): bool
     {
-        foreach ($this->userPermissions as $key => $value) {
+        foreach ($this->specifiedPermissions as $key => $value) {
             if ((str_is($permission, $key) || str_is($key, $permission)) && $value === true) {
                 return true;
             }

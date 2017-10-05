@@ -21,7 +21,6 @@ use App\Exceptions\Payment\Robokassa\InvalidSumException;
  *
  * @author   JhaoDa <jhaoda@gmail.com>
  * @modified by D3lph1 <d3lph1.contact@gmail.com> special for L-shop project (https://github.com/D3lph1/L-shop)
- *
  * @package  App\Services\Payments\Robokassa
  */
 class Checkout
@@ -122,7 +121,7 @@ class Checkout
         if ($customParams) {
             // sort customParams alphabetically
             ksort($customParams);
-            $signature .= ':' . http_build_query($customParams, null, ':');
+            $signature .= ':' . http_build_query($customParams);
         }
 
         $data = $this->getData($payment);
@@ -187,7 +186,7 @@ class Checkout
         }
 
         ksort($params);
-        $params = http_build_query($params, null, ':');
+        $params = http_build_query($params);
 
         return $params ? ':' . $params : '';
     }

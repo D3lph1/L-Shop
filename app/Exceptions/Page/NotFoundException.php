@@ -14,8 +14,8 @@ use Throwable;
  */
 class NotFoundException extends DomainException
 {
-    public function __construct(int $pageId, int $code = 0, Throwable $previous = null)
+    public function __construct($page, int $code = 0, Throwable $previous = null)
     {
-        parent::__construct("Page with id `$pageId` not found", $code, $previous);
+        parent::__construct("Page [`$page`] not found", $code, $previous);
     }
 }

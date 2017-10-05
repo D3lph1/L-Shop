@@ -45,14 +45,14 @@ class EloquentPageRepository implements PageRepositoryInterface
         return EloquentPage::find($id, $columns);
     }
 
-    public function findByUrl(string $url, array $columns): PageInterface
+    public function findByUrl(string $url, array $columns): ?PageInterface
     {
         $key = "page.{$url}";
 
         return Cache::get($key, function () use ($columns, $url, $key) {
             $result = EloquentPage::select($columns)
                 ->where('url', $url)
-                ->get();
+                ->first();
 
             if (isset($result[0])) {
                 Cache::put($key, $result, (int)s_get('caching.pages.ttl'));

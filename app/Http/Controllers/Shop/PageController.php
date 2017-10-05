@@ -3,8 +3,10 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Shop;
 
+use App\Exceptions\Page\NotFoundException;
 use App\Http\Controllers\Controller;
 use App\Services\Page;
+use App\TransactionScripts\Pages;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -19,20 +21,18 @@ class PageController extends Controller
     /**
      * Render given static page
      */
-    public function render(Request $request, Page $page): View
+    public function render(Request $request, Pages $script): View
     {
-        $url = $request->route('page');
-        $page = $page->getByUrl($url, ['title', 'content']);
-
-        if (!$page) {
-            \App::abort(404);
+        $page = null;
+        try {
+            $page = $script->get($request->route('page'));
+        } catch (NotFoundException $e) {
+            $this->app->abort(404);
         }
 
-        $data = [
+        return view('shop.page', [
             'currentServer' => $request->get('currentServer'),
             'page' => $page
-        ];
-
-        return view('shop.page', $data);
+        ]);
     }
 }

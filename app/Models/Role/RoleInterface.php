@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace App\Models\Role;
 
+use App\Services\User\Permissions\Permissions;
+
 /**
  * Interface RoleInterface
  *
@@ -11,6 +13,9 @@ namespace App\Models\Role;
  */
 interface RoleInterface
 {
+    public function getPermissionsManager(): Permissions;
+
+
     public function getId(): int;
 
     public function getSlug(): string;

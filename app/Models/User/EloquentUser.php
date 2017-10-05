@@ -7,6 +7,9 @@ use App\Models\Activation\EloquentActivation;
 use App\Models\Ban\EloquentBan;
 use App\Models\News\EloquentNews;
 use App\Models\Payment\EloquentPayment;
+use App\Models\Persistence\EloquentPersistence;
+use App\Models\Reminder\EloquentReminder;
+use App\Models\Role\EloquentRole;
 use App\Services\User\Permissions;
 use App\Services\User\Roles;
 use Cartalyst\Sentinel\Users\EloquentUser as BaseUser;
@@ -68,11 +71,20 @@ class EloquentUser extends BaseUser implements UserInterface
      * @var array
      */
     protected $loginNames = [
-        'username',
-        'email'
+        'username'
     ];
 
     protected static $activationsModel = EloquentActivation::class;
+
+    protected static $rolesModel = EloquentRole::class;
+
+    protected static $persistencesModel = EloquentPersistence::class;
+
+    protected static $remindersModel = EloquentReminder::class;
+
+    private $rolesManager = null;
+
+    private $permissionsManager = null;
 
     public function news(): HasMany
     {
@@ -101,12 +113,20 @@ class EloquentUser extends BaseUser implements UserInterface
 
     public function getRolesManager(): Roles
     {
-        return new Roles($this);
+        if (is_null($this->rolesManager)) {
+            $this->rolesManager = new Roles($this);
+        }
+
+        return $this->rolesManager;
     }
 
-    public function getPermissionsManager(): Permissions
+    public function getPermissionsManager(): Permissions\Permissions
     {
-        return new Permissions($this);
+        if (is_null($this->permissionsManager)) {
+            $this->permissionsManager = new Permissions\UserPermissions($this);
+        }
+
+        return $this->permissionsManager;
     }
 
 

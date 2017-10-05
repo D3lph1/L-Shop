@@ -41,4 +41,8 @@ interface ProductRepositoryInterface extends BaseRepositoryInterface
     public function delete(int $productId): bool;
 
     public function deleteByItemId(int $itemId): bool;
+
+    public function deleteByServer(int $serverId): bool;
+
+    public function deleteByCategory(int $categoryId): bool;
 }

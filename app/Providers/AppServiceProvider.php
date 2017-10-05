@@ -85,5 +85,16 @@ class AppServiceProvider extends ServiceProvider
         Validator::extend('alpha_num_strict', function ($attribute, $value, $parameters, $validator) {
             return preg_match('/^[a-zA-Z0-9]+$/', $value);
         });
+
+        // Checks the input string so that it is a regular regular expression.
+        Validator::extend('valid_regex', function ($attribute, $value, $parameters, $validator) {
+            try {
+                preg_match($value, '');
+            } catch (\ErrorException $e) {
+                return false;
+            }
+
+            return true;
+        });
     }
 }

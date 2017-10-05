@@ -19,6 +19,10 @@ interface UserRepositoryInterface extends BaseUserRepositoryInterface, BaseRepos
 {
     public function findByUsername(string $username, array $columns): ?UserInterface;
 
+    public function findByEmail(string $email, array $columns): ?UserInterface;
+
+    public function updatePermissions(int $id, array $permissions): bool;
+
     public function withRolesActivationsBanPaginated(
         array $userColumns,
         array $rolesColumns,

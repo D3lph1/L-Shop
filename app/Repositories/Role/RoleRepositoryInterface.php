@@ -18,5 +18,7 @@ interface RoleRepositoryInterface extends BaseRoleRepositoryInterface, BaseRepos
 
     public function detachUser(int $roleId, int $userId): bool;
 
+    public function updatePermissions(int $id, array $permissions): bool;
+
     public function detachAllUser(int $userId): bool;
 }

@@ -7,6 +7,8 @@ use App\DataTransferObjects\Server;
 use App\Models\Category\EloquentCategory;
 use App\Models\Server\EloquentServer;
 use App\Models\Server\ServerInterface;
+use App\Repositories\Product\ProductRepositoryInterface;
+use App\Traits\ContainerTrait;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -17,10 +19,11 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class EloquentServerRepository implements ServerRepositoryInterface
 {
+    use ContainerTrait;
+
     public function create(Server $dto): ServerInterface
     {
         return EloquentServer::create(trim_nullable([
-            'id' => $dto->getId(),
             'name' => $dto->getName(),
             'enabled' => $dto->isEnabled(),
             'ip' => $dto->getIp(),
@@ -111,6 +114,10 @@ class EloquentServerRepository implements ServerRepositoryInterface
 
     public function delete(int $serverId): bool
     {
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->make(ProductRepositoryInterface::class);
+        $productRepository->deleteByServer($serverId);
+
         return (bool)EloquentServer::where('id', $serverId)->delete();
     }
 

@@ -88,6 +88,7 @@ return [
 
     // Specify validation messages
     'api_sashok_auth_format_regex' => 'Field "Format" must be contains a marker {username}',
+    'valid_regex' => 'Field ":attribute" must be a valid regular expression.',
 
     /*
     |--------------------------------------------------------------------------

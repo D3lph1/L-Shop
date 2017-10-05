@@ -17,9 +17,11 @@ class EloquentRoleRepository extends IlluminateRoleRepository implements RoleRep
 {
     public function attachUser(int $roleId, int $userId): bool
     {
+        $this->detachUser($roleId, $userId);
+
         return DB::table('role_users')->insert([
-            'user_id' => $roleId,
-            'role_id' => $userId
+            'user_id' => $userId,
+            'role_id' => $roleId
         ]);
     }
 
@@ -29,6 +31,13 @@ class EloquentRoleRepository extends IlluminateRoleRepository implements RoleRep
             ->where('user_id', $userId)
             ->where('role_id', $roleId)
             ->delete();
+    }
+
+    public function updatePermissions(int $id, array $permissions): bool
+    {
+        return (bool)EloquentRole::where('id', $id)->update([
+            'permissions' => count($permissions) === 0 ? null : json_encode($permissions)
+        ]);
     }
 
     public function detachAllUser(int $userId): bool

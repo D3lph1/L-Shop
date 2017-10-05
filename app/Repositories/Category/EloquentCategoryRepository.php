@@ -6,6 +6,8 @@ namespace App\Repositories\Category;
 use App\DataTransferObjects\Category;
 use App\Models\Category\CategoryInterface;
 use App\Models\Category\EloquentCategory;
+use App\Repositories\Product\ProductRepositoryInterface;
+use App\Traits\ContainerTrait;
 use Illuminate\Database\Eloquent\Builder;
 
 /**
@@ -16,6 +18,8 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class EloquentCategoryRepository implements CategoryRepositoryInterface
 {
+    use ContainerTrait;
+
     public function create(Category $category): CategoryInterface
     {
         return EloquentCategory::create([
@@ -36,7 +40,7 @@ class EloquentCategoryRepository implements CategoryRepositoryInterface
     {
         return EloquentCategory::select(array_merge($categoryColumns, ['server_id']))
             ->with([
-                'server' => function ($query) use($serverColumns) {
+                'server' => function ($query) use ($serverColumns) {
                     /** @var Builder $query */
                     $query->select(array_merge($serverColumns, ['id']));
                 }
@@ -46,6 +50,10 @@ class EloquentCategoryRepository implements CategoryRepositoryInterface
 
     public function deleteByServerId(int $serverId): bool
     {
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->make(ProductRepositoryInterface::class);
+        $productRepository->deleteByServer($serverId);
+
         return (bool)EloquentCategory::where('server_id', $serverId)->delete();
     }
 
@@ -56,6 +64,10 @@ class EloquentCategoryRepository implements CategoryRepositoryInterface
 
     public function delete(int $categoryId): bool
     {
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = $this->make(ProductRepositoryInterface::class);
+        $productRepository->deleteByCategory($categoryId);
+
         return (bool)EloquentCategory::where('id', $categoryId)->delete();
     }
 

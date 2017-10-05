@@ -28,6 +28,17 @@ class Pages
         $this->pageRepository = $pageRepository;
     }
 
+    public function get(string $url): PageInterface
+    {
+        $page = $this->pageRepository->findByUrl($url, ['title', 'content']);
+
+        if (is_null($page)) {
+            throw new NotFoundException($url);
+        }
+
+        return $page;
+    }
+
     public function create(Page $dto): PageInterface
     {
         if (!$this->isUrlUniqueAll($dto->getUrl())) {

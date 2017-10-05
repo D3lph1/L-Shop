@@ -4,6 +4,8 @@ declare(strict_types = 1);
 namespace App\Services\Monitoring;
 
 use App\DataTransferObjects\MonitoringPlayers;
+use App\Services\Rcon\Colorizers\TrimColorizer;
+use App\Traits\ContainerTrait;
 use D3lph1\MinecraftRconManager\Connector;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -16,6 +18,8 @@ use Illuminate\Support\Facades\Log;
  */
 class RconMonitoring implements MonitoringInterface
 {
+    use ContainerTrait;
+
     /**
      * @var Connector
      */
@@ -42,7 +46,7 @@ class RconMonitoring implements MonitoringInterface
         $callable = function () use ($serverId) {
             try {
                 $connection = $this->connector->get($serverId);
-                $list = $connection->send('list');
+                $list = (string)$connection->send('list');
             } catch (\Exception $e) {
                 // If the connection could not be established.
                 $dto = new MonitoringPlayers($serverId, -1, -1);
@@ -51,6 +55,8 @@ class RconMonitoring implements MonitoringInterface
                 return $dto;
             }
             $matches = [];
+
+            $list = $this->sanitize($list);
             preg_match(s_get('monitoring.rcon.pattern'), $list, $matches);
 
             if (count($matches) === 0) {
@@ -70,5 +76,13 @@ class RconMonitoring implements MonitoringInterface
         };
 
         return Cache::get("monitoring.{$serverId}", $callable);
+    }
+
+    private function sanitize(string $string): string
+    {
+        /** @var TrimColorizer $colorizer */
+        $colorizer = $this->make(TrimColorizer::class);
+
+        return $colorizer->colorize($string);
     }
 }

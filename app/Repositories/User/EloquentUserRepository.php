@@ -33,6 +33,18 @@ class EloquentUserRepository extends IlluminateUserRepository implements UserRep
         return EloquentUser::select($columns)->where('username', $username)->first();
     }
 
+    public function findByEmail(string $email, array $columns): ?UserInterface
+    {
+        return EloquentUser::select($columns)->where('email', $email)->first();
+    }
+
+    public function updatePermissions(int $id, array $permissions): bool
+    {
+        return (bool)EloquentUser::where('id', $id)->update([
+            'permissions' => count($permissions) === 0 ? null : json_encode($permissions)
+        ]);
+    }
+
     public function __construct(HasherInterface $hasher, Dispatcher $dispatcher = null, $model = null)
     {
         parent::__construct($hasher, $dispatcher, EloquentUser::class);

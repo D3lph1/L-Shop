@@ -24,7 +24,7 @@ interface PageRepositoryInterface extends BaseRepositoryInterface
 
     public function find(int $id, array $columns): ?PageInterface;
 
-    public function findByUrl(string $url, array $columns): PageInterface;
+    public function findByUrl(string $url, array $columns): ?PageInterface;
 
     public function getPaginated(array $columns): LengthAwarePaginator;
 

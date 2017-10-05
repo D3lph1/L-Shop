@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace App\Models\Role;
 
+use App\Services\User\Permissions\Permissions;
+use App\Services\User\Permissions\RolePermissions;
 use Cartalyst\Sentinel\Roles\EloquentRole as BaseRole;
 
 /**
@@ -36,6 +38,17 @@ class EloquentRole extends BaseRole implements RoleInterface
         'name',
         'permissions'
     ];
+
+    private $permissionsManager = null;
+
+    public function getPermissionsManager(): Permissions
+    {
+        if (is_null($this->permissionsManager)) {
+            $this->permissionsManager = new RolePermissions($this);
+        }
+
+        return $this->permissionsManager;
+    }
 
     public function getId(): int
     {

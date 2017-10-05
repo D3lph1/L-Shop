@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Providers;
 
+use App\Models\Role\EloquentRole;
 use App\Models\User\EloquentUser;
 use App\Repositories\Activation\ActivationRepositoryInterface;
 use App\Repositories\Activation\EloquentActivationRepository;
@@ -73,7 +74,10 @@ class RepositoryServiceProvider extends ServiceProvider
         });
         $this->app->singleton(PaymentRepositoryInterface::class, EloquentPaymentRepository::class);
         $this->app->singleton(ProductRepositoryInterface::class, EloquentProductRepository::class);
-        $this->app->singleton(RoleRepositoryInterface::class, EloquentRoleRepository::class);
+        $this->app->singleton(RoleRepositoryInterface::class, function ($app) {
+            /** @var Container $app */
+            return $app->make(EloquentRoleRepository::class, ['model' => EloquentRole::class]);
+        });
         $this->app->singleton(ActivationRepositoryInterface::class, EloquentActivationRepository::class);
         $this->app->singleton(PersistenceRepositoryInterface::class, EloquentPersistenceRepository::class);
         $this->app->singleton(ReminderRepositoryInterface::class, EloquentReminderRepository::class);

@@ -153,6 +153,16 @@ class EloquentProductRepository implements ProductRepositoryInterface
         return (bool)EloquentProduct::where('item_id', $itemId)->delete();
     }
 
+    public function deleteByServer(int $serverId): bool
+    {
+        return (bool)EloquentProduct::where('server_id', $serverId)->delete();
+    }
+
+    public function deleteByCategory(int $categoryId): bool
+    {
+        return (bool)EloquentProduct::where('category_id', $categoryId)->delete();
+    }
+
     private function mergeProductColumns(array $columns): array
     {
         return array_merge($columns, ['products.item_id']);
