@@ -36,9 +36,11 @@ class News
         return $this->id;
     }
 
-    public function setId(int $id): void
+    public function setId(int $id): self
     {
         $this->id = $id;
+
+        return $this;
     }
 
     public function setTitle(string $title): self

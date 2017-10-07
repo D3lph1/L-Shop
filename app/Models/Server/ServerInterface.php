@@ -16,17 +16,31 @@ interface ServerInterface
     public function getCategories(): iterable;
 
 
-    public function getId(): int;
+    public function setId(int $id): ServerInterface;
+
+    public function getId(): ?int;
+
+    public function setName(string $name): ServerInterface;
 
     public function getName(): string;
 
+    public function setIp(?string $ip): ServerInterface;
+
     public function getIp(): ?string ;
+
+    public function setPort(?int $port): ServerInterface;
 
     public function getPort(): ?int;
 
+    public function setPassword(?string $password): ServerInterface;
+
     public function getPassword(): ?string;
 
+    public function setEnabled(bool $isEnabled): ServerInterface;
+
     public function isEnabled(): bool;
+
+    public function setMonitoringEnabled(bool $isMonitoringEnabled): ServerInterface;
 
     public function isMonitoringEnabled(): bool;
 

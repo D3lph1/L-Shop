@@ -19,17 +19,31 @@ interface CartInterface
 
     public function getId(): int;
 
+    public function setPlayer(string $player): CartInterface;
+
     public function getPlayer(): string;
+
+    public function setType(string $type): CartInterface;
 
     public function getType(): string;
 
+    public function setItem(string $item): CartInterface;
+
     public function getItem(): string;
+
+    public function setAmount(int $amount): CartInterface;
 
     public function getAmount(): int;
 
+    public function setExtra(string $extra): CartInterface;
+
     public function getExtra(): ?string;
 
+    public function setItemId(int $id): CartInterface;
+
     public function getItemId(): int;
+
+    public function setServerId(int $id): CartInterface;
 
     public function getServerId(): int;
 

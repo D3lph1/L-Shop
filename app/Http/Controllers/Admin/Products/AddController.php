@@ -7,8 +7,10 @@ use App\DataTransferObjects\Product;
 use App\Exceptions\ItemNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveAddedProductRequest;
+use App\Models\Product\ProductInterface;
 use App\Repositories\Item\ItemRepositoryInterface;
 use App\Repositories\Server\ServerRepositoryInterface;
+use App\Traits\ContainerTrait;
 use App\TransactionScripts\Products;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -22,6 +24,8 @@ use Illuminate\View\View;
  */
 class AddController extends Controller
 {
+    use ContainerTrait;
+
     /**
      * Render the add product page.
      */
@@ -49,7 +53,9 @@ class AddController extends Controller
      */
     public function save(SaveAddedProductRequest $request, Products $script): RedirectResponse
     {
-        $dto = (new Product())
+        /** @var ProductInterface $entity */
+        $entity = $this->make(ProductInterface::class);
+        $entity
             ->setPrice((float)$request->get('price'))
             ->setStack((float)$request->get('stack'))
             ->setItemId((int)$request->get('item'))
@@ -60,7 +66,7 @@ class AddController extends Controller
         $result = null;
 
         try {
-            $result = $script->create($dto);
+            $result = $script->create($entity);
         } catch (ItemNotFoundException $e) {
             $this->msg->danger(__('messages.admin.products.add.item_not_found', ['id' => $dto->getItemId()]));
         }

@@ -7,6 +7,7 @@ use App\Models\Ban\BanInterface;
 use App\Models\User\UserInterface;
 use App\Repositories\Ban\BanRepositoryInterface;
 use App\Services\Support\Time;
+use App\Traits\ContainerTrait;
 use Carbon\Carbon;
 
 /**
@@ -17,6 +18,8 @@ use Carbon\Carbon;
  */
 class Ban
 {
+    use ContainerTrait;
+
     /**
      * @var UserInterface
      */
@@ -56,9 +59,11 @@ class Ban
     public function until(UserInterface $user, ?Carbon $until, ?string $reason = null): BanInterface
     {
         $this->pardon($user);
+        /** @var BanInterface $entity */
+        $entity = $this->make(BanInterface::class);
 
         return $this->repository->create(
-            (new \App\DataTransferObjects\Ban())
+            $entity
                 ->setUserId($user->getId())
                 ->setUntil($until)
                 ->setReason($reason)
@@ -72,7 +77,7 @@ class Ban
      * @param int           $days   Term of blocking.
      * @param string        $reason Reason for blocking.
      *
-     * @return \App\Repositories\Ban
+     * @return BanInterface
      */
     public function forDays(UserInterface $user, int $days, ?string $reason = null): BanInterface
     {

@@ -101,11 +101,11 @@ class News
         ]);
     }
 
-    public function create(DTO $dto): bool
+    public function create(NewsInterface $entity): bool
     {
-        $result = $this->newsRepository->create($dto);
+        $result = $this->newsRepository->create($entity);
 
-        // Remove new data from cache.
+        // Remove news data from cache.
         $this->forgetNews();
         $this->forgetCount();
 
@@ -114,7 +114,13 @@ class News
 
     public function update(DTO $dto): bool
     {
-        $result = $this->newsRepository->update($dto->getId(), $dto);
+        /** @var NewsInterface $entity */
+        $entity = $this->make(NewsInterface::class);
+        $entity
+            ->setTitle($dto->getTitle())
+            ->setContent($dto->getContent());
+
+        $result = $this->newsRepository->update($dto->getId(), $entity);
 
         // Remove all data from cache.
         $this->forgetNews();

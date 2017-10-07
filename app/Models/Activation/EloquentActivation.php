@@ -30,8 +30,59 @@ class EloquentActivation extends BaseActivation implements ActivationInterface
 {
     protected $dates = ['completed_at'];
 
+    public function getId(): int
+    {
+        return $this->id;
+    }
+
+    public function setUserId(int $userId): ActivationInterface
+    {
+        $this->user_id = $userId;
+
+        return $this;
+    }
+
+    public function getUserId(): int
+    {
+        return $this->user_id;
+    }
+
+    public function setCode(string $code): ActivationInterface
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
     public function getCompletedAt(): ?Carbon
     {
         return $this->completed_at;
+    }
+
+    public function setCompleted(bool $isCompleted): ActivationInterface
+    {
+        $this->completed = $isCompleted;
+
+        return $this;
+    }
+
+    public function isCompleted(): bool
+    {
+        return $this->completed;
+    }
+
+    public function getCreatedAt(): Carbon
+    {
+        return $this->created_at;
+    }
+
+    public function getUpdatedAt(): ?Carbon
+    {
+        return $this->updated_at;
     }
 }

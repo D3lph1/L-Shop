@@ -8,6 +8,7 @@ use App\Exceptions\News\DisabledException;
 use App\Exceptions\News\NotFoundExceptions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveEditedNewsRequest;
+use App\Traits\ContainerTrait;
 use App\TransactionScripts\Shop\News;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -21,6 +22,8 @@ use Illuminate\View\View;
  */
 class EditController extends Controller
 {
+    use ContainerTrait;
+
     /**
      * Render the edit news page.
      */
@@ -50,10 +53,9 @@ class EditController extends Controller
     public function save(SaveEditedNewsRequest $request, News $news): RedirectResponse
     {
         $dto = (new DTO())
+            ->setId((int)$request->route('id'))
             ->setTitle($request->get('news_title'))
             ->setContent($request->get('news_content'));
-
-        $dto->setId((int)$request->route('id'));
 
         if ($news->update($dto)) {
             $this->msg->success(__('messages.admin.news.edit.success'));

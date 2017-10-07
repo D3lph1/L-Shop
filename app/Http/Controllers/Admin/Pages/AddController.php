@@ -7,6 +7,8 @@ use App\DataTransferObjects\Page as DTO;
 use App\Exceptions\Page\UrlAlreadyExistsException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveAddedPageRequest;
+use App\Models\Page\PageInterface;
+use App\Traits\ContainerTrait;
 use App\TransactionScripts\Pages;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -20,6 +22,8 @@ use Illuminate\View\View;
  */
 class AddController extends Controller
 {
+    use ContainerTrait;
+
     /**
      * Render add static page.
      */
@@ -35,13 +39,13 @@ class AddController extends Controller
      */
     public function save(SaveAddedPageRequest $request, Pages $script): RedirectResponse
     {
-        $page = (new DTO())
+        $entity = $this->make(PageInterface::class)
             ->setTitle($request->get('page_title'))
             ->setContent($request->get('page_content'))
             ->setUrl($request->get('page_url'));
 
         try {
-            if ($script->create($page)) {
+            if ($script->create($entity)) {
                 $this->msg->success(__('messages.admin.pages.add.success'));
             } else {
                 $this->msg->danger(__('messages.admin.pages.add.fail'));

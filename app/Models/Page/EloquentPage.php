@@ -34,9 +34,23 @@ class EloquentPage extends Model implements PageInterface
         'url'
     ];
 
-    public function getId(): int
+    public function setId(int $id): PageInterface
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setTitle(string $title): PageInterface
+    {
+        $this->title = $title;
+
+        return $this;
     }
 
     public function getTitle(): string
@@ -44,9 +58,23 @@ class EloquentPage extends Model implements PageInterface
         return $this->title;
     }
 
+    public function setContent(string $content): PageInterface
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
     public function getContent(): string
     {
         return $this->content;
+    }
+
+    public function setUrl(string $url): PageInterface
+    {
+        $this->url = $url;
+
+        return $this;
     }
 
     public function getUrl(): string

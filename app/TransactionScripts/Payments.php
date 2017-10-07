@@ -83,7 +83,7 @@ class Payments
                 if ($product->getId() === $key) {
                     $tmp = [];
                     $tmp['name'] = $product->getItem()->getName();
-                    $tmp['count'] = $value;
+                    $tmp['count'] = $value ?: __('content.shop.catalog.item.forever');
                     $tmp['image'] = Image::getOrDefault('items/' . $product->getItem()->getImage(), 'empty.png');
                     $result[] = $tmp;
                 }
@@ -190,9 +190,11 @@ class Payments
     public function fillupbalance(int $userId, float $sum, int $serverId, string $ip): ?PaymentInterface
     {
         $sum = (float)abs($sum);
+        /** @var PaymentInterface $entity */
+        $entity = $this->make(PaymentInterface::class);
 
         $payment = $this->paymentRepository->create(
-            (new Payment())
+            $entity
                 ->setProducts(null)
                 ->setCost($sum)
                 ->setUserId($userId)

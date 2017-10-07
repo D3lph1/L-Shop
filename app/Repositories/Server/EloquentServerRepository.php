@@ -21,27 +21,28 @@ class EloquentServerRepository implements ServerRepositoryInterface
 {
     use ContainerTrait;
 
-    public function create(Server $dto): ServerInterface
+    public function create(ServerInterface $entity): ServerInterface
     {
         return EloquentServer::create(trim_nullable([
-            'name' => $dto->getName(),
-            'enabled' => $dto->isEnabled(),
-            'ip' => $dto->getIp(),
-            'port' => $dto->getPort(),
-            'password' => $dto->getPassword(),
-            'monitoring_enabled' => $dto->isMonitoringEnabled()
+            'id' => $entity->getId(),
+            'name' => $entity->getName(),
+            'enabled' => $entity->isEnabled(),
+            'ip' => $entity->getIp(),
+            'port' => $entity->getPort(),
+            'password' => $entity->getPassword(),
+            'monitoring_enabled' => $entity->isMonitoringEnabled()
         ]));
     }
 
-    public function update(int $serverId, Server $dto): bool
+    public function update(int $serverId, ServerInterface $entity): bool
     {
         return (bool)EloquentServer::where('id', $serverId)->update([
-            'name' => $dto->getName(),
-            'enabled' => $dto->isEnabled(),
-            'ip' => $dto->getIp(),
-            'port' => $dto->getPort(),
-            'password' => $dto->getPassword(),
-            'monitoring_enabled' => $dto->isMonitoringEnabled()
+            'name' => $entity->getName(),
+            'enabled' => $entity->isEnabled(),
+            'ip' => $entity->getIp(),
+            'port' => $entity->getPort(),
+            'password' => $entity->getPassword(),
+            'monitoring_enabled' => $entity->isMonitoringEnabled()
         ]);
     }
 

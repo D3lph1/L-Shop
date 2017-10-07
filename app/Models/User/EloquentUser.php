@@ -135,9 +135,23 @@ class EloquentUser extends BaseUser implements UserInterface
         return $this->id;
     }
 
+    public function setUsername(string $username): UserInterface
+    {
+        $this->username = $username;
+
+        return $this;
+    }
+
     public function getUsername(): string
     {
         return $this->username;
+    }
+
+    public function setEmail(string $email): UserInterface
+    {
+        $this->email = $email;
+
+        return $this;
     }
 
     public function getEmail(): string
@@ -145,9 +159,23 @@ class EloquentUser extends BaseUser implements UserInterface
         return $this->email;
     }
 
+    public function setPassword(string $password): UserInterface
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
     public function getPassword(): string
     {
         return $this->password;
+    }
+
+    public function setBalance(float $value): UserInterface
+    {
+        $this->balance = $value;
+
+        return $this;
     }
 
     public function getBalance(): float

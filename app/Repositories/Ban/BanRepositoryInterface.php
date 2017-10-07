@@ -16,7 +16,7 @@ use Cartalyst\Sentinel\Users\UserInterface;
  */
 interface BanRepositoryInterface extends BaseRepositoryInterface
 {
-    public function create(Ban $dto): BanInterface;
+    public function create(BanInterface $entity): BanInterface;
 
     public function findByUser(UserInterface $user): ?BanInterface;
 

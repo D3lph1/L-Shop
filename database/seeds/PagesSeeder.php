@@ -1,7 +1,9 @@
 <?php
 declare(strict_types = 1);
 
+use App\Models\Page\PageInterface;
 use App\Repositories\Page\PageRepositoryInterface;
+use App\Traits\ContainerTrait;
 use Illuminate\Database\Seeder;
 
 /**
@@ -11,6 +13,8 @@ use Illuminate\Database\Seeder;
  */
 class PagesSeeder extends Seeder
 {
+    use ContainerTrait;
+
     /**
      * @var PageRepositoryInterface
      */
@@ -27,7 +31,7 @@ class PagesSeeder extends Seeder
     public function run(): void
     {
         $this->repository->create(
-            (new \App\DataTransferObjects\Page())
+            $this->make(PageInterface::class)
                 ->setId(1)
                 ->setTitle(__('seeding.pages.0.title'))
                 ->setContent(__('seeding.pages.0.content'))

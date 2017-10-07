@@ -8,6 +8,7 @@ use App\Exceptions\Page\NotFoundException;
 use App\Exceptions\Page\UrlAlreadyExistsException;
 use App\Models\Page\PageInterface;
 use App\Repositories\Page\PageRepositoryInterface;
+use App\Traits\ContainerTrait;
 use Cache;
 
 /**
@@ -18,6 +19,8 @@ use Cache;
  */
 class Pages
 {
+    use ContainerTrait;
+
     /**
      * @var PageRepositoryInterface
      */
@@ -39,13 +42,13 @@ class Pages
         return $page;
     }
 
-    public function create(Page $dto): PageInterface
+    public function create(PageInterface $entity): PageInterface
     {
-        if (!$this->isUrlUniqueAll($dto->getUrl())) {
-            throw new UrlAlreadyExistsException($dto->getUrl());
+        if (!$this->isUrlUniqueAll($entity->getUrl())) {
+            throw new UrlAlreadyExistsException($entity->getUrl());
         }
 
-        return $this->pageRepository->create($dto);
+        return $this->pageRepository->create($entity);
     }
 
     public function informationForEdit(int $pageId): PageInterface
@@ -72,7 +75,14 @@ class Pages
 
         Cache::forget("page.{$dto->getUrl()}");
 
-        return $this->pageRepository->update($dto->getId(), $dto);
+        /** @var PageInterface $entity */
+        $entity = $this->make(PageInterface::class);
+        $entity
+            ->setTitle($dto->getTitle())
+            ->setContent($dto->getContent())
+            ->setUrl($dto->getUrl());
+
+        return $this->pageRepository->update($dto->getId(), $entity);
     }
 
     public function delete(int $pageId): bool

@@ -2,6 +2,7 @@
 declare(strict_types = 1);
 
 use App\DataTransferObjects\Server;
+use App\Models\Category\CategoryInterface;
 use App\Models\Server\ServerInterface;
 use App\Repositories\Category\CategoryRepositoryInterface;
 use App\Repositories\Server\ServerRepositoryInterface;
@@ -14,6 +15,8 @@ use Illuminate\Database\Seeder;
  */
 class ServersSeeder extends Seeder
 {
+    use \App\Traits\ContainerTrait;
+
     /**
      * @var ServerRepositoryInterface
      */
@@ -52,7 +55,7 @@ class ServersSeeder extends Seeder
     {
         /** @var ServerInterface $server */
         $server = $this->serverRepository->create(
-            (new Server())
+            $this->make(ServerInterface::class)
                 ->setId(1)
                 ->setName('MMO')
                 ->setEnabled(true)
@@ -63,19 +66,19 @@ class ServersSeeder extends Seeder
         );
 
         $this->categoryRepository->create(
-            (new \App\DataTransferObjects\Category())
+            $this->make(CategoryInterface::class)
                 ->setId(1)
                 ->setName(__('seeding.categories.1'))
                 ->setServerId($server->getId())
         );
         $this->categoryRepository->create(
-            (new \App\DataTransferObjects\Category())
+            $this->make(CategoryInterface::class)
                 ->setId(2)
                 ->setName(__('seeding.categories.2'))
                 ->setServerId($server->getId())
         );
         $this->categoryRepository->create(
-            (new \App\DataTransferObjects\Category())
+            $this->make(CategoryInterface::class)
                 ->setId(5)
                 ->setName(__('seeding.categories.5'))
                 ->setServerId($server->getId())
@@ -86,7 +89,7 @@ class ServersSeeder extends Seeder
     {
         /** @var ServerInterface $server */
         $server = $this->serverRepository->create(
-            (new Server())
+            $this->make(ServerInterface::class)
                 ->setId(2)
                 ->setName('Hi-Tech (PvP)')
                 ->setEnabled(true)
@@ -97,7 +100,7 @@ class ServersSeeder extends Seeder
         );
 
         $this->categoryRepository->create(
-            (new \App\DataTransferObjects\Category())
+            $this->make(CategoryInterface::class)
                 ->setId(3)
                 ->setName(__('seeding.categories.3'))
                 ->setServerId($server->getId())
@@ -108,7 +111,7 @@ class ServersSeeder extends Seeder
     {
         /** @var ServerInterface $server */
         $server = $this->serverRepository->create(
-            (new Server())
+            $this->make(ServerInterface::class)
                 ->setId(3)
                 ->setName('Hi-Tech (PvE)')
                 ->setEnabled(true)
@@ -119,7 +122,7 @@ class ServersSeeder extends Seeder
         );
 
         $this->categoryRepository->create(
-            (new \App\DataTransferObjects\Category())
+            $this->make(CategoryInterface::class)
                 ->setId(4)
                 ->setName(__('seeding.categories.4'))
                 ->setServerId($server->getId())

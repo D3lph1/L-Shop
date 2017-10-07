@@ -26,6 +26,7 @@ return [
                 'fail' => 'Failed to create server.',
                 'category' => [
                     'add' => [
+                        'empty' => 'Category name must not be empty.',
                         'success' => 'The category ":name" is created.',
                         'fail' => 'Unable to create category.'
                     ],

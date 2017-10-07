@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Models\Persistence;
 
+use Carbon\Carbon;
 use Cartalyst\Sentinel\Persistences\EloquentPersistence as BasePersistence;
 
 /**
@@ -24,5 +25,37 @@ use Cartalyst\Sentinel\Persistences\EloquentPersistence as BasePersistence;
  */
 class EloquentPersistence extends BasePersistence implements PersistenceInterface
 {
-    //
+    public function setUserId(int $userId): PersistenceInterface
+    {
+        $this->user_id = $userId;
+
+        return $this;
+    }
+
+    public function getUserId(): int
+    {
+        return $this->user_id;
+    }
+
+    public function setCode(string $code): PersistenceInterface
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
+    public function getCode(): string
+    {
+        return $this->code;
+    }
+
+    public function getCreatedAt(): Carbon
+    {
+        return $this->created_at;
+    }
+
+    public function getUpdatedAt(): ?Carbon
+    {
+        return $this->updated_at;
+    }
 }

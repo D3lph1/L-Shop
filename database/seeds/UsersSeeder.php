@@ -49,7 +49,7 @@ class UsersSeeder extends Seeder
             ]
         ]);
 
-        $role->users()->attach($user);
+        $this->sentinel->getRoleRepository()->attachUser($role->getId(), $user->getId());
     }
 
     private function createUser(): void
@@ -71,6 +71,6 @@ class UsersSeeder extends Seeder
             ]
         ]);
 
-        $role->users()->attach($user);
+        $this->sentinel->getRoleRepository()->attachUser($role->getId(), $user->getId());
     }
 }

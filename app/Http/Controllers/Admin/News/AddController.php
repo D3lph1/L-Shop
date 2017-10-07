@@ -6,6 +6,8 @@ namespace App\Http\Controllers\Admin\News;
 use App\DataTransferObjects\News as DTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveAddedNewsRequest;
+use App\Models\News\NewsInterface;
+use App\Traits\ContainerTrait;
 use App\TransactionScripts\Shop\News;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -19,6 +21,8 @@ use Illuminate\View\View;
  */
 class AddController extends Controller
 {
+    use ContainerTrait;
+
     /**
      * Render the add news page.
      */
@@ -34,12 +38,12 @@ class AddController extends Controller
      */
     public function save(SaveAddedNewsRequest $request, News $news): RedirectResponse
     {
-        $dto = (new DTO())
+        $entity = $this->make(NewsInterface::class)
             ->setTitle($request->get('news_title'))
             ->setContent($request->get('news_content'))
             ->setUserId($this->sentinel->getUser()->getUserId());
 
-        if ($news->create($dto)) {
+        if ($news->create($entity)) {
             $this->msg->success(__('messages.admin.news.add.success'));
 
             return response()->redirectToRoute('admin.news.list', ['server' => $request->get('currentServer')->id]);

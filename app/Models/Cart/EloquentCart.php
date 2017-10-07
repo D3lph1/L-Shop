@@ -78,9 +78,11 @@ class EloquentCart extends Model implements CartInterface
         return $this->id;
     }
 
-    public function getServerId(): int
+    public function setPlayer(string $player): CartInterface
     {
-        return $this->server;
+        $this->player = $player;
+
+        return $this;
     }
 
     public function getPlayer(): string
@@ -88,9 +90,23 @@ class EloquentCart extends Model implements CartInterface
         return $this->player;
     }
 
+    public function setType(string $type): CartInterface
+    {
+        $this->type = $type;
+
+        return $this;
+    }
+
     public function getType(): string
     {
         return $this->type;
+    }
+
+    public function setItem(string $item): CartInterface
+    {
+        $this->item = $item;
+
+        return $this;
     }
 
     public function getItem(): string
@@ -98,9 +114,23 @@ class EloquentCart extends Model implements CartInterface
         return $this->item;
     }
 
+    public function setAmount(int $amount): CartInterface
+    {
+        $this->amount = $amount;
+
+        return $this;
+    }
+
     public function getAmount(): int
     {
         return $this->amount;
+    }
+
+    public function setExtra(string $extra): CartInterface
+    {
+        $this->extra = $extra;
+
+        return $this;
     }
 
     public function getExtra(): ?string
@@ -108,12 +138,26 @@ class EloquentCart extends Model implements CartInterface
         return $this->extra;
     }
 
+    public function setItemId(int $id): CartInterface
+    {
+        $this->item_id = $id;
+
+        return $this;
+    }
+
     public function getItemId(): int
     {
         return $this->item_id;
     }
 
-    public function getServer(): int
+    public function setServerId(int $id): CartInterface
+    {
+        $this->server = $id;
+
+        return $this;
+    }
+
+    public function getServerId(): int
     {
         return $this->server;
     }

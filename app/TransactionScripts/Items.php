@@ -9,6 +9,7 @@ use App\Models\Item\ItemInterface;
 use App\Repositories\Item\ItemRepositoryInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Services\Items\ImageMode;
+use App\Traits\ContainerTrait;
 use DB;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use Illuminate\Http\UploadedFile;
@@ -21,6 +22,8 @@ use Illuminate\Http\UploadedFile;
  */
 class Items
 {
+    use ContainerTrait;
+
     /**
      * @var ItemRepositoryInterface
      */
@@ -74,7 +77,17 @@ class Items
             $dto->setImageName(null);
         }
 
-        return $this->itemRepository->create($dto);
+        /** @var ItemInterface $entity */
+        $entity = $this->make(ItemInterface::class);
+        $entity
+            ->setName($dto->getName())
+            ->setDescription($dto->getDescription())
+            ->setType($dto->getType())
+            ->setImage($dto->getImage() ? $dto->getImage()->getFilename() : null)
+            ->setItem($dto->getItem())
+            ->setExtra($dto->getExtra());
+
+        return $this->itemRepository->create($entity);
     }
 
     public function update(int $itemId, Item $dto): bool

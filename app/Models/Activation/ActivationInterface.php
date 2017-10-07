@@ -14,5 +14,23 @@ use Cartalyst\Sentinel\Activations\ActivationInterface as BaseActivationInterfac
  */
 interface ActivationInterface extends BaseActivationInterface
 {
+    public function getId(): int;
+
+    public function setUserId(int $userId): ActivationInterface;
+
+    public function getUserId(): int;
+
+    public function setCode(string $code): ActivationInterface;
+
+    public function getCode(): string;
+
+    public function setCompleted(bool $isCompleted): ActivationInterface;
+
+    public function isCompleted(): bool;
+
     public function getCompletedAt(): ?Carbon;
+
+    public function getCreatedAt(): Carbon;
+
+    public function getUpdatedAt(): ?Carbon;
 }

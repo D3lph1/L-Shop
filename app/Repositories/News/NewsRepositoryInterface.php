@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace App\Repositories\News;
 
-use App\DataTransferObjects\News;
 use App\Models\News\NewsInterface;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -16,9 +15,9 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
  */
 interface NewsRepositoryInterface extends BaseRepositoryInterface
 {
-    public function create(News $dto): ?NewsInterface;
+    public function create(NewsInterface $entity): NewsInterface;
 
-    public function update(int $id, News $dto): bool;
+    public function update(int $id, NewsInterface $entity): bool;
 
     public function delete(int $id): bool;
 

@@ -18,7 +18,11 @@ interface RoleInterface
 
     public function getId(): int;
 
+    public function setSlug(string $slug): RoleInterface;
+
     public function getSlug(): string;
+
+    public function setName(string $name): RoleInterface;
 
     public function getName(): string;
 

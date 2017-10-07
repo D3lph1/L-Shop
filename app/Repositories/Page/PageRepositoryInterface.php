@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace App\Repositories\Page;
 
-use App\DataTransferObjects\Page;
 use App\Models\Page\PageInterface;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -16,9 +15,9 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
  */
 interface PageRepositoryInterface extends BaseRepositoryInterface
 {
-    public function create(Page $dto): PageInterface;
+    public function create(PageInterface $entity): PageInterface;
 
-    public function update(int $id, Page $dto): bool;
+    public function update(int $id, PageInterface $entity): bool;
 
     public function paginated(): LengthAwarePaginator;
 

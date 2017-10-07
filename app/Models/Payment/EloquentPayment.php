@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Models\Payment;
 
+use App\Exceptions\InvalidArgumentTypeException;
 use App\Models\User\EloquentUser;
 use App\Models\User\UserInterface;
 use Carbon\Carbon;
@@ -66,6 +67,13 @@ class EloquentPayment extends Model implements PaymentInterface
         return $this->belongsTo(EloquentUser::class, 'user_id', 'id');
     }
 
+    public function setService(string $serviceName): PaymentInterface
+    {
+        $this->service = $serviceName;
+
+        return $this;
+    }
+
     public function getUser(): UserInterface
     {
         return $this->user;
@@ -81,9 +89,36 @@ class EloquentPayment extends Model implements PaymentInterface
         return $this->service;
     }
 
+    public function setProducts($products): PaymentInterface
+    {
+        if (is_array($products)) {
+            $this->products = is_null($products) ? null : json_encode($products);
+        } else if (is_string($products)) {
+            $this->products = $products;
+        } else if (is_null($products)) {
+            $this->products = null;
+        } else {
+            throw new InvalidArgumentTypeException(['array', 'string'], $products);
+        }
+
+        return $this;
+    }
+
     public function getProducts(): ?array
     {
         return is_null($this->products) ? null : json_decode($this->products, true);
+    }
+
+    public function getProductsAsString(): ?string
+    {
+        return $this->products;
+    }
+
+    public function setCost(float $cost): PaymentInterface
+    {
+        $this->cost = $cost;
+
+        return $this;
     }
 
     public function getCost(): float
@@ -91,9 +126,23 @@ class EloquentPayment extends Model implements PaymentInterface
         return $this->cost;
     }
 
+    public function setUserId(?int $userId): PaymentInterface
+    {
+        $this->user_id = $userId;
+
+        return $this;
+    }
+
     public function getUserId(): ?int
     {
         return $this->user_id;
+    }
+
+    public function setUsername(?string $username): PaymentInterface
+    {
+        $this->username = $username;
+
+        return $this;
     }
 
     public function getUsername(): ?string
@@ -101,14 +150,35 @@ class EloquentPayment extends Model implements PaymentInterface
         return $this->username;
     }
 
+    public function setServerId(int $server_id): PaymentInterface
+    {
+        $this->server_id = $server_id;
+
+        return $this;
+    }
+
     public function getServerId(): int
     {
         return $this->server_id;
     }
 
-    public function getIp(): ?string
+    public function setIp(string $ip): PaymentInterface
+    {
+        $this->ip = $ip;
+
+        return $this;
+    }
+
+    public function getIp(): string
     {
         return $this->ip;
+    }
+
+    public function setCompleted(bool $isCompleted): PaymentInterface
+    {
+        $this->completed = $isCompleted;
+
+        return $this;
     }
 
     public function isCompleted(): bool

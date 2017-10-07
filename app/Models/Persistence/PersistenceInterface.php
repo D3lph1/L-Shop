@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace App\Models\Persistence;
 
+use Carbon\Carbon;
+
 /**
  * Interface PersistenceInterface
  *
@@ -11,5 +13,15 @@ namespace App\Models\Persistence;
  */
 interface PersistenceInterface extends \Cartalyst\Sentinel\Persistences\PersistenceInterface
 {
-    //
+    public function setUserId(int $userId): PersistenceInterface;
+
+    public function getUserId(): int;
+
+    public function setCode(string $code): PersistenceInterface;
+
+    public function getCode(): string ;
+
+    public function getCreatedAt(): Carbon;
+
+    public function getUpdatedAt(): ?Carbon;
 }

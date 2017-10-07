@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace App\Repositories\Product;
 
-use App\DataTransferObjects\Product;
 use App\Models\Product\ProductInterface;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -16,9 +15,9 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
  */
 interface ProductRepositoryInterface extends BaseRepositoryInterface
 {
-    public function create(Product $dto): ProductInterface;
+    public function create(ProductInterface $entity): ProductInterface;
 
-    public function update(int $productId, Product $dto): bool;
+    public function update(int $productId, ProductInterface $entity): bool;
 
     public function exists(int $id): bool;
 

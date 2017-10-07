@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace App\Repositories\Page;
 
-use App\DataTransferObjects\Page;
 use App\Models\Page\EloquentPage;
 use App\Models\Page\PageInterface;
 use Cache;
@@ -17,21 +16,22 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
  */
 class EloquentPageRepository implements PageRepositoryInterface
 {
-    public function create(Page $dto): PageInterface
+    public function create(PageInterface $entity): PageInterface
     {
-        return EloquentPage::create([
-            'title' => $dto->getTitle(),
-            'content' => $dto->getContent(),
-            'url' => $dto->getUrl()
-        ]);
+        return EloquentPage::create(trim_nullable([
+            'id' => $entity->getId(),
+            'title' => $entity->getTitle(),
+            'content' => $entity->getContent(),
+            'url' => $entity->getUrl()
+        ]));
     }
 
-    public function update(int $id, Page $dto): bool
+    public function update(int $id, PageInterface $entity): bool
     {
         return (bool)EloquentPage::where('id', $id)->update([
-            'title' => $dto->getTitle(),
-            'content' => $dto->getContent(),
-            'url' => $dto->getUrl()
+            'title' => $entity->getTitle(),
+            'content' => $entity->getContent(),
+            'url' => $entity->getUrl()
         ]);
     }
 

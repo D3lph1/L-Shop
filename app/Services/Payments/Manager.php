@@ -13,6 +13,7 @@ use App\Repositories\Payment\PaymentRepositoryInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
 use App\Services\Items\Type;
 use App\Services\User\Balance;
+use App\Traits\ContainerTrait;
 use Cartalyst\Sentinel\Sentinel;
 
 /**
@@ -23,6 +24,8 @@ use Cartalyst\Sentinel\Sentinel;
  */
 class Manager
 {
+    use ContainerTrait;
+
     const COUNT_TYPE_STACKS = 0;
 
     const COUNT_TYPE_NUMBER = 1;
@@ -143,8 +146,11 @@ class Manager
      */
     private function insert(bool $isQuick): PaymentInterface
     {
+        /** @var PaymentInterface $entity */
+        $entity = $this->make(PaymentInterface::class);
+
         return $this->paymentRepository->create(
-            (new Payment())
+            $entity
                 ->setProducts($this->products)
                 ->setCost($this->cost)
                 ->setUserId(is_int($this->username) ? $this->username : null)

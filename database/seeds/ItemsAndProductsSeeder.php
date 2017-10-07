@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 use App\DataTransferObjects\Item;
 use App\DataTransferObjects\Product;
+use App\Models\Item\ItemInterface;
+use App\Models\Product\ProductInterface;
 use App\Repositories\Item\ItemRepositoryInterface;
 use App\Repositories\Product\ProductRepositoryInterface;
 use Illuminate\Database\Seeder;
@@ -14,6 +16,8 @@ use Illuminate\Database\Seeder;
  */
 class ItemsAndProductsSeeder extends Seeder
 {
+    use \App\Traits\ContainerTrait;
+
     /**
      * @var ItemRepositoryInterface
      */
@@ -46,9 +50,9 @@ class ItemsAndProductsSeeder extends Seeder
 
     private function createGrassBlock(): void
     {
-        /** @var \App\Models\Item\ItemInterface $item */
+        /** @var ItemInterface $item */
         $item = $this->itemRepository->create(
-            (new Item())
+            $this->make(ItemInterface::class)
                 ->setId(5)
                 ->setName(__('seeding.items.grass'))
                 ->setDescription('')
@@ -59,7 +63,7 @@ class ItemsAndProductsSeeder extends Seeder
         );
 
         $this->productRepository->create(
-            (new Product())
+            $this->make(ProductInterface::class)
                 ->setId(14)
                 ->setPrice(2)
                 ->setItemId($item->getId())
@@ -72,20 +76,20 @@ class ItemsAndProductsSeeder extends Seeder
 
     private function createTnt(): void
     {
-        /** @var \App\Models\Item\ItemInterface $item */
+        /** @var ItemInterface $item */
         $item = $this->itemRepository->create(
-            (new Item())
+            $this->make(ItemInterface::class)
                 ->setId(6)
                 ->setName(__('seeding.items.tnt'))
                 ->setDescription('')
                 ->setType('item')
                 ->setItem('46')
-                ->setImageName('784a013771bdf825d1cf26b49897a605.png')
+                ->setImage('784a013771bdf825d1cf26b49897a605.png')
                 ->setExtra(null)
         );
 
         $this->productRepository->create(
-            (new Product())
+            $this->make(ProductInterface::class)
                 ->setId(15)
                 ->setPrice(20)
                 ->setItemId($item->getId())
@@ -98,20 +102,20 @@ class ItemsAndProductsSeeder extends Seeder
 
     private function createChest(): void
     {
-        /** @var \App\Models\Item\ItemInterface $item */
+        /** @var ItemInterface $item */
         $item = $this->itemRepository->create(
-            (new Item())
+            $this->make(ItemInterface::class)
                 ->setId(7)
                 ->setName(__('seeding.items.chest'))
                 ->setDescription('')
                 ->setType('item')
                 ->setItem('54')
-                ->setImageName('d6c6adf53d0145708ec54a41e8a4e3d8.png')
+                ->setImage('d6c6adf53d0145708ec54a41e8a4e3d8.png')
                 ->setExtra(null)
         );
 
         $this->productRepository->create(
-            (new Product())
+            $this->make(ProductInterface::class)
                 ->setId(16)
                 ->setPrice(15)
                 ->setItemId($item->getId())
@@ -124,20 +128,20 @@ class ItemsAndProductsSeeder extends Seeder
 
     private function createFurnace(): void
     {
-        /** @var \App\Models\Item\ItemInterface $item */
+        /** @var ItemInterface $item */
         $item = $this->itemRepository->create(
-            (new Item())
+            $this->make(ItemInterface::class)
                 ->setId(8)
                 ->setName(__('seeding.items.furnace'))
                 ->setDescription('')
                 ->setType('item')
                 ->setItem('61')
-                ->setImageName('4a69519aa46ee6b5b15bab8abd5139f3.png')
+                ->setImage('4a69519aa46ee6b5b15bab8abd5139f3.png')
                 ->setExtra(null)
         );
 
         $this->productRepository->create(
-            (new Product())
+            $this->make(ProductInterface::class)
                 ->setId(17)
                 ->setPrice(15)
                 ->setItemId($item->getId())
@@ -150,20 +154,20 @@ class ItemsAndProductsSeeder extends Seeder
 
     private function createSword(): void
     {
-        /** @var \App\Models\Item\ItemInterface $item */
+        /** @var ItemInterface $item */
         $item = $this->itemRepository->create(
-            (new Item())
+            $this->make(ItemInterface::class)
                 ->setId(9)
                 ->setName(__('seeding.items.diamond_sword'))
                 ->setDescription('')
                 ->setType('item')
                 ->setItem('276')
-                ->setImageName('9d8feda602d70231f0297a3b7e436d4b.png')
+                ->setImage('9d8feda602d70231f0297a3b7e436d4b.png')
                 ->setExtra(null)
         );
 
         $this->productRepository->create(
-            (new Product())
+            $this->make(ProductInterface::class)
                 ->setId(18)
                 ->setPrice(67)
                 ->setItemId($item->getId())
@@ -176,20 +180,20 @@ class ItemsAndProductsSeeder extends Seeder
 
     private function createHelmet(): void
     {
-        /** @var \App\Models\Item\ItemInterface $item */
+        /** @var ItemInterface $item */
         $item = $this->itemRepository->create(
-            (new Item())
+            $this->make(ItemInterface::class)
                 ->setId(10)
                 ->setName(__('seeding.items.diamond_helmet'))
                 ->setDescription('')
                 ->setType('item')
                 ->setItem('310')
-                ->setImageName('d2714c56c81bcc4ff35798832226967f.png')
+                ->setImage('d2714c56c81bcc4ff35798832226967f.png')
                 ->setExtra(null)
         );
 
         $this->productRepository->create(
-            (new Product())
+            $this->make(ProductInterface::class)
                 ->setId(19)
                 ->setPrice(54)
                 ->setItemId($item->getId())
@@ -202,20 +206,20 @@ class ItemsAndProductsSeeder extends Seeder
 
     private function createVip(): void
     {
-        /** @var \App\Models\Item\ItemInterface $item */
+        /** @var ItemInterface $item */
         $item = $this->itemRepository->create(
-            (new Item())
+            $this->make(ItemInterface::class)
                 ->setId(11)
                 ->setName(__('seeding.items.vip'))
                 ->setDescription('')
                 ->setType('permgroup')
                 ->setItem('vip')
-                ->setImageName('f0c9755f2685d55b7540c941b6f29ff9.png')
+                ->setImage('f0c9755f2685d55b7540c941b6f29ff9.png')
                 ->setExtra(null)
         );
 
         $this->productRepository->create(
-            (new Product())
+            $this->make(ProductInterface::class)
                 ->setId(20)
                 ->setPrice(15)
                 ->setItemId($item->getId())
@@ -226,7 +230,7 @@ class ItemsAndProductsSeeder extends Seeder
         );
 
         $this->productRepository->create(
-            (new Product())
+            $this->make(ProductInterface::class)
                 ->setId(21)
                 ->setPrice(100)
                 ->setItemId($item->getId())

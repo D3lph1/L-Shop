@@ -65,9 +65,23 @@ class EloquentServer extends Model implements ServerInterface
         return $this->categories;
     }
 
-    public function getId(): int
+    public function setId(int $id): ServerInterface
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setName(string $name): ServerInterface
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     public function getName(): string
@@ -75,9 +89,23 @@ class EloquentServer extends Model implements ServerInterface
         return $this->name;
     }
 
+    public function setIp(?string $ip): ServerInterface
+    {
+        $this->ip = $ip;
+
+        return $this;
+    }
+
     public function getIp(): ?string
     {
         return $this->ip;
+    }
+
+    public function setPort(?int $port): ServerInterface
+    {
+        $this->port = $port;
+
+        return $this;
     }
 
     public function getPort(): ?int
@@ -85,14 +113,35 @@ class EloquentServer extends Model implements ServerInterface
         return $this->port;
     }
 
+    public function setPassword(?string $password): ServerInterface
+    {
+        $this->password = $password;
+
+        return $this;
+    }
+
     public function getPassword(): ?string
     {
         return $this->password;
     }
 
+    public function setEnabled(bool $isEnabled): ServerInterface
+    {
+        $this->enabled = $isEnabled;
+
+        return $this;
+    }
+
     public function isEnabled(): bool
     {
         return (bool)$this->enabled;
+    }
+
+    public function setMonitoringEnabled(bool $isMonitoringEnabled): ServerInterface
+    {
+        $this->monitoring_enabled = $isMonitoringEnabled;
+
+        return $this;
     }
 
     public function isMonitoringEnabled(): bool

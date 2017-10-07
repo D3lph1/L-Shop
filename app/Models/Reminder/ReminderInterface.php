@@ -9,9 +9,15 @@ interface ReminderInterface
 {
     public function getId(): int;
 
+    public function setUserId(int $userId): ReminderInterface;
+
     public function getUserId(): int;
 
+    public function setCode(string $code): ReminderInterface;
+
     public function getCode(): string;
+
+    public function setCompleted(bool $isCompleted): ReminderInterface;
 
     public function isCompleted(): bool;
 

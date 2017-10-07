@@ -18,18 +18,18 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class EloquentPaymentRepository implements PaymentRepositoryInterface
 {
-    public function create(Payment $dto): ?PaymentInterface
+    public function create(PaymentInterface $entity): PaymentInterface
     {
-        return EloquentPayment::create(trim_nullable([
-            'service' => $dto->getService(),
-            'products' => $dto->getProducts(),
-            'cost' => $dto->getCost(),
-            'user_id' => $dto->getUserId(),
-            'username' => $dto->getUsername(),
-            'server_id' => $dto->getServerId(),
-            'ip' => $dto->getIp(),
-            'completed' => $dto->isCompleted()
-        ]));
+        return EloquentPayment::create([
+            'service' => $entity->getService(),
+            'products' => $entity->getProductsAsString(),
+            'cost' => $entity->getCost(),
+            'user_id' => $entity->getUserId(),
+            'username' => $entity->getUsername(),
+            'server_id' => $entity->getServerId(),
+            'ip' => $entity->getIp(),
+            'completed' => $entity->isCompleted()
+        ]);
     }
 
     public function find(int $id, array $columns): ?PaymentInterface

@@ -16,7 +16,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
  */
 interface ItemRepositoryInterface extends BaseRepositoryInterface
 {
-    public function create(Item $dto): ItemInterface;
+    public function create(ItemInterface $entity): ItemInterface;
 
     public function find(int $id, array $columns): ?ItemInterface;
 

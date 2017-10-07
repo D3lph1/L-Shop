@@ -57,9 +57,23 @@ class EloquentItem extends Model implements ItemInterface
         return $this->hasMany(EloquentProduct::class, 'item_id', 'id');
     }
 
-    public function getId(): int
+    public function setId(int $id): ItemInterface
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setName(string $name): ItemInterface
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     public function getName(): string
@@ -67,9 +81,23 @@ class EloquentItem extends Model implements ItemInterface
         return $this->name;
     }
 
+    public function setDescription(?string $description): ItemInterface
+    {
+        $this->description = $description;
+
+        return $this;
+    }
+
     public function getDescription(): ?string
     {
         return $this->description;
+    }
+
+    public function setType(string $type): ItemInterface
+    {
+        $this->type = $type;
+
+        return $this;
     }
 
     public function getType(): string
@@ -77,14 +105,35 @@ class EloquentItem extends Model implements ItemInterface
         return $this->type;
     }
 
+    public function setItem(string $item): ItemInterface
+    {
+        $this->item = $item;
+
+        return $this;
+    }
+
     public function getItem(): string
     {
         return $this->item;
     }
 
+    public function setImage(?string $image): ItemInterface
+    {
+        $this->image = $image;
+
+        return $this;
+    }
+
     public function getImage(): ?string
     {
         return $this->image;
+    }
+
+    public function setExtra(?string $extra): ItemInterface
+    {
+        $this->extra = $extra;
+
+        return $this;
     }
 
     public function getExtra(): ?string

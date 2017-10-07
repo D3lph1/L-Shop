@@ -18,21 +18,22 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class EloquentNewsRepository implements NewsRepositoryInterface
 {
-    public function create(News $dto): ?NewsInterface
+    public function create(NewsInterface $entity): NewsInterface
     {
-        return EloquentNews::create([
-            'title' => $dto->getTitle(),
-            'content' => $dto->getContent(),
-            'user_id' => $dto->getUserId()
-        ]);
+        return EloquentNews::create(trim_nullable([
+            'id' => $entity->getId(),
+            'title' => $entity->getTitle(),
+            'content' => $entity->getContent(),
+            'user_id' => $entity->getUserId()
+        ]));
     }
 
-    public function update(int $id, News $dto): bool
+    public function update(int $id, NewsInterface $entity): bool
     {
         return EloquentNews::where('id', $id)->update([
-            'title' => $dto->getTitle(),
-            'content' => $dto->getContent(),
-            'user_id' => $dto->getUserId()
+            'title' => $entity->getTitle(),
+            'content' => $entity->getContent(),
+            'user_id' => $entity->getUserId()
         ]);
     }
 

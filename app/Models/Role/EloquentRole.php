@@ -55,9 +55,23 @@ class EloquentRole extends BaseRole implements RoleInterface
         return $this->id;
     }
 
+    public function setSlug(string $slug): RoleInterface
+    {
+        $this->slug = $slug;
+
+        return $this;
+    }
+
     public function getSlug(): string
     {
         return $this->slug;
+    }
+
+    public function setName(string $name): RoleInterface
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     public function getName(): string

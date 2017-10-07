@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 use App\DataTransferObjects\Payment;
 use App\Repositories\Payment\PaymentRepositoryInterface;
+use App\Traits\ContainerTrait;
 use Illuminate\Database\Seeder;
 
 /**
@@ -12,6 +13,8 @@ use Illuminate\Database\Seeder;
  */
 class PaymentsSeeder extends Seeder
 {
+    use ContainerTrait;
+
     /**
      * @var PaymentRepositoryInterface
      */
@@ -29,7 +32,7 @@ class PaymentsSeeder extends Seeder
         }
 
         $this->paymentRepository->create(
-            (new Payment())
+            $this->make(\App\Models\Payment\PaymentInterface::class)
                 ->setService('Database seeder')
                 ->setProducts([
                     14 => 64,
@@ -43,7 +46,7 @@ class PaymentsSeeder extends Seeder
         );
 
         $this->paymentRepository->create(
-            (new Payment())
+            $this->make(\App\Models\Payment\PaymentInterface::class)
                 ->setService('Database seeder')
                 ->setProducts([
                     14 => 64,
@@ -58,7 +61,7 @@ class PaymentsSeeder extends Seeder
         );
 
         $this->paymentRepository->create(
-            (new Payment())
+            $this->make(\App\Models\Payment\PaymentInterface::class)
                 ->setProducts([
                     20 => 365,
                     21 => 0

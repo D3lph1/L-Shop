@@ -31,7 +31,7 @@ class RobokassaTest extends TestCase
         $balance = $user->getBalance();
 
         $payment = $paymentRepository->create(
-            (new Payment())
+            $this->make(PaymentInterface::class)
                 ->setCost(33)
                 ->setUserId($userId)
                 ->setServerId(1)
@@ -56,7 +56,7 @@ class RobokassaTest extends TestCase
         $paymentRepository = $this->make(PaymentRepositoryInterface::class);
 
         $payment = $paymentRepository->create(
-            (new Payment())
+            $this->make(PaymentInterface::class)
                 ->setProducts([14 => 64, 16 => 128])
                 ->setCost(55)
                 ->setUserId(1)

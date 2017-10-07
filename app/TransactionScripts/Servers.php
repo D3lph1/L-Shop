@@ -4,20 +4,35 @@ declare(strict_types = 1);
 namespace App\TransactionScripts;
 
 use App\DataTransferObjects\Admin\EditedServer;
-use App\DataTransferObjects\Category;
 use App\DataTransferObjects\Server;
 use App\Exceptions\Server\AttemptToDeleteTheLastCategoryException;
 use App\Exceptions\Server\AttemptToDeleteTheLastServerException;
 use App\Exceptions\Server\NotFoundException;
+use App\Models\Category\CategoryInterface;
+use App\Models\Server\ServerInterface;
 use App\Repositories\Category\CategoryRepositoryInterface;
-use App\Repositories\Server\ServerInterface;
 use App\Repositories\Server\ServerRepositoryInterface;
+use App\Traits\ContainerTrait;
 use Illuminate\Support\Facades\DB;
 
+/**
+ * Class Servers
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\TransactionScripts
+ */
 class Servers
 {
+    use ContainerTrait;
+
+    /**
+     * @var ServerRepositoryInterface
+     */
     private $serverRepository;
 
+    /**
+     * @var CategoryRepositoryInterface
+     */
     private $categoryRepository;
 
     public function __construct(ServerRepositoryInterface $serverRepository, CategoryRepositoryInterface $categoryRepository)
@@ -29,11 +44,25 @@ class Servers
     public function createServer(Server $dto)
     {
         DB::transaction(function () use ($dto) {
-            $server = $this->serverRepository->create($dto);
+            /** @var ServerInterface $entity */
+            $entity = $this->make(ServerInterface::class);
+            $entity
+                ->setName($dto->getName())
+                ->setEnabled($dto->isEnabled())
+                ->setIp($dto->getIp())
+                ->setPort($dto->getPort())
+                ->setPassword($dto->getPassword())
+                ->setMonitoringEnabled($dto->isMonitoringEnabled());
+
+            $server = $this->serverRepository->create($entity);
 
             foreach ($dto->getCategories() as $category) {
-                $category->setServerId($server->getId());
-                $this->categoryRepository->create($category);
+                /** @var CategoryInterface $entity */
+                $entity = $this->make(CategoryInterface::class);
+                $entity
+                    ->setName($category->getName())
+                    ->setServerId($server->getId());
+                $this->categoryRepository->create($entity);
             }
         });
     }
@@ -41,10 +70,26 @@ class Servers
     public function updateServer(Server $dto)
     {
         DB::transaction(function () use ($dto) {
-            $this->serverRepository->update($dto->getId(), $dto);
+            /** @var ServerInterface $entity */
+            $entity = $this->make(ServerInterface::class);
+            $entity
+                ->setName($dto->getName())
+                ->setEnabled($dto->isEnabled())
+                ->setIp($dto->getIp())
+                ->setPort($dto->getPort())
+                ->setPassword($dto->getPassword())
+                ->setMonitoringEnabled($dto->isMonitoringEnabled());
+
+            $this->serverRepository->update($dto->getId(), $entity);
 
             foreach ($dto->getCategories() as $category) {
-                $this->categoryRepository->update($category->getId(), $category);
+                /** @var CategoryInterface $entity */
+                $entity = $this->make(CategoryInterface::class);
+                $entity
+                    ->setName($category->getName())
+                    ->setServerId($category->getServerId());
+
+                $this->categoryRepository->update($category->getId(), $entity);
             }
         });
     }
@@ -63,9 +108,9 @@ class Servers
         });
     }
 
-    public function createCategory(Category $dto): bool
+    public function createCategory(CategoryInterface $entity): bool
     {
-        return (bool)$this->categoryRepository->create($dto);
+        return (bool)$this->categoryRepository->create($entity);
     }
 
     public function removeCategory(int $categoryId, int $serverId): bool

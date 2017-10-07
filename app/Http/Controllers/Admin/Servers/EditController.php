@@ -10,6 +10,8 @@ use App\Exceptions\Server\AttemptToDeleteTheLastServerException;
 use App\Exceptions\Server\NotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveEditedServerRequest;
+use App\Models\Category\CategoryInterface;
+use App\Traits\ContainerTrait;
 use App\TransactionScripts\Servers;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
@@ -24,6 +26,8 @@ use Illuminate\View\View;
  */
 class EditController extends Controller
 {
+    use ContainerTrait;
+
     /**
      * @var Servers
      */
@@ -57,12 +61,20 @@ class EditController extends Controller
 
     public function addCategory(Request $request): JsonResponse
     {
-        $category = (new Category())
+        if (empty($request->get('category'))) {
+            $this->msg->danger(__('messages.admin.servers.add.category.add.empty'));
+
+            return json_response('fail');
+        }
+
+        /** @var CategoryInterface $entity */
+        $entity = $this->make(CategoryInterface::class);
+        $entity
             ->setName($request->get('category'))
             ->setServerId((int)$request->route('edit'));
 
-        if ($this->script->createCategory($category)) {
-            $this->msg->success(__('messages.admin.servers.add.category.add.success'));
+        if ($this->script->createCategory($entity)) {
+            $this->msg->success(__('messages.admin.servers.add.category.add.success', ['name' => $entity->getName()]));
 
             return json_response('success');
         }

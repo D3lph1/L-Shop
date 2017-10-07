@@ -13,17 +13,31 @@ use Carbon\Carbon;
  */
 interface ItemInterface
 {
-    public function getId(): int;
+    public function setId(int $id): ItemInterface;
+
+    public function getId(): ?int;
+
+    public function setName(string $name): ItemInterface;
 
     public function getName(): string;
 
+    public function setDescription(?string $description): ItemInterface;
+
     public function getDescription(): ?string;
+
+    public function setType(string $type): ItemInterface;
 
     public function getType(): string;
 
+    public function setItem(string $item): ItemInterface;
+
     public function getItem(): string;
 
+    public function setImage(?string $image): ItemInterface;
+
     public function getImage(): ?string;
+
+    public function setExtra(?string $extra): ItemInterface;
 
     public function getExtra(): ?string;
 

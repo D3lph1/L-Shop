@@ -1,9 +1,8 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Repositories\Item;
 
-use App\DataTransferObjects\Item;
 use App\Models\Item\EloquentItem;
 use App\Models\Item\ItemInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -16,15 +15,16 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
  */
 class EloquentItemRepository implements ItemRepositoryInterface
 {
-    public function create(Item $dto): ItemInterface
+    public function create(ItemInterface $entity): ItemInterface
     {
         return EloquentItem::create(trim_nullable([
-            'name' => $dto->getName(),
-            'description' => $dto->getDescription(),
-            'type' => $dto->getType(),
-            'item' => $dto->getItem(),
-            'image' => $dto->getImageName(),
-            'extra' => $dto->getExtra()
+            'id' => $entity->getId(),
+            'name' => $entity->getName(),
+            'description' => $entity->getDescription(),
+            'type' => $entity->getType(),
+            'item' => $entity->getItem(),
+            'image' => $entity->getImage(),
+            'extra' => $entity->getExtra()
         ]));
     }
 

@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace App\Repositories\Ban;
 
-use App\DataTransferObjects\Ban;
 use App\Models\Ban\BanInterface;
 use App\Models\Ban\EloquentBan;
 use Carbon\Carbon;
@@ -18,12 +17,12 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class EloquentBanRepository implements BanRepositoryInterface
 {
-    public function create(Ban $dto): BanInterface
+    public function create(BanInterface $entity): BanInterface
     {
         return EloquentBan::create([
-            'user_id' => $dto->getUserId(),
-            'until' => $dto->getUntil(),
-            'reason' => $dto->getReason()
+            'user_id' => $entity->getUserId(),
+            'until' => $entity->getUntil(),
+            'reason' => $entity->getReason()
         ]);
     }
 

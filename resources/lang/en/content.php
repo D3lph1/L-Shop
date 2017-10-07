@@ -660,7 +660,7 @@ return [
                     'table' => [
                         'image' => 'Image',
                         'name' => 'Name',
-                        'count' => 'Count',
+                        'count' => 'Count / Duration',
                     ]
                 ]
             ]

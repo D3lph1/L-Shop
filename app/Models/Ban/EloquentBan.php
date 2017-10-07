@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Models\Ban;
 
@@ -11,12 +11,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 /**
  * App\Models\Ban\EloquentBan
  *
- * @property int $id
- * @property int $user_id
- * @property \Carbon\Carbon|null $until
- * @property string|null $reason
- * @property \Carbon\Carbon|null $created_at
- * @property \Carbon\Carbon|null $updated_at
+ * @property int                                $id
+ * @property int                                $user_id
+ * @property \Carbon\Carbon|null                $until
+ * @property string|null                        $reason
+ * @property \Carbon\Carbon|null                $created_at
+ * @property \Carbon\Carbon|null                $updated_at
  * @property-read \App\Models\User\EloquentUser $user
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Ban\EloquentBan whereCreatedAt($value)
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Ban\EloquentBan whereId($value)
@@ -56,14 +56,35 @@ class EloquentBan extends Model implements BanInterface
         return $this->id;
     }
 
+    public function setUserId(int $id): BanInterface
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
     public function getUserId(): int
     {
         return $this->user_id;
     }
 
+    public function setUntil(Carbon $until): BanInterface
+    {
+        $this->until = $until;
+
+        return $this;
+    }
+
     public function getUntil(): ?Carbon
     {
         return $this->until;
+    }
+
+    public function setReason(string $reason): BanInterface
+    {
+        $this->reason = $reason;
+
+        return $this;
     }
 
     public function getReason(): ?string

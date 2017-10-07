@@ -20,19 +20,20 @@ class EloquentCategoryRepository implements CategoryRepositoryInterface
 {
     use ContainerTrait;
 
-    public function create(Category $category): CategoryInterface
+    public function create(CategoryInterface $entity): CategoryInterface
     {
         return EloquentCategory::create([
-            'name' => $category->getName(),
-            'server_id' => $category->getServerId()
+            'id' => $entity->getId(),
+            'name' => $entity->getName(),
+            'server_id' => $entity->getServerId()
         ]);
     }
 
-    public function update(int $categoryId, Category $dto): bool
+    public function update(int $categoryId, CategoryInterface $entity): bool
     {
         return (bool)EloquentCategory::where('id', $categoryId)->update([
-            'name' => $dto->getName(),
-            'server_id' => $dto->getServerId()
+            'name' => $entity->getName(),
+            'server_id' => $entity->getServerId()
         ]);
     }
 

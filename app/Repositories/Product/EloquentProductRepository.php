@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace App\Repositories\Product;
 
-use App\DataTransferObjects\Product;
 use App\Models\Product\EloquentProduct;
 use App\Models\Product\ProductInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -17,29 +16,29 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class EloquentProductRepository implements ProductRepositoryInterface
 {
-    public function create(Product $dto): ProductInterface
+    public function create(ProductInterface $entity): ProductInterface
     {
         return EloquentProduct::create(trim_nullable([
-            'id' => $dto->getId(),
-            'price' => $dto->getPrice(),
-            'item_id' => $dto->getItemId(),
-            'server_id' => $dto->getServerId(),
-            'stack' => $dto->getStack(),
-            'category_id' => $dto->getCategoryId(),
-            'sort_priority' => $dto->getSortPriority()
+            'id' => $entity->getId(),
+            'price' => $entity->getPrice(),
+            'item_id' => $entity->getItemId(),
+            'server_id' => $entity->getServerId(),
+            'stack' => $entity->getStack(),
+            'category_id' => $entity->getCategoryId(),
+            'sort_priority' => $entity->getSortPriority()
         ]));
     }
 
-    public function update(int $productId, Product $dto): bool
+    public function update(int $productId, ProductInterface $entity): bool
     {
         return (bool)EloquentProduct::where('id', $productId)
             ->update([
-                'price' => $dto->getPrice(),
-                'item_id' => $dto->getItemId(),
-                'server_id' => $dto->getServerId(),
-                'stack' => $dto->getStack(),
-                'category_id' => $dto->getCategoryId(),
-                'sort_priority' => $dto->getSortPriority(),
+                'price' => $entity->getPrice(),
+                'item_id' => $entity->getItemId(),
+                'server_id' => $entity->getServerId(),
+                'stack' => $entity->getStack(),
+                'category_id' => $entity->getCategoryId(),
+                'sort_priority' => $entity->getSortPriority(),
             ]);
     }
 

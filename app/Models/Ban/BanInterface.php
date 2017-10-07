@@ -15,9 +15,15 @@ interface BanInterface
 {
     public function getId(): int;
 
+    public function setUserId(int $id): BanInterface;
+
     public function getUserId(): int;
 
+    public function setUntil(Carbon $until): BanInterface;
+
     public function getUntil(): ?Carbon;
+
+    public function setReason(string $reason): BanInterface;
 
     public function getReason(): ?string;
 }

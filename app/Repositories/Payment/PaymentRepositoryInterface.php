@@ -16,7 +16,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
  */
 interface PaymentRepositoryInterface extends BaseRepositoryInterface
 {
-    public function create(Payment $dto): ?PaymentInterface;
+    public function create(PaymentInterface $entity): PaymentInterface;
 
     public function find(int $id, array $columns): ?PaymentInterface;
 

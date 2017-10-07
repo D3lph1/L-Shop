@@ -98,7 +98,7 @@ class BuyTest extends TestCase
     private function buy($productId, $count, $username = null)
     {
         /** @var $handler Catalog */
-        $handler = Container::getInstance()->make(Catalog::class);
+        $handler = $this->make(Catalog::class);
 
         return $handler->purchase($productId, $count, 1, '127.0.0.1', $username)->getData()->status;
     }

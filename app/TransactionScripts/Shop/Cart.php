@@ -33,7 +33,7 @@ class Cart
         $repository = $this->make(ProductRepositoryInterface::class);
         /** @var \App\Services\Cart $cart */
         $cart = $this->make(\App\Services\Cart::class);
-        $fromCart = $cart->products();
+        $fromCart = $cart->products() ?: [];
         $identifiers = array_keys($fromCart);
         $products = [];
 

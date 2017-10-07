@@ -45,14 +45,14 @@ class Products
         $this->itemRepository = $itemRepository;
     }
 
-    public function create(Product $dto): bool
+    public function create(ProductInterface $entity): bool
     {
-        if (!$this->itemRepository->exists($dto->getItemId())) {
-            throw new ItemNotFoundException($dto->getItemId());
+        if (!$this->itemRepository->exists($entity->getItemId())) {
+            throw new ItemNotFoundException($entity->getItemId());
         }
 
-        return (bool)DB::transaction(function () use ($dto) {
-            return $this->productRepository->create($dto);
+        return (bool)DB::transaction(function () use ($entity) {
+            return $this->productRepository->create($entity);
         });
     }
 
@@ -68,7 +68,7 @@ class Products
 
         return $this->productRepository->withCategoryWithServerPaginated(
             ['products.id', 'products.price', 'products.stack'],
-            ['items.image', 'items.name'],
+            ['items.image', 'items.name', 'items.type'],
             ['name'],
             ['name'],
             $orderBy,

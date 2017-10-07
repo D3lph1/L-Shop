@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace App\Repositories\Category;
 
-use App\DataTransferObjects\Category;
 use App\Models\Category\CategoryInterface;
 use App\Repositories\BaseRepositoryInterface;
 
@@ -15,9 +14,9 @@ use App\Repositories\BaseRepositoryInterface;
  */
 interface CategoryRepositoryInterface extends BaseRepositoryInterface
 {
-    public function create(Category $category): CategoryInterface;
+    public function create(CategoryInterface $entity): CategoryInterface;
 
-    public function update(int $categoryId, Category $dto): bool;
+    public function update(int $categoryId, CategoryInterface $entity): bool;
 
     public function allWithServers(array $categoryColumns, array $serverColumns): iterable;
 

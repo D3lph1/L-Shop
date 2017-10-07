@@ -6,6 +6,7 @@ namespace Tests\Feature\Admin;
 use App\DataTransferObjects\Item;
 use App\DataTransferObjects\Product;
 use App\Models\Item\ItemInterface;
+use App\Models\Product\ProductInterface;
 use App\Services\Items\Type;
 use App\TransactionScripts\Items;
 use App\TransactionScripts\Products;
@@ -55,7 +56,7 @@ class ProductItemTest extends TestCase
         );
         $this->assertInstanceOf(ItemInterface::class, $item);
         $itemId = (int)$item->getId();
-        $dto = (new Product())
+        $dto = $this->make(ProductInterface::class)
             ->setPrice(0.01)
             ->setStack(64)
             ->setItemId($itemId)

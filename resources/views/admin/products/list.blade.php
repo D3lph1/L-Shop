@@ -62,7 +62,7 @@
                                 <td><img height="35" width="35" src=" {{ \App\Services\Image::getOrDefault('items/' . $product->getItem()->getImage(), 'empty.png') }}"></td>
                                 <td>{{ $product->getItem()->getName() }}</td>
                                 <td>{{ $product->getPrice() }}</td>
-                                <td>{{ $product->getStack() }}</td>
+                                <td>@if($product->getStack() == 0 and $product->getItem()->getType() === \App\Services\Items\Type::PERMGROUP) @lang('content.shop.catalog.item.forever') @else {{ $product->getStack() }} @endif</td>
                                 <td>{{ $product->getCategory()->getServer()->getName() }}</td>
                                 <td>{{ $product->getCategory()->getName() }}</td>
                                 <td><a href="{{ route('admin.products.edit', ['server' => $currentServer->getId(), 'product' => $product->getId()]) }}" class="btn btn-info btn-sm">Редактировать</a></td>

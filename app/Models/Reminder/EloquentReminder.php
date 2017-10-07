@@ -13,7 +13,7 @@ use Cartalyst\Sentinel\Reminders\EloquentReminder as BaseReminder;
  * @property int $user_id
  * @property string $code
  * @property bool $completed
- * @property string|null $completed_at
+ * @property \Carbon\Carbon|null $completed_at
  * @property \Carbon\Carbon|null $created_at
  * @property \Carbon\Carbon|null $updated_at
  * @method static \Illuminate\Database\Eloquent\Builder|\App\Models\Reminder\EloquentReminder whereCode($value)
@@ -37,14 +37,35 @@ class EloquentReminder extends BaseReminder implements ReminderInterface
         return $this->id;
     }
 
+    public function setUserId(int $userId): ReminderInterface
+    {
+        $this->user_id = $userId;
+
+        return $this;
+    }
+
     public function getUserId(): int
     {
         return $this->user_id;
     }
 
+    public function setCode(string $code): ReminderInterface
+    {
+        $this->code = $code;
+
+        return $this;
+    }
+
     public function getCode(): string
     {
         return $this->code;
+    }
+
+    public function setCompleted(bool $isCompleted): ReminderInterface
+    {
+        $this->completed = $isCompleted;
+
+        return $this;
     }
 
     public function isCompleted(): bool

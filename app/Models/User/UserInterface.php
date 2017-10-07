@@ -27,11 +27,19 @@ interface UserInterface extends BaseUserInterface
 
     public function getId(): int;
 
+    public function setUsername(string $username): UserInterface;
+
     public function getUsername(): string;
+
+    public function setEmail(string $email): UserInterface;
 
     public function getEmail(): string;
 
+    public function setPassword(string $password): UserInterface;
+
     public function getPassword(): string;
+
+    public function setBalance(float $value): UserInterface;
 
     public function getBalance(): float;
 

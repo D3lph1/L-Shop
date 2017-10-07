@@ -50,9 +50,16 @@ class EloquentNews extends Model implements NewsInterface
         return $this->author;
     }
 
-    public function getId(): int
+    public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setTitle(string $title): NewsInterface
+    {
+        $this->title = $title;
+
+        return $this;
     }
 
     public function getTitle(): string
@@ -60,9 +67,23 @@ class EloquentNews extends Model implements NewsInterface
         return $this->title;
     }
 
+    public function setContent(string $content): NewsInterface
+    {
+        $this->content = $content;
+
+        return $this;
+    }
+
     public function getContent(): string
     {
         return $this->content;
+    }
+
+    public function setUserId(string $userId): NewsInterface
+    {
+        $this->user_id = $userId;
+
+        return $this;
     }
 
     public function getUserId(): int

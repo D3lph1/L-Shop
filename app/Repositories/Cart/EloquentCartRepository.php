@@ -17,16 +17,16 @@ use Illuminate\Database\Eloquent\Builder;
  */
 class EloquentCartRepository implements CartRepositoryInterface
 {
-    public function create(Cart $dto): CartInterface
+    public function create(CartInterface $entity): CartInterface
     {
         return EloquentCart::create([
-            'server' => $dto->getServerId(),
-            'player' => $dto->getPlayer(),
-            'type' => $dto->getType(),
-            'item' => $dto->getItem(),
-            'amount' => $dto->getAmount(),
-            'extra' => $dto->getExtra(),
-            'item_id' => $dto->getItemId()
+            'server' => $entity->getServerId(),
+            'player' => $entity->getPlayer(),
+            'type' => $entity->getType(),
+            'item' => $entity->getItem(),
+            'amount' => $entity->getAmount(),
+            'extra' => $entity->getExtra(),
+            'item_id' => $entity->getItemId()
         ]);
     }
 

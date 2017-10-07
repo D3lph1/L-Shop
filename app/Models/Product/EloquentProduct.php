@@ -72,9 +72,23 @@ class EloquentProduct extends Model implements ProductInterface
         return $this->category;
     }
 
-    public function getId(): int
+    public function setId(int $id): ProductInterface
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setPrice(float $price): ProductInterface
+    {
+        $this->price = $price;
+
+        return $this;
     }
 
     public function getPrice(): float
@@ -82,9 +96,23 @@ class EloquentProduct extends Model implements ProductInterface
         return $this->price;
     }
 
+    public function setItemId(int $itemId): ProductInterface
+    {
+        $this->item_id = $itemId;
+
+        return $this;
+    }
+
     public function getItemId(): int
     {
         return $this->item_id;
+    }
+
+    public function setServerId(int $serverId): ProductInterface
+    {
+        $this->server_id = $serverId;
+
+        return $this;
     }
 
     public function getServerId(): int
@@ -92,14 +120,35 @@ class EloquentProduct extends Model implements ProductInterface
         return $this->server_id;
     }
 
+    public function setStack(float $stackSize): ProductInterface
+    {
+        $this->stack = $stackSize;
+
+        return $this;
+    }
+
     public function getStack(): float
     {
         return $this->stack;
     }
 
+    public function setCategoryId(int $categoryId): ProductInterface
+    {
+        $this->category_id = $categoryId;
+
+        return $this;
+    }
+
     public function getCategoryId(): int
     {
         return $this->category_id;
+    }
+
+    public function setSortPriority(float $sortPriority): ProductInterface
+    {
+        $this->sort_priority = $sortPriority;
+
+        return $this;
     }
 
     public function getSortPriority(): float

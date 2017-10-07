@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace App\Repositories\Server;
 
-use App\DataTransferObjects\Server;
 use App\Models\Server\ServerInterface;
 use App\Repositories\BaseRepositoryInterface;
 
@@ -15,9 +14,9 @@ use App\Repositories\BaseRepositoryInterface;
  */
 interface ServerRepositoryInterface extends BaseRepositoryInterface
 {
-    public function create(Server $dto): ServerInterface;
+    public function create(ServerInterface $entity): ServerInterface;
 
-    public function update(int $serverId, Server $dto);
+    public function update(int $serverId, ServerInterface $entity);
 
     public function find(int $id, array $columns);
 

@@ -17,9 +17,15 @@ interface CategoryInterface
     public function getServer(): ServerInterface;
 
 
-    public function getId(): int;
+    public function setId(int $id): CategoryInterface;
+
+    public function getId(): ?int;
+
+    public function setName(string $name): CategoryInterface;
 
     public function getName(): string;
+
+    public function setServerId(int $id): CategoryInterface;
 
     public function getServerId(): int;
 

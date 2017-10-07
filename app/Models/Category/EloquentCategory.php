@@ -54,14 +54,35 @@ class EloquentCategory extends Model implements CategoryInterface
         return $this->server;
     }
 
-    public function getId(): int
+    public function setId(int $id): CategoryInterface
+    {
+        $this->id = $id;
+
+        return $this;
+    }
+
+    public function getId(): ?int
     {
         return $this->id;
+    }
+
+    public function setName(string $name): CategoryInterface
+    {
+        $this->name = $name;
+
+        return $this;
     }
 
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function setServerId(int $id): CategoryInterface
+    {
+        $this->server_id = $id;
+
+        return $this;
     }
 
     public function getServerId(): int

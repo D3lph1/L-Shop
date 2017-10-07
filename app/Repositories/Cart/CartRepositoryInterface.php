@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace App\Repositories\Cart;
 
-use App\DataTransferObjects\Cart;
 use App\Models\Cart\CartInterface;
 use App\Repositories\BaseRepositoryInterface;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -16,7 +15,7 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
  */
 interface CartRepositoryInterface extends BaseRepositoryInterface
 {
-    public function create(Cart $dto): CartInterface;
+    public function create(CartInterface $entity): CartInterface;
 
     public function insert(array $attributes): bool;
 

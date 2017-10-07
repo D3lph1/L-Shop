@@ -3,8 +3,27 @@ declare(strict_types = 1);
 
 namespace App\Providers;
 
+use App\Models\Ban\BanInterface;
+use App\Models\Ban\EloquentBan;
+use App\Models\Cart\CartInterface;
+use App\Models\Cart\EloquentCart;
+use App\Models\Category\CategoryInterface;
+use App\Models\Category\EloquentCategory;
+use App\Models\Item\EloquentItem;
+use App\Models\Item\ItemInterface;
+use App\Models\News\EloquentNews;
+use App\Models\News\NewsInterface;
+use App\Models\Page\EloquentPage;
+use App\Models\Page\PageInterface;
+use App\Models\Payment\EloquentPayment;
+use App\Models\Payment\PaymentInterface;
+use App\Models\Product\EloquentProduct;
+use App\Models\Product\ProductInterface;
 use App\Models\Role\EloquentRole;
+use App\Models\Server\EloquentServer;
+use App\Models\Server\ServerInterface;
 use App\Models\User\EloquentUser;
+use App\Models\User\UserInterface;
 use App\Repositories\Activation\ActivationRepositoryInterface;
 use App\Repositories\Activation\EloquentActivationRepository;
 use App\Repositories\Ban\BanRepositoryInterface;
@@ -61,6 +80,17 @@ class RepositoryServiceProvider extends ServiceProvider
      */
     public function register()
     {
+        $this->app->bind(UserInterface::class, EloquentUser::class);
+        $this->app->bind(BanInterface::class, EloquentBan::class);
+        $this->app->bind(CartInterface::class, EloquentCart::class);
+        $this->app->bind(ServerInterface::class, EloquentServer::class);
+        $this->app->bind(CategoryInterface::class, EloquentCategory::class);
+        $this->app->bind(ItemInterface::class, EloquentItem::class);
+        $this->app->bind(NewsInterface::class, EloquentNews::class);
+        $this->app->bind(PageInterface::class, EloquentPage::class);
+        $this->app->bind(PaymentInterface::class, EloquentPayment::class);
+        $this->app->bind(ProductInterface::class, EloquentProduct::class);
+
         $this->app->singleton(BanRepositoryInterface::class, EloquentBanRepository::class);
         $this->app->singleton(PageRepositoryInterface::class, EloquentPageRepository::class);
         $this->app->singleton(NewsRepositoryInterface::class, EloquentNewsRepository::class);

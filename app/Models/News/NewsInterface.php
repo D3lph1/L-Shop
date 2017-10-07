@@ -17,11 +17,17 @@ interface NewsInterface
     public function getUser(): UserInterface;
 
 
-    public function getId(): int;
+    public function getId(): ?int;
+
+    public function setTitle(string $title): NewsInterface;
 
     public function getTitle(): string;
 
+    public function setContent(string $content): NewsInterface;
+
     public function getContent(): string;
+
+    public function setUserId(string $userId): NewsInterface;
 
     public function getUserId(): int;
 

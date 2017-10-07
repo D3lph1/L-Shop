@@ -13,11 +13,19 @@ use Carbon\Carbon;
  */
 interface PageInterface
 {
-    public function getId(): int;
+    public function setId(int $id): PageInterface;
+
+    public function getId(): ?int;
+
+    public function setTitle(string $title): PageInterface;
 
     public function getTitle(): string;
 
+    public function setContent(string $content): PageInterface;
+
     public function getContent(): string;
+
+    public function setUrl(string $url): PageInterface;
 
     public function getUrl(): string;
 
