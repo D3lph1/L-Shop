@@ -754,41 +754,6 @@ Route::group(['namespace' => 'Admin', 'where' => ['server' => '\d+'], 'middlewar
     /**
      * INFORMATION SECTION
      */
-    // Render documentation page
-    Route::get('/server/{server}/admin/info/docs', 'Info\DocsController@render')
-        ->name('admin.info.docs')
-        ->middleware([
-            'servers:all'
-        ]);
-
-    // Render main documentation page
-    Route::get('/server/{server}/admin/info/docs/main', 'Info\DocsController@main')
-        ->name('admin.info.docs.main')
-        ->middleware([
-            'servers:all'
-        ]);
-
-    // Render API documentation page
-    Route::get('/server/{server}/admin/info/docs/api', 'Info\DocsController@api')
-        ->name('admin.info.docs.api')
-        ->middleware([
-            'servers:all'
-        ]);
-
-    // Render Sashok724 Launcher integration page
-    Route::get('/server/{server}/admin/info/docs/sashok_launcher_integration', 'Info\DocsController@sashokLauncherIntegration')
-        ->name('admin.info.docs.sashok_launcher_integration')
-        ->middleware([
-            'servers:all'
-        ]);
-
-    // Render CLI documentation page
-    Route::get('/server/{server}/admin/info/docs/cli', 'Info\DocsController@cli')
-        ->name('admin.info.docs.cli')
-        ->middleware([
-            'servers:all'
-        ]);
-
     // Render about page
     Route::get('/server/{server}/admin/info/about', 'Info\AboutController@render')
         ->name('admin.info.about')

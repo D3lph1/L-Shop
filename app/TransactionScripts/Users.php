@@ -21,7 +21,6 @@ use App\Services\User\InitStrategies\AdminInitStrategy;
 use App\Services\User\InitStrategies\CommonUserInitStrategy;
 use App\Services\User\InitStrategies\InitStrategyInterface;
 use App\Traits\ContainerTrait;
-use Cartalyst\Sentinel\Hashing\HasherInterface;
 use Cartalyst\Sentinel\Sentinel;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -102,12 +101,6 @@ class Users
         $other = $this->sentinel->getUserRepository()->findByCredentials(['email' => $dto->getEmail()]);
         if ($other and $other->getId() !== $dto->getId()) {
             throw new EmailAlreadyExistsException($dto->getEmail());
-        }
-
-        if (!is_null($dto->getPassword())) {
-            /** @var HasherInterface $hasher */
-            $hasher = $this->make(HasherInterface::class);
-            $credentials['password'] = $hasher->hash($dto->getPassword());
         }
 
         if ($this->sentinel->getUserRepository()->update($user, $credentials)) {

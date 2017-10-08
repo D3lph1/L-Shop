@@ -98,6 +98,7 @@ return [
         ],
         'pages' => [
             'url_already_exists' => 'A page with this address already exists!',
+            'not_found' => 'Page not found',
             'add' => [
                 'success' => 'Page successfully created!',
                 'fail' => 'Could not create page.'

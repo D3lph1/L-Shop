@@ -30,10 +30,9 @@ class EloquentNewsRepository implements NewsRepositoryInterface
 
     public function update(int $id, NewsInterface $entity): bool
     {
-        return EloquentNews::where('id', $id)->update([
+        return (bool)EloquentNews::where('id', $id)->update([
             'title' => $entity->getTitle(),
-            'content' => $entity->getContent(),
-            'user_id' => $entity->getUserId()
+            'content' => $entity->getContent()
         ]);
     }
 

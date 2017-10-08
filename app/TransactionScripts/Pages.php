@@ -87,6 +87,14 @@ class Pages
 
     public function delete(int $pageId): bool
     {
+        $page = $this->pageRepository->find($pageId, ['url']);
+
+        if (is_null($page)) {
+            throw new NotFoundException($pageId);
+        }
+
+        Cache::forget("page.{$page->getUrl()}");
+
         return $this->pageRepository->delete($pageId);
     }
 

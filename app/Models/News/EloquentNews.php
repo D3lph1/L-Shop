@@ -79,7 +79,7 @@ class EloquentNews extends Model implements NewsInterface
         return $this->content;
     }
 
-    public function setUserId(string $userId): NewsInterface
+    public function setUserId(int $userId): NewsInterface
     {
         $this->user_id = $userId;
 

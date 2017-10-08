@@ -35,20 +35,25 @@ class EloquentCartRepository implements CartRepositoryInterface
         return EloquentCart::insert($attributes);
     }
 
-    public function historyForUser($userLogin, ?int $server, array $columns): LengthAwarePaginator
+    public function historyForUser($userLogin, ?int $server, array $cartColumns, array $itemColumns): LengthAwarePaginator
     {
         if ($server) {
-            $builder = EloquentCart::select($columns)
-                ->join('items', 'items.id', 'cart.item_id')
+            $builder = EloquentCart::join('items', 'items.id', 'cart.item_id')
                 ->where('cart.server', $server);
         } else {
-            $builder = EloquentCart::select($columns)
-                ->join('items', 'items.id', 'cart.item_id');
+            $builder = EloquentCart::join('items', 'items.id', 'cart.item_id');
         }
 
         return $builder
+            ->select(array_merge($cartColumns, ['item_id']))
             ->where('cart.player', $userLogin)
             ->orderBy('cart.created_at', 'DESC')
+            ->with([
+                'item_' => function ($query) use ($itemColumns) {
+                    /** @var Builder $query */
+                    $query->select(array_merge($itemColumns, ['id']));
+                }
+            ])
             ->paginate(s_get('profile.cart_items_per_page', 10));
     }
 

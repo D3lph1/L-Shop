@@ -19,7 +19,7 @@ interface CartRepositoryInterface extends BaseRepositoryInterface
 
     public function insert(array $attributes): bool;
 
-    public function historyForUser($userLogin, int $server, array $columns): LengthAwarePaginator;
+    public function historyForUser($userLogin, int $server, array $cartColumns, array $itemColumns): LengthAwarePaginator;
 
     public function getByPlayerWithItems(string $player, array $cartColumns, array $itemColumns): iterable;
 

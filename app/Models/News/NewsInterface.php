@@ -27,7 +27,7 @@ interface NewsInterface
 
     public function getContent(): string;
 
-    public function setUserId(string $userId): NewsInterface;
+    public function setUserId(int $userId): NewsInterface;
 
     public function getUserId(): int;
 

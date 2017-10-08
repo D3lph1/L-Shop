@@ -69,7 +69,7 @@
     <div class="ad-btn-block">
         <button class="btn btn-info btn-block admin-menu-btn"><i class="fa fa-info left"></i>@lang('sidebar.admin.info.name')</button>
         <ul class="ad-btn-list">
-            <a href="{{ route('admin.info.docs', ['server' => $currentServer->getId()]) }}" class="waves-effect">@lang('sidebar.admin.info.nodes.docs')</a>
+            <a href="https://github.com/D3lph1/L-shop/wiki" target="_blank" class="waves-effect">@lang('sidebar.admin.info.nodes.docs')</a>
             <a href="{{ route('admin.info.about', ['server' => $currentServer->getId()]) }}" class="waves-effect">@lang('sidebar.admin.info.nodes.about')</a>
         </ul>
     </div>

@@ -42,12 +42,12 @@
                         <tbody>
                         @foreach($items as $item)
                             <tr>
-                                <td><img height="35" width="35" src="@if(is_file(img_path("items/$item->image"))) {{ asset("img/items/{$item->image}") }} @else {{ asset("img/empty.png") }} @endif"></td>
-                                <td>{{ $item->name }}</td>
-                                <td>{{ $item->amount }}</td>
+                                <td><img height="35" width="35" src="{{ \App\Services\Image::getOrDefault('items/' . $item->getRelatedItem()->getImage(), "empty.png") }}"></td>
+                                <td>{{ $item->getRelatedItem()->getName() }}</td>
+                                <td>{{ $item->getAmount() }}</td>
                                 @foreach($servers as $server)
-                                    @if($server->id == $item->server)
-                                        <td>{{ $server->name }}</td>
+                                    @if($server->getId() === $item->getServerId())
+                                        <td>{{ $server->getName() }}</td>
                                     @endif
                                 @endforeach
                             </tr>

@@ -14,7 +14,6 @@
         "barryvdh/laravel-ide-helper": "^2.2",
         "cartalyst/sentinel": "2.0.*",
         "d3lph1/minecraft-rcon-manager": "~1.0",
-        "erusev/parsedown": "1.6.3",
         "intervention/image": "2.4.0"
     },
     "require-dev": {

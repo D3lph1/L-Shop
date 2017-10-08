@@ -37,6 +37,10 @@
                         <td><a href="https://github.com/D3lph1/L-shop" target="_blank">https://github.com/D3lph1/L-shop</a></td>
                     </tr>
                     <tr>
+                        <td>@lang('sidebar.admin.info.nodes.docs')</td>
+                        <td><a href="https://github.com/D3lph1/L-shop/wiki" target="_blank">https://github.com/D3lph1/L-shop/wiki</a></td>
+                    </tr>
+                    <tr>
                         <td>@lang('content.admin.other.info.about.rubukkit')</td>
                         <td><a href="http://rubukkit.org/threads/l-shop-open-source.133265/" target="_blank">http://rubukkit.org/threads/l-shop-open-source.133265/</a></td>
                     </tr>

@@ -19,7 +19,7 @@
             @endif
             <div class="alert alert-info">
                 <button id="admin-api-docs-alert-close" type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                @lang('content.admin.control.api.api_doc_alert') <a href="{{ route('admin.info.docs.api', ['server' => $currentServer->id]) }}" class="btn btn-info btn-sm">@lang('content.admin.control.api.api_doc_alert_btn')</a>.
+                @lang('content.admin.control.api.api_doc_alert') <a href="https://github.com/D3lph1/L-shop/wiki" target="_blank" class="btn btn-info btn-sm">@lang('content.admin.control.api.api_doc_alert_btn')</a>.
             </div>
             <form method="post" action="{{ route('admin.control.api.save', ['server' => $currentServer->id]) }}">
                 <div class="card card-block">

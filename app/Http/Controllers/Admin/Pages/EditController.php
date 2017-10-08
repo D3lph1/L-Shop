@@ -90,12 +90,17 @@ class EditController extends Controller
     public function delete(Request $request): RedirectResponse
     {
         $id = (int)$request->route('id');
-        if ($this->pages->delete($id)) {
-            $this->msg->info(__('messages.admin.pages.delete.success'));
+        try {
+            if ($this->pages->delete($id)) {
+                $this->msg->info(__('messages.admin.pages.delete.success'));
 
-            return response()->redirectToRoute('admin.pages.list', ['server' => $request->get('currentServer')->getId()]);
+                return response()->redirectToRoute('admin.pages.list', ['server' => $request->get('currentServer')->getId()]);
+            } else {
+                $this->msg->danger(__('messages.admin.pages.delete.fail'));
+            }
+        } catch (NotFoundException $e) {
+            $this->msg->danger(__('messages.admin.pages.not_found'));
         }
-        $this->msg->danger(__('messages.admin.pages.delete.fail'));
 
         return back();
     }

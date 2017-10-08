@@ -21,15 +21,13 @@ class CartController extends Controller
      */
     public function render(Request $request, CartRepositoryInterface $cr): View
     {
-        $server = $request->get('filter_server');
+        $server = (int)$request->get('filter_server');
 
-        $items = $cr->historyForUser(\Sentinel::getUser()->getUserLogin(), $server, [
-            'cart.amount',
-            'cart.created_at',
-            'cart.server',
-            'items.name',
-            'items.image',
-        ]);
+        $items = $cr->historyForUser(\Sentinel::getUser()->getUserLogin(),
+            $server,
+            ['amount', 'cart.created_at', 'server'],
+            ['name', 'type', 'image']
+        );
 
         $data = [
             'currentServer' => $request->get('currentServer'),
