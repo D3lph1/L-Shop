@@ -13,7 +13,6 @@ use App\Services\Message;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Handler extends ExceptionHandler
 {
@@ -71,10 +70,6 @@ class Handler extends ExceptionHandler
     {
         if ($exception instanceof BannedException) {
             return $this->ban($exception);
-        }
-
-        if (!$this->isHttpException($exception) and !config('app.debug')) {
-            $exception = new HttpException(500);
         }
 
         return parent::render($request, $exception);

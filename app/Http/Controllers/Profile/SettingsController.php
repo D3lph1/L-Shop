@@ -35,7 +35,7 @@ class SettingsController extends Controller
     /**
      * Change password from profile.
      */
-    public function password(SaveChangedPasswordRequest $request, Sentinel $sentinel): RedirectResponse
+    public function password(SaveChangedPasswordRequest $request): RedirectResponse
     {
         if (!s_get('user.enable_change_password', false)) {
             $this->msg->danger(__('messages.profile.password.disabled'));
@@ -43,8 +43,8 @@ class SettingsController extends Controller
             return back();
         }
 
-        $user = $sentinel->getUser();
-        $result = $sentinel->getUserRepository()->update($user, [
+        $user = $this->sentinel->getUser();
+        $result = $this->sentinel->getUserRepository()->update($user, [
             'password' => $request->get('password')
         ]);
 
