@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 use Illuminate\Database\Seeder;
 
@@ -10,17 +11,18 @@ use Illuminate\Database\Seeder;
 class DatabaseSeeder extends Seeder
 {
     public function __construct(
-        \App\Repositories\BanRepository $ban,
-        \App\Repositories\CartRepository $cart,
-        \App\Repositories\CategoryRepository $category,
-        \App\Repositories\ItemRepository $item,
-        \App\Repositories\NewsRepository $news,
-        \App\Repositories\PageRepository $page,
-        \App\Repositories\PaymentRepository $payment,
-        \App\Repositories\ProductRepository $product,
-        \App\Repositories\ServerRepository $server,
-        \App\Repositories\UserRepository $user,
-        \Cartalyst\Sentinel\Sentinel $sentinel
+        \App\Repositories\Ban\BanRepositoryInterface $ban,
+        \App\Repositories\Cart\CartRepositoryInterface $cart,
+        \App\Repositories\Category\CategoryRepositoryInterface $category,
+        \App\Repositories\Item\ItemRepositoryInterface $item,
+        \App\Repositories\News\NewsRepositoryInterface $news,
+        \App\Repositories\Page\PageRepositoryInterface $page,
+        \App\Repositories\Payment\PaymentRepositoryInterface $payment,
+        \App\Repositories\Product\ProductRepositoryInterface $product,
+        \App\Repositories\Server\ServerRepositoryInterface $server,
+        \App\Repositories\Persistence\PersistenceRepositoryInterface $persistence,
+        \Cartalyst\Sentinel\Sentinel $sentinel,
+        \Illuminate\Cache\CacheManager $cache
     )
     {
         // Truncate storage data.
@@ -33,23 +35,29 @@ class DatabaseSeeder extends Seeder
         $payment->truncate();
         $product->truncate();
         $server->truncate();
-        $user->truncate();
-        $sentinel->getRoleRepository()->createModel()->truncate();
+        $persistence->truncate();
+
+        /** @var \App\Repositories\User\UserRepositoryInterface $userRepository */
+        $userRepository = $sentinel->getUserRepository();
+        $userRepository->truncate();
+
+        /** @var \App\Repositories\Role\RoleRepositoryInterface $roleRepository */
+        $roleRepository = $sentinel->getRoleRepository();
+        $roleRepository->truncate();
+
         DB::table('settings')->truncate();
         DB::table('activations')->truncate();
-        DB::table('bans')->truncate();
-        DB::table('persistences')->truncate();
         DB::table('reminders')->truncate();
         DB::table('throttle')->truncate();
         DB::table('role_users')->truncate();
+
+        $cache->flush();
     }
 
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
         $this->call(SettingsSeeder::class);
         $this->call(UsersSeeder::class);
@@ -57,5 +65,6 @@ class DatabaseSeeder extends Seeder
         $this->call(PagesSeeder::class);
         $this->call(ServersSeeder::class);
         $this->call(ItemsAndProductsSeeder::class);
+        $this->call(PaymentsSeeder::class);
     }
 }

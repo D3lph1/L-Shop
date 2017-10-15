@@ -1,37 +1,33 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Providers;
 
+use App\Services\Payments\Interkassa\Checkout as InterkassaCheckout;
 use App\Services\Payments\Manager;
 use App\Services\Payments\Robokassa\Checkout as RobokassaCheckout;
-use App\Services\Payments\Interkassa\Checkout as InterkassaCheckout;
 use Illuminate\Support\ServiceProvider;
 
 /**
  * Class PaymentServiceProvider
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Providers
  */
 class PaymentServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         //
     }
 
     /**
      * Register the application services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         $this->app->alias(Manager::class, 'payment.manager');
 

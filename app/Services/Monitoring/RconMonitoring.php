@@ -1,19 +1,25 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Services\Monitoring;
 
 use App\DataTransferObjects\MonitoringPlayers;
+use App\Services\Rcon\Colorizers\TrimColorizer;
+use App\Traits\ContainerTrait;
 use D3lph1\MinecraftRconManager\Connector;
+use Illuminate\Support\Facades\Cache;
+use Illuminate\Support\Facades\Log;
 
 /**
  * Class RconMonitoring
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Services\Monitoring
  */
 class RconMonitoring implements MonitoringInterface
 {
+    use ContainerTrait;
+
     /**
      * @var Connector
      */
@@ -21,8 +27,6 @@ class RconMonitoring implements MonitoringInterface
 
     /**
      * RconMonitoring constructor.
-     *
-     * @param Connector $connector
      */
     public function __construct(Connector $connector)
     {
@@ -32,37 +36,53 @@ class RconMonitoring implements MonitoringInterface
     /**
      * {@inheritdoc}
      */
-    public function getPlayers($serverId)
+    public function getPlayers(int $serverId): ?MonitoringPlayers
     {
         return $this->get($serverId);
     }
 
-    /**
-     * @param int $serverId Server identifier.
-     *
-     * @return MonitoringPlayers
-     */
-    protected function get($serverId)
+    protected function get(int $serverId): ?MonitoringPlayers
     {
         $callable = function () use ($serverId) {
             try {
                 $connection = $this->connector->get($serverId);
-                $list = $connection->send('list');
+                $list = (string)$connection->send('list');
             } catch (\Exception $e) {
-                $dto = new MonitoringPlayers($serverId, -1, -1, (int)s_get('caching.monitoring.ttl'));
-                \Cache::add("monitoring.{$serverId}", $dto, (int)s_get('caching.monitoring.ttl'));
+                // If the connection could not be established.
+                $dto = new MonitoringPlayers($serverId, -1, -1);
+                Cache::add("monitoring.{$serverId}", $dto, (int)s_get('caching.monitoring.ttl'));
 
                 return $dto;
             }
             $matches = [];
-            preg_match('/.*\s([0-9]+)\/([0-9]+).*/ui', $list, $matches);
 
-            $dto = new MonitoringPlayers($serverId, (int)$matches[1], (int)$matches[2]);
-            \Cache::add("monitoring.{$serverId}", $dto, (int)s_get('caching.monitoring.ttl'));
+            $list = $this->sanitize($list);
+            preg_match(s_get('monitoring.rcon.pattern'), $list, $matches);
+
+            if (count($matches) === 0) {
+                // If the response came, but was not disassembled correctly.
+                Log::warning(
+                    "Unable to receive information about monitoring from server `{$serverId}`.
+                    Answer received: {$list}"
+                );
+
+                return new MonitoringPlayers($serverId);
+            }
+
+            $dto = new MonitoringPlayers($serverId, (int)$matches['now'], (int)$matches['total']);
+            Cache::add("monitoring.{$serverId}", $dto, (int)s_get('caching.monitoring.ttl'));
 
             return $dto;
         };
 
-        return \Cache::get("monitoring.{$serverId}", $callable);
+        return Cache::get("monitoring.{$serverId}", $callable);
+    }
+
+    private function sanitize(string $string): string
+    {
+        /** @var TrimColorizer $colorizer */
+        $colorizer = $this->make(TrimColorizer::class);
+
+        return $colorizer->colorize($string);
     }
 }

@@ -2,11 +2,25 @@
 
 namespace Tests;
 
+use App\Traits\ContainerTrait;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
+/**
+ * Class TestCase
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package Tests
+ */
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
+
+    use ContainerTrait;
+
+    public function setUp()
+    {
+        parent::setUp();
+    }
 
     protected function authenticateUser()
     {

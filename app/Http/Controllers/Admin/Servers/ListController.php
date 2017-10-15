@@ -1,54 +1,52 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Servers;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\TransactionScripts\Servers;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 /**
  * Class ListController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Server
  */
-class ListController extends BaseController
+class ListController extends Controller
 {
     /**
-     * Render page with servers list
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     * @var Servers
      */
-    public function render(Request $request)
+    private $script;
+
+    public function __construct(Servers $script)
     {
-        $servers = $this->serverRepository->getWithCategories([
-            'servers.id',
-            'servers.name',
-            'servers.enabled'
-        ]);
-
-        $data = [
-            'currentServer' => $request->get('currentServer'),
-            'servers' => $servers
-        ];
-
-        return view('admin.servers.list', $data);
+        parent::__construct();
+        $this->script = $script;
     }
 
     /**
-     * Enable given server
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
+     * Render page with servers list
      */
-    public function enable(Request $request)
+    public function render(Request $request): View
+    {
+        return view('admin.servers.list', [
+            'currentServer' => $request->get('currentServer'),
+            'servers' => $this->script->informationForList()
+        ]);
+    }
+
+    /**
+     * Enable given server.
+     */
+    public function enable(Request $request): RedirectResponse
     {
         $serverId = (int)$request->route('enable');
 
-        if ($this->serverService->enableServer($serverId)) {
+        if ($this->script->enableServer($serverId)) {
             $this->msg->info(__('messages.admin.servers.list.enable.success'));
             $code = 302;
         } else {
@@ -60,22 +58,20 @@ class ListController extends BaseController
     }
 
     /**
-     * Disable given server
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
+     * Disable given server.
      */
-    public function disable(Request $request)
+    public function disable(Request $request): RedirectResponse
     {
         $serverId = (int)$request->route('disable');
 
-        if ($this->serverService->disableServer($serverId)) {
+        if ($this->script->disableServer($serverId)) {
             $this->msg->info(__('messages.admin.servers.list.disable.success'));
+            $code = 302;
         } else {
             $this->msg->danger(__('messages.admin.servers.list.disable.fail'));
+            $code = 400;
         }
 
-        return back();
+        return back($code);
     }
 }

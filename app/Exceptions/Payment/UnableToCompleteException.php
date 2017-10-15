@@ -1,8 +1,9 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Exceptions\Payment;
 
-use App\Exceptions\LShopException;
+use App\Exceptions\RuntimeException;
 
 /**
  * Class UnableToCompleteException
@@ -11,7 +12,7 @@ use App\Exceptions\LShopException;
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  * @package App\Exceptions\Payment
  */
-class UnableToCompleteException extends \RuntimeException implements LShopException
+class UnableToCompleteException extends RuntimeException
 {
     //
 }

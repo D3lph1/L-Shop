@@ -12,7 +12,7 @@
         </div>
         <div class="product-container">
             <div class="mb-1">
-                <a href="{{ route('admin.news.add', ['server' => $currentServer->id]) }}" class="btn btn-info btn-block">@lang('content.admin.news.list.add')</a>
+                <a href="{{ route('admin.news.add', ['server' => $currentServer->getId()]) }}" class="btn btn-info btn-block">@lang('content.admin.news.list.add')</a>
             </div>
             @if($news->count())
                 <div class="table-responsive">
@@ -29,12 +29,12 @@
                         <tbody>
                         @foreach($news as $one)
                             <tr>
-                                <th scope="row">{{ $one->id }}</th>
-                                <td>{{ $one->title }}</td>
-                                <td>{{ $one->author->username }}</td>
-                                <td>{{ $one->created_at }}</td>
-                                <td>{{ $one->updated_at }}</td>
-                                <td><a href="{{ route('admin.news.edit', ['server' => $currentServer->id, 'id' => $one->id]) }}" class="btn btn-info btn-sm">@lang('content.admin.news.list.table.edit')</a></td>
+                                <th scope="row">{{ $one->getId() }}</th>
+                                <td>{{ $one->getTitle() }}</td>
+                                <td>{{ $one->getUser()->getUsername() }}</td>
+                                <td>{{ $one->getCreatedAt() }}</td>
+                                <td>{{ $one->getUpdatedAt() }}</td>
+                                <td><a href="{{ route('admin.news.edit', ['server' => $currentServer->getId(), 'id' => $one->getId()]) }}" class="btn btn-info btn-sm">@lang('content.admin.news.list.table.edit')</a></td>
                             </tr>
                         @endforeach
                         </tbody>

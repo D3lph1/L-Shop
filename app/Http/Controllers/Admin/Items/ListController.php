@@ -1,48 +1,37 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Items;
 
-use App\Repositories\ItemRepository;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Admin\ListParent;
+use App\Repositories\ItemRepository;
+use App\TransactionScripts\Items;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 /**
  * Class ListController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Items
  */
 class ListController extends ListParent
 {
     /**
      * Render page with items list.
-     *
-     * @param Request        $request
-     * @param ItemRepository $itemRepository
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request, ItemRepository $itemRepository)
+    public function render(Request $request, Items $script): View
     {
-        $orderBy = $this->checkOrderBy($request->get('orderBy'));
-        $orderType = $this->checkOrderType($request->get('orderType'));
+        $orderBy = $request->get('orderBy');
+        $orderType = $request->get('orderType');
         $filter = $request->get('filter');
 
-        $items = $itemRepository->forAdmin([
-            'id',
-            'name',
-            'type',
-            'image',
-            'extra'
-        ], $orderBy, $orderType, $filter);
+        $items = $script->informationForList($orderBy, $orderType, $filter);
 
-        $data = [
+        return view('admin.items.list', [
             'currentServer' => $request->get('currentServer'),
             'filters' => $this->filtersAvailable,
             'items' => $items
-        ];
-
-        return view('admin.items.list', $data);
+        ]);
     }
 }

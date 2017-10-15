@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Profile;
 
@@ -6,20 +7,21 @@ use App\Exceptions\User\Character\InvalidImageSizeException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Profile\UploadCloakRequest;
 use App\Http\Requests\Profile\UploadSkinRequest;
-use App\Services\Character\Skin;
 use App\Services\Character\UploadedCloak;
 use App\Services\Character\UploadedSkin;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Http\UploadedFile;
+use Illuminate\View\View;
 
+/**
+ * Class CharacterController
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Http\Controllers\Profile
+ */
 class CharacterController extends Controller
 {
-    /**
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function render(Request $request)
+    public function render(Request $request): View
     {
         if (!(s_get('profile.character.skin.enabled', 0) or s_get('profile.character.cloak.enabled', 0))) {
             $this->app->abort(403);
@@ -34,12 +36,8 @@ class CharacterController extends Controller
 
     /**
      * Handles a skin change request.
-     *
-     * @param UploadSkinRequest $request
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function uploadSkin(UploadSkinRequest $request)
+    public function uploadSkin(UploadSkinRequest $request): JsonResponse
     {
         if (!s_get('profile.character.skin.enabled', 0)) {
             return json_response('disabled', [
@@ -74,12 +72,8 @@ class CharacterController extends Controller
 
     /**
      * Handles a cloak change request.
-     *
-     * @param UploadCloakRequest $request
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function uploadCloak(UploadCloakRequest $request)
+    public function uploadCloak(UploadCloakRequest $request): JsonResponse
     {
         if (!s_get('profile.character.cloak.enabled', 0)) {
             return json_response('disabled', [

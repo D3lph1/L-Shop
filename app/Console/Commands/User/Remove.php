@@ -1,7 +1,11 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Console\Commands\User;
 
+use App\Models\User\UserInterface;
+use App\Repositories\User\UserRepositoryInterface;
+use Cartalyst\Sentinel\Sentinel;
 use Illuminate\Console\Command;
 use Symfony\Component\Console\Input\InputArgument;
 
@@ -10,7 +14,6 @@ use Symfony\Component\Console\Input\InputArgument;
  * Remove user by username
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Console\Commands
  */
 class Remove extends Command
@@ -30,31 +33,40 @@ class Remove extends Command
     protected $description = 'Remove given user';
 
     /**
+     * @var Sentinel
+     */
+    private $sentinel;
+
+    /**
      * Create a new command instance.
      */
-    public function __construct()
+    public function __construct(Sentinel $sentinel)
     {
         parent::__construct();
+        $this->sentinel = $sentinel;
     }
 
     /**
      * Execute the console command.
-     *
-     * @return void
      */
-    public function handle()
+    public function handle(): int
     {
         $username = $this->argument('username');
-        $user = \Sentinel::findByCredentials(['username' => $username]);
+        /** @var UserInterface $user */
+        $user = $this->sentinel->getUserRepository()->findByCredentials(['username' => $username]);
 
         if (!$user) {
             $this->error("User with username $username not found");
 
-            return;
+            return 1;
         }
 
-        $user->delete();
+        /** @var UserRepositoryInterface $repository */
+        $repository = $this->sentinel->getUserRepository();
+        $repository->delete($user->getId());
         $this->info('User has been successfully removed!');
+
+        return 0;
     }
 
     /**

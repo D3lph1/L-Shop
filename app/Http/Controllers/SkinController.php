@@ -1,32 +1,27 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers;
 
 use App\Services\Character\Skin;
 use Illuminate\Http\Request;
+use Intervention\Image\Image;
+use Symfony\Component\HttpFoundation\Response;
 
+/**
+ * Class SkinController
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Http\Controllers
+ */
 class SkinController extends Controller
 {
     /**
-     * @param string $player
-     *
-     * @return Skin
-     */
-    protected function skin($player)
-    {
-        return $this->app->makeWith(Skin::class, ['player' => $player]);
-    }
-
-    /**
      * Check user with given username on exists
-     *
-     * @param string $username
-     *
-     * @return bool
      */
-    protected function checkUser($username)
+    protected function checkUser(string $username): bool
     {
-        if (\Sentinel::getUserRepository()->findByCredentials(['username' => $username])) {
+        if ($this->sentinel->getUserRepository()->findByCredentials(['username' => $username])) {
             return true;
         }
 
@@ -35,7 +30,7 @@ class SkinController extends Controller
         return false;
     }
 
-    public function skinFront(Request $request)
+    public function skinFront(Request $request): Response
     {
         $username = $request->route('user');
         $skin = $this->skin($username);
@@ -44,12 +39,10 @@ class SkinController extends Controller
         $ready->resizeImage(256);
         $img = $ready->saveImageAsTmpAndGet();
 
-        return response($img->encode('png'), 200, [
-            'Content-Type' => 'image/png'
-        ]);
+        return $this->makeResponse($img);
     }
 
-    public function skinBack(Request $request)
+    public function skinBack(Request $request): Response
     {
         $username = $request->route('user');
         $skin = $this->skin($username);
@@ -58,12 +51,10 @@ class SkinController extends Controller
         $ready->resizeImage(256);
         $img = $ready->saveImageAsTmpAndGet();
 
-        return response($img->encode('png'), 200, [
-            'Content-Type' => 'image/png'
-        ]);
+        return $this->makeResponse($img);
     }
 
-    public function headFront(Request $request)
+    public function headFront(Request $request): Response
     {
         $username = $request->route('user');
         $skin = $this->skin($username);
@@ -72,12 +63,10 @@ class SkinController extends Controller
         $ready->resizeImage(256);
         $img = $ready->saveImageAsTmpAndGet();
 
-        return response($img->encode('png'), 200, [
-            'Content-Type' => 'image/png'
-        ]);
+        return $this->makeResponse($img);
     }
 
-    public function headBack(Request $request)
+    public function headBack(Request $request): Response
     {
         $username = $request->route('user');
         $skin = $this->skin($username);
@@ -86,12 +75,10 @@ class SkinController extends Controller
         $ready->resizeImage(256);
         $img = $ready->saveImageAsTmpAndGet();
 
-        return response($img->encode('png'), 200, [
-            'Content-Type' => 'image/png'
-        ]);
+        return $this->makeResponse($img);
     }
 
-    public function cloakFront(Request $request)
+    public function cloakFront(Request $request): Response
     {
         $username = $request->route('user');
         $skin = $this->skin($username);
@@ -104,12 +91,10 @@ class SkinController extends Controller
         $ready->resizeImage(256);
         $img = $ready->saveImageAsTmpAndGet();
 
-        return response($img->encode('png'), 200, [
-            'Content-Type' => 'image/png'
-        ]);
+        return $this->makeResponse($img);
     }
 
-    public function cloakBack(Request $request)
+    public function cloakBack(Request $request): Response
     {
         $username = $request->route('user');
         $skin = $this->skin($username);
@@ -122,7 +107,17 @@ class SkinController extends Controller
         $ready->resizeImage(256);
         $img = $ready->saveImageAsTmpAndGet();
 
-        return response($img->encode('png'), 200, [
+        return $this->makeResponse($img);
+    }
+
+    private function skin(string $player): Skin
+    {
+        return $this->app->makeWith(Skin::class, ['player' => $player]);
+    }
+
+    private function makeResponse(Image $image): Response
+    {
+        return response($image->encode('png'), 200, [
             'Content-Type' => 'image/png'
         ]);
     }

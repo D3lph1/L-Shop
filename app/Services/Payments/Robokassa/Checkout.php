@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 /**
  * This file is part of Robokassa package.
@@ -20,35 +21,64 @@ use App\Exceptions\Payment\Robokassa\InvalidSumException;
  *
  * @author   JhaoDa <jhaoda@gmail.com>
  * @modified by D3lph1 <d3lph1.contact@gmail.com> special for L-shop project (https://github.com/D3lph1/L-shop)
- *
- * @package  Idma\Robokassa
+ * @package  App\Services\Payments\Robokassa
  */
 class Checkout
 {
     const CULTURE_EN = 'en';
+
     const CULTURE_RU = 'ru';
+
+    /**
+     * @var string
+     */
     private $culture;
 
+    /**
+     * @var string
+     */
     private $baseUrl = 'http://auth.robokassa.ru/Merchant/Index.aspx?';
+
+    /**
+     * @var bool
+     */
     private $isTestMode = false;
+
+    /**
+     * @var string
+     */
     private $algo = 'sha512';
+
+    /**
+     * @var array
+     */
     private $data;
 
+    /**
+     * @var string
+     */
     private $login;
+
+    /**
+     * @var string
+     */
     private $paymentPassword;
+
+    /**
+     * @var string
+     */
     private $validationPassword;
 
     /**
-     * Class constructor.
-     *
-     * @param  string $login              login of Merchant
-     * @param  string $paymentPassword    password #1
-     * @param  string $validationPassword password #2
-     * @param  string $algo               hashing algo
-     * @param  bool   $testMode           use test server
-     * @param string  $culture
+     * Checkout constructor.
      */
-    public function __construct($login, $paymentPassword, $validationPassword, $algo = 'sha512', $testMode = false, $culture = self::CULTURE_RU)
+    public function __construct(
+        string $login,
+        string $paymentPassword,
+        string $validationPassword,
+        string $algo = 'sha512',
+        bool $testMode = false,
+        string $culture = self::CULTURE_RU)
     {
         $this->login = $login;
         $this->paymentPassword = $paymentPassword;
@@ -61,14 +91,11 @@ class Checkout
     /**
      * Create payment url.
      *
-     * @param Payment $payment
-     *
-     * @return string if sum less or equals zero
      * @throws EmptyDescriptionException if description is empty or not provided
      * @throws InvalidInvoiceIdException if invoice ID less or equals zero or not provided
      * @throws InvalidSumException if sum less or equals zero
      */
-    public function getPaymentUrl(Payment $payment)
+    public function getPaymentUrl(Payment $payment): string
     {
         if ($payment->getAmount() <= 0) {
             throw new InvalidSumException();
@@ -94,24 +121,19 @@ class Checkout
         if ($customParams) {
             // sort customParams alphabetically
             ksort($customParams);
-            $signature .= ':' . http_build_query($customParams, null, ':');
+            $signature .= ':' . http_build_query($customParams);
         }
 
         $data = $this->getData($payment);
         $data['SignatureValue'] = hash($this->algo, $signature);
 
-        $data = http_build_query($data, null, '&');
-        $custom = http_build_query($customParams, null, '&');
+        $data = http_build_query($data, '', '&');
+        $custom = http_build_query($customParams, '', '&');
 
         return $this->baseUrl . $data . ($custom ? '&' . $custom : '');
     }
 
-    /**
-     * @param Payment $payment
-     *
-     * @return array
-     */
-    private function getData(Payment $payment)
+    private function getData(Payment $payment): array
     {
         return [
             'MerchantLogin' => $this->login,
@@ -128,12 +150,8 @@ class Checkout
 
     /**
      * Validates the Robokassa query.
-     *
-     * @param  array  $data         query data
-     *
-     * @return bool
      */
-    public function validate($data)
+    public function validate(array $data): bool
     {
         $this->data = $data;
 
@@ -152,17 +170,12 @@ class Checkout
         return $valid;
     }
 
-    /**
-     * @param int $invoiceId
-     *
-     * @return string
-     */
-    public function getSuccessAnswer($invoiceId)
+    public function getSuccessAnswer(int $invoiceId): string
     {
         return 'OK' . $invoiceId . "\n";
     }
 
-    private function getCustomParamsString(array $source)
+    private function getCustomParamsString(array $source): string
     {
         $params = [];
 
@@ -173,7 +186,7 @@ class Checkout
         }
 
         ksort($params);
-        $params = http_build_query($params, null, ':');
+        $params = http_build_query($params);
 
         return $params ? ':' . $params : '';
     }

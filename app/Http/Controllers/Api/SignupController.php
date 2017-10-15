@@ -1,31 +1,30 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Api;
 
-use App\Services\Registrar;
-use Illuminate\Http\Request;
-use App\Exceptions\User\UnableToCreateUser;
 use App\Exceptions\User\EmailAlreadyExistsException;
+use App\Exceptions\User\UnableToCreateUser;
 use App\Exceptions\User\UsernameAlreadyExistsException;
+use App\Traits\Validator;
+use App\TransactionScripts\Authentication;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Request;
 
 /**
  * Class SignupController
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Api
  */
 class SignupController extends ApiController
 {
+    use Validator;
+
     /**
      * Signup user by API.
-     *
-     * @param Request   $request
-     * @param Registrar $registrar
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function signup(Request $request, Registrar $registrar)
+    public function signup(Request $request, Authentication $script): JsonResponse
     {
         $username = $request->get('username');
         $email = $request->get('email');
@@ -39,13 +38,17 @@ class SignupController extends ApiController
             return $this->optionDisabledResponse();
         }
 
+        if (!$this->validateUsername($username)) {
+            return json_response('invalid username', ['code' => 4]);
+        }
+
         if (!$this->validateHash($hash, $username, $email, $password, $balance, $forceActivate, $admin)) {
             return $this->invalidHashResponse();
         }
 
         try {
             // Register new user.
-            $registrar->register($username, $email, $password, $balance, (bool)$forceActivate, $admin);
+            $script->register($username, $email, $password, (float)$balance, (bool)$forceActivate, (bool)$admin);
         } catch (UsernameAlreadyExistsException $e) {
             return json_response('username already exists', ['code' => 1]);
         } catch (EmailAlreadyExistsException $e) {

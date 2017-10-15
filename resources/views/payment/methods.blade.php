@@ -10,15 +10,15 @@
         <h1><i class="fa fa-credit-card fa-left-big"></i>@lang('content.payments.methods.title')</h1>
     </div>
     <div id="content-container" class="flex-first flex">
-        @if($robokassa)
-            <a href="{!! $robokassa !!}" class="btn btn-warning btn-lg btn-block">ROBOKASSA</a>
+        @if($methods->getRobokassa())
+            <a href="{!! $methods->getRobokassa() !!}" class="btn btn-warning btn-lg btn-block">ROBOKASSA</a>
         @endif
 
-        @if($interkassa)
-            <a href="{!! $interkassa !!}" class="btn btn-warning btn-lg btn-block">INTERKASSA</a>
+        @if($methods->getInterkassa())
+            <a href="{!! $methods->getInterkassa() !!}" class="btn btn-warning btn-lg btn-block">INTERKASSA</a>
         @endif
 
-        @if(!($robokassa or $interkassa))
+        @if(!($methods->getRobokassa() or $methods->getInterkassa()))
             <div class="flex-center flex">
                 <h3>@lang('content.payments.methods.nothing')</h3>
             </div>

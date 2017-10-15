@@ -11,7 +11,7 @@
             <h1><i class="fa fa-cubes fa-lg fa-left-big"></i>@lang('content.admin.products.list.title')</h1>
         </div>
         <div class="mb-1">
-            <a href="{{ route('admin.products.add', ['server' => $currentServer->id]) }}" class="btn btn-info btn-block">@lang('content.admin.products.list.add')</a>
+            <a href="{{ route('admin.products.add', ['server' => $currentServer->getId()]) }}" class="btn btn-info btn-block">@lang('content.admin.products.list.add')</a>
         </div>
         <div class="product-container">
             @if($products->count())
@@ -20,12 +20,12 @@
                         <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@lang('content.admin.products.list.sort.title')</button>
 
                         <div class="dropdown-menu">
-                            <a href="{{ route('admin.products.list', ['server' => $currentServer->id]) }}" class="dropdown-item">@lang('content.admin.products.list.sort.without')</a>
+                            <a href="{{ route('admin.products.list', ['server' => $currentServer->getId()]) }}" class="dropdown-item">@lang('content.admin.products.list.sort.without')</a>
                             <div class="dropdown-divider"></div>
-                            <a href="{{ route('admin.products.list', ['server' => $currentServer->id, 'orderBy' => 'id', 'orderType' => 'asc']) }}" class="dropdown-item">@lang('content.admin.products.list.sort.id')</a>
-                            <a href="{{ route('admin.products.list', ['server' => $currentServer->id, 'orderBy' => 'id', 'orderType' => 'desc']) }}" class="dropdown-item">@lang('content.admin.products.list.sort.id_desc')</a>
-                            <a href="{{ route('admin.products.list', ['server' => $currentServer->id, 'orderBy' => 'name', 'orderType' => 'asc']) }}" class="dropdown-item">@lang('content.admin.products.list.sort.name')</a>
-                            <a href="{{ route('admin.products.list', ['server' => $currentServer->id, 'orderBy' => 'name', 'orderType' => 'desc']) }}" class="dropdown-item">@lang('content.admin.products.list.sort.name_desc')</a>
+                            <a href="{{ route('admin.products.list', ['server' => $currentServer->getId(), 'orderBy' => 'products.id', 'orderType' => 'asc']) }}" class="dropdown-item">@lang('content.admin.products.list.sort.id')</a>
+                            <a href="{{ route('admin.products.list', ['server' => $currentServer->getId(), 'orderBy' => 'products.id', 'orderType' => 'desc']) }}" class="dropdown-item">@lang('content.admin.products.list.sort.id_desc')</a>
+                            <a href="{{ route('admin.products.list', ['server' => $currentServer->getId(), 'orderBy' => 'items.name', 'orderType' => 'asc']) }}" class="dropdown-item">@lang('content.admin.products.list.sort.name')</a>
+                            <a href="{{ route('admin.products.list', ['server' => $currentServer->getId(), 'orderBy' => 'items.name', 'orderType' => 'desc']) }}" class="dropdown-item">@lang('content.admin.products.list.sort.name_desc')</a>
                         </div>
                     </div>
 
@@ -33,10 +33,10 @@
                         <button class="btn btn-info dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">@lang('content.admin.products.list.filter.title')</button>
 
                         <div class="dropdown-menu dropdown-overflow">
-                            <a href="{{ route('admin.products.list', ['server' => $currentServer->id]) }}" class="dropdown-item">@lang('content.admin.products.list.filter.without')</a>
+                            <a href="{{ route('admin.products.list', ['server' => $currentServer->getId()]) }}" class="dropdown-item">@lang('content.admin.products.list.filter.without')</a>
                             <div class="dropdown-divider"></div>
                             @foreach($filters as $filter)
-                                <a href="{{ route('admin.products.list', ['server' => $currentServer->id, 'filter' => $filter]) }}" class="dropdown-item">{{ $filter }}</a>
+                                <a href="{{ route('admin.products.list', ['server' => $currentServer->getId(), 'filter' => $filter]) }}" class="dropdown-item">{{ $filter }}</a>
                             @endforeach
                         </div>
                     </div>
@@ -58,14 +58,14 @@
                         <tbody>
                         @foreach($products as $product)
                             <tr>
-                                <th scope="row">{{ $product->id }}</th>
-                                <td><img height="35" width="35" src="@if(is_file(img_path("items/$product->image"))) {{ asset("img/items/{$product->image}") }} @else {{ asset("img/empty.png") }} @endif"></td>
-                                <td>{{ $product->name }}</td>
-                                <td>{{ $product->price }}</td>
-                                <td>{{ $product->stack }}</td>
-                                <td>{{ $product->server }}</td>
-                                <td>{{ $product->category }}</td>
-                                <td><a href="{{ route('admin.products.edit', ['server' => $currentServer->id, 'product' => $product->id]) }}" class="btn btn-info btn-sm">Редактировать</a></td>
+                                <th scope="row">{{ $product->getId() }}</th>
+                                <td><img height="35" width="35" src=" {{ \App\Services\Image::getOrDefault('items/' . $product->getItem()->getImage(), 'empty.png') }}"></td>
+                                <td>{{ $product->getItem()->getName() }}</td>
+                                <td>{{ $product->getPrice() }}</td>
+                                <td>@if($product->getStack() == 0 and $product->getItem()->getType() === \App\Services\Items\Type::PERMGROUP) @lang('content.shop.catalog.item.forever') @else {{ $product->getStack() }} @endif</td>
+                                <td>{{ $product->getCategory()->getServer()->getName() }}</td>
+                                <td>{{ $product->getCategory()->getName() }}</td>
+                                <td><a href="{{ route('admin.products.edit', ['server' => $currentServer->getId(), 'product' => $product->getId()]) }}" class="btn btn-info btn-sm">Редактировать</a></td>
                             </tr>
                         @endforeach
                         </tbody>

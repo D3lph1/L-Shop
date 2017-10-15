@@ -1,9 +1,16 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class SaveAddedItemRequest
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Http\Requests\Admin
+ */
 class SaveAddedItemRequest extends FormRequest
 {
     /**
@@ -11,17 +18,15 @@ class SaveAddedItemRequest extends FormRequest
      *
      * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'name' => 'required|min:3|max:64',
@@ -32,7 +37,7 @@ class SaveAddedItemRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         $itemType = $this->get('item_type');
 

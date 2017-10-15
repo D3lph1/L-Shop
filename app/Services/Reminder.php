@@ -2,13 +2,13 @@
 
 namespace App\Services;
 
+use App\Exceptions\User\NotFoundException;
 use App\Exceptions\User\RemindCodeNotFound;
 use App\Exceptions\User\UnableToCompleteRemindException;
 use App\Mail\ForgotPassword;
-use App\Exceptions\User\NotFoundException;
-use App\Models\User;
-use Cartalyst\Sentinel\Users\UserInterface;
-use Cartalyst\Sentinel\Reminders\EloquentReminder;
+use App\Models\Reminder\EloquentReminder;
+use App\Models\User\UserInterface;
+use Cartalyst\Sentinel\Sentinel;
 
 /**
  * Class Reminder
@@ -19,6 +19,13 @@ use Cartalyst\Sentinel\Reminders\EloquentReminder;
  */
 class Reminder
 {
+    private $sentinel;
+
+    public function __construct(Sentinel $sentinel)
+    {
+        $this->sentinel = $sentinel;
+    }
+
     /**
      * @param string $email User email address
      * @param string $ip    User ip address
@@ -57,7 +64,7 @@ class Reminder
      */
     public function checkCode($userId, $code)
     {
-        $user = \Sentinel::getUserRepository()->findById($userId);
+        $user = $this->sentinel->getUserRepository()->findById($userId);
 
         return \Reminder::exists($user, $code);
     }
@@ -73,26 +80,21 @@ class Reminder
      */
     private function complete($userId, $code, $password)
     {
-        $user = \Sentinel::getUserRepository()->findById($userId);
+        $user = $this->sentinel->getUserRepository()->findById($userId);
 
         return \Reminder::complete($user, $code, $password);
     }
 
     /**
      * Get user by email.
-     *
-     * @param string $email User email.
-     *
-     * @throws NotFoundException
-     *
-     * @return mixed
      */
-    private function user($email)
+    private function user(string $email): UserInterface
     {
-        $user = \Sentinel::getUserRepository()->findByCredentials(['email' => $email]);
+        /** @var UserInterface $user */
+        $user = $this->sentinel->getUserRepository()->findByEmail($email, ['id', 'username', 'email']);
 
-        if (!$user) {
-            throw new NotFoundException();
+        if (is_null($user)) {
+            throw new NotFoundException($email);
         }
 
         return $user;
@@ -100,14 +102,9 @@ class Reminder
 
     /**
      * Send email for password reset.
-     *
-     * @param UserInterface    $user
-     * @param EloquentReminder $reminder
-     * @param                  $ip
      */
-    private function sendEmail(UserInterface $user, EloquentReminder $reminder, $ip)
+    private function sendEmail(UserInterface $user, EloquentReminder $reminder, string $ip)
     {
-        /** @var User $user */
-        \Mail::to($user->email)->queue(new ForgotPassword($user->id, $user->username, $reminder->code, $ip));
+        \Mail::to($user->getEmail())->queue(new ForgotPassword($user->getId(), $user->getUsername(), $reminder->getCode(), $ip));
     }
 }

@@ -1,15 +1,15 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Composers;
 
-use Illuminate\View\View;
 use App\Contracts\ComposerContract;
+use Illuminate\View\View;
 
 /**
  * Class GlobalLayoutComposer
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Composers
  */
 class GlobalLayoutComposer implements ComposerContract
@@ -17,7 +17,7 @@ class GlobalLayoutComposer implements ComposerContract
     /**
      * {@inheritdoc}
      */
-    public function compose(View $view)
+    public function compose(View $view): void
     {
         $view->with($this->getData());
     }
@@ -25,7 +25,7 @@ class GlobalLayoutComposer implements ComposerContract
     /**
      * @return array
      */
-    private function getData()
+    private function getData(): array
     {
         return [
             'shopDescription' => s_get('shop.description'),

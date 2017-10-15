@@ -1,101 +1,44 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Products;
 
-use App\DataTransferObjects\Admin\Product;
-use App\Repositories\ItemRepository;
-use App\Repositories\ProductRepository;
-use App\Repositories\ServerRepository;
-use App\Services\AdminProducts;
-use Illuminate\Http\Request;
+use App\DataTransferObjects\Product;
+use App\Exceptions\Product\NotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveEditedProductRequest;
+use App\TransactionScripts\Products;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 /**
  * Class EditController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Products
  */
 class EditController extends Controller
 {
     /**
-     * @var AdminProducts
-     */
-    private $adminProducts;
-
-    /**
-     * @param AdminProducts $adminProducts
-     */
-    public function __construct(AdminProducts $adminProducts)
-    {
-        $this->adminProducts = $adminProducts;
-        parent::__construct();
-    }
-
-    /**
      * Render the edit given product page.
-     *
-     * @param Request           $request
-     * @param ItemRepository    $itemRepository
-     * @param ProductRepository $productRepository
-     * @param ServerRepository  $serverRepository
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request, ItemRepository $itemRepository, ProductRepository $productRepository, ServerRepository $serverRepository)
+    public function render(Request $request, Products $script): View
     {
-        $product = $productRepository->forEditProducts($request->route('product'), [
-            'products.id',
-            'products.price',
-            'products.stack',
-            'products.item_id',
-            'products.category_id',
-            'products.sort_priority',
-            'items.name',
-            'items.type'
-        ]);
+        $dto = null;
 
-        if (!$product) {
+        try {
+            $dto = $script->informationForEdit((int)$request->route('product'));
+        } catch (NotFoundException $e) {
             $this->app->abort(404);
-        }
-
-        $items = $itemRepository->all([
-            'id',
-            'name',
-            'type'
-        ]);
-
-        $categories = $serverRepository->allWithCategories([
-            'categories.name as category',
-            'categories.id as category_id',
-            'servers.name as server',
-            'servers.id as server_id'
-        ]);
-
-        $categoryId = null;
-        $categoryName = null;
-        $serverId = null;
-        $serverName = null;
-        foreach ($categories as $category) {
-            if ($category->category_id == $product->category_id) {
-                $categoryId = $category->category_id;
-                $categoryName = $category->category;
-                $serverId = $category->server_id;
-                $serverName = $category->server;
-            }
         }
 
         $data = [
             'currentServer' => $request->get('currentServer'),
-            'product' => $product,
-            'items' => $items,
-            'categories' => $categories,
-            'categoryId' => $categoryId,
-            'categoryName' => $categoryName,
-            'serverId' => $serverId,
-            'serverName' => $serverName
+            'product' => $dto->getProduct(),
+            'items' => $dto->getItems(),
+            'categories' => $dto->getCategories(),
+            'category' => $dto->getCategory()
         ];
 
         return view('admin.products.edit', $data);
@@ -103,24 +46,18 @@ class EditController extends Controller
 
     /**
      * Save edited product.
-     *
-     * @param SaveEditedProductRequest $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(SaveEditedProductRequest $request)
+    public function save(SaveEditedProductRequest $request, Products $script): RedirectResponse
     {
-        $dto = new Product(
-            $request->get('price'),
-            $request->get('stack'),
-            $request->get('item'),
-            $request->get('server'),
-            $request->get('category'),
-            $request->get('sort_priority')
-        );
-        $dto->setId($request->route('product'));
+        $dto = (new Product())
+            ->setPrice((float)$request->get('price'))
+            ->setStack((float)$request->get('stack'))
+            ->setItemId((int)$request->get('item'))
+            ->setServerId((int)$request->get('server'))
+            ->setCategoryId((int)$request->get('category'))
+            ->setSortPriority((float)$request->get('sort_priority'));
 
-        $result = $this->adminProducts->edit($dto);
+        $result = $script->edit((int)$request->route('product'), $dto);
 
         if ($result) {
             $this->msg->success(__('messages.admin.products.edit.success'));
@@ -128,20 +65,16 @@ class EditController extends Controller
             $this->msg->danger(__('messages.admin.products.edit.fail'));
         }
 
-        return response()->redirectToRoute('admin.products.list', ['server' => $request->get('currentServer')->id]);
+        return response()->redirectToRoute('admin.products.list', ['server' => $request->get('currentServer')->getId()]);
     }
 
     /**
      * Remove product.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function remove(Request $request)
+    public function remove(Request $request, Products $script): RedirectResponse
     {
         $productId = (int)$request->route('product');
-        $result = $this->adminProducts->delete($productId);
+        $result = $script->delete($productId);
 
         if ($result) {
             $this->msg->info(__('messages.admin.products.remove.success'));
@@ -149,6 +82,6 @@ class EditController extends Controller
             $this->msg->danger(__('messages.admin.products.remove.fail'));
         }
 
-        return response()->redirectToRoute('admin.products.list', ['server' => $request->get('currentServer')->id]);
+        return response()->redirectToRoute('admin.products.list', ['server' => $request->get('currentServer')->getId()]);
     }
 }

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Auth;
 
@@ -8,6 +9,7 @@ use App\Exceptions\User\UnableToCompleteRemindException;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Services\Reminder;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Psr\Log\LoggerInterface;
@@ -16,7 +18,6 @@ use Psr\Log\LoggerInterface;
  * Class ForgotPasswordController
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Auth
  */
 class ForgotPasswordController extends Controller
@@ -26,9 +27,6 @@ class ForgotPasswordController extends Controller
      */
     private $reminder;
 
-    /**
-     * @param Reminder $reminder
-     */
     public function __construct(Reminder $reminder)
     {
         $this->reminder = $reminder;
@@ -36,7 +34,7 @@ class ForgotPasswordController extends Controller
     }
 
     /**
-     * Render forgot password page
+     * Render forgot password page.
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
@@ -50,13 +48,9 @@ class ForgotPasswordController extends Controller
     }
 
     /**
-     * Handle forgot password request
-     *
-     * @param ForgotPasswordRequest $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
+     * Handle forgot password request.
      */
-    public function handle(ForgotPasswordRequest $request)
+    public function handle(ForgotPasswordRequest $request): RedirectResponse
     {
         if ($this->isDisabled()) {
             return response()->redirectToRoute('index');
@@ -107,13 +101,8 @@ class ForgotPasswordController extends Controller
 
     /**
      * Handle reset password request
-     *
-     * @param ResetPasswordRequest $request
-     * @param LoggerInterface      $logger
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function resetPassword(ResetPasswordRequest $request, LoggerInterface $logger)
+    public function resetPassword(ResetPasswordRequest $request, LoggerInterface $logger): RedirectResponse
     {
         if ($this->isDisabled()) {
             return response()->redirectToRoute('index');
@@ -141,10 +130,7 @@ class ForgotPasswordController extends Controller
         return response()->redirectToRoute('signin');
     }
 
-    /**
-     * @return bool|\Illuminate\Http\RedirectResponse
-     */
-    private function isDisabled()
+    private function isDisabled(): bool
     {
         if (!s_get('shop.enable_password_reset')) {
             $this->msg->warning(__('messages.auth.forgot.disabled'));

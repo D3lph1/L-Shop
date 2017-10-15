@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 /**
  * This file is part of Robokassa package.
@@ -11,17 +12,15 @@
 
 namespace App\Exceptions\Payment\Robokassa;
 
-use App\Exceptions\LShopException;
-
 /**
  * Class InvalidInvoiceIdException
  *
  * @author JhaoDa <jhaoda@gmail.com>
  * @package Idma\Robokassa\Exception
  */
-class InvalidInvoiceIdException extends PaymentException implements LShopException
+class InvalidInvoiceIdException extends PaymentException
 {
     public function __construct($message = '', $code = 0, \Exception $previous = null) {
-        parent::__construct('Invoice id is required and cannot be less or equals zero.', $code, $previous);
+        parent::__construct('Invoice id is required and cannot be less or equals zero', $code, $previous);
     }
 }

@@ -1,45 +1,33 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class SaveChangedPasswordRequest
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Http\Requests\Admin
+ */
 class SaveChangedPasswordRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
 
     /**
      * Get the validation rules that apply to the request.
-     *
-     * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'password' => 'required|confirmed|min:4|max:191'
-        ];
-    }
-
-    /**
-     * @return array
-     */
-    public function messages()
-    {
-        $a = ['attribute' => 'Новый пароль'];
-
-        return [
-            'password.required' => trans('validation.required', $a),
-            'password.confirmed' => trans('validation.confirmed', $a),
-            'password.min' => trans('validation.required', $a),
-            'password.max' => trans('validation.required', $a),
         ];
     }
 }

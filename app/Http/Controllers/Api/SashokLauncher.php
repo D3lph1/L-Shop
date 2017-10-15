@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Api;
 
@@ -7,13 +8,13 @@ use App\Exceptions\User\BannedException;
 use App\Http\Controllers\Controller;
 use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
 use Illuminate\Http\Request;
+use Symfony\Component\HttpFoundation\Response;
 
 /**
  * Class SashokLauncher
  * Integration Sashok724's launcher in L-Shop system.
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Api
  */
 class SashokLauncher extends ApiController
@@ -31,13 +32,8 @@ class SashokLauncher extends ApiController
 
     /**
      * Handle authenticate request.
-     *
-     * @param Request                      $request
-     * @param \App\Services\SashokLauncher $handler
-     *
-     * @return \Illuminate\Contracts\Routing\ResponseFactory|string|\Symfony\Component\HttpFoundation\Response
      */
-    public function auth(Request $request, \App\Services\SashokLauncher $handler)
+    public function auth(Request $request, \App\Services\SashokLauncher $handler): Response
     {
         if (!$this->isEnabled('launcher.sashok.auth')) {
             return response(__('messages.api.disabled'));
@@ -63,10 +59,10 @@ class SashokLauncher extends ApiController
         }
 
         if ($username) {
-            $foramt = s_get('api.launcher.sashok.auth.format');
+            $format = s_get('api.launcher.sashok.auth.format');
 
-            // Replace username maker in response format
-            return str_replace('{username}', $username, $foramt);
+            // Replace username marker in response format.
+            return response(str_replace('{username}', $username, $format));
         }
 
         return response(s_get('api.launcher.sashok.auth.error_message'));

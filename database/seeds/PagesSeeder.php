@@ -1,6 +1,9 @@
 <?php
+declare(strict_types = 1);
 
-use App\Repositories\PageRepository;
+use App\Models\Page\PageInterface;
+use App\Repositories\Page\PageRepositoryInterface;
+use App\Traits\ContainerTrait;
 use Illuminate\Database\Seeder;
 
 /**
@@ -10,25 +13,29 @@ use Illuminate\Database\Seeder;
  */
 class PagesSeeder extends Seeder
 {
+    use ContainerTrait;
+
+    /**
+     * @var PageRepositoryInterface
+     */
     private $repository;
 
-    public function __construct(PageRepository $repository)
+    public function __construct(PageRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
 
     /**
      * Run the database seeds.
-     *
-     * @return void
      */
-    public function run()
+    public function run(): void
     {
-        $this->repository->create([
-            'id' => 1,
-            'title' => __('seeding.pages.0.title'),
-            'content' => __('seeding.pages.0.content'),
-            'url' => 'welcome-to-L-Shop'
-        ]);
+        $this->repository->create(
+            $this->make(PageInterface::class)
+                ->setId(1)
+                ->setTitle(__('seeding.pages.0.title'))
+                ->setContent(__('seeding.pages.0.content'))
+                ->setUrl('welcome-to-L-Shop')
+        );
     }
 }

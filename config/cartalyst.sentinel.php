@@ -53,7 +53,7 @@ return [
 
     'users' => [
 
-        'model' => 'App\Models\User',
+        'model' => \App\Models\User\EloquentUser::class,
 
     ],
 
@@ -68,7 +68,7 @@ return [
 
     'roles' => [
 
-        'model' => 'Cartalyst\Sentinel\Roles\EloquentRole',
+        'model' => \App\Models\Role\EloquentRole::class,
 
     ],
 
@@ -111,7 +111,7 @@ return [
 
     'persistences' => [
 
-        'model' => 'Cartalyst\Sentinel\Persistences\EloquentPersistence',
+        'model' => \App\Models\Persistence\EloquentPersistence::class,
 
         'single' => false,
 
@@ -152,7 +152,7 @@ return [
 
     'activations' => [
 
-        'model' => 'Cartalyst\Sentinel\Activations\EloquentActivation',
+        'model' => \App\Models\Activation\EloquentActivation::class,
 
         'expires' => 259200,
 
@@ -174,7 +174,7 @@ return [
 
     'reminders' => [
 
-        'model' => 'Cartalyst\Sentinel\Reminders\EloquentReminder',
+        'model' => \App\Models\Reminder\EloquentReminder::class,
 
         'expires' => 14400,
 

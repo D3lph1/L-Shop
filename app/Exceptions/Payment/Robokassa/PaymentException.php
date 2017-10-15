@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 /**
  * This file is part of Robokassa package.
@@ -11,6 +12,7 @@
 
 namespace App\Exceptions\Payment\Robokassa;
 
+use App\Exceptions\Exception;
 use App\Exceptions\LShopException;
 
 /**
@@ -19,10 +21,10 @@ use App\Exceptions\LShopException;
  * @author JhaoDa <jhaoda@gmail.com>
  * @package Idma\Robokassa\Exception
  */
-class PaymentException extends \Exception implements LShopException
+class PaymentException extends Exception implements LShopException
 {
-    public function __construct($message = '', $code = 0, \Exception $previous = null) {
-        $message = $message ? $message : 'Unknown payment exception.';
+    public function __construct(string $message = '', int $code = 0, \Exception $previous = null) {
+        $message = $message ? $message : 'Unknown payment exception';
 
         parent::__construct($message, $code, $previous);
     }

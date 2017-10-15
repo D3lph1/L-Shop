@@ -1,8 +1,9 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Exceptions\Payment\Interkassa;
 
-use App\Exceptions\LShopException;
+use App\Exceptions\RuntimeException;
 use Throwable;
 
 /**
@@ -11,12 +12,10 @@ use Throwable;
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  * @package App\Exceptions\Payment\Interkassa
  */
-class UnexpectedStatusException extends \RuntimeException implements LShopException
+class UnexpectedStatusException extends RuntimeException
 {
-    public function __construct($status, $code = 0, Throwable $previous = null)
+    public function __construct(string $status, int $code = 0, Throwable $previous = null)
     {
-        $message = "Expected \"success\" invoice status, \"$status\" given";
-
-        parent::__construct($message, $code, $previous);
+        parent::__construct("Expected \"success\" invoice status, \"$status\" given", $code, $previous);
     }
 }

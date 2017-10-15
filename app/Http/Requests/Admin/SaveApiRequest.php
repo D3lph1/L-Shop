@@ -1,17 +1,22 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Requests\Admin;
 
 use Illuminate\Foundation\Http\FormRequest;
 
+/**
+ * Class SaveApiRequest
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Http\Requests\Admin
+ */
 class SaveApiRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
-     *
-     * @return bool
      */
-    public function authorize()
+    public function authorize(): bool
     {
         return true;
     }
@@ -21,7 +26,7 @@ class SaveApiRequest extends FormRequest
      *
      * @return array
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             'api_enabled' => 'boolean',
@@ -36,7 +41,7 @@ class SaveApiRequest extends FormRequest
         ];
     }
 
-    public function messages()
+    public function messages(): array
     {
         return [
             'key.required' => trans('validation.required', ['attribute' => 'Ключ доступа']),

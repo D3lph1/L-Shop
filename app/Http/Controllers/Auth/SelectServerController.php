@@ -1,27 +1,24 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Auth;
 
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 /**
  * Class SelectServerController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Auth
  */
 class SelectServerController extends Controller
 {
     /**
      * Render the select server page.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request): View
     {
         $data = [
             'servers' => $request->get('servers'),

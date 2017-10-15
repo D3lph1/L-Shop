@@ -1,15 +1,17 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Payment;
 
+use App\Exceptions\LogicException;
+use App\Exceptions\Payment\AlreadyCompletedException;
+use App\Exceptions\Payment\NotFoundException;
 use App\Http\Controllers\Controller;
-use App\Models\Payment;
-use App\Repositories\PaymentRepository;
-use App\Services\Payments\Interkassa\Checkout as InterkassaCheckout;
-use App\Services\Payments\Interkassa\Payment as InterkassaPayment;
-use App\Services\Payments\Robokassa\Checkout as RobokassaCheckout;
-use App\Services\Payments\Robokassa\Payment as RobokassaPayment;
+use App\Models\Payment\PaymentInterface;
+use App\TransactionScripts\Payments;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 /**
  * Class PaymentController
@@ -21,129 +23,56 @@ use Illuminate\Http\Request;
 class PaymentController extends Controller
 {
     /**
-     * @var Payment
+     * @var PaymentInterface
      */
     private $payment;
 
     /**
      * Render the payment methods page
-     *
-     * @param Request           $request
-     * @param PaymentRepository $paymentRepository
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request, PaymentRepository $paymentRepository)
+    public function render(Request $request, Payments $script): View
     {
-        $this->payment = (int)$request->route('payment');
-        $this->payment = $paymentRepository->find($this->payment, ['id', 'cost', 'user_id', 'username', 'completed']);
+        $methods = null;
 
-        // If payment with this ID does not exist, exit.
-        if (!$this->payment) {
+        try {
+            $methods = $script->methods((int)$request->route('payment'));
+        } catch (NotFoundException $e) {
             $this->app->abort(404);
-        }
-
-        // If the payment is completed, deny access.
-        if ($this->payment->completed) {
+        } catch (AlreadyCompletedException | LogicException $e) {
             $this->app->abort(403);
         }
 
-        // Verification of whether the payment the user belongs.
-        if (is_null($this->payment->username)) {
-            if (!is_auth()) {
-                // If it is not, deny access.
-                $this->app->abort(403);
-            }
-
-            if ($this->payment->user_id != $this->sentinel->getUser()->getUserId()) {
-                // If it is not, deny access.
-                $this->app->abort(403);
-            }
-        }
-
-        $data = [
-            'robokassa' => $this->robokassa(),
-            'interkassa' => $this->interkassa(),
-        ];
-
-        return view('payment.methods', $data);
+        return view('payment.methods', [
+            'methods' => $methods
+        ]);
     }
 
-    /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function renderFillUpBalancePage()
+    public function renderFillUpBalancePage(): View
     {
         return view('payment.fillupbalance');
     }
 
-    /**
-     * @param Request           $request
-     * @param PaymentRepository $paymentRepository
-     *
-     * @return bool|\Illuminate\Http\JsonResponse
-     */
-    public function fillUpBalance(Request $request, PaymentRepository $paymentRepository)
+    public function fillUpBalance(Request $request, Payments $script): JsonResponse
     {
-        $server = (int)$request->route('server');
-        $sum = abs($request->get('sum'));
-
+        $sum = (float)$request->get('sum');
         $validated = $this->validateFillUpBalanceSum($sum, true);
+
         if ($validated !== true) {
             return $validated;
         }
 
-        $payment = $paymentRepository->create([
-            'service' => null,
-            'products' => null,
-            'cost' => $sum,
-            'user_id' => $this->sentinel->getUser()->getUserId(),
-            'username' => null,
-            'server_id' => $server,
-            'ip' => $request->ip(),
-            'completed' => false
-        ]);
+        $payment = $script->fillupbalance(
+            $this->sentinel->getUser()->getId(),
+            $sum,
+            (int)$request->route('server'),
+            $request->ip()
+        );
 
         return json_response('success',[
                 'redirect' => route('payment.methods', [
-                'server' => $server,
+                'server' => $request->get('currentServer')->getId(),
                 'payment' => $payment
             ])
         ]);
-    }
-
-    /**
-     * @return string
-     */
-    private function robokassa()
-    {
-        if (!s_get('payment.method.robokassa.enabled')) {
-            return null;
-        }
-
-        /** @var RobokassaCheckout $checkout */
-        $checkout = $this->app->make(RobokassaCheckout::class);
-        $payment = new RobokassaPayment($this->payment->id, $this->payment->cost);
-        $payment->setDescription(s_get('shop.name'));
-
-        return $checkout->getPaymentUrl($payment);
-    }
-
-    /**
-     * @return string
-     */
-    private function interkassa()
-    {
-        if (!s_get('payment.method.interkassa.enabled')) {
-            return null;
-        }
-
-        /** @var InterkassaCheckout $checkout */
-        $checkout = $this->app->make(InterkassaCheckout::class);
-        $payment = new InterkassaPayment($this->payment->id, $this->payment->cost);
-        $payment->setDescription(s_get('shop.name'));
-        $payment->setCurrency(s_get('payment.method.interkassa.currency'));
-
-        return $checkout->getPaymentUrl($payment);
     }
 }

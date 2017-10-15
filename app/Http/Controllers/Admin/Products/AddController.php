@@ -1,50 +1,35 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Products;
 
-use App\DataTransferObjects\Admin\Product;
+use App\DataTransferObjects\Product;
 use App\Exceptions\ItemNotFoundException;
-use App\Http\Requests\Admin\SaveAddedProductRequest;
-use App\Repositories\ItemRepository;
-use App\Repositories\ServerRepository;
-use App\Services\AdminProducts;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\SaveAddedProductRequest;
+use App\Models\Product\ProductInterface;
+use App\Repositories\Item\ItemRepositoryInterface;
+use App\Repositories\Server\ServerRepositoryInterface;
+use App\Traits\ContainerTrait;
+use App\TransactionScripts\Products;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 /**
  * Class AddController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Products
  */
 class AddController extends Controller
 {
-    /**
-     * @var AdminProducts
-     */
-    private $adminProducts;
-
-    /**
-     * @param AdminProducts $adminProducts
-     */
-    public function __construct(AdminProducts $adminProducts)
-    {
-        $this->adminProducts = $adminProducts;
-
-        parent::__construct();
-    }
+    use ContainerTrait;
 
     /**
      * Render the add product page.
-     *
-     * @param Request        $request
-     * @param ItemRepository $itemRepository
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request, ItemRepository $itemRepository, ServerRepository $serverRepository)
+    public function render(Request $request, ItemRepositoryInterface $itemRepository, ServerRepositoryInterface $serverRepository): View
     {
         $items = $itemRepository->all([
             'id',
@@ -52,17 +37,12 @@ class AddController extends Controller
             'type'
         ]);
 
-        $categories = $serverRepository->allWithCategories([
-            'categories.name as category',
-            'categories.id as category_id',
-            'servers.name as server',
-            'servers.id as server_id'
-        ]);
+        $servers = $serverRepository->allWithCategories(['name'], ['id', 'name']);
 
         $data = [
             'currentServer' => $request->get('currentServer'),
             'items' => $items,
-            'categories' => $categories
+            'servers' => $servers
         ];
 
         return view('admin.products.add', $data);
@@ -70,25 +50,23 @@ class AddController extends Controller
 
     /**
      * Save new product request.
-     *
-     * @param SaveAddedProductRequest $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(SaveAddedProductRequest $request)
+    public function save(SaveAddedProductRequest $request, Products $script): RedirectResponse
     {
+        /** @var ProductInterface $entity */
+        $entity = $this->make(ProductInterface::class);
+        $entity
+            ->setPrice((float)$request->get('price'))
+            ->setStack((float)$request->get('stack'))
+            ->setItemId((int)$request->get('item'))
+            ->setServerId((int)$request->get('server'))
+            ->setCategoryId((int)$request->get('category'))
+            ->setSortPriority((float)$request->get('sort_priority'));
+
         $result = null;
-        $dto = new Product(
-            $request->get('price'),
-            $request->get('stack'),
-            $request->get('item'),
-            $request->get('server'),
-            $request->get('category'),
-            $request->get('sort_priority')
-        );
 
         try {
-            $result = $this->adminProducts->create($dto);
+            $result = $script->create($entity);
         } catch (ItemNotFoundException $e) {
             $this->msg->danger(__('messages.admin.products.add.item_not_found', ['id' => $dto->getItemId()]));
         }

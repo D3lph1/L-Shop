@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Exceptions;
 
@@ -8,7 +9,7 @@ namespace App\Exceptions;
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  * @package App\Exceptions
  */
-class FailedToUpdateTableException extends \RuntimeException implements LShopException
+class FailedToUpdateTableException extends RuntimeException
 {
     //
 }

@@ -1,39 +1,30 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Auth;
 
 use App\Services\Activator;
 use Cartalyst\Sentinel\Sentinel;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\RepeatSendActivationRequest;
+use Illuminate\View\View;
 
 /**
  * Class ActivationController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Auth
  */
 class ActivationController extends Controller
 {
-    /**
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\Http\RedirectResponse|\Illuminate\View\View
-     */
-    public function renderWaitPage(Request $request)
+    public function renderWaitPage(): View
     {
         return view('auth.activate_wait');
     }
 
-    /**
-     * @param Request  $request
-     * @param Sentinel $sentinel
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function activate(Request $request, Sentinel $sentinel)
+    public function activate(Request $request, Sentinel $sentinel): RedirectResponse
     {
         $userId = (int)$request->route('user');
 
@@ -55,14 +46,7 @@ class ActivationController extends Controller
         return response()->redirectToRoute('signin');
     }
 
-    /**
-     * @param RepeatSendActivationRequest $request
-     * @param Sentinel                    $sentinel
-     * @param Activator                   $activator
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function repeatSend(RepeatSendActivationRequest $request, Sentinel $sentinel, Activator $activator)
+    public function repeatSend(RepeatSendActivationRequest $request, Sentinel $sentinel, Activator $activator): RedirectResponse
     {
         $email = $request->get('email');
         $user = $sentinel->getUserRepository()->findByCredentials(['email' => $email]);

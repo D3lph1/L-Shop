@@ -1,63 +1,61 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\News;
 
-use App\DataTransferObjects\Admin\News as DTO;
+use App\DataTransferObjects\News as DTO;
+use App\Exceptions\News\DisabledException;
+use App\Exceptions\News\NotFoundExceptions;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveEditedNewsRequest;
-use App\Repositories\NewsRepository;
-use App\Services\News;
+use App\Traits\ContainerTrait;
+use App\TransactionScripts\Shop\News;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 /**
  * Class EditController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\News
  */
 class EditController extends Controller
 {
+    use ContainerTrait;
+
     /**
      * Render the edit news page.
-     *
-     * @param Request        $request
-     * @param NewsRepository $newsRepository
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request, NewsRepository $newsRepository)
+    public function render(Request $request, News $news): View
     {
-        $id = (int)$request->route('id');
-        $news = $newsRepository->find($id);
+        $concrete = null;
 
-        if (!$news) {
+        try {
+            $concrete = $news->find((int)$request->route('id'));
+        } catch (DisabledException $exception) {
+            $this->msg->warning(__('messages.shop.catalog.news.disabled'));
+
+            return back();
+        } catch (NotFoundExceptions $e) {
             $this->app->abort(404);
         }
 
-        $data = [
+        return view('admin.news.edit', [
             'currentServer' => $request->get('currentServer'),
-            'news' => $news
-        ];
-
-        return view('admin.news.edit', $data);
+            'news' => $concrete
+        ]);
     }
 
     /**
      * Handle the edit news request.
-     *
-     * @param SaveEditedNewsRequest $request
-     * @param News                  $news
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(SaveEditedNewsRequest $request, News $news)
+    public function save(SaveEditedNewsRequest $request, News $news): RedirectResponse
     {
-        $dto = new DTO(
-            $request->get('news_title'),
-            $request->get('news_content')
-        );
-        $dto->setId($request->route('id'));
+        $dto = (new DTO())
+            ->setId((int)$request->route('id'))
+            ->setTitle($request->get('news_title'))
+            ->setContent($request->get('news_content'));
 
         if ($news->update($dto)) {
             $this->msg->success(__('messages.admin.news.edit.success'));
@@ -71,13 +69,8 @@ class EditController extends Controller
 
     /**
      * Remove given news.
-     *
-     * @param Request $request
-     * @param News    $news
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function remove(Request $request, News $news)
+    public function remove(Request $request, News $news): RedirectResponse
     {
         $id = (int)$request->route('id');
         if ($news->delete($id)) {

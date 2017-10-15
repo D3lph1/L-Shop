@@ -53,6 +53,7 @@ return array(
 
     'model_locations' => array(
         'app',
+        'app/Models/Ban',
     ),
 
 

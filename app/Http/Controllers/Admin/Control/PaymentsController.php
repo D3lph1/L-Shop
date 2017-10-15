@@ -1,16 +1,18 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Control;
 
 use App\Http\Requests\Admin\SavePaymentsRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\View\View;
 
 /**
  * Class PaymentsController
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Control
  */
 class PaymentsController extends Controller
@@ -36,12 +38,8 @@ class PaymentsController extends Controller
 
     /**
      * Render payments settings page.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request): View
     {
         $data = [
             'currentServer' => $request->get('currentServer'),
@@ -73,12 +71,8 @@ class PaymentsController extends Controller
 
     /**
      * Handle the save payments settings request.
-     *
-     * @param SavePaymentsRequest $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(SavePaymentsRequest $request)
+    public function save(SavePaymentsRequest $request): RedirectResponse
     {
         $this->all($request);
 
@@ -105,8 +99,6 @@ class PaymentsController extends Controller
 
     /**
      * Save all settings.
-     *
-     * @param Request $request
      */
     private function all(Request $request)
     {
@@ -116,8 +108,6 @@ class PaymentsController extends Controller
 
     /**
      * Save settings for robokassa.
-     *
-     * @param Request $request
      */
     private function robokassa(Request $request)
     {
@@ -145,8 +135,6 @@ class PaymentsController extends Controller
 
     /**
      * Save settings for interkassa.
-     *
-     * @param Request $request
      */
     private function interkassa(Request $request)
     {
@@ -176,13 +164,8 @@ class PaymentsController extends Controller
 
     /**
      * Check algo on correct name.
-     *
-     * @param string $algo
-     * @param string $service
-     *
-     * @return bool
      */
-    public function checkAlgo($algo, $service)
+    public function checkAlgo(string $algo, string $service): bool
     {
         $prop = $service . 'Algos';
 

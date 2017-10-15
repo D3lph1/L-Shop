@@ -1,57 +1,51 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Pages;
 
-use App\DataTransferObjects\Admin\Page as DTO;
+use App\DataTransferObjects\Page as DTO;
 use App\Exceptions\Page\UrlAlreadyExistsException;
-use App\Services\Page;
-use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveAddedPageRequest;
+use App\Models\Page\PageInterface;
+use App\Traits\ContainerTrait;
+use App\TransactionScripts\Pages;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 /**
  * Class AddController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Pages
  */
 class AddController extends Controller
 {
+    use ContainerTrait;
+
     /**
      * Render add static page.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request): View
     {
-        $data = [
+        return view('admin.pages.add', [
             'currentServer' => $request->get('currentServer')
-        ];
-
-        return view('admin.pages.add', $data);
+        ]);
     }
 
     /**
      * Save new static page.
-     *
-     * @param SaveAddedPageRequest $request
-     * @param Page                 $handler
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(SaveAddedPageRequest $request, Page $handler)
+    public function save(SaveAddedPageRequest $request, Pages $script): RedirectResponse
     {
-        $page = new DTO(
-            $request->get('page_title'),
-            $request->get('page_content'),
-            $request->get('page_url')
-        );
+        $entity = $this->make(PageInterface::class)
+            ->setTitle($request->get('page_title'))
+            ->setContent($request->get('page_content'))
+            ->setUrl($request->get('page_url'));
 
         try {
-            if ($handler->create($page)) {
+            if ($script->create($entity)) {
                 $this->msg->success(__('messages.admin.pages.add.success'));
             } else {
                 $this->msg->danger(__('messages.admin.pages.add.fail'));
@@ -62,6 +56,6 @@ class AddController extends Controller
             return back();
         }
 
-        return response()->redirectToRoute('admin.pages.list', ['server' => $request->get('currentServer')->id]);
+        return response()->redirectToRoute('admin.pages.list', ['server' => $request->get('currentServer')->getId()]);
     }
 }

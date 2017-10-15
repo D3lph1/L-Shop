@@ -251,6 +251,15 @@
                             <label for="m-s-rcon-connection-timeout">@lang('content.admin.control.main_settings.monitoring.timeout')</label>
                         </div>
                     </p>
+
+                    <p>
+                    <div class="md-form mt-2">
+                        <i class="fa fa-commenting-o prefix" data-toggle="popover" data-placement="right" data-trigger="hover" title="@lang('components.popover.title')" data-html="false" data-content="@lang('content.admin.control.main_settings.monitoring.pattern_popover')"></i>
+                        <input type="text" name="rcon_monitoring_pattern" id="m-s-rcon-monitoring-pattern" class="form-control" value="{{ $rconMonitoringPattern }}">
+                        <label for="m-s-rcon-monitoring-pattern">@lang('content.admin.control.main_settings.monitoring.pattern')</label>
+                    </div>
+                    </p>
+
                     </p>
                 </div>
             </div>

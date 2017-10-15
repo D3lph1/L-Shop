@@ -1,25 +1,36 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Users;
 
-use App\Models\User;
-use App\Repositories\UserRepository;
-use App\Services\Ban;
-use Cartalyst\Sentinel\Sentinel;
-use Illuminate\Database\Eloquent\Builder;
-use Illuminate\Http\Request;
+use App\Exceptions\User\AlreadyActivatedException;
+use App\Exceptions\User\NotFoundException;
 use App\Http\Controllers\Controller;
+use App\Services\Ban;
+use App\TransactionScripts\Users;
+use Illuminate\Http\JsonResponse;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 /**
  * Class ListController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Users
  */
 class ListController extends Controller
 {
-    private $searchSpecials = ['>', '<', '=', '>=', '<=', '!=', '<>'];
+    /**
+     * @var Users
+     */
+    private $script;
+
+    public function __construct(Users $script)
+    {
+        parent::__construct();
+        $this->script = $script;
+    }
 
     /**
      * Render the users list page.
@@ -29,53 +40,46 @@ class ListController extends Controller
      *
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request, Ban $ban)
+    public function render(Request $request, Ban $ban): View
     {
-        $users = $this->sentinel->getUserRepository()->with(['roles', 'activations', 'ban'])->paginate(50);
-
-        $data = [
+        return view('admin.users.list', [
             'currentServer' => $request->get('currentServer'),
             'ban' => $ban,
-            'users' => $users
-        ];
-
-        return view('admin.users.list', $data);
+            'users' => $this->script->informationForList()
+        ]);
     }
 
     /**
      * Activate given user.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function complete(Request $request)
+    public function complete(Request $request): RedirectResponse
     {
-        $user = $this->sentinel->findById((int)$request->route('user'));
-        $activation = $this->sentinel->getActivationRepository()->completed($user);
-        if ($activation) {
+        try {
+            if ($this->script->activate((int)$request->route('user'))) {
+                $this->msg->success(__('messages.admin.users.list.activate.success'));
+            } else {
+                $this->msg->success(__('messages.admin.users.list.activate.fail'));
+            }
+        } catch (NotFoundException $e) {
+            $this->msg->success(__('messages.admin.users.edit.remove.not_found'));
+        } catch (AlreadyActivatedException $e) {
             $this->msg->info(__('messages.admin.users.list.activate.already'));
-
-            return back();
         }
-
-        $this->sentinel->activate($user);
-        $this->msg->success(__('messages.admin.users.list.activate.success'));
 
         return back();
     }
 
     /**
      * Search given user.
-     *
-     * @param Request  $request
-     *
-     * @return \Illuminate\Http\JsonResponse
      */
-    public function search(Request $request)
+    public function search(Request $request): JsonResponse
     {
-        $search = $request->get('search');
-        $result = $this->getResult($search);
+        $query = $request->get('search');
+        if (empty($query)) {
+            return json_response('not_found');
+        }
+
+        $result = $this->script->search($query);
 
         if (count($result) > 0) {
             $currency = s_get('shop.currency_html');
@@ -86,7 +90,7 @@ class ListController extends Controller
                         'server' => $request->get('currentServer')->id,
                         'edit' => $item['id'],
                     ]);
-            $item['currency'] = $currency;
+                $item['currency'] = $currency;
             }
             unset($item);
 
@@ -96,17 +100,5 @@ class ListController extends Controller
         }
 
         return json_response('not_found');
-    }
-
-    /**
-     * Get user search result.
-     *
-     * @param string $search Query string.
-     *
-     * @return array
-     */
-    protected function getResult($search)
-    {
-        return $this->app->make(UserRepository::class)->search($search, $this->searchSpecials);
     }
 }

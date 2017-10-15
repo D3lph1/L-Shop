@@ -1,17 +1,24 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Console;
 
+use App\Console\Commands\Payment\Complete;
 use App\Console\Commands\Server\Rcon;
+use App\Console\Commands\User\Activate;
 use App\Console\Commands\User\Block;
 use App\Console\Commands\User\Create;
 use App\Console\Commands\User\Remove;
-use App\Console\Commands\User\Activate;
-use App\Console\Commands\Payment\Complete;
 use App\Console\Commands\User\Unblock;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
+/**
+ * Class Kernel
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Console
+ */
 class Kernel extends ConsoleKernel
 {
     /**
@@ -31,11 +38,8 @@ class Kernel extends ConsoleKernel
 
     /**
      * Define the application's command schedule.
-     *
-     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
-     * @return void
      */
-    protected function schedule(Schedule $schedule)
+    protected function schedule(Schedule $schedule): void
     {
         // $schedule->command('inspire')
         //          ->hourly();
@@ -43,10 +47,8 @@ class Kernel extends ConsoleKernel
 
     /**
      * Register the Closure based commands for the application.
-     *
-     * @return void
      */
-    protected function commands()
+    protected function commands(): void
     {
         require base_path('routes/console.php');
     }

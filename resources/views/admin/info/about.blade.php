@@ -26,15 +26,19 @@
                     <tbody>
                     <tr>
                         <td>@lang('content.admin.other.info.about.lshop_version')</td>
-                        <td>0.4.3b (BETA)</td>
+                        <td>0.5.0 (BETA)</td>
                     </tr>
                     <tr>
                         <td>@lang('content.admin.other.info.about.laravel_version')</td>
-                        <td>5.4.24</td>
+                        <td>5.5.4</td>
                     </tr>
                     <tr>
                         <td>@lang('content.admin.other.info.about.github')</td>
                         <td><a href="https://github.com/D3lph1/L-shop" target="_blank">https://github.com/D3lph1/L-shop</a></td>
+                    </tr>
+                    <tr>
+                        <td>@lang('sidebar.admin.info.nodes.docs')</td>
+                        <td><a href="https://github.com/D3lph1/L-shop/wiki" target="_blank">https://github.com/D3lph1/L-shop/wiki</a></td>
                     </tr>
                     <tr>
                         <td>@lang('content.admin.other.info.about.rubukkit')</td>
@@ -65,7 +69,7 @@
                     <img class="rounded-circle" src="{{ asset('img/admin/developers/WhileD0S.png') }}" alt="Generic placeholder image" height="100" width="100">
                 </a>
                 <div class="media-body">
-                    <h4 class="media-heading">WhilD0S <a href="https://vk.com/whiled0s" target="_blank" class="btn btn-primary btn-sm"><i class="fa fa-vk"></i></a></h4>
+                    <h4 class="media-heading">WhileD0S <a href="https://vk.com/whiled0s" target="_blank" class="btn btn-primary btn-sm"><i class="fa fa-vk"></i></a></h4>
                     <p>@lang('content.admin.other.info.about.whiled0s_description')</p>
                 </div>
             </div>

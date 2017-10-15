@@ -1,12 +1,16 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Composers;
 
 use App\Contracts\ComposerContract;
 use App\DataTransferObjects\MonitoringPlayers;
-use App\Models\Server;
-use App\Repositories\NewsRepository;
+use App\Models\Server\ServerInterface;
+use App\Repositories\News\NewsRepositoryInterface;
 use App\Services\Monitoring\MonitoringInterface;
+use App\Traits\ContainerTrait;
+use App\TransactionScripts\Monitoring;
+use App\TransactionScripts\Shop\News;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
@@ -16,11 +20,12 @@ use Illuminate\View\View;
  * on each child page of this template.
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Composers
  */
 class ShopLayoutComposer implements ComposerContract
 {
+    use ContainerTrait;
+
     /**
      * @var Request
      */
@@ -29,55 +34,42 @@ class ShopLayoutComposer implements ComposerContract
     /**
      * Data about current server
      *
-     * @var Server
+     * @var ServerInterface
      */
     private $currentServer;
 
     /**
-     * Data about all enabled servers
+     * Data about all enabled servers.
      *
-     * @var Server
+     * @var ServerInterface[]
      */
     private $servers;
-
-    /**
-     * @var NewsRepository
-     */
-    private $newsRepository;
 
     /**
      * @var MonitoringInterface
      */
     private $monitoring;
 
-    /**
-     * @param Request             $request
-     * @param NewsRepository      $newsRepository
-     * @param MonitoringInterface $monitoring
-     */
-    public function __construct(Request $request, NewsRepository $newsRepository, MonitoringInterface $monitoring)
+    public function __construct(Request $request, MonitoringInterface $monitoring)
     {
         $this->request = $request;
         $this->currentServer = $request->get('currentServer');
         $this->servers = $request->get('servers');
-        $this->newsRepository = $newsRepository;
         $this->monitoring = $monitoring;
     }
 
     /**
      * {@inheritdoc}
      */
-    public function compose(View $view)
+    public function compose(View $view): void
     {
         $view->with($this->getData());
     }
 
     /**
      * Obtain information for subsequent composing.
-     *
-     * @return array
      */
-    private function getData()
+    private function getData(): array
     {
         if (s_get('news.enabled')) {
             $news = $this->news();
@@ -90,7 +82,7 @@ class ShopLayoutComposer implements ComposerContract
         return [
             'isAuth' => is_auth(),
             'isAdmin' => is_admin(),
-            'username' => is_auth() ? \Sentinel::getUser()->getUserLogin() : null,
+            'username' => is_auth() ? \Sentinel::getUser()->getUsername() : null,
             'balance' => is_auth() ? \Sentinel::getUser()->getBalance() : null,
             'currency' => s_get('shop.currency_html', 'руб.'),
             'currentServer' => $this->currentServer,
@@ -116,22 +108,24 @@ class ShopLayoutComposer implements ComposerContract
 
     /**
      * Get first portion of news list.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection
      */
-    private function news()
+    private function news(): iterable
     {
-        return $this->newsRepository->getFirstPortion();
+        /** @var News $script */
+        $script = $this->make(News::class);
+
+        return $script->firstPortion();
     }
 
     /**
      * Get all news count.
-     *
-     * @return int
      */
-    private function newsCount()
+    private function newsCount(): int
     {
-        return $this->newsRepository->count();
+        /** @var NewsRepositoryInterface $repository */
+        $repository = $this->make(NewsRepositoryInterface::class);
+
+        return $repository->count();
     }
 
     /**
@@ -139,22 +133,11 @@ class ShopLayoutComposer implements ComposerContract
      *
      * @return MonitoringPlayers[]
      */
-    private function monitoring()
+    private function monitoring(): array
     {
-        if (s_get('monitoring.enabled')) {
-            $servers = $this->request->get('servers');
-            $monitoring = [];
+        /** @var Monitoring $monitoring */
+        $monitoring = $this->make(Monitoring::class);
 
-            /** @var Server $server */
-            foreach ($servers as $server) {
-                if ($server->monitoring_enabled) {
-                    $monitoring[] = $this->monitoring->getPlayers($server->id);
-                }
-            }
-
-            return $monitoring;
-        }
-
-        return [];
+        return $monitoring->forServers($this->request->get('servers'));
     }
 }

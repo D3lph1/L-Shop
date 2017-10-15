@@ -1,60 +1,46 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Providers;
 
-use App\Models\Server;
-use App\Repositories\ServerRepository;
 use App\Services\Activator;
 use App\Services\Cart;
-use App\Services\CartBuy;
-use App\Services\CatalogBuy;
 use App\Services\Message;
 use App\Services\Monitoring\MonitoringInterface;
 use App\Services\Monitoring\RconMonitoring;
 use App\Services\ReCaptcha;
-use App\Services\Registrar;
 use App\Services\SashokLauncher;
+use App\TransactionScripts\Monitoring;
 use D3lph1\MinecraftRconManager\Connector;
 use D3lph1\MinecraftRconManager\Rcon;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\Facades\Schema;
+use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
 
+/**
+ * Class AppServiceProvider
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Providers
+ */
 class AppServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap any application services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
         Schema::defaultStringLength(191);
 
-        \Validator::extend('alpha_strict', function ($attribute, $value, $parameters, $validator) {
-            return preg_match('/^[a-zA-Z]+$/', $value);
-        });
-
-        \Validator::extend('alpha_dash_strict', function ($attribute, $value, $parameters, $validator) {
-            return preg_match('/^[a-zA-Z0-9_-]+$/', $value);
-        });
-
-        \Validator::extend('alpha_num_strict', function ($attribute, $value, $parameters, $validator) {
-            return preg_match('/^[a-zA-Z0-9]+$/', $value);
-        });
+        $this->registerValidators();
     }
 
     /**
      * Register any application services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
-        if (!Schema::hasTable('servers')) {
-            return;
-        }
-
         $this->app->alias(Message::class, 'message');
 
         $this->app->alias(Cart::class, 'cart');
@@ -67,40 +53,48 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->alias(Activator::class, 'activator');
-
-        $this->app->alias(Activator::class, 'reminder');
-
-        $this->app->alias(Registrar::class, 'registrar');
-
-        $this->app->alias(CatalogBuy::class,'catalog.buy');
-
-        $this->app->alias(CartBuy::class, 'cart.buy');
-
         $this->app->alias(SashokLauncher::class, 'launcher.sashok');
 
         $this->app->singleton(Rcon::class, function (Application $app) {
-            $request = $app->make('request');
-            $servers = $request->get('servers');
-
-            if (!$servers) {
-                $servers = $app->make(ServerRepository::class)->all();
+            // To successfully carry out the migration procedure.
+            if (!Schema::hasTable('servers')) {
+                return new Connector();
             }
 
-            $rcon = new Connector();
-
-            /** @var Server $server */
-            foreach ($servers as $server) {
-                $rcon->add($server->id, $server->ip, $server->port, $server->password, s_get('monitoring.rcon.timeout', 1));
-            }
-
-            return $rcon;
+            return $this->app->make(Monitoring::class)->init($app->make('request')->get('servers'));
         });
+
         $this->app->alias(Rcon::class, Connector::class);
         $this->app->alias(Rcon::class, 'rcon');
-
         $this->app->singleton(MonitoringInterface::class, function (Application $app) {
             return new RconMonitoring($app->make(Rcon::class));
         });
         $this->app->alias(MonitoringInterface::class, 'monitoring');
+    }
+
+    private function registerValidators()
+    {
+        Validator::extend('alpha_strict', function ($attribute, $value, $parameters, $validator) {
+            return preg_match('/^[a-zA-Z]+$/', $value);
+        });
+
+        Validator::extend('alpha_dash_strict', function ($attribute, $value, $parameters, $validator) {
+            return preg_match('/^[a-zA-Z0-9_-]+$/', $value);
+        });
+
+        Validator::extend('alpha_num_strict', function ($attribute, $value, $parameters, $validator) {
+            return preg_match('/^[a-zA-Z0-9]+$/', $value);
+        });
+
+        // Checks the input string so that it is a regular regular expression.
+        Validator::extend('valid_regex', function ($attribute, $value, $parameters, $validator) {
+            try {
+                preg_match($value, '');
+            } catch (\ErrorException $e) {
+                return false;
+            }
+
+            return true;
+        });
     }
 }

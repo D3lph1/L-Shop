@@ -23,7 +23,7 @@
 
                     <div class="dropdown-menu">
                         @foreach($servers as $server)
-                            <a data-server-id="{{ $server->id }}" class="dropdown-item rcon-dropdown-item">{{ $server->name }}</a>
+                            <a data-server-id="{{ $server->getId() }}" class="dropdown-item rcon-dropdown-item">{{ $server->name }}</a>
                         @endforeach
                     </div>
                 </div>
@@ -34,20 +34,20 @@
             </div>
 
             @foreach($servers as $server)
-                <div class="row rcon-server" data-server-id="{{ $server->id }}" style="display: none">
-                    <div class="col-12 rcon-area" data-server-id="{{ $server->id }}">
-                        <ul class="list-group rcon-list" data-server-id="{{ $server->id }}">
+                <div class="row rcon-server" data-server-id="{{ $server->getId() }}" style="display: none">
+                    <div class="col-12 rcon-area" data-server-id="{{ $server->getId() }}">
+                        <ul class="list-group rcon-list" data-server-id="{{ $server->getId() }}">
                         </ul>
                     </div>
                     <div class="col-md-10 mt-2">
                         <div class="md-form">
-                            <input type="text" class="input-alternate rcon-input" data-server-id="{{ $server->id }}" data-url="{{ route('admin.other.rcon.send', ['server' => $currentServer, 'send' => $server->id]) }}" placeholder="@lang('content.admin.other.rcon.enter_cmd')">
+                            <input type="text" class="input-alternate rcon-input" data-server-id="{{ $server->getId() }}" data-url="{{ route('admin.other.rcon.send', ['server' => $currentServer, 'send' => $server->getId()]) }}" placeholder="@lang('content.admin.other.rcon.enter_cmd')">
                         </div>
                     </div>
 
                     <div class="col-md-2 mt-2">
                         <div class="md-form">
-                            <button class="btn btn-info btn-sm rcon-btn" data-server-id="{{ $server->id }}" data-url="{{ route('admin.other.rcon.send', ['server' => $currentServer, 'send' => $server->id]) }}">@lang('content.admin.other.rcon.exec')</button>
+                            <button class="btn btn-info btn-sm rcon-btn" data-server-id="{{ $server->getId() }}" data-url="{{ route('admin.other.rcon.send', ['server' => $currentServer, 'send' => $server->getId()]) }}">@lang('content.admin.other.rcon.exec')</button>
                         </div>
                     </div>
                 </div>

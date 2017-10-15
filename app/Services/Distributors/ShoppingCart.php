@@ -1,63 +1,64 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Services\Distributors;
 
-use App\Repositories\CartRepository;
-use App\Repositories\PaymentRepository;
-use App\Repositories\ProductRepository;
-use Carbon\Carbon;
-use App\Models\Payment;
 use App\Exceptions\FailedToInsertException;
-use Illuminate\Database\Eloquent\Collection;
+use App\Exceptions\UnexpectedValueException;
+use App\Models\Payment\PaymentInterface;
+use App\Models\Product\ProductInterface;
+use App\Repositories\Cart\CartRepositoryInterface;
+use App\Services\Items\Type;
+use DB;
 
 /**
  * Class ShoppingCart
  * It produces products issue in the player shopping cart plugin table.
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Services\Distributors
  */
 class ShoppingCart extends Distributor
 {
     /**
-     * @var CartRepository
+     * @var CartRepositoryInterface
      */
-    protected $cartRepository;
+    private $cartRepository;
 
-    /**
-     * ShoppingCart constructor.
-     *
-     * @param CartRepository    $cartRepository
-     * @param ProductRepository $productRepository
-     * @param PaymentRepository $paymentRepository
-     */
-    public function __construct(
-        CartRepository $cartRepository,
-        ProductRepository $productRepository,
-        PaymentRepository $paymentRepository
-    )
+    public function __construct(CartRepositoryInterface $cartRepository)
     {
         $this->cartRepository = $cartRepository;
-        parent::__construct($productRepository, $paymentRepository);
+        parent::__construct();
     }
 
     /**
      * {@inheritdoc}
      */
-    public function give(Payment $payment)
+    public function give(PaymentInterface $payment): void
     {
-        $this->payment = $payment;
-        $this->setUser();
-        \DB::transaction(function () use ($payment) {
-            $products = $this->productsWithItems($payment->products);
-            $this->putInTable($this->prepareInsertData($products));
-            $this->complete();
+        DB::transaction(function () use ($payment) {
+            $username = $this->getUsername($payment);
+            $products = $this->productsWithItems($payment->getProducts());
+            $this->putInTable($this->prepareInsertData($payment, $products, $username));
         });
     }
 
     /**
-     * @param Collection $products
+     * @param array $data
+     *               Example:
+     *               [
+     *                  [
+     *                      'product' => <instanceof ProductInterface>,
+     *                      'count' => 64
+     *                  ],
+     *                  [
+     *                      'product' => <instanceof ProductInterface>,
+     *                      'count' => 1
+     *                  ],
+     *                  [
+     *                      //
+     *                  ]
+     *               ]
      *
      * @return array Array with the goods that need to be given to the user.
      *               Example:
@@ -77,34 +78,37 @@ class ShoppingCart extends Distributor
      *                  ]
      *               ]
      */
-    private function prepareInsertData($products)
+    private function prepareInsertData(PaymentInterface $payment, array $data, string $username)
     {
         $insertData = [];
 
-        foreach ($products as $product) {
+        foreach ($data as $one) {
+            /** @var ProductInterface $product */
+            $product = $one['product'];
             // If the current product is a privilege.
-            if ($product->type == 'permgroup') {
-                if ($product->count) {
-                    $item = $product->item . '?lifetime=' . $product->count * 86400;
+            if ($product->getItem()->getType() === Type::PERMGROUP) {
+                if ($one['count']) {
+                    $item = $product->getItem()->getItem() . '?lifetime=' . $one['count'] * 86400;
                 } else {
-                    $item = $product->item;
+                    $item = $product->getItem()->getItem();
                 }
                 $amount = 1;
-            } else {
+            } else if ($product->getItem()->getType() === Type::ITEM) {
                 // If the current product is a simple item.
-                $item = $product->item;
-                $amount = $product->count;
+                $item = $product->getItem()->getItem();
+                $amount = $one['count'];
+            } else {
+                throw new UnexpectedValueException("Unexpected item type `{$product->getItem()->getType()}`");
             }
 
             $insertData[] = [
-                'server' => $this->payment->server_id,
-                'player' => $this->user,
-                'type' => $product->type,
+                'server' => $payment->getServerId(),
+                'player' => $username,
+                'type' => $product->getItem()->getType(),
                 'item' => $item,
                 'amount' => $amount,
-                'extra' => $product->extra,
-                'item_id' => $product->item_id,
-                'created_at' => Carbon::now()->toDateTimeString()
+                'extra' => $product->getItem()->getExtra(),
+                'item_id' => $product->getItem()->getId()
             ];
         }
 
@@ -112,13 +116,11 @@ class ShoppingCart extends Distributor
     }
 
     /**
-     * @param array $insertData
-     *
-     * @throws FailedToInsertException
+     * Insert data in shopping cart payment
      */
-    private function putInTable($insertData)
+    private function putInTable(array $data): void
     {
-        if (!$this->cartRepository->insert($insertData)) {
+        if (!$this->cartRepository->insert($data)) {
             throw new FailedToInsertException();
         }
     }

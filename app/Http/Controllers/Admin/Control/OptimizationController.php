@@ -1,30 +1,28 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Control;
 
 use App\Http\Requests\Admin\SaveOptimizationRequest;
 use Illuminate\Cache\Repository;
 use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\View\View;
 
 /**
  * Class OptimizationController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Control
  */
 class OptimizationController extends Controller
 {
     /**
      * Render the optimization page.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request): View
     {
         $data = [
             'currentServer' => $request->get('currentServer'),
@@ -39,12 +37,8 @@ class OptimizationController extends Controller
 
     /**
      * Handle save optimization settings request.
-     *
-     * @param SaveOptimizationRequest $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(SaveOptimizationRequest $request)
+    public function save(SaveOptimizationRequest $request): RedirectResponse
     {
         s_set([
             'caching.statistic.ttl' => $request->get('ttl_statistic'),
@@ -60,12 +54,8 @@ class OptimizationController extends Controller
 
     /**
      * Handle update routes cache request.
-     *
-     * @param Kernel $artisan
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function updateRoutesCache(Kernel $artisan)
+    public function updateRoutesCache(Kernel $artisan): RedirectResponse
     {
         $artisan->call('route:cache');
         $this->msg->info(__('messages.admin.control.optimization.update_routes_cache_success'));
@@ -75,12 +65,8 @@ class OptimizationController extends Controller
 
     /**
      * Handle update config cache request.
-     *
-     * @param Kernel $artisan
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function updateConfigCache(Kernel $artisan)
+    public function updateConfigCache(Kernel $artisan): RedirectResponse
     {
         $artisan->call('config:cache');
         $this->msg->info(__('messages.admin.control.optimization.update_config_cache_success'));
@@ -90,12 +76,8 @@ class OptimizationController extends Controller
 
     /**
      * Handle clear view cache request.
-     *
-     * @param Kernel $artisan
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function clearViewCache(Kernel $artisan)
+    public function clearViewCache(Kernel $artisan): RedirectResponse
     {
         $artisan->call('view:clear');
         $this->msg->info(__('messages.admin.control.optimization.update_view_cache_success'));
@@ -105,12 +87,8 @@ class OptimizationController extends Controller
 
     /**
      * Handle clear app cache request.
-     *
-     * @param Repository $cache
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function clearAppCache(Repository $cache)
+    public function clearAppCache(Repository $cache): RedirectResponse
     {
         if ($cache->flush()) {
             $this->msg->info(__('messages.admin.control.optimization.update_app_cache_success'));

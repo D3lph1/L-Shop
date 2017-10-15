@@ -1,28 +1,26 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Control;
 
 use App\Http\Requests\Admin\SaveSecurityRequest;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\View\View;
 
 /**
  * Class SecurityController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Control
  */
 class SecurityController extends Controller
 {
     /**
      * Render security settings page.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request): View
     {
         $data = [
             'currentServer' => $request->get('currentServer'),
@@ -42,7 +40,7 @@ class SecurityController extends Controller
      *
      * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(SaveSecurityRequest $request)
+    public function save(SaveSecurityRequest $request): RedirectResponse
     {
         s_set([
             'recaptcha.public_key' => $request->get('recaptcha_public_key'),

@@ -81,6 +81,8 @@ return [
                     'enable' => 'Enable server monitoring',
                     'timeout' => 'Connection timeout',
                     'timeout_popover' => 'The time after which the connection to the server socket will be automatically disconnected. (If there is no connection). Specify in seconds.',
+                    'pattern' => 'Response format',
+                    'pattern_popover' => 'Here you need to enter a regular expression that will parse the response string. It must necessarily include a capture-group ?&lt;now&gt; (To mark the current online) and ?&lt;total&gt; (For marking the total number of slots on the server). Note that, before comparing with the regular expression, the response string from the server is cleared of special characters.',
                 ],
                 'maintenance' => [
                     'title' => 'Maintenance mode',
@@ -276,6 +278,7 @@ return [
             'edit' => [
                 'title' => 'Edit :name server',
                 'new_category_name' => 'Name of the new category',
+                'add' => 'Add new category',
                 'remove' => 'Delete server'
             ],
             'list' => [
@@ -288,6 +291,7 @@ return [
         ],
         'products' => [
             'add' => [
+                'title' => 'Add product',
                 'attach_item' => 'Assign item/privilege',
                 'products_in_stack' => 'Quantity of products in 1 stack',
                 'perm_duration' => 'Duration of the privilege (in days). 0 - forever',
@@ -537,7 +541,7 @@ return [
                     'rubukkit' => 'Topic on RuBukkit.org',
                     'developers' => 'Developers',
                     'd3lph1_description' => '<strong>Software code</strong>. You can contact me for technical support.',
-                    'whiled0s_description' => '<strong>Design and layout</strong>. You can apply to me in order to order the development of a unique design for your site, including for a site based on the L-Shop system.',
+                    'whiled0s_description' => '<strong>Design and layout</strong>. You can apply to me in order to order the development of a unique design for your site, including for a app based on the L-Shop system.',
                 ],
                 'docs' => [
                     'title' => 'Documentation',
@@ -646,6 +650,7 @@ return [
                 'more' => 'Show more ...',
                 'completed' => 'Completed',
                 'not_completed' => 'Not completed',
+                'completed_by_admin' => 'Completed by administrator',
                 'complete' => 'Complete',
                 'pay' => 'Pay now',
                 'empty' => 'Payment history is empty',
@@ -655,7 +660,7 @@ return [
                     'table' => [
                         'image' => 'Image',
                         'name' => 'Name',
-                        'count' => 'Count',
+                        'count' => 'Count / Duration',
                     ]
                 ]
             ]
@@ -676,7 +681,8 @@ return [
     'monitoring' => [
         'title' => 'Server monitoring',
         'cancel' => 'Cancel',
-        'server_disabled' => 'Server is disabled'
+        'server_disabled' => 'Server is disabled',
+        'error' => 'Unable to receive information from server.'
     ],
 
     'payments' => [
@@ -760,17 +766,17 @@ return [
         'logout' => 'Logout'
     ],
     'months' => [
-        'January',
-        'February',
-        'March',
-        'April',
-        'May',
-        'June',
-        'July',
-        'August',
-        'September',
-        'October',
-        'November',
-        'December',
+        1 => 'January',
+        2 => 'February',
+        3 => 'March',
+        4 => 'April',
+        5 => 'May',
+        6 => 'June',
+        7 => 'July',
+        8 => 'August',
+        9 => 'September',
+        10 => 'October',
+        11 => 'November',
+        12 => 'December',
     ]
 ];

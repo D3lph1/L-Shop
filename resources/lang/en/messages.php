@@ -26,10 +26,13 @@ return [
                 'fail' => 'Failed to create server.',
                 'category' => [
                     'add' => [
-                        'success' => 'The category ":name" is created.'
+                        'empty' => 'Category name must not be empty.',
+                        'success' => 'The category ":name" is created.',
+                        'fail' => 'Unable to create category.'
                     ],
                     'remove' => [
                         'success' => 'Category removed.',
+                        'fail' => 'Unable to remove category.',
                         'last' => 'There must be at least one category for this server.'
                     ]
                 ]
@@ -56,6 +59,7 @@ return [
             ],
             'edit' => [
                 'success' => 'Item changed successfully.',
+                'not_found' => 'Item not found.',
                 'fail' => 'The item could not be edited.'
             ],
             'remove' => [
@@ -94,6 +98,7 @@ return [
         ],
         'pages' => [
             'url_already_exists' => 'A page with this address already exists!',
+            'not_found' => 'Page not found',
             'add' => [
                 'success' => 'Page successfully created!',
                 'fail' => 'Could not create page.'
@@ -149,6 +154,7 @@ return [
             'list' => [
                 'activate' => [
                     'success' => 'User account verified.',
+                    'fail' => 'Unable to activate user.',
                     'already' => 'The user account has already been verified.',
                 ]
             ]

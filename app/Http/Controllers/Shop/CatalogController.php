@@ -1,22 +1,22 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Shop;
 
 use App\Exceptions\Payment\InvalidProductsCountException;
 use App\Exceptions\User\InvalidUsernameException;
 use App\Http\Controllers\Controller;
-use App\Repositories\ProductRepository;
-use App\Repositories\ServerRepository;
 use App\Services\Cart;
-use App\Services\CatalogBuy;
 use App\Traits\BuyResponse;
+use App\TransactionScripts\Shop\Catalog;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 /**
  * Class CatalogController
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Shop
  */
 class CatalogController extends Controller
@@ -25,63 +25,31 @@ class CatalogController extends Controller
 
     /**
      * Render the catalog page
-     *
-     * @param Request           $request
-     * @param Cart              $cart
-     * @param ProductRepository $productRepository
-     * @param ServerRepository  $serverRepository
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request, Cart $cart, ProductRepository $productRepository, ServerRepository $serverRepository)
+    public function render(Request $request, Catalog $catalog, Cart $cart): View
     {
-        $categories = $serverRepository->categories($request->get('currentServer')->id);
-        $category = $request->route('category');
-        $f = false;
+        $server = $request->get('currentServer')->getId();
+        $categories = $catalog->categories($server);
+        $category = $catalog->currentCategory((int)$request->route('category'), $categories);
 
-        // To determine the presence and keep the current category.
-        foreach ($categories as $one) {
-            if (is_null($category)) {
-                $category = $one->id;
-                $f = true;
-                break;
-            }
-            if ($category == $one->id) {
-                $f = true;
-                break;
-            }
-        }
-
-        // If a category with this ID does not exist.
-        if (!$f) {
-            $this->app->abort(404);
-        }
-
-        $data = [
+        return view('shop.catalog', [
             'categories' => $categories,
             'currentCategory' => $category,
-            'goods' => $productRepository->forCatalog($request->get('currentServer')->id, $category),
+            'products' => $catalog->products($server, $category->getId()),
             'cart' => $cart
-        ];
-
-        return view('shop.catalog', $data);
+        ]);
     }
 
-    /**
-     * @param Request    $request
-     * @param CatalogBuy $handler
-     *
-     * @return \Illuminate\Http\JsonResponse
-     */
-    public function buy(Request $request, CatalogBuy $handler)
+    public function buy(Request $request, Catalog $catalog): JsonResponse
     {
+        $productId = (int)$request->route('product');
         $server = (int)$request->route('server');
         $ip = $request->ip();
         $username = $request->get('username');
-        $count = $request->get('count');
+        $count = (float)$request->get('count');
 
         try {
-            return $handler->buy($request->route('product'), $count, $server, $ip, $username);
+            return $catalog->purchase($productId, $count, $server, $ip, $username);
         } catch (InvalidUsernameException $e) {
             return json_response('invalid_username', [
                 'message' => [

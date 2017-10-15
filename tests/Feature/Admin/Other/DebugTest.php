@@ -4,6 +4,12 @@ namespace Tests\Feature\Admin\Other;
 
 use Tests\Feature\Future;
 
+/**
+ * Class DebugTest
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @package Tests\Feature\Admin\Other
+ */
 class DebugTest extends Future
 {
     public function testVisitAdmin()

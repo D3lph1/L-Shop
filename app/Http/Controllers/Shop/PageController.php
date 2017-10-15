@@ -1,42 +1,38 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Shop;
 
-use App\Services\Page;
-use Illuminate\Http\Request;
+use App\Exceptions\Page\NotFoundException;
 use App\Http\Controllers\Controller;
+use App\Services\Page;
+use App\TransactionScripts\Pages;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 /**
  * Class PageController
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Shop
  */
 class PageController extends Controller
 {
     /**
      * Render given static page
-     *
-     * @param Request $request
-     * @param Page    $page
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request, Page $page)
+    public function render(Request $request, Pages $script): View
     {
-        $url = $request->route('page');
-        $page = $page->getByUrl($url, ['title', 'content']);
-
-        if (!$page) {
-            \App::abort(404);
+        $page = null;
+        try {
+            $page = $script->get($request->route('page'));
+        } catch (NotFoundException $e) {
+            $this->app->abort(404);
         }
 
-        $data = [
+        return view('shop.page', [
             'currentServer' => $request->get('currentServer'),
             'page' => $page
-        ];
-
-        return view('shop.page', $data);
+        ]);
     }
 }

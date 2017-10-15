@@ -88,6 +88,7 @@ return [
 
     // Specify validation messages
     'api_sashok_auth_format_regex' => 'Field "Format" must be contains a marker {username}',
+    'valid_regex' => 'Field ":attribute" must be a valid regular expression.',
 
     /*
     |--------------------------------------------------------------------------
@@ -173,6 +174,7 @@ return [
         'server_port' => 'Server port',
         'server_password' => 'RCON password',
         'rcon_connection_timeout' => 'Connection timeout',
+        'rcon_monitoring_pattern' => 'Response format',
         'enable_monitoring' => 'Enable server monitoring',
         'signup_redirect' => 'Redirect user to custom URL after registration',
         'signup_redirect_url' => 'Custom URL',
@@ -183,6 +185,8 @@ return [
         'character_hd_cloak_enabled' => 'Allow users to set HD cloaks',
         'character_skin_max_file_size' => 'Maximum size of the skin file',
         'character_cloak_max_file_size' => 'Maximum size of the cloak file',
+
+        'categories.*.*' => 'Category name'
     ],
 
 ];

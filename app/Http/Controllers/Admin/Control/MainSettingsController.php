@@ -1,30 +1,28 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Control;
 
-use App\Services\News;
+use App\TransactionScripts\Shop\News;
 use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveMainSettingsRequest;
+use Illuminate\View\View;
 
 /**
  * Class MainSettingsController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Control
  */
 class MainSettingsController extends Controller
 {
     /**
      * Render the main settings page.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request): View
     {
         $data = [
             'currentServer' => $request->get('currentServer'),
@@ -53,6 +51,7 @@ class MainSettingsController extends Controller
             'productsSortType' => s_get('shop.sort', 'name'),
             'enableMonitoring' => s_get('monitoring.enabled'),
             'rconConnectionTimeout' => s_get('monitoring.rcon.timeout'),
+            'rconMonitoringPattern' => s_get('monitoring.rcon.pattern'),
             'cartCapacity' => s_get('cart.capacity'),
             'isDownForMaintenance' => $this->app->isDownForMaintenance()
         ];
@@ -62,12 +61,8 @@ class MainSettingsController extends Controller
 
     /**
      * Save main settings options.
-     *
-     * @param SaveMainSettingsRequest $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
      */
-    public function save(SaveMainSettingsRequest $request, News $news)
+    public function save(SaveMainSettingsRequest $request, News $news): RedirectResponse
     {
         $newsFirstPortion = (int)$request->get('news_first_portion');
 
@@ -94,6 +89,7 @@ class MainSettingsController extends Controller
             'shop.sort' => $request->get('products_sort_type'),
             'monitoring.enabled' => $request->get('enable_monitoring'),
             'monitoring.rcon.timeout' => $request->get('rcon_connection_timeout'),
+            'monitoring.rcon.pattern' => $request->get('rcon_monitoring_pattern'),
             'cart.capacity' => $request->get('cart_capacity'),
 
             'profile.character.skin.enabled' => (bool)$request->get('character_skin_enabled'),
@@ -113,10 +109,8 @@ class MainSettingsController extends Controller
 
     /**
      * Enable/disable maintenance mode.
-     *
-     * @param bool $maintenance
      */
-    public function maintenance($maintenance)
+    public function maintenance(bool $maintenance)
     {
         $artisan = $this->app->make(Kernel::class);
 

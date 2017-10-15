@@ -1,67 +1,57 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Servers;
 
-use App\DataTransferObjects\Admin\Category;
-use App\DataTransferObjects\Admin\Server;
-use App\Http\Requests\Admin\SaveAddedServerRequest;
-use Carbon\Carbon;
-use Illuminate\Http\Request;
+use App\DataTransferObjects\Category;
+use App\DataTransferObjects\Server;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\SaveAddedServerRequest;
+use App\TransactionScripts\Servers;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
 
 /**
  * Class AddController
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin\Server
  */
-class AddController extends BaseController
+class AddController extends Controller
 {
     /**
      * Render the add new server page
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
      */
-    public function render(Request $request)
+    public function render(Request $request): View
     {
-        $data = [
+        return view('admin.servers.add', [
             'currentServer' => $request->get('currentServer')
-        ];
-
-        return view('admin.servers.add', $data);
+        ]);
     }
 
-    /**
-     * @param SaveAddedServerRequest $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function save(SaveAddedServerRequest $request)
+    public function save(SaveAddedServerRequest $request, Servers $script): RedirectResponse
     {
         $categories = [];
         foreach ($request->get('categories') as $category) {
-            $categories[] = new Category($category);
+            $categories[] = (new Category())->setName($category);
         }
 
-        $dto = new Server(
-            $request->get('server_name'),
-            $request->get('enabled'),
-            $categories,
-            $request->get('server_ip'),
-            $request->get('server_port'),
-            $request->get('server_password'),
-            $request->get('server_monitoring_enabled')
-        );
+        $dto = (new Server())
+            ->setName($request->get('server_name'))
+            ->setCategories($categories)
+            ->setIp($request->get('server_ip'))
+            ->setPort((int)$request->get('server_port'))
+            ->setPassword($request->get('server_password'))
+            ->setMonitoringEnabled((bool)$request->get('server_monitoring_enabled'))
+            ->setEnabled((bool)$request->get('enabled'));
 
-        $this->serverService->createServer($dto);
+        $script->createServer($dto);
 
         $this->msg->success(__('messages.admin.servers.add.success', ['name' => $request->get('server_name')]));
 
         return response()->redirectToRoute('admin.servers.list', [
-            'server' => $request->get('currentServer')->id
+            'server' => $request->get('currentServer')->getId()
         ]);
     }
 }

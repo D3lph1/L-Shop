@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin;
 
@@ -8,7 +9,6 @@ use App\Http\Controllers\Controller;
  * Class ListParent
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Http\Controllers\Admin
  */
 class ListParent extends Controller
@@ -30,36 +30,4 @@ class ListParent extends Controller
         'H', 'I', 'J', 'K', 'L', 'K', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W',
         'X', 'Y', 'Z'
     ];
-
-    /**
-     * @param string $orderBy
-     *
-     * @return null|string
-     */
-    protected function checkOrderBy($orderBy)
-    {
-        $orderBy = mb_strtolower($orderBy);
-
-        if (in_array($orderBy, $this->orderByAvailable)) {
-            return $orderBy;
-        }
-
-        return null;
-    }
-
-    /**
-     * @param string $orderType
-     *
-     * @return null|string
-     */
-    protected function checkOrderType($orderType)
-    {
-        $orderType = strtolower($orderType);
-
-        if ($orderType == 'asc' or $orderType == 'desc') {
-            return $orderType;
-        }
-
-        return null;
-    }
 }

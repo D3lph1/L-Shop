@@ -2,12 +2,21 @@
 
 namespace Tests\Feature\Payments;
 
-use App\Models\Cart;
-use App\Models\Payment;
-use App\Repositories\CartRepository;
+use App\DataTransferObjects\Payment;
+use App\Models\Cart\CartInterface;
+use App\Models\Payment\PaymentInterface;
+use App\Models\User\UserInterface;
+use App\Repositories\Cart\CartRepositoryInterface;
+use App\Repositories\Payment\PaymentRepositoryInterface;
 use App\Services\Handlers\Payments\Robokassa;
 use Tests\TestCase;
 
+/**
+ * Class RobokassaTest
+ *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
+ * @package Tests\Feature\Payments
+ */
 class RobokassaTest extends TestCase
 {
     /**
@@ -15,23 +24,25 @@ class RobokassaTest extends TestCase
      */
     public function testCreateAndCompleteBalance()
     {
-        $paymentRepository = \App::make('App\Repositories\PaymentRepository');
+        $paymentRepository = \App::make(PaymentRepositoryInterface::class);
         $userId = 1;
+        /** @var UserInterface $user */
         $user = \Sentinel::getUserRepository()->findById($userId);
-        $balance = $user->balance;
+        $balance = $user->getBalance();
 
-        $payment = $paymentRepository->create([
-            'cost' => 33,
-            'user_id' => $userId,
-            'server_id' => 1,
-            'ip' => '127.0.0.1',
-            'completed' => 0
-        ]);
+        $payment = $paymentRepository->create(
+            $this->make(PaymentInterface::class)
+                ->setCost(33)
+                ->setUserId($userId)
+                ->setServerId(1)
+                ->setIp('127.0.0.1')
+                ->setCompleted(false)
+        );
 
         $this->createAndComplete($payment);
 
         $user = \Sentinel::getUserRepository()->findById($userId);
-        $this->assertEquals($balance + 33, $user->balance);
+        $this->assertEquals($balance + 33, $user->getBalance());
 
         $paymentRepository->delete($payment->id);
     }
@@ -41,52 +52,54 @@ class RobokassaTest extends TestCase
      */
     public function testCreateAndCompleteItems()
     {
-        $paymentRepository = \App::make('App\Repositories\PaymentRepository');
+        /** @var PaymentRepositoryInterface $paymentRepository */
+        $paymentRepository = $this->make(PaymentRepositoryInterface::class);
 
-        $payment = $paymentRepository->create([
-            'products' => serialize([14 => 64, 16 => 128]),
-            'user_id' => 1,
-            'server_id' => 1,
-            'ip' => '127.0.0.1',
-            'completed' => 0
-        ]);
+        $payment = $paymentRepository->create(
+            $this->make(PaymentInterface::class)
+                ->setProducts([14 => 64, 16 => 128])
+                ->setCost(55)
+                ->setUserId(1)
+                ->setServerId(1)
+                ->setIp('127.0.0.1')
+                ->setCompleted(0)
+        );
 
-        $this->app->make(CartRepository::class)->truncate();
+        $this->app->make(CartRepositoryInterface::class)->truncate();
         $this->createAndComplete($payment);
         $this->assertCart($payment);
-        $paymentRepository->delete($payment->id);
+        $paymentRepository->delete($payment->getId());
     }
 
     /**
      * @param Payment $payment
      */
-    private function createAndComplete(Payment $payment)
+    private function createAndComplete(PaymentInterface $payment)
     {
         /** @var Robokassa $handler */
-        $handler = \App::make('App\Services\Handlers\Payments\Robokassa');
-        $id = $payment->id;
-        $handler->handle([], true, $id);
+        $handler = \App::make(Robokassa::class);
+        $handler->handle([], true, $payment->getId());
     }
 
     /**
      * @param Payment $payment
      */
-    private function assertCart(Payment $payment)
+    private function assertCart(PaymentInterface $payment)
     {
-        /** @var CartRepository $paymentRepository */
-        $cartRepository = $this->app->make(CartRepository::class);
+        /** @var CartRepositoryInterface $paymentRepository */
+        $cartRepository = $this->app->make(CartRepositoryInterface::class);
 
-        /** @var Cart $last */
+        /** @var CartInterface[] $last */
         $cart = $cartRepository->all();
 
-        $unserializedProducts = unserialize($payment->products);
+        $unserializedProducts = $payment->getProducts();
         $count = [];
         $amount = [];
 
-        /** @var Cart $one */
+        /** @var CartInterface $one */
         foreach ($cart as $one) {
             $count[] = current($unserializedProducts);
-            $amount[] = $one->amount;
+            $amount[] = $one->getAmount();
             next($unserializedProducts);
         }
 

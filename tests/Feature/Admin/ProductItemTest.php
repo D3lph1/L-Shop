@@ -1,60 +1,71 @@
 <?php
+declare(strict_types = 1);
 
 namespace Tests\Feature\Admin;
 
+use App\DataTransferObjects\Item;
+use App\DataTransferObjects\Product;
+use App\Models\Item\ItemInterface;
+use App\Models\Product\ProductInterface;
+use App\Services\Items\Type;
+use App\TransactionScripts\Items;
+use App\TransactionScripts\Products;
 use Tests\TestCase;
-use App\Models\Item;
-use App\Models\Product;
-use App\Services\AdminItems;
-use App\Services\AdminProducts;
-use Illuminate\Container\Container;
 
 /**
  * Class ProductItemTest
  *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- *
+ * @author  D3lph1 <d3lph1.contact@gmail.com>
  * @package Tests\Feature\Admin
  */
 class ProductItemTest extends TestCase
 {
     /**
-     * @var AdminItems
+     * @var Items
      */
     private $adminItems;
 
     /**
-     * @var AdminProducts
+     * @var Products
      */
     private $adminProduct;
 
-    /**
-     * @param null   $name
-     * @param array  $data
-     * @param string $dataName
-     */
-    public function __construct($name = null, array $data = [], $dataName = '')
+    public function setUp()
     {
-        $this->adminItems = Container::getInstance()->make('App\Services\AdminItems');
-        $this->adminProduct = Container::getInstance()->make('App\Services\AdminProducts');
+        parent::setUp();
+        /** @var Items adminItems */
+        $this->adminItems = $this->make(Items::class);
 
-        parent::__construct($name, $data, $dataName);
+        /** @var Products adminItems */
+        $this->adminProduct = $this->make(Products::class);
     }
 
     /**
      * Create/delete product/item test
-     *
-     * @return void
      */
-    public function testCase()
+    public function testCase(): void
     {
-        $item = $this->adminItems->create('Test item', '', 'item', null, 1337, null);
-        $this->assertInstanceOf(Item::class, $item);
-        $itemId = (int)$item->id;
-        $dto = new \App\DataTransferObjects\Admin\Product(0.01, 64, $itemId, 1, 1, 0);
+
+        $item = $this->adminItems->create(
+            (new Item())
+                ->setName('Test item')
+                ->setType(Type::ITEM)
+                ->setImageName(null)
+                ->setItem('1337')
+                ->setExtra(null)
+        );
+        $this->assertInstanceOf(ItemInterface::class, $item);
+        $itemId = (int)$item->getId();
+        $dto = $this->make(ProductInterface::class)
+            ->setPrice(0.01)
+            ->setStack(64)
+            ->setItemId($itemId)
+            ->setServerId(1)
+            ->setCategoryId(1)
+            ->setSortPriority(0);
 
         $product = $this->adminProduct->create($dto);
-        $this->assertInstanceOf(Product::class, $product);
+        $this->assertTrue($product);
 
         $this->assertTrue($this->adminItems->delete($itemId));
     }
