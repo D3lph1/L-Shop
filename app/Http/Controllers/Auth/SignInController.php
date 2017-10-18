@@ -5,11 +5,9 @@ namespace App\Http\Controllers\Auth;
 
 use App\Exceptions\User\BannedException;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\SignInRequest;
 use App\TransactionScripts\Authentication;
 use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
 use Cartalyst\Sentinel\Checkpoints\ThrottlingException;
-use Cartalyst\Sentinel\Sentinel;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -39,7 +37,7 @@ class SignInController extends Controller
     /**
      * Handle the user signin
      */
-    public function signin(SignInRequest $request, Authentication $script): JsonResponse
+    public function signin(Request $request, Authentication $script): JsonResponse
     {
         try {
             $user = $script->authenticate($request->get('username'), $request->get('password'));
