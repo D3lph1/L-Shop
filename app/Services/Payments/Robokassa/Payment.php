@@ -52,7 +52,8 @@ class Payment
     public function __construct(int $number, float $amount)
     {
         $this->number = $number;
-        $this->amount = $amount;
+        // Format as it requires robokassa.
+        $this->amount = number_format($amount, 2, '.', '');
     }
 
     public function getNumber(): int
@@ -60,7 +61,10 @@ class Payment
         return $this->number;
     }
 
-    public function getAmount(): float
+    /**
+     * @return string Formatted amount string.
+     */
+    public function getAmount(): string
     {
         return $this->amount;
     }
