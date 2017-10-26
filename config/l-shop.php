@@ -37,5 +37,8 @@ return [
             // Without trailing slash
             'path' => public_path('img/users/cloaks')
         ]
+    ],
+    'rcon' => [
+        'timeout' => 0.5
     ]
 ];

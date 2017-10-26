@@ -6,15 +6,15 @@
     "type": "project",
     "require": {
         "php": ">=7.1.0",
-        "laravel/framework": "5.5.4",
-        "laravel/tinker": "~1.0",
-        "fideloper/proxy": "3.3.4",
         "anlutro/l4-settings": "0.4.9",
         "barryvdh/laravel-debugbar": "^2.3",
         "barryvdh/laravel-ide-helper": "^2.2",
         "cartalyst/sentinel": "2.0.*",
-        "d3lph1/minecraft-rcon-manager": "~1.0",
-        "intervention/image": "2.4.0"
+        "d3lph1/minecraft-rcon-manager": "~1.2",
+        "fideloper/proxy": "3.3.4",
+        "intervention/image": "2.4.0",
+        "laravel/framework": "5.5.4",
+        "laravel/tinker": "~1.0"
     },
     "require-dev": {
         "doctrine/dbal": "~2.3",

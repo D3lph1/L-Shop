@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Providers;
 
+use App\Models\Server\ServerInterface;
 use App\Services\Activator;
 use App\Services\Cart;
 use App\Services\Message;
@@ -10,7 +11,6 @@ use App\Services\Monitoring\MonitoringInterface;
 use App\Services\Monitoring\RconMonitoring;
 use App\Services\ReCaptcha;
 use App\Services\SashokLauncher;
-use App\TransactionScripts\Monitoring;
 use D3lph1\MinecraftRconManager\Connector;
 use D3lph1\MinecraftRconManager\Rcon;
 use Illuminate\Contracts\Foundation\Application;
@@ -55,21 +55,43 @@ class AppServiceProvider extends ServiceProvider
         $this->app->alias(Activator::class, 'activator');
         $this->app->alias(SashokLauncher::class, 'launcher.sashok');
 
-        $this->app->singleton(Rcon::class, function (Application $app) {
-            // To successfully carry out the migration procedure.
-            if (!Schema::hasTable('servers')) {
-                return new Connector();
-            }
-
-            return $this->app->make(Monitoring::class)->init($app->make('request')->get('servers'));
+        $this->app->singleton(Rcon::class, function () {
+            return $this->getRconConnector((float)config('l-shop.rcon.timeout'));
         });
 
         $this->app->alias(Rcon::class, Connector::class);
         $this->app->alias(Rcon::class, 'rcon');
+
+        $this->app->singleton('monitoring.rcon', function () {
+            return $this->getRconConnector((float)s_get('monitoring.rcon.timeout'));
+        });
+
         $this->app->singleton(MonitoringInterface::class, function (Application $app) {
-            return new RconMonitoring($app->make(Rcon::class));
+            return new RconMonitoring($app->make('monitoring.rcon'));
         });
         $this->app->alias(MonitoringInterface::class, 'monitoring');
+    }
+
+    private function getRconConnector(float $timeout): Connector
+    {
+        // To successfully carry out the migration procedure.
+        if (!Schema::hasTable('servers')) {
+            return new Connector();
+        }
+
+        $servers = $this->app->make('request')->get('servers');
+        $connector = new Connector();
+
+        if (!$servers) {
+            return $connector;
+        }
+
+        /** @var ServerInterface $server */
+        foreach ($servers as $server) {
+            $connector->add($server->getId(), $server->getIp(), $server->getPort(), $server->getPassword(), $timeout);
+        }
+
+        return $connector;
     }
 
     private function registerValidators()

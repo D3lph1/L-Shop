@@ -18,3 +18,4 @@ Homestead.yaml
 .env
 
 !.gitignore
+!/composer.lock
