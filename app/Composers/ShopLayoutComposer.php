@@ -78,8 +78,7 @@ class ShopLayoutComposer implements ComposerContract
             $news = false;
             $newsCount = 0;
         }
-
-        \Debugbar::info(\App::make('rcon'));
+        
         return [
             'isAuth' => is_auth(),
             'isAdmin' => is_admin(),
