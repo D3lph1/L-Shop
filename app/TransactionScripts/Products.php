@@ -116,7 +116,17 @@ class Products
         }
 
         return (bool)DB::transaction(function () use ($productId, $dto) {
-            return $this->productRepository->update($productId, $dto);
+            /** @var ProductInterface $entity */
+            $entity = $this->make(ProductInterface::class);
+            $entity
+                ->setPrice($dto->getPrice())
+                ->setItemId($dto->getItemId())
+                ->setServerId($dto->getServerId())
+                ->setStack($dto->getStack())
+                ->setCategoryId($dto->getCategoryId())
+                ->setSortPriority($dto->getSortPriority());
+
+            return $this->productRepository->update($productId, $entity);
         });
     }
 
