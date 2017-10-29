@@ -115,4 +115,9 @@ class EloquentPaymentRepository implements PaymentRepositoryInterface
     {
         return (bool)EloquentPayment::where('id', $id)->delete();
     }
+
+    public function deleteByUserId(int $userId): bool
+    {
+        return (bool)EloquentPayment::where('user_id', $userId)->delete();
+    }
 }

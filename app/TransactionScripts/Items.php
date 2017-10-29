@@ -76,14 +76,14 @@ class Items
         } else if ($dto->getImageMode() === ImageMode::DEFAULT) {
             $dto->setImageName(null);
         }
-
+        \Debugbar::info($dto);
         /** @var ItemInterface $entity */
         $entity = $this->make(ItemInterface::class);
         $entity
             ->setName($dto->getName())
             ->setDescription($dto->getDescription())
             ->setType($dto->getType())
-            ->setImage($dto->getImage() ? $dto->getImage()->getFilename() : null)
+            ->setImage($dto->getImageName() ? $dto->getImageName() : null)
             ->setItem($dto->getItem())
             ->setExtra($dto->getExtra());
 

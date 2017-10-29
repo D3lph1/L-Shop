@@ -34,4 +34,6 @@ interface PaymentRepositoryInterface extends BaseRepositoryInterface
     public function withUserPaginated(array $paymentColumns, array $userColumns): LengthAwarePaginator;
 
     public function delete(int $id): bool;
+
+    public function deleteByUserId(int $userId): bool;
 }

@@ -7,6 +7,7 @@ use App\Models\Role\RoleInterface;
 use App\Models\User\EloquentUser;
 use App\Models\User\UserInterface;
 use App\Repositories\Activation\ActivationRepositoryInterface;
+use App\Repositories\Payment\PaymentRepositoryInterface;
 use App\Repositories\Persistence\PersistenceRepositoryInterface;
 use App\Repositories\Reminder\ReminderRepositoryInterface;
 use App\Repositories\Role\RoleRepositoryInterface;
@@ -158,5 +159,9 @@ class EloquentUserRepository extends IlluminateUserRepository implements UserRep
         /** @var RoleRepositoryInterface $roleRepository */
         $roleRepository = $this->make(RoleRepositoryInterface::class);
         $roleRepository->detachAllUser($userId);
+
+        /** @var PaymentRepositoryInterface $paymentRepository */
+        $paymentRepository = $this->make(PaymentRepositoryInterface::class);
+        $paymentRepository->deleteByUserId($userId);
     }
 }

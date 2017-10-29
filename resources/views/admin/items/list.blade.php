@@ -60,7 +60,7 @@
                                 <td><img height="35" width="35" src="@if(is_file(img_path("items/$item->image"))) {{ asset("img/items/{$item->image}") }} @else {{ asset("img/empty.png") }} @endif"></td>
                                 <td>{{ $item->getName() }}</td>
                                 <td>@if ($item->getType() === 'item') @lang('content.admin.items.add.type.item') @elseif($item->getType() === 'permgroup') @lang('content.admin.items.add.type.perm') @endif</td>
-                                <td>@if(is_null($item->getExtra())) @lang('content.all.no') @else {{ $item->getExtra() }} @endif</td>
+                                <td>@if(is_null($item->getExtra())) @lang('content.all.no') @else {{ short_string($item->getExtra(), 25) }} @endif</td>
                                 <td><a href="{{ route('admin.items.edit', ['server' => $currentServer->getId(), 'item' => $item->getId()]) }}" class="btn btn-info btn-sm">@lang('content.admin.items.list.table.edit')</a></td>
                             </tr>
                         @endforeach
