@@ -76,7 +76,7 @@ class Items
         } else if ($dto->getImageMode() === ImageMode::DEFAULT) {
             $dto->setImageName(null);
         }
-        \Debugbar::info($dto);
+
         /** @var ItemInterface $entity */
         $entity = $this->make(ItemInterface::class);
         $entity

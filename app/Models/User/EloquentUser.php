@@ -71,6 +71,7 @@ class EloquentUser extends BaseUser implements UserInterface
      * @var array
      */
     protected $loginNames = [
+        'email',
         'username'
     ];
 
