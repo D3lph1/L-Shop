@@ -203,7 +203,7 @@ if (!function_exists('username')) {
             return null;
         }
 
-        return \Sentinel::getUser()->getUserLogin();
+        return \Sentinel::getUser()->getUsername();
     }
 }
 
