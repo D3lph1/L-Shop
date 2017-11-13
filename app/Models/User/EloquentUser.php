@@ -12,6 +12,7 @@ use App\Models\Reminder\EloquentReminder;
 use App\Models\Role\EloquentRole;
 use App\Services\User\Permissions;
 use App\Services\User\Roles;
+use Carbon\Carbon;
 use Cartalyst\Sentinel\Users\EloquentUser as BaseUser;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
@@ -102,11 +103,17 @@ class EloquentUser extends BaseUser implements UserInterface
         return $this->hasOne(EloquentBan::class, 'user_id', 'id');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getActivations(): iterable
     {
         return $this->activations;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getRoles(): iterable
     {
         return $this->roles;
@@ -187,5 +194,23 @@ class EloquentUser extends BaseUser implements UserInterface
     public function getPermissions(): ?array
     {
         return $this->permissions;
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function getUUID(): ?string
+    {
+        return $this->uuid;
+    }
+
+    public function getCreatedAt(): Carbon
+    {
+        return $this->created_at;
+    }
+
+    public function getUpdatedAt(): ?Carbon
+    {
+        return $this->updated_at;
     }
 }

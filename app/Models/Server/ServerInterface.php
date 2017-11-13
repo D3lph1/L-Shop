@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Models\Server;
 
+use App\Models\Category\CategoryInterface;
 use Carbon\Carbon;
 
 /**
@@ -13,6 +14,9 @@ use Carbon\Carbon;
  */
 interface ServerInterface
 {
+    /**
+     * @return CategoryInterface[]
+     */
     public function getCategories(): iterable;
 
 

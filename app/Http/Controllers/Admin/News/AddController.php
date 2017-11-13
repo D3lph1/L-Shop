@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\News;
 
-use App\DataTransferObjects\News as DTO;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveAddedNewsRequest;
 use App\Models\News\NewsInterface;
@@ -46,7 +45,7 @@ class AddController extends Controller
         if ($news->create($entity)) {
             $this->msg->success(__('messages.admin.news.add.success'));
 
-            return response()->redirectToRoute('admin.news.list', ['server' => $request->get('currentServer')->id]);
+            return response()->redirectToRoute('admin.news.list', ['server' => $request->get('currentServer')->getId()]);
         }
         $this->msg->danger(__('messages.admin.news.add.fail'));
 

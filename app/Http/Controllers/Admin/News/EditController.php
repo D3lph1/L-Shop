@@ -60,7 +60,7 @@ class EditController extends Controller
         if ($news->update($dto)) {
             $this->msg->success(__('messages.admin.news.edit.success'));
 
-            return response()->redirectToRoute('admin.news.list', ['server' => $request->get('currentServer')->id]);
+            return response()->redirectToRoute('admin.news.list', ['server' => $request->get('currentServer')->getId()]);
         }
         $this->msg->danger(__('messages.admin.news.edit.fail'));
 
@@ -79,6 +79,6 @@ class EditController extends Controller
             $this->msg->danger(__('messages.admin.news.remove.fail'));
         }
 
-        return response()->redirectToRoute('admin.news.list', ['server' => $request->get('currentServer')->id]);
+        return response()->redirectToRoute('admin.news.list', ['server' => $request->get('currentServer')->getId()]);
     }
 }

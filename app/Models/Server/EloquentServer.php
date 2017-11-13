@@ -60,6 +60,9 @@ class EloquentServer extends Model implements ServerInterface
         return $this->hasMany(EloquentCategory::class, 'server_id', 'id');
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getCategories(): iterable
     {
         return $this->categories;

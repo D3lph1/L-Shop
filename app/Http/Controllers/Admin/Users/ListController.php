@@ -87,7 +87,7 @@ class ListController extends Controller
             foreach ($result as &$item) {
                 $item['url'] = route('admin.users.edit',
                     [
-                        'server' => $request->get('currentServer')->id,
+                        'server' => $request->get('currentServer')->getId(),
                         'edit' => $item['id'],
                     ]);
                 $item['currency'] = $currency;

@@ -9,7 +9,7 @@ namespace App\Exceptions;
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  * @package App\Exceptions
  */
-class UnexpectedValueException extends \UnexpectedValueException implements LShopException
+class UnexpectedValueException extends \UnexpectedValueException
 {
     //
 }

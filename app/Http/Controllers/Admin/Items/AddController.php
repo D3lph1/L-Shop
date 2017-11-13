@@ -54,6 +54,6 @@ class AddController extends Controller
             $this->msg->danger(__('messages.admin.items.add.fail'));
         }
 
-        return response()->redirectToRoute('admin.items.list', ['server' => $request->get('currentServer')->id]);
+        return response()->redirectToRoute('admin.items.list', ['server' => $request->get('currentServer')->getId()]);
     }
 }

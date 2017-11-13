@@ -155,7 +155,7 @@ class EditController extends Controller
         } catch (AttemptToDeleteTheLastServerException $e) {
             $this->msg->warning(__('messages.admin.servers.remove.last'));
 
-            return redirect()->route('admin.servers.list', $request->get('currentServer')->id);
+            return redirect()->route('admin.servers.list', $request->get('currentServer')->getId());
         }
 
         $this->msg->info(__('messages.admin.servers.remove.success'));

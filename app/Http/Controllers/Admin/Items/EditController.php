@@ -81,7 +81,7 @@ class EditController extends Controller
             $this->msg->danger(__('messages.admin.items.edit.fail'));
         }
 
-        return response()->redirectToRoute('admin.items.list', ['server' => $request->get('currentServer')->id]);
+        return response()->redirectToRoute('admin.items.list', ['server' => $request->get('currentServer')->getId()]);
     }
 
     /**
@@ -101,6 +101,6 @@ class EditController extends Controller
             $this->msg->danger(__('messages.admin.items.remove.fail'));
         }
 
-        return response()->redirectToRoute('admin.items.list', ['server' => $request->get('currentServer')->id]);
+        return response()->redirectToRoute('admin.items.list', ['server' => $request->get('currentServer')->getId()]);
     }
 }

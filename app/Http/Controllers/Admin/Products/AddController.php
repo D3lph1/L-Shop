@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Products;
 
-use App\DataTransferObjects\Product;
 use App\Exceptions\ItemNotFoundException;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\SaveAddedProductRequest;
@@ -68,7 +67,7 @@ class AddController extends Controller
         try {
             $result = $script->create($entity);
         } catch (ItemNotFoundException $e) {
-            $this->msg->danger(__('messages.admin.products.add.item_not_found', ['id' => $dto->getItemId()]));
+            $this->msg->danger(__('messages.admin.products.add.item_not_found', ['id' => $entity->getItemId()]));
         }
 
         if ($result) {
@@ -77,6 +76,6 @@ class AddController extends Controller
             $this->msg->danger(__('messages.admin.products.add.fail'));
         }
 
-        return response()->redirectToRoute('admin.products.list', ['server' => $request->get('currentServer')->id]);
+        return response()->redirectToRoute('admin.products.list', ['server' => $request->get('currentServer')->getId()]);
     }
 }

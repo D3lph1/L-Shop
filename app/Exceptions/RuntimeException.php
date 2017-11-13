@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Exceptions;
 
-class RuntimeException extends \RuntimeException implements LShopException
+class RuntimeException extends \RuntimeException
 {
     //
 }

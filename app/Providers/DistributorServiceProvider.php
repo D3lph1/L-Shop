@@ -5,6 +5,7 @@ namespace App\Providers;
 
 use App\Contracts\Distributor;
 use App\Exceptions\DistributorNotFoundException;
+use App\Exceptions\RuntimeException;
 use Illuminate\Support\ServiceProvider;
 
 /**
@@ -38,7 +39,7 @@ class DistributorServiceProvider extends ServiceProvider
                     return $obj;
                 }
 
-                throw new \LogicException(
+                throw new RuntimeException(
                     "Class $full must be a subclass of " . \App\Services\Distributors\Distributor::class
                 );
             }
