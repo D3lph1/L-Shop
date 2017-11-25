@@ -19,10 +19,7 @@ use Tests\TestCase;
  */
 class RobokassaTest extends TestCase
 {
-    /**
-     * @return void
-     */
-    public function testCreateAndCompleteBalance()
+    public function testCreateAndCompleteBalance(): void
     {
         $paymentRepository = \App::make(PaymentRepositoryInterface::class);
         $userId = 1;
@@ -47,10 +44,7 @@ class RobokassaTest extends TestCase
         $paymentRepository->delete($payment->id);
     }
 
-    /**
-     * @return void
-     */
-    public function testCreateAndCompleteItems()
+    public function testCreateAndCompleteItems(): void
     {
         /** @var PaymentRepositoryInterface $paymentRepository */
         $paymentRepository = $this->make(PaymentRepositoryInterface::class);
@@ -71,20 +65,14 @@ class RobokassaTest extends TestCase
         $paymentRepository->delete($payment->getId());
     }
 
-    /**
-     * @param Payment $payment
-     */
-    private function createAndComplete(PaymentInterface $payment)
+    private function createAndComplete(PaymentInterface $payment): void
     {
         /** @var Robokassa $handler */
         $handler = \App::make(Robokassa::class);
         $handler->handle([], true, $payment->getId());
     }
 
-    /**
-     * @param Payment $payment
-     */
-    private function assertCart(PaymentInterface $payment)
+    private function assertCart(PaymentInterface $payment): void
     {
         /** @var CartRepositoryInterface $paymentRepository */
         $cartRepository = $this->app->make(CartRepositoryInterface::class);

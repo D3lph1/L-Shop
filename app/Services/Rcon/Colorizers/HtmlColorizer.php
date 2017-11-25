@@ -3,6 +3,13 @@ declare(strict_types = 1);
 
 namespace App\Services\Rcon\Colorizers;
 
+/**
+ * Class HtmlColorizer
+ * Converts the Minecraft markup to HTML code.
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ * @package App\Services\Rcon\Colorizers
+ */
 class HtmlColorizer implements ColorizerInterface
 {
     /**

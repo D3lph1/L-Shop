@@ -5,6 +5,7 @@ namespace App\Services\Rcon\Colorizers;
 
 /**
  * Interface ColorizerInterface
+ * The interface characterizes classes that perform any transformation of data formatted by a Minecraft markup.
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
  * @package App\Services\Rcon\Colorizers

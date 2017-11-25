@@ -19,6 +19,9 @@ class EloquentActivationRepository extends IlluminateActivationRepository implem
         return (bool)EloquentActivation::where('user_id', $userId)->delete();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function truncate(): void
     {
         EloquentActivation::truncate();

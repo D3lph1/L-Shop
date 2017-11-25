@@ -19,6 +19,9 @@ class EloquentPersistenceRepository extends IlluminatePersistenceRepository impl
         return (bool)EloquentPersistence::where('user_id', $userId)->delete();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function truncate(): void
     {
         EloquentPersistence::truncate();

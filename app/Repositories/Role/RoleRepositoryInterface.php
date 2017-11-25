@@ -14,11 +14,23 @@ use Cartalyst\Sentinel\Roles\RoleRepositoryInterface as BaseRoleRepositoryInterf
  */
 interface RoleRepositoryInterface extends BaseRoleRepositoryInterface, BaseRepositoryInterface
 {
+    /**
+     * Attaches the given role to the user.
+     */
     public function attachUser(int $roleId, int $userId): bool;
 
+    /**
+     * Detaches the given role to the user.
+     */
     public function detachUser(int $roleId, int $userId): bool;
 
+    /**
+     * Modifies the list of role privileges.
+     */
     public function updatePermissions(int $id, array $permissions): bool;
 
+    /**
+     * Detaches from the user all the privileges that he has.
+     */
     public function detachAllUser(int $userId): bool;
 }

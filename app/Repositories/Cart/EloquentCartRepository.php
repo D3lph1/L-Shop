@@ -75,6 +75,9 @@ class EloquentCartRepository implements CartRepositoryInterface
         return EloquentCart::all();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function truncate(): void
     {
         EloquentCart::truncate();

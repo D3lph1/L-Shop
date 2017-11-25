@@ -8,9 +8,9 @@ use Illuminate\Http\UploadedFile;
 
 /**
  * Class UploadedSkin
+ * Represents a user-loaded skin.
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Services\Character
  */
 class UploadedSkin

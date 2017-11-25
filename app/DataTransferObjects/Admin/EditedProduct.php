@@ -14,12 +14,24 @@ use App\Models\Product\ProductInterface;
  */
 class EditedProduct
 {
+    /**
+     * @var ProductInterface
+     */
     private $product;
 
+    /**
+     * @var iterable
+     */
     private $items;
 
+    /**
+     * @var iterable
+     */
     private $categories;
 
+    /**
+     * @var CategoryInterface
+     */
     private $category;
 
     public function __construct(

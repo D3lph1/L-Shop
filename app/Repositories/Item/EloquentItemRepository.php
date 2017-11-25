@@ -74,6 +74,9 @@ class EloquentItemRepository implements ItemRepositoryInterface
         return (bool)EloquentItem::where('id', $id)->delete();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function truncate(): void
     {
         EloquentItem::truncate();

@@ -72,6 +72,9 @@ class EloquentCategoryRepository implements CategoryRepositoryInterface
         return (bool)EloquentCategory::where('id', $categoryId)->delete();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function truncate(): void
     {
         EloquentCategory::truncate();

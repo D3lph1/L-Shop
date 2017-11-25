@@ -78,6 +78,9 @@ class RconMonitoring implements MonitoringInterface
         return Cache::get("monitoring.{$serverId}", $callable);
     }
 
+    /**
+     * Clear string from minecraft markup.
+     */
     private function sanitize(string $string): string
     {
         /** @var TrimColorizer $colorizer */

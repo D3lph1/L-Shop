@@ -37,28 +37,14 @@ class BuyTest extends TestCase
 
     public function testBuyItemWithZeroCount()
     {
-        try {
-            $this->buy(14, 0, 'D3lph1');
-        } catch (InvalidProductsCountException $e) {
-            $this->assertTrue(true);
-
-            return;
-        }
-
-        $this->assertTrue(false);
+        $this->expectException(InvalidProductsCountException::class);
+        $this->buy(14, 0, 'D3lph1');
     }
 
     public function testBuyItemWithInvalidCount()
     {
-        try {
-            $this->buy(14, 15, 'D3lph1');
-        } catch (InvalidProductsCountException $e) {
-            $this->assertTrue(true);
-
-            return;
-        }
-
-        $this->assertTrue(false);
+        $this->expectException(InvalidProductsCountException::class);
+        $this->buy(14, 15, 'D3lph1');
     }
 
     public function testBuyPerm()
@@ -70,15 +56,8 @@ class BuyTest extends TestCase
 
     public function testBuyPermZeroCount()
     {
-        try {
-            $this->buy(20, 0, 'D3lph1');
-        } catch (InvalidProductsCountException $e) {
-            $this->assertTrue(true);
-
-            return;
-        }
-
-        $this->assertTrue(false);
+        $this->expectException(InvalidProductsCountException::class);
+        $this->buy(20, 0, 'D3lph1');
     }
 
     public function testBuyPermPermanently()

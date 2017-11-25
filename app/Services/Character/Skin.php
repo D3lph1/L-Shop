@@ -8,6 +8,7 @@ use App\Exceptions\User\Character\InvalidImageSizeException;
 
 /**
  * Class Skin
+ * Produces processing and cutting images of skin and cloak.
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  * @package App\Services\Character

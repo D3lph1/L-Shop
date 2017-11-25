@@ -48,6 +48,9 @@ class EloquentBanRepository implements BanRepositoryInterface
             ->exists();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function truncate(): void
     {
         EloquentBan::truncate();

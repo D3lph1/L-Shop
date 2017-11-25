@@ -43,8 +43,16 @@ final class AnsiColors
 
     public const WHITE = "\033[1;37m";
 
+    /**
+     * A sequence marking the end of formatting.
+     */
     public const RESET = "\033[0m";
 
 
     public const BOLD = "\033[1m";
+
+    private function __construct()
+    {
+        //
+    }
 }

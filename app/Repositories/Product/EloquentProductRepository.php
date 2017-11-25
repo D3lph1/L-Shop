@@ -172,6 +172,9 @@ class EloquentProductRepository implements ProductRepositoryInterface
         return array_merge($columns, ['items.id']);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function truncate(): void
     {
         EloquentProduct::truncate();

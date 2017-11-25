@@ -15,10 +15,6 @@ interface MonitoringInterface
 {
     /**
      * Get monitoring-information about the server.
-     *
-     * @param int $serverId Server identifier.
-     *
-     * @return MonitoringPlayers
      */
     public function getPlayers(int $serverId): ?MonitoringPlayers;
 }

@@ -15,6 +15,9 @@ use Illuminate\Support\Facades\DB;
  */
 class EloquentRoleRepository extends IlluminateRoleRepository implements RoleRepositoryInterface
 {
+    /**
+     * {@inheritdoc}
+     */
     public function attachUser(int $roleId, int $userId): bool
     {
         $this->detachUser($roleId, $userId);
@@ -25,6 +28,9 @@ class EloquentRoleRepository extends IlluminateRoleRepository implements RoleRep
         ]);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function detachUser(int $roleId, int $userId): bool
     {
         return (bool)DB::table('role_users')
@@ -33,6 +39,9 @@ class EloquentRoleRepository extends IlluminateRoleRepository implements RoleRep
             ->delete();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function updatePermissions(int $id, array $permissions): bool
     {
         return (bool)EloquentRole::where('id', $id)->update([
@@ -40,6 +49,9 @@ class EloquentRoleRepository extends IlluminateRoleRepository implements RoleRep
         ]);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function detachAllUser(int $userId): bool
     {
         return (bool)DB::table('role_users')
@@ -47,6 +59,9 @@ class EloquentRoleRepository extends IlluminateRoleRepository implements RoleRep
             ->delete();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function truncate(): void
     {
         EloquentRole::truncate();

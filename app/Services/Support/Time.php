@@ -15,6 +15,11 @@ class Time
 {
     protected static $defaultFormat = 'd-m-Y H:i:s';
 
+    private function __construct()
+    {
+        //
+    }
+
     /**
      * It convert given datetime to default system format.
      */

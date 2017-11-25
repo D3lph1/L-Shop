@@ -98,6 +98,9 @@ class EloquentNewsRepository implements NewsRepositoryInterface
             ->paginate($perPage);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function truncate(): void
     {
         EloquentNews::truncate();

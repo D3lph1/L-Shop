@@ -18,6 +18,9 @@ class EloquentReminderRepository implements ReminderRepositoryInterface
         return (bool)EloquentReminder::where('user_id', $userId)->delete();
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function truncate(): void
     {
         EloquentReminder::truncate();

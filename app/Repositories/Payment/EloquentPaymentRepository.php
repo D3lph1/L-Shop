@@ -106,11 +106,6 @@ class EloquentPaymentRepository implements PaymentRepositoryInterface
             ->paginate(50);
     }
 
-    public function truncate(): void
-    {
-        EloquentPayment::truncate();
-    }
-
     public function delete(int $id): bool
     {
         return (bool)EloquentPayment::where('id', $id)->delete();
@@ -119,5 +114,13 @@ class EloquentPaymentRepository implements PaymentRepositoryInterface
     public function deleteByUserId(int $userId): bool
     {
         return (bool)EloquentPayment::where('user_id', $userId)->delete();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function truncate(): void
+    {
+        EloquentPayment::truncate();
     }
 }

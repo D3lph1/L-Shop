@@ -11,5 +11,8 @@ namespace App\Repositories;
  */
 interface BaseRepositoryInterface
 {
+    /**
+     * Removes all rows from the table.
+     */
     public function truncate(): void;
 }

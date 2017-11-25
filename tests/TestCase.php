@@ -3,6 +3,7 @@
 namespace Tests;
 
 use App\Traits\ContainerTrait;
+use Cartalyst\Sentinel\Throttling\ThrottleRepositoryInterface;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 /**

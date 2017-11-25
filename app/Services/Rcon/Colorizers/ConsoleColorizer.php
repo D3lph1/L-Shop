@@ -7,6 +7,7 @@ use App\Services\Support\AnsiColors;
 
 /**
  * Class ConsoleColorizer
+ * Converts the Minecraft markup into color codes ansi for output on console.
  *
  * @author D3lph1 <d3lph1.contact@gmail.com>
  * @package App\Services\Rcon\Colorizer
