@@ -23,7 +23,7 @@ class CartController extends Controller
     {
         $server = (int)$request->get('filter_server');
 
-        $items = $cr->historyForUser(\Sentinel::getUser()->getUserLogin(),
+        $items = $cr->historyForUser(\Sentinel::getUser()->getUsername(),
             $server,
             ['amount', 'cart.created_at', 'server'],
             ['name', 'type', 'image']
