@@ -87,7 +87,7 @@ class Users
         $credentials = [
             'username' => $dto->getUsername(),
             'email' => $dto->getEmail(),
-            'update' => $dto->getPassword(),
+            'password' => $dto->getPassword(),
             'balance' => $dto->getBalance()
         ];
 

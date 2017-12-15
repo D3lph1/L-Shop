@@ -7,6 +7,7 @@ use App\Exceptions\SashokLauncherAuthWhiteListException;
 use App\Exceptions\User\BannedException;
 use App\Http\Controllers\Controller;
 use Cartalyst\Sentinel\Checkpoints\NotActivatedException;
+use Cartalyst\Sentinel\Checkpoints\ThrottlingException;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpFoundation\Response;
 
@@ -56,6 +57,8 @@ class SashokLauncher extends ApiController
             return response(__('messages.auth.signin.not_activated'));
         } catch (BannedException $e) {
             return response(build_ban_message($e->getUntil(), $e->getReason()));
+        } catch (ThrottlingException $e) {
+            return response(__('messages.auth.signin.frozen_alternative', ['delay' => $e->getDelay()]));
         }
 
         if ($username) {

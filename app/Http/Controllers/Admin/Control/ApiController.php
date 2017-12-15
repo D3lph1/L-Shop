@@ -47,7 +47,7 @@ class ApiController extends Controller
      */
     public function save(SaveApiRequest $request): RedirectResponse
     {
-        $whiteList = $this->convertSashokLauncerAuthWhiteList($request->get('sashok_launcher_auth_white_list'));
+        $whiteList = $this->convertSashokLauncherAuthWhiteList((string)$request->get('sashok_launcher_auth_white_list'));
 
         s_set([
             'api.enabled' => (bool)$request->get('enabled'),
@@ -73,7 +73,7 @@ class ApiController extends Controller
     /**
      * Convert given whitelist string in needed format.
      */
-    private function convertSashokLauncerAuthWhiteList(string $whiteList): string
+    private function convertSashokLauncherAuthWhiteList(string $whiteList): string
     {
         $whiteList = preg_replace('/(\s+)/ui', '', $whiteList);
         $whiteList = explode(',', $whiteList);

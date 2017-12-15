@@ -193,6 +193,7 @@ return [
         'signin' => [
             'welcome' => 'Welcome, :username.',
             'frozen' => 'You made too many login attempts. The authorization option will not be available later :delay seconds.',
+            'frozen_alternative' => 'Account is temporarily frozen. Authorization will not be available later :delay seconds.',
             'not_activated' => 'Your account has not been activated. Check your mail for our letter.',
             'only_for_admins' => 'Log in to common users is prohibited.',
             'invalid_credentials' => 'A user with this credentials was not found.'
