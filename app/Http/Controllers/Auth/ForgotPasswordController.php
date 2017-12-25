@@ -6,12 +6,12 @@ namespace App\Http\Controllers\Auth;
 use App\Exceptions\User\NotFoundException;
 use App\Exceptions\User\RemindCodeNotFound;
 use App\Exceptions\User\UnableToCompleteRemindException;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\Auth\ForgotPasswordRequest;
 use App\Http\Requests\Auth\ResetPasswordRequest;
 use App\Services\Reminder;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
-use App\Http\Controllers\Controller;
 use Psr\Log\LoggerInterface;
 
 /**

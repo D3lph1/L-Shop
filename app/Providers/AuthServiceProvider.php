@@ -5,10 +5,12 @@ namespace App\Providers;
 
 use App\Models\Activation\EloquentActivation;
 use App\Models\Persistence\EloquentPersistence;
+use App\Models\Reminder\EloquentReminder;
 use App\Models\Role\EloquentRole;
 use App\Models\User\EloquentUser;
 use App\Repositories\Activation\ActivationRepositoryInterface;
 use App\Repositories\Persistence\PersistenceRepositoryInterface;
+use App\Repositories\Reminder\ReminderRepositoryInterface;
 use App\Repositories\Role\RoleRepositoryInterface;
 use App\Repositories\User\UserRepositoryInterface;
 use App\Services\BanCheckpoint;
@@ -56,5 +58,6 @@ class AuthServiceProvider extends ServiceProvider
         $sentinel->setRoleRepository($this->app->make(RoleRepositoryInterface::class, ['model' => EloquentRole::class]));
         $sentinel->setActivationRepository($this->app->make(ActivationRepositoryInterface::class, ['model' => EloquentActivation::class]));
         $sentinel->setPersistenceRepository($this->app->make(PersistenceRepositoryInterface::class, ['model' => EloquentPersistence::class]));
+        $sentinel->setReminderRepository($this->app->make(ReminderRepositoryInterface::class, ['model' => EloquentReminder::class]));
     }
 }

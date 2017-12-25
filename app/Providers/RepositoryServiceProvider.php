@@ -102,6 +102,7 @@ class RepositoryServiceProvider extends ServiceProvider
             /** @var Container $app */
             return $app->make(EloquentUserRepository::class, ['model' => EloquentUser::class]);
         });
+        $this->app->alias(UserRepositoryInterface::class, \Cartalyst\Sentinel\Users\UserRepositoryInterface::class);
         $this->app->singleton(PaymentRepositoryInterface::class, EloquentPaymentRepository::class);
         $this->app->singleton(ProductRepositoryInterface::class, EloquentProductRepository::class);
         $this->app->singleton(RoleRepositoryInterface::class, function ($app) {

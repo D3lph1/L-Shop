@@ -11,7 +11,7 @@ use App\Repositories\BaseRepositoryInterface;
  * @author  D3lph1 <d3lph1.contact@gmail.com>
  * @package App\Repositories\Reminder
  */
-interface ReminderRepositoryInterface extends BaseRepositoryInterface
+interface ReminderRepositoryInterface extends \Cartalyst\Sentinel\Reminders\ReminderRepositoryInterface, BaseRepositoryInterface
 {
     public function deleteByUser(int $userId): bool;
 }

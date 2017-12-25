@@ -8,22 +8,31 @@ use App\Exceptions\User\UnableToCompleteRemindException;
 use App\Mail\ForgotPassword;
 use App\Models\Reminder\EloquentReminder;
 use App\Models\User\UserInterface;
+use App\Repositories\Reminder\ReminderRepositoryInterface;
 use Cartalyst\Sentinel\Sentinel;
 
 /**
  * Class Reminder
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Services
  */
 class Reminder
 {
+    /**
+     * @var Sentinel
+     */
     private $sentinel;
 
-    public function __construct(Sentinel $sentinel)
+    /**
+     * @var ReminderRepositoryInterface
+     */
+    private $reminder;
+
+    public function __construct(Sentinel $sentinel, ReminderRepositoryInterface $reminder)
     {
         $this->sentinel = $sentinel;
+        $this->reminder = $reminder;
     }
 
     /**
@@ -82,7 +91,7 @@ class Reminder
     {
         $user = $this->sentinel->getUserRepository()->findById($userId);
 
-        return \Reminder::complete($user, $code, $password);
+        return $this->reminder->complete($user, $code, $password);
     }
 
     /**
