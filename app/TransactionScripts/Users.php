@@ -87,9 +87,12 @@ class Users
         $credentials = [
             'username' => $dto->getUsername(),
             'email' => $dto->getEmail(),
-            'password' => $dto->getPassword(),
             'balance' => $dto->getBalance()
         ];
+
+        if ($dto->getPassword()) {
+            $credentials = array_merge($credentials, ['password' => $dto->getPassword()]);
+        }
 
         /** @var UserInterface $other */
         $other = $this->sentinel->getUserRepository()->findByCredentials(['username' => $dto->getUsername()]);
