@@ -51,18 +51,18 @@ return [
 
         'memcached' => [
             'driver' => 'memcached',
-            'persistent_id' => null,
+            'persistent_id' => env('MEMCACHED_PERSISTENT_ID'),
             'sasl' => [
-                'username',
-                'password'
+                env('MEMCACHED_USERNAME'),
+                env('MEMCACHED_PASSWORD'),
             ],
             'options' => [
                 // Memcached::OPT_CONNECT_TIMEOUT  => 2000,
             ],
             'servers' => [
                 [
-                    'host' => '127.0.0.1',
-                    'port' => 11211,
+                    'host' => env('MEMCACHED_HOST', '127.0.0.1'),
+                    'port' => env('MEMCACHED_PORT', 11211),
                     'weight' => 100,
                 ],
             ],
@@ -86,6 +86,9 @@ return [
     |
     */
 
-    'prefix' => 'laravel',
+    'prefix' => env(
+        'CACHE_PREFIX',
+        str_slug(env('APP_NAME', 'laravel'), '_').'_cache'
+    ),
 
 ];

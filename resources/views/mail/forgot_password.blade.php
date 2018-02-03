@@ -1,1 +1,0 @@
-@lang('mail.forgot_password.content', ['username' => $username, 'link' => route('reset_password', ['user' => $userId, 'code' => $code]), 'ip' => $ip])

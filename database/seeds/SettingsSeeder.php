@@ -1,31 +1,48 @@
 <?php
+declare(strict_types = 1);
 
+use App\Services\Database\Truncater\Truncater;
+use App\Services\Settings\Setting;
+use App\Services\Settings\Settings;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Seeder;
 
-/**
- * Class SettingsSeeder
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- */
 class SettingsSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
+    public function run(Settings $settings, Repository $config): void
     {
-        $config = config('default');
-        ksort($config);
-        s_set($config);
-        s_set([
-            'shop.currency' => __('seeding.settings.currency'),
-            'shop.currency_html' => __('seeding.settings.currency_html'),
-            'shop.description' => __('seeding.settings.description'),
-            'shop.keywords' => __('seeding.settings.keywords'),
-            'api.launcher.sashok.auth.error_message' => __('seeding.settings.sashok_auth_error_message')
-        ]);
-        s_save();
+        $settings->flush();
+        $settings->save();
+
+        $data = $config->get('default');
+        $data = $this->localize($data);
+
+        $settings->setArray($data);
+        $settings->save();
+    }
+
+    /**
+     * Localizes the configuration by replacing strings starting with $: by the value from
+     * the localization file (seeding.php).
+     *
+     * @param array $data
+     *
+     * @return array
+     */
+    private function localize(array $data): array
+    {
+        foreach ($data as $key => &$value) {
+            if (is_array($value)) {
+                $value = $this->localize($value);
+                continue;
+            }
+
+            if (is_string($value) && mb_strpos($value, '$:') === 0) {
+                $value = mb_substr($value, 2);
+                $value = __("seeding.{$value}");
+            }
+        }
+
+        return $data;
     }
 }

@@ -91,6 +91,7 @@ return [
 
     // Specify validation messages
     'api_sashok_auth_format_regex' => 'Поле "Формат" должно содержать маркер {username}.',
+    'valid_regex' => 'Поле ":attribute" должно быть валидным регулярным выражением.',
 
     /*
     |--------------------------------------------------------------------------
@@ -176,6 +177,7 @@ return [
         'server_port' => 'Порт сервера',
         'server_password' => 'RCON пароль',
         'rcon_connection_timeout' => 'Таймаут соединения',
+        'rcon_monitoring_pattern' => 'Формат ответа',
         'enable_monitoring' => 'Включить мониторинг серверов',
         'signup_redirect' => 'Перенаправлять пользователя на кастомный URL после регистрации',
         'signup_redirect_url' => 'Кастомный URL',
@@ -186,5 +188,7 @@ return [
         'character_hd_cloak_enabled' => 'Разрешить пользователям устанавливать HD плащи',
         'character_skin_max_file_size' => 'Максимальный размер файла скина',
         'character_cloak_max_file_size' => 'Максимальный размер файла плаща',
+
+        'categories.*.*' => 'Имя категории'
     ],
 ];

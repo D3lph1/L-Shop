@@ -1,34 +1,32 @@
 {
-    "name": "laravel/laravel",
-    "description": "The Laravel Framework.",
-    "keywords": ["framework", "laravel"],
+    "name": "d3lph1/l-shop",
+    "description": "Modern trading system for Minecraft.",
+    "keywords": ["shop", "minecraft", "l-shop", "laravel"],
     "license": "MIT",
     "type": "project",
     "require": {
-        "php": ">=5.6.4",
-        "anlutro/l4-settings": "^0.4.9",
-        "barryvdh/laravel-debugbar": "^2.3",
-        "barryvdh/laravel-ide-helper": "^2.2",
-        "cartalyst/sentinel": "2.0.*",
-        "d3lph1/minecraft-rcon-manager": "~1.0",
-        "erusev/parsedown": "^1.6",
-        "intervention/image": "^2.3",
-        "laravel/framework": "5.4.24",
-        "laravel/tinker": "~1.0"
+        "php": ">=7.1.0",
+        "fideloper/proxy": "3.3.4",
+        "laravel/framework": "5.5.29",
+        "laravel/tinker": "1.0.3",
+        "laravel-doctrine/orm": "1.4.2",
+        "laravel-doctrine/migrations": "1.1.7"
     },
     "require-dev": {
-        "doctrine/dbal": "~2.3",
-        "fzaninotto/faker": "~1.4",
-        "mockery/mockery": "0.9.*",
-        "phpunit/phpunit": "~5.7"
+        "filp/whoops": "2.1.14",
+        "fzaninotto/faker": "1.7.1",
+        "mockery/mockery": "1.0",
+        "phpunit/phpunit": "6.5.5",
+        "symfony/thanks": "1.0.1",
+        "barryvdh/laravel-ide-helper": "2.4.1"
     },
     "autoload": {
         "classmap": [
-            "database"
+            "database/seeds",
+            "database/factories"
         ],
         "psr-4": {
-            "App\\": "app/",
-            "Models\\": "app/Models"
+            "App\\": "app/"
         },
         "files": [
             "app/helpers.php"
@@ -39,24 +37,27 @@
             "Tests\\": "tests/"
         }
     },
+    "extra": {
+        "laravel": {
+            "dont-discover": [
+            ]
+        }
+    },
     "scripts": {
         "post-root-package-install": [
-            "php -r \"file_exists('.env') || copy('.env.example', '.env');\""
+            "@php -r \"file_exists('.env') || copy('.env.example', '.env');\""
         ],
         "post-create-project-cmd": [
-            "php artisan key:generate"
+            "@php artisan key:generate"
         ],
-        "post-install-cmd": [
-            "Illuminate\\Foundation\\ComposerScripts::postInstall",
-            "php artisan optimize"
-        ],
-        "post-update-cmd": [
-            "Illuminate\\Foundation\\ComposerScripts::postUpdate",
-            "php artisan optimize"
+        "post-autoload-dump": [
+            "Illuminate\\Foundation\\ComposerScripts::postAutoloadDump",
+            "@php artisan package:discover"
         ]
     },
     "config": {
         "preferred-install": "dist",
-        "sort-packages": true
+        "sort-packages": true,
+        "optimize-autoloader": true
     }
 }

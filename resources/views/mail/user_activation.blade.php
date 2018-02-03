@@ -1,1 +1,0 @@
-@lang('mail.user_activation.content', ['username' => $username, 'link' => route('activate', ['user' => $userId, 'code' => $code])])

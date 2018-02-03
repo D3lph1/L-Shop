@@ -2,23 +2,26 @@
 
 namespace Tests;
 
+use Doctrine\ORM\EntityManagerInterface;
+use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    protected function authenticateUser()
+    protected function transaction()
     {
-        if (!\Sentinel::authenticate(['username' => 'user', 'password' => 'user'])) {
-            throw new \RuntimeException('Can not authorize user');
-        }
+        $this->app->make(EntityManagerInterface::class)->beginTransaction();
     }
 
-    protected function authenticateAdmin()
+    protected function rollback()
     {
-        if (!\Sentinel::authenticate(['username' => 'admin', 'password' => 'admin'])) {
-            throw new \RuntimeException('Can not authorize admin');
-        }
+        $this->app->make(EntityManagerInterface::class)->rollback();
+    }
+
+    protected function reMigrate()
+    {
+        $this->app->make(Kernel::class)->call('doctrine:migrations:refresh');
     }
 }

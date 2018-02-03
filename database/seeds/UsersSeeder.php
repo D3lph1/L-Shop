@@ -1,75 +1,42 @@
 <?php
+declare(strict_types=1);
 
-use Cartalyst\Sentinel\Sentinel;
+use App\Entity\Role;
+use App\Entity\User;
+use App\Repository\Activation\ActivationRepository;
+use App\Repository\Persistence\PersistenceRepository;
+use App\Repository\Reminder\ReminderRepository;
+use App\Repository\Role\RoleRepository;
+use App\Repository\User\UserRepository;
+use App\Services\Auth\Activator;
+use App\Services\Auth\Auth;
+use App\Services\Auth\Roles;
+use App\Services\Database\Truncater\Truncater;
 use Illuminate\Database\Seeder;
 
-/**
- * Class UsersSeeder
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- */
 class UsersSeeder extends Seeder
 {
-    /**
-     * @var Sentinel
-     */
-    private $sentinel;
-
-    public function __construct(Sentinel $sentinel)
+    public function run(
+        Auth $auth,
+        Activator $activator,
+        RoleRepository $roleRepository,
+        UserRepository $userRepository,
+        ActivationRepository $activationRepository,
+        ReminderRepository $reminderRepository,
+        PersistenceRepository $persistenceRepository): void
     {
-        $this->sentinel = $sentinel;
-    }
+        $activationRepository->deleteAll();
+        $reminderRepository->deleteAll();
+        $persistenceRepository->deleteAll();
+        $userRepository->deleteAll();
 
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
-        $this->createAdmin();
-        $this->createUser();
-    }
+        $user = $auth->register(new User('admin', 'admin@example.com', 'admin'));
+        $activator->activate($user);
 
-    private function createAdmin()
-    {
-        $user = $this->sentinel->registerAndActivate([
-            'username' => 'admin',
-            'email' => 'admin@example.com',
-            'password' => 'admin',
-            'balance' => 1000,
-        ]);
-
-        $role = $this->sentinel->getRoleRepository()->createModel()->create([
-            'id' => 1,
-            'slug' => 'admin',
-            'name' => __('seeding.roles.admin'),
-            'permissions' => [
-                'user.admin' => true
-            ]
-        ]);
-
-        $role->users()->attach($user);
-    }
-
-    private function createUser()
-    {
-        $user = $this->sentinel->registerAndActivate([
-            'username' => 'user',
-            'email' => 'user@example.com',
-            'password' => 'user',
-            'balance' => 0,
-        ]);
-
-        $role = $this->sentinel->getRoleRepository()->createModel()->create([
-            'id' => 2,
-            'slug' => 'user',
-            'name' => __('seeding.roles.user'),
-            'permissions' => [
-                'user.admin' => false
-            ]
-        ]);
-
-        $role->users()->attach($user);
+        $adminRole = $roleRepository->findByName(Roles::ADMIN);
+        $user->addRole($adminRole);
+        $adminRole->addUser($user);
+        $userRepository->update($user);
+        $roleRepository->update($adminRole);
     }
 }

@@ -1,4 +1,0 @@
-<Files ".env">
-    Order Allow,Deny
-    Deny from all
-</Files>

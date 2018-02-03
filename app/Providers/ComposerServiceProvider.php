@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Providers;
 
@@ -10,39 +11,23 @@ use Illuminate\Support\ServiceProvider;
  * Class ComposerServiceProvider
  *
  * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
  * @package App\Providers
  */
 class ComposerServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
-     *
-     * @return void
      */
-    public function boot()
+    public function boot(): void
     {
-        view()->composer([
-            'layouts.shop',
-            'shop.catalog',
-            'shop.cart',
-            'payment.fillupbalance',
-            'profile.payments'
-        ],
-            ShopLayoutComposer::class);
-
-        view()->composer([
-            'layouts.global'
-        ],
-            GlobalLayoutComposer::class);
+        view()->composer(['layout.global'], GlobalLayoutComposer::class);
+        view()->composer(['layout.shop'], ShopLayoutComposer::class);
     }
 
     /**
      * Register the application services.
-     *
-     * @return void
      */
-    public function register()
+    public function register(): void
     {
         //
     }

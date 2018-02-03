@@ -1,11 +1,15 @@
 <?php
 
 return [
-    'settings' => [
-        'currency' => 'Руб.',
-        'currency_html' => '<i class="fa fa-rub"></i>',
+    'shop' => [
         'description' => 'Современная торговая система для Minecraft',
-        'keywords' => 'L-Shop,магазин,купить,minecraft,майнкрафт',
+        'keywords' => 'L-Shop, магазин, купить, minecraft, майнкрафт',
+    ],
+    'settings' => [
+        'currency' => [
+            'name' => 'Руб.',
+            'html' => '<i class="fa fa-rub"></i>'
+        ],
         'sashok_auth_error_message' => 'Пользователь с такими данными не найден',
     ],
     'roles' => [
@@ -15,9 +19,9 @@ return [
     'categories' => [
         '1' => 'Блоки',
         '2' => 'Предметы',
-        '5' => 'Привилегии',
-        '3' => 'Броня',
-        '4' => 'Предметы',
+        '3' => 'Привилегии',
+        '4' => 'Броня',
+        '5' => 'Предметы',
     ],
     'items' => [
         'grass' => 'Блок травы',

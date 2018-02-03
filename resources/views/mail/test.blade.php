@@ -1,1 +1,0 @@
-@lang('mail.test.content', ['site' => $site])

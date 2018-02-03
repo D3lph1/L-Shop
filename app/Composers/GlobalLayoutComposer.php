@@ -1,35 +1,29 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Composers;
 
+use App\Services\Infrastructure\Notification\Notificator;
+use App\Services\Settings\Settings;
 use Illuminate\View\View;
-use App\Contracts\ComposerContract;
 
-/**
- * Class GlobalLayoutComposer
- *
- * @author  D3lph1 <d3lph1.contact@gmail.com>
- *
- * @package App\Composers
- */
-class GlobalLayoutComposer implements ComposerContract
+class GlobalLayoutComposer
 {
-    /**
-     * {@inheritdoc}
-     */
-    public function compose(View $view)
+    public function compose(View $view): void
     {
         $view->with($this->getData());
     }
 
-    /**
-     * @return array
-     */
-    private function getData()
+    private function getData(): array
     {
+        $settings = app(Settings::class);
+        $notificator = app(Notificator::class);
+
         return [
-            'shopDescription' => s_get('shop.description'),
-            'shopKeywords' => s_get('shop.keywords')
+            'title' => $settings->get('shop.name')->getValue(),
+            'description' => $settings->get('shop.description')->getValue(),
+            'keywords' => $settings->get('shop.keywords')->getValue(),
+            'notifications' => $notificator->pull()
         ];
     }
 }

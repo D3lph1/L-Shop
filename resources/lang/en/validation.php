@@ -41,12 +41,14 @@ return [
     'email'                => 'The :attribute must be a valid email address.',
     'exists'               => 'The selected :attribute is invalid.',
     'file'                 => 'The :attribute must be a file.',
-    'filled'               => 'The :attribute field is required.',
+    'filled'               => 'The :attribute field must have a value.',
     'image'                => 'The :attribute must be an image.',
     'in'                   => 'The selected :attribute is invalid.',
     'in_array'             => 'The :attribute field does not exist in :other.',
     'integer'              => 'The :attribute must be an integer.',
     'ip'                   => 'The :attribute must be a valid IP address.',
+    'ipv4'                 => 'The :attribute must be a valid IPv4 address.',
+    'ipv6'                 => 'The :attribute must be a valid IPv6 address.',
     'json'                 => 'The :attribute must be a valid JSON string.',
     'max'                  => [
         'numeric' => 'The :attribute may not be greater than :max.',
@@ -86,9 +88,6 @@ return [
     'uploaded'             => 'The :attribute failed to upload.',
     'url'                  => 'The :attribute format is invalid.',
 
-    // Specify validation messages
-    'api_sashok_auth_format_regex' => 'Field "Format" must be contains a marker {username}',
-
     /*
     |--------------------------------------------------------------------------
     | Custom Validation Language Lines
@@ -117,72 +116,6 @@ return [
     |
     */
 
-    'attributes' => [
-        'username' => 'Username',
-        'email' => 'Email',
-        'password' => 'Password',
-        'balance' => 'Balance',
-        'skin' => 'Skin',
-        'cloak' => 'Cloak',
-        'block_duration' => 'Duration of blocking',
-
-        'min_sum' => 'Minimum balance recharge amount',
-        'currency' => 'Currency name',
-        'currency_html' => 'HTML representation of currency',
-
-        'robokassa_login' => 'Robkassa. Login',
-        'robokassa_password1' => 'Robkassa. Password №1',
-        'robokassa_password2' => 'Robkassa. Password №2',
-        'robokassa_algo' => 'Robkassa. Algorithm for calculating the checksum',
-        'robokassa_test' => 'Robokassa. Test mode',
-
-        'interkassa_checkout_id' => 'Interkassa. Checkout identifier',
-        'interkassa_key' => 'Interkassa. Key',
-        'interkassa_test_key' => 'Interkassa. Test key',
-        'interkassa_currency' => 'Interkassa. Currency',
-        'interkassa_algo' => 'Interkassa. Algorithm for calculating the checksum',
-        'interkassa_test' => 'Interkassa. Test mode',
-
-        'page_title' => 'Page title',
-        'page_content' => 'Contents of the page',
-        'page_url' => 'Page address',
-
-        'news_title' => 'News title',
-        'news_content' => 'Content of news',
-
-        'server_name' => 'Server name',
-
-        'products_per_page' => 'Quantity of goods on 1 page of the store',
-        'payments_per_page' => 'Number of items on the payment history page in the user profile',
-        'cart_per_page' => 'Number of items on the page of the in-game shopping cart in the user\'s profile',
-        'news_first_portion' => 'Number of news items on the screen at page load time',
-        'news_per_page' => 'Number of downloads at a time',
-        'cart_capacity' => 'Maximum capacity of the cart',
-        'ttl_statistic' => 'The lifetime of the statistics cache',
-        'ttl_statistic_pages' => 'The lifetime of the static page cache',
-        'ttl_news' => 'The lifetime of the news cache',
-        'ttl_monitoring' => 'The lifetime of the server monitoring cache',
-        'sashok_launcher_auth_error_message' => 'Message when the user enters the data incorrectly',
-        'sashok_launcher_auth_format' => 'Format',
-        'separator' => 'Separator',
-        'recaptcha_public_key' => 'Public key reCAPTCHA',
-        'recaptcha_secret_key' => 'Secret key reCAPTCHA',
-        'test_mail_address' => 'E-mail address to which the letter will be sent',
-        'sort_priority' => 'Sort priority',
-        'server_ip' => 'Server IP address',
-        'server_port' => 'Server port',
-        'server_password' => 'RCON password',
-        'rcon_connection_timeout' => 'Connection timeout',
-        'enable_monitoring' => 'Enable server monitoring',
-        'signup_redirect' => 'Redirect user to custom URL after registration',
-        'signup_redirect_url' => 'Custom URL',
-
-        'character_skin_enabled' => 'Allow users to set skins',
-        'character_cloak_enabled' => 'Allow users to set cloaks',
-        'character_hd_skin_enabled' => 'Allow users to set HD skins',
-        'character_hd_cloak_enabled' => 'Allow users to set HD cloaks',
-        'character_skin_max_file_size' => 'Maximum size of the skin file',
-        'character_cloak_max_file_size' => 'Maximum size of the cloak file',
-    ],
+    'attributes' => [],
 
 ];

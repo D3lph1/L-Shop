@@ -15,9 +15,9 @@ return [
     'categories' => [
         '1' => 'Blocks',
         '2' => 'Items',
-        '5' => 'Privileges',
-        '3' => 'Armor',
-        '4' => 'Items',
+        '3' => 'Privileges',
+        '4' => 'Armor',
+        '5' => 'Items',
     ],
     'items' => [
         'grass' => 'Block of grass',

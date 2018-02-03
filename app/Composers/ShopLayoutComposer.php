@@ -1,160 +1,73 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Composers;
 
-use App\Contracts\ComposerContract;
-use App\DataTransferObjects\MonitoringPlayers;
-use App\Models\Server;
-use App\Repositories\NewsRepository;
-use App\Services\Monitoring\MonitoringInterface;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
+use App\Composers\Constructors\AdminBlockConstructor;
+use App\Composers\Constructors\ProfileBlockConstructor;
+use App\Composers\Constructors\ServersBlockConstructor;
+use App\Services\Auth\AccessMode;
+use App\Services\Auth\Auth;
+use App\Services\Cart\Cart;
+use App\Services\Infrastructure\Server\Persistence\Persistence;
+use App\Services\Settings\Settings;
+use Illuminate\Contracts\View\View;
 
-/**
- * Class ShopLayoutComposer
- * Serves to transfer shared data to a layout.shop template that will be available
- * on each child page of this template.
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- *
- * @package App\Composers
- */
-class ShopLayoutComposer implements ComposerContract
+class ShopLayoutComposer
 {
     /**
-     * @var Request
+     * @var Auth
      */
-    private $request;
+    private $auth;
 
     /**
-     * Data about current server
-     *
-     * @var Server
+     * @var Settings
      */
-    private $currentServer;
+    private $settings;
 
-    /**
-     * Data about all enabled servers
-     *
-     * @var Server
-     */
-    private $servers;
-
-    /**
-     * @var NewsRepository
-     */
-    private $newsRepository;
-
-    /**
-     * @var MonitoringInterface
-     */
-    private $monitoring;
-
-    /**
-     * @param Request             $request
-     * @param NewsRepository      $newsRepository
-     * @param MonitoringInterface $monitoring
-     */
-    public function __construct(Request $request, NewsRepository $newsRepository, MonitoringInterface $monitoring)
+    public function __construct(Auth $auth, Settings $settings)
     {
-        $this->request = $request;
-        $this->currentServer = $request->get('currentServer');
-        $this->servers = $request->get('servers');
-        $this->newsRepository = $newsRepository;
-        $this->monitoring = $monitoring;
+        $this->auth = $auth;
+        $this->settings = $settings;
     }
 
-    /**
-     * {@inheritdoc}
-     */
-    public function compose(View $view)
+    public function compose(View $view): void
     {
         $view->with($this->getData());
     }
 
-    /**
-     * Obtain information for subsequent composing.
-     *
-     * @return array
-     */
-    private function getData()
+    private function getData(): array
     {
-        if (s_get('news.enabled')) {
-            $news = $this->news();
-            $newsCount = $this->newsCount();
-        } else {
-            $news = false;
-            $newsCount = 0;
-        }
+        $server = app(Persistence::class)->retrieve();
 
         return [
-            'isAuth' => is_auth(),
-            'isAdmin' => is_admin(),
-            'username' => is_auth() ? \Sentinel::getUser()->getUserLogin() : null,
-            'balance' => is_auth() ? \Sentinel::getUser()->getBalance() : null,
-            'currency' => s_get('shop.currency_html', 'руб.'),
-            'currentServer' => $this->currentServer,
-            'character' =>
-                s_get('profile.character.skin.enabled', 0) or s_get('profile.character.cloak.enabled', 0),
-
-            'canEnter' => access_mode_any() and !is_auth(),
-            'servers' => $this->servers,
-            'catalogUrl' => route('catalog', [
-                'currentServer' => $this->currentServer
-            ]),
-            'cartUrl' => route('cart', [
-                'server' => $this->currentServer->id
-            ]),
-            'signinUrl' => route('signin'),
-            'logoutUrl' => route('logout'),
-            'shopName' => s_get('shop.name', 'L - Shop'),
-            'news' => $news,
-            'newsCount' => $newsCount,
-            'monitoring' => $this->monitoring()
+            'isAuth' => $this->auth->check(),
+            'isAdmin' => true,
+            'username' => $this->auth->check() ? $this->auth->getUser()->getUsername() : null,
+            'balance' => $this->auth->check() ? $this->auth->getUser()->getBalance() : null,
+            'currency' => $this->settings->get('shop.currency.html')->getValue(),
+            'cartCount' => $server !== null ? app(Cart::class)->countServer($server) : 0,
+            'canLogin' => !$this->auth->check() && $this->settings->get('auth.access_mode')->getValue() === AccessMode::ANY,
+            'profile' => app(ProfileBlockConstructor::class)->construct(),
+            'adminBlock' => app(AdminBlockConstructor::class)->construct(),
+            'serversBlock' => app(ServersBlockConstructor::class)->construct(),
+            'currentServerName' => $server !== null ? $server->getName() : __('content.layout.shop.server_not_selected'),
+            'news' => $this->news(),
+            'newsFirstPortion' => $this->settings->get('system.news.first_portion'),
+            'monitoringEnabled' => $this->settings->get('system.monitoring.enabled'),
+            'monitoredServers' => $this->monitoredServers(),
+            'server' => $server !== null ? $server : null,
+            'shopName' => $this->settings->get('shop.name')->getValue()
         ];
     }
 
-    /**
-     * Get first portion of news list.
-     *
-     * @return \Illuminate\Database\Eloquent\Collection
-     */
-    private function news()
+    private function news(): array
     {
-        return $this->newsRepository->getFirstPortion();
+        return [];
     }
 
-    /**
-     * Get all news count.
-     *
-     * @return int
-     */
-    private function newsCount()
+    private function monitoredServers(): array
     {
-        return $this->newsRepository->count();
-    }
-
-    /**
-     * Obtain data for monitoring servers.
-     *
-     * @return MonitoringPlayers[]
-     */
-    private function monitoring()
-    {
-        if (s_get('monitoring.enabled')) {
-            $servers = $this->request->get('servers');
-            $monitoring = [];
-
-            /** @var Server $server */
-            foreach ($servers as $server) {
-                if ($server->monitoring_enabled) {
-                    $monitoring[] = $this->monitoring->getPlayers($server->id);
-                }
-            }
-
-            return $monitoring;
-        }
-
         return [];
     }
 }
