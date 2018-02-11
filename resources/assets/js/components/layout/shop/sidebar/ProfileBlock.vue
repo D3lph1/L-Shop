@@ -42,7 +42,7 @@
         ],
         computed: {
             cart() {
-                return this.$store.state.cartCount;
+                return this.$store.state.cart.amount;
             }
         },
         mounted() {

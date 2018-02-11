@@ -20,7 +20,7 @@
                     <label for="si-password">{{ $t('content.all.password') }}</label>
                 </div>
                 <div class="col-12 text-center">
-                    <button class="btn btn-warning btn-lg" @click="perform">{{ $t('content.auth.signin.btn') }}</button>
+                    <button class="btn btn-warning btn-lg" :disabled="disabledBtn" @click="perform">{{ $t('content.auth.signin.btn') }}</button>
                 </div>
             </div>
             <div class="card-footer">
@@ -51,7 +51,8 @@
         data() {
             return {
                 username: '',
-                password: ''
+                password: '',
+                disabledBtn: false
             }
         },
         methods: {
@@ -61,6 +62,7 @@
                 return this.username.length !== 0 && this.password.length !== 0;
             },
             send() {
+                this.disabledBtn = true;
                 axios.post(this.routeLogin, {
                     username: this.username,
                     password: this.password
@@ -76,6 +78,7 @@
                                 Url.redirect(this.routeServers);
                             }
                         }
+                        this.disabledBtn = false;
                     });
             },
             perform() {

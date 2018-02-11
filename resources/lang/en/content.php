@@ -5,7 +5,7 @@ return [
         'save' => 'Save changes',
 
         'control' => [
-            'main_settings' => [
+            'basic' => [
                 'title' => 'Main settings',
                 'shop' => [
                     'title' => 'Shop',
@@ -537,6 +537,7 @@ return [
                     'description' => '<strong>L - Shop</strong> is an open source project, an entire system designed to help administrators of Minecraft gaming servers simplify the process of selling virtual goods.',
                     'lshop_version' => 'L-Shop system version',
                     'laravel_version' => 'The version of the Laravel framework',
+                    'vuejs_version' => 'The version of the Vue.js framework',
                     'github' => 'GitHub repository',
                     'rubukkit' => 'Topic on RuBukkit.org',
                     'developers' => 'Developers',
@@ -559,6 +560,7 @@ return [
         'catalog' => [
             'title' => 'Catalog',
             'category_empty' => 'Category is empty',
+            'categories_does_not_exist' => 'Categories does not exist',
             'item' => [
                 'forever' => 'Forever',
                 'for' => 'for',
@@ -573,9 +575,9 @@ return [
                 'next_btn' => 'Continue',
                 'cancel_btn' => 'Cancel',
                 'username' => 'Username',
-                'auth' => 'Your account will be charged the amount of :span :currency
+                'auth' => 'Your account will be charged the amount of :cost :currency
                     If funds are not enough, you will be automatically redirected to the payment page.',
-                'guest' => 'You will be redirected to the payment method selection page. Order amount: :sum :currency',
+                'guest' => 'You will be redirected to the payment method selection page. Order amount: :cost :currency',
             ]
         ],
         'cart' => [
@@ -624,13 +626,11 @@ return [
             'update' => 'Update',
             'max_file_size' => 'The maximum file size is <strong>:size</strong> KB.',
             'skin' => [
-                'max_image_size' => 'Image size is <strong>64x32</strong>.',
-                'max_image_size_hd' => 'The maximum image size is <strong>1024x512</strong>.',
+                'image_size' => 'You can set skins with the resolution: :list.',
             ],
-            'clock' => [
+            'cloak' => [
                 'not_set' => 'Cloak not set',
-                'max_image_size' => 'Image size is <strong>22x17</strong>.',
-                'max_image_size_hd' => 'The maximum image size is <strong>1024x512</strong>.',
+                'image_size' => 'You can set cloaks with the resolution: :list.',
             ]
         ],
         'payments' => [
@@ -764,19 +764,5 @@ return [
         'password' => 'Password',
         'password_confirmation' => 'Confirm password',
         'logout' => 'Logout'
-    ],
-    'months' => [
-        1 => 'January',
-        2 => 'February',
-        3 => 'March',
-        4 => 'April',
-        5 => 'May',
-        6 => 'June',
-        7 => 'July',
-        8 => 'August',
-        9 => 'September',
-        10 => 'October',
-        11 => 'November',
-        12 => 'December',
     ]
 ];

@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 /** @var \Illuminate\Routing\Router $router */
 $router->get('/', 'IndexController@index')
@@ -56,3 +57,22 @@ $router->put('/cart', 'Shop\CartController@put')
     ->name('frontend.cart.put');
 $router->delete('/cart', 'Shop\CartController@remove')
     ->name('frontend.cart.remove');
+
+$router->get('/news/{id}', 'Shop\NewsController@render')
+    ->name('frontend.news.render');
+$router->post('/news/load', 'Shop\NewsController@load')
+    ->name('frontend.news.load');
+
+$router->get('/page/{url}', 'Shop\PageController@render')
+    ->name('frontend.page.render');
+
+$router->get('/profile/character', 'Profile\CharacterController@render')
+    ->name('frontend.profile.character.render')
+    ->middleware('auth');
+
+$router->post('/profile/character/skin/upload', 'Profile\CharacterController@uploadSkin')
+    ->name('frontend.profile.character.skin.upload')
+    ->middleware('auth');
+$router->post('/profile/character/cloak/upload', 'Profile\CharacterController@uploadCloak')
+    ->name('frontend.profile.character.cloak.upload')
+    ->middleware('auth');

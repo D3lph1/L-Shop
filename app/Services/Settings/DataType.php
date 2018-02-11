@@ -11,6 +11,8 @@ class DataType
 
     public const FLOAT = 'float';
 
+    public const JSON = 'json';
+
     private function __construct()
     {
     }

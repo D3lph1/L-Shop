@@ -6,6 +6,8 @@ namespace App\Providers;
 use App\Entity\Activation;
 use App\Entity\Category;
 use App\Entity\Item;
+use App\Entity\News;
+use App\Entity\Page;
 use App\Entity\Permission;
 use App\Entity\Persistence;
 use App\Entity\Product;
@@ -19,6 +21,10 @@ use App\Repository\Category\CategoryRepository;
 use App\Repository\Category\DoctrineCategoryRepository;
 use App\Repository\Item\DoctrineItemRepository;
 use App\Repository\Item\ItemRepository;
+use App\Repository\News\DoctrineNewsRepository;
+use App\Repository\News\NewsRepository;
+use App\Repository\Page\DoctrinePageRepository;
+use App\Repository\Page\PageRepository;
 use App\Repository\Permission\DoctrinePermissionRepository;
 use App\Repository\Permission\PermissionRepository;
 use App\Repository\Persistence\DoctrinePersistenceRepository;
@@ -84,7 +90,14 @@ class RepositoryServiceProvider extends ServiceProvider
             'concrete' => DoctrineProductRepository::class,
             'entity' => Product::class
         ],
-
+        NewsRepository::class => [
+            'concrete' => DoctrineNewsRepository::class,
+            'entity' => News::class
+        ],
+        PageRepository::class => [
+            'concrete' => DoctrinePageRepository::class,
+            'entity' => Page::class
+        ],
         Repository::class => [
             'concrete' => DoctrineRepository::class,
             'entity' => Setting::class

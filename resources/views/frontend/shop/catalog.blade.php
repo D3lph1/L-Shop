@@ -26,28 +26,34 @@
     </div>
     <div id="p-containers">
         <div class="product-container">
-            @if($products->count())
-                <div class="m-products">
-                    @foreach($products as $product)
-                        <catalog-item
-                                :product-id="{{ $product->getId() }}"
-                                name="{{ $product->getItem()->getName() }}"
-                                image="{{ \App\Services\Media\Image::itemImagePath($product->getItem()->getImage()) }}"
-                                :price="{{ json_encode($product->getPrice()) }}"
-                                currency="{{ $currency }}"
-                                :stack="{{ json_encode($product->getStack()) }}"
-                                is-item="{{ $product->getItem()->getType() === \App\Services\Item\Type::ITEM }}"
-                                is-permgroup="{{ $product->getItem()->getType() === \App\Services\Item\Type::PERMGROUP }}"
-                                :in-cart="{{ json_encode($cart->exist(new \App\Services\Cart\Item($product, 0))) }}"
-                                put-in-cart-route="{{ route('frontend.cart.put') }}"
-                                quick-purchase-route="{{ '' }}"
-                        ></catalog-item>
-                    @endforeach
-                </div>
-                {{ $products->links('components.pagination') }}
+            @if($products !== null)
+                @if($products->count())
+                    <div class="m-products">
+                        @foreach($products as $product)
+                            <catalog-item
+                                    :product-id="{{ $product->getId() }}"
+                                    name="{{ $product->getItem()->getName() }}"
+                                    image="{{ \App\Services\Media\Image::itemImagePath($product->getItem()->getImage()) }}"
+                                    :price="{{ json_encode($product->getPrice()) }}"
+                                    currency="{{ $currency }}"
+                                    :stack="{{ json_encode($product->getStack()) }}"
+                                    is-item="{{ $product->getItem()->getType() === \App\Services\Item\Type::ITEM }}"
+                                    is-permgroup="{{ $product->getItem()->getType() === \App\Services\Item\Type::PERMGROUP }}"
+                                    :in-cart="{{ json_encode($cart->exist(new \App\Services\Cart\Item($product, 0))) }}"
+                                    put-in-cart-route="{{ route('frontend.cart.put') }}"
+                                    quick-purchase-route="{{ '' }}"
+                            ></catalog-item>
+                        @endforeach
+                    </div>
+                    {{ $products->links('components.pagination') }}
+                @else
+                    <div class="alert alert-info text-center">
+                        @lang('content.shop.catalog.category_empty')
+                    </div>
+                @endif
             @else
                 <div class="alert alert-info text-center">
-                    @lang('content.shop.catalog.category_empty')
+                    @lang('content.shop.catalog.categories_does_not_exist')
                 </div>
             @endif
         </div>

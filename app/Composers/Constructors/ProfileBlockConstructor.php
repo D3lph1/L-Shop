@@ -23,7 +23,7 @@ class ProfileBlockConstructor
         $profile = [];
         if ($this->characterAvailable()) {
             array_push($profile, [
-                'link' => '',
+                'link' => route('frontend.profile.character.render'),
                 'icon' => 'user',
                 'caption' => __('sidebar.profile.character')
             ]);

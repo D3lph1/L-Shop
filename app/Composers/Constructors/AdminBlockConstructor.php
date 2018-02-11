@@ -3,18 +3,30 @@ declare(strict_types = 1);
 
 namespace App\Composers\Constructors;
 
+use App\Services\Auth\Auth;
+use App\Services\Auth\Permissions;
+
 class AdminBlockConstructor
 {
-    public function construct(): array
+    /**
+     * @var Auth
+     */
+    private $auth;
+
+    private $items;
+
+    public function __construct(Auth $auth)
     {
-        return [
+        $this->auth = $auth;
+        $this->items = [
             [
                 'caption' => __('sidebar.admin.control.name'),
                 'icon' => 'cogs',
                 'subItems' => [
                     [
-                        'link' => '',
-                        'caption' => __('sidebar.admin.control.nodes.main_settings')
+                        'link' => route('admin.control.basic.render'),
+                        'caption' => __('sidebar.admin.control.nodes.main_settings'),
+                        'permissions' => [Permissions::ADMIN_CONTROL_BASIC_ACCESS]
                     ],
                     [
                         'link' => '',
@@ -152,11 +164,31 @@ class AdminBlockConstructor
                         'target' => '_blank'
                     ],
                     [
-                        'link' => '',
-                        'caption' => __('sidebar.admin.info.nodes.about')
+                        'link' => route('admin.information.about.render'),
+                        'caption' => __('sidebar.admin.info.nodes.about'),
+                        'permissions' => [Permissions::ADMIN_INFORMATION_ABOUT_ACCESS]
                     ],
                 ]
             ]
         ];
+    }
+
+    public function construct(): array
+    {
+        foreach ($this->items as $k => &$item) {
+            foreach ($item['subItems'] as $key => &$subItem) {
+                if (isset($subItem['permissions'])) {
+                    if (!$this->auth->getUser()->hasAllPermission($subItem['permissions'])) {
+                        unset($item['subItems'][$key]);
+                    }
+                }
+            }
+
+            if (count($item['subItems']) === 0) {
+                unset($this->items[$k]);
+            }
+        }
+
+        return $this->items;
     }
 }

@@ -9,3 +9,8 @@ function setting(string $key, $default = null)
 {
     return app(Settings::class)->get($key, $default);
 }
+
+function permission_middleware(string $permission): string
+{
+    return "permission:{$permission}";
+}

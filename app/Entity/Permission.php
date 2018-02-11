@@ -32,7 +32,7 @@ class Permission implements PermissionInterface
     private $users;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Role", inversedBy="permissions")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Role", inversedBy="permissions", cascade={"persist"})
      */
     private $roles;
 

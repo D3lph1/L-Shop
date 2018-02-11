@@ -10,7 +10,7 @@
                 <div class="modal-body">
                     <div class="md-form">
                         <input v-if="!this.$store.state.isAuth" v-model="username" type="text" class="form-control text-center" :placeholder="$t('content.shop.catalog.fast_buy_modal.username')">
-                        <input v-model="count" @blur="recount" type="number" class="form-control text-center no-spinners">
+                        <input v-model="amount" @blur="recount" type="number" class="form-control text-center no-spinners">
 
                         <div class="text-center" id="catalog-to-buy-cbuttons">
                             <button class="btn btn-warning btn-sm" @click="decrement"><i class="fa fa-minus"></i></button>
@@ -19,10 +19,10 @@
                     </div>
                     <div class="alert alert-info">
                         <span v-if="this.$store.state.isAuth">
-                            <span v-html="$t('content.shop.catalog.fast_buy_modal.auth', {sum, currency})"></span>
+                            <span v-html="$t('content.shop.catalog.fast_buy_modal.auth', {cost, currency})"></span>
                         </span>
                         <span v-else>
-                            <span v-html="$t('content.shop.catalog.fast_buy_modal.guest', {sum, currency})"></span>
+                            <span v-html="$t('content.shop.catalog.fast_buy_modal.guest', {cost, currency})"></span>
                         </span>
                     </div>
 
@@ -38,15 +38,15 @@
 </template>
 
 <script>
-    import Url from './../../common/url';
+    import Url from '../../../common/url';
 
     export default {
         props: ['currency', 'captcha'],
         data() {
             return {
                 username: '',
-                count: 0,
-                sum: 0,
+                amount: 0,
+                cost: 0,
                 disabledBtn: false
             }
         },
@@ -63,16 +63,16 @@
         },
         watch: {
             /**
-             * Initialize a count with a value from the store.
+             * Initialize a amount with a value from the store.
              */
             stack(val) {
-                this.count = val;
+                this.amount = val;
             },
             /**
-             * Initialize a sum with a value from the store
+             * Initialize a cost with a value from the store
              */
             price(val) {
-                this.sum = val;
+                this.cost = val;
             }
         },
         methods: {
@@ -91,7 +91,7 @@
 
                 axios.post(this.url, {
                     username: this.username,
-                    count: this.count,
+                    amount: this.amount,
                     captcha: captcha.getToken()
                 }).then((response) => {
                     response = response.data;
@@ -114,21 +114,19 @@
              * Increases the amount of the product by 1 stack.
              */
             increment() {
-                this.count += this.stack;
+                this.amount += this.stack;
                 this.recount();
-                this.resum();
             },
             /**
              * Decrements the amount of the product by 1 stack.
              */
             decrement() {
-                this.count -= this.stack;
+                this.amount -= this.stack;
                 this.recount();
-                this.resum();
             },
             /**
              * Recalculates the quantity of goods, producing normalization. Valid is considered
-             * to be an amount that condition (count % stack == 0) condition. If an incorrect
+             * to be an amount that condition (amount % stack == 0) condition. If an incorrect
              * quantity of goods is entered, it is normalized, by rounding to the
              * nearest acceptable number.
              * For example:
@@ -141,18 +139,21 @@
              *      Normalized count: 16
              */
             recount() {
-                if (this.count <= 0) {
-                    this.count = this.stack;
+                if (this.amount <= 0) {
+                    this.amount = this.stack;
                     this.resum();
 
                     return;
                 }
 
-                if (this.count % this.stack !== 0) {
-                    const newCount = Math.round(this.count / this.stack) * this.stack;
+                if (this.amount % this.stack !== 0) {
+                    let newAmount = Math.round(this.amount / this.stack) * this.stack;
+                    if (newAmount < this.stack) {
+                        newAmount = this.stack;
+                    }
 
-                    if (newCount > 0) {
-                        this.count = newCount;
+                    if (newAmount > 0) {
+                        this.amount = newAmount;
                     }
                 }
 
@@ -163,7 +164,7 @@
              * the amount should be recalculated only with a normalized amount of products.
              */
             resum() {
-                this.sum = this.price * this.count / this.stack;
+                this.cost = this.price * this.amount / this.stack;
             }
         }
     }

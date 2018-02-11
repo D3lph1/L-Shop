@@ -45,17 +45,25 @@ class Setting
         return $this->key;
     }
 
+    /**
+     * @param null $castTo
+     *
+     * @return bool|float|int|array|mixed
+     */
     public function getValue($castTo = null)
     {
-        if ($castTo === DataType::BOOL) {
-            return (bool)$this->value;
-        } else if ($castTo === DataType::INT) {
-            return (int)$this->value;
-        } else if ($castTo === DataType::FLOAT) {
-            return (float)$this->value;
+        switch ($castTo) {
+            case DataType::BOOL:
+                return (bool)$this->value;
+            case DataType::INT:
+                return (int)$this->value;
+            case DataType::FLOAT:
+                return (float)$this->value;
+            case DataType::JSON:
+                return json_decode($this->value);
+            default:
+                return $this->value;
         }
-
-        return $this->value;
     }
 
     public function setValue($value): void

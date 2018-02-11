@@ -7,7 +7,7 @@ use App\Services\Infrastructure\Notification\Notification;
 
 class Info implements Notification
 {
-    private $type = 'danger';
+    private $type = 'info';
 
     private $content;
 

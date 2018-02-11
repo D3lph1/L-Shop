@@ -20,11 +20,11 @@ class CatalogResult
     private $currentCategory;
 
     /**
-     * @var LengthAwarePaginator
+     * @var LengthAwarePaginator|null
      */
     private $products;
 
-    public function __construct(Server $server, ?Category $currentCategory, LengthAwarePaginator $products)
+    public function __construct(Server $server, ?Category $currentCategory, ?LengthAwarePaginator $products)
     {
         $this->server = $server;
         $this->currentCategory = $currentCategory;
@@ -41,7 +41,7 @@ class CatalogResult
         return $this->currentCategory;
     }
 
-    public function getProducts(): LengthAwarePaginator
+    public function getProducts(): ?LengthAwarePaginator
     {
         return $this->products;
     }

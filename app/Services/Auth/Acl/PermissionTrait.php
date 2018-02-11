@@ -30,10 +30,15 @@ trait PermissionTrait
     {
         /** @var PermissionInterface $each */
         foreach ($this->getPermissions() as $each) {
-            /** @var PermissionInterface $permission */
             foreach ($permissions as $permission) {
-                if ($permission->getName() !== $each->getName()) {
-                    return false;
+                if ($permission instanceof PermissionInterface) {
+                    if ($permission->getName() !== $each->getName()) {
+                        return false;
+                    }
+                } else {
+                    if ($permission !== $each->getName()) {
+                        return false;
+                    }
                 }
             }
         }
@@ -42,8 +47,14 @@ trait PermissionTrait
             /** @var RoleInterface $each */
             foreach ($this->getRoles() as $each) {
                 foreach ($permissions as $permission) {
-                    if (!$this->hasPermission($permission->getName())) {
-                        return false;
+                    if ($permission instanceof PermissionInterface) {
+                        if (!$this->hasPermission($permission->getName())) {
+                            return false;
+                        }
+                    } else {
+                        if (!$this->hasPermission($permission)) {
+                            return false;
+                        }
                     }
                 }
             }
@@ -56,10 +67,15 @@ trait PermissionTrait
     {
         /** @var PermissionInterface $each */
         foreach ($this->getPermissions() as $each) {
-            /** @var PermissionInterface $permission */
             foreach ($permissions as $permission) {
-                if ($permission->getName() === $each->getName()) {
-                    return true;
+                if ($permission instanceof PermissionInterface) {
+                    if ($permission->getName() === $each->getName()) {
+                        return true;
+                    }
+                } else {
+                    if ($permission === $each->getName()) {
+                        return true;
+                    }
                 }
             }
         }
@@ -68,8 +84,14 @@ trait PermissionTrait
             /** @var PermissionInterface $each */
             foreach ($this->getPermissions() as $each) {
                 foreach ($permissions as $permission) {
-                    if ($this->hasPermission($permission->getName())) {
-                        return true;
+                    if ($permission instanceof PermissionInterface) {
+                        if ($this->hasPermission($permission->getName())) {
+                            return true;
+                        }
+                    } else {
+                        if ($this->hasPermission($permission)) {
+                            return true;
+                        }
                     }
                 }
             }

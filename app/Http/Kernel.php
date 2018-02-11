@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace App\Http;
 
 use App\Http\Middleware\Captcha;
+use App\Http\Middleware\NeedPermission;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -40,8 +41,7 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            'throttle:60,1',
-            'bindings',
+            //
         ],
     ];
 
@@ -59,6 +59,7 @@ class Kernel extends HttpKernel
         'can' => \Illuminate\Auth\Middleware\Authorize::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'captcha' => Captcha::class
+        'captcha' => Captcha::class,
+        'permission' => NeedPermission::class
     ];
 }

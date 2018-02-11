@@ -209,7 +209,7 @@ class User implements HasRoles, HasPermissions
     /**
      * @ORM\PrePersist
      */
-    public function generateCreatedAt()
+    public function generateCreatedAt(): void
     {
         $this->createdAt = new \DateTimeImmutable();
     }

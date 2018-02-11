@@ -15,7 +15,7 @@
                 </div>
                 <div v-html="captcha" class="md-form"></div>
                 <div class="col-12 text-center">
-                    <button class="btn btn-warning btn-lg" @click="perform">{{ $t('content.auth.activate_wait.repeat') }}</button>
+                    <button class="btn btn-warning btn-lg" :disabled="disabledBtn" @click="perform">{{ $t('content.auth.activate_wait.repeat') }}</button>
                 </div>
             </div>
             <div class="card-footer">
@@ -37,7 +37,8 @@
         props: ['accessModeAny', 'accessModeAuth', 'routeRepeatActivation', 'routeLogin', 'routeServers', 'captcha'],
         data() {
             return {
-                email: ''
+                email: '',
+                disabledBtn: false
             }
         },
         methods: {
@@ -47,15 +48,18 @@
                 return this.email.length !== 0;
             },
             send() {
+                this.disabledBtn = true;
                 axios.post(this.routeRepeatActivation, {
                     email: this.email,
                     _captcha: captcha.getToken()
                 })
                     .then((response) => {
                         grecaptcha.reset();
+                        this.disabledBtn = false;
                     })
                     .catch((err) => {
                         grecaptcha.reset();
+                        this.disabledBtn = false;
                     });
             },
             perform() {

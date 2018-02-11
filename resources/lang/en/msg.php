@@ -243,12 +243,14 @@ return [
             'skin' => [
                 'success' => 'The new skin is installed successfully!',
                 'disabled' => 'The ability to change the skin is disabled.',
-                'invalid_ratio' => 'Invalid image size.',
+                'invalid_ratio' => 'Invalid image ratio.',
+                'invalid_resolution' => 'Invalid image resolution.'
             ],
             'cloak' => [
                 'success' => 'The new raincoat is installed successfully!',
                 'disabled' => 'The ability to change your raincoat is disabled.',
-                'invalid_ratio' => 'Invalid image size.',
+                'invalid_ratio' => 'Invalid image ratio.',
+                'invalid_resolution' => 'Invalid image resolution.'
             ]
         ]
     ],
@@ -294,5 +296,6 @@ return [
     ],
 
     'request_error' => 'An error occurred while executing the request.',
+    'forbidden' => 'Action is forbidden.',
     'captcha_required' => 'You have to confirm that you are not a robot.'
 ];

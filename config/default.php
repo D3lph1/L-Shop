@@ -28,15 +28,39 @@ return [
             'enabled' => true
         ],
         'news' => [
-            'first_portion' => 15
+            'pagination' => [
+                'per_page' => 15
+            ]
         ],
         'profile' => [
             'character' => [
                 'skin' => [
-                    'enabled' => true
+                    'enabled' => true,
+                    'max_file_size' => 768,
+                    'list' => json_encode([
+                        [64, 32]
+                    ]),
+                    'hd' => [
+                        'enabled' => true,
+                        'list' => json_encode([
+                            [512, 256],
+                            [1024, 512]
+                        ])
+                    ]
                 ],
                 'cloak' => [
-                    'enabled' => true
+                    'enabled' => true,
+                    'max_file_size' => 512,
+                    'list' => json_encode([
+                        [22, 17]
+                    ]),
+                    'hd' => [
+                        'enabled' => true,
+                        'list' => json_encode([
+                            [256, 128],
+                            [512, 256]
+                        ])
+                    ]
                 ]
             ]
         ],

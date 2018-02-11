@@ -16,7 +16,7 @@
                     <label for="forgot-password-confirmation">{{ $t('content.auth.reset_password.password_confirmation') }}</label>
                 </div>
                 <div class="col-12 text-center">
-                    <button class="btn btn-warning btn-lg" @click="perform">{{ $t('content.auth.reset_password.btn') }}</button>
+                    <button class="btn btn-warning btn-lg" :disabled="disabledBtn" @click="perform">{{ $t('content.auth.reset_password.btn') }}</button>
                 </div>
             </div>
             <div class="card-footer">
@@ -41,7 +41,8 @@
         data() {
             return {
                 password: '',
-                passwordConfirmation: ''
+                passwordConfirmation: '',
+                disabledBtn: false
             }
         },
         methods: {
@@ -49,6 +50,7 @@
                 return this.password.length !== 0 && this.passwordConfirmation.length !== 0;
             },
             send() {
+                this.disabledBtn = true;
                 axios.post(this.routeResetPassword, {
                     password: this.password,
                     password_confirmation: this.passwordConfirmation,
@@ -57,6 +59,7 @@
                         if (response.data.status === 'success') {
                             Url.redirect(response.data.redirect);
                         }
+                        this.disabledBtn = false;
                     });
             },
             perform() {

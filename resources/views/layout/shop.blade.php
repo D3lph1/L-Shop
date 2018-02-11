@@ -11,8 +11,8 @@
                     username="{{ $username }}"
                     balance="{{ $balance }}"
                     currency="{{ $currency }}"
-                    route-catalog="{{ '' }}"
-                    route-cart="{{ route('frontend.cart.render', ['server' => $server->getId()]) }}"
+                    route-catalog="{{ $routeCatalog }}"
+                    route-cart="{{ $routeCart }}"
                     cart-count="{{ $cartCount }}"
                     route-fillupbalance=""
                     route-logout="{{ route('frontend.auth.logout') }}"
@@ -40,10 +40,8 @@
 
     @if($news)
         <news-block
-                empty="{{ count($news) === 0 }}"
-                :news="{{ json_encode($news) }}"
-                allow-load-more="{{ count($news) >= $newsFirstPortion }}"
-                load-more-url="{{ '/' }}"
+                :items="{{ json_encode($news) }}"
+                route-load-more="{{ route('frontend.news.load') }}"
         ></news-block>
     @endif
 
@@ -74,7 +72,7 @@
 
         <div id="footer">
             <div id="f-first">
-                <p>2017<i class="fa fa-copyright fa-left fa-right"></i>Copyright : {{ $shopName }}</p>
+                <p>2017-2018<i class="fa fa-copyright fa-left fa-right"></i>Copyright : {{ $shopName }}</p>
             </div>
 
             <div id="f-second">

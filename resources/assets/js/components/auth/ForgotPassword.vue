@@ -12,7 +12,7 @@
                 </div>
                 <div v-html="captcha" class="md-form"></div>
                 <div class="col-12 text-center">
-                    <button class="btn btn-warning btn-lg" @click="perform">{{ $t('content.auth.forgot.btn') }}</button>
+                    <button class="btn btn-warning btn-lg" :disabled="disabledBtn" @click="perform">{{ $t('content.auth.forgot.btn') }}</button>
                 </div>
             </div>
             <div class="card-footer">
@@ -36,7 +36,8 @@
         props: ['accessModeAny', 'accessModeAuth', 'routeLogin', 'routeServers', 'routeForgotPassword', 'captcha'],
         data() {
             return {
-                email: ''
+                email: '',
+                disabledBtn: false
             }
         },
         methods: {
@@ -46,6 +47,7 @@
                 return this.email.length !== 0;
             },
             send() {
+                this.disabledBtn = true;
                 axios.post(this.routeForgotPassword, {
                     email: this.email,
                     _captcha: captcha.getToken()
@@ -55,9 +57,11 @@
                         if (response.data.status === 'success') {
                             Url.redirect(response.data.redirect);
                         }
+                        this.disabledBtn = false;
                     })
                     .catch((err) => {
                         grecaptcha.reset();
+                        this.disabledBtn = false;
                     });
             },
             perform() {

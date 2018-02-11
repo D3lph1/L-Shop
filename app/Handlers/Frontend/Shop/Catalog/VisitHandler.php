@@ -61,6 +61,7 @@ class VisitHandler
         $server = $this->checkServerAndCategory($serverId, $categoryId);
 
         $currentCategory = $server->getCategories()->get(0);
+
         if ($categoryId !== 0) {
             /** @var Category $category */
             foreach ($server->getCategories() as $category) {
@@ -70,6 +71,10 @@ class VisitHandler
                     break;
                 }
             }
+        }
+
+        if ($currentCategory === null) {
+            return new CatalogResult($server, null, null);
         }
 
         $products = $this->productRepository->findForCategoryPaginated(

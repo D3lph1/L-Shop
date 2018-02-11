@@ -10,6 +10,8 @@ class DatabaseSeeder extends Seeder
         $this->call(SettingsSeeder::class);
         $this->call(RolesSeeder::class);
         $this->call(UsersSeeder::class);
+        $this->call(NewsSeeder::class);
+        $this->call(PagesSeeder::class);
         $this->call(ServersSeeder::class);
         $this->call(ProductsSeeder::class);
     }

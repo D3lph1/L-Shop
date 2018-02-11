@@ -27,7 +27,8 @@
                 </div>
                 <div v-html="captcha" class="md-form"></div>
                 <div class="col-12 text-center">
-                    <button class="btn btn-warning btn-lg" @click="perform">{{ $t('content.auth.register.btn') }}
+                    <button class="btn btn-warning btn-lg" :disabled="disabledBtn" @click="perform">
+                        {{ $t('content.auth.register.btn') }}
                     </button>
                 </div>
             </div>
@@ -55,7 +56,8 @@
                 username: '',
                 email: '',
                 password: '',
-                passwordConfirmation: ''
+                passwordConfirmation: '',
+                disabledBtn: false
             }
         },
         methods: {
@@ -66,6 +68,7 @@
                     this.passwordConfirmation.length !== 0;
             },
             send() {
+                this.disabledBtn = true;
                 axios.post(this.routeRegister, {
                     username: this.username,
                     email: this.email,
@@ -79,9 +82,11 @@
                         if (data.status === 'success') {
                             Url.redirect(data.redirect);
                         }
+                        this.disabledBtn = false;
                     })
                     .catch((err) => {
                         grecaptcha.reset();
+                        this.disabledBtn = false;
                     });
             },
             perform() {
