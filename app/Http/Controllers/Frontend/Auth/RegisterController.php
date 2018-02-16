@@ -9,7 +9,7 @@ use App\Http\Requests\Frontend\Auth\RegisterRequest;
 use App\Services\Auth\AccessMode;
 use App\Services\Auth\Exceptions\EmailAlreadyExistsException;
 use App\Services\Auth\Exceptions\UsernameAlreadyExistsException;
-use App\Services\Infrastructure\Notification\Notifications\Danger;
+use App\Services\Infrastructure\Notification\Notifications\Error;
 use App\Services\Infrastructure\Notification\Notifications\Success;
 use App\Services\Infrastructure\Notification\Notificator;
 use App\Services\Infrastructure\Response\JsonResponse;
@@ -21,11 +21,11 @@ use Illuminate\Contracts\View\View;
 
 class RegisterController extends Controller
 {
-    public function render(Settings $settings, Captcha $captcha): View
+    public function render(Settings $settings, Captcha $captcha)
     {
-        return view('frontend.auth.register', [
-            'isAccessModeAny' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY,
-            'isAccessModeAuth' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY,
+        return new JsonResponse(Status::SUCCESS, [
+            'accessModeAny' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY,
+            'accessModeAuth' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY,
             'captcha' => $captcha->view()
         ]);
     }
@@ -51,24 +51,24 @@ class RegisterController extends Controller
                     ));
 
                     return new JsonResponse(Status::SUCCESS, [
-                        'redirect' => route('frontend.servers')
+                        'redirect' => 'frontend.auth.servers'
                     ]);
                 }
 
                 return new JsonResponse(Status::SUCCESS, [
-                    'redirect' => route('frontend.auth.activation.sent')
+                    'redirect' => 'frontend.auth.activation.sent'
                 ]);
             }
 
             return (new JsonResponse(Status::FAILURE))
-                ->addNotification(new Danger(__('msg.auth.register.fail')));
+                ->addNotification(new Error(__('msg.auth.register.fail')));
 
         } catch (UsernameAlreadyExistsException $e) {
             return (new JsonResponse('username_already_exists'))
-                ->addNotification(new Danger(__('msg.auth.register.username_already_exists')));
+                ->addNotification(new Error(__('msg.auth.register.username_already_exists')));
         } catch (EmailAlreadyExistsException $e) {
             return (new JsonResponse('email_already_exists'))
-                ->addNotification(new Danger(__('msg.auth.register.email_already_exists')));
+                ->addNotification(new Error(__('msg.auth.register.email_already_exists')));
         }
     }
 }

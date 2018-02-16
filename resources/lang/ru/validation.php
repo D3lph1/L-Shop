@@ -125,6 +125,7 @@ return [
         'username' => 'Имя пользователя',
         'email' => 'Адрес электронной почты',
         'password' => 'Пароль',
+        'password_confirmation' => 'Подтвердите пароль',
         'balance' => 'Баланс',
         'skin' => 'Скин',
         'cloak' => 'Плащ',

@@ -22,10 +22,6 @@ class OnlyAuthorized
             return $next($request);
         }
 
-        if ($request->ajax()) {
-            return response()->json(new JsonResponse('not_authorized'), 403);
-        }
-
-        return redirect()->route('frontend.auth.login.render');
+        return response()->json(new JsonResponse('auth'), 403);
     }
 }

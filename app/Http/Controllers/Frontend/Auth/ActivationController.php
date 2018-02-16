@@ -10,7 +10,7 @@ use App\Http\Requests\Frontend\Auth\RepeatActivationRequest;
 use App\Services\Auth\AccessMode;
 use App\Services\Auth\Exceptions\AlreadyActivatedException;
 use App\Services\Auth\Exceptions\UserDoesNotExistException;
-use App\Services\Infrastructure\Notification\Notifications\Danger;
+use App\Services\Infrastructure\Notification\Notifications\Error;
 use App\Services\Infrastructure\Notification\Notifications\Success;
 use App\Services\Infrastructure\Notification\Notificator;
 use App\Services\Infrastructure\Response\JsonResponse;
@@ -23,11 +23,11 @@ use Illuminate\Http\Request;
 
 class ActivationController extends Controller
 {
-    public function sent(Settings $settings, Captcha $captcha): View
+    public function sent(Settings $settings, Captcha $captcha)
     {
-        return view('frontend.auth.activation', [
-            'isAccessModeAny' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY,
-            'isAccessModeAuth' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY,
+        return new JsonResponse(Status::SUCCESS, [
+            'accessModeAny' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY,
+            'accessModeAuth' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY,
             'captcha' => $captcha->view()
         ]);
     }
@@ -41,10 +41,10 @@ class ActivationController extends Controller
                 ->addNotification(new Success(__('msg.frontend.auth.activation.repeat')));
         } catch (UserDoesNotExistException $e) {
             return (new JsonResponse('user_not_found'))
-                ->addNotification(new Danger(__('msg.frontend.auth.activation.user_not_found')));
+                ->addNotification(new Error(__('msg.frontend.auth.activation.user_not_found')));
         } catch (AlreadyActivatedException $e) {
             return (new JsonResponse('already_activated'))
-                ->addNotification(new Danger(__('msg.frontend.auth.activation.already')));
+                ->addNotification(new Error(__('msg.frontend.auth.activation.already')));
         }
     }
 
@@ -53,9 +53,9 @@ class ActivationController extends Controller
         if ($handler->handle($request->route('code'))) {
             $notificator->notify(new Success(__('msg.frontend.auth.activation.success')));
         } else {
-            $notificator->notify(new Danger(__('msg.frontend.auth.activation.fail')));
+            $notificator->notify(new Error(__('msg.frontend.auth.activation.fail')));
         }
 
-        return redirect()->route('frontend.auth.login.render');
+        return redirect()->to('/login');
     }
 }

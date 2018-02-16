@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Middleware;
 
-use App\Services\Infrastructure\Notification\Notifications\Danger;
+use App\Services\Infrastructure\Notification\Notifications\Error;
 use App\Services\Infrastructure\Response\JsonResponse;
 use App\Services\Infrastructure\Security\Captcha\Captcha as CaptchaInterface;
 use Illuminate\Contracts\Config\Repository;
@@ -51,7 +51,7 @@ class Captcha
     {
         return response()->json(
             (new JsonResponse('invalid_captcha'))
-                ->addNotification(new Danger(__('msg.captcha_required')))
+                ->addNotification(new Error(__('msg.captcha_required')))
         );
     }
 }

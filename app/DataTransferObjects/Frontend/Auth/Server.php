@@ -6,6 +6,11 @@ namespace App\DataTransferObjects\Frontend\Auth;
 class Server implements \JsonSerializable
 {
     /**
+     * @var int
+     */
+    private $id;
+
+    /**
      * @var string
      */
     private $name;
@@ -18,13 +23,19 @@ class Server implements \JsonSerializable
     /**
      * @var string
      */
-    private $url;
+    private $route;
 
-    public function __construct(string $name, bool $enabled, string $url)
+    public function __construct(int $id, string $name, bool $enabled, string $route)
     {
+        $this->id = $id;
         $this->name = $name;
         $this->enabled = $enabled;
-        $this->url = $url;
+        $this->route = $route;
+    }
+
+    public function getId(): int
+    {
+        return $this->id;
     }
 
     public function getName(): string
@@ -37,9 +48,9 @@ class Server implements \JsonSerializable
         return $this->enabled;
     }
 
-    public function getUrl(): string
+    public function getRoute(): string
     {
-        return $this->url;
+        return $this->route;
     }
 
     /**
@@ -48,9 +59,10 @@ class Server implements \JsonSerializable
     public function jsonSerialize(): array
     {
         return [
+            'id' => $this->getId(),
             'name' => $this->getName(),
             'enabled' => $this->isEnabled(),
-            'url' => $this->getUrl()
+            'route' => $this->getRoute()
         ];
     }
 }

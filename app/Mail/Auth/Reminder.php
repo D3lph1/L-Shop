@@ -35,7 +35,7 @@ class Reminder extends Mailable
 
         return $this->view("mail.auth.reminder.{$config->get('app.locale')}", [
             'username' => $this->reminder->getUser()->getUsername(),
-            'link' => route('frontend.auth.password.reset.render', ['code' => $this->reminder->getCode()]),
+            'link' => route('frontend.auth.password.reset', ['code' => $this->reminder->getCode()]),
             'ip' => $this->ip,
             'appName' => $config->get('app.name')
         ]);

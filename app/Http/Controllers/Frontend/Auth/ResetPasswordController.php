@@ -7,7 +7,7 @@ use App\Handlers\Frontend\Auth\ResetPasswordHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Frontend\Auth\ResetPasswordRequest;
 use App\Services\Auth\AccessMode;
-use App\Services\Infrastructure\Notification\Notifications\Danger;
+use App\Services\Infrastructure\Notification\Notifications\Error;
 use App\Services\Infrastructure\Notification\Notifications\Success;
 use App\Services\Infrastructure\Notification\Notificator;
 use App\Services\Infrastructure\Response\JsonResponse;
@@ -17,19 +17,16 @@ use Illuminate\Http\Request;
 
 class ResetPasswordController extends Controller
 {
-    public function render(Request $request, ResetPasswordHandler $handler, Notificator $notificator, Settings $settings)
+    public function render(Request $request, ResetPasswordHandler $handler, Settings $settings)
     {
-        $code = $request->route('code');
-        if (!$handler->isValidCode($code)) {
-            $notificator->notify(new Danger(__('msg.frontend.auth.reset.invalid_code')));
-
-            return redirect()->route('frontend.auth.login.render');
+        if (!$handler->isValidCode($request->route('code'))) {
+            return (new JsonResponse(Status::FAILURE))
+                ->addNotification(new Error(__('msg.frontend.auth.password.reset.invalid_code')));
         }
 
-        return view('frontend.auth.reset_password', [
-            'isAccessModeAny' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY,
-            'isAccessModeAuth' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY,
-            'code' => $code
+        return new JsonResponse(Status::SUCCESS, [
+            'accessModeAny' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY,
+            'accessModeAuth' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY
         ]);
     }
 
@@ -45,6 +42,6 @@ class ResetPasswordController extends Controller
         }
 
         return (new JsonResponse(Status::FAILURE))
-            ->addNotification(new Danger(__('msg.frontend.auth.reset.fail')));
+            ->addNotification(new Error(__('msg.frontend.auth.reset.fail')));
     }
 }

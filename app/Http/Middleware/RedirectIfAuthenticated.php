@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace App\Http\Middleware;
 
 use App\Services\Auth\Auth;
+use App\Services\Infrastructure\Response\JsonResponse;
 use Closure;
 
 class RedirectIfAuthenticated
@@ -28,7 +29,7 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next)
     {
         if ($this->auth->check()) {
-            return redirect()->route('frontend.index');
+            return response()->json(new JsonResponse('guest'));
         }
 
         return $next($request);

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace Tests\Unit\Services\Infrastructure\Response;
 
-use App\Services\Infrastructure\Notification\Notifications\Danger;
+use App\Services\Infrastructure\Notification\Notifications\Error;
 use App\Services\Infrastructure\Notification\Notifications\Success;
 use App\Services\Infrastructure\Notification\Notifications\Warning;
 use App\Services\Infrastructure\Response\JsonResponse;
@@ -65,7 +65,7 @@ class JsonResponseTest extends TestCase
     {
         $response = new JsonResponse('success', ['key' => 1]);
         $response->addNotification(new Warning('lorem ipsum1'));
-        $response->addNotification(new Danger('lorem ipsum2'));
+        $response->addNotification(new Error('lorem ipsum2'));
         $expected = [
             'status' => 'success',
             'key' => 1,

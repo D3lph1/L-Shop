@@ -22,8 +22,7 @@ class GlobalLayoutComposer
         return [
             'title' => $settings->get('shop.name')->getValue(),
             'description' => $settings->get('shop.description')->getValue(),
-            'keywords' => $settings->get('shop.keywords')->getValue(),
-            'notifications' => $notificator->pull()
+            'keywords' => $settings->get('shop.keywords')->getValue()
         ];
     }
 }

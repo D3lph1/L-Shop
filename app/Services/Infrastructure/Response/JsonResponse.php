@@ -4,6 +4,8 @@ declare(strict_types = 1);
 namespace App\Services\Infrastructure\Response;
 
 use App\Services\Infrastructure\Notification\Notification;
+use App\Services\Infrastructure\Notification\Notificator;
+use Illuminate\Support\Facades\Log;
 
 class JsonResponse implements \JsonSerializable
 {
@@ -59,11 +61,10 @@ class JsonResponse implements \JsonSerializable
             'status' => $this->status,
         ], $this->data);
 
-        if (count($notifications) > 0) {
-            $result = array_merge($result, [
-                'notifications' => $notifications
-            ]);
-        }
+        $result = array_merge($result, [
+            'notifications' => $notifications
+        ]);
+
 
         return $result;
     }

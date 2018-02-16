@@ -13,7 +13,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Frontend\Profile\Character\UploadCloakRequest;
 use App\Http\Requests\Frontend\Profile\Character\UploadSkinRequest;
 use App\Services\Auth\Auth;
-use App\Services\Infrastructure\Notification\Notifications\Danger;
+use App\Services\Infrastructure\Notification\Notifications\Error;
 use App\Services\Infrastructure\Notification\Notifications\Success;
 use App\Services\Infrastructure\Response\JsonResponse;
 use App\Services\Infrastructure\Response\Status;
@@ -51,18 +51,18 @@ class CharacterController extends Controller
             $handler->handle($request->file('skin'));
         } catch (InvalidRatioException $e) {
             return (new JsonResponse(Status::FAILURE))
-                ->addNotification(new Danger(__('msg.profile.character.skin.invalid_ratio')));
+                ->addNotification(new Error(__('msg.profile.character.skin.invalid_ratio')));
         } catch (InvalidResolutionException $e) {
             return (new JsonResponse(Status::FAILURE))
-                ->addNotification(new Danger(__('msg.profile.character.skin.invalid_resolution')));
+                ->addNotification(new Error(__('msg.profile.character.skin.invalid_resolution')));
         } catch (FileException $e) {
             $logger->error($e);
 
             return (new JsonResponse(Status::FAILURE))
-                ->addNotification(new Danger(__('msg.request_error')));
+                ->addNotification(new Error(__('msg.request_error')));
         } catch (ForbiddenException $e) {
             return (new JsonResponse(Status::FAILURE))
-                ->addNotification(new Danger(__('msg.request_error')));
+                ->addNotification(new Error(__('msg.request_error')));
         }
 
         return (new JsonResponse(Status::SUCCESS))
@@ -75,18 +75,18 @@ class CharacterController extends Controller
             $handler->handle($request->file('cloak'));
         } catch (InvalidRatioException $e) {
             return (new JsonResponse(Status::FAILURE))
-                ->addNotification(new Danger(__('msg.profile.character.cloak.invalid_ratio')));
+                ->addNotification(new Error(__('msg.profile.character.cloak.invalid_ratio')));
         } catch (InvalidResolutionException $e) {
             return (new JsonResponse(Status::FAILURE))
-                ->addNotification(new Danger(__('msg.profile.character.cloak.invalid_resolution')));
+                ->addNotification(new Error(__('msg.profile.character.cloak.invalid_resolution')));
         } catch (FileException $e) {
             $logger->error($e);
 
             return (new JsonResponse(Status::FAILURE))
-                ->addNotification(new Danger(__('msg.request_error')));
+                ->addNotification(new Error(__('msg.request_error')));
         } catch (ForbiddenException $e) {
             return (new JsonResponse(Status::FAILURE))
-                ->addNotification(new Danger(__('msg.request_error')));
+                ->addNotification(new Error(__('msg.request_error')));
         }
 
         return (new JsonResponse(Status::SUCCESS))

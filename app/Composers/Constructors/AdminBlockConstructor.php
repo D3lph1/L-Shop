@@ -20,152 +20,152 @@ class AdminBlockConstructor
         $this->auth = $auth;
         $this->items = [
             [
-                'caption' => __('sidebar.admin.control.name'),
-                'icon' => 'cogs',
+                'title' => __('content.layout.shop.sidebar.admin.control.title'),
+                'icon' => 'settings_applications',
                 'subItems' => [
                     [
-                        'link' => route('admin.control.basic.render'),
-                        'caption' => __('sidebar.admin.control.nodes.main_settings'),
+                        'link' => '',
+                        'title' => __('content.layout.shop.sidebar.admin.control.sub_items.main_settings'),
                         'permissions' => [Permissions::ADMIN_CONTROL_BASIC_ACCESS]
                     ],
                     [
                         'link' => '',
-                        'caption' => __('sidebar.admin.control.nodes.payments')
+                        'title' => __('content.layout.shop.sidebar.admin.control.sub_items.payments')
                     ],
                     [
                         'link' => '',
-                        'caption' => __('sidebar.admin.control.nodes.api')
+                        'title' => __('content.layout.shop.sidebar.admin.control.sub_items.api')
                     ],
                     [
                         'link' => '',
-                        'caption' => __('sidebar.admin.control.nodes.security')
+                        'title' => __('content.layout.shop.sidebar.admin.control.sub_items.security')
                     ],
                     [
                         'link' => '',
-                        'caption' => __('sidebar.admin.control.nodes.optimization')
-                    ],
-                ]
-            ],
-            [
-                'caption' => __('sidebar.admin.servers.name'),
-                'icon' => 'server',
-                'subItems' => [
-                    [
-                        'link' => '',
-                        'caption' => __('sidebar.admin.servers.nodes.add')
-                    ],
-                    [
-                        'link' => '',
-                        'caption' => __('sidebar.admin.servers.nodes.edit')
+                        'title' => __('content.layout.shop.sidebar.admin.control.sub_items.optimization')
                     ],
                 ]
             ],
             [
-                'caption' => __('sidebar.admin.products.name'),
-                'icon' => 'cubes',
+                'title' => __('content.layout.shop.sidebar.admin.servers.title'),
+                'icon' => 'storage',
                 'subItems' => [
                     [
                         'link' => '',
-                        'caption' => __('sidebar.admin.products.nodes.add')
+                        'title' => __('content.layout.shop.sidebar.admin.servers.sub_items.add')
                     ],
                     [
                         'link' => '',
-                        'caption' => __('sidebar.admin.products.nodes.edit')
+                        'title' => __('content.layout.shop.sidebar.admin.servers.sub_items.edit')
                     ],
                 ]
             ],
             [
-                'caption' => __('sidebar.admin.items.name'),
-                'icon' => 'diamond',
+                'title' => __('content.layout.shop.sidebar.admin.products.title'),
+                'icon' => 'apps',
                 'subItems' => [
                     [
                         'link' => '',
-                        'caption' => __('sidebar.admin.items.nodes.add')
+                        'title' => __('content.layout.shop.sidebar.admin.products.sub_items.add')
                     ],
                     [
                         'link' => '',
-                        'caption' => __('sidebar.admin.items.nodes.edit')
+                        'title' => __('content.layout.shop.sidebar.admin.products.sub_items.edit')
                     ],
                 ]
             ],
             [
-                'caption' => __('sidebar.admin.news.name'),
-                'icon' => 'newspaper-o',
+                'title' => __('content.layout.shop.sidebar.admin.items.title'),
+                'icon' => 'beach_access',
                 'subItems' => [
                     [
                         'link' => '',
-                        'caption' => __('sidebar.admin.news.nodes.add')
+                        'title' => __('content.layout.shop.sidebar.admin.items.sub_items.add')
                     ],
                     [
                         'link' => '',
-                        'caption' => __('sidebar.admin.news.nodes.edit')
+                        'title' => __('content.layout.shop.sidebar.admin.items.sub_items.edit')
                     ],
                 ]
             ],
             [
-                'caption' => __('sidebar.admin.pages.name'),
-                'icon' => 'files-o',
+                'title' => __('content.layout.shop.sidebar.admin.news.title'),
+                'icon' => 'library_books',
                 'subItems' => [
                     [
                         'link' => '',
-                        'caption' => __('sidebar.admin.pages.nodes.add')
+                        'title' => __('content.layout.shop.sidebar.admin.news.sub_items.add')
                     ],
                     [
                         'link' => '',
-                        'caption' => __('sidebar.admin.pages.nodes.edit')
+                        'title' => __('content.layout.shop.sidebar.admin.news.sub_items.add')
                     ],
                 ]
             ],
             [
-                'caption' => __('sidebar.admin.users.name'),
-                'icon' => 'users',
+                'title' => __('content.layout.shop.sidebar.admin.pages.title'),
+                'icon' => 'insert_drive_file',
                 'subItems' => [
                     [
                         'link' => '',
-                        'caption' => __('sidebar.admin.users.nodes.edit')
+                        'title' => __('content.layout.shop.sidebar.admin.pages.sub_items.add')
+                    ],
+                    [
+                        'link' => '',
+                        'title' => __('content.layout.shop.sidebar.admin.pages.sub_items.edit')
+                    ],
+                ]
+            ],
+            [
+                'title' => __('content.layout.shop.sidebar.admin.users.title'),
+                'icon' => 'people_outline',
+                'subItems' => [
+                    [
+                        'link' => '',
+                        'title' => __('content.layout.shop.sidebar.admin.users.sub_items.edit')
                     ]
                 ]
             ],
             [
-                'caption' => __('sidebar.admin.other.name'),
-                'icon' => 'ellipsis-h',
+                'title' => __('content.layout.shop.sidebar.admin.other.title'),
+                'icon' => 'group_work',
                 'subItems' => [
                     [
                         'link' => '',
-                        'caption' => __('sidebar.admin.other.nodes.rcon')
+                        'title' => __('content.layout.shop.sidebar.admin.other.sub_items.rcon')
                     ],
                     [
                         'link' => '',
-                        'caption' => __('sidebar.admin.other.nodes.debug')
+                        'title' => __('content.layout.shop.sidebar.admin.other.sub_items.debug')
                     ],
                 ]
             ],
             [
-                'caption' => __('sidebar.admin.statistic.name'),
-                'icon' => 'pencil',
+                'title' => __('content.layout.shop.sidebar.admin.statistic.title'),
+                'icon' => 'show_chart',
                 'subItems' => [
                     [
                         'link' => '',
-                        'caption' => __('sidebar.admin.statistic.nodes.show')
+                        'title' => __('content.layout.shop.sidebar.admin.statistic.sub_items.show')
                     ],
                     [
                         'link' => '',
-                        'caption' => __('sidebar.admin.statistic.nodes.payments')
+                        'title' => __('content.layout.shop.sidebar.admin.statistic.sub_items.payments')
                     ],
                 ]
             ],
             [
-                'caption' => __('sidebar.admin.info.name'),
+                'title' => __('content.layout.shop.sidebar.admin.info.title'),
                 'icon' => 'info',
                 'subItems' => [
                     [
                         'link' => 'https://github.com/D3lph1/L-shop/wiki',
-                        'caption' => __('sidebar.admin.info.nodes.docs'),
+                        'title' => __('content.layout.shop.sidebar.admin.info.sub_items.docs'),
                         'target' => '_blank'
                     ],
                     [
-                        'link' => route('admin.information.about.render'),
-                        'caption' => __('sidebar.admin.info.nodes.about'),
+                        'link' => '',
+                        'title' => __('content.layout.shop.sidebar.admin.info.sub_items.about'),
                         'permissions' => [Permissions::ADMIN_INFORMATION_ABOUT_ACCESS]
                     ],
                 ]
@@ -175,6 +175,10 @@ class AdminBlockConstructor
 
     public function construct(): array
     {
+        if (!$this->auth->check()) {
+            return [];
+        }
+
         foreach ($this->items as $k => &$item) {
             foreach ($item['subItems'] as $key => &$subItem) {
                 if (isset($subItem['permissions'])) {

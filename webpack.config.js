@@ -4,7 +4,7 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     entry: {
-        preloader: './resources/assets/js/preloader.js',
+        //preloader: './resources/assets/js/preloader.js',
         app: './resources/assets/js/app.js'
     },
     output: {
@@ -78,10 +78,6 @@ module.exports = {
     devtool: '#eval-source-map',
     plugins: [
         new webpack.ProvidePlugin({
-            $: 'jquery',
-            jQuery: 'jquery',
-            axios: 'axios',
-            Tether: 'tether',
             Waves: 'node-waves'
         }),
         new ExtractTextPlugin("css/app.min.css")

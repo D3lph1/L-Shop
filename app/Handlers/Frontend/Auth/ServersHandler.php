@@ -39,9 +39,10 @@ class ServersHandler
                 $serverDTOs = [];
                 foreach ($servers as $server) {
                     $serverDTOs[] = new ServerDTO(
+                        $server->getId(),
                         $server->getName(),
                         $server->isEnabled(),
-                        route('frontend.catalog.render', ['server' => $server->getId()])
+                        'frontend.shop.catalog'
                     );
                 }
 
@@ -53,9 +54,10 @@ class ServersHandler
         foreach ($servers as $server) {
             if ($server->isEnabled()) {
                 $serverDTOs[] = new ServerDTO(
+                    $server->getId(),
                     $server->getName(),
                     $server->isEnabled(),
-                    route('frontend.catalog.render', ['server' => $server->getId()])
+                    'frontend.shop.catalog'
                 );
             }
         }
