@@ -1,7 +1,7 @@
 <template>
     <div>
         <v-toolbar
-                color="grey darken-1"
+                color="primary"
                 dark
                 temporary
                 app
@@ -20,29 +20,27 @@
         >
 
             <basic-block></basic-block>
-            <profile-block v-if="$store.getters.isAuth" character="character"></profile-block>
+            <profile-block v-if="$store.getters.isAuth" :character="character"></profile-block>
             <admin-block v-if="adminSidebar.length !== 0" :items="adminSidebar"></admin-block>
 
         </v-navigation-drawer>
         <v-content>
-            <v-container fluid fill-height>
-                <v-layout justify-center align-center>
-                    <v-flex shrink>
-
-                    </v-flex>
-                </v-layout>
-            </v-container>
+            <div class="px-4 pt-4">
+                <router-view name="content"></router-view>
+            </div>
         </v-content>
         <v-navigation-drawer
                 right
                 temporary
                 v-model="right"
                 fixed
-        ></v-navigation-drawer>
-        <v-footer color="grey darken-2" class="white--text" inset app absolute height="40">
+        >
+            <news v-if="news !== null" :news="news"></news>
+        </v-navigation-drawer>
+        <v-footer color="primary" fixed class="white--text" inset app height="40">
             <v-spacer></v-spacer>
             <span>2017-2018 &copy; L-Shop</span>
-            <v-btn href="https://github.com/D3lph1/L-shop" target="_blank" small color="secondary">GitHub</v-btn>
+            <v-btn href="https://github.com/D3lph1/L-shop" target="_blank" small outline color="white">GitHub</v-btn>
             <v-spacer></v-spacer>
         </v-footer>
     </div>
@@ -50,9 +48,10 @@
 
 <script>
     import loader from './../../../core/http/loader'
-    import BasicBlock from './BasicBlock.vue'
-    import ProfileBlock from './ProfileBlock.vue'
-    import AdminBlock from './AdminBlock.vue'
+    import BasicBlock from './sidebar/BasicBlock.vue'
+    import ProfileBlock from './sidebar/ProfileBlock.vue'
+    import AdminBlock from './sidebar/AdminBlock.vue'
+    import News from './news/Block.vue'
 
     export default {
         data() {
@@ -65,7 +64,8 @@
                 mobileBreakPoint: 1024,
 
                 character: false,
-                adminSidebar: []
+                adminSidebar: [],
+                news: null
             }
         },
         created() {
@@ -90,12 +90,14 @@
 
                 this.character = data.character;
                 this.adminSidebar = data.sidebar.admin;
+                this.news = data.news;
             }
         },
         components: {
             'basic-block': BasicBlock,
             'profile-block': ProfileBlock,
-            'admin-block': AdminBlock
+            'admin-block': AdminBlock,
+            'news': News
         }
     }
 </script>

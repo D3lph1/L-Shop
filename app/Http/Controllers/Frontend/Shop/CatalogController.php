@@ -8,6 +8,8 @@ use App\Exceptions\Server\DoesNotExistException as ServerDoesNotExistException;
 use App\Handlers\Frontend\Shop\Catalog\VisitHandler;
 use App\Http\Controllers\Controller;
 use App\Services\Cart\Cart;
+use App\Services\Infrastructure\Response\JsonResponse;
+use App\Services\Infrastructure\Response\Status;
 use App\Services\Infrastructure\Security\Captcha\Captcha;
 use App\Services\Settings\Settings;
 use Illuminate\Http\Request;
@@ -25,11 +27,13 @@ class CatalogController extends Controller
             throw new NotFoundHttpException();
         }
 
-        return view('frontend.shop.catalog', [
+        return new JsonResponse(Status::SUCCESS, [
             'shopName' => $settings->get('shop.name')->getValue(),
             'currency' => $settings->get('shop.currency.html')->getValue(),
+            'logo' => asset('/img/layout/logo/small.png'),
             'server' => $dto->getServer(),
             'currentCategory' => $dto->getCurrentCategory(),
+            'paginator' => $dto->getPaginator(),
             'products' => $dto->getProducts(),
             'cart' => $cart,
             'captcha' => $captcha->view()

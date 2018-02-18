@@ -1,0 +1,63 @@
+<template>
+    <v-container
+            fluid
+            style="min-height: 0;"
+            grid-list-lg
+    >
+        <v-layout row wrap v-if="items.total > 0">
+            <news-item v-for="each in items.news" :key="each.id" :item="each"></news-item>
+        </v-layout>
+        <v-layout row wrap v-else>
+            <v-flex xs12>
+                <v-alert type="info" :value="true">
+                    <div class="text-xs-center">{{ $t('content.layout.news.empty') }}</div>
+                </v-alert>
+            </v-flex>
+        </v-layout>
+        <v-bottom-nav v-if="items.total > items.news.length">
+            <v-btn flat color="primary" @click="loadMore">
+                <span>{{ $t('content.layout.news.load') }}</span>
+                <v-icon>more_horiz</v-icon>
+            </v-btn>
+        </v-bottom-nav>
+    </v-container>
+</template>
+
+<script>
+    import Item from './Item.vue'
+
+    export default {
+        props: {
+            news: {
+                required: true,
+                type: Object
+            }
+        },
+        data() {
+            return {
+                items: this.news
+            }
+        },
+        methods: {
+            loadMore() {
+                this.$axios.get('/api/news/load', {
+                    params: {
+                        portion: ++this.items.portion
+                    }
+                }).then((response) => {
+                    console.log(response.data);
+                    if (response.data.status === 'success') {
+                        for (let each in response.data.items.news) {
+                            if (response.data.items.news.hasOwnProperty(each)) {
+                                this.items.news.push(response.data.items.news[each]);
+                            }
+                        }
+                    }
+                });
+            }
+        },
+        components: {
+            'news-item': Item
+        },
+    }
+</script>

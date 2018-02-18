@@ -128,7 +128,7 @@ class AdminBlockConstructor
             ],
             [
                 'title' => __('content.layout.shop.sidebar.admin.other.title'),
-                'icon' => 'group_work',
+                'icon' => 'more_horiz',
                 'subItems' => [
                     [
                         'link' => '',

@@ -32,7 +32,7 @@ class NewsController extends Controller
 
     public function load(LoadRequest $request, LoadHandler $handler)
     {
-        $items = $handler->load($request->get('portion'));
+        $items = $handler->load((int) $request->get('portion'));
 
         return new JsonResponse(Status::SUCCESS, ['items' => $items]);
     }

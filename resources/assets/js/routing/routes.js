@@ -4,7 +4,8 @@ import Activation from './../templates/frontend/auth/Activation.vue'
 import ForgotPassword from './../templates/frontend/auth/password/Forgot.vue'
 import ResetPassword from './../templates/frontend/auth/password/Reset.vue'
 import Servers from './../templates/frontend/auth/Servers.vue'
-import Catalog from '../templates/layout/shop/Shop.vue'
+import Shop from '../templates/layout/shop/Shop.vue'
+import Catalog from '../templates/frontend/shop/catalog/Catalog.vue'
 
 export default [
     {
@@ -56,8 +57,24 @@ export default [
         }
     },
     {
-        path: '/catalog/:server',
-        name: 'frontend.shop.catalog',
-        component: Catalog
+        path: '/catalog',
+        component: Shop,
+        children: [
+            {
+                path: ':server',
+                alias: ':server/0',
+                name: 'frontend.shop.catalog',
+                components: {
+                    content: Catalog
+                }
+            },
+            {
+                path: ':server/:category',
+                name: 'frontend.shop.catalog.category',
+                components: {
+                    content: Catalog
+                }
+            }
+        ]
     }
 ];

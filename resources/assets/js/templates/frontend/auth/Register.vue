@@ -1,6 +1,6 @@
 <template>
     <v-content>
-        <v-container fluid>
+        <v-container fluid fill-height>
             <v-layout align-center justify-center>
                 <v-flex xs12 sm5 md4 lg3>
                     <v-card class="elevation-12">
@@ -13,8 +13,24 @@
                             <v-form>
                                 <v-text-field prepend-icon="person" v-model="username" :label="$t('validation.attributes.username')" type="text" @keyup.enter="perform"></v-text-field>
                                 <v-text-field prepend-icon="mail" v-model="email" :label="$t('validation.attributes.email')" type="text" @keyup.enter="perform"></v-text-field>
-                                <v-text-field prepend-icon="lock" v-model="password" :label="$t('validation.attributes.password')" type="password" @keyup.enter="perform"></v-text-field>
-                                <v-text-field prepend-icon="lock" v-model="passwordConfirmation" :label="$t('validation.attributes.password_confirmation')" type="password" @keyup.enter="perform"></v-text-field>
+                                <v-text-field
+                                        prepend-icon="lock"
+                                        v-model="password"
+                                        :append-icon="p1 ? 'visibility' : 'visibility_off'"
+                                        :append-icon-cb="() => (p1 = !p1)"
+                                        :label="$t('validation.attributes.password')"
+                                        :type="p1 ? 'password' : 'text'"
+                                        @keyup.enter="perform"
+                                ></v-text-field>
+                                <v-text-field
+                                        prepend-icon="lock"
+                                        v-model="passwordConfirmation"
+                                        :append-icon="p2 ? 'visibility' : 'visibility_off'"
+                                        :append-icon-cb="() => (p2 = !p2)"
+                                        :label="$t('validation.attributes.password_confirmation')"
+                                        :type="p2 ? 'password' : 'text'"
+                                        @keyup.enter="perform"
+                                ></v-text-field>
                             </v-form>
                             <!--<v-form>
                                 <div v-html="captcha"></div>
@@ -53,6 +69,8 @@
                 password: '',
                 passwordConfirmation: '',
                 loadingBtn: false,
+                p1: true,
+                p2: true,
 
                 accessModeAny: false,
                 accessModeAuth: false,

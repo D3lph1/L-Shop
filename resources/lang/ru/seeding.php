@@ -3,7 +3,13 @@
 return [
     'shop' => [
         'description' => 'Современная торговая система для Minecraft',
-        'keywords' => 'L-Shop, магазин, купить, minecraft, майнкрафт',
+        'keywords' => [
+            'L-Shop',
+            'магазин',
+            'купить',
+            'minecraft',
+            'майнкрафт',
+        ]
     ],
     'settings' => [
         'currency' => [

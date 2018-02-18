@@ -31,7 +31,7 @@ class Item implements \JsonSerializable
             'id' => $this->getNews()->getId(),
             'title' => $this->getNews()->getTitle(),
             'content' => Str::limit($this->getNews()->getContent(), 150, '...'),
-            'url' => route('frontend.news.render', ['id' => $this->getNews()->getId()])
+            'url' => ''
         ];
     }
 }

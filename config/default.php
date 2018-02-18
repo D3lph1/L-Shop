@@ -6,7 +6,7 @@ return [
     'shop' => [
         'name' => 'L-Shop',
         'description' => '$:shop.description',
-        'keywords' => '$:shop.keywords',
+        'keywords' => json_encode('$:shop.keywords'),
         'currency' => [
             'name' => '$:settings.currency.name',
             'html' => '$:settings.currency.html'

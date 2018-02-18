@@ -3,7 +3,10 @@ declare(strict_types=1);
 
 namespace App\Handlers\Frontend\Shop\Catalog;
 
-use App\DataTransferObjects\Frontend\Shop\CatalogResult;
+use App\DataTransferObjects\Frontend\Shop\Catalog\Category as CategoryDTO;
+use App\DataTransferObjects\Frontend\Shop\Catalog\Product;
+use App\DataTransferObjects\Frontend\Shop\Catalog\Result;
+use App\DataTransferObjects\Frontend\Shop\Catalog\Server as ServerDTO;
 use App\Entity\Category;
 use App\Entity\Server;
 use App\Repository\Product\ProductRepository;
@@ -13,6 +16,7 @@ use App\Exceptions\Server\DoesNotExistException as ServerDoesNotExistException;
 use App\Repository\Server\ServerRepository;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class VisitHandler
 {
@@ -52,11 +56,11 @@ class VisitHandler
      * @param int $serverId
      * @param int $categoryId
      *
-     * @return CatalogResult
+     * @return Result
      * @throws ServerDoesNotExistException
      * @throws CategoryDoesNotExistException
      */
-    public function handle(int $serverId, ?int $categoryId): CatalogResult
+    public function handle(int $serverId, ?int $categoryId): Result
     {
         $server = $this->checkServerAndCategory($serverId, $categoryId);
 
@@ -74,15 +78,16 @@ class VisitHandler
         }
 
         if ($currentCategory === null) {
-            return new CatalogResult($server, null, null);
+            return new Result(new ServerDTO($server), null, [], null);
         }
 
-        $products = $this->productRepository->findForCategoryPaginated(
+        $paginator = $this->productRepository->findForCategoryPaginated(
             $currentCategory,
             $this->settings->get('system.catalog.pagination.per_page')->getValue(DataType::INT)
         );
+        $products = $this->fromPaginatorToDTO($paginator);
 
-        return new CatalogResult($server, $currentCategory, $products);
+        return new Result(new ServerDTO($server), new CategoryDTO($currentCategory), $products, $paginator);
     }
 
     /**
@@ -120,5 +125,16 @@ class VisitHandler
         }
 
         throw new CategoryDoesNotExistException($categoryId);
+    }
+
+    private function fromPaginatorToDTO(LengthAwarePaginator $paginator)
+    {
+        $products = $paginator->items();
+        $result = [];
+        foreach ($products as $product) {
+            $result[] = new Product($product);
+        }
+
+        return $result;
     }
 }

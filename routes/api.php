@@ -33,4 +33,5 @@ $router->get('/servers', 'Frontend\Auth\ServersController@render');
 
 // Shop
 $router->get('/shop', 'Frontend\Shop\ShopController@render');
-
+$router->get('/catalog/{server}/{category?}', 'Frontend\Shop\CatalogController@render');
+$router->get('/news/load', 'Frontend\Shop\NewsController@load');

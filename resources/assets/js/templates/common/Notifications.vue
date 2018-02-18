@@ -28,6 +28,7 @@
         position: fixed
         top: 1rem
         right: 1rem
+        z-index: 100
         .notification
             position: relative
             padding: .5rem 1.5rem .5rem 1rem
