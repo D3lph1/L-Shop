@@ -41,10 +41,16 @@ class AddToResponse
                         $json['notifications'][] = $item;
                     }
                 }
-                if ($this->auth->check()) {
-                    $json['auth'] = [
-                        'username' => $this->auth->getUser()->getUsername()
-                    ];
+                if ($this->auth->check() && $response->status() !== 500) {
+                    if (isset($json['auth'])) {
+                        $json['auth'] = array_merge($json['auth'], [
+                            'username' => $this->auth->getUser()->getUsername()
+                        ]);
+                    } else {
+                        $json['auth'] = [
+                            'username' => $this->auth->getUser()->getUsername()
+                        ];
+                    }
                 }
                 $response->setContent(json_encode($json));
             }

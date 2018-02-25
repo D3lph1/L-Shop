@@ -66,7 +66,9 @@ return [
         ],
         'catalog' => [
             'pagination' => [
-                'per_page' => 15
+                'per_page' => 15,
+                'order_by' => 'product.sortPriority',
+                'descending' => false
             ]
         ]
     ],

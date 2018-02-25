@@ -21,7 +21,7 @@ class Item
     private $id;
 
     /**
-     * @ORM\Column(name="name", type="string", length=255, nullable=false, unique=false)
+     * @ORM\Column(name="`name`", type="string", length=255, nullable=false, unique=false)
      */
     private $name;
 

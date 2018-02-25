@@ -12,7 +12,13 @@
                     <v-list-tile-title>{{ item.title }}</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
-            <v-list-tile v-for="(subItem, index) in item.subItems" :key="index" :href="subItem.link" target="_blank">
+            <v-list-tile
+                    v-for="(subItem, index) in item.subItems"
+                    :key="index"
+                    :to="to(subItem) ? to(subItem) : null"
+                    :href="href(subItem) ? href(subItem) : null"
+                    :target="href(subItem) && subItem.target ? subItem.target : null"
+            >
                 <v-list-tile-content>
                     <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
                 </v-list-tile-content>
@@ -27,6 +33,22 @@
             items: {
                 required: true,
                 type: Array
+            }
+        },
+        methods: {
+            href(subItem) {
+                if (subItem.absolute) {
+                    return subItem.link;
+                }
+
+                return false;
+            },
+            to(subItem) {
+                if (subItem.absolute) {
+                    return false;
+                }
+
+                return {name: subItem.link};
             }
         }
     }

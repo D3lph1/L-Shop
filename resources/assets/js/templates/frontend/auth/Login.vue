@@ -17,7 +17,7 @@
                         </v-card-text>
                         <v-card-actions>
                             <v-layout flex align-center justify-center>
-                                <v-btn color="primary" :loading="loadingBtn" :disabled="loadingBtn || disabledBtn" @click="perform">{{ $t('content.frontend.auth.login.login') }}</v-btn>
+                                <v-btn color="primary" :loading="loadingBtn" :disabled="disabledBtn" @click="perform">{{ $t('content.frontend.auth.login.login') }}</v-btn>
                             </v-layout>
                         </v-card-actions>
                         <v-card-actions class="text-xs-center" v-if="enabledRegister && !onlyForAdmins">

@@ -21,7 +21,8 @@ export default {
                 });
             })
             .catch((err) => {
-                this.$store.commit('requestError');
+                console.log(err);
+                store.commit('requestError');
             });
     },
     beforeRouteUpdate(url, to, from, next, vm) {
@@ -36,7 +37,7 @@ export default {
                 next();
             })
             .catch((err) => {
-                this.$store.commit('requestError');
+                store.commit('requestError');
             });
     }
 }

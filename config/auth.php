@@ -83,7 +83,7 @@ return [
         | become invalid and the user will be logged out.
         |
         */
-        'lifetime' => 43200 // 1 month
+        'lifetime' => 43800 // 1 month
     ],
     'activation' => [
         /*

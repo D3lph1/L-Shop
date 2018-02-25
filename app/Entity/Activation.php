@@ -94,6 +94,6 @@ class Activation
 
     public function isExpired(): bool
     {
-        return $this->getCreatedAt()->getTimestamp() + config('auth.activation.lifetime') < time();
+        return $this->getCreatedAt()->getTimestamp() + config('auth.activation.lifetime') * 60 < time();
     }
 }

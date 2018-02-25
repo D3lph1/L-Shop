@@ -30,6 +30,10 @@ class NeedPermission
      */
     public function handle($request, Closure $next, string $permission)
     {
+        if (!$this->auth->check()) {
+            throw new HttpException(403);
+        }
+
         if ($this->auth->getUser()->hasPermission($permission)) {
             return $next($request);
         }

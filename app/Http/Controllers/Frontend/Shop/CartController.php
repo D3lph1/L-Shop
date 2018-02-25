@@ -1,8 +1,9 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Frontend\Shop;
 
+use App\DataTransferObjects\Frontend\Shop\Server;
 use App\Exceptions\Product\DoesNotExistException;
 use App\Handlers\Frontend\Shop\Cart\PutHandler;
 use App\Handlers\Frontend\Shop\Cart\RemoveHandler;
@@ -11,45 +12,53 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Frontend\Shop\Cart\PutRequest;
 use App\Http\Requests\Frontend\Shop\Cart\RemoveRequest;
 use App\Services\Auth\Auth;
+use App\Services\Cart\Cart;
 use App\Services\Infrastructure\Notification\Notifications\Info;
 use App\Services\Infrastructure\Notification\Notifications\Success;
 use App\Services\Infrastructure\Notification\Notifications\Warning;
 use App\Services\Infrastructure\Response\JsonResponse;
 use App\Services\Infrastructure\Response\Status;
 use App\Services\Infrastructure\Security\Captcha\Captcha;
+use App\Services\Infrastructure\Server\Persistence\Persistence;
 use App\Services\Settings\Settings;
 use Illuminate\Http\Request;
 
 class CartController extends Controller
 {
-    public function render(Request $request, VisitHandler $handler, Auth $auth, Settings $settings, Captcha $captcha)
+    public function render(Request $request, VisitHandler $handler, Captcha $captcha, Persistence $persistence)
     {
-        return view('frontend.shop.cart', [
-            'isAuth' => $auth->check(),
-            'currency' => $settings->get('shop.currency.html')->getValue(),
+        $server = $persistence->retrieve();
+        if ($server !== null) {
+            $server = new Server($server);
+        }
+
+        return [
             'cart' => $handler->handle((int)$request->route('server')),
-            'captcha' => $captcha->view()
-        ]);
+            'captcha' => $captcha->view(),
+            'currentServer' => $server
+        ];
     }
 
-    public function put(PutRequest $request, PutHandler $handler)
+    public function put(PutRequest $request, PutHandler $handler, Cart $cart, Persistence $persistence): JsonResponse
     {
         $handler->handle($request->get('product'));
 
-        return (new JsonResponse(Status::SUCCESS))
-            ->addNotification(new Success(__('msg.shop.cart.success.message')));
+        return (new JsonResponse(Status::SUCCESS, [
+            'amount' => $persistence->retrieve() ? count($cart->retrieveServer($persistence->retrieve())) : null
+        ]))
+            ->addNotification(new Success(__('msg.frontend.shop.catalog.put_in_cart')));
     }
 
-    public function remove(RemoveRequest $request, RemoveHandler $handler)
+    public function remove(RemoveRequest $request, RemoveHandler $handler): JsonResponse
     {
         try {
             $handler->handle($request->get('product'));
 
             return (new JsonResponse(Status::SUCCESS))
-                ->addNotification(new Info(__('msg.shop.cart.remove.success')));
+                ->addNotification(new Info(__('msg.frontend.shop.cart.remove.success')));
         } catch (DoesNotExistException $e) {
             return (new JsonResponse('product_does_not_exist'))
-                ->addNotification(new Warning(__('msg.shop.cart.remove.fail')));
+                ->addNotification(new Warning(__('msg.frontend.shop.cart.remove.fail')));
         }
     }
 }

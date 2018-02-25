@@ -11,7 +11,7 @@
                         </v-toolbar>
                         <v-card-text>
                             <v-list>
-                                <v-list-tile avatar v-for="(server, index) in servers" :key="index" @click="$router.push({name: server.route, params: {server: server.id}})">
+                                <v-list-tile avatar v-for="(server, index) in servers" :key="index" :to="{name: server.route, params: {server: server.id}}">
                                     <v-list-tile-action>
                                         <v-icon v-if="!server.enabled">power_settings_new</v-icon>
                                     </v-list-tile-action>
@@ -68,6 +68,7 @@
                         if (response.data.status === 'success') {
                             this.$notification.info($t('msg.frontend.auth.logout.success'));
                             this.$router.replace({name: 'frontend.auth.login'});
+                            this.$store.commit('logout');
                             this.disabledLogoutBtn = false;
                         }
                     });

@@ -15,7 +15,8 @@ class JsonResponseTest extends TestCase
     {
         $response = new JsonResponse('success');
         $expected = [
-            'status' => 'success'
+            'status' => 'success',
+            'notifications' => []
         ];
         self::assertEquals($expected, $response->jsonSerialize());
     }
@@ -35,7 +36,8 @@ class JsonResponseTest extends TestCase
             'key2' => [
                 'item1',
                 'item2'
-            ]
+            ],
+            'notifications' => []
         ];
         self::assertEquals($expected, $response->jsonSerialize());
     }
@@ -75,7 +77,7 @@ class JsonResponseTest extends TestCase
                     'content' => 'lorem ipsum1'
                 ],
                 [
-                    'type' => 'danger',
+                    'type' => 'error',
                     'content' => 'lorem ipsum2'
                 ]
             ]

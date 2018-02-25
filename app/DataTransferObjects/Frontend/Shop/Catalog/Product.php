@@ -12,9 +12,15 @@ class Product implements \JsonSerializable
      */
     private $entity;
 
-    public function __construct(Entity $product)
+    /**
+     * @var bool
+     */
+    private $inCart;
+
+    public function __construct(Entity $product, bool $inCart)
     {
         $this->entity = $product;
+        $this->inCart = $inCart;
     }
 
     /**
@@ -26,7 +32,8 @@ class Product implements \JsonSerializable
             'id' => $this->entity->getId(),
             'item' => new Item($this->entity->getItem()),
             'price' => $this->entity->getPrice(),
-            'stack' => $this->entity->getStack()
+            'stack' => $this->entity->getStack(),
+            'inCart' => $this->inCart
         ];
     }
 }

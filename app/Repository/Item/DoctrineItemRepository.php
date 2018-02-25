@@ -5,9 +5,13 @@ namespace App\Repository\Item;
 
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use LaravelDoctrine\ORM\Pagination\PaginatesFromRequest;
 
 class DoctrineItemRepository implements ItemRepository
 {
+    use PaginatesFromRequest;
+
     /**
      * @var EntityManagerInterface
      */
@@ -24,11 +28,65 @@ class DoctrineItemRepository implements ItemRepository
         $this->er = $er;
     }
 
+    public function findPaginated(int $perPage): LengthAwarePaginator
+    {
+        return $this->paginateAll($perPage);
+    }
+
+    public function findPaginatedWithOrder(string $orderBy, bool $descending, int $perPage): LengthAwarePaginator
+    {
+        return $this->paginate(
+            $this->createQueryBuilder('i')
+                ->orderBy("i.{$orderBy}", $descending ? 'DESC' : 'ASC')
+                ->getQuery(),
+            $perPage,
+            'page',
+            false
+        );
+    }
+
+    public function findPaginateWithSearch(string $search, int $perPage): LengthAwarePaginator
+    {
+        return $this->paginate(
+            $this->createQueryBuilder('i')
+                ->where('i.id LIKE :search')
+                ->orWhere('i.name LIKE :search')
+                ->setParameter('search', "%{$search}%")
+                ->getQuery(),
+            $perPage,
+            'page',
+            false
+        );
+    }
+
+    public function findPaginatedWithOrderAndSearch(string $orderBy, bool $descending, string $search, int $perPage): LengthAwarePaginator
+    {
+        return $this->paginate(
+            $this->createQueryBuilder('i')
+                ->orderBy("i.{$orderBy}", $descending ? 'DESC' : 'ASC')
+                ->where('i.id LIKE :search')
+                ->orWhere('i.name LIKE :search')
+                ->setParameter('search', "%{$search}%")
+                ->getQuery(),
+            $perPage,
+            'page',
+            false
+        );
+    }
+
     public function deleteAll(): bool
     {
         return (bool)$this->er->createQueryBuilder('i')
             ->delete()
             ->getQuery()
             ->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function createQueryBuilder($alias, $indexBy = null)
+    {
+        return $this->er->createQueryBuilder($alias, $indexBy);
     }
 }

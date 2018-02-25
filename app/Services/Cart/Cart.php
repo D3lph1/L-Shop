@@ -58,7 +58,7 @@ class Cart
 
     public function exist(Item $item): bool
     {
-        return $this->storage->retrieve($item->getProduct()->getCategory()->getId(), $item->getProduct()->getId()) !== null;
+        return $this->storage->retrieve($item->getProduct()->getCategory()->getServer()->getId(), $item->getProduct()->getId()) !== null;
     }
 
     public function countServer(Server $server)

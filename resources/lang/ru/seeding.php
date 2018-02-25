@@ -14,7 +14,7 @@ return [
     'settings' => [
         'currency' => [
             'name' => 'Руб.',
-            'html' => '<i class="fa fa-rub"></i>'
+            'html' => '₽'
         ],
         'sashok_auth_error_message' => 'Пользователь с такими данными не найден',
     ],

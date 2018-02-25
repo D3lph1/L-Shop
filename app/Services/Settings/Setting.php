@@ -48,7 +48,7 @@ class Setting
     /**
      * @param null $castTo
      *
-     * @return bool|float|int|array|mixed
+     * @return mixed
      */
     public function getValue($castTo = null)
     {

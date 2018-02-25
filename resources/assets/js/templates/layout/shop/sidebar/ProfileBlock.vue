@@ -49,7 +49,7 @@
                         visible: this.character
                     },
                     {
-                        icon: 'settings',
+                        icon: 'build',
                         title: $t('content.layout.shop.sidebar.profile.settings')
                     },
                     {

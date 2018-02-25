@@ -5,6 +5,7 @@ namespace App\Composers\Constructors;
 
 use App\Services\Auth\Auth;
 use App\Services\Auth\Permissions;
+use App\Services\Infrastructure\Meta\System;
 
 class AdminBlockConstructor
 {
@@ -24,7 +25,7 @@ class AdminBlockConstructor
                 'icon' => 'settings_applications',
                 'subItems' => [
                     [
-                        'link' => '',
+                        'link' => 'admin.control.basic',
                         'title' => __('content.layout.shop.sidebar.admin.control.sub_items.main_settings'),
                         'permissions' => [Permissions::ADMIN_CONTROL_BASIC_ACCESS]
                     ],
@@ -66,11 +67,13 @@ class AdminBlockConstructor
                 'subItems' => [
                     [
                         'link' => '',
-                        'title' => __('content.layout.shop.sidebar.admin.products.sub_items.add')
+                        'title' => __('content.layout.shop.sidebar.admin.products.sub_items.add'),
+                        'permissions' => [Permissions::ADMIN_PRODUCTS_CRUD_ACCESS]
                     ],
                     [
-                        'link' => '',
-                        'title' => __('content.layout.shop.sidebar.admin.products.sub_items.edit')
+                        'link' => 'admin.products.list',
+                        'title' => __('content.layout.shop.sidebar.admin.products.sub_items.edit'),
+                        'permissions' => [Permissions::ADMIN_PRODUCTS_CRUD_ACCESS]
                     ],
                 ]
             ],
@@ -80,11 +83,13 @@ class AdminBlockConstructor
                 'subItems' => [
                     [
                         'link' => '',
-                        'title' => __('content.layout.shop.sidebar.admin.items.sub_items.add')
+                        'title' => __('content.layout.shop.sidebar.admin.items.sub_items.add'),
+                        'permissions' => [Permissions::ADMIN_ITEMS_CRUD_ACCESS]
                     ],
                     [
-                        'link' => '',
-                        'title' => __('content.layout.shop.sidebar.admin.items.sub_items.edit')
+                        'link' => 'admin.items.list',
+                        'title' => __('content.layout.shop.sidebar.admin.items.sub_items.edit'),
+                        'permissions' => [Permissions::ADMIN_ITEMS_CRUD_ACCESS]
                     ],
                 ]
             ],
@@ -94,11 +99,13 @@ class AdminBlockConstructor
                 'subItems' => [
                     [
                         'link' => '',
-                        'title' => __('content.layout.shop.sidebar.admin.news.sub_items.add')
+                        'title' => __('content.layout.shop.sidebar.admin.news.sub_items.add'),
+                        'permissions' => [Permissions::ADMIN_NEWS_CRUD_ACCESS]
                     ],
                     [
-                        'link' => '',
-                        'title' => __('content.layout.shop.sidebar.admin.news.sub_items.add')
+                        'link' => 'admin.news.list',
+                        'title' => __('content.layout.shop.sidebar.admin.news.sub_items.edit'),
+                        'permissions' => [Permissions::ADMIN_NEWS_CRUD_ACCESS]
                     ],
                 ]
             ],
@@ -108,11 +115,13 @@ class AdminBlockConstructor
                 'subItems' => [
                     [
                         'link' => '',
-                        'title' => __('content.layout.shop.sidebar.admin.pages.sub_items.add')
+                        'title' => __('content.layout.shop.sidebar.admin.pages.sub_items.add'),
+                        'permissions' => [Permissions::ADMIN_PAGES_CRUD_ACCESS]
                     ],
                     [
-                        'link' => '',
-                        'title' => __('content.layout.shop.sidebar.admin.pages.sub_items.edit')
+                        'link' => 'admin.pages.list',
+                        'title' => __('content.layout.shop.sidebar.admin.pages.sub_items.edit'),
+                        'permissions' => [Permissions::ADMIN_PAGES_CRUD_ACCESS]
                     ],
                 ]
             ],
@@ -121,8 +130,9 @@ class AdminBlockConstructor
                 'icon' => 'people_outline',
                 'subItems' => [
                     [
-                        'link' => '',
-                        'title' => __('content.layout.shop.sidebar.admin.users.sub_items.edit')
+                        'link' => 'admin.users.list',
+                        'title' => __('content.layout.shop.sidebar.admin.users.sub_items.edit'),
+                        'permissions' => [Permissions::ADMIN_USERS_CRUD_ACCESS]
                     ]
                 ]
             ],
@@ -159,12 +169,13 @@ class AdminBlockConstructor
                 'icon' => 'info',
                 'subItems' => [
                     [
-                        'link' => 'https://github.com/D3lph1/L-shop/wiki',
+                        'link' => System::documentationUrL(),
+                        'absolute' => true,
                         'title' => __('content.layout.shop.sidebar.admin.info.sub_items.docs'),
                         'target' => '_blank'
                     ],
                     [
-                        'link' => '',
+                        'link' => 'admin.information.about',
                         'title' => __('content.layout.shop.sidebar.admin.info.sub_items.about'),
                         'permissions' => [Permissions::ADMIN_INFORMATION_ABOUT_ACCESS]
                     ],

@@ -16,8 +16,13 @@ class RolesSeeder extends Seeder
             //
         ],
         Roles::ADMIN => [
-            Permissions::ADMIN_CONTROL_BASIC_ACCESS,
             Permissions::VIEWING_DISABLED_SERVERS,
+            Permissions::ADMIN_CONTROL_BASIC_ACCESS,
+            Permissions::ADMIN_ITEMS_CRUD_ACCESS,
+            Permissions::ADMIN_PRODUCTS_CRUD_ACCESS,
+            Permissions::ADMIN_NEWS_CRUD_ACCESS,
+            Permissions::ADMIN_PAGES_CRUD_ACCESS,
+            Permissions::ADMIN_USERS_CRUD_ACCESS,
             Permissions::ADMIN_INFORMATION_ABOUT_ACCESS
         ]
     ];

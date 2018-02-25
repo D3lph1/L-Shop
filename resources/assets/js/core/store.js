@@ -12,11 +12,24 @@ export default new Vuex.Store({
         requestError: false,
         auth: {
             user: {
-                username: null
+                username: null,
+                balance: null
+            }
+        },
+        shop: {
+            server: null,
+            currency: {
+                html: ''
+            },
+            cart: {
+                amount: 0
             }
         }
     },
     mutations: {
+        setCurrencyHtml(state, currency) {
+            state.shop.currency.html = currency;
+        },
         startLoading(state) {
             state.loading = true;
         },
@@ -48,10 +61,34 @@ export default new Vuex.Store({
         },
         setAuth(state, username) {
             if (typeof username !== 'string') {
-                throw TypeError(`username must be type of string, ${typeof username} given`)
+                state.username = null;
+
+                return;
             }
 
             state.auth.user.username = username;
+        },
+        logout(state) {
+            state.auth.user.username = null;
+            state.auth.user.balance = null;
+        },
+        setBalance(state, balance) {
+            state.auth.user.balance = balance;
+        },
+        setServer(state, server) {
+            state.shop.server = server;
+        },
+        setCartAmount(state, amount) {
+            state.shop.cart.amount = amount;
+        },
+        subCartAmount(state, amount = 1) {
+            if (amount >= state.shop.cart.amount) {
+                state.shop.cart.amount = 0;
+
+                return;
+            }
+
+            state.shop.cart.amount -= amount;
         }
     },
     getters: {

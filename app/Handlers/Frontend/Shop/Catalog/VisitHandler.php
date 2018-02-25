@@ -9,11 +9,15 @@ use App\DataTransferObjects\Frontend\Shop\Catalog\Result;
 use App\DataTransferObjects\Frontend\Shop\Catalog\Server as ServerDTO;
 use App\Entity\Category;
 use App\Entity\Server;
+use App\Exceptions\UnexpectedValueException;
 use App\Repository\Product\ProductRepository;
+use App\Services\Cart\Cart;
+use App\Services\Cart\Item;
 use App\Services\Infrastructure\Server\Persistence\Persistence;
 use App\Exceptions\Category\DoesNotExistException as CategoryDoesNotExistException;
 use App\Exceptions\Server\DoesNotExistException as ServerDoesNotExistException;
 use App\Repository\Server\ServerRepository;
+use App\Services\Product\Order;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -40,16 +44,23 @@ class VisitHandler
      */
     private $persistence;
 
+    /**
+     * @var Cart
+     */
+    private $cart;
+
     public function __construct(
         ServerRepository $serverRepository,
         ProductRepository $productRepository,
         Settings $settings,
-        Persistence $persistence)
+        Persistence $persistence,
+        Cart $cart)
     {
         $this->serverRepository = $serverRepository;
         $this->productRepository = $productRepository;
         $this->settings = $settings;
         $this->persistence = $persistence;
+        $this->cart = $cart;
     }
 
     /**
@@ -81,8 +92,15 @@ class VisitHandler
             return new Result(new ServerDTO($server), null, [], null);
         }
 
+        $orderBy = $this->settings->get('system.catalog.pagination.order_by')->getValue();
+        if (!in_array($orderBy, Order::availableFields())) {
+            throw new UnexpectedValueException('$orderBy has invalid value `' . $orderBy . '`');
+        }
+
         $paginator = $this->productRepository->findForCategoryPaginated(
             $currentCategory,
+            $orderBy,
+            $this->settings->get('system.catalog.pagination.descending')->getValue(DataType::BOOL),
             $this->settings->get('system.catalog.pagination.per_page')->getValue(DataType::INT)
         );
         $products = $this->fromPaginatorToDTO($paginator);
@@ -127,12 +145,12 @@ class VisitHandler
         throw new CategoryDoesNotExistException($categoryId);
     }
 
-    private function fromPaginatorToDTO(LengthAwarePaginator $paginator)
+    private function fromPaginatorToDTO(LengthAwarePaginator $paginator): array
     {
         $products = $paginator->items();
         $result = [];
         foreach ($products as $product) {
-            $result[] = new Product($product);
+            $result[] = new Product($product, $this->cart->exist(new Item($product, 0)));
         }
 
         return $result;

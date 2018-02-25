@@ -46,17 +46,78 @@ class DoctrineProductRepository implements ProductRepository
 
     public function find(int $id): ?Product
     {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->er->find($id);
     }
 
-    public function findForCategoryPaginated(Category $category, int $perPage): LengthAwarePaginator
+    public function findForCategoryPaginated(Category $category, string $orderBy, bool $descending, int $perPage): LengthAwarePaginator
+    {
+        return $this->paginate(
+            $this->createQueryBuilder('product')
+                ->join('product.item', 'item')
+                ->where('product.category = :category')
+                ->orderBy($orderBy, $descending ? 'DESC' : 'ASC')
+                ->setParameter('category', $category)
+                ->getQuery(),
+            $perPage,
+            'page',
+            false
+        );
+    }
+
+    public function findPaginated(int $perPage): LengthAwarePaginator
+    {
+        return $this->paginateAll($perPage, 'page');
+    }
+
+    public function findPaginatedWithOrder(string $orderBy, bool $descending, int $perPage): LengthAwarePaginator
+    {
+        return $this->paginate(
+            $this->createQueryBuilder('product')
+                ->join('product.item', 'item')
+                ->orderBy($orderBy, $descending ? 'DESC' : 'ASC')
+                ->getQuery(),
+            $perPage,
+            'page',
+            false
+        );
+    }
+
+    public function findPaginateWithSearch(string $search, int $perPage): LengthAwarePaginator
     {
         return $this->paginate(
             $this->createQueryBuilder('p')
-                ->where('p.category = :category')
-                ->setParameter('category', $category)
+                ->join('p.item', 'i')
+                ->where('p.id LIKE :search')
+                ->orWhere('p.price LIKE :search')
+                ->orWhere('p.stack LIKE :search')
+                ->orWhere('i.id LIKE :search')
+                ->orWhere('i.name LIKE :search')
+                ->setParameter('search', "%{$search}%")
                 ->getQuery(),
-            $perPage);
+            $perPage,
+            'page',
+            false
+        );
+    }
+
+    public function findPaginatedWithOrderAndSearch(string $orderBy, bool $descending, string $search, int $perPage): LengthAwarePaginator
+    {
+        return $this->paginate(
+            $this->createQueryBuilder('product')
+                ->orderBy($orderBy, $descending ? 'DESC' : 'ASC')
+                ->join('product.item', 'item')
+                ->where('product.id LIKE :search')
+                ->orWhere('product.price LIKE :search')
+                ->orWhere('product.stack LIKE :search')
+                ->orWhere('item.id LIKE :search')
+                ->orWhere('item.name LIKE :search')
+                ->setParameter('search', "%{$search}%")
+                ->getQuery(),
+            $perPage,
+            'page',
+            false
+        );
     }
 
     /**

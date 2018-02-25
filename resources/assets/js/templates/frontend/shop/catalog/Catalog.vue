@@ -23,17 +23,35 @@
                         <catalog-item
                                 v-for="(product, index) in products"
                                 :key="index"
+                                :id="product.id"
                                 :name="product.item.name"
                                 :image="product.item.image"
                                 :price="product.price"
                                 :stack="product.stack"
+                                :in-cart="product.inCart"
+                                :is-item="product.item.isItem"
+                                :is-permgroup="product.item.isPermgroup"
+                                @purchase-dialog-opening="openPurchaseDialog"
+                                @about-dialog-opening="openAboutDialog"
+                                v-if="!loading"
                         ></catalog-item>
                     </v-layout>
 
-                    <div class="text-xs-center" v-if="paginator.last_page > 1">
-                        <v-pagination class="mt-5" :length="paginator.last_page" v-model="page" :total-visible="7"></v-pagination>
+                    <div class="text-xs-center" v-if="paginator.last_page > 1 && !loading">
+                        <v-pagination
+                                class="mt-5"
+                                :length="paginator.last_page"
+                                v-model="page"
+                                :total-visible="7"
+                                :disabled="paginationDisabled"
+                        ></v-pagination>
                     </div>
                 </v-tab-item>
+
+                <div class="text-xs-center">
+                    <v-progress-circular indeterminate color="primary" v-if="loading"></v-progress-circular>
+                </div>
+
                 <v-alert v-if="products.length === 0" type="info" :value="true">
                     <div class="text-xs-center">Категория пуста</div>
                 </v-alert>
@@ -42,6 +60,28 @@
         <v-alert v-else type="info" :value="true">
             <div class="text-xs-center">Категории отсутствуют</div>
         </v-alert>
+
+        <purchase-dialog
+                v-if="purchase.dialog"
+                :dialog="purchase.dialog"
+                :name="purchasableProduct.item.name"
+                :price="purchasableProduct.price"
+                :stack="purchasableProduct.stack"
+                :is-item="purchasableProduct.item.isItem"
+                :is-permgroup="purchasableProduct.item.isPermgroup"
+                @close="closePurchaseDialog"
+        ></purchase-dialog>
+
+        <about-dialog
+                v-if="about.dialog"
+                :dialog="about.dialog"
+                :name="aboutableProduct.item.name"
+                :description="aboutableProduct.item.description"
+                :image="aboutableProduct.item.image"
+                :is-item="aboutableProduct.item.isItem"
+                :is-permgroup="aboutableProduct.item.isPermgroup"
+                @close="closeAboutDialog"
+        ></about-dialog>
     </div>
 </template>
 
@@ -49,6 +89,8 @@
     import loader from './../../../../core/http/loader'
     import Header from './Header.vue'
     import Item from './Item.vue'
+    import PurchaseDialog from './PurchaseDialog.vue'
+    import AboutDialog from './AboutDialog.vue'
 
     function buildUrlApi(server, category, page) {
         return '/api' + buildUrl(server, category, page);
@@ -61,15 +103,38 @@
         data() {
             return {
                 shopName: null,
+                // URL of the shop logo.
                 logo: null,
+                // The current active tab of the v-tabs component.
                 tab: null,
+                // Current page of pagination.
                 page: 1,
                 currentCategory: {},
                 server: {
+                    // List of available categories for this server.
                     categories: []
                 },
-                paginator: [],
-                products: []
+                // It stores information for paginating content, such as the current page,
+                // the total number of pages, the URL of the previous and next page, and so on.
+                paginator: {},
+                // The variable stores an array of goods for the current page of the selected category.
+                products: [],
+                // This flag is used to hide items on tabs and to show the download indicator
+                // when changing tabs.
+                loading: false,
+                // This flag is used to block the pagination component during the download of
+                // products from a new page.
+                paginationDisabled: false,
+
+                purchase: {
+                    dialog: false,
+                    product: null
+                },
+
+                about: {
+                    dialog: false,
+                    product: null
+                }
             }
         },
         beforeRouteEnter(to, from, next) {
@@ -80,7 +145,22 @@
         },
         watch: {
             page(val) {
-                this.$router.push(buildUrl(this.$route.params.server, this.$route.params.category, val));
+                this.paginationDisabled = true;
+                this.$router.push(buildUrl(this.$route.params.server, this.$route.params.category, val),
+                    () => {
+                        this.paginationDisabled = false;
+                    },
+                    () => {
+                        this.paginationDisabled = false;
+                    });
+            }
+        },
+        computed: {
+            purchasableProduct() {
+                return this.productById(this.purchase.product);
+            },
+            aboutableProduct() {
+                return this.productById(this.about.product);
             }
         },
         methods: {
@@ -90,6 +170,8 @@
                 this.shopName = data.shopName;
                 this.logo = data.logo;
                 this.server = data.server;
+
+                this.$store.commit('setServer', data.currentServer);
 
                 if (data.currentCategory !== null) {
                     this.currentCategory = data.currentCategory;
@@ -109,18 +191,49 @@
                 }
             },
             changeCategory(id) {
+                this.loading = true;
                 this.$router.push({
                     name: 'frontend.shop.catalog.category',
                     params: {
                         server: this.$route.params.server,
                         category: id
                     }
+                }, () => {
+                    this.loading = false;
+                }, () => {
+                    this.loading = false;
                 });
             },
+            openPurchaseDialog(id) {
+                this.purchase.dialog = true;
+                this.purchase.product = id;
+            },
+            closePurchaseDialog() {
+                this.purchase.dialog = false;
+            },
+            openAboutDialog(id) {
+                this.about.dialog = true;
+                this.about.product = id;
+            },
+            closeAboutDialog() {
+                this.about.dialog = false;
+            },
+            productById(id) {
+                let item;
+                this.products.forEach((each) => {
+                    if (each.id === id) {
+                        item = each;
+                    }
+                });
+
+                return item;
+            }
         },
         components: {
             'catalog-header': Header,
             'catalog-item': Item,
+            'purchase-dialog': PurchaseDialog,
+            'about-dialog': AboutDialog
         }
     }
 </script>

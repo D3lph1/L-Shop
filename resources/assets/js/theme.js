@@ -10,7 +10,7 @@ import colors from 'vuetify/es5/util/colors'
 
 Vue.use(Vuetify, {
     theme: {
-        primary: colors.amber.darken2,
+        primary: colors.orange.lighten1,
         secondary: colors.blue.base,
     }
 });

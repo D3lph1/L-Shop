@@ -17,7 +17,7 @@
         </v-toolbar>
         <v-list class="pt-0" dense>
             <v-divider></v-divider>
-            <v-list-tile @click="$router.push({name: 'frontend.shop.catalog', params: {server: $route.params.server}})">
+            <v-list-tile :to="toCatalog()">
                 <v-list-tile-action>
                     <v-icon>view_module</v-icon>
                 </v-list-tile-action>
@@ -25,12 +25,25 @@
                     <v-list-tile-title>{{ $t('content.layout.shop.sidebar.basic.catalog') }}</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
-            <v-list-tile @click="">
+            <v-list-tile :to="toCart()">
                 <v-list-tile-action>
-                    <v-icon>shopping_cart</v-icon>
+                    <v-badge v-model="cartBadges" right>
+                        <span slot="badge">{{ $store.state.shop.cart.amount }}</span>
+                        <v-icon>shopping_cart</v-icon>
+                    </v-badge>
                 </v-list-tile-action>
                 <v-list-tile-content>
-                    <v-list-tile-title>{{ $t('content.layout.shop.sidebar.basic.cart') }}</v-list-tile-title>
+                    <v-list-tile-title>
+                        {{ $t('content.layout.shop.sidebar.basic.cart') }}
+                    </v-list-tile-title>
+                </v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile @click="$router.push({name: 'frontend.auth.servers'})">
+                <v-list-tile-action>
+                    <v-icon>keyboard_backspace</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                    <v-list-tile-title>{{ $t('content.layout.shop.sidebar.basic.servers') }}</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
             <div v-if="$store.getters.isAuth">
@@ -63,6 +76,16 @@
 
 <script>
     export default {
+        data() {
+            return {
+                cartBadges: false
+            }
+        },
+        watch: {
+            '$store.state.shop.cart.amount'(val) {
+                this.cartBadges = Boolean(val);
+            }
+        },
         methods: {
             logout() {
                 this.$axios.post('/api/logout')
@@ -70,8 +93,23 @@
                         if (response.data.status === 'success') {
                             this.$notification.info($t('msg.frontend.auth.logout.success'));
                             this.$router.replace({name: 'frontend.auth.login'});
+                            this.$store.commit('logout');
                         }
                     });
+            },
+            toCatalog() {
+                if (!this.$store.state.shop.server) {
+                    return {name: 'frontend.auth.servers'};
+                } else {
+                    return {name: 'frontend.shop.catalog', params: {server: this.$store.state.shop.server.id}};
+                }
+            },
+            toCart() {
+                if (!this.$store.state.shop.server) {
+                    return {name: 'frontend.auth.servers'};
+                } else {
+                    return {name: 'frontend.shop.cart', params: {server: this.$store.state.shop.server.id}};
+                }
             }
         }
     }

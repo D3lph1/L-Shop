@@ -7,7 +7,7 @@ use App\Services\Cart\Storage\Storage as ClassStorage;
 use App\Services\Database\Truncater\MySQLTruncater;
 use App\Services\Database\Truncater\PostgreSQLTruncater;
 use App\Services\Database\Truncater\Truncater;
-use App\Services\DateTime\Formatting\DefaultFormatter;
+use App\Services\DateTime\Formatting\HumanizeFormatter;
 use App\Services\DateTime\Formatting\Formatter;
 use App\Services\Infrastructure\Notification\Drivers\Driver;
 use App\Services\Infrastructure\Notification\Drivers\Session;
@@ -42,7 +42,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(Driver::class, Session::class);
         $this->app->singleton(PersistenceStorage::class, SessionPersistenceStorage::class);
         $this->app->singleton(ClassStorage::class, SessionCartStorage::class);
-        $this->app->singleton(Formatter::class, DefaultFormatter::class);
+        $this->app->singleton(Formatter::class, HumanizeFormatter::class);
         $this->app->bind(SkinApplicator::class, DefaultSkinApplicator::class);
         $this->app->bind(CloakApplicator::class, DefaultCloakApplicator::class);
         $this->app->singleton(Captcha::class, function () {

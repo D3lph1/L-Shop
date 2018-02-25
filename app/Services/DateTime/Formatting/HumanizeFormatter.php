@@ -6,7 +6,7 @@ namespace App\Services\DateTime\Formatting;
 use DateTimeInterface;
 use Illuminate\Contracts\Translation\Translator;
 
-class DefaultFormatter implements Formatter
+class HumanizeFormatter implements Formatter
 {
     /**
      * @var Translator

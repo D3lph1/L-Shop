@@ -19,4 +19,42 @@ html {
   -ms-overflow-style: none; }
 
 ::-webkit-scrollbar-thumb {
-  background: #FF0000; }
+  background: rgba(255, 255, 255, 0); }
+
+.no-spinners {
+  -moz-appearance: textfield; }
+
+.no-spinners::-webkit-outer-spin-button,
+.no-spinners::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0; }
+
+.fw400 {
+  font-weight: 400; }
+
+.centered input {
+  text-align: center !important; }
+
+.no-spinners input {
+  -moz-appearance: textfield; }
+
+.no-spinners input::-webkit-outer-spin-button,
+.no-spinners input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0; }
+
+#logo-block {
+  padding: 1rem;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+  margin-bottom: 1rem;
+  justify-content: center;
+  flex-wrap: wrap; }
+  #logo-block .c-logo {
+    max-width: 200px;
+    margin: 0 1rem; }
+  #logo-block .logo-text {
+    justify-content: center;
+    align-self: center;
+    margin: 0 1rem; }

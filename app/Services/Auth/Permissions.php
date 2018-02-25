@@ -33,6 +33,31 @@ class Permissions
     public const ADMIN_CONTROL_BASIC_ACCESS = 'admin_control_basic_access';
 
     /**
+     * Allows the user to add/edit/delete items.
+     */
+    public const ADMIN_ITEMS_CRUD_ACCESS = 'admin_items_crud_access';
+
+    /**
+     * Allows the user to add/edit/delete products.
+     */
+    public const ADMIN_PRODUCTS_CRUD_ACCESS = 'admin_products_crud_access';
+
+    /**
+     * Allows the user to add/edit/delete news.
+     */
+    public const ADMIN_NEWS_CRUD_ACCESS = 'admin_news_crud_access';
+
+    /**
+     * Allows the user to add/edit/delete pages.
+     */
+    public const ADMIN_PAGES_CRUD_ACCESS = 'admin_pages_crud_access';
+
+    /**
+     * Allows the user to add/edit/delete users.
+     */
+    public const ADMIN_USERS_CRUD_ACCESS = 'admin_users_crud_access';
+
+    /**
      * Allows the user to access the `admin->information->about` section
      */
     public const ADMIN_INFORMATION_ABOUT_ACCESS = 'admin_information_about_access';

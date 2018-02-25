@@ -70,7 +70,7 @@ class RegisterTest extends TestCase
         $response->assertStatus(200);
         $response->assertJson([
             'status' => Status::SUCCESS,
-            'redirect' => route('frontend.servers')
+            'redirect' => 'frontend.auth.servers'
         ]);
         $this->rollback();
     }
@@ -93,7 +93,7 @@ class RegisterTest extends TestCase
         $response->assertStatus(200);
         $response->assertJson([
             'status' => Status::SUCCESS,
-            'redirect' => route('frontend.auth.activation.sent')
+            'redirect' => 'frontend.auth.activation.sent'
         ]);
         $this->rollback();
     }
