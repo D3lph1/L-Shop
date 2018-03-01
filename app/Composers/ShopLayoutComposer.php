@@ -50,7 +50,6 @@ class ShopLayoutComposer
             'currency' => $this->settings->get('shop.currency.html')->getValue(),
             'cartCount' => $server !== null ? app(Cart::class)->countServer($server) : 0,
             'canLogin' => !$this->auth->check() && $this->settings->get('auth.access_mode')->getValue() === AccessMode::ANY,
-            'profile' => app(ProfileBlockConstructor::class)->construct(),
             'adminBlock' => app(AdminBlockConstructor::class)->construct(),
             'serversBlock' => app(ServersBlockConstructor::class)->construct(),
             'currentServerName' => $server !== null ? $server->getName() : __('content.layout.shop.server_not_selected'),

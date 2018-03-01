@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Repository\Item;
 
+use App\Entity\Item;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -26,6 +27,29 @@ class DoctrineItemRepository implements ItemRepository
     {
         $this->em = $em;
         $this->er = $er;
+    }
+
+    public function create(Item $item): void
+    {
+        $this->em->persist($item);
+        $this->em->flush();
+    }
+
+    public function update(Item $item): void
+    {
+        $this->em->merge($item);
+        $this->em->flush();
+    }
+
+    public function find(int $id): ?Item
+    {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        return $this->er->find($id);
+    }
+
+    public function findAll(): array
+    {
+        return $this->er->findAll();
     }
 
     public function findPaginated(int $perPage): LengthAwarePaginator
@@ -72,6 +96,12 @@ class DoctrineItemRepository implements ItemRepository
             'page',
             false
         );
+    }
+
+    public function remove(Item $item): void
+    {
+        $this->em->remove($item);
+        $this->em->flush();
     }
 
     public function deleteAll(): bool

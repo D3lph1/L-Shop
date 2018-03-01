@@ -4,8 +4,8 @@ declare(strict_types = 1);
 namespace App\DataTransferObjects\Frontend\Shop;
 
 use App\Services\Cart\Item;
+use App\Services\Item\Image\Image;
 use App\Services\Item\Type;
-use App\Services\Media\Image;
 
 class CartResult implements \JsonSerializable
 {
@@ -35,7 +35,7 @@ class CartResult implements \JsonSerializable
                         'isItem' => $this->cartItem->getProduct()->getItem()->getType() === Type::ITEM,
                         'isPermgroup' => $this->cartItem->getProduct()->getItem()->getType() === Type::PERMGROUP,
                     ],
-                    'image' => Image::itemImagePath($this->cartItem->getProduct()->getItem()->getImage())
+                    'image' => Image::assetPathOrDefault($this->cartItem->getProduct()->getItem()->getImage())
                 ]
             ],
             'amount' => $this->cartItem->getAmount()

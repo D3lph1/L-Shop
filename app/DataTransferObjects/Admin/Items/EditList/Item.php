@@ -1,10 +1,10 @@
 <?php
 declare(strict_types=1);
 
-namespace App\DataTransferObjects\Admin\Items;
+namespace App\DataTransferObjects\Admin\Items\EditList;
 
 use App\Entity\Item as Entity;
-use App\Services\Media\Image;
+use App\Services\Item\Image\Image;
 
 class Item implements \JsonSerializable
 {
@@ -26,7 +26,7 @@ class Item implements \JsonSerializable
         return [
             'id' => $this->item->getId(),
             'name' => $this->item->getName(),
-            'image' => Image::itemImagePath($this->item->getImage()),
+            'image' => Image::assetPathOrDefault($this->item->getImage()),
             'type' => __("common.item.type.{$this->item->getType()}")
         ];
     }

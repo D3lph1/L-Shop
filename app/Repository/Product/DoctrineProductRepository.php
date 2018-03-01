@@ -75,6 +75,8 @@ class DoctrineProductRepository implements ProductRepository
         return $this->paginate(
             $this->createQueryBuilder('product')
                 ->join('product.item', 'item')
+                ->join('product.category', 'category')
+                ->join('category.server', 'server')
                 ->orderBy($orderBy, $descending ? 'DESC' : 'ASC')
                 ->getQuery(),
             $perPage,
@@ -86,13 +88,17 @@ class DoctrineProductRepository implements ProductRepository
     public function findPaginateWithSearch(string $search, int $perPage): LengthAwarePaginator
     {
         return $this->paginate(
-            $this->createQueryBuilder('p')
-                ->join('p.item', 'i')
+            $this->createQueryBuilder('product')
+                ->join('product.item', 'item')
+                ->join('product.server', 'server')
+                ->join('server.category', 'category')
                 ->where('p.id LIKE :search')
-                ->orWhere('p.price LIKE :search')
-                ->orWhere('p.stack LIKE :search')
-                ->orWhere('i.id LIKE :search')
-                ->orWhere('i.name LIKE :search')
+                ->orWhere('product.price LIKE :search')
+                ->orWhere('product.stack LIKE :search')
+                ->orWhere('item.id LIKE :search')
+                ->orWhere('item.name LIKE :search')
+                ->orWhere('server.name LIKE :search')
+                ->orWhere('category.name LIKE :search')
                 ->setParameter('search', "%{$search}%")
                 ->getQuery(),
             $perPage,
@@ -107,11 +113,15 @@ class DoctrineProductRepository implements ProductRepository
             $this->createQueryBuilder('product')
                 ->orderBy($orderBy, $descending ? 'DESC' : 'ASC')
                 ->join('product.item', 'item')
+                ->join('product.category', 'category')
+                ->join('category.server', 'server')
                 ->where('product.id LIKE :search')
                 ->orWhere('product.price LIKE :search')
                 ->orWhere('product.stack LIKE :search')
                 ->orWhere('item.id LIKE :search')
                 ->orWhere('item.name LIKE :search')
+                ->orWhere('server.name LIKE :search')
+                ->orWhere('category.name LIKE :search')
                 ->setParameter('search', "%{$search}%")
                 ->getQuery(),
             $perPage,

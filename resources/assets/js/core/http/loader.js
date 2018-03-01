@@ -21,7 +21,6 @@ export default {
                 });
             })
             .catch((err) => {
-                console.log(err);
                 store.commit('requestError');
             });
     },

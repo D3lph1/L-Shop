@@ -15,6 +15,8 @@ use App\Services\Infrastructure\Security\Captcha\Captcha;
 use App\Services\Infrastructure\Security\Captcha\ReCaptcha;
 use App\Services\Infrastructure\Server\Persistence\Storage\Session as SessionPersistenceStorage;
 use App\Services\Infrastructure\Server\Persistence\Storage\Storage as PersistenceStorage;
+use App\Services\Item\Image\Hashing\Hasher;
+use App\Services\Item\Image\Hashing\MD5Hasher;
 use App\Services\Media\Character\Cloak\Applicators\Applicator as CloakApplicator;
 use App\Services\Media\Character\Cloak\Applicators\DefaultApplicator as DefaultCloakApplicator;
 use App\Services\Media\Character\Skin\Applicators\Applicator as SkinApplicator;
@@ -52,6 +54,7 @@ class AppServiceProvider extends ServiceProvider
                 $settings->get('system.security.captcha.recaptcha.secret_key')->getValue()
             );
         });
+        $this->app->singleton(Hasher::class, MD5Hasher::class);
     }
 
     private function registerTruncater()

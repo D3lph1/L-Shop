@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Handlers\Admin\Items;
 
-use App\DataTransferObjects\Admin\Items\ListResult;
+use App\DataTransferObjects\Admin\Items\EditList\Result;
 use App\Exceptions\InvalidArgumentException;
 use App\Repository\Item\ItemRepository;
 
@@ -21,7 +21,7 @@ class ListHandler
         $this->repository = $repository;
     }
 
-    public function handle(?string $orderBy, bool $descending, ?string $search, int $perPage): ListResult
+    public function handle(?string $orderBy, bool $descending, ?string $search, int $perPage): Result
     {
         if (!empty($orderBy) && !in_array($orderBy, $this->availableOrders)) {
             throw new InvalidArgumentException('Argument $orderBy has illegal value');
@@ -50,6 +50,6 @@ class ListHandler
             }
         }
 
-        return new ListResult($paginator);
+        return new Result($paginator);
     }
 }

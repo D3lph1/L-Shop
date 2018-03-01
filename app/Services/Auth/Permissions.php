@@ -58,6 +58,11 @@ class Permissions
     public const ADMIN_USERS_CRUD_ACCESS = 'admin_users_crud_access';
 
     /**
+     * Allows to show shop statistic.
+     */
+    public const ADMIN_STATISTIC_SHOW_ACCESS = 'admin_statistic_show_access';
+
+    /**
      * Allows the user to access the `admin->information->about` section
      */
     public const ADMIN_INFORMATION_ABOUT_ACCESS = 'admin_information_about_access';

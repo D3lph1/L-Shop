@@ -66,7 +66,7 @@ class AdminBlockConstructor
                 'icon' => 'apps',
                 'subItems' => [
                     [
-                        'link' => '',
+                        'link' => 'admin.products.add',
                         'title' => __('content.layout.shop.sidebar.admin.products.sub_items.add'),
                         'permissions' => [Permissions::ADMIN_PRODUCTS_CRUD_ACCESS]
                     ],
@@ -82,7 +82,7 @@ class AdminBlockConstructor
                 'icon' => 'beach_access',
                 'subItems' => [
                     [
-                        'link' => '',
+                        'link' => 'admin.items.add',
                         'title' => __('content.layout.shop.sidebar.admin.items.sub_items.add'),
                         'permissions' => [Permissions::ADMIN_ITEMS_CRUD_ACCESS]
                     ],
@@ -155,8 +155,9 @@ class AdminBlockConstructor
                 'icon' => 'show_chart',
                 'subItems' => [
                     [
-                        'link' => '',
-                        'title' => __('content.layout.shop.sidebar.admin.statistic.sub_items.show')
+                        'link' => 'admin.statistic.show',
+                        'title' => __('content.layout.shop.sidebar.admin.statistic.sub_items.show'),
+                        'permissions' => [Permissions::ADMIN_STATISTIC_SHOW_ACCESS]
                     ],
                     [
                         'link' => '',

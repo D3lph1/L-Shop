@@ -1,11 +1,11 @@
 <?php
 declare(strict_types = 1);
 
-namespace App\DataTransferObjects\Admin\Items;
+namespace App\DataTransferObjects\Admin\Items\EditList;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-class ListResult
+class Result
 {
     private $paginator;
 

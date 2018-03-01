@@ -1,20 +1,24 @@
-import Login from './../templates/frontend/auth/Login.vue'
-import Register from './../templates/frontend/auth/Register.vue'
-import Activation from './../templates/frontend/auth/Activation.vue'
-import ForgotPassword from './../templates/frontend/auth/password/Forgot.vue'
-import ResetPassword from './../templates/frontend/auth/password/Reset.vue'
-import Servers from './../templates/frontend/auth/Servers.vue'
-import Shop from '../templates/layout/shop/Shop.vue'
-import Catalog from '../templates/frontend/shop/catalog/Catalog.vue'
-import Cart from '../templates/frontend/shop/cart/Cart.vue'
+const Login = () => import(/* webpackChunkName: "shop" */ './../templates/frontend/auth/Login.vue');
+const Register = () => import(/* webpackChunkName: "shop" */ './../templates/frontend/auth/Register.vue');
+const Activation = () => import(/* webpackChunkName: "shop" */ './../templates/frontend/auth/Activation.vue');
+const ForgotPassword = () => import(/* webpackChunkName: "shop" */ './../templates/frontend/auth/password/Forgot.vue');
+const ResetPassword = () => import(/* webpackChunkName: "shop" */ './../templates/frontend/auth/password/Reset.vue');
+const Servers = () => import(/* webpackChunkName: "shop" */ './../templates/frontend/auth/Servers.vue');
+const Shop = () => import(/* webpackChunkName: "shop" */ '../templates/layout/shop/Shop.vue');
+const Catalog = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/shop/catalog/Catalog.vue');
+const Cart = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/shop/cart/Cart.vue');
 
-import BasicSettings from '../templates/admin/control/BasicSettings.vue'
-import ProductsList from '../templates/admin/products/List.vue'
-import ItemsList from '../templates/admin/items/List.vue'
-import NewsList from '../templates/admin/news/List.vue'
-import PagesList from '../templates/admin/pages/List.vue'
-import UsersList from '../templates/admin/users/List.vue'
-import About from '../templates/admin/information/About.vue'
+const BasicSettings = () => import(/* webpackChunkName: "admin" */ '../templates/admin/control/BasicSettings.vue');
+const ProductsAdd = () => import(/* webpackChunkName: "admin" */ '../templates/admin/products/Add.vue');
+const ProductsList = () => import(/* webpackChunkName: "admin" */ '../templates/admin/products/List.vue');
+const ItemsAdd = () => import(/* webpackChunkName: "admin" */ '../templates/admin/items/Add.vue');
+const ItemsEdit = () => import(/* webpackChunkName: "admin" */ '../templates/admin/items/Edit.vue');
+const ItemsList = () => import(/* webpackChunkName: "admin" */ '../templates/admin/items/List.vue');
+const NewsList = () => import(/* webpackChunkName: "admin" */ '../templates/admin/news/List.vue');
+const PagesList = () => import(/* webpackChunkName: "admin" */ '../templates/admin/pages/List.vue');
+const UsersList = () => import(/* webpackChunkName: "admin" */ '../templates/admin/users/List.vue');
+const StatisticShow = () => import(/* webpackChunkName: "admin" */ '../templates/admin/statistic/Show.vue');
+const About = () => import(/* webpackChunkName: "admin" */'../templates/admin/information/About.vue');
 
 export default [
     {
@@ -123,6 +127,16 @@ export default [
                 }
             },
             {
+                path: 'products/add',
+                name: 'admin.products.add',
+                components: {
+                    content: ProductsAdd
+                },
+                meta: {
+                    title: $t('content.admin.products.add.title')
+                }
+            },
+            {
                 path: 'products/list',
                 name: 'admin.products.list',
                 components: {
@@ -133,6 +147,16 @@ export default [
                 }
             },
             {
+                path: 'items/add',
+                name: 'admin.items.add',
+                components: {
+                    content: ItemsAdd
+                },
+                meta: {
+                    title: $t('content.admin.items.add.title')
+                }
+            },
+            {
                 path: 'items/list',
                 name: 'admin.items.list',
                 components: {
@@ -140,6 +164,16 @@ export default [
                 },
                 meta: {
                     title: $t('content.admin.items.list.title')
+                }
+            },
+            {
+                path: 'items/edit/:item',
+                name: 'admin.items.edit',
+                components: {
+                    content: ItemsEdit
+                },
+                meta: {
+                    title: $t('content.admin.items.edit.title')
                 }
             },
             {
@@ -170,6 +204,16 @@ export default [
                 },
                 meta: {
                     title: $t('content.admin.users.list.title')
+                }
+            },
+            {
+                path: 'statistic/show',
+                name: 'admin.statistic.show',
+                components: {
+                    content: StatisticShow
+                },
+                meta: {
+                    title: $t('content.admin.statistic.show.title')
                 }
             },
             {

@@ -1,53 +1,66 @@
 .fade-out-leave-active
-        visibility: hidden
-        opacity: 0
-        transition: visibility 0s .15s, opacity .15s linear
+  visibility: hidden
+  opacity: 0
+  transition: visibility 0s .15s, opacity .15s linear
+
 html
-        overflow: scroll
-        overflow-x: hidden
-        -ms-overflow-style: none
+  overflow: scroll
+  overflow-x: hidden
+  -ms-overflow-style: none
+
 ::-webkit-scrollbar
-        width: 0
-        background: transparent
-        -ms-overflow-style: none
+  width: 0
+  background: transparent
+  -ms-overflow-style: none
+
 ::-webkit-scrollbar-thumb
-        background: rgba(255, 255, 255, 0)
+  background: rgba(255, 255, 255, 0)
 
 .no-spinners
-        -moz-appearance: textfield
+  -moz-appearance: textfield
 
 .no-spinners::-webkit-outer-spin-button,
 .no-spinners::-webkit-inner-spin-button
-        -webkit-appearance: none
-        margin: 0
+  -webkit-appearance: none
+  margin: 0
 
 .fw400
-        font-weight: 400
+  font-weight: 400
 
 .centered
-        input
-                text-align: center !important
+  input
+    text-align: center !important
 
 .no-spinners
-        input
-                -moz-appearance: textfield
-        input::-webkit-outer-spin-button,
-        input::-webkit-inner-spin-button
-                -webkit-appearance: none
-                margin: 0
+  input
+    -moz-appearance: textfield
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button
+    -webkit-appearance: none
+    margin: 0
+
+.br0
+  border-radius: 0 !important
 
 #logo-block
-        padding: 1rem
-        display: -webkit-flex
-        display: -ms-flex
-        display: flex
-        margin-bottom: 1rem
-        justify-content: center
-        flex-wrap: wrap
-        .c-logo
-                max-width: 200px
-                margin: 0 1rem
-        .logo-text
-                justify-content: center
-                align-self: center
-                margin: 0 1rem
+  padding: 1rem
+  display: -webkit-flex
+  display: -ms-flex
+  display: flex
+  margin-bottom: 1rem
+  justify-content: center
+  flex-wrap: wrap
+  .c-logo
+    max-width: 200px
+    margin: 0 1rem
+  .logo-text
+    justify-content: center
+    align-self: center
+    margin: 0 1rem
+
+.add-image-block
+  padding-top: 20px
+  padding-bottom: 20px
+  .preview
+    height: 150px
+    width: 150px

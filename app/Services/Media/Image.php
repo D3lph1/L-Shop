@@ -9,22 +9,6 @@ class Image
     {
     }
 
-    public static function itemImagePath(?string $image): string
-    {
-        $default = asset('img/shop/items/default.png');
-        if (empty($image)) {
-            return $default;
-        }
-
-        $path = public_path("img/shop/items/{$image}");
-
-        if (file_exists($path) && is_file($path)) {
-            return asset("img/shop/items/{$image}");
-        }
-
-        return $default;
-    }
-
     public static function skinPath(string $username): ?string
     {
         $path = public_path("img/shop/users/skins/{$username}.png");

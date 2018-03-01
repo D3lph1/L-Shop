@@ -41,6 +41,11 @@ class Item
     private $image;
 
     /**
+     * @ORM\Column(name="game_id", type="string", length=255, nullable=false)
+     */
+    private $gameId;
+
+    /**
      * @ORM\Column(name="extra", type="text", nullable=true)
      */
     private $extra;
@@ -50,10 +55,11 @@ class Item
      */
     private $products;
 
-    public function __construct(string $name, string $type)
+    public function __construct(string $name, string $type, string $gameId)
     {
         $this->setName($name);
         $this->setType($type);
+        $this->setGameId($gameId);
         $this->products = new ArrayCollection();
     }
 
@@ -79,7 +85,7 @@ class Item
         return $this->description;
     }
 
-    public function setDescription(string $description): Item
+    public function setDescription(?string $description): Item
     {
         $this->description = $description;
 
@@ -103,9 +109,21 @@ class Item
         return $this->image;
     }
 
-    public function setImage(string $image): Item
+    public function setImage(?string $image): Item
     {
         $this->image = $image;
+
+        return $this;
+    }
+
+    public function getGameId(): string
+    {
+        return $this->gameId;
+    }
+
+    public function setGameId(string $gameId): Item
+    {
+        $this->gameId = $gameId;
 
         return $this;
     }
@@ -115,7 +133,7 @@ class Item
         return $this->extra;
     }
 
-    public function setExtra(string $extra): Item
+    public function setExtra(?string $extra): Item
     {
         $this->extra = $extra;
 

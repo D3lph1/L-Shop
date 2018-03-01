@@ -29,7 +29,7 @@ class News implements \JsonSerializable
             'user' => [
                 'username' => $this->news->getUser()->getUsername()
             ],
-            'created_at' => app(JavaScriptFormatter::class)->format($this->news->getCreatedAt())
+            'created_at' => (new JavaScriptFormatter())->format($this->news->getCreatedAt())
         ];
     }
 }

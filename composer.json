@@ -1,7 +1,20 @@
 {
     "name": "d3lph1/l-shop",
     "description": "Modern trading system for Minecraft.",
-    "keywords": ["shop", "minecraft", "l-shop", "laravel"],
+    "keywords": ["shop", "e-shop", "trading", "bukkit", "minecraft", "l-shop", "laravel"],
+    "authors": [
+        {
+            "name": "Chertkov Bogdan",
+            "email": "d3lph1.contact@gmail.com",
+            "homepage": "https://github.com/D3lph1",
+            "role": "Backend/Frontend developing"
+        },
+        {
+            "name": "Vlasov Michael",
+            "homepage": "https://github.com/Whiled0S",
+            "role": "Design, layout"
+        }
+    ],
     "license": "MIT",
     "type": "project",
     "require": {
@@ -10,7 +23,7 @@
         "intervention/image": "^2.4",
         "laravel-doctrine/migrations": "1.1.7",
         "laravel-doctrine/orm": "1.4.2",
-        "laravel/framework": "5.5.29",
+        "laravel/framework": "5.5.36",
         "laravel/tinker": "1.0.3"
     },
     "require-dev": {

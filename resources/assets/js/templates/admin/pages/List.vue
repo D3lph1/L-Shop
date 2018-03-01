@@ -48,7 +48,12 @@
                 totalItems: 0,
                 items: [],
                 loading: false,
-                pagination: {},
+                pagination: {
+                    page: this.$route.query.page ? this.$route.query.page : 1,
+                    rowsPerPage: this.$route.query.per_page ? parseInt(this.$route.query.per_page) : 25,
+                    sortBy: this.$route.query.order_by ? this.$route.query.order_by : 'id',
+                    descending: this.$route.query.descending === 'true',
+                },
                 headers: [
                     {
                         text: $t('content.admin.pages.list.table.headers.id'),

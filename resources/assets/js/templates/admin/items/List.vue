@@ -2,6 +2,7 @@
     <v-card>
         <v-card-title>
             {{ $t('content.admin.items.list.title') }}
+            <v-btn flat color="primary" small icon :to="{name: 'admin.items.add'}"><v-icon>add</v-icon></v-btn>
             <v-spacer></v-spacer>
             <v-text-field
                     append-icon="search"
@@ -33,8 +34,11 @@
                 <td class="text-xs-center">{{ props.item.name }}</td>
                 <td class="text-xs-center">{{ props.item.type }}</td>
                 <td class="justify-center layout px-0">
-                    <v-btn icon class="mx-0">
+                    <v-btn icon class="mx-0" :to="{name: 'admin.items.edit', params: {item: props.item.id}}">
                         <v-icon color="secondary">edit</v-icon>
+                    </v-btn>
+                    <v-btn icon class="mx-0" @click="deleteItem(props.item)">
+                        <v-icon color="pink">delete</v-icon>
                     </v-btn>
                 </td>
             </template>
@@ -50,7 +54,12 @@
                 totalItems: 0,
                 items: [],
                 loading: false,
-                pagination: {},
+                pagination: {
+                    page: this.$route.query.page ? this.$route.query.page : 1,
+                    rowsPerPage: this.$route.query.per_page ? parseInt(this.$route.query.per_page) : 25,
+                    sortBy: this.$route.query.order_by ? this.$route.query.order_by : 'id',
+                    descending: this.$route.query.descending === 'true',
+                },
                 headers: [
                     {
                         text: $t('content.admin.items.list.table.headers.id'),
@@ -120,9 +129,26 @@
                     descending: this.$route.query.descending,
                     search: this.search
                 })
-                    .then((response) => {
+                    .then(response => {
                         this.setTable(response.data)
                     });
+            },
+            deleteItem(item) {
+                if (confirm($t('content.admin.items.list.delete', {name: item.name}))) {
+                    this.$axios.post('/api/admin/items', {
+                        _method: 'DELETE',
+                        item: item.id
+                    })
+                        .then(response => {
+                            if (response.data.status === 'success') {
+                                this.items.forEach((each, index) => {
+                                    if (each.id === item.id) {
+                                        this.items.splice(index, 1);
+                                    }
+                                });
+                            }
+                        });
+                }
             },
             setTable(data) {
                 this.totalItems = data.paginator.total;

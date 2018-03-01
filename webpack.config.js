@@ -4,13 +4,13 @@ const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 module.exports = {
     entry: {
-        //preloader: './resources/assets/js/preloader.js',
         app: './resources/assets/js/app.js'
     },
     output: {
         path: path.resolve(__dirname, './public'),
-        publicPath: '/public',
-        filename: 'js/[name].min.js'
+        publicPath: '/',
+        filename: 'js/[name].min.js',
+        chunkFilename: 'js/bundles/[name].min.js'
     },
     module: {
         rules: [

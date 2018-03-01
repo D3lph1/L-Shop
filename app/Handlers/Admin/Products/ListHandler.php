@@ -3,13 +3,21 @@ declare(strict_types = 1);
 
 namespace App\Handlers\Admin\Products;
 
-use App\DataTransferObjects\Admin\Products\ListResult;
+use App\DataTransferObjects\Admin\Products\EditList\Result;
 use App\Exceptions\InvalidArgumentException;
 use App\Repository\Product\ProductRepository;
 
 class ListHandler
 {
-    private $availableOrders = ['product.id', 'product.price', 'product.stack', 'item.name', 'item.type'];
+    private $availableOrders = [
+        'product.id',
+        'product.price',
+        'product.stack',
+        'item.name',
+        'item.type',
+        'server.name',
+        'category.name'
+    ];
 
     /**
      * @var ProductRepository
@@ -21,7 +29,7 @@ class ListHandler
         $this->repository = $repository;
     }
 
-    public function handle(?string $orderBy, bool $descending, ?string $search, int $perPage): ListResult
+    public function handle(?string $orderBy, bool $descending, ?string $search, int $perPage): Result
     {
         if (!empty($orderBy) && !in_array($orderBy, $this->availableOrders)) {
             throw new InvalidArgumentException('Argument $orderBy has illegal value');
@@ -50,6 +58,6 @@ class ListHandler
             }
         }
 
-        return new ListResult($paginator);
+        return new Result($paginator);
     }
 }

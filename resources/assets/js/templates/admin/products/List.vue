@@ -2,6 +2,7 @@
     <v-card>
         <v-card-title>
             {{ $t('content.admin.products.list.title') }}
+            <v-btn flat color="primary" small icon :to="{name: 'admin.products.add'}"><v-icon>add</v-icon></v-btn>
             <v-spacer></v-spacer>
             <v-text-field
                     append-icon="search"
@@ -34,6 +35,8 @@
                 <td class="text-xs-center">{{ props.item.item.type }}</td>
                 <td class="text-xs-center">{{ props.item.price }}</td>
                 <td class="text-xs-center">{{ props.item.stack }}</td>
+                <td class="text-xs-center">{{ props.item.server.name }}</td>
+                <td class="text-xs-center">{{ props.item.category.name }}</td>
                 <td class="justify-center layout px-0">
                     <v-btn icon class="mx-0">
                         <v-icon color="secondary">edit</v-icon>
@@ -52,7 +55,12 @@
                 totalItems: 0,
                 items: [],
                 loading: false,
-                pagination: {},
+                pagination: {
+                    page: this.$route.query.page ? this.$route.query.page : 1,
+                    rowsPerPage: this.$route.query.per_page ? parseInt(this.$route.query.per_page) : 25,
+                    sortBy: this.$route.query.order_by ? this.$route.query.order_by : 'product.id',
+                    descending: this.$route.query.descending === 'true',
+                },
                 headers: [
                     {
                         text: $t('content.admin.products.list.table.headers.id'),
@@ -90,6 +98,18 @@
                         value: 'product.stack'
                     },
                     {
+                        text: $t('common.server'),
+                        align: 'center',
+                        sortable: true,
+                        value: 'server.name'
+                    },
+                    {
+                        text: $t('common.category'),
+                        align: 'center',
+                        sortable: true,
+                        value: 'category.name'
+                    },
+                    {
                         text: $t('common.actions'),
                         align: 'center',
                         sortable: false
@@ -113,6 +133,7 @@
                     if (this.pagination.descending !== null) {
                         query.descending = this.pagination.descending;
                     }
+
 
                     this.$router.replace({name: 'admin.products.list', query: query}, () => {
                         this.retrieveFromApi();

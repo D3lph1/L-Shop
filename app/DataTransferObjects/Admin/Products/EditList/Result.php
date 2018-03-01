@@ -1,11 +1,11 @@
 <?php
 declare(strict_types = 1);
 
-namespace App\DataTransferObjects\Admin\Products;
+namespace App\DataTransferObjects\Admin\Products\EditList;
 
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-class ListResult
+class Result
 {
     /**
      * @var LengthAwarePaginator

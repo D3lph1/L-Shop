@@ -53,9 +53,16 @@ $router->delete('/cart', 'Frontend\Shop\CartController@remove');
 
 // Admin
 $router->get('/admin/control/basic', 'Admin\Control\BasicController@render');
+$router->get('/admin/products/add', 'Admin\Products\AddController@render');
 $router->post('/admin/products/list', 'Admin\Products\ListController@pagination');
+$router->get('/admin/items/add', 'Admin\Items\AddController@render');
+$router->post('/admin/items/add', 'Admin\Items\AddController@add');
+$router->get('/admin/items/edit/{item}', 'Admin\Items\EditController@render');
+$router->post('/admin/items/edit/{item}', 'Admin\Items\EditController@edit');
+$router->delete('/admin/items', 'Admin\Items\ListController@delete');
 $router->post('/admin/items/list', 'Admin\Items\ListController@pagination');
 $router->post('/admin/users/list', 'Admin\Users\ListController@pagination');
 $router->post('/admin/news/list', 'Admin\News\ListController@pagination');
 $router->post('/admin/pages/list', 'Admin\Pages\ListController@pagination');
+$router->get('/admin/statistic/show', 'App\Handlers\Admin\Statistic\ShowController@render');
 $router->get('/admin/information/about', 'Admin\Information\AboutController@render');

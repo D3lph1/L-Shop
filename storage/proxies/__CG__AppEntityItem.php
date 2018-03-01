@@ -64,10 +64,10 @@ class Item extends \App\Entity\Item implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'name', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'type', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'image', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'extra', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'products'];
+            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'name', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'type', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'image', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'gameId', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'extra', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'products'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'name', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'type', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'image', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'extra', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'products'];
+        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'name', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'type', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'image', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'gameId', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'extra', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'products'];
     }
 
     /**
@@ -224,7 +224,7 @@ class Item extends \App\Entity\Item implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
-    public function setDescription(string $description): \App\Entity\Item
+    public function setDescription(?string $description): \App\Entity\Item
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setDescription', [$description]);
@@ -268,12 +268,34 @@ class Item extends \App\Entity\Item implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
-    public function setImage(string $image): \App\Entity\Item
+    public function setImage(?string $image): \App\Entity\Item
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setImage', [$image]);
 
         return parent::setImage($image);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getGameId(): string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getGameId', []);
+
+        return parent::getGameId();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function setGameId(string $gameId): \App\Entity\Item
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'setGameId', [$gameId]);
+
+        return parent::setGameId($gameId);
     }
 
     /**

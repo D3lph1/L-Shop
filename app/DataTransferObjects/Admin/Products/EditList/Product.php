@@ -1,10 +1,10 @@
 <?php
 declare(strict_types = 1);
 
-namespace App\DataTransferObjects\Admin\Products;
+namespace App\DataTransferObjects\Admin\Products\EditList;
 
 use App\Entity\Product as Entity;
-use App\Services\Media\Image;
+use App\Services\Item\Image\Image;
 use App\Services\Product\Stack;
 
 class Product implements \JsonSerializable
@@ -28,9 +28,15 @@ class Product implements \JsonSerializable
             'id' => $this->product->getId(),
             'price' => $this->product->getPrice(),
             'stack' => Stack::formatUnits($this->product),
+            'server' => [
+                'name' => $this->product->getCategory()->getServer()->getName()
+            ],
+            'category' => [
+                'name' => $this->product->getCategory()->getName()
+            ],
             'item' => [
                 'name' => $this->product->getItem()->getName(),
-                'image' => Image::itemImagePath($this->product->getItem()->getImage()),
+                'image' => Image::assetPathOrDefault($this->product->getItem()->getImage()),
                 'type' => __("common.item.type.{$this->product->getItem()->getType()}")
             ]
         ];
