@@ -93,7 +93,7 @@ class EditHandler
 
     private function moveAndGetName(UploadedFile $file): string
     {
-        $hash = $this->imageHasher->make(sys_get_temp_dir() . DIRECTORY_SEPARATOR . $file->getFilename());
+        $hash = $this->imageHasher->make($file->path());
         $filename = "{$hash}.{$file->getClientOriginalExtension()}";
         $file->move(Image::absolutePath(), $filename);
 

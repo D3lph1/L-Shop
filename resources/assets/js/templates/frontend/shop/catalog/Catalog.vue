@@ -28,9 +28,12 @@
                                 :image="product.item.image"
                                 :price="product.price"
                                 :stack="product.stack"
+                                :item-id="product.item.id"
                                 :in-cart="product.inCart"
                                 :is-item="product.item.isItem"
                                 :is-permgroup="product.item.isPermgroup"
+                                :products-crud-access="productsCrudAccess"
+                                :items-crud-access="itemsCrudAccess"
                                 @purchase-dialog-opening="openPurchaseDialog"
                                 @about-dialog-opening="openAboutDialog"
                                 v-if="!loading"
@@ -134,7 +137,10 @@
                 about: {
                     dialog: false,
                     product: null
-                }
+                },
+
+                productsCrudAccess: false,
+                itemsCrudAccess: false,
             }
         },
         beforeRouteEnter(to, from, next) {
@@ -170,6 +176,8 @@
                 this.shopName = data.shopName;
                 this.logo = data.logo;
                 this.server = data.server;
+                this.productsCrudAccess = data.productsCrudAccess;
+                this.itemsCrudAccess = data.itemsCrudAccess;
 
                 this.$store.commit('setServer', data.currentServer);
 

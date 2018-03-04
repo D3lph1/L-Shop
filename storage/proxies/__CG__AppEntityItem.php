@@ -312,7 +312,7 @@ class Item extends \App\Entity\Item implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
-    public function setExtra(string $extra): \App\Entity\Item
+    public function setExtra(?string $extra): \App\Entity\Item
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setExtra', [$extra]);

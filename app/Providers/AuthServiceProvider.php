@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Providers;
 
+use App\Services\Auth\Auth;
 use App\Services\Auth\Checkpoint\ActivationCheckpoint;
 use App\Services\Auth\Checkpoint\Pool;
 use App\Services\Auth\Generators\DefaultCodeGenerator;
@@ -28,5 +29,6 @@ class AuthServiceProvider extends ServiceProvider
                 $this->app->make(ActivationCheckpoint::class)
             ]);
         });
+        $this->app->singleton(Auth::class);
     }
 }

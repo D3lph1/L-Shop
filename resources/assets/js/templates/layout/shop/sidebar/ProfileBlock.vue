@@ -2,7 +2,7 @@
     <v-list class="pt-0" dense>
         <v-subheader inset>{{ $t('content.layout.shop.sidebar.profile.title') }}</v-subheader>
         <div v-for="item in items" v-if="(typeof item.visible === 'undefined') || item.visible">
-            <v-list-tile v-if="typeof item.subItems === 'undefined' || item.subItems.length === 0" @click="">
+            <v-list-tile v-if="typeof item.subItems === 'undefined' || item.subItems.length === 0" :to="item.to">
                 <v-list-tile-action>
                     <v-icon>{{ item.icon }}</v-icon>
                 </v-list-tile-action>
@@ -46,6 +46,7 @@
                     {
                         icon: 'accessibility',
                         title: $t('content.layout.shop.sidebar.profile.character'),
+                        to: {name: 'frontend.profile.character'},
                         visible: this.character
                     },
                     {

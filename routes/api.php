@@ -50,15 +50,24 @@ $router->get('/cart/{server}', 'Frontend\Shop\CartController@render');
 $router->put('/cart', 'Frontend\Shop\CartController@put');
 $router->delete('/cart', 'Frontend\Shop\CartController@remove');
 
+//Profile
+$router->get('/profile/character', 'Frontend\Profile\CharacterController@render');
+
 
 // Admin
 $router->get('/admin/control/basic', 'Admin\Control\BasicController@render');
 $router->get('/admin/products/add', 'Admin\Products\AddController@render');
+$router->post('/admin/products/add', 'Admin\Products\AddController@add');
+$router->get('/admin/products/edit/{product}', 'Admin\Products\EditController@render');
+$router->post('/admin/products/edit/{product}', 'Admin\Products\EditController@edit');
 $router->post('/admin/products/list', 'Admin\Products\ListController@pagination');
+$router->delete('/admin/products', 'Admin\Products\ListController@delete');
 $router->get('/admin/items/add', 'Admin\Items\AddController@render');
-$router->post('/admin/items/add', 'Admin\Items\AddController@add');
+$router->post('/admin/items/add', 'Admin\Items\AddController@add')
+    ->name('admin.items.add');
 $router->get('/admin/items/edit/{item}', 'Admin\Items\EditController@render');
-$router->post('/admin/items/edit/{item}', 'Admin\Items\EditController@edit');
+$router->post('/admin/items/edit/{item}', 'Admin\Items\EditController@edit')
+    ->name('admin.items.edit');
 $router->delete('/admin/items', 'Admin\Items\ListController@delete');
 $router->post('/admin/items/list', 'Admin\Items\ListController@pagination');
 $router->post('/admin/users/list', 'Admin\Users\ListController@pagination');
@@ -66,3 +75,13 @@ $router->post('/admin/news/list', 'Admin\News\ListController@pagination');
 $router->post('/admin/pages/list', 'Admin\Pages\ListController@pagination');
 $router->get('/admin/statistic/show', 'App\Handlers\Admin\Statistic\ShowController@render');
 $router->get('/admin/information/about', 'Admin\Information\AboutController@render');
+
+
+$router->any('/skin/front/{username}', 'Frontend\User\SkinController@front')
+    ->name('api.skin.front');
+$router->any('/skin/back/{username}', 'Frontend\User\SkinController@back')
+    ->name('api.skin.back');
+$router->any('/cloak/front/{username}', 'Frontend\User\CloakController@front')
+    ->name('api.cloak.front');
+$router->any('/cloak/back/{username}', 'Frontend\User\CloakController@back')
+    ->name('api.cloak.back');

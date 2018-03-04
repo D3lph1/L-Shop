@@ -19,7 +19,7 @@ class AddController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(permission_middleware(Permissions::ADMIN_ITEMS_CRUD_ACCESS));
+        //$this->middleware(permission_middleware(Permissions::ADMIN_ITEMS_CRUD_ACCESS));
     }
 
     public function render(RenderHandler $handler)

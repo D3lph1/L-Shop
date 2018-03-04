@@ -34,6 +34,11 @@ class Product
     private $sortPriority = 0;
 
     /**
+     * @ORM\Column(name="hidden", type="boolean", nullable=false, unique=false)
+     */
+    private $hidden = false;
+
+    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Item", inversedBy="products", cascade={"persist"})
      */
     private $item;
@@ -112,6 +117,18 @@ class Product
     public function setSortPriority(float $sortPriority): Product
     {
         $this->sortPriority = $sortPriority;
+
+        return $this;
+    }
+
+    public function isHidden(): bool
+    {
+        return $this->hidden;
+    }
+
+    public function setHidden(bool $val): Product
+    {
+        $this->hidden = $val;
 
         return $this;
     }

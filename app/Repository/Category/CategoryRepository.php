@@ -11,6 +11,8 @@ interface CategoryRepository
 
     public function deleteAll(): bool;
 
+    public function find(int $id): ?Category;
+
     /**
      * @return Category[]
      */

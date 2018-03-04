@@ -1,5 +1,5 @@
 <?php
-declare(strict_typesr = 1);
+declare(strict_types = 1);
 
 namespace App\Services\Item\Image\Hashing;
 

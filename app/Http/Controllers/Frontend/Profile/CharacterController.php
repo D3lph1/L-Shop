@@ -25,12 +25,20 @@ use Symfony\Component\HttpFoundation\File\Exception\FileException;
 
 class CharacterController extends Controller
 {
-    public function render(Auth $auth, Settings $settings, VisitHandler $handler): View
+    public function render(Auth $auth, Settings $settings, VisitHandler $handler): JsonResponse
     {
         $dto = $handler->handle();
+        $username = $auth->getUser()->getUsername();
 
-        return view('frontend.profile.character', [
-            'username' => $auth->getUser()->getUsername(),
+        return new JsonResponse(Status::SUCCESS, [
+            'skin' => [
+                'front' => route('api.skin.front', ['username' => $username]),
+                'back' => route('api.skin.back', ['username' => $username]),
+            ],
+            'cloak' => [
+                'front' => route('api.cloak.front', ['username' => $username]),
+                'back' => route('api.cloak.back', ['username' => $username]),
+            ],
             'skinEnabled' => $settings->get('system.profile.character.skin.enabled')->getValue(),
             'maxSkinFileSize' => $settings->get('system.profile.character.skin.max_file_size')->getValue(),
 

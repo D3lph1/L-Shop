@@ -25,6 +25,7 @@ class Item implements \JsonSerializable
     public function jsonSerialize(): array
     {
         return [
+            'id' => $this->item->getId(),
             'name' => $this->item->getName(),
             'description' => $this->item->getDescription(),
             'isItem' => $this->item->getType() === Type::ITEM,

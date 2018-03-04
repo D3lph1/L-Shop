@@ -7,9 +7,11 @@ const Servers = () => import(/* webpackChunkName: "shop" */ './../templates/fron
 const Shop = () => import(/* webpackChunkName: "shop" */ '../templates/layout/shop/Shop.vue');
 const Catalog = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/shop/catalog/Catalog.vue');
 const Cart = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/shop/cart/Cart.vue');
+const Character = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/profile/Character.vue');
 
 const BasicSettings = () => import(/* webpackChunkName: "admin" */ '../templates/admin/control/BasicSettings.vue');
 const ProductsAdd = () => import(/* webpackChunkName: "admin" */ '../templates/admin/products/Add.vue');
+const ProductsEdit = () => import(/* webpackChunkName: "admin" */ '../templates/admin/products/Edit.vue');
 const ProductsList = () => import(/* webpackChunkName: "admin" */ '../templates/admin/products/List.vue');
 const ItemsAdd = () => import(/* webpackChunkName: "admin" */ '../templates/admin/items/Add.vue');
 const ItemsEdit = () => import(/* webpackChunkName: "admin" */ '../templates/admin/items/Edit.vue');
@@ -113,6 +115,22 @@ export default [
         ]
     },
     {
+        path: '/profile',
+        component: Shop,
+        children: [
+            {
+                path: 'character',
+                name: 'frontend.profile.character',
+                components: {
+                    content: Character
+                },
+                meta: {
+                    title: $t('content.frontend.profile.character.title')
+                }
+            }
+        ]
+    },
+    {
         path: '/admin',
         component: Shop,
         children: [
@@ -134,6 +152,16 @@ export default [
                 },
                 meta: {
                     title: $t('content.admin.products.add.title')
+                }
+            },
+            {
+                path: 'products/edit/:product',
+                name: 'admin.products.edit',
+                components: {
+                    content: ProductsEdit
+                },
+                meta: {
+                    title: $t('content.admin.products.edit.title')
                 }
             },
             {

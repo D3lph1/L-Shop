@@ -36,6 +36,18 @@ class DoctrineProductRepository implements ProductRepository
         $this->em->flush();
     }
 
+    public function update(Product $product): void
+    {
+        $this->em->merge($product);
+        $this->em->flush();
+    }
+
+    public function remove(Product $product): void
+    {
+        $this->em->remove($product);
+        $this->em->flush();
+    }
+
     public function deleteAll(): bool
     {
         return (bool)$this->er->createQueryBuilder('p')
@@ -56,6 +68,7 @@ class DoctrineProductRepository implements ProductRepository
             $this->createQueryBuilder('product')
                 ->join('product.item', 'item')
                 ->where('product.category = :category')
+                ->andWhere('product.hidden = false')
                 ->orderBy($orderBy, $descending ? 'DESC' : 'ASC')
                 ->setParameter('category', $category)
                 ->getQuery(),

@@ -9,8 +9,14 @@
                             <v-icon>more_vert</v-icon>
                         </v-btn>
                         <v-list>
-                            <v-list-tile v-for="(item, index) in menu" :key="index" @click="item.onClick">
-                                <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                            <v-list-tile @click="this.openAboutDialog">
+                                <v-list-tile-title>{{ $t('content.frontend.shop.catalog.item.about') }}</v-list-tile-title>
+                            </v-list-tile>
+                            <v-list-tile v-if="productsCrudAccess" :to="{name: 'admin.products.edit', params: {product: id}}">
+                                <v-list-tile-title>{{ $t('content.frontend.shop.catalog.item.go_to_product') }}</v-list-tile-title>
+                            </v-list-tile>
+                            <v-list-tile v-if="itemsCrudAccess" :to="{name: 'admin.items.edit', params: {item: itemId}}">
+                                <v-list-tile-title>{{ $t('content.frontend.shop.catalog.item.go_to_item') }}</v-list-tile-title>
                             </v-list-tile>
                         </v-list>
                     </v-menu>
@@ -67,6 +73,10 @@
                 required: true,
                 type: Number
             },
+            itemId: {
+                required: true,
+                type: Number
+            },
             inCart: {
                 required: true,
                 type: Boolean
@@ -78,18 +88,20 @@
             isPermgroup: {
                 required: true,
                 type: Boolean
+            },
+            productsCrudAccess: {
+                required: true,
+                type: Boolean
+            },
+            itemsCrudAccess: {
+                required: true,
+                type: Boolean
             }
         },
         data() {
             return {
                 loading: false,
-                alreadyInCart: this.inCart,
-                menu: [
-                    {
-                        title: $t('content.frontend.shop.catalog.item.about'),
-                        onClick: this.openAboutDialog
-                    }
-                ]
+                alreadyInCart: this.inCart
             }
         },
         watch: {

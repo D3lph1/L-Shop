@@ -11,6 +11,10 @@ interface ProductRepository
 {
     public function create(Product $product): void;
 
+    public function update(Product $product): void;
+
+    public function remove(Product $product): void;
+
     public function deleteAll(): bool;
 
     public function find(int $id): ?Product;

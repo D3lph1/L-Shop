@@ -38,8 +38,11 @@
                 <td class="text-xs-center">{{ props.item.server.name }}</td>
                 <td class="text-xs-center">{{ props.item.category.name }}</td>
                 <td class="justify-center layout px-0">
-                    <v-btn icon class="mx-0">
+                    <v-btn icon class="mx-0" :to="{name: 'admin.products.edit', params: {product: props.item.id}}">
                         <v-icon color="secondary">edit</v-icon>
+                    </v-btn>
+                    <v-btn icon class="mx-0" @click="deleteProduct(props.item)">
+                        <v-icon color="pink">delete</v-icon>
                     </v-btn>
                 </td>
             </template>
@@ -158,6 +161,23 @@
                     .then((response) => {
                         this.setTable(response.data)
                     });
+            },
+            deleteProduct(product) {
+                if (confirm($t('content.admin.products.list.delete'))) {
+                    this.$axios.post('/api/admin/products', {
+                        _method: 'DELETE',
+                        product: product.id
+                    })
+                        .then(response => {
+                            if (response.data.status === 'success') {
+                                this.items.forEach((each, index) => {
+                                    if (each.id === product.id) {
+                                        this.items.splice(index, 1);
+                                    }
+                                });
+                            }
+                        })
+                }
             },
             setTable(data) {
                 this.totalItems = data.paginator.total;

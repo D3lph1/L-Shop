@@ -1,27 +1,28 @@
 <?php
+declare(strict_types = 1);
 
 namespace Tests;
 
+use App\Services\Auth\Auth;
 use Doctrine\ORM\EntityManagerInterface;
-use Illuminate\Contracts\Console\Kernel;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    protected function transaction()
+    protected function transaction(): void
     {
         $this->app->make(EntityManagerInterface::class)->beginTransaction();
     }
 
-    protected function rollback()
+    protected function rollback(): void
     {
         $this->app->make(EntityManagerInterface::class)->rollback();
     }
 
-    protected function reMigrate()
+    protected function authAdmin(): void
     {
-        $this->app->make(Kernel::class)->call('doctrine:migrations:refresh');
+        app(Auth::class)->authenticate('admin', 'admin');
     }
 }

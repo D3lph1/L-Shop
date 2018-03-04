@@ -8,6 +8,8 @@ use App\Exceptions\Category\DoesNotExistException as CategoryDoesNotExistExcepti
 use App\Exceptions\Server\DoesNotExistException as ServerDoesNotExistException;
 use App\Handlers\Frontend\Shop\Catalog\VisitHandler;
 use App\Http\Controllers\Controller;
+use App\Services\Auth\Auth;
+use App\Services\Auth\Permissions;
 use App\Services\Cart\Cart;
 use App\Services\Infrastructure\Response\JsonResponse;
 use App\Services\Infrastructure\Response\Status;
@@ -25,6 +27,7 @@ class CatalogController extends Controller
         Settings $settings,
         Cart $cart,
         Captcha $captcha,
+        Auth $auth,
         Persistence $persistence)
     {
         try {
@@ -40,6 +43,9 @@ class CatalogController extends Controller
             $server = new Server($server);
         }
 
+        $productsCrudAccess = $auth->check() ? $auth->getUser()->hasPermission(Permissions::ADMIN_PRODUCTS_CRUD_ACCESS) : false;
+        $itemsCrudAccess = $auth->check() ? $auth->getUser()->hasPermission(Permissions::ADMIN_ITEMS_CRUD_ACCESS) : false;
+
         return new JsonResponse(Status::SUCCESS, [
             'shopName' => $settings->get('shop.name')->getValue(),
             'currency' => $settings->get('shop.currency.html')->getValue(),
@@ -50,7 +56,9 @@ class CatalogController extends Controller
             'products' => $dto->getProducts(),
             'cart' => $cart,
             'captcha' => $captcha->view(),
-            'currentServer' => $server
+            'currentServer' => $server,
+            'productsCrudAccess' => $productsCrudAccess,
+            'itemsCrudAccess' => $itemsCrudAccess
         ]);
     }
 }

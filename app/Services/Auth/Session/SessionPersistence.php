@@ -75,7 +75,7 @@ class SessionPersistence
         if (empty($code)) {
             return $this->createEmpty();
         }
-
+        
         $persistence = $this->persistenceRepository->findByCode($code);
         if ($persistence === null) {
             return $this->createEmpty();

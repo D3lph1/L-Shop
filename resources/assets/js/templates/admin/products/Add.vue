@@ -49,8 +49,9 @@
                     >
                     </v-select>
                     <v-text-field
+                            type="number"
+                            class="mt-4 no-spinners"
                             v-show="isItem && category && this.server.categories.length !== 0"
-                            class="mt-4 mb-4"
                             :label="$t('content.admin.products.add.item_stack')"
                             v-model="amount"
                             prepend-icon="plus_one"
@@ -63,26 +64,36 @@
                             v-model="forever"
                     ></v-switch>
                     <v-text-field
+                            type="number"
+                            class="no-spinners"
                             v-show="isPermgroup && category && this.server.categories.length !== 0"
-                            class="mb-4"
                             :label="$t('content.admin.products.add.permgroup_stack')"
                             :disabled="forever"
                             v-model="amount"
                             prepend-icon="timelapse"
                     ></v-text-field>
                     <v-text-field
+                            type="number"
+                            class="no-spinners"
                             :label="$t('content.admin.products.add.price')"
                             v-model="price"
                             prepend-icon="attach_money"
                     ></v-text-field>
                     <v-text-field
+                            type="number"
+                            class="no-spinners"
                             :label="$t('content.admin.products.add.sort_priority')"
                             v-model="sortPriority"
                             prepend-icon="sort"
                     ></v-text-field>
+                    <v-switch
+                            color="secondary"
+                            :label="$t('content.admin.products.add.hide')"
+                            v-model="hidden"
+                    ></v-switch>
                 </v-card-text>
                 <v-card-actions>
-                    <v-btn flat color="orange" :disabled="finishDisabled">{{ $t('content.admin.products.add.finish') }}</v-btn>
+                    <v-btn flat color="orange" :disabled="finishDisabled" @click="perform">{{ $t('content.admin.products.add.finish') }}</v-btn>
                 </v-card-actions>
             </v-card>
         </v-flex>
@@ -107,7 +118,8 @@
                 forever: false,
                 amount: 0,
                 price: 0,
-                sortPriority: 0
+                sortPriority: 0,
+                hidden: false
             }
         },
         beforeRouteEnter (to, from, next) {
@@ -134,8 +146,8 @@
                 return this.item === null || this.item === '' ||
                     this.server === null || this.server === '' ||
                     this.category === null || this.category === '' ||
-                    (!this.forever && (this.amount === 0 || this.amount === '0')) ||
-                    this.price === 0 || this.price === '0';
+                    (!this.forever && Number(this.amount) <= 0) ||
+                    Number(this.price) <= 0;
             }
         },
         methods: {
@@ -145,6 +157,22 @@
                 }
 
                 return true;
+            },
+            perform() {
+                this.$axios.post('/api/admin/products/add', {
+                    item: this.item.id,
+                    category: this.category.id,
+                    stack: this.amount,
+                    forever: this.forever,
+                    price: this.price,
+                    sort_priority: this.sortPriority,
+                    hidden: this.hidden
+                })
+                    .then(response => {
+                        if (response.data.status) {
+                            this.$router.push({name: 'admin.products.list'});
+                        }
+                    });
             },
             setData(response) {
                 const data = response.data;

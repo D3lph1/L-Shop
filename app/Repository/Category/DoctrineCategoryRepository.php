@@ -39,6 +39,12 @@ class DoctrineCategoryRepository implements CategoryRepository
             ->getResult();
     }
 
+    public function find(int $id): ?Category
+    {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        return $this->er->find($id);
+    }
+
     /**
      * {@inheritdoc}
      */
