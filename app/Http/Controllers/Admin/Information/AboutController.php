@@ -20,8 +20,18 @@ class AboutController extends Controller
     public function render(): JsonResponse
     {
         return new JsonResponse(Status::SUCCESS, [
-            'logo' => asset('img/layout/logo/small.png'),
-            'version' => System::version()->formatted()
+            'version' => System::version()->formatted(),
+            'images' => [
+                'logo' => asset('img/layout/logo/small.png'),
+                'laravel' => asset('img/layout/admin/logo/laravel.png'),
+                'vue' => asset('img/layout/admin/logo/vue.png'),
+                'doctrine' => asset('img/layout/admin/logo/doctrine.png'),
+                'vuetify' => asset('img/layout/admin/logo/vuetify.png')
+            ],
+            'developers' => [
+                'd3lph1' => asset('img/layout/admin/developers/D3lph1.png'),
+                'whileD0S' => asset('img/layout/admin/developers/WhileD0S.png')
+            ]
         ]);
     }
 }

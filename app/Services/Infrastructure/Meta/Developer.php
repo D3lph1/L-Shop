@@ -58,7 +58,7 @@ class Developer implements Arrayable, \JsonSerializable
 
     public function getDescription(): ?string
     {
-        return $this->descripion;
+        return $this->description;
     }
 
     public function getContacts(): array

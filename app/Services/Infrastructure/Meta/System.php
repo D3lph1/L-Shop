@@ -49,7 +49,7 @@ final class System
             new Developer(
                 'D3lph1',
                 __('content.admin.information.about.developers.D3lph1.name'),
-                __('content.admin.information.about.developers.D3lph1.description'),
+                __('content.admin.information.about.developers.D3lph1.description.plain'),
                 [
                     'vk' => 'https://vk.com/d3lph1',
                     'rubukkit' => 'http://rubukkit.org/members/d3lph1.94641/',
@@ -60,7 +60,7 @@ final class System
             new Developer(
                 'WhileD0S',
                 __('content.admin.information.about.developers.WhileD0S.name'),
-                __('content.admin.information.about.developers.WhileD0S.description'),
+                __('content.admin.information.about.developers.WhileD0S.description.plain'),
                 [
                     'vk' => 'https://vk.com/whiled0s'
                 ],
