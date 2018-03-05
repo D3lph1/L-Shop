@@ -8,6 +8,7 @@ use App\Exceptions\Media\Character\InvalidRatioException;
 use App\Exceptions\Media\Character\InvalidResolutionException;
 use App\Services\Auth\Auth;
 use App\Services\Media\Character\Skin\Accessor;
+use App\Services\Media\Character\Skin\Image as SkinImage;
 use App\Services\Media\Character\Skin\Resolution;
 use App\Services\Media\Image as ImageUtil;
 use App\Services\Validation\SkinValidator;
@@ -107,6 +108,6 @@ class UploadSkinHandler
      */
     private function move(Image $image)
     {
-        $image->save(ImageUtil::getSkinsPathWithName($this->auth->getUser()->getUsername()));
+        $image->save(SkinImage::getAbsolutePath($this->auth->getUser()->getUsername()));
     }
 }

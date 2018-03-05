@@ -55,13 +55,13 @@
                     <v-progress-circular indeterminate color="primary" v-if="loading"></v-progress-circular>
                 </div>
 
-                <v-alert v-if="products.length === 0" type="info" :value="true">
-                    <div class="text-xs-center">Категория пуста</div>
+                <v-alert v-if="products.length === 0" type="info" outline :value="true">
+                    <div class="text-xs-center">{{ $t('content.frontend.shop.catalog.empty_category') }}</div>
                 </v-alert>
             </v-tabs-items>
         </div>
-        <v-alert v-else type="info" :value="true">
-            <div class="text-xs-center">Категории отсутствуют</div>
+        <v-alert v-else type="info" outline :value="true">
+            <div class="text-xs-center">{{ $t('content.frontend.shop.catalog.categories_does_not_exists') }}</div>
         </v-alert>
 
         <purchase-dialog

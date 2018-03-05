@@ -52,6 +52,10 @@ $router->delete('/cart', 'Frontend\Shop\CartController@remove');
 
 //Profile
 $router->get('/profile/character', 'Frontend\Profile\CharacterController@render');
+$router->post('/profile/character/skin/upload', 'Frontend\Profile\CharacterController@uploadSkin');
+$router->post('/profile/character/skin/delete', 'Frontend\Profile\CharacterController@deleteSkin');
+$router->post('/profile/character/cloak/upload', 'Frontend\Profile\CharacterController@uploadCloak');
+$router->post('/profile/character/cloak/delete', 'Frontend\Profile\CharacterController@deleteCloak');
 
 
 // Admin
@@ -77,11 +81,11 @@ $router->get('/admin/statistic/show', 'App\Handlers\Admin\Statistic\ShowControll
 $router->get('/admin/information/about', 'Admin\Information\AboutController@render');
 
 
-$router->any('/skin/front/{username}', 'Frontend\User\SkinController@front')
+$router->any('/skin/front/{username}', 'Api\User\SkinController@front')
     ->name('api.skin.front');
-$router->any('/skin/back/{username}', 'Frontend\User\SkinController@back')
+$router->any('/skin/back/{username}', 'Api\User\SkinController@back')
     ->name('api.skin.back');
-$router->any('/cloak/front/{username}', 'Frontend\User\CloakController@front')
+$router->any('/cloak/front/{username}', 'Api\User\CloakController@front')
     ->name('api.cloak.front');
-$router->any('/cloak/back/{username}', 'Frontend\User\CloakController@back')
+$router->any('/cloak/back/{username}', 'Api\User\CloakController@back')
     ->name('api.cloak.back');

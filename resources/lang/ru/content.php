@@ -40,6 +40,8 @@ return [
             ],
             'catalog' => [
                 'title' => 'Каталог товаров',
+                'categories_does_not_exists' => 'Категории отсутствуют',
+                'empty_category' => 'Категория пуста',
                 'item' => [
                     'put_in_cart' => 'В корзину',
                     'already_in_cart' => 'Уже в корзине',
@@ -85,7 +87,16 @@ return [
         'profile' => [
             'character' => [
                 'title' => 'Персонаж',
-                'upload' => 'Обновить'
+                'upload' => 'Обновить',
+                'skin' => [
+                    'image_resolutions' => 'Вы можете загружать изображения скинов со следующим(и) разрешениями: :resolutions.',
+                    'file_size' => 'Максимальный размер файла скина: :size КБ.'
+                ],
+                'cloak' => [
+                    'not_set' => 'Плащ не установлен',
+                    'image_resolutions' => 'Вы можете загружать изображения плащей со следующим(и) разрешениями: :resolutions.',
+                    'file_size' => 'Максимальный размер файла плаща: :size КБ.'
+                ]
             ]
         ]
     ],

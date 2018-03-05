@@ -7,7 +7,7 @@ use App\Repository\User\UserRepository;
 use App\Services\Auth\Exceptions\UserDoesNotExistException;
 use App\Services\Media\Character\Skin\Applicators\Applicator;
 use App\Services\Media\Character\Skin\Builder;
-use App\Services\Media\Image as ImageUtil;
+use App\Services\Media\Character\Skin\Image as SkinImage;
 use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
 
@@ -32,7 +32,7 @@ class SkinHandler
     public function front(string $username): Image
     {
         $this->checkUser($username);
-        $canvas = $this->imageManager->make(ImageUtil::skinPath($username));
+        $canvas = $this->imageManager->make(SkinImage::absolutePath($username));
 
         return $this->builder($canvas)->front(256);
     }
@@ -40,7 +40,7 @@ class SkinHandler
     public function back(string $username): Image
     {
         $this->checkUser($username);
-        $canvas = $this->imageManager->make(ImageUtil::skinPath($username));
+        $canvas = $this->imageManager->make(SkinImage::absolutePath($username));
 
         return $this->builder($canvas)->back(256);
     }

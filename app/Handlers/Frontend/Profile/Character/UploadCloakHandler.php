@@ -8,6 +8,7 @@ use App\Exceptions\Media\Character\InvalidRatioException;
 use App\Exceptions\Media\Character\InvalidResolutionException;
 use App\Services\Auth\Auth;
 use App\Services\Media\Character\Cloak\Accessor;
+use App\Services\Media\Character\Cloak\Image as CloakImage;
 use App\Services\Media\Character\Cloak\Resolution;
 use App\Services\Media\Image as ImageUtil;
 use App\Services\Validation\CloakValidator;
@@ -106,6 +107,6 @@ class UploadCloakHandler
      */
     private function move(Image $image)
     {
-        $image->save(ImageUtil::getCloaksPathWithName($this->auth->getUser()->getUsername()));
+        $image->save(CloakImage::getAbsolutePath($this->auth->getUser()->getUsername()));
     }
 }

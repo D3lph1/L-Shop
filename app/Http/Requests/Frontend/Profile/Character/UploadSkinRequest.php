@@ -37,7 +37,7 @@ class UploadSkinRequest extends FormRequest
             ->addRule(new Rule('max', $settings->get('system.profile.character.skin.max_file_size')->getValue()));
 
         return [
-            'skin' => $builder->build()
+            'file' => $builder->build()
         ];
     }
 }

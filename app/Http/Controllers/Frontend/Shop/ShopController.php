@@ -13,6 +13,8 @@ use App\Services\Infrastructure\Meta\System;
 use App\Services\Infrastructure\Response\JsonResponse;
 use App\Services\Infrastructure\Response\Status;
 use App\Services\Infrastructure\Server\Persistence\Persistence;
+use App\Services\Media\Character\Cloak\Accessor as CloakAccessor;
+use App\Services\Media\Character\Skin\Accessor as SkinAccessor;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
 
@@ -24,22 +26,31 @@ class ShopController extends Controller
         LoadHandler $loadHandler,
         Persistence $persistence,
         Auth $auth,
-        Cart $cart)
+        Cart $cart,
+        SkinAccessor $skinAccessor,
+        CloakAccessor $cloakAccessor)
     {
         $server = $persistence->retrieve();
         if ($server !== null) {
             $server = new Server($server);
         }
 
+        $character = false;
+        $balance = null;
+        if ($auth->check()) {
+            $character = $skinAccessor->allowSet($auth->getUser()) || $cloakAccessor->allowSet($auth->getUser());
+            $balance = $auth->getUser()->getBalance();
+        }
+
         return new JsonResponse(Status::SUCCESS, [
             'currency' => $settings->get('shop.currency.html')->getValue(),
-            'character' => $this->characterAvailable($settings),
+            'character' => $character,
             'sidebar' => [
                 'admin' => $adminBlockConstructor->construct()
             ],
             'auth' => [
                 'user' => [
-                    'balance' => $auth->check() ? $auth->getUser()->getBalance() : null
+                    'balance' => $balance
                 ]
             ],
             'cart' => [

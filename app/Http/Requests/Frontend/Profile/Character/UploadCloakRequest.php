@@ -37,7 +37,7 @@ class UploadCloakRequest extends FormRequest
             ->addRule(new Rule('max', $settings->get('system.profile.character.cloak.max_file_size')->getValue()));
 
         return [
-            'cloak' => $builder->build()
+            'file' => $builder->build()
         ];
     }
 }

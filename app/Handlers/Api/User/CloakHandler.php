@@ -7,7 +7,7 @@ use App\Repository\User\UserRepository;
 use App\Services\Auth\Exceptions\UserDoesNotExistException;
 use App\Services\Media\Character\Cloak\Applicators\Applicator;
 use App\Services\Media\Character\Cloak\Builder;
-use App\Services\Media\Image as ImageUtil;
+use App\Services\Media\Character\Cloak\Image as CloakImage;
 use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
 
@@ -29,18 +29,24 @@ class CloakHandler
         $this->userRepository = $userRepository;
     }
 
-    public function front(string $username): Image
+    public function front(string $username): ?Image
     {
         $this->checkUser($username);
-        $canvas = $this->imageManager->make(ImageUtil::cloakPath($username));
+        if (!CloakImage::exists($username)) {
+            return null;
+        }
+        $canvas = $this->imageManager->make(CloakImage::absolutePath($username));
 
         return $this->builder($canvas)->front(256);
     }
 
-    public function back(string $username): Image
+    public function back(string $username): ?Image
     {
         $this->checkUser($username);
-        $canvas = $this->imageManager->make(ImageUtil::cloakPath($username));
+        if (!CloakImage::exists($username)) {
+            return null;
+        }
+        $canvas = $this->imageManager->make(CloakImage::absolutePath($username));
 
         return $this->builder($canvas)->back(256);
     }
