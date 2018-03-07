@@ -5,6 +5,7 @@ namespace App\Providers;
 
 use App\Entity\Activation;
 use App\Entity\Category;
+use App\Entity\Enchantment;
 use App\Entity\Item;
 use App\Entity\News;
 use App\Entity\Page;
@@ -19,6 +20,8 @@ use App\Repository\Activation\ActivationRepository;
 use App\Repository\Activation\DoctrineActivationRepository;
 use App\Repository\Category\CategoryRepository;
 use App\Repository\Category\DoctrineCategoryRepository;
+use App\Repository\Enchantment\DoctrineEnchantmentRepository;
+use App\Repository\Enchantment\EnchantmentRepository;
 use App\Repository\Item\DoctrineItemRepository;
 use App\Repository\Item\ItemRepository;
 use App\Repository\News\DoctrineNewsRepository;
@@ -97,6 +100,10 @@ class RepositoryServiceProvider extends ServiceProvider
         PageRepository::class => [
             'concrete' => DoctrinePageRepository::class,
             'entity' => Page::class
+        ],
+        EnchantmentRepository::class => [
+            'concrete' => DoctrineEnchantmentRepository::class,
+            'entity' => Enchantment::class
         ],
         Repository::class => [
             'concrete' => DoctrineRepository::class,

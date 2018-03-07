@@ -51,9 +51,14 @@ class Item
     private $extra;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="item")
+     * @ORM\OneToMany(targetEntity="App\Entity\Product", mappedBy="item", cascade={"remove"})
      */
     private $products;
+
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\EnchantmentItem", mappedBy="item", cascade={"persist", "remove"})
+     */
+    private $enchantmentItems;
 
     public function __construct(string $name, string $type, string $gameId)
     {
@@ -61,6 +66,7 @@ class Item
         $this->setType($type);
         $this->setGameId($gameId);
         $this->products = new ArrayCollection();
+        $this->enchantmentItems = new ArrayCollection();
     }
 
     public function getId(): int
@@ -150,5 +156,25 @@ class Item
         $this->products->add($product);
 
         return $this;
+    }
+
+    public function addEnchantmentItem(EnchantmentItem $enchantmentItem): Item
+    {
+        $this->enchantmentItems->add($enchantmentItem);
+
+        return $this;
+    }
+
+    public function removeEnchantmentItem(EnchantmentItem $element): bool
+    {
+        return $this->enchantmentItems->removeElement($element);
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getEnchantmentItems(): Collection
+    {
+        return $this->enchantmentItems;
     }
 }

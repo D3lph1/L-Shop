@@ -83,6 +83,14 @@
                             prepend-icon="fingerprint"
                             v-model="item.game_id"
                     ></v-text-field>
+                    <div class="text-xs-center" v-if="item.type === 'item'">
+                        <v-btn color="purple" dark @click.native.stop="enchantment = true">{{ $t('content.admin.items.add.enchantment.title') }}</v-btn>
+                    </div>
+                    <enchantment
+                            :dialog="enchantment"
+                            :enchantments="enchantments"
+                            @close="closeEnchantmentDialog"
+                    ></enchantment>
                     <v-text-field
                             :label="$t('content.admin.items.add.extra')"
                             prepend-icon="list"
@@ -100,6 +108,7 @@
 <script>
     import loader from './../../../core/http/loader'
     import Table from './ImagesBrowseTable.vue'
+    import Enchantment from './Enchantment.vue'
 
     export default {
         data() {
@@ -129,7 +138,10 @@
                 imageType: 'current',
                 imagePreviewUpload: null,
                 imagePreviewBrowser: null,
-                imageBrowser: null
+                imageBrowser: null,
+                enchantment: false,
+                enchantments: [],
+                readyEnchantments: []
             }
         },
         beforeRouteEnter (to, from, next) {
@@ -164,15 +176,28 @@
             setUploadedImage(form) {
                 this.image = form;
             },
+            closeEnchantmentDialog(readyEnchantments) {
+                this.readyEnchantments = [];
+                readyEnchantments.forEach(enchantment => {
+                    if (enchantment.model > 0) {
+                        this.readyEnchantments.push({
+                            id: enchantment.id,
+                            level: enchantment.model,
+                        });
+                    }
+                });
+                this.enchantment = false;
+            },
             perform() {
                 const data = this.image !== null ? this.image : new FormData();
                 data.append('name', this.item.name);
-                data.append('description', this.item.description !== null ? this.item.description : '');
+                data.append('description', this.item.description);
                 data.append('item_type', this.item.type);
                 data.append('image_type', this.imageType);
                 data.append('image_name', this.imageBrowser);
                 data.append('game_id', this.item.game_id);
-                data.append('extra', this.item.extra !== null ? this.item.extra : '');
+                data.append('enchantments', JSON.stringify(this.readyEnchantments));
+                data.append('extra', this.item.extra);
 
                 this.$axios.post(`/api/admin/items/edit/${this.$route.params.item}`, data)
                     .then((response) => {
@@ -186,11 +211,13 @@
 
                 this.item = data.item;
                 this.images = data.images;
-                this.imageType = data.item.image === null ? 'default' : 'current'
+                this.imageType = data.item.image === null ? 'default' : 'current';
+                this.enchantments = data.enchantments;
             }
         },
         components: {
-            'images-browse-table': Table
+            'images-browse-table': Table,
+            'enchantment': Enchantment
         }
     }
 </script>

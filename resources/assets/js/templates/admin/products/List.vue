@@ -31,7 +31,10 @@
             <template slot="items" slot-scope="props">
                 <td class="text-xs-center">{{ props.item.id }}</td>
                 <td class="text-xs-center"><img :src="props.item.item.image" height="30" :alt="props.item.item.name"></td>
-                <td class="text-xs-center">{{ props.item.item.name }}</td>
+                <td class="text-xs-center">
+                    {{ props.item.item.name }}
+                    <v-enchanted class="cp" v-if="props.item.item.enchanted"></v-enchanted>
+                </td>
                 <td class="text-xs-center">{{ props.item.item.type }}</td>
                 <td class="text-xs-center">{{ props.item.price }}</td>
                 <td class="text-xs-center">{{ props.item.stack }}</td>

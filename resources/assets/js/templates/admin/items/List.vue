@@ -31,7 +31,10 @@
             <template slot="items" slot-scope="props">
                 <td class="text-xs-center">{{ props.item.id }}</td>
                 <td class="text-xs-center"><img :src="props.item.image" height="30" :alt="props.item.name"></td>
-                <td class="text-xs-center">{{ props.item.name }}</td>
+                <td class="text-xs-center">
+                    {{ props.item.name }}
+                    <v-enchanted class="cp" v-if="props.item.enchanted"></v-enchanted>
+                </td>
                 <td class="text-xs-center">{{ props.item.type }}</td>
                 <td class="justify-center layout px-0">
                     <v-btn icon class="mx-0" :to="{name: 'admin.items.edit', params: {item: props.item.id}}">

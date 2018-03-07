@@ -24,13 +24,19 @@ class Item implements \JsonSerializable
      */
     public function jsonSerialize(): array
     {
+        $enchantments = [];
+        foreach ($this->item->getEnchantmentItems() as $item) {
+            $enchantments[] = new Enchantment($item);
+        }
+
         return [
             'id' => $this->item->getId(),
             'name' => $this->item->getName(),
             'description' => $this->item->getDescription(),
             'isItem' => $this->item->getType() === Type::ITEM,
             'isPermgroup' => $this->item->getType() === Type::PERMGROUP,
-            'image' => Image::assetPathOrDefault($this->item->getImage())
+            'image' => Image::assetPathOrDefault($this->item->getImage()),
+            'enchantments'=> $enchantments
         ];
     }
 }

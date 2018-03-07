@@ -27,7 +27,8 @@ class Item implements \JsonSerializable
             'id' => $this->item->getId(),
             'name' => $this->item->getName(),
             'image' => Image::assetPathOrDefault($this->item->getImage()),
-            'type' => __("common.item.type.{$this->item->getType()}")
+            'type' => __("common.item.type.{$this->item->getType()}"),
+            'enchanted' => $this->item->getEnchantmentItems()->count() !== 0
         ];
     }
 }

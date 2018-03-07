@@ -68,3 +68,6 @@ html {
   .add-image-block .preview {
     height: 150px;
     width: 150px; }
+
+.cp {
+  cursor: pointer; }

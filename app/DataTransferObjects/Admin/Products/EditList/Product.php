@@ -37,7 +37,8 @@ class Product implements \JsonSerializable
             'item' => [
                 'name' => $this->product->getItem()->getName(),
                 'image' => Image::assetPathOrDefault($this->product->getItem()->getImage()),
-                'type' => __("common.item.type.{$this->product->getItem()->getType()}")
+                'type' => __("common.item.type.{$this->product->getItem()->getType()}"),
+                'enchanted' => $this->product->getItem()->getEnchantmentItems()->count() !== 0
             ]
         ];
     }

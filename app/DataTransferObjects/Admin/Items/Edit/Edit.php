@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\DataTransferObjects\Admin\Items\Edit;
 
+use App\DataTransferObjects\Admin\Items\Add\EnchantmentFromFrontend;
 use Illuminate\Http\UploadedFile;
 
 class Edit
@@ -46,6 +47,11 @@ class Edit
      * @var string
      */
     private $gameId;
+
+    /**
+     * @var EnchantmentFromFrontend[]
+     */
+    private $enchantments;
 
     /**
      * @var null|string
@@ -210,6 +216,26 @@ class Edit
     public function getGameId(): string
     {
         return $this->gameId;
+    }
+
+    /**
+     * @param EnchantmentFromFrontend[] $enchantments
+     *
+     * @return Edit
+     */
+    public function setEnchantments(array $enchantments): Edit
+    {
+        $this->enchantments = $enchantments;
+
+        return $this;
+    }
+
+    /**
+     * @return EnchantmentFromFrontend[]
+     */
+    public function getEnchantments(): array
+    {
+        return $this->enchantments;
     }
 
     /**

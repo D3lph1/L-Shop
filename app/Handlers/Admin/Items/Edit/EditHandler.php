@@ -4,13 +4,16 @@ declare(strict_types=1);
 namespace App\Handlers\Admin\Items\Edit;
 
 use App\DataTransferObjects\Admin\Items\Edit\Edit;
-use App\Entity\Item;
+use App\Entity\Enchantment;
+use App\Entity\EnchantmentItem;
 use App\Exceptions\InvalidArgumentTypeException;
 use App\Exceptions\Item\DoesNotExistException;
 use App\Exceptions\UnexpectedValueException;
+use App\Repository\Enchantment\EnchantmentRepository;
 use App\Repository\Item\ItemRepository;
 use App\Services\Item\Image\Hashing\Hasher;
 use App\Services\Item\Image\Image;
+use App\Services\Item\Type;
 use Illuminate\Http\UploadedFile;
 
 class EditHandler
@@ -26,22 +29,28 @@ class EditHandler
     /**
      * @var ItemRepository
      */
-    private $repository;
+    private $itemRepository;
+
+    /**
+     * @var EnchantmentRepository
+     */
+    private $enchantmentRepository;
 
     /**
      * @var Hasher
      */
     private $imageHasher;
 
-    public function __construct(ItemRepository $repository, Hasher $imageHasher)
+    public function __construct(ItemRepository $itemRepository, EnchantmentRepository $enchantmentRepository, Hasher $imageHasher)
     {
-        $this->repository = $repository;
+        $this->itemRepository = $itemRepository;
+        $this->enchantmentRepository = $enchantmentRepository;
         $this->imageHasher = $imageHasher;
     }
 
     public function handle(Edit $dto): void
     {
-        $item = $this->repository->find($dto->getId());
+        $item = $this->itemRepository->find($dto->getId());
         if ($item === null) {
             throw new DoesNotExistException($dto->getId());
         }
@@ -56,7 +65,60 @@ class EditHandler
             ->setGameId($dto->getGameId())
             ->setExtra($dto->getExtra());
 
-        $this->repository->update($item);
+        if ($dto->getItemType() === Type::ITEM) {
+            /** @var EnchantmentItem[] $ei */
+            $ei = $item->getEnchantmentItems();
+            $original = $dto->getEnchantments();
+            $enchantments = $dto->getEnchantments();
+
+            // Update edited enchantments.
+            foreach ($enchantments as $key => &$each) {
+                foreach ($ei as $eei) {
+                    if ($eei->getEnchantment()->getId() === $each->getId()) {
+                        $eei->setLevel($each->getLevel());
+                        unset($enchantments[$key]);
+                        continue;
+                    }
+                }
+            }
+
+            // Add new enchantments.
+            $new = [];
+            foreach ($enchantments as $each) {
+                $new[] = $each->getId();
+            }
+
+            /** @var Enchantment[] $new */
+            $new = $this->enchantmentRepository->findWhereIn($new);
+            foreach ($new as $each) {
+                foreach ($enchantments as $enchantment) {
+                    if ($each->getId() === $enchantment->getId()) {
+                        $enchantmentItem = new EnchantmentItem($each, $enchantment->getLevel());
+                        $item->addEnchantmentItem($enchantmentItem);
+                        $enchantmentItem->setItem($item);
+                    }
+                }
+            }
+
+            // Delete removed enchantments.
+            /** @var EnchantmentItem $enchantment */
+            foreach ($item->getEnchantmentItems() as $enchantment) {
+                $f = false;
+                foreach ($original as $each) {
+                    if ($enchantment->getEnchantment()->getId() === $each->getId()) {
+                        $f = true;
+                        break;
+                    }
+                }
+
+                if (!$f) {
+                    $enchantment->deleteItem();
+                    $item->removeEnchantmentItem($enchantment);
+                }
+            }
+        }
+
+        $this->itemRepository->update($item);
     }
 
     /**

@@ -45,6 +45,9 @@ class Result
         return $this->currentCategory;
     }
 
+    /**
+     * @return Product[]
+     */
     public function getProducts(): array
     {
         return $this->products;

@@ -75,6 +75,14 @@
                             prepend-icon="fingerprint"
                             v-model="id"
                     ></v-text-field>
+                    <div class="text-xs-center" v-if="type === 'item'">
+                        <v-btn color="purple" dark @click.native.stop="enchantment = true">{{ $t('content.admin.items.add.enchantment.title') }}</v-btn>
+                    </div>
+                    <enchantment
+                            :dialog="enchantment"
+                            :enchantments="enchantments"
+                            @close="closeEnchantmentDialog"
+                    ></enchantment>
                     <v-text-field
                             :label="$t('content.admin.items.add.extra')"
                             prepend-icon="list"
@@ -92,6 +100,7 @@
 <script>
     import loader from './../../../core/http/loader'
     import Table from './ImagesBrowseTable.vue'
+    import Enchantment from './Enchantment.vue'
 
     export default {
         data() {
@@ -118,7 +127,10 @@
                 image: null,
                 images: [],
                 id: null,
-                extra: null
+                extra: null,
+                enchantment: false,
+                enchantments: [],
+                readyEnchantments: []
             }
         },
         beforeRouteEnter (to, from, next) {
@@ -153,6 +165,18 @@
             setUploadedImage(form) {
                 this.image = form;
             },
+            closeEnchantmentDialog(readyEnchantments) {
+                this.readyEnchantments = [];
+                readyEnchantments.forEach(enchantment => {
+                    if (enchantment.model > 0) {
+                        this.readyEnchantments.push({
+                            id: enchantment.id,
+                            level: enchantment.model,
+                        });
+                    }
+                });
+                this.enchantment = false;
+            },
             perform() {
                 const data = this.image !== null ? this.image : new FormData();
                 data.append('name', this.name);
@@ -161,6 +185,7 @@
                 data.append('image_type', this.imageType);
                 data.append('image_name', this.imageBrowser);
                 data.append('game_id', this.id);
+                data.append('enchantments', JSON.stringify(this.readyEnchantments));
                 data.append('extra', this.extra);
 
                 this.$axios.post('/api/admin/items/add', data)
@@ -174,10 +199,12 @@
                 const data = response.data;
 
                 this.images = data.images;
+                this.enchantments = data.enchantments;
             }
         },
         components: {
-            'images-browse-table': Table
+            'images-browse-table': Table,
+            'enchantment': Enchantment
         }
     }
 </script>

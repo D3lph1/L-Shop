@@ -43,6 +43,11 @@ class Add
     private $gameId;
 
     /**
+     * @var EnchantmentFromFrontend[]
+     */
+    private $enchantments;
+
+    /**
      * @var null|string
      */
     private $extra;
@@ -185,6 +190,26 @@ class Add
     public function getGameId(): string
     {
         return $this->gameId;
+    }
+
+    /**
+     * @param EnchantmentFromFrontend[] $enchantments
+     *
+     * @return Add
+     */
+    public function setEnchantments(array $enchantments): Add
+    {
+        $this->enchantments = $enchantments;
+
+        return $this;
+    }
+
+    /**
+     * @return EnchantmentFromFrontend[]
+     */
+    public function getEnchantments(): array
+    {
+        return $this->enchantments;
     }
 
     /**

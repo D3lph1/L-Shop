@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace App\Http\Controllers\Admin\Items;
 
 use App\DataTransferObjects\Admin\Items\Add\Add;
+use App\DataTransferObjects\Admin\Items\Add\EnchantmentFromFrontend;
 use App\Handlers\Admin\Items\Add\AddHandler;
 use App\Handlers\Admin\Items\Add\RenderHandler;
 use App\Http\Controllers\Controller;
@@ -27,12 +28,18 @@ class AddController extends Controller
         $dto = $handler->handle();
 
         return new JsonResponse(Status::SUCCESS, [
-            'images' => $dto->getImages()
+            'images' => $dto->getImages(),
+            'enchantments' => $dto->getEnchantments()
         ]);
     }
 
     public function add(AddRequest $request, AddHandler $handler, Notificator $notificator): JsonResponse
     {
+        $enchantments = [];
+        foreach (json_decode($request->get('enchantments'), true) as $item) {
+            $enchantments[] = new EnchantmentFromFrontend($item['id'], $item['level']);
+        }
+
         $dto = (new Add())
             ->setName($request->get('name'))
             ->setDescription($request->get('description'))
@@ -41,6 +48,7 @@ class AddController extends Controller
             ->setFile($request->file('file'))
             ->setImageName($request->get('image_name'))
             ->setGameId($request->get('game_id'))
+            ->setEnchantments($enchantments)
             ->setExtra($request->get('extra'));
 
         $handler->handle($dto);

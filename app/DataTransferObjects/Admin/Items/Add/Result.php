@@ -8,11 +8,17 @@ class Result
     /**
      * @var Image[]
      */
-    private $images;
+    private $images = [];
 
-    public function __construct(array $images)
+    /**
+     * @var Enchantment
+     */
+    private $enchantments = [];
+
+    public function __construct(array $images, array $enchantments)
     {
         $this->images = $images;
+        $this->enchantments = $enchantments;
     }
 
     /**
@@ -21,5 +27,13 @@ class Result
     public function getImages(): array
     {
         return $this->images;
+    }
+
+    /**
+     * @return Enchantment[]
+     */
+    public function getEnchantments(): array
+    {
+        return $this->enchantments;
     }
 }

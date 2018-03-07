@@ -2,14 +2,17 @@
     <v-flex xs12 sm12 md4 lg3>
         <v-card class="product-block">
             <div class="product-header title">
-                <div class="product-name">{{ name }}</div>
+                <div class="product-name">
+                    {{ name }}
+                    <v-enchanted class="enchanted" v-if="enchantments.length !== 0"></v-enchanted>
+                </div>
                 <div class="product-menu">
                     <v-menu bottom left>
                         <v-btn flat icon small slot="activator">
                             <v-icon>more_vert</v-icon>
                         </v-btn>
                         <v-list>
-                            <v-list-tile @click="this.openAboutDialog">
+                            <v-list-tile @click="openAboutDialog">
                                 <v-list-tile-title>{{ $t('content.frontend.shop.catalog.item.about') }}</v-list-tile-title>
                             </v-list-tile>
                             <v-list-tile v-if="productsCrudAccess" :to="{name: 'admin.products.edit', params: {product: id}}">
@@ -43,7 +46,7 @@
                 <span v-if="alreadyInCart">{{ $t('content.frontend.shop.catalog.item.already_in_cart') }}</span>
                 <span v-else>{{ $t('content.frontend.shop.catalog.item.put_in_cart') }}</span>
             </v-btn>
-            <v-btn block small color="primary" @click="openPurchaseDialog"><v-icon left small>attach_money</v-icon>
+            <v-btn block small color="primary" @click.native.stop="openPurchaseDialog"><v-icon left small>attach_money</v-icon>
                 {{ $t('content.frontend.shop.catalog.item.quick_purchase') }}
             </v-btn>
         </v-card>
@@ -96,6 +99,10 @@
             itemsCrudAccess: {
                 required: true,
                 type: Boolean
+            },
+            enchantments: {
+                required: true,
+                type: Array
             }
         },
         data() {
@@ -152,8 +159,10 @@
             font-weight: 400
             .product-name
                 display: inline-block
-                width: 170px
+                width: 200px
                 word-wrap: break-word
+                .enchanted
+                    cursor: pointer
             .product-menu
                 position: absolute
                 top: 5px

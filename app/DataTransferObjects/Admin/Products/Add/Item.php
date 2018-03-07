@@ -31,7 +31,8 @@ class Item implements \JsonSerializable
             'type' => [
                 'isItem' => $this->item->getType() === Type::ITEM,
                 'isPermgroup' => $this->item->getType() === Type::PERMGROUP
-            ]
+            ],
+            'enchanted' => $this->item->getEnchantmentItems()->count() !== 0
         ];
     }
 }

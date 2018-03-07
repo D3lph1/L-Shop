@@ -9,6 +9,14 @@
             </div>
         </div>
         <p class="subheading" v-html="$t('content.admin.information.about.description')"></p>
+            <div class="text-xs-center mt-5">
+                <v-chip outline color="primary">
+                    <v-avatar>
+                        <img :src="images.logo" alt="trevor">
+                    </v-avatar>
+                    {{ $t('content.admin.information.about.lshop_version', {version}) }}
+                </v-chip>
+            </div>
         <v-layout row wrap align-center justify-center class="mt-5">
             <v-flex xs6 sm4 md4 lg4>
                 <v-tooltip bottom>
@@ -81,17 +89,22 @@
                 },
                 version: null,
                 items: [
-                    { header: $t('content.admin.information.about.developers_title') },
+                    {
+                        header: $t('content.admin.information.about.developers_title')
+                    },
                     {
                         avatar: null,
-                        title: 'D3lph1',
+                        title: 'D3lph1 <a href="https://vk.com/d3lph1" target="_blank">vk</a> <a href="http://rubukkit.org/members/d3lph1.94641" target="_blank">rubukkit</a> <a href="https://github.com/D3lph1" target="_blank">github</a>',
                         subtitle: $t('content.admin.information.about.developers.D3lph1.description.html'),
                         subtitlePlain: $t('content.admin.information.about.developers.D3lph1.description.plain'),
                     },
-                    { divider: true, inset: true },
+                    {
+                        divider: true,
+                        inset: true
+                    },
                     {
                         avatar: null,
-                        title: 'WhileD0S',
+                        title: 'WhileD0S <a href="https://vk.com/whiled0s" target="_blank">vk</a>',
                         subtitle: $t('content.admin.information.about.developers.WhileD0S.description.html'),
                         subtitlePlain: $t('content.admin.information.about.developers.WhileD0S.description.plain')
                     },

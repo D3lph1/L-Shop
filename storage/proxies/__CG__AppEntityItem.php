@@ -64,10 +64,10 @@ class Item extends \App\Entity\Item implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'name', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'type', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'image', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'gameId', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'extra', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'products'];
+            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'name', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'type', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'image', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'gameId', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'extra', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'products', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'enchantmentItems'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'name', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'type', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'image', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'gameId', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'extra', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'products'];
+        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'id', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'name', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'description', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'type', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'image', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'gameId', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'extra', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'products', '' . "\0" . 'App\\Entity\\Item' . "\0" . 'enchantmentItems'];
     }
 
     /**
@@ -340,6 +340,39 @@ class Item extends \App\Entity\Item implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'addProduct', [$product]);
 
         return parent::addProduct($product);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function addEnchantmentItem(\App\Entity\EnchantmentItem $enchantmentItem): \App\Entity\Item
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addEnchantmentItem', [$enchantmentItem]);
+
+        return parent::addEnchantmentItem($enchantmentItem);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function removeEnchantmentItem(\App\Entity\EnchantmentItem $element): bool
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeEnchantmentItem', [$element]);
+
+        return parent::removeEnchantmentItem($element);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getEnchantmentItems(): \Doctrine\Common\Collections\Collection
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEnchantmentItems', []);
+
+        return parent::getEnchantmentItems();
     }
 
 }

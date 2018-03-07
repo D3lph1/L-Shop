@@ -22,7 +22,10 @@
                                 <img :src="data.item.image" class="br0">
                             </v-list-tile-avatar>
                             <v-list-tile-content>
-                                <v-list-tile-title v-html="data.item.name"></v-list-tile-title>
+                                <v-list-tile-title>
+                                    <span v-html="data.item.name"></span>
+                                    <v-enchanted v-if="data.item.enchanted"></v-enchanted>
+                                </v-list-tile-title>
                             </v-list-tile-content>
                         </template>
                     </v-select>

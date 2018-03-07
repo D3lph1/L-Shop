@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Items;
 
+use App\DataTransferObjects\Admin\Items\Add\EnchantmentFromFrontend;
 use App\DataTransferObjects\Admin\Items\Edit\Edit;
 use App\Exceptions\Item\DoesNotExistException;
 use App\Handlers\Admin\Items\Edit\EditHandler;
@@ -32,7 +33,8 @@ class EditController extends Controller
 
             return new JsonResponse(Status::SUCCESS, [
                 'item' => $item->getItem(),
-                'images' => $item->getImages()
+                'images' => $item->getImages(),
+                'enchantments' => $item->getEnchantments()
             ]);
         } catch (DoesNotExistException $e) {
             throw new NotFoundHttpException();
@@ -41,6 +43,11 @@ class EditController extends Controller
 
     public function edit(EditRequest $request, EditHandler $handler): JsonResponse
     {
+        $enchantments = [];
+        foreach (json_decode($request->get('enchantments'), true) as $item) {
+            $enchantments[] = new EnchantmentFromFrontend($item['id'], $item['level']);
+        }
+
         $dto = (new Edit())
             ->setId((int)$request->route('item'))
             ->setName($request->get('name'))
@@ -50,6 +57,7 @@ class EditController extends Controller
             ->setFile($request->file('file'))
             ->setImageName($request->get('image_name'))
             ->setGameId($request->get('game_id'))
+            ->setEnchantments($enchantments)
             ->setExtra($request->get('extra'));
 
         try {

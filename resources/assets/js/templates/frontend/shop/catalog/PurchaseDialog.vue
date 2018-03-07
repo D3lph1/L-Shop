@@ -1,6 +1,6 @@
 <template>
     <v-layout row justify-center>
-        <v-dialog v-model="dialog" persistent max-width="500px">
+        <v-dialog v-model="dialogData" max-width="500px">
             <v-card>
                 <v-card-title>
                     <span class="headline">{{ $t('content.frontend.shop.catalog.purchase.title', {product: name}) }}</span>
@@ -43,7 +43,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" flat @click.native="$emit('close')">{{ $t('common.cancel') }}</v-btn>
+                    <v-btn color="blue darken-1" flat @click.native="dialogData = false">{{ $t('common.cancel') }}</v-btn>
                     <v-btn color="blue darken-1" flat @click.native="purchase" :loading="disabledBtn">{{ $t('content.frontend.shop.catalog.purchase.purchase') }}</v-btn>
                 </v-card-actions>
             </v-card>
@@ -81,6 +81,7 @@
         },
         data() {
             return {
+                dialogData: this.dialog,
                 username: '',
                 amount: this.stack,
                 cost: this.price,
@@ -88,6 +89,14 @@
             }
         },
         watch: {
+            dialog(val) {
+                this.dialogData = val;
+            },
+            dialogData(val) {
+                if (val === false) {
+                    this.$emit('close');
+                }
+            },
             /**
              * Initialize a amount with a value from the store.
              */

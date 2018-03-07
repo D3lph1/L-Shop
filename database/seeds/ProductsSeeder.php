@@ -1,11 +1,14 @@
 <?php
 declare(strict_types = 1);
 
+use App\Entity\EnchantmentItem;
 use App\Entity\Item;
 use App\Entity\Product;
 use App\Repository\Category\CategoryRepository;
+use App\Repository\Enchantment\EnchantmentRepository;
 use App\Repository\Item\ItemRepository;
 use App\Repository\Product\ProductRepository;
+use App\Services\Item\Enchantment\Enchantments;
 use Illuminate\Database\Seeder;
 
 class ProductsSeeder extends Seeder
@@ -13,7 +16,8 @@ class ProductsSeeder extends Seeder
     public function run(
         ProductRepository $productRepository,
         ItemRepository $itemRepository,
-        CategoryRepository $categoryRepository): void
+        CategoryRepository $categoryRepository,
+        EnchantmentRepository $enchantmentRepository): void
     {
         $productRepository->deleteAll();
         $itemRepository->deleteAll();
@@ -46,9 +50,20 @@ class ProductsSeeder extends Seeder
             32
         ));
 
+        $item = (new Item(__('seeding.items.diamond_sword'), \App\Services\Item\Type::ITEM, '276'))
+            ->setImage('9d8feda602d70231f0297a3b7e436d4b.png');
+
+        $item->addEnchantmentItem(
+            (new EnchantmentItem($enchantmentRepository->findByGameId(Enchantments::SHARPNESS), 4))
+                ->setItem($item)
+        );
+        $item->addEnchantmentItem(
+            (new EnchantmentItem($enchantmentRepository->findByGameId(Enchantments::FIRE_ASPECT), 2))
+                ->setItem($item)
+        );
+
         $productRepository->create(new Product(
-            (new Item(__('seeding.items.diamond_sword'), \App\Services\Item\Type::ITEM, '276'))
-                ->setImage('9d8feda602d70231f0297a3b7e436d4b.png'),
+            $item,
             $categoryRepository->findAll()[1],
             67,
             1

@@ -34,6 +34,7 @@
                                 :is-permgroup="product.item.isPermgroup"
                                 :products-crud-access="productsCrudAccess"
                                 :items-crud-access="itemsCrudAccess"
+                                :enchantments="product.item.enchantments"
                                 @purchase-dialog-opening="openPurchaseDialog"
                                 @about-dialog-opening="openAboutDialog"
                                 v-if="!loading"
@@ -83,6 +84,7 @@
                 :image="aboutableProduct.item.image"
                 :is-item="aboutableProduct.item.isItem"
                 :is-permgroup="aboutableProduct.item.isPermgroup"
+                :enchantments="aboutableProduct.item.enchantments"
                 @close="closeAboutDialog"
         ></about-dialog>
     </div>

@@ -1,6 +1,6 @@
 <template>
     <v-layout row justify-center>
-        <v-dialog v-model="dialog" persistent max-width="500px">
+        <v-dialog v-model="dialogData" max-width="500px">
             <v-card>
                 <v-card-title>
                     <span class="headline">{{ $t('content.frontend.shop.catalog.about.title', {product: name}) }}</span>
@@ -17,7 +17,7 @@
                         <div v-html="description"></div>
                     </v-container>
                     <v-container>
-                        <v-layout>
+                        <v-layout row>
                             <v-flex xs6>{{ $t('content.frontend.shop.catalog.about.type') }}</v-flex>
                             <v-flex xs6 class="text-xs-right">
                                 <span v-if="isItem">
@@ -28,11 +28,23 @@
                                 </span>
                             </v-flex>
                         </v-layout>
+                        <v-divider v-if="enchantments.length !== 0"></v-divider>
+                        <v-layout v-if="enchantments.length !== 0">
+                            <v-flex xs6>{{ $t('content.frontend.shop.catalog.about.enchantments') }}</v-flex>
+                            <v-flex xs6 class="text-xs-right">
+                                <div v-for="enchantment in enchantments" class="purple--text">
+
+                                    {{ enchantment.name }}
+                                    {{ enchantment.level }}
+                                    <v-icon color="purple">flash_on</v-icon>
+                                </div>
+                            </v-flex>
+                        </v-layout>
                     </v-container>
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="blue darken-1" flat @click.native="$emit('close')">{{ $t('common.cancel') }}</v-btn>
+                    <v-btn color="blue darken-1" flat @click.native="dialogData = false">{{ $t('common.cancel') }}</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -64,8 +76,27 @@
             isPermgroup: {
                 required: true,
                 type: Boolean
+            },
+            enchantments: {
+                required: true,
+                type: Array
             }
         },
+        data() {
+            return {
+                dialogData: this.dialog
+            }
+        },
+        watch: {
+            dialog(val) {
+                this.dialogData = val;
+            },
+            dialogData(val) {
+                if (val === false) {
+                    this.$emit('close');
+                }
+            }
+        }
     }
 </script>
 

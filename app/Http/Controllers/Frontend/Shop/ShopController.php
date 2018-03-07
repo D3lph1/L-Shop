@@ -61,10 +61,4 @@ class ShopController extends Controller
             'github' => System::githubRepositoryUrl()
         ]);
     }
-
-    private function characterAvailable(Settings $settings): bool
-    {
-        return $settings->get('system.profile.character.skin.enabled')->getValue(DataType::BOOL)
-            || $settings->get('system.profile.character.cloak.enabled')->getValue(DataType::BOOL);
-    }
 }
