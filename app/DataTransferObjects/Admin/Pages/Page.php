@@ -24,7 +24,9 @@ class Page implements \JsonSerializable
     {
         return [
             'id' => $this->page->getId(),
-            'title' => $this->page->getTitle()
+            'title' => $this->page->getTitle(),
+            'link' => str_limit($this->page->getUrl(), 30, '...'),
+            'url' => $this->page->getUrl()
         ];
     }
 }

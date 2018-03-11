@@ -21,6 +21,7 @@ class AboutController extends Controller
     {
         return new JsonResponse(Status::SUCCESS, [
             'version' => System::version()->formatted(),
+            'github' => System::githubRepositoryUrl(),
             'images' => [
                 'logo' => asset('img/layout/logo/small.png'),
                 'laravel' => asset('img/layout/admin/logo/laravel.png'),

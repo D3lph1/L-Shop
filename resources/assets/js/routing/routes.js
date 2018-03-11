@@ -8,6 +8,9 @@ const Shop = () => import(/* webpackChunkName: "shop" */ '../templates/layout/sh
 const Catalog = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/shop/catalog/Catalog.vue');
 const Cart = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/shop/cart/Cart.vue');
 const Character = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/profile/Character.vue');
+const ProfileSettings = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/profile/Settings.vue');
+const News = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/news/News.vue');
+const Page = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/Page.vue');
 
 const BasicSettings = () => import(/* webpackChunkName: "admin" */ '../templates/admin/control/BasicSettings.vue');
 const ProductsAdd = () => import(/* webpackChunkName: "admin" */ '../templates/admin/products/Add.vue');
@@ -17,6 +20,8 @@ const ItemsAdd = () => import(/* webpackChunkName: "admin" */ '../templates/admi
 const ItemsEdit = () => import(/* webpackChunkName: "admin" */ '../templates/admin/items/Edit.vue');
 const ItemsList = () => import(/* webpackChunkName: "admin" */ '../templates/admin/items/List.vue');
 const NewsList = () => import(/* webpackChunkName: "admin" */ '../templates/admin/news/List.vue');
+const PagesAdd = () => import(/* webpackChunkName: "admin" */ '../templates/admin/pages/Add.vue');
+const PagesEdit = () => import(/* webpackChunkName: "admin" */ '../templates/admin/pages/Edit.vue');
 const PagesList = () => import(/* webpackChunkName: "admin" */ '../templates/admin/pages/List.vue');
 const UsersList = () => import(/* webpackChunkName: "admin" */ '../templates/admin/users/List.vue');
 const StatisticShow = () => import(/* webpackChunkName: "admin" */ '../templates/admin/statistic/Show.vue');
@@ -127,6 +132,42 @@ export default [
                 meta: {
                     title: $t('content.frontend.profile.character.title')
                 }
+            },
+            {
+                path: 'settings',
+                name: 'frontend.profile.settings',
+                components: {
+                    content: ProfileSettings
+                },
+                meta: {
+                    title: $t('content.frontend.profile.settings.title')
+                }
+            }
+        ]
+    },
+    {
+        path: '/news',
+        component: Shop,
+        children: [
+            {
+                path: ':news',
+                name: 'frontend.news',
+                components: {
+                    content: News
+                }
+            }
+        ]
+    },
+    {
+        path: '/page',
+        component: Shop,
+        children: [
+            {
+                path: ':url',
+                name: 'frontend.page',
+                components: {
+                    content: Page
+                }
             }
         ]
     },
@@ -212,6 +253,26 @@ export default [
                 },
                 meta: {
                     title: $t('content.admin.news.list.title')
+                }
+            },
+            {
+                path: 'pages/add',
+                name: 'admin.pages.add',
+                components: {
+                    content: PagesAdd
+                },
+                meta: {
+                    title: $t('content.admin.pages.add.title')
+                }
+            },
+            {
+                path: 'pages/edit/:page',
+                name: 'admin.pages.edit',
+                components: {
+                    content: PagesEdit
+                },
+                meta: {
+                    title: $t('content.admin.pages.edit.title')
                 }
             },
             {

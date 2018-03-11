@@ -1,14 +1,13 @@
 <?php
 declare(strict_types = 1);
 
-namespace App\Handlers\Frontend\Shop\News;
+namespace App\Handlers\Frontend\News;
 
 use App\DataTransferObjects\Frontend\Shop\News\Container;
 use App\DataTransferObjects\Frontend\Shop\News\Item;
 use App\Repository\News\NewsRepository;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
-use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class LoadHandler
 {

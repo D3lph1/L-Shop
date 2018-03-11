@@ -5,7 +5,13 @@
             grid-list-lg
     >
         <v-layout row wrap v-if="items.total > 0">
-            <news-item v-for="each in items.news" :key="each.id" :item="each"></news-item>
+            <news-item
+                    v-for="(each, index) in items.news"
+                    :key="index"
+                    :id="each.id"
+                    :title="each.title"
+                    :content="each.content"
+            ></news-item>
         </v-layout>
         <v-layout row wrap v-else>
             <v-flex xs12>

@@ -135,7 +135,7 @@
                 }
                 */
                 this.disabledBtn = true;
-                axios.post(this.url, {
+                this.$axios.post(this.url, {
                     username: this.username,
                     amount: this.amount
                 }).then((response) => {

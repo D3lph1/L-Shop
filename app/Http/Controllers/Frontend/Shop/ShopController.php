@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Frontend\Shop;
 
 use App\Composers\Constructors\AdminBlockConstructor;
 use App\DataTransferObjects\Frontend\Shop\Server;
-use App\Handlers\Frontend\Shop\News\LoadHandler;
+use App\Handlers\Frontend\News\LoadHandler;
 use App\Http\Controllers\Controller;
 use App\Services\Auth\Auth;
 use App\Services\Cart\Cart;
@@ -15,7 +15,6 @@ use App\Services\Infrastructure\Response\Status;
 use App\Services\Infrastructure\Server\Persistence\Persistence;
 use App\Services\Media\Character\Cloak\Accessor as CloakAccessor;
 use App\Services\Media\Character\Skin\Accessor as SkinAccessor;
-use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
 
 class ShopController extends Controller

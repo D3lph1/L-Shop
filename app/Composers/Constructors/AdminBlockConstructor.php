@@ -114,7 +114,7 @@ class AdminBlockConstructor
                 'icon' => 'insert_drive_file',
                 'subItems' => [
                     [
-                        'link' => '',
+                        'link' => 'admin.pages.add',
                         'title' => __('content.layout.shop.sidebar.admin.pages.sub_items.add'),
                         'permissions' => [Permissions::ADMIN_PAGES_CRUD_ACCESS]
                     ],

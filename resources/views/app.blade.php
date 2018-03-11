@@ -21,7 +21,7 @@
     <v-app>
         <notifications></notifications>
         <request-error></request-error>
-        <global-preloader></global-preloader>
+        <preloader></preloader>
 
         <router-view></router-view>
     </v-app>

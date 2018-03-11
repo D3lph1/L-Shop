@@ -51,7 +51,8 @@
                     },
                     {
                         icon: 'build',
-                        title: $t('content.layout.shop.sidebar.profile.settings')
+                        title: $t('content.layout.shop.sidebar.profile.settings'),
+                        to: {name: 'frontend.profile.settings'}
                     },
                     {
                         icon: 'info_outline',

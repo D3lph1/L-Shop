@@ -4,10 +4,9 @@ declare(strict_types = 1);
 namespace App\Composers;
 
 use App\Composers\Constructors\AdminBlockConstructor;
-use App\Composers\Constructors\ProfileBlockConstructor;
 use App\Composers\Constructors\ServersBlockConstructor;
 use App\DataTransferObjects\Frontend\Shop\News\Container;
-use App\Handlers\Frontend\Shop\News\LoadHandler;
+use App\Handlers\Frontend\News\LoadHandler;
 use App\Services\Auth\AccessMode;
 use App\Services\Auth\Auth;
 use App\Services\Cart\Cart;

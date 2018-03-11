@@ -30,8 +30,7 @@ class Item implements \JsonSerializable
         return [
             'id' => $this->getNews()->getId(),
             'title' => $this->getNews()->getTitle(),
-            'content' => Str::limit($this->getNews()->getContent(), 150, '...'),
-            'url' => ''
+            'content' => Str::limit($this->getNews()->getContent(), 150, '...')
         ];
     }
 }

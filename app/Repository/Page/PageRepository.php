@@ -10,7 +10,9 @@ interface PageRepository
 {
     public function create(Page $page): void;
 
-    public function deleteAll(): bool;
+    public function update(Page $page): void;
+
+    public function find(int $id): ?Page;
 
     public function findByUrl(string $url): ?Page;
 
@@ -21,4 +23,8 @@ interface PageRepository
     public function findPaginateWithSearch(string $search, int $perPage): LengthAwarePaginator;
 
     public function findPaginatedWithOrderAndSearch(string $orderBy, bool $descending, string $search, int $perPage): LengthAwarePaginator;
+
+    public function remove(Page $page): void;
+
+    public function deleteAll(): bool;
 }

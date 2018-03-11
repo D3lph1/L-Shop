@@ -35,12 +35,16 @@ class DoctrinePageRepository implements PageRepository
         $this->em->flush();
     }
 
-    public function deleteAll(): bool
+    public function update(Page $page): void
     {
-        return (bool)$this->er->createQueryBuilder('p')
-            ->delete()
-            ->getQuery()
-            ->getResult();
+        $this->em->merge($page);
+        $this->em->flush();
+    }
+
+    public function find(int $id): ?Page
+    {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        return $this->er->find($id);
     }
 
     public function findByUrl(string $url): ?Page
@@ -72,6 +76,7 @@ class DoctrinePageRepository implements PageRepository
             $this->createQueryBuilder('p')
                 ->where('p.id LIKE :search')
                 ->orWhere('p.title LIKE :search')
+                ->orWhere('p.url LIKE :search')
                 ->setParameter('search', "%{$search}%")
                 ->getQuery(),
             $perPage,
@@ -87,12 +92,27 @@ class DoctrinePageRepository implements PageRepository
                 ->orderBy("p.{$orderBy}", $descending ? 'DESC' : 'ASC')
                 ->where('p.id LIKE :search')
                 ->orWhere('p.title LIKE :search')
+                ->orWhere('p.url LIKE :search')
                 ->setParameter('search', "%{$search}%")
                 ->getQuery(),
             $perPage,
             'page',
             false
         );
+    }
+
+    public function remove(Page $page): void
+    {
+        $this->em->remove($page);
+        $this->em->flush();
+    }
+
+    public function deleteAll(): bool
+    {
+        return (bool)$this->er->createQueryBuilder('p')
+            ->delete()
+            ->getQuery()
+            ->getResult();
     }
 
     /**

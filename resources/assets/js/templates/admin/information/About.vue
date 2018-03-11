@@ -10,12 +10,14 @@
         </div>
         <p class="subheading" v-html="$t('content.admin.information.about.description')"></p>
             <div class="text-xs-center mt-5">
-                <v-chip outline color="primary">
-                    <v-avatar>
-                        <img :src="images.logo" alt="trevor">
-                    </v-avatar>
-                    {{ $t('content.admin.information.about.lshop_version', {version}) }}
-                </v-chip>
+                <a :href="github" target="_blank" class="l-shop-version" title="GitHub">
+                    <v-chip outline color="primary" style="cursor: pointer !important;">
+                        <v-avatar>
+                            <img :src="images.logo" class="cp" alt="L-Shop logo">
+                        </v-avatar>
+                        <span class="cp">{{ $t('content.admin.information.about.lshop_version', {version}) }}</span>
+                    </v-chip>
+                </a>
             </div>
         <v-layout row wrap align-center justify-center class="mt-5">
             <v-flex xs6 sm4 md4 lg4>
@@ -85,7 +87,8 @@
                     laravel: null,
                     vue: null,
                     doctrine: null,
-                    vuetify: null
+                    vuetify: null,
+                    github: null
                 },
                 version: null,
                 items: [
@@ -123,6 +126,7 @@
 
                 this.logo = data.logo;
                 this.version = data.version;
+                this.github = data.github;
                 this.images = data.images;
                 this.items[1].avatar = data.developers.d3lph1;
                 this.items[3].avatar = data.developers.whileD0S;
@@ -132,6 +136,9 @@
 </script>
 
 <style lang="sass" scoped>
+    .l-shop-version
+        text-decoration: none
+        cursor: pointer
     .product-logo
         cursor: pointer
         padding: 1rem

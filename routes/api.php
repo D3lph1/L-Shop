@@ -44,11 +44,14 @@ $router->get('/servers', 'Frontend\Auth\ServersController@render');
 // Shop
 $router->get('/shop', 'Frontend\Shop\ShopController@render');
 $router->get('/catalog/{server}/{category?}', 'Frontend\Shop\CatalogController@render');
-$router->get('/news/load', 'Frontend\Shop\NewsController@load');
 
 $router->get('/cart/{server}', 'Frontend\Shop\CartController@render');
 $router->put('/cart', 'Frontend\Shop\CartController@put');
 $router->delete('/cart', 'Frontend\Shop\CartController@remove');
+
+$router->get('/news/load', 'Frontend\News\NewsController@load');
+$router->get('/news/{news}', 'Frontend\News\NewsController@render');
+$router->get('/page/{url}', 'Frontend\PageController@render');
 
 //Profile
 $router->get('/profile/character', 'Frontend\Profile\CharacterController@render');
@@ -57,6 +60,8 @@ $router->post('/profile/character/skin/delete', 'Frontend\Profile\CharacterContr
 $router->post('/profile/character/cloak/upload', 'Frontend\Profile\CharacterController@uploadCloak');
 $router->post('/profile/character/cloak/delete', 'Frontend\Profile\CharacterController@deleteCloak');
 
+$router->post('/profile/settings/password', 'Frontend\Profile\SettingsController@password');
+$router->post('/profile/settings/sessions/reset', 'Frontend\Profile\SettingsController@resetSessions');
 
 // Admin
 $router->get('/admin/control/basic', 'Admin\Control\BasicController@render');
@@ -76,7 +81,11 @@ $router->delete('/admin/items', 'Admin\Items\ListController@delete');
 $router->post('/admin/items/list', 'Admin\Items\ListController@pagination');
 $router->post('/admin/users/list', 'Admin\Users\ListController@pagination');
 $router->post('/admin/news/list', 'Admin\News\ListController@pagination');
+$router->post('/admin/pages/add', 'Admin\Pages\AddController@add');
+$router->get('/admin/pages/edit/{page}', 'Admin\Pages\EditController@render');
+$router->post('/admin/pages/edit/{page}', 'Admin\Pages\EditController@edit');
 $router->post('/admin/pages/list', 'Admin\Pages\ListController@pagination');
+$router->delete('/admin/pages', 'Admin\Pages\ListController@delete');
 $router->get('/admin/statistic/show', 'App\Handlers\Admin\Statistic\ShowController@render');
 $router->get('/admin/information/about', 'Admin\Information\AboutController@render');
 

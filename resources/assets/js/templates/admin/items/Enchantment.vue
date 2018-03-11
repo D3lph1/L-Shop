@@ -11,7 +11,7 @@
 
                         <div class="mt-3">
                             <div v-for="(enchantment, index) in models">
-                                <v-subheader v-if="(index - 1 >= 0 && models[index - 1].group !== enchantment.group) || index === 0">{{ enchantment.groupName }}</v-subheader>
+                                <v-subheader inset v-if="(index - 1 >= 0 && models[index - 1].group !== enchantment.group) || index === 0">{{ enchantment.groupName }}</v-subheader>
                                 <v-slider
                                         :label="enchantment.name"
                                         v-model="enchantment.model"

@@ -2,6 +2,7 @@
     <v-card>
         <v-card-title>
             {{ $t('content.admin.pages.list.title') }}
+            <v-btn flat color="primary" small icon :to="{name: 'admin.pages.add'}"><v-icon>add</v-icon></v-btn>
             <v-spacer></v-spacer>
             <v-text-field
                     append-icon="search"
@@ -30,9 +31,13 @@
             <template slot="items" slot-scope="props">
                 <td class="text-xs-center">{{ props.item.id }}</td>
                 <td class="text-xs-center">{{ props.item.title }}</td>
+                <td class="text-xs-center"><router-link :to="{name: 'frontend.page', params: {url: props.item.url}}">{{ props.item.link }}</router-link></td>
                 <td class="justify-center layout px-0">
-                    <v-btn icon class="mx-0">
+                    <v-btn icon class="mx-0" :to="{name: 'admin.pages.edit', params: {page: props.item.id}}">
                         <v-icon color="secondary">edit</v-icon>
+                    </v-btn>
+                    <v-btn icon class="mx-0" @click="deletePage(props.item)">
+                        <v-icon color="pink">delete</v-icon>
                     </v-btn>
                 </td>
             </template>
@@ -66,6 +71,12 @@
                         align: 'center',
                         sortable: true,
                         value: 'title'
+                    },
+                    {
+                        text: $t('content.admin.pages.list.table.headers.url'),
+                        align: 'center',
+                        sortable: true,
+                        value: 'url'
                     },
                     {
                         text: $t('common.actions'),
@@ -115,6 +126,23 @@
                     .then((response) => {
                         this.setTable(response.data)
                     });
+            },
+            deletePage(page) {
+                if (confirm($t('content.admin.pages.list.delete'))) {
+                    this.$axios.post('/api/admin/pages', {
+                        _method: 'DELETE',
+                        page: page.id
+                    })
+                        .then(response => {
+                            if (response.data.status === 'success') {
+                                this.items.forEach((each, index) => {
+                                    if (each.id === page.id) {
+                                        this.items.splice(index, 1);
+                                    }
+                                });
+                        }
+                    });
+                }
             },
             setTable(data) {
                 this.totalItems = data.paginator.total;

@@ -9,7 +9,7 @@ use App\Repository\Page\PageRepository;
 
 class ListHandler
 {
-    private $availableOrders = ['id', 'title'];
+    private $availableOrders = ['id', 'title', 'url'];
 
     /**
      * @var PageRepository

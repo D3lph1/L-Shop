@@ -2,11 +2,11 @@
     <v-flex xs12>
         <v-card color="secondary" class="white--text">
             <v-card-title primary-title>
-                <div class="headline">{{ item.title }}</div>
-                <div>{{ item.content }}</div>
+                <div class="headline">{{ title }}</div>
+                <div>{{ content }}</div>
             </v-card-title>
             <v-card-actions>
-                <v-btn flat dark>{{ $t('content.layout.news.read') }}</v-btn>
+                <v-btn flat dark :to="{name: 'frontend.news', params: {news: id}}">{{ $t('content.layout.news.read') }}</v-btn>
             </v-card-actions>
         </v-card>
     </v-flex>
@@ -15,10 +15,18 @@
 <script>
     export default {
         props: {
-            item: {
+            id: {
                 required: true,
-                type: Object
-            }
+                type: Number
+            },
+            title: {
+                required: true,
+                type: String
+            },
+            content: {
+                required: true,
+                type: String
+            },
         }
     }
 </script>

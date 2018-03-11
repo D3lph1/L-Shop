@@ -2,6 +2,7 @@
     <v-card>
         <v-card-title>
             {{ $t('content.admin.news.list.title') }}
+            <v-btn flat color="primary" small icon><v-icon>add</v-icon></v-btn>
             <v-spacer></v-spacer>
             <v-text-field
                     append-icon="search"

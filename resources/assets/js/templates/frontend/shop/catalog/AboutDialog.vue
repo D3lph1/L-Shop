@@ -33,10 +33,11 @@
                             <v-flex xs6>{{ $t('content.frontend.shop.catalog.about.enchantments') }}</v-flex>
                             <v-flex xs6 class="text-xs-right">
                                 <div v-for="enchantment in enchantments" class="purple--text">
-
-                                    {{ enchantment.name }}
-                                    {{ enchantment.level }}
-                                    <v-icon color="purple">flash_on</v-icon>
+                                    <span class="cp">
+                                        {{ enchantment.name }}
+                                        {{ enchantment.level }}
+                                        <v-icon color="purple">flash_on</v-icon>
+                                    </span>
                                 </div>
                             </v-flex>
                         </v-layout>

@@ -1,7 +1,7 @@
 {
   "name": "L-Shop",
   "description": "Modern trading system for Minecraft.",
-  "version": "0.6.0",
+  "version": "1.0.0",
   "author": "D3lph1 <d3lph1.contact@gmail.com>",
   "private": true,
   "scripts": {

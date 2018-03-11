@@ -13,7 +13,7 @@ const router = new Router({
 const title = document.title;
 
 router.beforeEach((to, from, next) => {
-    //store.commit('startLoading');
+    store.commit('startLoading');
 
     // Sets the title for the current page. The header is obtained from the
     // meta attribute of the route.
@@ -24,6 +24,10 @@ router.beforeEach((to, from, next) => {
     }
 
     next();
+});
+
+router.afterEach(() => {
+    store.commit('stopLoading');
 });
 
 export default router;

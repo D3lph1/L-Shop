@@ -1,11 +1,11 @@
 <?php
 declare(strict_types = 1);
 
-namespace App\Http\Controllers\Frontend\Shop;
+namespace App\Http\Controllers\Frontend\News;
 
 use App\Exceptions\News\DoesNotExistException;
-use App\Handlers\Frontend\Shop\News\LoadHandler;
-use App\Handlers\Frontend\Shop\News\VisitHandler;
+use App\Handlers\Frontend\News\LoadHandler;
+use App\Handlers\Frontend\News\VisitHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Frontend\Shop\News\LoadRequest;
 use App\Services\DateTime\Formatting\Formatter;
@@ -19,9 +19,9 @@ class NewsController extends Controller
     public function render(Request $request, VisitHandler $handler, Formatter $formatter)
     {
         try {
-            $news = $handler->handle((int)$request->route('id'));
+            $news = $handler->handle((int)$request->route('news'));
 
-            return view('frontend.shop.news', [
+            return new JsonResponse(Status::SUCCESS, [
                 'news' => $news,
                 'formatter' => $formatter
             ]);
