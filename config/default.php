@@ -6,7 +6,7 @@ return [
     'shop' => [
         'name' => 'L-Shop',
         'description' => '$:shop.description',
-        'keywords' => json_encode('$:shop.keywords'),
+        'keywords' => '$:shop.keywords',
         'currency' => [
             'name' => '$:settings.currency.name',
             'html' => '$:settings.currency.html'
@@ -25,7 +25,13 @@ return [
             ]
         ],
         'monitoring' => [
-            'enabled' => true
+            'enabled' => true,
+            'rcon' => [
+                'timeout' => 1,
+                'command' => 'list',
+                'pattern' => '/^.*(?<now>\d+)\/(?<total>\d+).*$/ui',
+                'ttl' => 10
+            ]
         ],
         'news' => [
             'pagination' => [

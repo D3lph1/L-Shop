@@ -7,6 +7,8 @@ use App\Services\Auth\Generators\CodeGenerator;
 use App\Entity\Activation;
 use App\Entity\User;
 use App\Repository\Activation\ActivationRepository;
+use App\Services\DateTime\DateTimeUtil;
+use Illuminate\Contracts\Config\Repository;
 
 class Activator
 {
@@ -20,10 +22,19 @@ class Activator
      */
     private $codeGenerator;
 
-    public function __construct(ActivationRepository $activationRepository, CodeGenerator $codeGenerator)
+    /**
+     * @var Repository
+     */
+    private $config;
+
+    public function __construct(
+        ActivationRepository $activationRepository,
+        CodeGenerator $codeGenerator,
+        Repository $config)
     {
         $this->activationRepository = $activationRepository;
         $this->codeGenerator = $codeGenerator;
+        $this->config = $config;
     }
 
     public function makeActivation(User $user): Activation
@@ -53,12 +64,19 @@ class Activator
     public function complete(string $code): bool
     {
         $activation = $this->activationRepository->findByCode($code);
-        if ($activation === null || $activation->isExpired() || $activation->isCompleted()) {
+        if ($activation === null || $this->isExpired($activation) || $activation->isCompleted()) {
             return false;
         }
         $this->activationRepository->update($activation->complete());
 
         return true;
+    }
+
+    public function isExpired(Activation $activation): bool
+    {
+        return (new \DateTimeImmutable())
+            ->diff(DateTimeUtil::add($activation->getCreatedAt(), $this->config->get('auth.activation.lifetime')))
+            ->invert !== 0;
     }
 
     public function isActivated(User $user): bool

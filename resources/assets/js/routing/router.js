@@ -1,3 +1,7 @@
+/**
+ * This file configures the application router.
+ */
+
 import Vue from 'vue'
 import Router from 'vue-router'
 import routes from './routes'
@@ -13,6 +17,7 @@ const router = new Router({
 const title = document.title;
 
 router.beforeEach((to, from, next) => {
+    // Show preloader.
     store.commit('startLoading');
 
     // Sets the title for the current page. The header is obtained from the
@@ -27,6 +32,7 @@ router.beforeEach((to, from, next) => {
 });
 
 router.afterEach(() => {
+    // Hide preloader after passage on route.
     store.commit('stopLoading');
 });
 

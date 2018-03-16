@@ -60,7 +60,6 @@ class CharacterController extends Controller
             $cloakImageSizes[] = $item[0] . 'x' . $item[1];
         }
 
-
         return new JsonResponse(Status::SUCCESS, [
             'skin' => [
                 'allowed' => $dto->isAllowSetSkin(),

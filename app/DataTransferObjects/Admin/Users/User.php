@@ -12,9 +12,21 @@ class User implements \JsonSerializable
      */
     private $user;
 
-    public function __construct(Entity $user)
+    /**
+     * @var bool
+     */
+    private $isActivated;
+
+    /**
+     * @var bool
+     */
+    private $isBanned;
+
+    public function __construct(Entity $user, bool $isActivated, bool $isBanned)
     {
         $this->user = $user;
+        $this->isActivated = $isActivated;
+        $this->isBanned = $isBanned;
     }
 
     /**
@@ -25,7 +37,9 @@ class User implements \JsonSerializable
         return [
             'id' => $this->user->getId(),
             'username' => $this->user->getUsername(),
-            'email' => $this->user->getEmail()
+            'email' => $this->user->getEmail(),
+            'isActivated' => $this->isActivated,
+            'isBanned' => $this->isBanned
         ];
     }
 }

@@ -11,7 +11,12 @@ interface ServerRepository
 
     public function deleteAll(): bool;
 
-    public function findAll(): array;
-
     public function find(int $id): ?Server;
+
+    /**
+     * @return Server[]
+     */
+    public function findWithEnabledMonitoring(): array;
+
+    public function findAll(): array;
 }

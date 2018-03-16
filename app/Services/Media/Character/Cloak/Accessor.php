@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Services\Media\Character\Cloak;
 
@@ -26,7 +26,15 @@ class Accessor
             return true;
         }
 
-        return $this->enabled();
+        if ($user->hasPermission(Permissions::ALLOW_SET_CLOAKS_IMPORTANT)) {
+            return true;
+        }
+
+        if (!$this->enabled()) {
+            return false;
+        }
+
+        return $user->hasPermission(Permissions::ALLOW_SET_CLOAKS);
     }
 
     public function allowSetHD(User $user): bool
@@ -39,11 +47,8 @@ class Accessor
             return false;
         }
 
-        if ($this->settings->get('system.profile.character.skin.hd.enabled')->getValue(DataType::BOOL)) {
-            return true;
-        }
-
-        if ($user->hasPermission(Permissions::ALLOW_SET_HD_CLOAKS)) {
+        if ($user->hasPermission(Permissions::ALLOW_SET_HD_CLOAKS) &&
+            $this->settings->get('system.profile.character.skin.hd.enabled')->getValue(DataType::BOOL)) {
             return true;
         }
 

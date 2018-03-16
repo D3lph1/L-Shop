@@ -39,17 +39,29 @@ class DoctrineServerRepository implements ServerRepository
             ->getResult();
     }
 
+    public function find(int $id): ?Server
+    {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        return $this->er->find($id);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findWithEnabledMonitoring(): array
+    {
+        return $this->er->createQueryBuilder('s')
+            ->select()
+            ->where('s.monitoringEnabled = 1')
+            ->getQuery()
+            ->getResult();
+    }
+
     /**
      * @return Server[]
      */
     public function findAll(): array
     {
         return $this->er->findAll();
-    }
-
-    public function find(int $id): ?Server
-    {
-        /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->er->find($id);
     }
 }

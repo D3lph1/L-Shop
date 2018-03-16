@@ -1,9 +1,14 @@
 <template>
     <div class="notifications">
         <transition-group name="slide-x-transition" tag="div">
-            <v-alert v-for="(item, index) in notifications" class="notification" :type="item.type" :key="index" :value="true">
-                {{ item.content }}
-            </v-alert>
+            <v-alert
+                    v-for="(item, index) in notifications"
+                    class="notification"
+                    :type="item.type"
+                    :key="index"
+                    :value="true"
+                    v-html="item.content"
+            ></v-alert>
         </transition-group>
     </div>
 </template>

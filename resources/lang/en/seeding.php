@@ -4,7 +4,7 @@ return [
     'settings' => [
         'currency' => 'USD',
         'currency_html' => '<i class="fa fa-usd"></i>',
-        'description' => 'Modern trading system for Minecraft',
+        'description' => 'Modern e-commerce system for Minecraft',
         'keywords' => 'L-Shop,shop,buy,store,minecraft',
         'sashok_auth_error_message' => 'User with this credentials not found',
     ],

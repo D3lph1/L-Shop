@@ -205,6 +205,6 @@ class AdminBlockConstructor
             }
         }
 
-        return $this->items;
+        return array_values($this->items);
     }
 }

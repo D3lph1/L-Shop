@@ -1,3 +1,10 @@
+/**
+ * Below is the declaration of system vue routes.
+ * The meta title field serves to specify the header that the route page will have.
+ *
+ * @author D3lph1 <d3lph1.contact@gmail.com>
+ */
+
 const Login = () => import(/* webpackChunkName: "shop" */ './../templates/frontend/auth/Login.vue');
 const Register = () => import(/* webpackChunkName: "shop" */ './../templates/frontend/auth/Register.vue');
 const Activation = () => import(/* webpackChunkName: "shop" */ './../templates/frontend/auth/Activation.vue');
@@ -24,6 +31,7 @@ const PagesAdd = () => import(/* webpackChunkName: "admin" */ '../templates/admi
 const PagesEdit = () => import(/* webpackChunkName: "admin" */ '../templates/admin/pages/Edit.vue');
 const PagesList = () => import(/* webpackChunkName: "admin" */ '../templates/admin/pages/List.vue');
 const UsersList = () => import(/* webpackChunkName: "admin" */ '../templates/admin/users/List.vue');
+const UsersEdit = () => import(/* webpackChunkName: "admin" */ '../templates/admin/users/Edit.vue');
 const StatisticShow = () => import(/* webpackChunkName: "admin" */ '../templates/admin/statistic/Show.vue');
 const About = () => import(/* webpackChunkName: "admin" */'../templates/admin/information/About.vue');
 
@@ -283,6 +291,16 @@ export default [
                 },
                 meta: {
                     title: $t('content.admin.pages.list.title')
+                }
+            },
+            {
+                path: 'users/edit/:user',
+                name: 'admin.users.edit',
+                components: {
+                    content: UsersEdit
+                },
+                meta: {
+                    title: $t('content.admin.users.edit.main.title')
                 }
             },
             {

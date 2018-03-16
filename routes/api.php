@@ -45,6 +45,8 @@ $router->get('/servers', 'Frontend\Auth\ServersController@render');
 $router->get('/shop', 'Frontend\Shop\ShopController@render');
 $router->get('/catalog/{server}/{category?}', 'Frontend\Shop\CatalogController@render');
 
+$router->get('/monitoring', 'Api\MonitoringController@monitor');
+
 $router->get('/cart/{server}', 'Frontend\Shop\CartController@render');
 $router->put('/cart', 'Frontend\Shop\CartController@put');
 $router->delete('/cart', 'Frontend\Shop\CartController@remove');
@@ -79,13 +81,15 @@ $router->post('/admin/items/edit/{item}', 'Admin\Items\EditController@edit')
     ->name('admin.items.edit');
 $router->delete('/admin/items', 'Admin\Items\ListController@delete');
 $router->post('/admin/items/list', 'Admin\Items\ListController@pagination');
-$router->post('/admin/users/list', 'Admin\Users\ListController@pagination');
 $router->post('/admin/news/list', 'Admin\News\ListController@pagination');
 $router->post('/admin/pages/add', 'Admin\Pages\AddController@add');
 $router->get('/admin/pages/edit/{page}', 'Admin\Pages\EditController@render');
 $router->post('/admin/pages/edit/{page}', 'Admin\Pages\EditController@edit');
 $router->post('/admin/pages/list', 'Admin\Pages\ListController@pagination');
 $router->delete('/admin/pages', 'Admin\Pages\ListController@delete');
+$router->get('/admin/users/edit/{user}', 'Admin\Users\EditController@render');
+$router->post('/admin/users/edit/{user}', 'Admin\Users\EditController@edit');
+$router->post('/admin/users/list', 'Admin\Users\ListController@pagination');
 $router->get('/admin/statistic/show', 'App\Handlers\Admin\Statistic\ShowController@render');
 $router->get('/admin/information/about', 'Admin\Information\AboutController@render');
 

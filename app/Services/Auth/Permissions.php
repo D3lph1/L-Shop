@@ -8,6 +8,16 @@ class Permissions
     public const VIEWING_DISABLED_SERVERS = 'viewing_disabled_servers';
 
     /**
+     * Ability to set skins.
+     */
+    public const ALLOW_SET_SKINS = 'allow_set_skins';
+
+    /**
+     * The ability to set skins, regardless of whether or not it is possible to skins at all.
+     */
+    public const ALLOW_SET_SKINS_IMPORTANT = 'allow_set_skins_important';
+
+    /**
      * Ability to set hd skins.
      */
     public const ALLOW_SET_HD_SKINS = 'allow_set_hd_skins';
@@ -16,6 +26,16 @@ class Permissions
      * The ability to set hd skins, regardless of whether or not it is possible to skins at all.
      */
     public const ALLOW_SET_HD_SKINS_IMPORTANT = 'allow_set_hd_skins_important';
+
+    /**
+     * Ability to set cloaks.
+     */
+    public const ALLOW_SET_CLOAKS = 'allow_set_cloaks';
+
+    /**
+     * The ability to set cloaks, regardless of whether or not it is possible to skins at all.
+     */
+    public const ALLOW_SET_CLOAKS_IMPORTANT = 'allow_set_cloaks_important';
 
     /**
      * Ability to set hd cloaks.

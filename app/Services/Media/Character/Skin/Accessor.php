@@ -26,7 +26,15 @@ class Accessor
             return true;
         }
 
-        return $this->enabled();
+        if ($user->hasPermission(Permissions::ALLOW_SET_SKINS_IMPORTANT)) {
+            return true;
+        }
+
+        if (!$this->enabled()) {
+            return false;
+        }
+
+        return $user->hasPermission(Permissions::ALLOW_SET_SKINS);
     }
 
     public function allowSetHD(User $user): bool
@@ -39,11 +47,8 @@ class Accessor
             return false;
         }
 
-        if ($this->settings->get('system.profile.character.skin.hd.enabled')->getValue(DataType::BOOL)) {
-            return true;
-        }
-
-        if ($user->hasPermission(Permissions::ALLOW_SET_HD_SKINS)) {
+        if ($user->hasPermission(Permissions::ALLOW_SET_HD_SKINS) &&
+            $this->settings->get('system.profile.character.skin.hd.enabled')->getValue(DataType::BOOL)) {
             return true;
         }
 

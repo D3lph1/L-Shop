@@ -5,6 +5,7 @@ namespace App\Http;
 
 use App\Http\Middleware\AddToResponse;
 use App\Http\Middleware\Captcha;
+use App\Http\Middleware\LogoutIfBanned;
 use App\Http\Middleware\NeedPermission;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -46,7 +47,7 @@ class Kernel extends HttpKernel
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class
         ],
     ];
 

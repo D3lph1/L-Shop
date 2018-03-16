@@ -1,7 +1,7 @@
 <template>
     <v-card>
         <v-container>
-            <v-layout row wrap>
+            <v-layout row wrap align-center justify-center>
                 <v-flex xs12 sm12 md6 lg6 class="text-xs-center mt-5" v-if="skin.allowed">
                     <v-layout row wrap align-center justify-center>
                         <v-flex xs12>

@@ -7,7 +7,9 @@ import Enchanted from './templates/common/Enchanted.vue'
 
 import Upload from './components/Uploader.vue'
 
-// Register application components.
+/**
+ * Register global application components.
+ */
 
 Vue.component('notifications', Notifications);
 Vue.component('preloader', Preloader);

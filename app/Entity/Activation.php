@@ -87,7 +87,7 @@ class Activation
     /**
      * @ORM\PrePersist
      */
-    public function generateCreatedAt()
+    public function generateCreatedAt(): void
     {
         $this->createdAt = new \DateTimeImmutable();
     }

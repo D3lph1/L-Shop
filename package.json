@@ -1,6 +1,6 @@
 {
   "name": "L-Shop",
-  "description": "Modern trading system for Minecraft.",
+  "description": "Modern e-commerce system for Minecraft.",
   "version": "1.0.0",
   "author": "D3lph1 <d3lph1.contact@gmail.com>",
   "private": true,
@@ -17,7 +17,7 @@
     "vue": "^2.5.13",
     "vue-chartjs": "^3.2.1",
     "vue-router": "^3.0.1",
-    "vuetify": "1.0.4",
+    "vuetify": "1.0.8",
     "vuex": "^3.0.0"
   },
   "devDependencies": {

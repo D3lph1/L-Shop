@@ -49,7 +49,7 @@ class DoctrineUserRepository implements UserRepository
             ->getResult();
     }
 
-    public function findById(int $id): ?User
+    public function find(int $id): ?User
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->er->find($id);

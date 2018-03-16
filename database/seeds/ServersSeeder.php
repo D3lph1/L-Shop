@@ -21,8 +21,11 @@ class ServersSeeder extends Seeder
         $serverRepository->deleteAll();
 
         $serverMMO = (new Server('MMO'))
+            ->setIp('127.0.0.1')
+            ->setPort(25575)
+            ->setPassword('123456')
             ->setEnabled(true)
-            ->setMonitoringEnabled(false);
+            ->setMonitoringEnabled(true);
         $categoryRepository->create(new Category(__('seeding.categories.1'), $serverMMO));
         $categoryRepository->create(new Category(__('seeding.categories.2'), $serverMMO));
         $categoryRepository->create(new Category(__('seeding.categories.3'), $serverMMO));

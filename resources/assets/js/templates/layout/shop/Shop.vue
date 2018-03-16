@@ -9,11 +9,12 @@
         >
             <v-toolbar-side-icon @click.stop="drawer = !drawer" style></v-toolbar-side-icon>
             <v-toolbar-title>
-                Сервер:
+                {{ $t('content.layout.shop.server') }}
                 <span v-if="server !== null">{{ server.name }}</span>
                 <span v-else>{{ $t('content.frontend.shop.layout.server_not_selected') }}</span>
             </v-toolbar-title>
             <v-spacer></v-spacer>
+            <v-toolbar-side-icon v-if="monitoring.length !== 0" @click="monitoringDialog = true"><v-icon>insert_chart</v-icon></v-toolbar-side-icon>
             <v-toolbar-side-icon @click.stop="right = !right"><v-icon>library_books</v-icon></v-toolbar-side-icon>
         </v-toolbar>
         <v-navigation-drawer
@@ -48,6 +49,12 @@
             <v-btn :href="github" target="_blank" small outline color="white">GitHub</v-btn>
             <v-spacer></v-spacer>
         </v-footer>
+
+        <monitoring-dialog
+                :dialog="monitoringDialog"
+                :monitoring="monitoring"
+                @close="closeMonitoringDialog"
+        ></monitoring-dialog>
     </div>
 </template>
 
@@ -58,6 +65,7 @@
     import AdminBlock from './sidebar/AdminBlock.vue'
     import Settings from './sidebar/Settings.vue'
     import News from './news/Block.vue'
+    import MonitoringDialog from './MonitoringDialog.vue'
 
     export default {
         data() {
@@ -68,6 +76,8 @@
                 left: null,
 
                 mobileBreakPoint: 1024,
+                monitoring: [],
+                monitoringDialog: false,
 
                 character: false,
                 server: null,
@@ -90,6 +100,14 @@
                 this.server = val;
             }
         },
+        mounted() {
+            this.$axios.get('/api/monitoring')
+                .then(response => {
+                    if (response.data.status === 'success') {
+                        this.monitoring = response.data.monitoring;
+                    }
+                });
+        },
         methods: {
             configureLayout() {
                 // Collapses the left drawer if the screen width is less than
@@ -97,6 +115,9 @@
                 if (window.innerWidth <= this.mobileBreakPoint) {
                     this.drawer = false;
                 }
+            },
+            closeMonitoringDialog() {
+                this.monitoringDialog = false;
             },
             setData(response) {
                 const data = response.data;
@@ -117,7 +138,8 @@
             'profile-block': ProfileBlock,
             'admin-block': AdminBlock,
             'settings': Settings,
-            'news': News
+            'news': News,
+            'monitoring-dialog': MonitoringDialog
         }
     }
 </script>

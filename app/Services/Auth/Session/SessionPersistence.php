@@ -75,7 +75,7 @@ class SessionPersistence
         if (empty($code)) {
             return $this->createEmpty();
         }
-        
+
         $persistence = $this->persistenceRepository->findByCode($code);
         if ($persistence === null) {
             return $this->createEmpty();
@@ -85,7 +85,7 @@ class SessionPersistence
         if ($persistence->isExpired()) {
             return $this->createEmpty();
         }
-        $user = $this->userRepository->findById($persistence->getUser()->getId());
+        $user = $this->userRepository->find($persistence->getUser()->getId());
 
         if (!$this->checkpointsPool->passCheck($user)) {
             return $this->createEmpty();

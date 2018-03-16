@@ -14,4 +14,9 @@ interface PermissionRepository
     public function deleteAll(): bool;
 
     public function findByName(string $name): ?Permission;
+
+    /**
+     * @return Permission[]
+     */
+    public function findAll(): array;
 }

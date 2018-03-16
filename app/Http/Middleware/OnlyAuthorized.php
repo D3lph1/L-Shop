@@ -9,6 +9,9 @@ use Illuminate\Http\Request;
 
 class OnlyAuthorized
 {
+    /**
+     * @var Auth
+     */
     private $auth;
 
     public function __construct(Auth $auth)

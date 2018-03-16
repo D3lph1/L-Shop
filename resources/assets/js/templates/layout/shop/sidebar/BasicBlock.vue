@@ -92,9 +92,12 @@
                     .then((response) => {
                         if (response.data.status === 'success') {
                             this.$notification.info($t('msg.frontend.auth.logout.success'));
-                            this.$router.replace({name: 'frontend.auth.login'});
                             this.$store.commit('logout');
                         }
+                        this.$router.replace({name: 'frontend.auth.login'});
+                    })
+                    .catch(error => {
+                        this.$router.replace({name: 'frontend.auth.login'});
                     });
             },
             toCatalog() {

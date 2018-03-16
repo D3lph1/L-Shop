@@ -66,7 +66,6 @@ module.exports = {
         noInfo: true,
         overlay: true
     },
-    watch: true,
     watchOptions: {
         aggregateTimeout: 300,
         poll: false,

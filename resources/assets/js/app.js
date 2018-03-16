@@ -7,7 +7,7 @@ import store from './core/store'
 
 Vue.use(Vuex);
 
-let app = new Vue({
+new Vue({
     el: '#app',
     router,
     store

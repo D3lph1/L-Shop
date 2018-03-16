@@ -12,21 +12,24 @@ class Pool
      */
     private $checkpoints = [];
 
+    private $enabledDefault;
+
     /**
      * @var bool
      */
-    private $enable;
+    private $enabled;
 
     /**
      * Pool constructor.
      *
      * @param Checkpoint[] $checkpoints
-     * @param bool         $enable
+     * @param bool         $enabled
      */
-    public function __construct(array $checkpoints = [], bool $enable = true)
+    public function __construct(array $checkpoints = [], bool $enabled = true)
     {
         $this->checkpoints = $checkpoints;
-        $this->enable = $enable;
+        $this->enabledDefault = $enabled;
+        $this->enabled = $enabled;
     }
 
     public function put(Checkpoint $checkpoint): bool
@@ -83,7 +86,7 @@ class Pool
 
     public function passLogin(User $user): bool
     {
-        if ($this->isEnable()) {
+        if ($this->isEnabled()) {
             foreach ($this->all() as $checkpoint) {
                 if (!$checkpoint->login($user)) {
                     return false;
@@ -96,7 +99,7 @@ class Pool
 
     public function passCheck(User $user): bool
     {
-        if ($this->isEnable()) {
+        if ($this->isEnabled()) {
             foreach ($this->all() as $checkpoint) {
                 if (!$checkpoint->check($user)) {
                     return false;
@@ -109,15 +112,30 @@ class Pool
 
     public function passLoginFail(): void
     {
-        if ($this->isEnable()) {
+        if ($this->isEnabled()) {
             foreach ($this->all() as $checkpoint) {
                 $checkpoint->loginFail();
             }
         }
     }
 
-    public function isEnable()
+    public function disable(): void
     {
-        return $this->enable;
+        $this->enabled = false;
+    }
+
+    public function enable(): void
+    {
+        $this->enabled = true;
+    }
+
+    public function reset(): void
+    {
+        $this->enabled = $this->enabledDefault;
+    }
+
+    public function isEnabled(): bool
+    {
+        return $this->enabled;
     }
 }

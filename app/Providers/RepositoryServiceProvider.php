@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace App\Providers;
 
 use App\Entity\Activation;
+use App\Entity\Ban;
 use App\Entity\Category;
 use App\Entity\Enchantment;
 use App\Entity\Item;
@@ -18,6 +19,8 @@ use App\Entity\Server;
 use App\Entity\User;
 use App\Repository\Activation\ActivationRepository;
 use App\Repository\Activation\DoctrineActivationRepository;
+use App\Repository\Ban\BanRepository;
+use App\Repository\Ban\DoctrineBanRepository;
 use App\Repository\Category\CategoryRepository;
 use App\Repository\Category\DoctrineCategoryRepository;
 use App\Repository\Enchantment\DoctrineEnchantmentRepository;
@@ -72,6 +75,10 @@ class RepositoryServiceProvider extends ServiceProvider
         ActivationRepository::class => [
             'concrete' => DoctrineActivationRepository::class,
             'entity' => Activation::class
+        ],
+        BanRepository::class => [
+            'concrete' => DoctrineBanRepository::class,
+            'entity' => Ban::class
         ],
         ReminderRepository::class => [
             'concrete' => DoctrineReminderRepository::class,

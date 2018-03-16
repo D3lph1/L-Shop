@@ -5,6 +5,7 @@ namespace App\Providers;
 
 use App\Services\Auth\Auth;
 use App\Services\Auth\Checkpoint\ActivationCheckpoint;
+use App\Services\Auth\Checkpoint\BanCheckpoint;
 use App\Services\Auth\Checkpoint\Pool;
 use App\Services\Auth\Generators\DefaultCodeGenerator;
 use App\Services\Auth\Generators\CodeGenerator;
@@ -26,7 +27,8 @@ class AuthServiceProvider extends ServiceProvider
         $this->app->bind(CodeGenerator::class, DefaultCodeGenerator::class);
         $this->app->singleton(Pool::class, function () {
             return new Pool([
-                $this->app->make(ActivationCheckpoint::class)
+                $this->app->make(ActivationCheckpoint::class),
+                $this->app->make(BanCheckpoint::class)
             ]);
         });
         $this->app->singleton(Auth::class);

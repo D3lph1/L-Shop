@@ -7,6 +7,7 @@ use App\Handlers\Frontend\Auth\AuthHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Frontend\Auth\LoginRequest;
 use App\Services\Auth\AccessMode;
+use App\Services\Auth\Exceptions\BannedException;
 use App\Services\Auth\Exceptions\NotActivatedException;
 use App\Services\Infrastructure\Notification\Notifications\Error;
 use App\Services\Infrastructure\Notification\Notifications\Success;
@@ -15,6 +16,7 @@ use App\Services\Infrastructure\Response\JsonResponse;
 use App\Services\Infrastructure\Response\Status;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
+use App\Services\Support\Lang\Ban\BanMessage;
 
 class LoginController extends Controller
 {
@@ -29,7 +31,7 @@ class LoginController extends Controller
         ]);
     }
 
-    public function handle(LoginRequest $request, AuthHandler $handler, Notificator $notificator)
+    public function handle(LoginRequest $request, AuthHandler $handler, Notificator $notificator, BanMessage $banMessage)
     {
         try {
             $dto = $handler->handle(
@@ -52,6 +54,22 @@ class LoginController extends Controller
         } catch (NotActivatedException $e) {
             return (new JsonResponse('not_activated'))
                 ->addNotification(new Error(__('msg.frontend.auth.login.not_activated')));
+        } catch (BannedException $e) {
+            $banMessages = $banMessage->buildMessageAuto($e->getBans());
+            if (count($banMessages->getMessages()) === 0) {
+                return (new JsonResponse('banned'))
+                    ->addNotification(new Error($banMessages->getTitle()));
+            }
+
+            $notification = $banMessages->getTitle();
+            $i = 1;
+            foreach ($banMessages->getMessages() as $message) {
+                $notification .= "<br>{$i}) {$message}";
+                $i++;
+            }
+
+            return (new JsonResponse('banned'))
+                ->addNotification(new Error($notification));
         }
     }
 }

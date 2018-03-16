@@ -47,6 +47,15 @@ class DoctrinePermissionRepository implements PermissionRepository
 
     public function findByName(string $name): ?Permission
     {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->er->findOneBy(['name' => $name]);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function findAll(): array
+    {
+        return $this->er->findAll();
     }
 }

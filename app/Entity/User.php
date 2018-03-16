@@ -64,6 +64,11 @@ class User implements HasRoles, HasPermissions
     private $activations;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Ban", mappedBy="user", cascade={"persist", "merge"})
+     */
+    private $bans;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Reminder", mappedBy="user")
      */
     private $reminders;
@@ -81,6 +86,7 @@ class User implements HasRoles, HasPermissions
         $this->roles = new ArrayCollection();
         $this->permissions = new ArrayCollection();
         $this->activations = new ArrayCollection();
+        $this->bans = new ArrayCollection();
         $this->reminders = new ArrayCollection();
     }
 
@@ -194,6 +200,18 @@ class User implements HasRoles, HasPermissions
     public function getActivations(): Collection
     {
         return $this->activations;
+    }
+
+    public function addBan(Ban $ban): User
+    {
+        $this->bans->add($ban);
+
+        return $this;
+    }
+
+    public function getBans(): Collection
+    {
+        return $this->bans;
     }
 
     public function getReminders(): Collection

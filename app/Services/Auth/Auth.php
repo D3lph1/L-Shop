@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace App\Services\Auth;
 
+use App\Services\Auth\Checkpoint\Pool;
 use App\Services\Auth\Session\Session;
 use App\Services\Auth\Session\SessionPersistence;
 use App\Entity\User;
@@ -34,6 +35,11 @@ class Auth
     private $eventDispatcher;
 
     /**
+     * @var Pool
+     */
+    private $pool;
+
+    /**
      * @var Session
      */
     private $session = null;
@@ -42,12 +48,14 @@ class Auth
         Authenticator $authenticator,
         Registrar $registrar,
         SessionPersistence $sessionPersistence,
-        Dispatcher $dispatcher)
+        Dispatcher $dispatcher,
+        Pool $pool)
     {
         $this->authenticator = $authenticator;
         $this->registrar = $registrar;
         $this->sessionPersistence = $sessionPersistence;
         $this->eventDispatcher = $dispatcher;
+        $this->pool = $pool;
     }
 
     public function authenticate(string $username, string $password, bool $remember = false): bool
@@ -91,11 +99,13 @@ class Auth
 
     public function logout(bool $anywhere = false): void
     {
+        $this->pool->disable();
         $this->setSessionIfNeed();
         if ($this->session->check()) {
             $this->sessionPersistence->destroy($this->session->getUser(), $anywhere);
             $this->session = $this->sessionPersistence->createEmpty();
         }
+        $this->pool->reset();
     }
 
     private function setSessionIfNeed(): void

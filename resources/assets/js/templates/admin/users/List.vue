@@ -31,8 +31,18 @@
                 <td class="text-xs-center">{{ props.item.id }}</td>
                 <td class="text-xs-center">{{ props.item.username }}</td>
                 <td class="text-xs-center">{{ props.item.email }}</td>
+                <td class="text-xs-center">
+                    <v-tooltip top v-if="props.item.isActivated">
+                        <v-icon class="cp" slot="activator">done</v-icon>
+                        <span>{{ $t('content.admin.users.list.table.activated') }}</span>
+                    </v-tooltip>
+                    <v-tooltip top v-if="props.item.isBanned">
+                        <v-icon class="cp" slot="activator">block</v-icon>
+                        <span>{{ $t('content.admin.users.list.table.banned') }}</span>
+                    </v-tooltip>
+                </td>
                 <td class="justify-center layout px-0">
-                    <v-btn icon class="mx-0">
+                    <v-btn icon class="mx-0" :to="{name: 'admin.users.edit', params: {user: props.item.id}}">
                         <v-icon color="secondary">edit</v-icon>
                     </v-btn>
                 </td>
@@ -73,6 +83,11 @@
                         align: 'center',
                         sortable: true,
                         value: 'email'
+                    },
+                    {
+                        text: $t('content.admin.users.list.table.headers.states'),
+                        align: 'center',
+                        sortable: false
                     },
                     {
                         text: $t('common.actions'),

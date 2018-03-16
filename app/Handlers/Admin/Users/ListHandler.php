@@ -6,6 +6,8 @@ namespace App\Handlers\Admin\Users;
 use App\DataTransferObjects\Admin\Users\ListResult;
 use App\Exceptions\InvalidArgumentException;
 use App\Repository\User\UserRepository;
+use App\Services\Auth\Activator;
+use App\Services\Auth\BanManager;
 
 class ListHandler
 {
@@ -16,9 +18,21 @@ class ListHandler
      */
     private $repository;
 
-    public function __construct(UserRepository $repository)
+    /**
+     * @var Activator
+     */
+    private $activator;
+
+    /**
+     * @var BanManager
+     */
+    private $banManager;
+
+    public function __construct(UserRepository $repository, Activator $activator, BanManager $banManager)
     {
         $this->repository = $repository;
+        $this->activator = $activator;
+        $this->banManager = $banManager;
     }
 
     public function handle(?string $orderBy, bool $descending, ?string $search, int $perPage): ListResult
@@ -50,6 +64,6 @@ class ListHandler
             }
         }
 
-        return new ListResult($paginator);
+        return new ListResult($paginator, $this->activator, $this->banManager);
     }
 }

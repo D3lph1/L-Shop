@@ -6,7 +6,9 @@ import './../sass/main.sass'
 
 import colors from 'vuetify/es5/util/colors'
 
-// Configure application theme.
+/**
+ * Configure application theme.
+ */
 
 Vue.use(Vuetify, {
     theme: {

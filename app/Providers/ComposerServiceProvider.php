@@ -21,7 +21,6 @@ class ComposerServiceProvider extends ServiceProvider
     public function boot(): void
     {
         view()->composer(['app'], GlobalLayoutComposer::class);
-        // view()->composer(['layout.shop'], ShopLayoutComposer::class);
     }
 
     /**

@@ -5,7 +5,7 @@ namespace Database\Migrations;
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema as Schema;
 
-class Version20180307084757 extends AbstractMigration
+class Version20180314121517 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -15,6 +15,7 @@ class Version20180307084757 extends AbstractMigration
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
         $this->addSql('CREATE TABLE lshop_activations (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, code VARCHAR(64) NOT NULL, completed_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime_immutable)\', created_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', INDEX IDX_C4AD3053A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE lshop_bans (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, until DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime_immutable)\', reason VARCHAR(255) DEFAULT NULL, created_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', INDEX IDX_C4A65971A76ED395 (user_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE lshop_categories (id INT AUTO_INCREMENT NOT NULL, server_id INT DEFAULT NULL, name VARCHAR(255) NOT NULL, INDEX IDX_E58BBDB31844E6B7 (server_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE lshop_enchantments (id INT AUTO_INCREMENT NOT NULL, game_id INT NOT NULL, max_level SMALLINT NOT NULL, `group` VARCHAR(32) DEFAULT NULL, UNIQUE INDEX UNIQ_A6790267E48FD905 (game_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE lshop_enchantments_items (id INT AUTO_INCREMENT NOT NULL, enchantment_id INT DEFAULT NULL, item_id INT DEFAULT NULL, level INT NOT NULL, INDEX IDX_CFD5A797F3927CF3 (enchantment_id), INDEX IDX_CFD5A797126F525E (item_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
@@ -33,6 +34,7 @@ class Version20180307084757 extends AbstractMigration
         $this->addSql('CREATE TABLE lshop_users (id INT AUTO_INCREMENT NOT NULL, username VARCHAR(32) NOT NULL, email VARCHAR(255) NOT NULL, password VARCHAR(60) NOT NULL, balance DOUBLE PRECISION NOT NULL, created_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', UNIQUE INDEX UNIQ_15622DEF85E0677 (username), UNIQUE INDEX UNIQ_15622DEE7927C74 (email), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE lshop_settings (id INT AUTO_INCREMENT NOT NULL, `key` VARCHAR(255) NOT NULL, value LONGTEXT DEFAULT NULL, updated_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime_immutable)\', UNIQUE INDEX UNIQ_461A7B124E645A7E (`key`), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('ALTER TABLE lshop_activations ADD CONSTRAINT FK_C4AD3053A76ED395 FOREIGN KEY (user_id) REFERENCES lshop_users (id)');
+        $this->addSql('ALTER TABLE lshop_bans ADD CONSTRAINT FK_C4A65971A76ED395 FOREIGN KEY (user_id) REFERENCES lshop_users (id)');
         $this->addSql('ALTER TABLE lshop_categories ADD CONSTRAINT FK_E58BBDB31844E6B7 FOREIGN KEY (server_id) REFERENCES lshop_servers (id)');
         $this->addSql('ALTER TABLE lshop_enchantments_items ADD CONSTRAINT FK_CFD5A797F3927CF3 FOREIGN KEY (enchantment_id) REFERENCES lshop_enchantments (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE lshop_enchantments_items ADD CONSTRAINT FK_CFD5A797126F525E FOREIGN KEY (item_id) REFERENCES lshop_items (id)');
@@ -66,12 +68,14 @@ class Version20180307084757 extends AbstractMigration
         $this->addSql('ALTER TABLE lshop_role_user DROP FOREIGN KEY FK_2B38BC71D60322AC');
         $this->addSql('ALTER TABLE lshop_categories DROP FOREIGN KEY FK_E58BBDB31844E6B7');
         $this->addSql('ALTER TABLE lshop_activations DROP FOREIGN KEY FK_C4AD3053A76ED395');
+        $this->addSql('ALTER TABLE lshop_bans DROP FOREIGN KEY FK_C4A65971A76ED395');
         $this->addSql('ALTER TABLE lshop_news DROP FOREIGN KEY FK_1279E70DA76ED395');
         $this->addSql('ALTER TABLE lshop_permission_user DROP FOREIGN KEY FK_2F5D723FA76ED395');
         $this->addSql('ALTER TABLE lshop_persistences DROP FOREIGN KEY FK_9E86B38DA76ED395');
         $this->addSql('ALTER TABLE lshop_reminders DROP FOREIGN KEY FK_7586A178A76ED395');
         $this->addSql('ALTER TABLE lshop_role_user DROP FOREIGN KEY FK_2B38BC71A76ED395');
         $this->addSql('DROP TABLE lshop_activations');
+        $this->addSql('DROP TABLE lshop_bans');
         $this->addSql('DROP TABLE lshop_categories');
         $this->addSql('DROP TABLE lshop_enchantments');
         $this->addSql('DROP TABLE lshop_enchantments_items');

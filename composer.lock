@@ -4,8 +4,53 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "c56bccf726046209e985411a540d7eee",
+    "content-hash": "19083daf7b01038208b0fb1e6e8d3842",
     "packages": [
+        {
+            "name": "d3lph1/minecraft-rcon-manager",
+            "version": "1.2",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/D3lph1/minecraft-rcon-manager.git",
+                "reference": "3dc807b8b79dc343fa5481dad75cfc1cdd87a392"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/D3lph1/minecraft-rcon-manager/zipball/3dc807b8b79dc343fa5481dad75cfc1cdd87a392",
+                "reference": "3dc807b8b79dc343fa5481dad75cfc1cdd87a392",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4.0"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "4.*"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "D3lph1\\MinecraftRconManager\\": "src",
+                    "D3lph1\\MinecraftRconManager\\tests\\": "tests"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Bogdan Chertkov",
+                    "email": "d3lph1.contact@gmail.com"
+                }
+            ],
+            "description": "Library for easy interaction with the minecraft server using rcon.",
+            "keywords": [
+                "mc",
+                "minecraft",
+                "rcon"
+            ],
+            "time": "2017-10-26T15:46:31+00:00"
+        },
         {
             "name": "dnoegel/php-xdg-base-dir",
             "version": "0.1",

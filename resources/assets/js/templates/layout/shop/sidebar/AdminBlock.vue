@@ -1,5 +1,5 @@
 <template>
-    <v-list class="pt-0" dense>
+    <v-list class="pt-0" dense v-if="$store.getters.isAuth">
         <v-subheader inset>{{ $t('content.layout.shop.sidebar.admin.title') }}</v-subheader>
         <v-list-group
                 v-for="item in items"

@@ -14,7 +14,7 @@ interface UserRepository
 
     public function deleteAll(): bool;
 
-    public function findById(int $id): ?User;
+    public function find(int $id): ?User;
 
     public function findByUsername(string $username): ?User;
 

@@ -3,6 +3,10 @@ import store from './../store'
 import router from './../../routing/router'
 import notification from './../notification/notification'
 
+/**
+ * Configuring the axios response spoiler. The response interceptor is a function
+ * that is called before the response is processed in the then() and catch().
+ */
 axios.interceptors.response.use((response) => {
     const data = response.data;
 
@@ -32,11 +36,16 @@ axios.interceptors.response.use((response) => {
             store.commit('setAuth', data.auth.username);
         }
 
+        if (data.early_redirect) {
+            router.push({name: data.early_redirect});
+        }
+
         if (typeof data.status !== 'undefined') {
             // The "auth" status means that the page is not accessible to the user
             // and needs to be authorized.
             if (data.status === 'auth') {
                 notification.warning($t('msg.only_for_auth'));
+                // Redirect to login page.
                 router.push({name: 'frontend.auth.login'});
 
                 // An empty promise since processing a query does not make sense.
@@ -59,7 +68,7 @@ axios.interceptors.response.use((response) => {
     // Show internal error notification.
     if (err.response.status === 500) {
         notification.error($t('msg.request_error.title'));
-    } else if (err.response.status === 422) {
+    } else {
         // Show validation error notification.
         // Example of structure:
         // {
@@ -80,6 +89,21 @@ axios.interceptors.response.use((response) => {
                     }
                 }
             }
+        }
+
+        // Show notifications. Read more on line 11.
+        const notifications = err.response.data.notifications;
+        for (let key in notifications) {
+            if (notifications.hasOwnProperty(key)) {
+                let each = notifications[key];
+                notification.call(each.type, each.content);
+            }
+        }
+
+        // If an early redirect element is present in the response, it makes an
+        // immediate redirect.
+        if (err.response.data.early_redirect) {
+            router.push({name: err.response.data.early_redirect});
         }
     }
 

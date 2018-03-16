@@ -25,6 +25,20 @@ class DoctrineRoleRepository implements RoleRepository
         $this->er = $er;
     }
 
+    public function findByName(string $name): ?Role
+    {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        return $this->er->findOneBy(['name' => $name]);
+    }
+
+    /**
+     * {@inheritdoc}
+     */
+    public function findByAll(): array
+    {
+        return $this->er->findAll();
+    }
+
     public function create(Role $role): void
     {
         $this->em->persist($role);
@@ -43,10 +57,5 @@ class DoctrineRoleRepository implements RoleRepository
             ->delete()
             ->getQuery()
             ->getResult();
-    }
-
-    public function findByName(string $name): ?Role
-    {
-        return $this->er->findOneBy(['name' => $name]);
     }
 }

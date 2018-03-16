@@ -53,7 +53,7 @@
                         <img height="70" :src="images.vuetify" alt="Doctrine logo">
                         <div class="logo-text"><h1 class="title grey--text text--darken-3">Vuetify</h1></div>
                     </div>
-                    <span>{{ $t('content.admin.information.about.version', {version: '1.0.4'}) }}</span>
+                    <span>{{ $t('content.admin.information.about.version', {version: '1.0.8'}) }}</span>
                 </v-tooltip>
             </v-flex>
         </v-layout>

@@ -1,13 +1,34 @@
 import axios from './axios'
 import store from './../store'
 
+/**
+ * This file is used to load data before proceeding along the route.
+ *
+ * @example
+ *  // Your component...
+ *  export default {
+ *      beforeRouteEnter (to, from, next) {
+ *          loader.beforeRouteEnter(`/example`, to, from, next);
+ *      },
+ *      beforeRouteUpdate (to, from, next) {
+ *          loader.beforeRouteUpdate(`/example`, to, from, next, this);
+ *      },
+ *      methods: {
+ *          setData(response) {
+ *              //
+ *          }
+ *      }
+ *  }
+ */
 export default {
     beforeRouteEnter(url, to, from, next) {
         axios.get(url)
             .then((response) => {
                 // If is error.
                 if (typeof response.response !== 'undefined') {
-                    store.commit('requestError');
+                    if (response.status === 500) {
+                        store.commit('requestError');
+                    }
 
                     return;
                 }
@@ -21,7 +42,9 @@ export default {
                 });
             })
             .catch((err) => {
-                store.commit('requestError');
+                if (err.response.status === 500) {
+                    store.commit('requestError');
+                }
             });
     },
     beforeRouteUpdate(url, to, from, next, vm) {
@@ -36,7 +59,9 @@ export default {
                 next();
             })
             .catch((err) => {
-                store.commit('requestError');
+                if (err.response.status === 500) {
+                    store.commit('requestError');
+                }
             });
     }
 }

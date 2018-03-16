@@ -2,14 +2,14 @@
 
 return [
     'shop' => [
-        'description' => 'Современная торговая система для Minecraft',
-        'keywords' => [
+        'description' => 'Современная система электронной коммерции для Minecraft',
+        'keywords' => json_encode([
             'L-Shop',
             'магазин',
             'купить',
             'minecraft',
             'майнкрафт',
-        ]
+        ])
     ],
     'settings' => [
         'currency' => [
