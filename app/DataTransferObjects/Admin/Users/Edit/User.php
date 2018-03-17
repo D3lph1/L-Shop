@@ -4,7 +4,9 @@ declare(strict_types = 1);
 namespace App\DataTransferObjects\Admin\Users\Edit;
 
 use App\Entity\Permission;
+use App\Entity\Role;
 use App\Entity\User as Entity;
+use App\Services\Auth\BanManager;
 
 class User implements \JsonSerializable
 {
@@ -33,13 +35,91 @@ class User implements \JsonSerializable
      */
     private $cloakBack;
 
-    public function __construct(Entity $user, string $skinFront, string $skinBack, ?string $cloakFront, ?string $cloakBack)
+    /**
+     * @var bool
+     */
+    private $skinDefault;
+
+    /**
+     * @var bool
+     */
+    private $cloakExists;
+
+    /**
+     * @var string|null
+     */
+    private $activatedAt;
+
+    /**
+     * @var bool
+     */
+    private $banned;
+
+    /**
+     * @var BanManager
+     */
+    private $banManager;
+
+    public function __construct(Entity $user, BanManager $banManager)
     {
         $this->user = $user;
+        $this->banManager = $banManager;
+    }
+
+    public function setSkinFront(string $skinFront): User
+    {
         $this->skinFront = $skinFront;
-        $this->skinBack = $skinBack;
-        $this->cloakFront = $cloakFront;
-        $this->cloakBack = $cloakBack;
+
+        return $this;
+    }
+
+    public function setSkinBack(string $url): User
+    {
+        $this->skinBack = $url;
+
+        return $this;
+    }
+
+    public function setCloakFront(?string $url): User
+    {
+        $this->cloakFront = $url;
+
+        return $this;
+    }
+
+    public function setCloakBack(?string $url): User
+    {
+        $this->cloakBack = $url;
+
+        return $this;
+    }
+
+    public function setSkinDefault(bool $isSkinDefault): User
+    {
+        $this->skinDefault = $isSkinDefault;
+
+        return $this;
+    }
+
+    public function setCloakExists(bool $isCloakExists): User
+    {
+        $this->cloakExists = $isCloakExists;
+
+        return $this;
+    }
+
+    public function setActivatedAt(?string $activatedAt): User
+    {
+        $this->activatedAt = $activatedAt;
+
+        return $this;
+    }
+
+    public function setBanned(bool $isBanned): User
+    {
+        $this->banned = $isBanned;
+
+        return $this;
     }
 
     /**
@@ -48,6 +128,7 @@ class User implements \JsonSerializable
     public function jsonSerialize(): array
     {
         $roles = [];
+        /** @var Role $role */
         foreach ($this->user->getRoles() as $role) {
             $roles[] = $role->getName();
         }
@@ -55,6 +136,12 @@ class User implements \JsonSerializable
         /** @var Permission $permission */
         foreach ($this->user->getPermissions() as $permission) {
             $permissions[] = $permission->getName();
+        }
+
+        $bans = [];
+        /** @var \App\Entity\Ban $ban */
+        foreach ($this->user->getBans() as $ban) {
+            $bans[] = new Ban($ban, $this->banManager->isExpired($ban));
         }
 
         return [
@@ -67,12 +154,17 @@ class User implements \JsonSerializable
                 'skin' => [
                     'front' => $this->skinFront,
                     'back' => $this->skinBack,
+                    'default' => $this->skinDefault
                 ],
                 'cloak' => [
                     'front' => $this->cloakFront,
-                    'back' => $this->cloakBack
+                    'back' => $this->cloakBack,
+                    'exists' => $this->cloakExists
                 ]
-            ]
+            ],
+            'activatedAt' => $this->activatedAt,
+            'bans' => $bans,
+            'banned' => $this->banned
         ];
     }
 }

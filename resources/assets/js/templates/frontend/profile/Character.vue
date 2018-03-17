@@ -9,7 +9,7 @@
                             <img :src="skin.back" alt="Back side of skin">
                         </v-flex>
                         <v-flex xs12 class="text-xs-center mt-2">
-                            <v-uploader class="uploader" accept="image/png" @formData="setUploadableSkin"></v-uploader>
+                            <v-uploader class="uploader" accept="image/png" :reset="skin.upload === null" @formData="setUploadableSkin"></v-uploader>
                         </v-flex>
                         <v-flex xs12 class="text-xs-center mt-2">
                             <v-btn color="success" :disabled="uploadSkinDisabled" :loading="skin.uploadLoading" @click="uploadSkin">{{ $t('content.frontend.profile.character.upload') }}</v-btn>
@@ -33,7 +33,7 @@
                             <v-alert type="info" outline :value="true">{{ $t('content.frontend.profile.character.cloak.not_set') }}</v-alert>
                         </v-flex>
                         <v-flex xs12 class="text-xs-center mt-2">
-                            <v-uploader class="uploader" accept="image/png" @formData="setUploadableCloak"></v-uploader>
+                            <v-uploader class="uploader" accept="image/png" :reset="cloak.upload === null" @formData="setUploadableCloak"></v-uploader>
                         </v-flex>
                         <v-flex xs12 class="text-xs-center mt-2">
                             <v-btn color="success" :disabled="uploadCloakDisabled" :loading="cloak.uploadLoading" @click="uploadCloak">{{ $t('content.frontend.profile.character.upload') }}</v-btn>
@@ -112,6 +112,7 @@
                             this.skin.default = false;
                             this.changeSkin();
                         }
+                        this.skin.upload = null;
                     });
             },
             deleteSkin() {
@@ -134,6 +135,7 @@
                             this.cloak.exists = true;
                             this.changeCloak();
                         }
+                        this.cloak.upload = null;
                     });
             },
             deleteCloak() {

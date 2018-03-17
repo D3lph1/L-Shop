@@ -54,6 +54,18 @@ class DoctrinePermissionRepository implements PermissionRepository
     /**
      * @inheritDoc
      */
+    public function findWhereNameIn(array $names): array
+    {
+        return $this->er->createQueryBuilder('p')
+            ->where('p.name IN (:names)')
+            ->setParameter('names', $names)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function findAll(): array
     {
         return $this->er->findAll();

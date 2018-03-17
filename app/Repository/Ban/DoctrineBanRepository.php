@@ -25,6 +25,18 @@ class DoctrineBanRepository implements BanRepository
         $this->er = $er;
     }
 
+    public function find(int $id): ?Ban
+    {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        return $this->er->find($id);
+    }
+
+    public function create(Ban $ban): void
+    {
+        $this->em->persist($ban);
+        $this->em->flush();
+    }
+
     /**
      * {@inheritdoc}
      */

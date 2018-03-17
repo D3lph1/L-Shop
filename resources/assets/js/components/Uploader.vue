@@ -12,7 +12,7 @@
                 :accept="accept"
                 :multiple="false"
                 :disabled="disabled"
-               ref="fileInput"
+                ref="fileInput"
                 @change="onFileChange"
         >
     </div>
@@ -43,6 +43,10 @@
             multiple: {
                 type: Boolean,
                 default: false
+            },
+            reset: {
+                type: Boolean,
+                default: false
             }
         },
         data(){
@@ -51,8 +55,15 @@
             };
         },
         watch: {
-            value(v){
-                this.filename = v;
+            value(val){
+                this.filename = val;
+            },
+            reset(val) {
+                if (val) {
+                    this.filename = '';
+                    this.$refs.fileInput.type = '';
+                    this.$refs.fileInput.type = 'file';
+                }
             }
         },
         mounted() {

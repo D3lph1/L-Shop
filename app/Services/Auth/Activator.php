@@ -81,14 +81,25 @@ class Activator
 
     public function isActivated(User $user): bool
     {
-        $activations = $user->getActivations();
         /** @var Activation $activation */
-        foreach ($activations as $activation) {
+        foreach ($user->getActivations() as $activation) {
             if ($activation->isCompleted()) {
                 return true;
             }
         }
 
         return false;
+    }
+
+    public function activation(User $user): ?Activation
+    {
+        /** @var Activation $activation */
+        foreach ($user->getActivations() as $activation) {
+            if ($activation->isCompleted()) {
+                return $activation;
+            }
+        }
+
+        return null;
     }
 }

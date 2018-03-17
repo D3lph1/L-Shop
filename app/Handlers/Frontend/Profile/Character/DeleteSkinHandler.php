@@ -5,6 +5,7 @@ namespace App\Handlers\Frontend\Profile\Character;
 
 use App\Services\Auth\Auth;
 use App\Services\Media\Character\Skin\Image;
+use Illuminate\Filesystem\Filesystem;
 
 class DeleteSkinHandler
 {
@@ -13,9 +14,15 @@ class DeleteSkinHandler
      */
     private $auth;
 
-    public function __construct(Auth $auth)
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    public function __construct(Auth $auth, Filesystem $filesystem)
     {
         $this->auth = $auth;
+        $this->filesystem = $filesystem;
     }
 
     public function handle(): bool
@@ -25,6 +32,6 @@ class DeleteSkinHandler
             return false;
         }
 
-        return \File::delete(Image::absolutePath($username));
+        return $this->filesystem->delete(Image::absolutePath($username));
     }
 }

@@ -24,8 +24,6 @@ use App\Services\Media\Character\Cloak\Accessor as CloakAccessor;
 use App\Services\Media\Character\Skin\Accessor as SkinAccessor;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
-use Psr\Log\LoggerInterface;
-use Symfony\Component\HttpFoundation\File\Exception\FileException;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class CharacterController extends Controller
@@ -80,48 +78,32 @@ class CharacterController extends Controller
         ]);
     }
 
-    public function uploadSkin(UploadSkinRequest $request, UploadSkinHandler $handler, LoggerInterface $logger): JsonResponse
+    public function uploadSkin(UploadSkinRequest $request, UploadSkinHandler $handler): JsonResponse
     {
         try {
             $handler->handle($request->file('file'));
         } catch (InvalidRatioException $e) {
-            return (new JsonResponse(Status::FAILURE))
+            return (new JsonResponse('invalid_ration'))
                 ->addNotification(new Error(__('msg.frontend.profile.skin.invalid_ratio')));
         } catch (InvalidResolutionException $e) {
-            return (new JsonResponse(Status::FAILURE))
+            return (new JsonResponse('invalid_resolution'))
                 ->addNotification(new Error(__('msg.frontend.profile.skin.invalid_resolution')));
-        } catch (FileException $e) {
-            $logger->error($e);
-
-            return (new JsonResponse(Status::FAILURE))
-                ->addNotification(new Error(__('msg.request_error')));
-        } catch (ForbiddenException $e) {
-            return (new JsonResponse(Status::FAILURE))
-                ->addNotification(new Error(__('msg.request_error')));
         }
 
         return (new JsonResponse(Status::SUCCESS))
             ->addNotification(new Success(__('msg.frontend.profile.skin.success')));
     }
 
-    public function uploadCloak(UploadCloakRequest $request, UploadCloakHandler $handler, LoggerInterface $logger): JsonResponse
+    public function uploadCloak(UploadCloakRequest $request, UploadCloakHandler $handler): JsonResponse
     {
         try {
             $handler->handle($request->file('file'));
         } catch (InvalidRatioException $e) {
-            return (new JsonResponse(Status::FAILURE))
+            return (new JsonResponse('invalid_ration'))
                 ->addNotification(new Error(__('msg.frontend.profile.cloak.invalid_ratio')));
         } catch (InvalidResolutionException $e) {
-            return (new JsonResponse(Status::FAILURE))
+            return (new JsonResponse('invalid_resolution'))
                 ->addNotification(new Error(__('msg.frontend.profile.cloak.invalid_resolution')));
-        } catch (FileException $e) {
-            $logger->error($e);
-
-            return (new JsonResponse(Status::FAILURE))
-                ->addNotification(new Error(__('msg.request_error')));
-        } catch (ForbiddenException $e) {
-            return (new JsonResponse(Status::FAILURE))
-                ->addNotification(new Error(__('msg.request_error')));
         }
 
         return (new JsonResponse(Status::SUCCESS))

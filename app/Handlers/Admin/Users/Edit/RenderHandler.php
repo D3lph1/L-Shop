@@ -11,7 +11,11 @@ use App\Exceptions\User\DoesNotExistException;
 use App\Repository\Permission\PermissionRepository;
 use App\Repository\Role\RoleRepository;
 use App\Repository\User\UserRepository;
-use App\Services\Media\Character\Cloak\Image;
+use App\Services\Auth\Activator;
+use App\Services\Auth\BanManager;
+use App\Services\DateTime\Formatting\JavaScriptFormatter;
+use App\Services\Media\Character\Cloak\Image as CloakImage;
+use App\Services\Media\Character\Skin\Image as SkinImage;
 
 class RenderHandler
 {
@@ -19,6 +23,16 @@ class RenderHandler
      * @var UserRepository
      */
     private $userRepository;
+
+    /**
+     * @var Activator
+     */
+    private $activator;
+
+    /**
+     * @var BanManager
+     */
+    private $banManager;
 
     /**
      * @var RoleRepository
@@ -30,9 +44,16 @@ class RenderHandler
      */
     private $permissionRepository;
 
-    public function __construct(UserRepository $userRepository, RoleRepository $roleRepository, PermissionRepository $permissionRepository)
+    public function __construct(
+        UserRepository $userRepository,
+        Activator $activator,
+        BanManager $banManager,
+        RoleRepository $roleRepository,
+        PermissionRepository $permissionRepository)
     {
         $this->userRepository = $userRepository;
+        $this->activator = $activator;
+        $this->banManager = $banManager;
         $this->roleRepository = $roleRepository;
         $this->permissionRepository = $permissionRepository;
     }
@@ -44,16 +65,24 @@ class RenderHandler
             throw new DoesNotExistException($userId);
         }
 
-        $cloakExists = Image::exists($user->getUsername());
-        $userDTO = new User(
-            $user,
-            route('api.skin.front', ['username' => $user->getUsername()]),
-            route('api.skin.back', ['username' => $user->getUsername()]),
-            $cloakExists ? route('api.cloak.front', ['username' => $user->getUsername()]) : null,
-            $cloakExists ? route('api.cloak.back', ['username' => $user->getUsername()]) : null
-        );
+        $activation = $this->activator->activation($user);
+        $activatedAt = $activation !== null ? $activation->getCompletedAt() : null;
 
-        return new RenderResult($userDTO, $this->roles(), $this->permissions());
+        $cloakExists = CloakImage::exists($user->getUsername());
+        $userDTO = (new User($user, $this->banManager))
+            ->setSkinFront(route('api.skin.front', ['username' => $user->getUsername()]))
+            ->setSkinBack(route('api.skin.back', ['username' => $user->getUsername()]))
+            ->setCloakFront(route('api.cloak.front', ['username' => $user->getUsername()]))
+            ->setCloakBack(route('api.cloak.back', ['username' => $user->getUsername()]))
+            ->setSkinDefault(SkinImage::isDefault($user->getUsername()))
+            ->setCloakExists($cloakExists)
+            ->setActivatedAt((new JavaScriptFormatter())->format($activatedAt))
+            ->setBanned($this->banManager->isBanned($user));
+
+        return (new RenderResult())
+            ->setUser($userDTO)
+            ->setRoles($this->roles())
+            ->setPermissions($this->permissions());
     }
 
     /**

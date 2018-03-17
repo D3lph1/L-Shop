@@ -49,7 +49,7 @@ class User implements HasRoles, HasPermissions
     private $balance = 0;
 
     /**
-     * @ORM\ManyToMany(targetEntity="App\Entity\Role", mappedBy="users")
+     * @ORM\ManyToMany(targetEntity="App\Entity\Role", mappedBy="users", cascade={"persist", "merge"})
      */
     private $roles;
 

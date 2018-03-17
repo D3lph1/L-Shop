@@ -67,7 +67,7 @@ class UploadSkinHandler
      * @throws FileException
      * @throws ForbiddenException
      */
-    public function handle(UploadedFile $file)
+    public function handle(UploadedFile $file): void
     {
         $image = $this->imageManager->make($file);
         if ($this->accessor->allowSetHD($this->auth->getUser())) {
@@ -106,7 +106,7 @@ class UploadSkinHandler
      *
      * @throws FileException
      */
-    private function move(Image $image)
+    private function move(Image $image): void
     {
         $image->save(SkinImage::getAbsolutePath($this->auth->getUser()->getUsername()));
     }

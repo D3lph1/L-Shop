@@ -16,6 +16,13 @@ interface PermissionRepository
     public function findByName(string $name): ?Permission;
 
     /**
+     * @param string[] $names
+     *
+     * @return Permission[]
+     */
+    public function findWhereNameIn(array $names): array;
+
+    /**
      * @return Permission[]
      */
     public function findAll(): array;

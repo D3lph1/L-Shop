@@ -6,7 +6,6 @@ namespace App\DataTransferObjects\Admin\Users\Edit;
 use App\DataTransferObjects\Admin\Users\Edit\User as UserDTO;
 use App\Entity\Permission;
 use App\Entity\Role;
-use App\Entity\User;
 
 class RenderResult
 {
@@ -25,18 +24,11 @@ class RenderResult
      */
     private $permissions = [];
 
-    /**
-     * RenderResult constructor.
-     *
-     * @param \App\DataTransferObjects\Admin\Users\Edit\User $user
-     * @param Role[]                                          $roles
-     * @param Permission[]                                          $permissions
-     */
-    public function __construct(UserDTO $user, array $roles, array $permissions)
+    public function setUser(UserDTO $user): RenderResult
     {
         $this->user = $user;
-        $this->roles = $roles;
-        $this->permissions = $permissions;
+
+        return $this;
     }
 
     /**
@@ -48,11 +40,35 @@ class RenderResult
     }
 
     /**
+     * @param Role[] $roles
+     *
+     * @return RenderResult
+     */
+    public function setRoles(array $roles): RenderResult
+    {
+        $this->roles = $roles;
+
+        return $this;
+    }
+
+    /**
      * @return Role[]
      */
     public function getRoles(): array
     {
         return $this->roles;
+    }
+
+    /**
+     * @param Permission[] $permissions
+     *
+     * @return RenderResult
+     */
+    public function setPermissions(array $permissions): RenderResult
+    {
+        $this->permissions = $permissions;
+
+        return $this;
     }
 
     /**

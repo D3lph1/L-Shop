@@ -16,7 +16,11 @@ export default class DateTime {
         return $t(`datetime.humanized.${date.getMonth() + 1}`, {
             day: date.getDate(),
             year: date.getFullYear(),
-            time: date.getHours() + ':' + date.getMinutes() + ':' + date.getSeconds()
+            // Time with leading zero.
+            time:
+                (date.getHours() < 10 ? '0' : '') + date.getHours() + ':' +
+                (date.getMinutes() < 10 ? '0' : '') + date.getMinutes() + ':' +
+                (date.getSeconds() < 10 ? '0' : '') + date.getSeconds()
         })
     }
 }
