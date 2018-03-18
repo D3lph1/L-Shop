@@ -59,7 +59,7 @@ class User implements HasRoles, HasPermissions
     private $permissions;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Activation", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="App\Entity\Activation", mappedBy="user", cascade={"remove"})
      */
     private $activations;
 
@@ -69,7 +69,7 @@ class User implements HasRoles, HasPermissions
     private $bans;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Reminder", mappedBy="user")
+     * @ORM\OneToMany(targetEntity="App\Entity\Reminder", mappedBy="user", cascade={"remove"})
      */
     private $reminders;
 

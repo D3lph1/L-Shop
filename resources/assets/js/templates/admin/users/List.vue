@@ -45,6 +45,9 @@
                     <v-btn icon class="mx-0" :to="{name: 'admin.users.edit', params: {user: props.item.id}}">
                         <v-icon color="secondary">edit</v-icon>
                     </v-btn>
+                    <v-btn icon class="mx-0" @click="deleteUser(props.item)" :disabled="props.item.username === $store.state.auth.user.username">
+                        <v-icon color="pink">delete</v-icon>
+                    </v-btn>
                 </td>
             </template>
         </v-data-table>
@@ -143,6 +146,23 @@
                 this.items = data.users;
 
                 this.loading = false;
+            },
+            deleteUser(user) {
+                if (confirm($t('content.admin.users.list.delete'))) {
+                    this.$axios.post('/api/admin/users', {
+                        _method: 'DELETE',
+                        user: user.id
+                    })
+                        .then(response => {
+                            if (response.data.status === 'success') {
+                                this.items.forEach((each, index) => {
+                                    if (each.id === user.id) {
+                                        this.items.splice(index, 1);
+                                    }
+                                });
+                            }
+                        })
+                }
             }
         }
     }

@@ -41,6 +41,12 @@ class DoctrineUserRepository implements UserRepository
         $this->em->flush();
     }
 
+    public function remove(User $user): void
+    {
+        $this->em->remove($user);
+        $this->em->flush();
+    }
+
     public function deleteAll(): bool
     {
         return (bool)$this->er->createQueryBuilder('u')

@@ -97,6 +97,7 @@ $router->delete('/admin/users/edit/ban/{ban}', 'Admin\Users\EditController@delet
 $router->post('/admin/users/edit/{user}/ban', 'Admin\Users\EditController@addBan');
 $router->post('/admin/users/edit/{user}', 'Admin\Users\EditController@edit');
 $router->post('/admin/users/list', 'Admin\Users\ListController@pagination');
+$router->delete('/admin/users', 'Admin\Users\ListController@delete');
 $router->get('/admin/statistic/show', 'App\Handlers\Admin\Statistic\ShowController@render');
 $router->get('/admin/information/about', 'Admin\Information\AboutController@render');
 

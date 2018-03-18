@@ -1,8 +1,6 @@
 /**
  * Below is the declaration of system vue routes.
  * The meta title field serves to specify the header that the route page will have.
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
  */
 
 const Login = () => import(/* webpackChunkName: "shop" */ './../templates/frontend/auth/Login.vue');
@@ -90,7 +88,7 @@ export default [
         children: [
             {
                 path: ':server',
-                alias: ':server/0',
+                redirect: ':server/0',
                 name: 'frontend.shop.catalog',
                 components: {
                     content: Catalog
