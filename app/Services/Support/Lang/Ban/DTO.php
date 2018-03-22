@@ -3,6 +3,10 @@ declare(strict_types = 1);
 
 namespace App\Services\Support\Lang\Ban;
 
+/**
+ * Class DTO
+ * Data transfer object for {@see BanMessage}
+ */
 class DTO
 {
     /**

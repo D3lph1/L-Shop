@@ -20,6 +20,13 @@ class BanManager
         $this->userRepository = $userRepository;
     }
 
+    /**
+     * Checks whether the passed ban is expired.
+     *
+     * @param Ban $ban Ban entity you want to check.
+     *
+     * @return bool
+     */
     public function isExpired(Ban $ban): bool
     {
         if ($ban->getUntil() === null) {
@@ -29,11 +36,25 @@ class BanManager
         return $ban->getUntil()->diff(new \DateTimeImmutable())->invert === 0;
     }
 
+    /**
+     * Checks whether the passed ban is permanent.
+     *
+     * @param Ban $ban Ban entity you want to check.
+     *
+     * @return bool
+     */
     public function isPermanent(Ban $ban): bool
     {
         return $ban->getUntil() === null;
     }
 
+    /**
+     * Checks whether the passed user is banned forever.
+     *
+     * @param User $user User you want to check.
+     *
+     * @return bool
+     */
     public function isPermanently(User $user): bool
     {
         /** @var Ban $ban */
@@ -47,7 +68,9 @@ class BanManager
     }
 
     /**
-     * @param User $user
+     * Returns all non-expired user bans.
+     *
+     * @param User $user The user whose bans you want to receive.
      *
      * @return Ban[]
      */
@@ -64,6 +87,13 @@ class BanManager
         return $result;
     }
 
+    /**
+     * Checks if the user is banned.
+     *
+     * @param User $user User you want to check.
+     *
+     * @return bool
+     */
     public function isBanned(User $user): bool
     {
         /** @var Ban $ban */
@@ -76,6 +106,15 @@ class BanManager
         return false;
     }
 
+    /**
+     * Ban the user before the specified datetime.
+     *
+     * @param User               $user The user you want to ban.
+     * @param \DateTimeImmutable $until Datetime when the ban ends.
+     * @param null|string        $reason Reason of ban.
+     *
+     * @return Ban
+     */
     public function banUntil(User $user, \DateTimeImmutable $until, ?string $reason = null): Ban
     {
         $ban = (new Ban($user, $until))
@@ -86,12 +125,43 @@ class BanManager
         return $ban;
     }
 
-    public function banForDays(User $user, int $days, ?string $reason = null): Ban
+    /**
+     * Ban the user for a certain period of time.
+     *
+     * @param User          $user The user you want to ban.
+     * @param \DateInterval $interval Duration of blocking.
+     * @param null|string   $reason Reason of ban.
+     *
+     * @return Ban
+     */
+    public function banFor(User $user, \DateInterval $interval, ?string $reason = null): Ban
     {
-        return $this->banUntil($user, DateTimeUtil::nowAdd($days * 60 * 24), $reason);
+        return $this->banUntil($user, DateTimeUtil::nowAdd($interval), $reason);
     }
 
-    public function permanently(User $user, ?string $reason): Ban
+    /**
+     * Ban the user for a certain period of time in minutes.
+     *
+     * @param User        $user The user you want to ban.
+     * @param int         $days Duration of blocking in minutes.
+     * @param null|string $reason Reason of ban.
+     *
+     * @return Ban
+     */
+    public function banForDays(User $user, int $days, ?string $reason = null): Ban
+    {
+        return $this->banUntil($user, DateTimeUtil::nowAddMinutes($days * 60 * 24), $reason);
+    }
+
+    /**
+     * Blocks the user forever.
+     *
+     * @param User        $user The user you want to ban.
+     * @param null|string $reason Reason of ban.
+     *
+     * @return Ban
+     */
+    public function banPermanently(User $user, ?string $reason = null): Ban
     {
         $ban = (new Ban($user, null))
             ->setReason($reason);
@@ -101,6 +171,13 @@ class BanManager
         return $ban;
     }
 
+    /**
+     * Deletes all active user blocks.
+     *
+     * @param User $user The user you want to unblock.
+     *
+     * @return bool Did you unlock the user?
+     */
     public function pardon(User $user): bool
     {
         if (!$this->isBanned($user)) {

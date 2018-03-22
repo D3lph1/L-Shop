@@ -58,6 +58,15 @@ class Auth
         $this->pool = $pool;
     }
 
+    /**
+     * Authenticates the user by the transmitted username and password.
+     *
+     * @param string $username
+     * @param string $password
+     * @param bool   $remember If true, the user session will exist even after the browser is closed.
+     *
+     * @return bool User authentication result.
+     */
     public function authenticate(string $username, string $password, bool $remember = false): bool
     {
         $this->session = $this->authenticator->authenticate($username, $password, $remember);
@@ -65,6 +74,17 @@ class Auth
         return $this->session->check();
     }
 
+    /**
+     * Registers a new user in the system.
+     *
+     * @param User $user         Entity of new user.
+     * @param bool $authenticate Authenticate the user after registration.
+     * @param bool $remember     If true and $authenticate is true, the user session will exist
+     *                           even after the browser is closed.
+     *
+     * @return User
+     * @throws \Exception
+     */
     public function register(User $user, bool $authenticate = false, bool $remember = false): User
     {
         $this->eventDispatcher->dispatch(new RegistrationBeginEvent());
@@ -83,6 +103,11 @@ class Auth
         return $user;
     }
 
+    /**
+     * Returns the user stored in the session, otherwise - null.
+     *
+     * @return User|null
+     */
     public function getUser(): ?User
     {
         $this->setSessionIfNeed();
@@ -90,6 +115,11 @@ class Auth
         return $this->session->getUser();
     }
 
+    /**
+     * Checks if the session is not empty.
+     *
+     * @return bool
+     */
     public function check(): bool
     {
         $this->setSessionIfNeed();
@@ -97,6 +127,11 @@ class Auth
         return $this->session->check();
     }
 
+    /**
+     * Deletes the user by destroying the session on the current device.
+     *
+     * @param bool $anywhere If true - destroys user sessions on all devices.
+     */
     public function logout(bool $anywhere = false): void
     {
         $this->pool->disable();

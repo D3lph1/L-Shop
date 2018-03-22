@@ -27,7 +27,8 @@ class AddTest extends TestCase
             'description' => $description,
             'item_type' => $itemType,
             'image_type' => 'default',
-            'game_id' => $gameId
+            'game_id' => $gameId,
+            'enchantments' => json_encode([])
         ]);
 
         $response->assertStatus(200);
@@ -68,7 +69,8 @@ class AddTest extends TestCase
             'item_type' => $itemType,
             'image_type' => 'upload',
             'file' => $file,
-            'game_id' => $gameId
+            'game_id' => $gameId,
+            'enchantments' => json_encode([])
         ]);
 
         $response->assertStatus(200);
@@ -119,7 +121,8 @@ class AddTest extends TestCase
             'image_type' => 'browse',
             'image_name' => $filename,
             'game_id' => $gameId,
-            'extra' => $extra
+            'extra' => $extra,
+            'enchantments' => json_encode([])
         ]);
 
         $response->assertStatus(200);
@@ -154,7 +157,8 @@ class AddTest extends TestCase
             'item_type' => $itemType,
             'image_type' => 'default',
             'game_id' => $gameId,
-            'extra' => $extra
+            'extra' => $extra,
+            'enchantments' => json_encode([])
         ]);
 
         $response->assertStatus(200);

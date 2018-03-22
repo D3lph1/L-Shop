@@ -7,6 +7,10 @@ use App\Entity\User;
 use App\Services\Auth\BanManager;
 use App\Services\Auth\Exceptions\BannedException;
 
+/**
+ * Class BanCheckpoint
+ * This checkpoint is used to deny access to those users whose account is banned.
+ */
 class BanCheckpoint implements Checkpoint
 {
     public const NAME = 'ban';
@@ -21,6 +25,9 @@ class BanCheckpoint implements Checkpoint
         $this->banManager = $banManager;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function login(User $user): bool
     {
         if ($this->banManager->isBanned($user)) {
@@ -30,6 +37,9 @@ class BanCheckpoint implements Checkpoint
         return true;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function check(User $user): bool
     {
         if ($this->banManager->isBanned($user)) {
@@ -39,11 +49,17 @@ class BanCheckpoint implements Checkpoint
         return true;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function loginFail(): void
     {
         //
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName(): string
     {
         return self::NAME;

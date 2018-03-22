@@ -11,7 +11,15 @@ class DateTimeUtil
     {
     }
 
-    public static function add(\DateTimeImmutable $dateTime, int $minutes): \DateTimeImmutable
+    /**
+     * Adds the specified number of minutes to the passed DateTime object.
+     *
+     * @param \DateTimeImmutable $dateTime
+     * @param int                $minutes
+     *
+     * @return \DateTimeImmutable
+     */
+    public static function addMinutes(\DateTimeImmutable $dateTime, int $minutes): \DateTimeImmutable
     {
         if ($minutes < 0) {
             throw new InvalidArgumentException('Argument $minutes must be greater or equals 0, ' . $minutes . ' given');
@@ -21,7 +29,26 @@ class DateTimeUtil
         return $dateTime->add($interval);
     }
 
-    public static function nowAdd(int $minutes): \DateTimeImmutable
+    /**
+     * Adds the specified interval to the current time.
+     *
+     * @param \DateInterval $interval
+     *
+     * @return \DateTimeImmutable
+     */
+    public static function nowAdd(\DateInterval $interval): \DateTimeImmutable
+    {
+        return (new \DateTimeImmutable())->add($interval);
+    }
+
+    /**
+     * Adds the specified number of minutes to the current time.
+     *
+     * @param int $minutes
+     *
+     * @return \DateTimeImmutable
+     */
+    public static function nowAddMinutes(int $minutes): \DateTimeImmutable
     {
         if ($minutes < 0) {
             throw new InvalidArgumentException('Argument $minutes must be greater or equals 0, ' . $minutes . ' given');
@@ -31,7 +58,26 @@ class DateTimeUtil
         return (new \DateTimeImmutable())->add($interval);
     }
 
-    public static function nowSub(int $minutes): \DateTimeImmutable
+    /**
+     * Takes from the current time a specified $interval.
+     *
+     * @param \DateInterval $interval
+     *
+     * @return \DateTimeImmutable
+     */
+    public static function nowSub(\DateInterval $interval): \DateTimeImmutable
+    {
+        return (new \DateTimeImmutable())->sub($interval);
+    }
+
+    /**
+     * Takes from the current time a specified number of minutes.
+     *
+     * @param int $minutes
+     *
+     * @return \DateTimeImmutable
+     */
+    public static function nowSubMinutes(int $minutes): \DateTimeImmutable
     {
         if ($minutes < 0) {
             throw new InvalidArgumentException('Argument $minutes must be greater or equals 0, ' . $minutes . ' given');

@@ -7,6 +7,10 @@ use App\Services\Media\Character\Skin\Applicators\Applicator;
 use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
 
+/**
+ * Class Builder
+ * Produces the construction of any part of the skin from individual segments.
+ */
 class Builder
 {
     /**
@@ -25,8 +29,17 @@ class Builder
         $this->applicator = $applicator;
     }
 
+    /**
+     * Produces the construction of the front of the skin.
+     *
+     * @param int|null $maxHeight The maximum height of the skin. If required, a resize to
+     *                            the specified value will be made.
+     *
+     * @return Image
+     */
     public function front(?int $maxHeight = null): Image
     {
+        // Create a new canvas. In the future, it will be inserted segments.
         $canvas = $this->manager->canvas($this->applicator->width(), $this->applicator->height());
         $head = $this->applicator->headFront();
         $canvas->insert($head, 'top-left', $head->width() / 2, 0);
@@ -53,8 +66,17 @@ class Builder
         return $canvas;
     }
 
+    /**
+     * Produces the construction of the back of the skin.
+     *
+     * @param int|null $maxHeight The maximum height of the skin. If required, a resize to
+     *                            the specified value will be made.
+     *
+     * @return Image
+     */
     public function back(?int $maxHeight = null): Image
     {
+        // Create a new canvas. In the future, it will be inserted segments.
         $canvas = $this->manager->canvas($this->applicator->width(), $this->applicator->height());
         $head = $this->applicator->headBack();
         $canvas->insert($head, 'top-left', $head->width() / 2, 0);
@@ -81,6 +103,12 @@ class Builder
         return $canvas;
     }
 
+    /**
+     * Produces a resize of the final image.
+     *
+     * @param Image $canvas
+     * @param int   $maxHeight
+     */
     private function resize(Image $canvas, int $maxHeight): void
     {
         $height = $this->applicator->height();
@@ -89,10 +117,5 @@ class Builder
         $newHeight = $maxHeight;
         $newWidth = ($newHeight * $width) / $height;
         $canvas->resize($newWidth, $newHeight);
-    }
-
-    public function getApplicator(): Applicator
-    {
-        return $this->applicator;
     }
 }

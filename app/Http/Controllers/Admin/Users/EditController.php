@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin\Users;
 
 use App\DataTransferObjects\Admin\Users\Edit\AddBan;
 use App\DataTransferObjects\Admin\Users\Edit\Edit;
+use App\Exceptions\InvalidArgumentException;
 use App\Exceptions\Media\Character\InvalidRatioException;
 use App\Exceptions\User\DoesNotExistException;
 use App\Handlers\Admin\Users\Edit\AddBanHandler;
@@ -148,8 +149,10 @@ class EditController extends Controller
     {
         $dto = (new AddBan())
             ->setUserId((int)$request->route('user'))
+            ->setMode($request->get('mode'))
             ->setForever((bool)$request->get('forever'))
             ->setDateTime($request->get('date_time'))
+            ->setDays((int)$request->get('days'))
             ->setReason($request->get('reason'));
 
         try {
@@ -162,6 +165,11 @@ class EditController extends Controller
         } catch (DoesNotExistException $e) {
             return (new JsonResponse('user_not_found'))
                 ->addNotification(new Error(__('msg.admin.users.edit.ban.add.user_not_found')));
+        } catch (InvalidArgumentException $e) {
+            return (new JsonResponse('date_time_empty'))
+                ->addNotification(new Error(__('validation.required', [
+                    'attribute' => __('content.admin.users.edit.actions.add_ban.datetime')
+                ])));
         }
     }
 

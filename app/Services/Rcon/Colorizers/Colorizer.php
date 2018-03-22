@@ -4,10 +4,10 @@ declare(strict_types = 1);
 namespace App\Services\Rcon\Colorizers;
 
 /**
- * Interface ColorizerInterface
+ * Interface Colorizer
  * The interface characterizes classes that perform any transformation of data formatted by a Minecraft markup.
  */
-interface ColorizerInterface
+interface Colorizer
 {
     /**
      * Disassembles the transmitted string and replaces the special characters on the

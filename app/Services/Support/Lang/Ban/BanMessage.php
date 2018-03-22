@@ -7,6 +7,10 @@ use App\Entity\Ban;
 use App\Services\Auth\BanManager;
 use App\Services\DateTime\Formatting\Formatter;
 
+/**
+ * Class BanMessage
+ * Forms a message stating that the user is locked.
+ */
 class BanMessage
 {
     /**

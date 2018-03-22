@@ -433,7 +433,7 @@ class User extends \App\Entity\User implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
-    public function hasRole(string $role): bool
+    public function hasRole($role): bool
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'hasRole', [$role]);
@@ -444,7 +444,7 @@ class User extends \App\Entity\User implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
-    public function hasAllRoles(iterable $roles): bool
+    public function hasAllRoles(array $roles): bool
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'hasAllRoles', [$roles]);
@@ -455,7 +455,7 @@ class User extends \App\Entity\User implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
-    public function hasAtLeastOneRole(iterable $roles): bool
+    public function hasAtLeastOneRole(array $roles): bool
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'hasAtLeastOneRole', [$roles]);
@@ -466,7 +466,7 @@ class User extends \App\Entity\User implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
-    public function hasPermission(string $permission): bool
+    public function hasPermission($permission): bool
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'hasPermission', [$permission]);
@@ -477,18 +477,18 @@ class User extends \App\Entity\User implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
-    public function hasAllPermission(iterable $permissions): bool
+    public function hasAllPermissions(array $permissions): bool
     {
 
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'hasAllPermission', [$permissions]);
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'hasAllPermissions', [$permissions]);
 
-        return parent::hasAllPermission($permissions);
+        return parent::hasAllPermissions($permissions);
     }
 
     /**
      * {@inheritDoc}
      */
-    public function hasAtLeastOnePermission(iterable $permissions): bool
+    public function hasAtLeastOnePermission(array $permissions): bool
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'hasAtLeastOnePermission', [$permissions]);

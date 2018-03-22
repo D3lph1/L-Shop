@@ -30,7 +30,8 @@ class EditTest extends TestCase
             'description' => $description,
             'item_type' => $itemType,
             'image_type' => 'current',
-            'game_id' => $gameId
+            'game_id' => $gameId,
+            'enchantments' => json_encode([])
         ]);
 
         $response->assertStatus(200);
@@ -67,7 +68,8 @@ class EditTest extends TestCase
             'description' => $description,
             'item_type' => $itemType,
             'image_type' => 'default',
-            'game_id' => $gameId
+            'game_id' => $gameId,
+            'enchantments' => json_encode([])
         ]);
 
         $response->assertStatus(200);
@@ -112,7 +114,8 @@ class EditTest extends TestCase
             'item_type' => $itemType,
             'image_type' => 'upload',
             'file' => $file,
-            'game_id' => $gameId
+            'game_id' => $gameId,
+            'enchantments' => json_encode([])
         ]);
 
         $response->assertStatus(200);
@@ -157,7 +160,8 @@ class EditTest extends TestCase
             'item_type' => $itemType,
             'image_type' => 'browse',
             'image_name' => $image,
-            'game_id' => $gameId
+            'game_id' => $gameId,
+            'enchantments' => json_encode([])
         ]);
 
         $response->assertStatus(200);

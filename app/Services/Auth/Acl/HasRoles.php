@@ -7,11 +7,32 @@ use Doctrine\Common\Collections\Collection;
 
 interface HasRoles
 {
-    public function hasRole(string $role): bool;
+    /**
+     * Checks whether the user has a passed role.
+     *
+     * @param string|RoleInterface $role Role name or role object.
+     *
+     * @return bool True - the user has a role.
+     */
+    public function hasRole($role): bool;
 
-    public function hasAllRoles(iterable $roles): bool;
+    /**
+     * Checks if the user has all of the specified roles.
+     *
+     * @param string[]|RoleInterface[] $roles Array with role names or role objects.
+     *
+     * @return bool True - the user has all roles.
+     */
+    public function hasAllRoles(array $roles): bool;
 
-    public function hasAtLeastOneRole(iterable $roles): bool;
+    /**
+     * Checks if the user has at least one of the passed roles.
+     *
+     * @param string[]|RoleInterface[] $roles Array with role names or role objects.
+     *
+     * @return bool True - the user has at least one role.
+     */
+    public function hasAtLeastOneRole(array $roles): bool;
 
     public function getRoles(): Collection;
 }

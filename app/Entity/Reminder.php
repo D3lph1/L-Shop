@@ -69,9 +69,4 @@ class Reminder
     {
         $this->createdAt = new \DateTimeImmutable();
     }
-
-    public function isExpired(): bool
-    {
-        return $this->getCreatedAt()->getTimestamp() + config('auth.reminder.lifetime') < time();
-    }
 }

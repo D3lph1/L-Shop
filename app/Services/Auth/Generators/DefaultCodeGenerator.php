@@ -5,7 +5,10 @@ namespace App\Services\Auth\Generators;
 
 class DefaultCodeGenerator implements CodeGenerator
 {
-    public function generate(int $length)
+    /**
+     * {@inheritdoc}
+     */
+    public function generate(int $length): string
     {
         return str_random($length);
     }

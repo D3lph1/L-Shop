@@ -23,6 +23,6 @@ abstract class TestCase extends BaseTestCase
 
     protected function authAdmin(): void
     {
-        app(Auth::class)->authenticate('admin', 'admin');
+        $this->app->make(Auth::class)->authenticate('admin', 'admin');
     }
 }

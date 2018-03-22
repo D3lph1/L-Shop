@@ -5,7 +5,12 @@ namespace App\Services\Product;
 
 class Order
 {
-    public static function availableFields()
+    /**
+     * Returns an array with fields for which sorting is allowed.
+     *
+     * @return string[]
+     */
+    public static function availableFields(): array
     {
         return ['product.sortPriority', 'item.name'];
     }

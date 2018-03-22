@@ -13,7 +13,14 @@ class Stack
     {
     }
 
-    public static function formatUnits(Product $product)
+    /**
+     * Formats the quantity of products for the user.
+     *
+     * @param Product $product
+     *
+     * @return string
+     */
+    public static function formatUnits(Product $product): string
     {
         if ($product->getItem()->getType() === Type::ITEM) {
             return __('common.item.units.item', ['amount' => $product->getStack()]);

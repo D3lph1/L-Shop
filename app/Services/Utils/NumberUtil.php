@@ -11,6 +11,13 @@ class NumberUtil
     {
     }
 
+    /**
+     * Translates a number from an arabic entry to a roman.
+     *
+     * @param int $value
+     *
+     * @return string Number in roman entry.
+     */
     public static function toRoman(int $value): string
     {
         if ($value < 0) {

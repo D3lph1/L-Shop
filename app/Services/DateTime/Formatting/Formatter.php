@@ -5,7 +5,18 @@ namespace App\Services\DateTime\Formatting;
 
 use DateTimeInterface;
 
+/**
+ * Interface Formatter
+ * Format the date and time.
+ */
 interface Formatter
 {
-    public function format(DateTimeInterface $dateTime);
+    /**
+     * Formatting.
+     *
+     * @param DateTimeInterface $dateTime
+     *
+     * @return string
+     */
+    public function format(DateTimeInterface $dateTime): string;
 }

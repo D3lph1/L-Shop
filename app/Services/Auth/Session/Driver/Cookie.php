@@ -7,6 +7,11 @@ use Illuminate\Config\Repository;
 use Illuminate\Cookie\CookieJar;
 use Illuminate\Http\Request;
 
+/**
+ * Class Cookie
+ * The standard driver is used to interact with cookies.
+ * Persistence code is on the user's client in http-only cookies.
+ */
 class Cookie implements Driver
 {
     /**
@@ -31,11 +36,17 @@ class Cookie implements Driver
         $this->config = $config;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function get(): ?string
     {
         return $this->request->cookie($this->config->get('auth.cookie'));
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function set(string $persistenceCode): void
     {
         $this->cookie->queue(
@@ -45,6 +56,9 @@ class Cookie implements Driver
         );
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function forget(): void
     {
         $this->cookie->queue($this->cookie->forget($this->config->get('auth.cookie')));

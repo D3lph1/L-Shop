@@ -5,19 +5,31 @@ namespace App\Services\Auth\Acl;
 
 trait RoleTrait
 {
-    public function hasRole(string $role): bool
+    /**
+     * {@inheritdoc}
+     */
+    public function hasRole($role): bool
     {
         /** @var RoleInterface $each */
         foreach ($this->getRoles() as $each) {
-            if ($role === $each->getName()) {
-                return true;
+            if ($each instanceof RoleInterface) {
+                if ($role->getName() === $each->getName()) {
+                    return true;
+                }
+            } else {
+                if ($role === $each->getName()) {
+                    return true;
+                }
             }
         }
 
         return false;
     }
 
-    public function hasAllRoles(iterable $roles): bool
+    /**
+     * {@inheritdoc}
+     */
+    public function hasAllRoles(array $roles): bool
     {
         /** @var PermissionInterface $each */
         foreach ($this->getRoles() as $each) {
@@ -32,7 +44,10 @@ trait RoleTrait
         return true;
     }
 
-    public function hasAtLeastOneRole(iterable $roles): bool
+    /**
+     * {@inheritdoc}
+     */
+    public function hasAtLeastOneRole(array $roles): bool
     {
         /** @var PermissionInterface $each */
         foreach ($this->getRoles() as $each) {

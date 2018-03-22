@@ -5,6 +5,10 @@ namespace App\Services\Cart;
 
 use App\Entity\Product;
 
+/**
+ * Class Item
+ * Represents a shopping cart storage unit.
+ */
 class Item
 {
     /**
@@ -13,11 +17,11 @@ class Item
     private $product;
 
     /**
-     * @var float
+     * @var int
      */
     private $amount;
 
-    public function __construct(Product $product, float $amount)
+    public function __construct(Product $product, int $amount)
     {
         $this->product = $product;
         $this->amount = $amount;
@@ -28,7 +32,7 @@ class Item
         return $this->product;
     }
 
-    public function getAmount(): float
+    public function getAmount(): int
     {
         return $this->amount;
     }

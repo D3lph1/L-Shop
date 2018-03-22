@@ -11,6 +11,14 @@ use App\Entity\User;
 use App\Repository\Persistence\PersistenceRepository;
 use App\Repository\User\UserRepository;
 
+/**
+ * Class SessionPersistence
+ * Creates a user session and controls persistence.
+ * Persistence in this context means the stored state of user authentication.
+ * Work with persistence is done with the help of the {@see Driver}.
+ *
+ * @see Persistence
+ */
 class SessionPersistence
 {
     /**
@@ -52,6 +60,14 @@ class SessionPersistence
         $this->checkpointsPool = $checkpointsPool;
     }
 
+    /**
+     * Creates a session and persistence for the transferred user.
+     *
+     * @param User $user
+     * @param bool $remember
+     *
+     * @return Session
+     */
     public function createFromUser(User $user, bool $remember): Session
     {
         if (!$remember) {
@@ -69,6 +85,11 @@ class SessionPersistence
         return new Session($user);
     }
 
+    /**
+     * Attempts to create a session from persistence storage. Otherwise it returns an empty session.
+     *
+     * @return Session
+     */
     public function createFromPersistenceStorage(): Session
     {
         $code = $this->sessionDriver->get();
@@ -94,6 +115,12 @@ class SessionPersistence
         return new Session($user);
     }
 
+    /**
+     * Destroys user session and removes persistence.
+     *
+     * @param User $user
+     * @param bool $destroyAll
+     */
     public function destroy(User $user, bool $destroyAll): void
     {
         if ($destroyAll) {
@@ -108,6 +135,11 @@ class SessionPersistence
         $this->sessionDriver->forget();
     }
 
+    /**
+     * Creates an empty session if the user is not authenticated.
+     *
+     * @return Session
+     */
     public function createEmpty(): Session
     {
         return new Session(null);

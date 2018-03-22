@@ -6,11 +6,8 @@ namespace App\Services\Rcon\Colorizers;
 /**
  * Class TrimColorizer
  * Removes Minecraft markup from the string.
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Services\Rcon\Colorizers
  */
-class TrimColorizer implements ColorizerInterface
+class TrimColorizer implements Colorizer
 {
     /**
      * {@inheritdoc}

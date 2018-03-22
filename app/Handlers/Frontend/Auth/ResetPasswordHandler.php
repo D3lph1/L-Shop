@@ -30,6 +30,6 @@ class ResetPasswordHandler
     {
         $entity = $this->repository->findByCode($code);
 
-        return $entity !== null && !$entity->isExpired();
+        return $entity !== null && !$this->reminder->isExpired($entity);
     }
 }

@@ -10,6 +10,8 @@ use App\Entity\User;
 use App\Events\Auth\PasswordReminderCreated;
 use App\Repository\Reminder\ReminderRepository;
 use App\Repository\User\UserRepository;
+use App\Services\DateTime\DateTimeUtil;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Http\Request;
 
@@ -41,6 +43,11 @@ class Reminder
     private $eventDispatcher;
 
     /**
+     * @var Repository
+     */
+    private $config;
+
+    /**
      * @var Request
      */
     private $request;
@@ -51,6 +58,7 @@ class Reminder
         CodeGenerator $codeGenerator,
         Hasher $hasher,
         Dispatcher $dispatcher,
+        Repository $config,
         Request $request)
     {
         $this->reminderRepository = $reminderRepository;
@@ -58,9 +66,17 @@ class Reminder
         $this->codeGenerator = $codeGenerator;
         $this->hasher = $hasher;
         $this->eventDispatcher = $dispatcher;
+        $this->config = $config;
         $this->request = $request;
     }
 
+    /**
+     * Creates a password reminder for the passed user.
+     *
+     * @param User $user
+     *
+     * @return Entity
+     */
     public function makeReminder(User $user): Entity
     {
         $this->reminderRepository->deleteByUser($user);
@@ -74,10 +90,20 @@ class Reminder
         return $entity;
     }
 
+    /**
+     * Tries to complete the reminder. If the reminder with the transmitted code
+     * exists and has not expired, it completes it and changes the user's
+     * password to the passed one.
+     *
+     * @param string $code        Reminder code.
+     * @param string $newPassword Password to be set to the user.
+     *
+     * @return bool True - if the reminder was completed, false - otherwise.
+     */
     public function complete(string $code, string $newPassword): bool
     {
         $entity = $this->reminderRepository->findByCode($code);
-        if ($entity === null || $entity->isExpired()) {
+        if ($entity === null || $this->isExpired($entity)) {
             return false;
         }
         $user = $entity->getUser()->setPassword($this->hasher->make($newPassword));
@@ -85,5 +111,19 @@ class Reminder
         $this->reminderRepository->remove($entity);
 
         return true;
+    }
+
+    /**
+     * Checks reminder has expired.
+     *
+     * @param Entity $reminder
+     *
+     * @return bool
+     */
+    public function isExpired(Entity $reminder): bool
+    {
+        return (new \DateTimeImmutable())
+                ->diff(DateTimeUtil::addMinutes($reminder->getCreatedAt(), $this->config->get('auth.reminder.lifetime')))
+                ->invert !== 0;
     }
 }

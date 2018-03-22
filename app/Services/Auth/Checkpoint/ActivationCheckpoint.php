@@ -8,10 +8,17 @@ use App\Entity\Activation;
 use App\Entity\User;
 use App\Repository\Activation\ActivationRepository;
 
+/**
+ * Class ActivationCheckpoint
+ * This checkpoint is used to deny access to those users whose account is not activated.
+ */
 class ActivationCheckpoint implements Checkpoint
 {
     public const NAME = 'activation';
 
+    /**
+     * @var ActivationRepository
+     */
     private $activationRepository;
 
     public function __construct(ActivationRepository $activationRepository)
@@ -19,6 +26,9 @@ class ActivationCheckpoint implements Checkpoint
         $this->activationRepository = $activationRepository;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function login(User $user): bool
     {
         /** @var Activation[] $activations */
@@ -32,16 +42,25 @@ class ActivationCheckpoint implements Checkpoint
         throw new NotActivatedException($user);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function check(User $user): bool
     {
         return $this->login($user);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function loginFail(): void
     {
         //
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function getName(): string
     {
         return self::NAME;

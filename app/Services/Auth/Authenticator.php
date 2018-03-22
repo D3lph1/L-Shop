@@ -44,6 +44,15 @@ class Authenticator
         $this->checkpointPool = $checkpointsPool;
     }
 
+    /**
+     * Authenticates the user by the transmitted username and password.
+     *
+     * @param string $username
+     * @param string $password
+     * @param bool   $remember If true, the user session will exist even after the browser is closed.
+     *
+     * @return Session Session object of the authenticated user.
+     */
     public function authenticate(string $username, string $password, bool $remember): Session
     {
         $user = $this->userRepository->findByUsername($username);
@@ -67,6 +76,17 @@ class Authenticator
         return $this->sessionPersistence->createFromUser($user, $remember);
     }
 
+    /**
+     * Produces "quick" user authentication. "Quick" authentication is characterized by
+     * the fact that it does not require data from the account (login / password),
+     * only the essence of the user is sufficient for it. In addition, this
+     * authentication does not call checkpoints.
+     *
+     * @param User $user User to be authenticated.
+     * @param bool $remember If true, the user session will exist even after the browser is closed.
+     *
+     * @return Session Session object of the authenticated user.
+     */
     public function authenticateQuick(User $user, bool $remember): Session
     {
         return $this->sessionPersistence->createFromUser($user, $remember);

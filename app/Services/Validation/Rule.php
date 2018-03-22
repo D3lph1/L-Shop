@@ -3,6 +3,10 @@ declare(strict_types = 1);
 
 namespace App\Services\Validation;
 
+/**
+ * Class Rule
+ * Validation rule. It is used by {@see RulesBuilder}.
+ */
 class Rule
 {
     /**

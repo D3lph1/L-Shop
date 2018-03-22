@@ -18,7 +18,18 @@
                                         v-model="forever"
                                 ></v-checkbox>
                             </v-flex>
-                            <v-flex xs12>
+                            <v-flex xs12 class="text-xs-center">
+                                <p>{{ $t('content.admin.users.edit.actions.add_ban.duration') }}</p>
+                                <v-btn-toggle mandatory v-model="mode">
+                                    <v-btn flat value="concrete" :disabled="forever">
+                                        {{ $t('content.admin.users.edit.actions.add_ban.concrete') }}
+                                    </v-btn>
+                                    <v-btn flat value="days" :disabled="forever">
+                                        {{ $t('content.admin.users.edit.actions.add_ban.in_days') }}
+                                    </v-btn>
+                                </v-btn-toggle>
+                            </v-flex>
+                            <v-flex xs12 v-show="mode === 'concrete'">
                                 <v-menu
                                         ref="dateMenu"
                                         lazy
@@ -51,8 +62,6 @@
                                         <v-btn flat color="primary" @click="$refs.dateMenu.save(date)">OK</v-btn>
                                     </v-date-picker>
                                 </v-menu>
-                            </v-flex>
-                            <v-flex xs12>
                                 <v-menu
                                         ref="timeMenu"
                                         lazy
@@ -82,6 +91,15 @@
                                     ></v-time-picker>
                                 </v-menu>
                             </v-flex>
+                            <v-flex xs12 v-show="mode === 'days'">
+                                <v-text-field
+                                        type="number"
+                                        class="no-spinners"
+                                        v-model="days"
+                                        :label="$t('content.admin.users.edit.actions.add_ban.days')"
+                                        :disabled="forever"
+                                ></v-text-field>
+                            </v-flex>
                             <v-flex xs12>
                                 <v-text-field
                                         :label="$t('content.admin.users.edit.actions.add_ban.reason')"
@@ -93,7 +111,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="secondary" flat :loading="finishLoading" @click.native="finish">{{ $t('content.admin.users.edit.actions.add_ban.finish') }}</v-btn>
+                    <v-btn color="secondary" flat :loading="finishLoading" :disabled="finishDisabled" @click.native="finish">{{ $t('content.admin.users.edit.actions.add_ban.finish') }}</v-btn>
                     <v-btn color="secondary" flat @click.native="dialogData = false">{{ $t('common.close') }}</v-btn>
                 </v-card-actions>
             </v-card>
@@ -121,12 +139,29 @@
             return {
                 dialogData: this.dialog,
                 forever: false,
+                mode: 'concrete',
                 date: null,
                 time: null,
                 dateMenu: false,
                 timeMenu: false,
+                days: 1,
                 reason: null,
                 finishLoading: false
+            }
+        },
+        computed: {
+            finishDisabled() {
+                if (this.forever) {
+                    return false;
+                }
+
+                if (this.mode === 'concrete') {
+                    return this.date === null || this.date === '' ||
+                            this.time === null || this.date === '';
+                } else if (this.mode === 'days') {
+                    return this.days === null || this.days === '' || this.days <= 0 ||
+                        Number(this.days) !== parseInt(Number(this.days), 10)
+                }
             }
         },
         watch: {
@@ -151,7 +186,9 @@
                 this.finishLoading = true;
                 this.$axios.post(`/api/admin/users/edit/${this.userId}/ban`, {
                     forever: this.forever,
+                    mode: this.mode,
                     date_time: !this.forever ? new Date(`${this.date} ${this.time}`) : null,
+                    days: this.days,
                     time: this.time,
                     reason: this.reason
                 })

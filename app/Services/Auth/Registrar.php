@@ -34,6 +34,13 @@ class Registrar
         $this->hasher = $hasher;
     }
 
+    /**
+     * Registers a new user.
+     *
+     * @param User $user The entity of the new user.
+     *
+     * @return User
+     */
     public function register(User $user): User
     {
         $this->checkUsername($user->getUsername());
@@ -47,14 +54,14 @@ class Registrar
         return $user;
     }
 
-    public function checkUsername(string $username)
+    private function checkUsername(string $username): void
     {
         if ($this->userRepository->findByUsername($username)) {
             throw new UsernameAlreadyExistsException($username);
         }
     }
 
-    public function checkEmail(string $email)
+    private function checkEmail(string $email): void
     {
         if ($this->userRepository->findByEmail($email)) {
             throw new EmailAlreadyExistsException($email);

@@ -3,8 +3,17 @@ declare(strict_types = 1);
 
 namespace App\Services\Auth;
 
+/**
+ * Class Permissions
+ * Defines available permissions.
+ * @example
+ *  $user->hasPermission(Permissions::ADMIN_ITEMS_CRUD_ACCESS);
+ */
 class Permissions
 {
+    /**
+     * Allows the user to see disabled servers in the server list.
+     */
     public const VIEWING_DISABLED_SERVERS = 'viewing_disabled_servers';
 
     /**

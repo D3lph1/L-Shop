@@ -37,6 +37,13 @@ class Activator
         $this->config = $config;
     }
 
+    /**
+     * Creates a new activation for the passed user.
+     *
+     * @param User $user
+     *
+     * @return Activation
+     */
     public function makeActivation(User $user): Activation
     {
         $this->activationRepository->deleteByUser($user);
@@ -49,6 +56,13 @@ class Activator
         return $activation;
     }
 
+    /**
+     * Activates the passed user.
+     *
+     * @param User $user
+     *
+     * @return Activation
+     */
     public function activate(User $user): Activation
     {
         do {
@@ -61,6 +75,14 @@ class Activator
         return $activation;
     }
 
+    /**
+     * Attempts to complete activation. In the event that the passed code exists
+     * and the activation with this code has not expired, the user is activated.
+     *
+     * @param string $code
+     *
+     * @return bool True - if the activation was completed, false - otherwise.
+     */
     public function complete(string $code): bool
     {
         $activation = $this->activationRepository->findByCode($code);
@@ -72,13 +94,27 @@ class Activator
         return true;
     }
 
+    /**
+     * Checks activation has expired.
+     *
+     * @param Activation $activation
+     *
+     * @return bool
+     */
     public function isExpired(Activation $activation): bool
     {
         return (new \DateTimeImmutable())
-            ->diff(DateTimeUtil::add($activation->getCreatedAt(), $this->config->get('auth.activation.lifetime')))
+            ->diff(DateTimeUtil::addMinutes($activation->getCreatedAt(), $this->config->get('auth.activation.lifetime')))
             ->invert !== 0;
     }
 
+    /**
+     * Checks if the user is activated.
+     *
+     * @param User $user
+     *
+     * @return bool
+     */
     public function isActivated(User $user): bool
     {
         /** @var Activation $activation */
@@ -91,6 +127,13 @@ class Activator
         return false;
     }
 
+    /**
+     * Gets the first complete activation of this user.
+     *
+     * @param User $user
+     *
+     * @return Activation|null
+     */
     public function activation(User $user): ?Activation
     {
         /** @var Activation $activation */

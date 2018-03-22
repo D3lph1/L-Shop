@@ -1,19 +1,27 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Services\Auth\Acl;
 
 trait PermissionTrait
 {
-    public function hasPermission(string $permission): bool
+    /**
+     * {@inheritdoc}
+     */
+    public function hasPermission($permission): bool
     {
         /** @var PermissionInterface $each */
         foreach ($this->getPermissions() as $each) {
-            if ($permission === $each->getName()) {
-                return true;
+            if ($permission instanceof PermissionInterface) {
+                if ($permission->getName() === $each->getName()) {
+                    return true;
+                }
+            } else {
+                if ($permission === $each->getName()) {
+                    return true;
+                }
             }
         }
-
         if ($this instanceof HasRoles) {
             /** @var RoleInterface $each */
             foreach ($this->getRoles() as $each) {
@@ -26,7 +34,10 @@ trait PermissionTrait
         return false;
     }
 
-    public function hasAllPermission(iterable $permissions): bool
+    /**
+     * {@inheritdoc}
+     */
+    public function hasAllPermissions(array $permissions): bool
     {
         /** @var PermissionInterface $each */
         foreach ($this->getPermissions() as $each) {
@@ -44,17 +55,10 @@ trait PermissionTrait
         }
 
         if ($this instanceof HasRoles) {
-            /** @var RoleInterface $each */
-            foreach ($this->getRoles() as $each) {
+            foreach ($this->getRoles() as $role) {
                 foreach ($permissions as $permission) {
-                    if ($permission instanceof PermissionInterface) {
-                        if (!$this->hasPermission($permission->getName())) {
-                            return false;
-                        }
-                    } else {
-                        if (!$this->hasPermission($permission)) {
-                            return false;
-                        }
+                    if (!$role->hasPermission($permission)) {
+                        return false;
                     }
                 }
             }
@@ -63,7 +67,10 @@ trait PermissionTrait
         return true;
     }
 
-    public function hasAtLeastOnePermission(iterable $permissions): bool
+    /**
+     * {@inheritdoc}
+     */
+    public function hasAtLeastOnePermission(array $permissions): bool
     {
         /** @var PermissionInterface $each */
         foreach ($this->getPermissions() as $each) {
@@ -81,17 +88,10 @@ trait PermissionTrait
         }
 
         if ($this instanceof HasRoles) {
-            /** @var PermissionInterface $each */
-            foreach ($this->getPermissions() as $each) {
+            foreach ($this->getRoles() as $role) {
                 foreach ($permissions as $permission) {
-                    if ($permission instanceof PermissionInterface) {
-                        if ($this->hasPermission($permission->getName())) {
-                            return true;
-                        }
-                    } else {
-                        if ($this->hasPermission($permission)) {
-                            return true;
-                        }
+                    if ($role->hasPermission($permission)) {
+                        return true;
                     }
                 }
             }

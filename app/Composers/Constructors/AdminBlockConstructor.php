@@ -194,7 +194,7 @@ class AdminBlockConstructor
         foreach ($this->items as $k => &$item) {
             foreach ($item['subItems'] as $key => &$subItem) {
                 if (isset($subItem['permissions'])) {
-                    if (!$this->auth->getUser()->hasAllPermission($subItem['permissions'])) {
+                    if (!$this->auth->getUser()->hasAllPermissions($subItem['permissions'])) {
                         unset($item['subItems'][$key]);
                     }
                 }

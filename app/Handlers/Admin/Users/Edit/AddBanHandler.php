@@ -6,6 +6,8 @@ namespace App\Handlers\Admin\Users\Edit;
 use App\DataTransferObjects\Admin\Users\Edit\AddBan;
 use App\DataTransferObjects\Admin\Users\Edit\Ban as BanDTO;
 use App\Entity\Ban;
+use App\Exceptions\InvalidArgumentException;
+use App\Exceptions\UnexpectedValueException;
 use App\Exceptions\User\DoesNotExistException;
 use App\Repository\Ban\BanRepository;
 use App\Repository\User\UserRepository;
@@ -13,6 +15,10 @@ use App\Services\Auth\BanManager;
 
 class AddBanHandler
 {
+    public const MODE_CONCRETE = 'concrete';
+
+    public const MODE_DAYS = 'days';
+
     /**
      * @var UserRepository
      */
@@ -43,15 +49,22 @@ class AddBanHandler
         }
 
         if ($dto->isForever()) {
-            $ban = new Ban($user, null);
+            $ban = $this->banManager->banPermanently($user, $dto->getReason());
         } else {
-            $dateTime = new \DateTimeImmutable($dto->getDateTime());
+            if ($dto->getMode() === self::MODE_CONCRETE) {
+                if (empty($dto->getDateTime())) {
+                    throw new InvalidArgumentException('DateTime can not be empty');
+                }
 
-            $ban = new Ban($user, $dateTime);
+                $dateTime = new \DateTimeImmutable($dto->getDateTime());
+
+                $ban = $this->banManager->banUntil($user, $dateTime, $dto->getReason());
+            } else if ($dto->getMode() === self::MODE_DAYS) {
+                $ban = $this->banManager->banForDays($user, $dto->getDays(), $dto->getReason());
+            } else {
+                throw new UnexpectedValueException("Mode value `{$dto->getMode()}` is invalid");
+            }
         }
-
-        $ban->setReason($dto->getReason());
-        $this->banRepository->create($ban);
 
         return new BanDTO($ban, $this->banManager->isExpired($ban));
     }

@@ -3,6 +3,10 @@ declare(strict_types = 1);
 
 namespace App\Services\Support;
 
+/**
+ * Class AnsiColors
+ * Represents constants with ANSI colors.
+ */
 class AnsiColors
 {
     public const BLACK = "\033[0;30m";

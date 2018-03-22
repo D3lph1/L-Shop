@@ -5,6 +5,10 @@ namespace App\Services\Media\Character\Cloak\Applicators;
 
 use Intervention\Image\Image;
 
+/**
+ * Class DefaultApplicator
+ * Applicator cuts the original cloak image into parts.
+ */
 class DefaultApplicator implements Applicator
 {
     /**
@@ -32,12 +36,12 @@ class DefaultApplicator implements Applicator
 
         if (!($validWidth && $validHeight)) {
             $this->ratio = (int)($this->canvas->width() / 17);
-
-            $validWidth = $this->canvas->width() / $this->ratio === 22;
-            $validHeight = $this->canvas->height() / $this->ratio === 17;
         }
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function front(): Image
     {
         $c = clone $this->canvas;
@@ -45,6 +49,9 @@ class DefaultApplicator implements Applicator
         return $c->crop(10 * $this->ratio, 16 * $this->ratio, $this->ratio, $this->ratio);
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function back(): Image
     {
         $c = clone $this->canvas;
@@ -52,16 +59,17 @@ class DefaultApplicator implements Applicator
         return $c->crop(10 * $this->ratio, 17 * $this->ratio, $this->ratio + 11 * $this->ratio, $this->ratio);
     }
 
-    public function edge(): Image
-    {
-        $c = clone $this->canvas;
-    }
-
+    /**
+     * {@inheritdoc}
+     */
     public function width(): int
     {
         return $this->ratio * 10;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function height(): int
     {
         return $this->ratio * 16;

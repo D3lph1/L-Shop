@@ -16,9 +16,19 @@ class AddBan
     private $forever;
 
     /**
+     * @var string
+     */
+    private $mode;
+
+    /**
      * @var string|null
      */
     private $dateTime;
+
+    /**
+     * @var int
+     */
+    private $days;
 
     /**
      * @var string|null
@@ -66,6 +76,26 @@ class AddBan
     }
 
     /**
+     * @return string
+     */
+    public function getMode(): string
+    {
+        return $this->mode;
+    }
+
+    /**
+     * @param string $mode
+     *
+     * @return AddBan
+     */
+    public function setMode(string $mode): AddBan
+    {
+        $this->mode = $mode;
+
+        return $this;
+    }
+
+    /**
      * @param null|string $dateTime
      *
      * @return AddBan
@@ -83,6 +113,26 @@ class AddBan
     public function getDateTime(): ?string
     {
         return $this->dateTime;
+    }
+
+    /**
+     * @return int
+     */
+    public function getDays(): int
+    {
+        return $this->days;
+    }
+
+    /**
+     * @param int $days
+     *
+     * @return AddBan
+     */
+    public function setDays(int $days): AddBan
+    {
+        $this->days = $days;
+
+        return $this;
     }
 
     /**

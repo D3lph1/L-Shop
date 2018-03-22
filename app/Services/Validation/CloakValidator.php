@@ -3,9 +3,21 @@ declare(strict_types = 1);
 
 namespace App\Services\Validation;
 
+/**
+ * Class CloakValidator
+ * Used to validate the size of the cloak image.
+ */
 class CloakValidator
 {
-    public function validate(int $width, int $height)
+    /**
+     * Validate cloak image sizes.
+     *
+     * @param int $width Image width.
+     * @param int $height Image height.
+     *
+     * @return bool True - parameters is valid.
+     */
+    public function validate(int $width, int $height): bool
     {
         $ratio = (int)($width / 64);
 

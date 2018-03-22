@@ -3,21 +3,21 @@ declare(strict_types = 1);
 
 namespace App\Services\Auth\Hashing;
 
-class BcryptHasher implements Hasher
+class WhirlpoolHasher implements Hasher
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function make(string $plainPassword): string
     {
-        return password_hash($plainPassword, PASSWORD_BCRYPT);
+        return hash('whirlpool', $plainPassword);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function check(string $plainPassword, string $hashedPassword): bool
     {
-        return password_verify($plainPassword, $hashedPassword);
+        return $this->make($plainPassword) === $hashedPassword;
     }
 }

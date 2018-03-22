@@ -6,6 +6,10 @@ namespace App\Services\DateTime\Formatting;
 use DateTimeInterface;
 use Illuminate\Contracts\Translation\Translator;
 
+/**
+ * Class HumanizeFormatter
+ * Creates a human-friendly datetime view.
+ */
 class HumanizeFormatter implements Formatter
 {
     /**
@@ -18,7 +22,10 @@ class HumanizeFormatter implements Formatter
         $this->translator = $translator;
     }
 
-    public function format(DateTimeInterface $dateTime)
+    /**
+     * {@inheritdoc}
+     */
+    public function format(DateTimeInterface $dateTime): string
     {
         $month = $dateTime->format('n');
         return $this->translator->trans("datetime.humanized.{$month}", [
