@@ -9,6 +9,8 @@ class Status
 
     public const FAILURE = 'failure';
 
+    public const FORBIDDEN = 'forbidden';
+
     private function __construct()
     {
     }

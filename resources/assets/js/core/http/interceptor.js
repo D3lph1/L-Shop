@@ -39,28 +39,6 @@ axios.interceptors.response.use((response) => {
         if (data.early_redirect) {
             router.push({name: data.early_redirect});
         }
-
-        if (typeof data.status !== 'undefined') {
-            // The "auth" status means that the page is not accessible to the user
-            // and needs to be authorized.
-            if (data.status === 'auth') {
-                notification.warning($t('msg.only_for_auth'));
-                // Redirect to login page.
-                router.push({name: 'frontend.auth.login'});
-
-                // An empty promise since processing a query does not make sense.
-                // Because the user will redirect.
-                return new Promise(() => {});
-            } else if (data.status === 'guest') {
-                // The "guest" status means that the page is only available to authorized users.
-
-                router.push({name: 'frontend.auth.servers'});
-
-                // An empty promise since processing a query does not make sense.
-                // Because the user will redirect.
-                return new Promise(() => {});
-            }
-        }
     }
 
     return response;

@@ -4,8 +4,10 @@ declare(strict_types = 1);
 namespace App\Providers;
 
 use App\Entity\Activation;
+use App\Entity\BalanceTransaction;
 use App\Entity\Ban;
 use App\Entity\Category;
+use App\Entity\Distribution;
 use App\Entity\Enchantment;
 use App\Entity\Item;
 use App\Entity\News;
@@ -13,16 +15,22 @@ use App\Entity\Page;
 use App\Entity\Permission;
 use App\Entity\Persistence;
 use App\Entity\Product;
+use App\Entity\Purchase;
 use App\Entity\Reminder;
 use App\Entity\Role;
 use App\Entity\Server;
+use App\Entity\ShoppingCart;
 use App\Entity\User;
 use App\Repository\Activation\ActivationRepository;
 use App\Repository\Activation\DoctrineActivationRepository;
+use App\Repository\BalanceTransaction\BalanceTransactionRepository;
+use App\Repository\BalanceTransaction\DoctrineBalanceTransactionRepository;
 use App\Repository\Ban\BanRepository;
 use App\Repository\Ban\DoctrineBanRepository;
 use App\Repository\Category\CategoryRepository;
 use App\Repository\Category\DoctrineCategoryRepository;
+use App\Repository\Distribution\DistributionRepository;
+use App\Repository\Distribution\DoctrineDistributionRepository;
 use App\Repository\Enchantment\DoctrineEnchantmentRepository;
 use App\Repository\Enchantment\EnchantmentRepository;
 use App\Repository\Item\DoctrineItemRepository;
@@ -37,12 +45,16 @@ use App\Repository\Persistence\DoctrinePersistenceRepository;
 use App\Repository\Persistence\PersistenceRepository;
 use App\Repository\Product\DoctrineProductRepository;
 use App\Repository\Product\ProductRepository;
+use App\Repository\Purchase\DoctrinePurchaseRepository;
+use App\Repository\Purchase\PurchaseRepository;
 use App\Repository\Reminder\DoctrineReminderRepository;
 use App\Repository\Reminder\ReminderRepository;
 use App\Repository\Role\DoctrineRoleRepository;
 use App\Repository\Role\RoleRepository;
 use App\Repository\Server\DoctrineServerRepository;
 use App\Repository\Server\ServerRepository;
+use App\Repository\ShoppingCart\DoctrineShoppingCartRepository;
+use App\Repository\ShoppingCart\ShoppingCartRepository;
 use App\Repository\User\DoctrineUserRepository;
 use App\Repository\User\UserRepository;
 use App\Services\Settings\Repository\Doctrine\DoctrineRepository;
@@ -111,6 +123,22 @@ class RepositoryServiceProvider extends ServiceProvider
         EnchantmentRepository::class => [
             'concrete' => DoctrineEnchantmentRepository::class,
             'entity' => Enchantment::class
+        ],
+        PurchaseRepository::class => [
+            'concrete' => DoctrinePurchaseRepository::class,
+            'entity' => Purchase::class
+        ],
+        BalanceTransactionRepository::class => [
+            'concrete' => DoctrineBalanceTransactionRepository::class,
+            'entity' => BalanceTransaction::class
+        ],
+        DistributionRepository::class => [
+            'concrete' => DoctrineDistributionRepository::class,
+            'entity' => Distribution::class
+        ],
+        ShoppingCartRepository::class => [
+            'concrete' => DoctrineShoppingCartRepository::class,
+            'entity' => ShoppingCart::class
         ],
         Repository::class => [
             'concrete' => DoctrineRepository::class,

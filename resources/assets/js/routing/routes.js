@@ -35,6 +35,11 @@ const About = () => import(/* webpackChunkName: "admin" */'../templates/admin/in
 
 export default [
     {
+        path: '/',
+        name: 'frontend.index',
+        redirect: {name: 'frontend.auth.servers'}
+    },
+    {
         path: '/login',
         name: 'frontend.auth.login',
         component: Login,

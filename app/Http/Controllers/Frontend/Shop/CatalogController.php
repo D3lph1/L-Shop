@@ -3,11 +3,16 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Frontend\Shop;
 
+use function App\auth_middleware;
 use App\DataTransferObjects\Frontend\Shop\Server;
 use App\Exceptions\Category\DoesNotExistException as CategoryDoesNotExistException;
+use App\Exceptions\Product\DoesNotExistException;
 use App\Exceptions\Server\DoesNotExistException as ServerDoesNotExistException;
+use App\Handlers\Frontend\Shop\Catalog\PurchaseHandler;
 use App\Handlers\Frontend\Shop\Catalog\VisitHandler;
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\Auth as AuthMiddleware;
+use App\Http\Requests\Frontend\Shop\Catalog\PurchaseRequest;
 use App\Services\Auth\Auth;
 use App\Services\Auth\Permissions;
 use App\Services\Cart\Cart;
@@ -21,6 +26,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CatalogController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(auth_middleware(AuthMiddleware::SOFT));
+    }
+
     public function render(
         Request $request,
         VisitHandler $handler,
@@ -60,5 +70,21 @@ class CatalogController extends Controller
             'productsCrudAccess' => $productsCrudAccess,
             'itemsCrudAccess' => $itemsCrudAccess
         ]);
+    }
+
+    public function purchase(PurchaseRequest $request, PurchaseHandler $handler): JsonResponse
+    {
+        try {
+            $handler->handle(
+                (int)$request->get('product'),
+                abs((int)$request->get('amount')),
+                $request->get('username'),
+                $request->ip()
+            );
+
+            return new JsonResponse(Status::SUCCESS);
+        } catch (DoesNotExistException $e) {
+            return new JsonResponse('product_not_found');
+        }
     }
 }

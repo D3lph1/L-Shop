@@ -38,7 +38,6 @@ class CharacterController extends Controller
 
             return $next($request);
         });
-
     }
 
     public function render(

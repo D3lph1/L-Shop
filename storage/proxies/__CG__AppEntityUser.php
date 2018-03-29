@@ -279,39 +279,6 @@ class User extends \App\Entity\User implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
-    public function addBalance(float $value): \App\Entity\User
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addBalance', [$value]);
-
-        return parent::addBalance($value);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function subBalance(float $value): \App\Entity\User
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'subBalance', [$value]);
-
-        return parent::subBalance($value);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function addPermission(\App\Entity\Permission $permission): \App\Entity\User
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addPermission', [$permission]);
-
-        return parent::addPermission($permission);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getPermissions(): \Doctrine\Common\Collections\Collection
     {
 

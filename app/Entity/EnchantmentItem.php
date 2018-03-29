@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="enchantments_items")
+ * @ORM\Table(name="enchantment_items")
  */
 class EnchantmentItem
 {

@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="activations")
+ * @ORM\Table(name="activations", indexes={@ORM\Index(name="code_idx", columns={"code"})})
  * @ORM\HasLifecycleCallbacks
  */
 class Activation
@@ -90,10 +90,5 @@ class Activation
     public function generateCreatedAt(): void
     {
         $this->createdAt = new \DateTimeImmutable();
-    }
-
-    public function isExpired(): bool
-    {
-        return $this->getCreatedAt()->getTimestamp() + config('auth.activation.lifetime') * 60 < time();
     }
 }

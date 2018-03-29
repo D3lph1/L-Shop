@@ -9,9 +9,9 @@ use App\Handlers\Frontend\Shop\Cart\PutHandler;
 use App\Handlers\Frontend\Shop\Cart\RemoveHandler;
 use App\Handlers\Frontend\Shop\Cart\VisitHandler;
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\Auth as AuthMiddleware;
 use App\Http\Requests\Frontend\Shop\Cart\PutRequest;
 use App\Http\Requests\Frontend\Shop\Cart\RemoveRequest;
-use App\Services\Auth\Auth;
 use App\Services\Cart\Cart;
 use App\Services\Infrastructure\Notification\Notifications\Info;
 use App\Services\Infrastructure\Notification\Notifications\Success;
@@ -20,11 +20,16 @@ use App\Services\Infrastructure\Response\JsonResponse;
 use App\Services\Infrastructure\Response\Status;
 use App\Services\Infrastructure\Security\Captcha\Captcha;
 use App\Services\Infrastructure\Server\Persistence\Persistence;
-use App\Services\Settings\Settings;
 use Illuminate\Http\Request;
+use function App\auth_middleware;
 
 class CartController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware(auth_middleware(AuthMiddleware::SOFT));
+    }
+
     public function render(Request $request, VisitHandler $handler, Captcha $captcha, Persistence $persistence)
     {
         $server = $persistence->retrieve();

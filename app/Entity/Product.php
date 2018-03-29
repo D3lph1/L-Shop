@@ -132,4 +132,22 @@ class Product
 
         return $this;
     }
+
+    /**
+     * @return string String representation of object.
+     * @example App\Entity\Product(id=3, price=0.99, stack=64, item={id=1, name="Block of grass", type="item"})
+     */
+    public function __toString(): string
+    {
+        return sprintf(
+            '%s(id=%d, price=%F, stack=%d, item={id=%d, name="%s", type="%s"})',
+            self::class,
+            $this->getId(),
+            $this->getPrice(),
+            $this->getStack(),
+            $this->getItem()->getId(),
+            $this->getItem()->getName(),
+            $this->getItem()->getType()
+        );
+    }
 }

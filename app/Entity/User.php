@@ -8,13 +8,17 @@ use App\Services\Auth\Acl\HasPermissions;
 use App\Services\Auth\Acl\HasRoles;
 use App\Services\Auth\Acl\PermissionTrait;
 use App\Services\Auth\Acl\RoleTrait;
+use App\Services\User\Balance\Transactor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="users")
+ * @ORM\Table(name="users", indexes={
+ *     @ORM\Index(name="username_idx", columns={"username"}),
+ *     @ORM\Index(name="email_idx", columns={"email"})
+ * })
  * @ORM\HasLifecycleCallbacks
  */
 class User implements HasRoles, HasPermissions
@@ -136,39 +140,19 @@ class User implements HasRoles, HasPermissions
         return $this->balance;
     }
 
+    /**
+     * It is not recommended to use this method directly. Instead, use {@see Transactor}.
+     *
+     * @param float $balance
+     *
+     * @return User
+     */
     public function setBalance(float $balance): User
     {
         if ($balance < 0) {
             throw new InvalidArgumentException('The argument $balance must be greater than or equal to zero');
         }
         $this->balance = $balance;
-
-        return $this;
-    }
-
-    public function addBalance(float $value): User
-    {
-        if ($value <= 0) {
-            throw new InvalidArgumentException('The argument $value must be a positive number');
-        }
-        $this->balance += $value;
-
-        return $this;
-    }
-
-    public function subBalance(float $value): User
-    {
-        if ($value <= 0) {
-            throw new InvalidArgumentException('The argument $value must be a positive number');
-        }
-        $this->balance -= $value;
-
-        return $this;
-    }
-
-    public function addPermission(Permission $permission): User
-    {
-        $this->permissions->add($permission);
 
         return $this;
     }
@@ -234,10 +218,17 @@ class User implements HasRoles, HasPermissions
 
     /**
      * @return string Object string representation.
-     * @example (D3lph1 [1])
+     * @example App\Entity\User(id=1, username="Admin", email="admin@example.com", balance=1000)
      */
     public function __toString(): string
     {
-        return "({$this->getUsername()} [{$this->getId()}])";
+        return sprintf(
+            '%s(id=%d, username="%s", email="%s", balance=%F)',
+            self::class,
+            $this->getId(),
+            $this->getUsername(),
+            $this->getEmail(),
+            $this->getBalance()
+        );
     }
 }

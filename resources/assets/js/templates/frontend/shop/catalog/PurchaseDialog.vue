@@ -44,7 +44,7 @@
                 <v-card-actions>
                     <v-spacer></v-spacer>
                     <v-btn color="blue darken-1" flat @click.native="dialogData = false">{{ $t('common.cancel') }}</v-btn>
-                    <v-btn color="blue darken-1" flat @click.native="purchase" :loading="disabledBtn">{{ $t('content.frontend.shop.catalog.purchase.purchase') }}</v-btn>
+                    <v-btn color="blue darken-1" flat @click.native="purchase" :loading="loadingPurchaseBtn">{{ $t('content.frontend.shop.catalog.purchase.purchase') }}</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>
@@ -57,6 +57,10 @@
             dialog: {
                 required: true,
                 type: Boolean
+            },
+            id: {
+                required: true,
+                type: Number
             },
             name: {
                 required: true,
@@ -85,7 +89,7 @@
                 username: '',
                 amount: this.stack,
                 cost: this.price,
-                disabledBtn: false
+                loadingPurchaseBtn: false
             }
         },
         watch: {
@@ -134,13 +138,18 @@
                     return;
                 }
                 */
-                this.disabledBtn = true;
-                this.$axios.post(this.url, {
+                this.loadingPurchaseBtn = true;
+                this.$axios.post('/api/catalog/purchase', {
                     username: this.username,
+                    product: this.id,
                     amount: this.amount
-                }).then((response) => {
-                    //
-                });
+                })
+                    .then((response) => {
+                        this.loadingPurchaseBtn = false;
+                        if (response.data.status === 'success') {
+                            //
+                        }
+                    });
             },
             /**
              * Increases the amount of the product by 1 stack.

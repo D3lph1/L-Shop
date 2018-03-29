@@ -39,11 +39,12 @@ $router->post('/password/forgot', 'Frontend\Auth\ForgotPasswordController@handle
 $router->get('/password/reset/{code}', 'Frontend\Auth\ResetPasswordController@render');
 $router->post('/password/reset/{code}', 'Frontend\Auth\ResetPasswordController@handle')
     ->name('frontend.auth.password.reset.handle');
-$router->get('/servers', 'Frontend\Auth\ServersController@render');
+$router->get('/servers', 'Frontend\Auth\SelectServerController@render');
 
 // Shop
 $router->get('/shop', 'Frontend\Shop\ShopController@render');
 $router->get('/catalog/{server}/{category?}', 'Frontend\Shop\CatalogController@render');
+$router->post('/catalog/purchase', 'Frontend\Shop\CatalogController@purchase');
 
 $router->get('/monitoring', 'Api\MonitoringController@monitor');
 

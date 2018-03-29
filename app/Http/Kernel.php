@@ -5,7 +5,6 @@ namespace App\Http;
 
 use App\Http\Middleware\AddToResponse;
 use App\Http\Middleware\Captcha;
-use App\Http\Middleware\LogoutIfBanned;
 use App\Http\Middleware\NeedPermission;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
@@ -59,7 +58,7 @@ class Kernel extends HttpKernel
      * @var array
      */
     protected $routeMiddleware = [
-        'auth' => \App\Http\Middleware\OnlyAuthorized::class,
+        'auth' => \App\Http\Middleware\Auth::class,
         'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'can' => \Illuminate\Auth\Middleware\Authorize::class,

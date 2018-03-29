@@ -28,6 +28,8 @@ use App\Services\Monitoring\Drivers\Driver as MonitoringDriver;
 use App\Services\Monitoring\Drivers\Rcon as RconMonitoring;
 use App\Services\Monitoring\Drivers\RconResponseParser;
 use App\Services\Monitoring\Monitoring;
+use App\Services\Purchasing\Distributors\Distributor;
+use App\Services\Purchasing\Distributors\ShoppingCartDistributor;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
 use D3lph1\MinecraftRconManager\Connector;
@@ -92,6 +94,8 @@ class AppServiceProvider extends ServiceProvider
                 $settings->get('system.monitoring.rcon.ttl')->getValue(DataType::FLOAT)
             );
         });
+
+        $this->app->singleton(Distributor::class, ShoppingCartDistributor::class);
     }
 
     private function registerTruncater(): void

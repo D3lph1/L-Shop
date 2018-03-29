@@ -36,4 +36,18 @@ class Stack
 
         throw new UnexpectedValueException();
     }
+
+    /**
+     * @param Product $product
+     *
+     * @return bool|null True - if is permgroup selling forever. Null - if it not permgroup.
+     */
+    public static function isForever(Product $product): ?bool
+    {
+        if ($product->getItem()->getType() !== Type::PERMGROUP) {
+            return null;
+        }
+
+        return $product->getStack() === 0;
+    }
 }
