@@ -46,6 +46,8 @@ $router->get('/shop', 'Frontend\Shop\ShopController@render');
 $router->get('/catalog/{server}/{category?}', 'Frontend\Shop\CatalogController@render');
 $router->post('/catalog/purchase', 'Frontend\Shop\CatalogController@purchase');
 
+$router->get('/payment/{purchase}', 'Frontend\Shop\PaymentController@render');
+
 $router->get('/monitoring', 'Api\MonitoringController@monitor');
 
 $router->get('/cart/{server}', 'Frontend\Shop\CartController@render');

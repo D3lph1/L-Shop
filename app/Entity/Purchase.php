@@ -47,20 +47,21 @@ class Purchase
     private $ip;
 
     /**
-     * @ORM\Column(name="completed_at", type="datetime_immutable", nullable=true)
-     */
-    private $completedAt = null;
-
-    /**
      * @ORM\Column(name="created_at", type="datetime_immutable")
      */
     private $createdAt;
+
+    /**
+     * @ORM\Embedded(class="App\Entity\Invoice", columnPrefix="invoice_")
+     */
+    private $invoice;
 
     public function __construct(float $cost, ?string $ip = null)
     {
         $this->cost = $cost;
         $this->items = new ArrayCollection();
         $this->ip = $ip;
+        $this->invoice = new Invoice();
     }
 
     public function getId(): int
@@ -99,9 +100,14 @@ class Purchase
 
     public function setPlayer(string $player): Purchase
     {
-        $this->user = $player;
+        $this->player = $player;
 
         return $this;
+    }
+
+    public function isAnonymously(): bool
+    {
+        return $this->user === null;
     }
 
     /**
@@ -113,26 +119,21 @@ class Purchase
         return $this->items;
     }
 
-    public function isCompleted()
-    {
-        return $this->getCompletedAt() !== null;
-    }
-
-    public function getCompletedAt(): ?\DateTimeImmutable
-    {
-        return $this->completedAt;
-    }
-
-    public function setCompletedAt(\DateTimeImmutable $completedAt): Purchase
-    {
-        $this->completedAt = $completedAt;
-
-        return $this;
-    }
-
     public function getIp(): ?string
     {
         return $this->ip;
+    }
+
+    public function getInvoice(): Invoice
+    {
+        return $this->invoice;
+    }
+
+    public function setInvoice(Invoice $invoice): Purchase
+    {
+        $this->invoice = $invoice;
+
+        return $this;
     }
 
     public function getCreatedAt(): \DateTimeImmutable
@@ -151,14 +152,15 @@ class Purchase
     public function __toString(): string
     {
         return sprintf(
-            '%s(id=%d, cost=%F, %s, completed_at=%s)',
+            '%s(id=%d, cost=%F, %s, invoice={via=%s, completed_at=%s})',
             self::class,
             $this->getId(),
             $this->getCost(),
             $this->getUser() === null ?
                 sprintf('player="%s"', $this->getPlayer()) :
                 sprintf('user={%s}', $this->getUser()),
-            $this->getCompletedAt() === null ? 'null' : "\"{$this->getCompletedAt()}\""
+            $this->getInvoice()->isCompleted() ? "\"{$this->getInvoice()->getVia()}\"" : 'null',
+            $this->getInvoice()->isCompleted() ? "\"{$this->getInvoice()->getCompletedAt()}\"" : 'null'
         );
     }
 }

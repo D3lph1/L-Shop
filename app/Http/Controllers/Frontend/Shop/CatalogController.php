@@ -16,6 +16,8 @@ use App\Http\Requests\Frontend\Shop\Catalog\PurchaseRequest;
 use App\Services\Auth\Auth;
 use App\Services\Auth\Permissions;
 use App\Services\Cart\Cart;
+use App\Services\Infrastructure\Notification\Notifications\Error;
+use App\Services\Infrastructure\Notification\Notifications\Success;
 use App\Services\Infrastructure\Response\JsonResponse;
 use App\Services\Infrastructure\Response\Status;
 use App\Services\Infrastructure\Security\Captcha\Captcha;
@@ -75,16 +77,28 @@ class CatalogController extends Controller
     public function purchase(PurchaseRequest $request, PurchaseHandler $handler): JsonResponse
     {
         try {
-            $handler->handle(
+            $result = $handler->handle(
                 (int)$request->get('product'),
                 abs((int)$request->get('amount')),
                 $request->get('username'),
                 $request->ip()
             );
 
-            return new JsonResponse(Status::SUCCESS);
+            if ($result->isQuick()) {
+                return (new JsonResponse(Status::SUCCESS, [
+                    'quick' => true,
+                    'newBalance' => $result->getNewBalance()
+                ]))
+                    ->addNotification(new Success(__('msg.frontend.shop.catalog.purchase.success')));
+            } else {
+                return new JsonResponse(Status::SUCCESS, [
+                    'quick' => false,
+                    'purchaseId' => $result->getPurchaseId()
+                ]);
+            }
         } catch (DoesNotExistException $e) {
-            return new JsonResponse('product_not_found');
+            return (new JsonResponse('product_not_found'))
+                ->addNotification(new Error(__('msg.frontend.shop.catalog.product_not_found')));
         }
     }
 }

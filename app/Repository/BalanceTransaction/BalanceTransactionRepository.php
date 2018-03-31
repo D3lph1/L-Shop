@@ -8,4 +8,6 @@ use App\Entity\BalanceTransaction;
 interface BalanceTransactionRepository
 {
     public function create(BalanceTransaction $transaction): void;
+
+    public function deleteAll(): bool;
 }

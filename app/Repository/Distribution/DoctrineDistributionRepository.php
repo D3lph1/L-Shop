@@ -30,4 +30,12 @@ class DoctrineDistributionRepository implements DistributionRepository
         $this->em->persist($distribution);
         $this->em->flush();
     }
+
+    public function deleteAll(): bool
+    {
+        return (bool)$this->er->createQueryBuilder('d')
+            ->delete()
+            ->getQuery()
+            ->getResult();
+    }
 }

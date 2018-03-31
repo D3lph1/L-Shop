@@ -12,6 +12,7 @@ const Servers = () => import(/* webpackChunkName: "shop" */ './../templates/fron
 const Shop = () => import(/* webpackChunkName: "shop" */ '../templates/layout/shop/Shop.vue');
 const Catalog = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/shop/catalog/Catalog.vue');
 const Cart = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/shop/cart/Cart.vue');
+const Payment = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/shop/Payment.vue');
 const Character = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/profile/Character.vue');
 const ProfileSettings = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/profile/Settings.vue');
 const News = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/news/News.vue');
@@ -126,6 +127,22 @@ export default [
                 },
                 meta: {
                     title: $t('content.frontend.shop.cart.title')
+                }
+            },
+        ]
+    },
+    {
+        path: '/payment',
+        component: Shop,
+        children: [
+            {
+                path: ':purchase',
+                name: 'frontend.shop.payment',
+                components: {
+                    content: Payment
+                },
+                meta: {
+                    title: $t('content.frontend.shop.payment.title')
                 }
             },
         ]

@@ -4,9 +4,12 @@ declare(strict_types=1);
 use App\Entity\Role;
 use App\Entity\User;
 use App\Repository\Activation\ActivationRepository;
+use App\Repository\BalanceTransaction\BalanceTransactionRepository;
 use App\Repository\Ban\BanRepository;
+use App\Repository\Distribution\DistributionRepository;
 use App\Repository\News\NewsRepository;
 use App\Repository\Persistence\PersistenceRepository;
+use App\Repository\Purchase\PurchaseRepository;
 use App\Repository\Reminder\ReminderRepository;
 use App\Repository\Role\RoleRepository;
 use App\Repository\User\UserRepository;
@@ -27,13 +30,19 @@ class UsersSeeder extends Seeder
         ActivationRepository $activationRepository,
         ReminderRepository $reminderRepository,
         PersistenceRepository $persistenceRepository,
-        NewsRepository $newsRepository): void
+        NewsRepository $newsRepository,
+        BalanceTransactionRepository $balanceTransactionRepository,
+        PurchaseRepository $purchaseRepository,
+        DistributionRepository $distributionRepository): void
     {
         $activationRepository->deleteAll();
         $reminderRepository->deleteAll();
         $persistenceRepository->deleteAll();
         $newsRepository->deleteAll();
         $banRepository->deleteAll();
+        $balanceTransactionRepository->deleteAll();
+        $distributionRepository->deleteAll();
+        $purchaseRepository->deleteAll();
         $userRepository->deleteAll();
 
         $user = $auth->register(new User('admin', 'admin@example.com', 'admin'));

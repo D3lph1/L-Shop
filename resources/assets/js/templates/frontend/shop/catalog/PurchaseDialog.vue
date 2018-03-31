@@ -146,8 +146,14 @@
                 })
                     .then((response) => {
                         this.loadingPurchaseBtn = false;
-                        if (response.data.status === 'success') {
-                            //
+                        const data = response.data;
+                        if (data.status === 'success') {
+                            if (data.quick) {
+                                this.$store.commit('setBalance', data.newBalance);
+                            } else {
+                                this.$router.push({name: 'frontend.shop.payment', params: {purchase: data.purchaseId}});
+                            }
+                            this.dialogData = false;
                         }
                     });
             },

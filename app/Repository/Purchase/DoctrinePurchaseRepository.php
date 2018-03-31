@@ -30,4 +30,18 @@ class DoctrinePurchaseRepository implements PurchaseRepository
         $this->em->persist($purchase);
         $this->em->flush();
     }
+
+    public function find(int $id): ?Purchase
+    {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        return $this->er->find($id);
+    }
+
+    public function deleteAll(): bool
+    {
+        return (bool)$this->er->createQueryBuilder('p')
+            ->delete()
+            ->getQuery()
+            ->getResult();
+    }
 }

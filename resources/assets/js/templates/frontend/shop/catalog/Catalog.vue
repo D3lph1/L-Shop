@@ -68,7 +68,7 @@
         <purchase-dialog
                 v-if="purchase.dialog"
                 :dialog="purchase.dialog"
-                :id="purchasableProduct.item.id"
+                :id="purchasableProduct.id"
                 :name="purchasableProduct.item.name"
                 :price="purchasableProduct.price"
                 :stack="purchasableProduct.stack"

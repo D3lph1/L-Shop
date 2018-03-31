@@ -27,7 +27,11 @@ return [
         ],
         'shop' => [
             'catalog' => [
-                'put_in_cart' => 'Товар добавлен в корзину.'
+                'put_in_cart' => 'Товар добавлен в корзину.',
+                'product_not_found' => 'Товар не найден.',
+                'purchase' => [
+                    'success' => 'Покупка совершена успешна.'
+                ]
             ],
             'cart' => [
                 'remove' => [

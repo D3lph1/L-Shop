@@ -86,4 +86,9 @@ class DateTimeUtil
 
         return (new \DateTimeImmutable())->sub($interval);
     }
+
+    public static function daysToSeconds(float $days): float
+    {
+        return $days * 86400;
+    }
 }

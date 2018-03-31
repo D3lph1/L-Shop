@@ -35,19 +35,5 @@ class AuthServiceProvider extends ServiceProvider
             ]);
         });
         $this->app->singleton(Auth::class);
-
-        $this->app->bind(Transactor::class, function () {
-            $auth = $this->app->make(Auth::class);
-            if (!$auth->check()) {
-                throw new BindingResolutionException(
-                    'Can not resolve parameter $user in App\Services\User\Balance\Transactor::_construct(). User must be authenticated.'
-                );
-            }
-
-            return new Transactor(
-                $this->app->make(BalanceTransactionRepository::class),
-                $auth->getUser()
-            );
-        });
     }
 }

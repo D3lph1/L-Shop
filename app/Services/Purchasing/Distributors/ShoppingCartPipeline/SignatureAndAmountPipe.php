@@ -7,6 +7,7 @@ use App\Entity\EnchantmentItem;
 use App\Entity\Product;
 use App\Entity\PurchaseItem;
 use App\Entity\ShoppingCart;
+use App\Services\DateTime\DateTimeUtil;
 use App\Services\Product\Stack;
 
 class SignatureAndAmountPipe
@@ -15,15 +16,17 @@ class SignatureAndAmountPipe
     {
         $purchaseItem = $entity->getDistribution()->getPurchaseItem();
         $product = $purchaseItem->getProduct();
-        if ($entity === ShoppingCart::TYPE_ITEM) {
+        if ($entity->getType() === ShoppingCart::TYPE_ITEM) {
             $entity
                 ->setSignature($this->buildItemSignature($product))
                 ->setAmount($purchaseItem->getAmount());
-        } elseif ($entity === ShoppingCart::TYPE_PERMGROUP) {
+        } elseif ($entity->getType() === ShoppingCart::TYPE_PERMGROUP) {
             if (Stack::isForever($product)) {
                 $entity->setSignature($product->getItem()->getGameId());
+                $entity->setAmount(1);
             } else {
                 $entity->setSignature($this->buildExpiredPermgroupSignature($purchaseItem));
+                $entity->setAmount(1);
             }
         }
 
@@ -51,6 +54,8 @@ class SignatureAndAmountPipe
 
     private function buildExpiredPermgroupSignature(PurchaseItem $purchaseItem): string
     {
-        return "{$purchaseItem->getProduct()->getItem()->getGameId()}?lifetime={$purchaseItem->getAmount()}";
+        $lifetime = DateTimeUtil::daysToSeconds($purchaseItem->getAmount());
+
+        return "{$purchaseItem->getProduct()->getItem()->getGameId()}?lifetime={$lifetime}";
     }
 }

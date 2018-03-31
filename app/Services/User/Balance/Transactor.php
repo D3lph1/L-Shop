@@ -25,63 +25,63 @@ class Transactor
      */
     private $userRepository;
 
-    /**
-     * @var User
-     */
-    private $user;
-
-    public function __construct(BalanceTransactionRepository $repository, UserRepository $userRepository, User $user)
+    public function __construct(BalanceTransactionRepository $repository, UserRepository $userRepository)
     {
         $this->transactionRepository = $repository;
         $this->userRepository = $userRepository;
-        $this->user = $user;
     }
 
     /**
+     * @param User  $user
      * @param float $value
      *
      * @return float New balance.
      */
-    public function add(float $value): float
+    public function add(User $user, float $value): float
     {
         if ($value <= 0) {
             throw new InvalidArgumentException('The argument $value must be a positive number');
         }
 
-        $this->transactionRepository->create(new BalanceTransaction($value, $this->user));
-        $this->user->setBalance($this->user->getBalance() + $value);
-        $this->userRepository->update($this->user);
+        $this->transactionRepository->create(new BalanceTransaction($value, $user));
+        $user->setBalance($user->getBalance() + $value);
+        $this->userRepository->update($user);
 
-        return $this->user->getBalance();
+        return $user->getBalance();
     }
 
     /**
+     * @param User  $user
      * @param float $value
      *
      * @return float New balance.
      */
-    public function sub(float $value): float
+    public function sub(User $user, float $value): float
     {
         if ($value <= 0) {
             throw new InvalidArgumentException('The argument $value must be a positive number');
         }
 
         // When debiting money from the balance, the delta must be negative number.
-        $this->transactionRepository->create(new BalanceTransaction($value * -1, $this->user));
-        $this->user->setBalance($this->user->getBalance() - $value);
-        $this->userRepository->update($this->user);
+        $this->transactionRepository->create(new BalanceTransaction($value * -1, $user));
+        $user->setBalance($user->getBalance() - $value);
+        $this->userRepository->update($user);
 
-        return $this->user->getBalance();
+        return $user->getBalance();
     }
 
-    public function set(float $value): void
+    /**
+     * @param User  $user
+     * @param float $value
+     */
+    public function set(User $user, float $value): void
     {
         if ($value < 0) {
             throw new InvalidArgumentException('The argument $value must be a equals or greater than 0');
         }
 
-        $this->transactionRepository->create(new BalanceTransaction($value - $this->user->getBalance(), $this->user));
-        $this->user->setBalance($value);
-        $this->userRepository->update($this->user);
+        $this->transactionRepository->create(new BalanceTransaction($value - $user->getBalance(), $user));
+        $user->setBalance($value);
+        $this->userRepository->update($user);
     }
 }

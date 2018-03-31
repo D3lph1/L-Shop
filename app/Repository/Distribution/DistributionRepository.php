@@ -8,4 +8,6 @@ use App\Entity\Distribution;
 interface DistributionRepository
 {
     public function create(Distribution $distribution): void;
+
+    public function deleteAll(): bool;
 }

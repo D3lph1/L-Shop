@@ -30,4 +30,12 @@ class DoctrineBalanceTransactionRepository implements BalanceTransactionReposito
         $this->em->persist($transaction);
         $this->em->flush();
     }
+
+    public function deleteAll(): bool
+    {
+        return (bool)$this->er->createQueryBuilder('t')
+            ->delete()
+            ->getQuery()
+            ->getResult();
+    }
 }

@@ -40,7 +40,7 @@ class PurchaseItem
         $this->amount = $amount;
     }
 
-    private function getId(): int
+    public function getId(): int
     {
         return $this->id;
     }
@@ -72,5 +72,12 @@ class PurchaseItem
     public function getPurchase(): Purchase
     {
         return $this->purchase;
+    }
+
+    public function setPurchase(Purchase $purchase): PurchaseItem
+    {
+        $this->purchase = $purchase;
+
+        return $this;
     }
 }

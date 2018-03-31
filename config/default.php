@@ -86,5 +86,26 @@ return [
         'reset_password' => [
             'enabled' => true
         ]
+    ],
+    'purchasing' => [
+        'services' => [
+            'robokassa' => [
+                'enabled' => true,
+                'login' => '',
+                'payment_password' => '',
+                'validation_password' => '',
+                'algorithm' => 'sha512',
+                'test' => true,
+                'culture' => \App\Services\Purchasing\Payments\Robokassa\Checkout::CULTURE_RU
+            ],
+            'interkassa' => [
+                'enabled' => true,
+                'login' => '',
+                'key' => '',
+                'test_key' => '',
+                'algorithm' => 'sha256',
+                'test' => true
+            ]
+        ]
     ]
 ];

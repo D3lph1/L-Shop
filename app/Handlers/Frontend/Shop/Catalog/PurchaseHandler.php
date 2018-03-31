@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Handlers\Frontend\Shop\Catalog;
 
+use App\DataTransferObjects\Frontend\Shop\Catalog\Purchase as ResultDTO;
 use App\DataTransferObjects\Frontend\Shop\Purchase;
 use App\Entity\Distribution;
 use App\Exceptions\Product\DoesNotExistException;
@@ -53,7 +54,7 @@ class PurchaseHandler
         $this->distributor = $distributor;
     }
 
-    public function handle(int $productId, int $amount, ?string $username, string $ip)
+    public function handle(int $productId, int $amount, ?string $username, string $ip): ResultDTO
     {
         $product = $this->productRepository->find($productId);
         if ($product === null) {
@@ -62,19 +63,25 @@ class PurchaseHandler
         if ($this->auth->check()) {
             $user = $this->auth->getUser();
         } else {
+            // User purchases without authorization.
             $user = $username;
         }
 
         $purchase = new Purchase($product, $amount);
         $purchase = $this->creator->create([$purchase], $user, $ip);
 
-        foreach ($purchase->getItems() as $purchaseItem) {
-            $distribution = new Distribution($purchaseItem);
-            if ($purchase->isCompleted()) {
+        if ($purchase->getInvoice()->isCompleted()) {
+            foreach ($purchase->getItems() as $purchaseItem) {
+                $distribution = new Distribution($purchaseItem);
+                $this->distributionRepository->create($distribution);
                 $this->distributor->distribute($distribution);
-            } else {
-                //
             }
+
+            return (new ResultDTO(true))
+                ->setNewBalance($purchase->getUser()->getBalance());
+        } else {
+            return (new ResultDTO(false))
+                ->setPurchaseId($purchase->getId());
         }
     }
 }

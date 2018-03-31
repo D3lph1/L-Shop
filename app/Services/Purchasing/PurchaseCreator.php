@@ -13,6 +13,7 @@ use App\Exceptions\Purchase\InvalidAmountException;
 use App\Repository\Purchase\PurchaseRepository;
 use App\Services\Item\Type;
 use App\Services\Product\Stack;
+use App\Services\User\Balance\Transactor;
 
 class PurchaseCreator
 {
@@ -21,11 +22,20 @@ class PurchaseCreator
      */
     private $purchaseRepository;
 
+    /**
+     * @var Transactor
+     */
+    private $transactor;
+
+    /**
+     * @var float
+     */
     private $cost = 0;
 
-    public function __construct(PurchaseRepository $purchaseRepository)
+    public function __construct(PurchaseRepository $purchaseRepository, Transactor $transactor)
     {
         $this->purchaseRepository = $purchaseRepository;
+        $this->transactor = $transactor;
     }
 
     /**
@@ -34,11 +44,16 @@ class PurchaseCreator
      * @param string      $ip
      *
      * @return Purchase
+     * @throws \Exception
      */
     public function create(array $dto, $user, string $ip): Purchase
     {
         $this->through($dto);
-        return $this->persist($dto, $user, $ip, $this->enoughMoney($user));
+        $enoughMoney = $this->enoughMoney($user);
+        if ($enoughMoney) {
+            $this->writeOffMoney($user);
+        }
+        return $this->persist($dto, $user, $ip, $enoughMoney);
     }
 
     /**
@@ -118,22 +133,30 @@ class PurchaseCreator
         return $user->getBalance() - $this->cost >= 0;
     }
 
+    private function writeOffMoney(User $user): void
+    {
+        $this->transactor->sub($user, $this->cost);
+    }
+
     /**
-     * @param DTO[]  $dto
-     * @param User|string   $user
-     * @param string $ip
-     * @param bool   $isCompleted
+     * @param DTO[]       $dto
+     * @param User|string $user
+     * @param string      $ip
+     * @param bool        $isCompleted
      *
      * @return Purchase
+     * @throws \Exception
      */
     private function persist(array $dto, $user, string $ip, bool $isCompleted): Purchase
     {
         $purchase = new Purchase($this->cost, $ip);
         foreach ($dto as $each) {
-            $purchase->getItems()->add(new PurchaseItem($each->getProduct(), $each->getAmount()));
+            $purchaseItem = new PurchaseItem($each->getProduct(), $each->getAmount());
+            $purchaseItem->setPurchase($purchase);
+            $purchase->getItems()->add($purchaseItem);
         }
         if ($isCompleted) {
-            $purchase->setCompletedAt(new \DateTimeImmutable());
+            $purchase->getInvoice()->setCompletedAt(new \DateTimeImmutable());
         }
         if ($user instanceof User) {
             $purchase->setUser($user);
