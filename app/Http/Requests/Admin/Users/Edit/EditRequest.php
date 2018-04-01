@@ -34,6 +34,7 @@ class EditRequest extends FormRequest
             ->addRule(new Rule('string'))
             ->addRule(new Rule('min', $config->get('auth.validation.username.min')))
             ->addRule(new Rule('max', $config->get('auth.validation.username.max')))
+            ->addRule(new Rule($config->get('auth.validation.username.rule')))
             ->build();
 
         $passwordRules = (new RulesBuilder())

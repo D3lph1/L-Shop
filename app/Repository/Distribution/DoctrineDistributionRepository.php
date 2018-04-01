@@ -31,6 +31,12 @@ class DoctrineDistributionRepository implements DistributionRepository
         $this->em->flush();
     }
 
+    public function update(Distribution $distribution): void
+    {
+        $this->em->merge($distribution);
+        $this->em->flush();
+    }
+
     public function deleteAll(): bool
     {
         return (bool)$this->er->createQueryBuilder('d')

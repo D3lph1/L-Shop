@@ -5,9 +5,8 @@ namespace App\Services\Purchasing\Payments\Interkassa;
 
 use App\Exceptions\RuntimeException;
 use App\Exceptions\UnexpectedValueException;
-use App\Services\Purchasing\Payments\Checkout as CheckoutInterface;
 
-class Checkout implements CheckoutInterface
+class Checkout
 {
     private const URL = 'https://sci.interkassa.com';
 

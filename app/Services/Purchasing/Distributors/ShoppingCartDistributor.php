@@ -5,6 +5,7 @@ namespace App\Services\Purchasing\Distributors;
 
 use App\Entity\Distribution;
 use App\Entity\ShoppingCart;
+use App\Repository\Distribution\DistributionRepository;
 use App\Repository\ShoppingCart\ShoppingCartRepository;
 use App\Services\Purchasing\Distributors\ShoppingCartPipeline\OtherPipe;
 use App\Services\Purchasing\Distributors\ShoppingCartPipeline\PlayerPipe;
@@ -12,18 +13,33 @@ use App\Services\Purchasing\Distributors\ShoppingCartPipeline\SignatureAndAmount
 use App\Services\Purchasing\Distributors\ShoppingCartPipeline\TypePipe;
 use Illuminate\Pipeline\Pipeline;
 
+/**
+ * Class ShoppingCartDistributor
+ * Produces the delivery of products to the player through the plug-in shopping cards reloaded.
+ * Implements the pipeline pattern.
+ *
+ * @see https://github.com/limito/ShoppingCartReloaded
+ */
 class ShoppingCartDistributor implements Distributor
 {
     /**
      * @var ShoppingCartRepository
      */
-    private $repository;
+    private $shoppingCartRepository;
+
+    /**
+     * @var DistributionRepository
+     */
+    private $distributionRepository;
 
     /**
      * @var Pipeline
      */
     private $pipeline;
 
+    /**
+     * @var array
+     */
     private $pipes = [
         PlayerPipe::class,
         TypePipe::class,
@@ -31,9 +47,13 @@ class ShoppingCartDistributor implements Distributor
         OtherPipe::class
     ];
 
-    public function __construct(ShoppingCartRepository $repository, Pipeline $pipeline)
+    public function __construct(
+        ShoppingCartRepository $shoppingCartRepository,
+        DistributionRepository $distributionRepository,
+        Pipeline $pipeline)
     {
-        $this->repository = $repository;
+        $this->shoppingCartRepository = $shoppingCartRepository;
+        $this->distributionRepository = $distributionRepository;
         $this->pipeline = $pipeline;
     }
 
@@ -46,7 +66,9 @@ class ShoppingCartDistributor implements Distributor
             ->send(new ShoppingCart($distribution))
             ->through($this->pipes)
             ->then(function (ShoppingCart $entity) {
-                $this->repository->create($entity);
+                $this->shoppingCartRepository->create($entity);
+                $entity->getDistribution()->setShoppingCart($entity);
+                $this->distributionRepository->update($entity->getDistribution());
             });
     }
 }

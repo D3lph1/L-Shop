@@ -23,6 +23,12 @@ class Distribution
      */
     private $purchaseItem;
 
+    /**
+     * @ORM\OneToOne(targetEntity="App\Entity\ShoppingCart")
+     * @ORM\JoinColumn(onDelete="CASCADE")
+     */
+    private $shoppingCart;
+
     public function __construct(PurchaseItem $purchaseItem)
     {
         $this->purchaseItem = $purchaseItem;
@@ -36,5 +42,17 @@ class Distribution
     public function getPurchaseItem(): PurchaseItem
     {
         return $this->purchaseItem;
+    }
+
+    public function getShoppingCart(): ?Distribution
+    {
+        return $this->shoppingCart;
+    }
+
+    public function setShoppingCart(ShoppingCart $shoppingCart): Distribution
+    {
+        $this->shoppingCart = $shoppingCart;
+
+        return $this;
     }
 }

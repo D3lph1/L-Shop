@@ -30,6 +30,7 @@ axios.interceptors.response.use((response) => {
                 }
             }
         }
+
         // If the auth element exists, it means that the user is authorized.
         if (typeof data.auth !== 'undefined') {
             // Set authorization session in storage.
@@ -38,6 +39,10 @@ axios.interceptors.response.use((response) => {
 
         if (data.early_redirect) {
             router.push({name: data.early_redirect});
+        }
+
+        if (data.status === 'guest') {
+            router.push({name: 'frontend.index'});
         }
     }
 
