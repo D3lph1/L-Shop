@@ -45,7 +45,7 @@ class UsersSeeder extends Seeder
         $purchaseRepository->deleteAll();
         $userRepository->deleteAll();
 
-        $user = $auth->register(new User('admin', 'admin@example.com', 'admin'));
+        $user = $auth->register(new User('admin', 'admin@example.com', 'admin'), true);
         $activator->activate($user);
 
         $adminRole = $roleRepository->findByName(Roles::ADMIN);
@@ -54,7 +54,7 @@ class UsersSeeder extends Seeder
         $userRepository->update($user);
         $roleRepository->update($adminRole);
 
-        $user = $auth->register(new User('user', 'user@example.com', '123456'));
+        $user = $auth->register(new User('user', 'user@example.com', '123456'), true);
         $activator->activate($user);
         $userRole = $roleRepository->findByName(Roles::USER);
         $user->addRole($userRole);

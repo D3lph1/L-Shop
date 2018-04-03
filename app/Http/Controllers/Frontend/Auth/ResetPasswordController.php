@@ -34,11 +34,9 @@ class ResetPasswordController extends Controller
     {
         $result = $handler->handle((string)$request->route('code'), (string)$request->get('password'));
         if ($result) {
-            $notificator->notify(new Success(__('msg.frontend.auth.reset.success')));
-
-            return new JsonResponse(Status::SUCCESS, [
+            return (new JsonResponse(Status::SUCCESS, [
                 'redirect' => route('frontend.auth.login.render')
-            ]);
+            ]))->addNotification(new Success(__('msg.frontend.auth.password.reset.success')));
         }
 
         return (new JsonResponse(Status::FAILURE))

@@ -29,7 +29,7 @@ class RegisterHandler
 
     public function handle(string $username, string $email, string $password): RegisterResult
     {
-        $user = $this->auth->register(new User($username, $email, $password), false, false);
+        $user = $this->auth->register(new User($username, $email, $password), false, false, false);
         $dto = new RegisterResult($user, !$this->pool->has(ActivationCheckpoint::NAME));
 
         return $dto;

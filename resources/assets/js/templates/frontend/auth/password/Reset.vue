@@ -11,8 +11,23 @@
                         </v-toolbar>
                         <v-card-text>
                             <v-form>
-                                <v-text-field prepend-icon="lock" v-model="password" :label="$t('validation.attributes.password')" type="text" @keyup.enter="perform"></v-text-field>
-                                <v-text-field prepend-icon="lock" v-model="passwordConfirmation" :label="$t('validation.attributes.password_confirmation')" type="text" @keyup.enter="perform"></v-text-field>
+                                <v-text-field
+                                        prepend-icon="lock"
+                                        v-model="password"
+                                        :label="$t('validation.attributes.password')"
+                                        :append-icon="p1 ? 'visibility' : 'visibility_off'"
+                                        :append-icon-cb="() => (p1 = !p1)"
+                                        :type="p1 ? 'password' : 'text'"
+                                        @keyup.enter="perform"
+                                ></v-text-field>
+                                <v-text-field prepend-icon="lock"
+                                              v-model="passwordConfirmation"
+                                              :label="$t('validation.attributes.password_confirmation')"
+                                              :append-icon="p2 ? 'visibility' : 'visibility_off'"
+                                              :append-icon-cb="() => (p2 = !p2)"
+                                              :type="p2 ? 'password' : 'text'"
+                                              @keyup.enter="perform"
+                                ></v-text-field>
                             </v-form>
                             <!--<v-form>
                                 <div v-html="captcha"></div>
@@ -20,7 +35,7 @@
                         </v-card-text>
                         <v-card-actions>
                             <v-layout flex align-center justify-center>
-                                <v-btn color="primary" :loading="loadingBtn" :disabled="loadingBtn || disabledBtn" @click="perform">{{ $t('content.frontend.auth.login.login') }}</v-btn>
+                                <v-btn color="primary" :loading="loadingBtn" :disabled="loadingBtn || disabledBtn" @click="perform">{{ $t('content.frontend.auth.password.reset.btn') }}</v-btn>
                             </v-layout>
                         </v-card-actions>
                         <v-card-actions class="text-xs-center" v-if="accessModeAny || accessModeAuth">
@@ -49,16 +64,18 @@
                 password: '',
                 passwordConfirmation: '',
                 loadingBtn: false,
+                p1: true,
+                p2: true,
 
                 accessModeAny: false,
                 accessModeAuth: false
             }
         },
         beforeRouteEnter (to, from, next) {
-            loader.beforeRouteEnter('/api/password/reset', to, from, next);
+            loader.beforeRouteEnter(`/api/password/reset/${to.params.code}`, to, from, next);
         },
         beforeRouteUpdate (to, from, next) {
-            loader.beforeRouteUpdate('/api/password/reset', to, from, next, this);
+            loader.beforeRouteUpdate(`/api/password/reset/${to.params.code}`, to, from, next, this);
         },
         computed: {
             disabledBtn() {
@@ -75,16 +92,18 @@
             },
             send() {
                 this.loadingBtn = true;
-                this.$axios.post('/api/password/reset', {
-                    email: this.email
+                this.$axios.post(`/api/password/reset/${this.$route.params.code}`, {
+                    password: this.password,
+                    password_confirmation: this.passwordConfirmation
                 })
                     .then((response) => {
                         let data = response.data;
                         let status = data.status;
                         if (status === 'success') {
-                            //
+                            this.$router.push({name: 'frontend.auth.login'})
+                        } else {
+                            this.loadingBtn = false;
                         }
-                        this.loadingBtn = false;
                     })
                     .catch((err) => {
                         this.loadingBtn = false;
@@ -98,7 +117,6 @@
             },
             setData(response) {
                 const data = response.data;
-
                 if (data.status === 'success') {
                     this.accessModeAny = data.accessModeAny;
                     this.accessModeAuth = data.accessModeAuth;

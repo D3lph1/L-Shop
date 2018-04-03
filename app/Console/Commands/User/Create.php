@@ -1,15 +1,14 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Console\Commands\User;
 
 use App\Console\Command;
-use App\Services\Auth\Auth;
-use App\Services\Validation\Rule;
-use App\Services\Validation\RulesBuilder;
-use Illuminate\Contracts\Config\Repository;
-use Illuminate\Contracts\Validation\Validator;
-use Illuminate\Validation\Factory;
+use App\Handlers\Consoe\User\CreateHandler;
+use App\Exceptions\InvalidArgumentException;
+use App\Services\Auth\Exceptions\EmailAlreadyExistsException;
+use App\Services\Auth\Exceptions\UsernameAlreadyExistsException;
+use Illuminate\Validation\ValidationException;
 
 class Create extends Command
 {
@@ -38,32 +37,78 @@ class Create extends Command
     /**
      * Execute the console command.
      *
-     * @param Auth    $auth
+     * @param CreateHandler $handler
      *
-     * @return mixed
+     * @return int
      */
-    public function handle(Auth $auth)
+    public function handle(CreateHandler $handler): int
     {
         $this->alert(__('commands.user.create.greeting'));
-        $username = $this->ask(__('commands.user.create.username'));
-        $validator = $this->usernameValidator($username);
 
-        //
-    }
+        // Filling username.
+        $continue = true;
+        do {
+            try {
+                $handler->setUsername($this->ask(__('commands.user.create.username')));
+            } catch (ValidationException $e) {
+                $this->displayErrors($e->errors());
+                continue;
+            } catch (UsernameAlreadyExistsException $e) {
+                $this->error(__('msg.admin.users.edit.username_already_exists'));
+                continue;
+            }
+            $continue = false;
+        } while ($continue);
 
-    private function usernameValidator($username): Validator
-    {
-        /** @var Repository $config */
-        $config = app(Repository::class);
+        // Filling email.
+        $continue = true;
+        do {
+            try {
+                $handler->setEmail($this->ask(__('commands.user.create.email')));
+            } catch (ValidationException $e) {
+                $this->displayErrors($e->errors());
+                continue;
+            } catch (EmailAlreadyExistsException $e) {
+                $this->error(__('msg.admin.users.edit.email_already_exists'));
+                continue;
+            }
+            $continue = false;
+        } while ($continue);
 
-        return app(Factory::class)->make(compact('username'), [
-            'username' => (new RulesBuilder())
-                ->addRule(new Rule('required'))
-                ->addRule(new Rule('string'))
-                ->addRule(new Rule('min', $config->get('auth.validation.username.min')))
-                ->addRule(new Rule('max', $config->get('auth.validation.username.max')))
-                ->addRule(new Rule($config->get('auth.validation.username.rule')))
-                ->build()
-        ]);
+        // Filling password.
+        $continue = true;
+        do {
+            try {
+                $handler->setPassword($this->secret(__('commands.user.create.password')));
+            } catch (ValidationException $e) {
+                $this->displayErrors($e->errors());
+                continue;
+            }
+            $continue = false;
+        } while ($continue);
+
+        // Password confirmation.
+        $continue = true;
+        do {
+            try {
+                $handler->setPasswordConfirmation($this->secret(__('commands.user.create.password_confirmation')));
+            } catch (InvalidArgumentException $e) {
+                $this->displayErrors(__('commands.user.create.password_confirmation_error'));
+                continue;
+            }
+            $continue = false;
+        } while ($continue);
+
+        $activate = $this->choice(
+            __('commands.user.create.activate'),
+            [__('common.no'), __('common.yes')],
+            1
+        );
+        $handler->setActivate($activate === __('common.yes'));
+        // Create user.
+        $handler->handle();
+        $this->info(__('commands.user.create.success'));
+
+        return 0;
     }
 }

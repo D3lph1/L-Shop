@@ -18,11 +18,6 @@ class SendEmailConfirmation
     private $activator;
 
     /**
-     * @var Pool
-     */
-    private $pool;
-
-    /**
      * @var Mailer
      */
     private $mailer;
@@ -36,13 +31,13 @@ class SendEmailConfirmation
 
     public function handle(RegistrationSuccessEvent $event): void
     {
-        if ($this->pool->has(ActivationCheckpoint::NAME)) {
+        if ($event->isNeedActivate()) {
+            $this->activator->activate($event->getUser());
+        } else {
             $activation = $this->activator->makeActivation($event->getUser());
             $this->mailer
                 ->to($event->getUser()->getEmail())
                 ->queue(new Confirmation($activation));
-        } else {
-            $this->activator->activate($event->getUser());
         }
     }
 }

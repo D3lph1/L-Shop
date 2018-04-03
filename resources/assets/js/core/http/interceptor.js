@@ -38,7 +38,7 @@ axios.interceptors.response.use((response) => {
         }
 
         if (data.early_redirect) {
-            router.push({name: data.early_redirect});
+            router.push({name: data.early_redirect, params: data.early_redirect_params});
         }
 
         if (data.status === 'guest') {
@@ -86,7 +86,7 @@ axios.interceptors.response.use((response) => {
         // If an early redirect element is present in the response, it makes an
         // immediate redirect.
         if (err.response.data.early_redirect) {
-            router.push({name: err.response.data.early_redirect});
+            router.push({name: err.response.data.early_redirect, params: err.response.early_redirect_params});
         }
     }
 

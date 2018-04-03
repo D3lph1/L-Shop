@@ -7,8 +7,23 @@ use App\Exceptions\DomainException;
 
 class DoesNotExistException extends DomainException
 {
-    public function __construct($user)
+    /**
+     * @var mixed
+     */
+    private $criteria;
+
+    public function __construct($criteria, int $code = 0, \Throwable $previous = null)
     {
-        parent::__construct("User {$user} does not exist", 0, null);
+        $this->criteria = $criteria;
+
+        parent::__construct("User `{$criteria}` does not exist", $code, $previous);
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getCriteria()
+    {
+        return $this->criteria;
     }
 }

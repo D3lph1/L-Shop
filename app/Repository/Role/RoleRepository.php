@@ -12,6 +12,13 @@ interface RoleRepository
     public function findByName(string $name): ?Role;
 
     /**
+     * @param int[] $identifiers
+     *
+     * @return Role[]
+     */
+    public function findWhereIdIn(array $identifiers): array;
+
+    /**
      * @param string[] $names
      *
      * @return Role[]

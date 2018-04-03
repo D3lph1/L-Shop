@@ -3,7 +3,12 @@ declare(strict_types = 1);
 
 namespace App\Console;
 
+use App\Console\Commands\DB\Setup as SetupDB;
 use App\Console\Commands\User\Create as CreateUser;
+use App\Console\Commands\User\Delete as DeleteUser;
+use App\Console\Commands\User\Roles\Attach as UserAttachRoles;
+use App\Console\Commands\User\Roles\Detach as UserDetachRoles;
+use App\Console\Commands\User\Roles\RolesList as UserRolesList;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
@@ -15,7 +20,12 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        CreateUser::class
+        SetupDB::class,
+        CreateUser::class,
+        DeleteUser::class,
+        UserAttachRoles::class,
+        UserDetachRoles::class,
+        UserRolesList::class
     ];
 
     /**

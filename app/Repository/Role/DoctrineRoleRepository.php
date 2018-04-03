@@ -34,6 +34,18 @@ class DoctrineRoleRepository implements RoleRepository
     /**
      * {@inheritdoc}
      */
+    public function findWhereIdIn(array $identifiers): array
+    {
+        return $this->er->createQueryBuilder('r')
+            ->where('r.id IN (:identifiers)')
+            ->setParameter('identifiers', $identifiers)
+            ->getQuery()
+            ->getResult();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function findWhereNameIn(array $names): array
     {
         return $this->er->createQueryBuilder('r')

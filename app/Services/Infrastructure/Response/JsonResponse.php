@@ -29,6 +29,11 @@ class JsonResponse implements \JsonSerializable
      */
     private $earlyRedirect;
 
+    /**
+     * @var array
+     */
+    private $earlyRedirectParams = [];
+
     public function __construct(string $status, array $data = [])
     {
         $this->status = $status;
@@ -52,9 +57,10 @@ class JsonResponse implements \JsonSerializable
         return $this;
     }
 
-    public function setEarlyRedirect(string $to): JsonResponse
+    public function setEarlyRedirect(string $to, array $params = []): JsonResponse
     {
         $this->earlyRedirect = $to;
+        $this->earlyRedirectParams = $params;
 
         return $this;
     }
@@ -78,7 +84,8 @@ class JsonResponse implements \JsonSerializable
         ]);
         if ($this->earlyRedirect !== null) {
             $result = array_merge($result, [
-                'early_redirect' => $this->earlyRedirect
+                'early_redirect' => $this->earlyRedirect,
+                'early_redirect_params' => $this->earlyRedirectParams
             ]);
         }
 

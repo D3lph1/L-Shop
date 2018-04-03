@@ -33,7 +33,7 @@ class Confirmation extends Mailable
     {
         $this->subject = $translator->trans('mail.auth.confirmation.subject');
 
-        return $this->view("mail.auth.confirmation.{$config->get('app.locale')}", [
+        return $this->view("mail.auth.confirmation", [
             'username' => $this->activation->getUser()->getUsername(),
             'link' => $url->route('frontend.auth.activation.complete', ['code' => $this->activation->getCode()]),
             'appName' => $config->get('app.name')

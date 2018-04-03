@@ -78,6 +78,7 @@ class Auth
      * Registers a new user in the system.
      *
      * @param User $user         Entity of new user.
+     * @param bool $activate     If true, the user will be activated immediately after registration.
      * @param bool $authenticate Authenticate the user after registration.
      * @param bool $remember     If true and $authenticate is true, the user session will exist
      *                           even after the browser is closed.
@@ -85,7 +86,7 @@ class Auth
      * @return User
      * @throws \Exception
      */
-    public function register(User $user, bool $authenticate = false, bool $remember = false): User
+    public function register(User $user, bool $activate = false, bool $authenticate = false, bool $remember = false): User
     {
         $this->eventDispatcher->dispatch(new RegistrationBeginEvent());
         try {
@@ -95,7 +96,7 @@ class Auth
 
             throw $e;
         }
-        $this->eventDispatcher->dispatch(new RegistrationSuccessEvent($user));
+        $this->eventDispatcher->dispatch(new RegistrationSuccessEvent($user, $activate));
         if ($authenticate) {
             $this->session = $this->authenticator->authenticateQuick($user, $remember);
         }
