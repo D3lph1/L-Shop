@@ -156,7 +156,7 @@ class PurchaseCreator
             $purchase->getItems()->add($purchaseItem);
         }
         if ($isCompleted) {
-            $purchase->getInvoice()->setCompletedAt(new \DateTimeImmutable());
+            $purchase->setCompletedAt(new \DateTimeImmutable());
         }
         if ($user instanceof User) {
             $purchase->setUser($user);

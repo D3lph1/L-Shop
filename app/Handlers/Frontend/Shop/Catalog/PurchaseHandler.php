@@ -70,7 +70,7 @@ class PurchaseHandler
         $purchase = new Purchase($product, $amount);
         $purchase = $this->creator->create([$purchase], $user, $ip);
 
-        if ($purchase->getInvoice()->isCompleted()) {
+        if ($purchase->isCompleted()) {
             foreach ($purchase->getItems() as $purchaseItem) {
                 $distribution = new Distribution($purchaseItem);
                 $this->distributionRepository->create($distribution);

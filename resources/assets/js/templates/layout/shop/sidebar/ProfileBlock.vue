@@ -22,7 +22,7 @@
                         <v-list-tile-title>{{ item.title }}</v-list-tile-title>
                     </v-list-tile-content>
                 </v-list-tile>
-                <v-list-tile v-for="(subItem, index) in item.subItems" :key="index" @click="">
+                <v-list-tile v-for="(subItem, index) in item.subItems" :key="index" :to="subItem.to">
                     <v-list-tile-content>
                         <v-list-tile-title>{{ subItem.title }}</v-list-tile-title>
                     </v-list-tile-content>
@@ -59,10 +59,12 @@
                         title: $t('content.layout.shop.sidebar.profile.information.title'),
                         subItems: [
                             {
-                                title: $t('content.layout.shop.sidebar.profile.information.sub_items.payments')
+                                title: $t('content.layout.shop.sidebar.profile.information.sub_items.purchases'),
+                                to: {name: 'frontend.profile.purchases'}
                             },
                             {
-                                title: $t('content.layout.shop.sidebar.profile.information.sub_items.cart')
+                                title: $t('content.layout.shop.sidebar.profile.information.sub_items.cart'),
+                                to: '/'
                             }
                         ]
                     }

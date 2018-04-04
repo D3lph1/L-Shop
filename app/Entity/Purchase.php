@@ -52,16 +52,20 @@ class Purchase
     private $createdAt;
 
     /**
-     * @ORM\Embedded(class="App\Entity\Invoice", columnPrefix="invoice_")
+     * @ORM\Column(name="via", type="string", length=64, nullable=true)
      */
-    private $invoice;
+    private $via;
+
+    /**
+     * @ORM\Column(name="completed_at", type="datetime_immutable", nullable=true)
+     */
+    private $completedAt;
 
     public function __construct(float $cost, ?string $ip = null)
     {
         $this->cost = $cost;
         $this->items = new ArrayCollection();
         $this->ip = $ip;
-        $this->invoice = new Invoice();
     }
 
     public function getId(): int
@@ -124,14 +128,31 @@ class Purchase
         return $this->ip;
     }
 
-    public function getInvoice(): Invoice
+    public function getVia(): string
     {
-        return $this->invoice;
+        return $this->via;
     }
 
-    public function setInvoice(Invoice $invoice): Purchase
+    public function setVia(string $via): Purchase
     {
-        $this->invoice = $invoice;
+        $this->via = $via;
+
+        return $this;
+    }
+
+    public function getCompletedAt(): ?\DateTimeImmutable
+    {
+        return $this->completedAt;
+    }
+
+    public function isCompleted(): bool
+    {
+        return $this->getCompletedAt() !== null;
+    }
+
+    public function setCompletedAt(\DateTimeImmutable $completedAt): Purchase
+    {
+        $this->completedAt = $completedAt;
 
         return $this;
     }
@@ -159,8 +180,8 @@ class Purchase
             $this->getUser() === null ?
                 sprintf('player="%s"', $this->getPlayer()) :
                 sprintf('user={%s}', $this->getUser()),
-            $this->getInvoice()->isCompleted() ? "\"{$this->getInvoice()->getVia()}\"" : 'null',
-            $this->getInvoice()->isCompleted() ? "\"{$this->getInvoice()->getCompletedAt()}\"" : 'null'
+            $this->isCompleted() ? "\"{$this->getVia()}\"" : 'null',
+            $this->isCompleted() ? "\"{$this->getCompletedAt()}\"" : 'null'
         );
     }
 }

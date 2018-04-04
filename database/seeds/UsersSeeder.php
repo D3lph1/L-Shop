@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use App\Entity\Role;
 use App\Entity\User;
 use App\Repository\Activation\ActivationRepository;
 use App\Repository\BalanceTransaction\BalanceTransactionRepository;
@@ -13,17 +12,14 @@ use App\Repository\Purchase\PurchaseRepository;
 use App\Repository\Reminder\ReminderRepository;
 use App\Repository\Role\RoleRepository;
 use App\Repository\User\UserRepository;
-use App\Services\Auth\Activator;
 use App\Services\Auth\Auth;
 use App\Services\Auth\Roles;
-use App\Services\Database\Truncater\Truncater;
 use Illuminate\Database\Seeder;
 
 class UsersSeeder extends Seeder
 {
     public function run(
         Auth $auth,
-        Activator $activator,
         RoleRepository $roleRepository,
         UserRepository $userRepository,
         BanRepository $banRepository,
@@ -46,7 +42,6 @@ class UsersSeeder extends Seeder
         $userRepository->deleteAll();
 
         $user = $auth->register(new User('admin', 'admin@example.com', 'admin'), true);
-        $activator->activate($user);
 
         $adminRole = $roleRepository->findByName(Roles::ADMIN);
         $user->addRole($adminRole);
@@ -55,7 +50,6 @@ class UsersSeeder extends Seeder
         $roleRepository->update($adminRole);
 
         $user = $auth->register(new User('user', 'user@example.com', '123456'), true);
-        $activator->activate($user);
         $userRole = $roleRepository->findByName(Roles::USER);
         $user->addRole($userRole);
         $userRole->addUser($user);

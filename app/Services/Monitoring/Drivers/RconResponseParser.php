@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Services\Monitoring\Drivers;
 
-use App\Services\Rcon\Colorizers\TrimColorizer;
+use App\Services\Rcon\Colorizers\StripColorizer;
 
 class RconResponseParser
 {
@@ -13,11 +13,11 @@ class RconResponseParser
     private $pattern;
 
     /**
-     * @var TrimColorizer
+     * @var StripColorizer
      */
     private $colorizer;
 
-    public function __construct(string $pattern, TrimColorizer $colorizer)
+    public function __construct(string $pattern, StripColorizer $colorizer)
     {
         $this->pattern = $pattern;
         $this->colorizer = $colorizer;

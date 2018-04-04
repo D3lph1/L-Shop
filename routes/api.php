@@ -58,7 +58,7 @@ $router->get('/news/load', 'Frontend\News\NewsController@load');
 $router->get('/news/{news}', 'Frontend\News\NewsController@render');
 $router->get('/page/{url}', 'Frontend\PageController@render');
 
-//Profile
+// Profile
 $router->get('/profile/character', 'Frontend\Profile\CharacterController@render');
 $router->post('/profile/character/skin/upload', 'Frontend\Profile\CharacterController@uploadSkin');
 $router->post('/profile/character/skin/delete', 'Frontend\Profile\CharacterController@deleteSkin');
@@ -67,6 +67,8 @@ $router->post('/profile/character/cloak/delete', 'Frontend\Profile\CharacterCont
 
 $router->post('/profile/settings/password', 'Frontend\Profile\SettingsController@password');
 $router->post('/profile/settings/sessions/reset', 'Frontend\Profile\SettingsController@resetSessions');
+
+$router->post('/profile/purchases', 'Frontend\Profile\PurchasesController@pagination');
 
 // Admin
 $router->get('/admin/control/basic', 'Admin\Control\BasicController@render');

@@ -1,0 +1,167 @@
+<template>
+    <v-card>
+        <v-card-title>
+            {{ $t('content.frontend.profile.purchases.title') }}
+        </v-card-title>
+        <v-data-table
+                :headers="headers"
+                :items="items"
+                :search="search"
+                :pagination.sync="pagination"
+                :total-items="totalItems"
+                :loading="loading"
+                :no-data-text="$t('content.frontend.profile.purchases.table.empty')"
+                :rows-per-page-items="[25, 50, 100]"
+                :rows-per-page-text="$t('common.table.rows_per_page')"
+                class="elevation-1"
+        >
+            <template slot="pageText" slot-scope="{ pageStart, pageStop }">
+                {{ pageStart }} - {{ pageStop }} {{ $t('common.table.of') }} {{ totalItems }}
+            </template>
+
+            <template slot="items" slot-scope="props">
+                <td class="text-xs-center">{{ props.item.id }}</td>
+                <td class="text-xs-center">{{ props.item.cost }} <span v-html="$store.state.shop.currency.html"></span></td>
+                <td class="text-xs-center">
+                    {{ props.item.items.length === 0 ? $t('content.frontend.profile.purchases.table.type.refill') : $t('content.frontend.profile.purchases.table.type.products') }}
+                </td>
+                <td class="text-xs-center">{{ props.item.createdAt }}</td>
+                <td class="text-xs-center">{{ props.item.completedAt !== null ? props.item.completedAt : '-' }}</td>
+                <td class="text-xs-left layout px-0">
+                    <v-btn icon class="mx-0" v-if="props.item.items.length !== 0" @click="openDetailsDialog(props.item)">
+                        <v-icon color="secondary">more_horiz</v-icon>
+                    </v-btn>
+                    <v-btn icon class="mx-0" v-if="props.item.completedAt === null">
+                        <v-icon color="success">navigate_next</v-icon>
+                    </v-btn>
+                </td>
+            </template>
+        </v-data-table>
+        <purchase-details-dialog
+                :dialog="detailsDialog"
+                :items="details"
+                @close="closeDetailsDialog"
+        ></purchase-details-dialog>
+    </v-card>
+</template>
+
+<script>
+    import PurchaseDetailsDialog from './PurchaseDetailsDialog.vue'
+    import DateTime from './../../../core/common/datetime'
+
+    export default {
+        data() {
+            return {
+                detailsDialog: false,
+                details: [],
+                search: '',
+                totalItems: 0,
+                items: [],
+                loading: false,
+                pagination: {
+                    page: this.$route.query.page ? this.$route.query.page : 1,
+                    rowsPerPage: this.$route.query.per_page ? parseInt(this.$route.query.per_page) : 25,
+                    sortBy: this.$route.query.order_by ? this.$route.query.order_by : 'id',
+                    descending: this.$route.query.descending === 'true',
+                },
+                headers: [
+                    {
+                        text: $t('content.frontend.profile.purchases.table.headers.id'),
+                        align: 'center',
+                        sortable: true,
+                        value: 'id'
+                    },
+                    {
+                        text: $t('content.frontend.profile.purchases.table.headers.cost'),
+                        align: 'center',
+                        sortable: true,
+                        value: 'cost'
+                    },
+                    {
+                        text: $t('common.type'),
+                        align: 'center',
+                        sortable: true
+                    },
+                    {
+                        text: $t('content.frontend.profile.purchases.table.headers.created_at'),
+                        align: 'center',
+                        sortable: true,
+                        value: 'createdAt'
+                    },
+                    {
+                        text: $t('content.frontend.profile.purchases.table.headers.completed_at'),
+                        align: 'center',
+                        sortable: true,
+                        value: 'completedAt'
+                    },
+                    {
+                        text: $t('common.actions'),
+                        align: 'left',
+                        sortable: false
+                    }
+                ]
+            }
+        },
+        watch: {
+            pagination: {
+                handler () {
+                    let query = {};
+                    if (this.pagination.page) {
+                        query.page = this.pagination.page;
+                    }
+                    if (this.pagination.rowsPerPage) {
+                        query.per_page = this.pagination.rowsPerPage;
+                    }
+                    if (this.pagination.sortBy) {
+                        query.order_by = this.pagination.sortBy;
+                    }
+                    if (this.pagination.descending !== null) {
+                        query.descending = this.pagination.descending;
+                    }
+
+                    this.$router.replace({name: 'frontend.profile.purchases', query: query}, () => {
+                        this.retrieveFromApi();
+                    }, () => {
+                        this.retrieveFromApi();
+                    });
+                },
+                deep: true
+            }
+        },
+        methods: {
+            retrieveFromApi() {
+                this.loading = true;
+
+                this.$axios.post('/api/profile/purchases', {
+                    page: this.$route.query.page,
+                    per_page: this.$route.query.per_page,
+                    order_by: this.$route.query.order_by,
+                    descending: this.$route.query.descending
+                })
+                    .then(response => {
+                        this.setTable(response.data)
+                    });
+            },
+            setTable(data) {
+                this.totalItems = data.paginator.total;
+                this.items = data.items;
+                this.items.forEach((item) => {
+                    item.createdAt = DateTime.localize(new Date(item.createdAt));
+                    item.completedAt = item.completedAt !== null ? DateTime.localize(new Date(item.completedAt)) : null;
+                });
+
+                this.loading = false;
+            },
+            openDetailsDialog(purchase) {
+                this.detailsDialog = true;
+                this.details = purchase.items.length !== 0 ? purchase.items : [];
+            },
+            closeDetailsDialog() {
+                this.detailsDialog = false;
+            }
+        },
+        components: {
+            'purchase-details-dialog': PurchaseDetailsDialog
+        }
+    }
+</script>
