@@ -14,12 +14,16 @@ class RolesSeeder extends Seeder
     private $roles = [
         Roles::USER => [
             Permissions::ALLOW_SET_SKINS,
-            Permissions::ALLOW_SET_CLOAKS
+            Permissions::ALLOW_SET_CLOAKS,
+            Permissions::PROFILE_PURCHASE_HISTORY_ACCESS,
+            Permissions::PROFILE_GAME_CART_ACCESS
         ],
         Roles::ADMIN => [
             Permissions::VIEWING_DISABLED_SERVERS,
             Permissions::ALLOW_SET_HD_SKINS_IMPORTANT,
             Permissions::ALLOW_SET_HD_CLOAKS_IMPORTANT,
+            Permissions::PROFILE_PURCHASE_HISTORY_ACCESS,
+            Permissions::PROFILE_GAME_CART_ACCESS,
             Permissions::ADMIN_CONTROL_BASIC_ACCESS,
             Permissions::ADMIN_ITEMS_CRUD_ACCESS,
             Permissions::ADMIN_PRODUCTS_CRUD_ACCESS,

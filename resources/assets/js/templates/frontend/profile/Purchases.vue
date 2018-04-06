@@ -6,12 +6,11 @@
         <v-data-table
                 :headers="headers"
                 :items="items"
-                :search="search"
                 :pagination.sync="pagination"
                 :total-items="totalItems"
                 :loading="loading"
                 :no-data-text="$t('content.frontend.profile.purchases.table.empty')"
-                :rows-per-page-items="[25, 50, 100]"
+                :rows-per-page-items="[25]"
                 :rows-per-page-text="$t('common.table.rows_per_page')"
                 class="elevation-1"
         >
@@ -54,7 +53,6 @@
             return {
                 detailsDialog: false,
                 details: [],
-                search: '',
                 totalItems: 0,
                 items: [],
                 loading: false,
@@ -80,7 +78,8 @@
                     {
                         text: $t('common.type'),
                         align: 'center',
-                        sortable: true
+                        sortable: true,
+                        value: 'type'
                     },
                     {
                         text: $t('content.frontend.profile.purchases.table.headers.created_at'),
@@ -109,9 +108,6 @@
                     if (this.pagination.page) {
                         query.page = this.pagination.page;
                     }
-                    if (this.pagination.rowsPerPage) {
-                        query.per_page = this.pagination.rowsPerPage;
-                    }
                     if (this.pagination.sortBy) {
                         query.order_by = this.pagination.sortBy;
                     }
@@ -134,7 +130,6 @@
 
                 this.$axios.post('/api/profile/purchases', {
                     page: this.$route.query.page,
-                    per_page: this.$route.query.per_page,
                     order_by: this.$route.query.order_by,
                     descending: this.$route.query.descending
                 })

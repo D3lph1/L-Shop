@@ -8,4 +8,6 @@ use App\Entity\ShoppingCart;
 interface ShoppingCartRepository
 {
     public function create(ShoppingCart $shoppingCart): void;
+
+    public function deleteAll(): bool;
 }

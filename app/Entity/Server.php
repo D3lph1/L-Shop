@@ -149,4 +149,18 @@ class Server
 
         return $this;
     }
+
+    /**
+     * @return string Object string representation.
+     * @example App\Entity\Server(id=1, name="MMO")
+     */
+    public function __toString(): string
+    {
+        return sprintf(
+            '%s(id=%d, name="%s")',
+            self::class,
+            $this->getId(),
+            $this->getName()
+        );
+    }
 }

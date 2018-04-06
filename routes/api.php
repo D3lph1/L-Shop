@@ -69,6 +69,7 @@ $router->post('/profile/settings/password', 'Frontend\Profile\SettingsController
 $router->post('/profile/settings/sessions/reset', 'Frontend\Profile\SettingsController@resetSessions');
 
 $router->post('/profile/purchases', 'Frontend\Profile\PurchasesController@pagination');
+$router->post('/profile/cart', 'Frontend\Profile\CartController@pagination');
 
 // Admin
 $router->get('/admin/control/basic', 'Admin\Control\BasicController@render');
@@ -103,7 +104,7 @@ $router->post('/admin/users/edit/{user}/ban', 'Admin\Users\EditController@addBan
 $router->post('/admin/users/edit/{user}', 'Admin\Users\EditController@edit');
 $router->post('/admin/users/list', 'Admin\Users\ListController@pagination');
 $router->delete('/admin/users', 'Admin\Users\ListController@delete');
-$router->get('/admin/statistic/show', 'App\Handlers\Admin\Statistic\ShowController@render');
+$router->get('/admin/statistic/show', 'Admin\Statistic\ShowController@render');
 $router->get('/admin/information/about', 'Admin\Information\AboutController@render');
 
 

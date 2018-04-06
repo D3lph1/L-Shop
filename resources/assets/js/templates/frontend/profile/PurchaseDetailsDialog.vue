@@ -13,8 +13,8 @@
                             class="elevation-1"
                     >
                         <template slot="items" slot-scope="props">
-                            <td class="text-xs-center">{{ props.item.name }} <v-enchanted class="cp" v-if="props.item.enchanted"></v-enchanted></td>
                             <td class="text-xs-center"><img :src="props.item.image" height="30"></td>
+                            <td class="text-xs-center">{{ props.item.name }} <v-enchanted class="cp" v-if="props.item.enchanted"></v-enchanted></td>
                             <td class="text-xs-center">{{ props.item.stack }}</td>
                             <td class="text-xs-center">{{ props.item.amount }}</td>
                             <td class="text-xs-center">{{ props.item.cost }} <span v-html="$store.state.shop.currency.html"></span></td>
@@ -47,16 +47,16 @@
                 dialogData: this.dialog,
                 headers: [
                     {
-                        text: $t('content.frontend.profile.purchases.details.table.headers.name'),
-                        align: 'center',
-                        sortable: true,
-                        value: 'name'
-                    },
-                    {
                         text: $t('content.frontend.profile.purchases.details.table.headers.image'),
                         align: 'center',
                         sortable: false,
                         value: 'image'
+                    },
+                    {
+                        text: $t('content.frontend.profile.purchases.details.table.headers.name'),
+                        align: 'center',
+                        sortable: true,
+                        value: 'name'
                     },
                     {
                         text: $t('content.frontend.profile.purchases.details.table.headers.stack'),

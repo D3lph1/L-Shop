@@ -17,6 +17,16 @@ class Permissions
     public const VIEWING_DISABLED_SERVERS = 'viewing_disabled_servers';
 
     /**
+     * Allows the user to access a page with a purchase history (Profile->Information->Purchase History).
+     */
+    public const PROFILE_PURCHASE_HISTORY_ACCESS = 'purchase_history_access';
+
+    /**
+     * Allows the user to access a page with a game cart (Profile->Information->Game cart).
+     */
+    public const PROFILE_GAME_CART_ACCESS = 'game_cart_access';
+
+    /**
      * Ability to set skins.
      */
     public const ALLOW_SET_SKINS = 'allow_set_skins';

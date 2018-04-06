@@ -16,6 +16,7 @@ const Payment = () => import(/* webpackChunkName: "shop" */ '../templates/fronte
 const Character = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/profile/Character.vue');
 const ProfileSettings = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/profile/Settings.vue');
 const ProfilePurchases = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/profile/Purchases.vue');
+const ProfileCart = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/profile/Cart.vue');
 const News = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/news/News.vue');
 const Page = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/Page.vue');
 
@@ -181,7 +182,17 @@ export default [
                 meta: {
                     title: $t('content.frontend.profile.purchases.title')
                 }
-            }
+            },
+            {
+                path: 'cart',
+                name: 'frontend.profile.cart',
+                components: {
+                    content: ProfileCart
+                },
+                meta: {
+                    title: $t('content.frontend.profile.cart.title')
+                }
+            },
         ]
     },
     {

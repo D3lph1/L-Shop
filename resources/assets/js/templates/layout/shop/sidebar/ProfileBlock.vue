@@ -64,7 +64,7 @@
                             },
                             {
                                 title: $t('content.layout.shop.sidebar.profile.information.sub_items.cart'),
-                                to: '/'
+                                to: {name: 'frontend.profile.cart'}
                             }
                         ]
                     }

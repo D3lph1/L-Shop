@@ -37,6 +37,23 @@ class Stack
         throw new UnexpectedValueException();
     }
 
+    public static function formatUnitsForAmount(Product $product, int $amount): string
+    {
+        if ($product->getItem()->getType() === Type::ITEM) {
+            return __('common.item.units.item', ['amount' => $amount]);
+        }
+
+        if ($product->getItem()->getType() === Type::PERMGROUP) {
+            if ($product->getStack() === 0) {
+                return __('common.item.units.forever');
+            }
+
+            return __('common.item.units.permgroup', ['duration' => $amount]);
+        }
+
+        throw new UnexpectedValueException();
+    }
+
     /**
      * @param Product $product
      *

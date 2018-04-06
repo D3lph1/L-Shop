@@ -11,6 +11,7 @@ use App\Repository\Persistence\PersistenceRepository;
 use App\Repository\Purchase\PurchaseRepository;
 use App\Repository\Reminder\ReminderRepository;
 use App\Repository\Role\RoleRepository;
+use App\Repository\ShoppingCart\ShoppingCartRepository;
 use App\Repository\User\UserRepository;
 use App\Services\Auth\Auth;
 use App\Services\Auth\Roles;
@@ -29,7 +30,8 @@ class UsersSeeder extends Seeder
         NewsRepository $newsRepository,
         BalanceTransactionRepository $balanceTransactionRepository,
         PurchaseRepository $purchaseRepository,
-        DistributionRepository $distributionRepository): void
+        DistributionRepository $distributionRepository,
+        ShoppingCartRepository $shoppingCartRepository): void
     {
         $activationRepository->deleteAll();
         $reminderRepository->deleteAll();
@@ -37,6 +39,7 @@ class UsersSeeder extends Seeder
         $newsRepository->deleteAll();
         $banRepository->deleteAll();
         $balanceTransactionRepository->deleteAll();
+        $shoppingCartRepository->deleteAll();
         $distributionRepository->deleteAll();
         $purchaseRepository->deleteAll();
         $userRepository->deleteAll();

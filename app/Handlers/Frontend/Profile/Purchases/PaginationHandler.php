@@ -9,6 +9,8 @@ use App\Repository\Purchase\PurchaseRepository;
 
 class PaginationHandler
 {
+    private const PER_PAGE = 25;
+
     /**
      * @var array
      */
@@ -24,7 +26,7 @@ class PaginationHandler
         $this->repository = $repository;
     }
 
-    public function handle(int $page, ?string $orderBy, bool $descending, int $perPage): ListResult
+    public function handle(int $page, ?string $orderBy, bool $descending): ListResult
     {
         if (!empty($orderBy) && !in_array($orderBy, $this->availableOrders)) {
             throw new InvalidArgumentException('Argument $orderBy has illegal value');
@@ -35,7 +37,7 @@ class PaginationHandler
                 $page,
                 $orderBy,
                 $descending,
-                $perPage
+                self::PER_PAGE
             );
         } else {
             $paginator = $this->repository->findPaginated($page, $perPage);

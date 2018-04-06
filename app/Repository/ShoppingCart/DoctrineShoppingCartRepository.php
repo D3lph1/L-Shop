@@ -30,4 +30,12 @@ class DoctrineShoppingCartRepository implements ShoppingCartRepository
         $this->em->persist($entity);
         $this->em->flush();
     }
+
+    public function deleteAll(): bool
+    {
+        return (bool)$this->er->createQueryBuilder('c')
+            ->delete()
+            ->getQuery()
+            ->getResult();
+    }
 }
