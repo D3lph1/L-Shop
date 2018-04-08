@@ -3,9 +3,8 @@ declare(strict_types = 1);
 
 namespace App\Services\Infrastructure\Response;
 
+use App\Exceptions\InvalidArgumentTypeException;
 use App\Services\Infrastructure\Notification\Notification;
-use App\Services\Infrastructure\Notification\Notificator;
-use Illuminate\Support\Facades\Log;
 
 class JsonResponse implements \JsonSerializable
 {
@@ -15,7 +14,7 @@ class JsonResponse implements \JsonSerializable
     private $status;
 
     /**
-     * @var array
+     * @var array|JsonRespondent
      */
     private $data;
 
@@ -34,8 +33,12 @@ class JsonResponse implements \JsonSerializable
      */
     private $earlyRedirectParams = [];
 
-    public function __construct(string $status, array $data = [])
+    public function __construct(string $status, $data = [])
     {
+        if (!is_array($data) && !($data instanceof JsonRespondent)) {
+            throw new InvalidArgumentTypeException('$data', ['array', JsonRespondent::class], $data);
+        }
+
         $this->status = $status;
         $this->data = $data;
     }
@@ -45,7 +48,10 @@ class JsonResponse implements \JsonSerializable
         return $this->status;
     }
 
-    public function getData(): array
+    /**
+     * @return array|object
+     */
+    public function getData()
     {
         return $this->data;
     }
@@ -75,9 +81,15 @@ class JsonResponse implements \JsonSerializable
             array_push($notifications, $notification->content());
         }
 
+        if (is_array($this->data)) {
+            $data = $this->data;
+        } else {
+            $data = $this->data->response();
+        }
+
         $result = array_merge([
             'status' => $this->status,
-        ], $this->data);
+        ], $data);
 
         $result = array_merge($result, [
             'notifications' => $notifications

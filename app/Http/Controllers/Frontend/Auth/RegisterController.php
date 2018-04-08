@@ -14,6 +14,7 @@ use App\Services\Infrastructure\Notification\Notifications\Success;
 use App\Services\Infrastructure\Response\JsonResponse;
 use App\Services\Infrastructure\Response\Status;
 use App\Services\Infrastructure\Security\Captcha\Captcha;
+use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
 
 class RegisterController extends Controller
@@ -29,7 +30,8 @@ class RegisterController extends Controller
 
     public function handle(
         RegisterRequest $request,
-        RegisterHandler $handler): JsonResponse
+        RegisterHandler $handler,
+        Settings $settings): JsonResponse
     {
         try {
             $dto = $handler->handle(
@@ -40,9 +42,15 @@ class RegisterController extends Controller
 
             if ($dto->isSuccessfully()) {
                 if ($dto->isActivated()) {
-                    return (new JsonResponse(Status::SUCCESS, [
-                        'redirect' => 'frontend.auth.servers'
-                    ]))->addNotification(new Success(__('msg.frontend.auth.register.success')));
+                    if ($settings->get('auth.register.custom_redirect.enabled')->getValue(DataType::BOOL)) {
+                        // Redirect user on custom url after success registration.
+                        $data = ['redirect_url' => $settings->get('auth.register.custom_redirect.url')->getValue()];
+                    } else {
+                        $data = ['redirect' => 'frontend.auth.servers'];
+                    }
+
+                    return (new JsonResponse(Status::SUCCESS, $data))
+                        ->addNotification(new Success(__('msg.frontend.auth.register.success')));
                 }
 
                 return new JsonResponse(Status::SUCCESS, [

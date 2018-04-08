@@ -6,6 +6,7 @@ namespace Tests\Feature\Frontend\Auth;
 use App\Services\Auth\Checkpoint\ActivationCheckpoint;
 use App\Services\Auth\Checkpoint\Pool;
 use App\Services\Infrastructure\Response\Status;
+use App\Services\Settings\Settings;
 use Illuminate\Validation\ValidationException;
 use Tests\TestCase;
 
@@ -56,9 +57,9 @@ class RegisterTest extends TestCase
     {
         $this->transaction();
 
-        $this->app->singleton(Pool::class, function () {
-            return new Pool([]);
-        });
+        $settings = $this->app->make(Settings::class);
+        $settings->set('auth.register.send_activation', false);
+        $settings->save();
 
         $response = $this->post(route('frontend.auth.register.handle', [
             'username' => 'D3lph1',
@@ -79,9 +80,9 @@ class RegisterTest extends TestCase
     {
         $this->transaction();
 
-        $this->app->singleton(Pool::class, function () {
-            return new Pool([$this->app->make(ActivationCheckpoint::class)]);
-        });
+        $settings = $this->app->make(Settings::class);
+        $settings->set('auth.register.send_activation', true);
+        $settings->save();
 
         $response = $this->post(route('frontend.auth.register.handle', [
             'username' => 'D3lph1',

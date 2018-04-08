@@ -81,7 +81,12 @@ return [
     'auth' => [
         'access_mode' => \App\Services\Auth\AccessMode::ANY,
         'register' => [
-            'enabled' => true
+            'enabled' => true,
+            'send_activation' => true,
+            'custom_redirect' => [
+                'enabled' => false,
+                'url' => ''
+            ]
         ],
         'reset_password' => [
             'enabled' => true

@@ -8,6 +8,8 @@ use App\Entity\User;
 use App\Services\Auth\Auth;
 use App\Services\Auth\Checkpoint\ActivationCheckpoint;
 use App\Services\Auth\Checkpoint\Pool;
+use App\Services\Settings\DataType;
+use App\Services\Settings\Settings;
 
 class RegisterHandler
 {
@@ -17,20 +19,21 @@ class RegisterHandler
     private $auth;
 
     /**
-     * @var Pool
+     * @var Settings
      */
-    private $pool;
+    private $settings;
 
-    public function __construct(Auth $auth, Pool $pool)
+    public function __construct(Auth $auth, Settings $settings)
     {
         $this->auth = $auth;
-        $this->pool = $pool;
+        $this->settings = $settings;
     }
 
     public function handle(string $username, string $email, string $password): RegisterResult
     {
-        $user = $this->auth->register(new User($username, $email, $password), false, false, false);
-        $dto = new RegisterResult($user, !$this->pool->has(ActivationCheckpoint::NAME));
+        $sendActivation = $this->settings->get('auth.register.send_activation')->getValue(DataType::BOOL);
+        $user = $this->auth->register(new User($username, $email, $password), !$sendActivation, false, false);
+        $dto = new RegisterResult($user, !$sendActivation);
 
         return $dto;
     }
