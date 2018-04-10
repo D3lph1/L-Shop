@@ -191,7 +191,13 @@
             <v-flex xs12 sm12 md6>
                 <v-card>
                     <v-card-text>
-                        <v-subheader class="mt-5">{{ $t('content.admin.control.basic.shop_section') }}</v-subheader>
+                        <v-subheader>{{ $t('content.admin.control.basic.catalog_section') }}</v-subheader>
+                        <v-text-field
+                                :label="$t('content.admin.control.basic.catalog_per_page')"
+                                v-model="catalogPerPage"
+                                type="number"
+                                class="no-spinners"
+                        ></v-text-field>
                         <v-select
                                 :items="sortProductsItems"
                                 v-model="sortProducts"
@@ -201,6 +207,52 @@
                                 persistent-hint
                                 single-line
                         ></v-select>
+
+                        <v-subheader class="mt-5">{{ $t('content.admin.control.basic.news_section') }}</v-subheader>
+                        <v-switch
+                                color="secondary"
+                                :label="$t('content.admin.control.basic.news_enabled')"
+                                class="mt-3"
+                                v-model="newsEnabled"
+                        ></v-switch>
+                        <v-text-field
+                                :label="$t('content.admin.control.basic.news_per_portion')"
+                                v-model="catalogPerPage"
+                                type="number"
+                                class="no-spinners"
+                        ></v-text-field>
+
+                        <v-subheader class="mt-5">{{ $t('content.admin.control.basic.monitoring_section') }}</v-subheader>
+                        <v-switch
+                                color="secondary"
+                                :label="$t('content.admin.control.basic.monitoring_enabled')"
+                                class="mt-3"
+                                v-model="monitoringEnabled"
+                        ></v-switch>
+                        <v-text-field
+                                :label="$t('content.admin.control.basic.monitoring_rcon_timeout')"
+                                v-model="monitoringRconTimeout"
+                                type="number"
+                                class="no-spinners"
+                        ></v-text-field>
+                        <v-text-field
+                                :label="$t('content.admin.control.basic.monitoring_rcon_command')"
+                                v-model="monitoringRconCommand"
+                                class="no-spinners"
+                        ></v-text-field>
+                        <v-text-field
+                                :label="$t('content.admin.control.basic.monitoring_rcon_response_pattern')"
+                                v-model="monitoringRconResponsePattern"
+                                class="no-spinners"
+                        ></v-text-field>
+
+                        <v-subheader class="mt-5">{{ $t('content.admin.control.basic.service_section') }}</v-subheader>
+                        <v-switch
+                                color="secondary"
+                                :label="$t('content.admin.control.basic.maintenance_mode_enabled')"
+                                class="mt-3"
+                                v-model="maintenanceMode"
+                        ></v-switch>
                     </v-card-text>
                     <v-card-actions>
                         <v-btn flat color="orange" :loading="finishLoading" :disabled="finishDisabled" @click="perform">{{ $t('common.save') }}</v-btn>
@@ -241,6 +293,7 @@
                 cloakSizes: [],
                 cloakSizesHd: [],
 
+                catalogPerPage: 0,
                 sortProducts: null,
                 sortProductsItems: [
                     {text: $t('content.admin.control.basic.sort_products.by_name'), value: {by: 'item.name', descending: false, value: 'item.name:false'}},
@@ -248,6 +301,13 @@
                     {text: $t('content.admin.control.basic.sort_products.by_priority'), value: {by: 'product.sortPriority', descending: false, value: 'product.sortPriority:false'}},
                     {text: $t('content.admin.control.basic.sort_products.by_priority_desc'), value: {by: 'product.sortPriority', descending: true, value: 'product.sortPriority:true'}}
                 ],
+                newsEnabled: false,
+                newsPerPortion: 0,
+                monitoringEnabled: false,
+                monitoringRconTimeout: 0,
+                monitoringRconCommand: 0,
+                monitoringRconResponsePattern: 0,
+                maintenanceMode: false,
 
                 finishDisabled: false,
                 finishLoading: false,
@@ -310,7 +370,17 @@
                 this.cloakEnabled = data.cloakEnabled;
                 this.hdCloakEnabled = data.hdCloakEnabled;
 
+                this.catalogPerPage = data.catalogPerPage;
                 this.sortProducts = `${data.sortProductsBy}:${data.sortProductsDescending}`;
+
+                this.newsEnabled = data.newsEnabled;
+                this.newsPerPortion = data.newsPerPortion;
+                this.monitoringEnabled = data.monitoringEnabled;
+                this.monitoringRconTimeout = data.monitoringRconTimeout;
+                this.monitoringRconCommand = data.monitoringRconCommand;
+                this.monitoringRconResponsePattern = data.monitoringRconResponsePattern;
+
+                this.maintenanceMode = data.maintenanceMode;
             }
         }
     }

@@ -34,6 +34,7 @@ return [
             ]
         ],
         'news' => [
+            'enabled' => true,
             'pagination' => [
                 'per_page' => 15
             ]

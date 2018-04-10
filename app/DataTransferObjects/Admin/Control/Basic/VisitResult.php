@@ -98,6 +98,11 @@ class VisitResult implements JsonRespondent
     private $hdCloakEnabled;
 
     /**
+     * @var int
+     */
+    private $catalogPerPage;
+
+    /**
      * @var string
      */
     private $sortProductsBy;
@@ -106,6 +111,41 @@ class VisitResult implements JsonRespondent
      * @var bool
      */
     private $sortProductsDescending;
+
+    /**
+     * @var bool
+     */
+    private $newsEnabled;
+
+    /**
+     * @var int
+     */
+    private $newsPerPortion;
+
+    /**
+     * @var bool
+     */
+    private $monitoringEnabled;
+
+    /**
+     * @var float
+     */
+    private $monitoringRconTimeout;
+
+    /**
+     * @var string
+     */
+    private $monitoringRconCommand;
+
+    /**
+     * @var string
+     */
+    private $monitoringRconResponsePattern;
+
+    /**
+     * @var bool
+     */
+    private $maintenanceModeEnabled;
 
     /**
      * @param string $name
@@ -325,6 +365,18 @@ class VisitResult implements JsonRespondent
     }
 
     /**
+     * @param int $catalogPerPage
+     *
+     * @return VisitResult
+     */
+    public function setCatalogPerPage(int $catalogPerPage): VisitResult
+    {
+        $this->catalogPerPage = $catalogPerPage;
+
+        return $this;
+    }
+
+    /**
      * @param string $sortProductsBy
      *
      * @return VisitResult
@@ -344,6 +396,90 @@ class VisitResult implements JsonRespondent
     public function setSortProductsDescending(bool $sortProductsDescending): VisitResult
     {
         $this->sortProductsDescending = $sortProductsDescending;
+
+        return $this;
+    }
+
+    /**
+     * @param bool $newsEnabled
+     *
+     * @return VisitResult
+     */
+    public function setNewsEnabled(bool $newsEnabled): VisitResult
+    {
+        $this->newsEnabled = $newsEnabled;
+
+        return $this;
+    }
+
+    /**
+     * @param int $newsPerPortion
+     *
+     * @return VisitResult
+     */
+    public function setNewsPerPortion(int $newsPerPortion): VisitResult
+    {
+        $this->newsPerPortion = $newsPerPortion;
+
+        return $this;
+    }
+
+    /**
+     * @param bool $monitoringEnabled
+     *
+     * @return VisitResult
+     */
+    public function setMonitoringEnabled(bool $monitoringEnabled): VisitResult
+    {
+        $this->monitoringEnabled = $monitoringEnabled;
+
+        return $this;
+    }
+
+    /**
+     * @param float $monitoringRconTimeout
+     *
+     * @return VisitResult
+     */
+    public function setMonitoringRconTimeout(float $monitoringRconTimeout): VisitResult
+    {
+        $this->monitoringRconTimeout = $monitoringRconTimeout;
+
+        return $this;
+    }
+
+    /**
+     * @param string $monitoringRconCommand
+     *
+     * @return VisitResult
+     */
+    public function setMonitoringRconCommand(string $monitoringRconCommand): VisitResult
+    {
+        $this->monitoringRconCommand = $monitoringRconCommand;
+
+        return $this;
+    }
+
+    /**
+     * @param string $monitoringRconResponsePattern
+     *
+     * @return VisitResult
+     */
+    public function setMonitoringRconResponsePattern(string $monitoringRconResponsePattern): VisitResult
+    {
+        $this->monitoringRconResponsePattern = $monitoringRconResponsePattern;
+
+        return $this;
+    }
+
+    /**
+     * @param bool $maintenanceModeEnabled
+     *
+     * @return VisitResult
+     */
+    public function setMaintenanceModeEnabled(bool $maintenanceModeEnabled): VisitResult
+    {
+        $this->maintenanceModeEnabled = $maintenanceModeEnabled;
 
         return $this;
     }
@@ -373,8 +509,16 @@ class VisitResult implements JsonRespondent
             'cloakEnabled' => $this->cloakEnabled,
             'hdCloakEnabled' => $this->hdCloakEnabled,
 
+            'catalogPerPage' => $this->catalogPerPage,
             'sortProductsBy' => $this->sortProductsBy,
-            'sortProductsDescending' => $this->sortProductsDescending
+            'sortProductsDescending' => $this->sortProductsDescending,
+            'newsEnabled' => $this->newsEnabled,
+            'newsPerPortion' => $this->newsPerPortion,
+            'monitoringEnabled' => $this->monitoringEnabled,
+            'monitoringRconTimeout' => $this->monitoringRconTimeout,
+            'monitoringRconCommand' => $this->monitoringRconCommand,
+            'monitoringRconResponsePattern' => $this->monitoringRconResponsePattern,
+            'maintenanceMode' => $this->maintenanceModeEnabled
         ];
     }
 }

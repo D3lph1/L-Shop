@@ -43,8 +43,19 @@ class VisitHandler
             ->setCloakEnabled($this->settings->get('system.profile.character.cloak.enabled')->getValue(DataType::BOOL))
             ->setHdCloakEnabled($this->settings->get('system.profile.character.cloak.hd.enabled')->getValue(DataType::BOOL))
 
+            ->setCatalogPerPage($this->settings->get('system.catalog.pagination.per_page')->getValue(DataType::INT))
             ->setSortProductsBy($this->settings->get('system.catalog.pagination.order_by')->getValue())
-            ->setSortProductsDescending($this->settings->get('system.catalog.pagination.descending')->getValue(DataType::BOOL));
+            ->setSortProductsDescending($this->settings->get('system.catalog.pagination.descending')->getValue(DataType::BOOL))
+
+            ->setNewsEnabled($this->settings->get('system.news.enabled')->getValue(DataType::BOOL))
+            ->setNewsPerPortion($this->settings->get('system.news.pagination.per_page')->getValue(DataType::INT))
+
+            ->setMonitoringEnabled($this->settings->get('system.monitoring.enabled')->getValue(DataType::BOOL))
+            ->setMonitoringRconTimeout($this->settings->get('system.monitoring.rcon.timeout')->getValue(DataType::FLOAT))
+            ->setMonitoringRconCommand($this->settings->get('system.monitoring.rcon.command')->getValue())
+            ->setMonitoringRconResponsePattern($this->settings->get('system.monitoring.rcon.pattern')->getValue())
+
+            ->setMaintenanceModeEnabled($this->settings->get('system.maintenance.enabled')->getValue(DataType::BOOL));
 
         return $dto;
     }
