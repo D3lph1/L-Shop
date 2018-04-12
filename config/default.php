@@ -30,7 +30,7 @@ return [
                 'timeout' => 1,
                 'command' => 'list',
                 'pattern' => '/^.*(?<now>\d+)\/(?<total>\d+).*$/ui',
-                'ttl' => 10
+                'ttl' => 3
             ]
         ],
         'news' => [
@@ -91,9 +91,13 @@ return [
         ],
         'reset_password' => [
             'enabled' => true
+        ],
+        'change_password' => [
+            'enabled' => true
         ]
     ],
     'purchasing' => [
+        'min_fill_balance_sum' => 3,
         'services' => [
             'robokassa' => [
                 'enabled' => true,
@@ -106,9 +110,10 @@ return [
             ],
             'interkassa' => [
                 'enabled' => true,
-                'login' => '',
+                'checkout_id' => '',
                 'key' => '',
                 'test_key' => '',
+                'currency' => '',
                 'algorithm' => 'sha256',
                 'test' => true
             ]

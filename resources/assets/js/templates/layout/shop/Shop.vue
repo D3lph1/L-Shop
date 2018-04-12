@@ -15,7 +15,7 @@
             </v-toolbar-title>
             <v-spacer></v-spacer>
             <v-toolbar-side-icon v-if="monitoring.length !== 0" @click="monitoringDialog = true"><v-icon>insert_chart</v-icon></v-toolbar-side-icon>
-            <v-toolbar-side-icon @click.stop="right = !right"><v-icon>library_books</v-icon></v-toolbar-side-icon>
+            <v-toolbar-side-icon v-show="newsAllowed" @click.stop="right = !right"><v-icon>library_books</v-icon></v-toolbar-side-icon>
         </v-toolbar>
         <v-navigation-drawer
                 fixed
@@ -35,12 +35,13 @@
             </div>
         </v-content>
         <v-navigation-drawer
+                v-show="newsAllowed"
                 right
                 temporary
                 v-model="right"
                 fixed
         >
-            <news v-if="news !== null" :news="news"></news>
+            <news v-if="newsAllowed" :news="news"></news>
         </v-navigation-drawer>
         <v-footer color="primary" fixed class="white--text" inset app height="40">
             <settings></settings>
@@ -100,6 +101,11 @@
                 this.server = val;
             }
         },
+        computed: {
+            newsAllowed() {
+                return this.news !== null && this.$store.state.shop.news.enabled;
+            }
+        },
         mounted() {
             this.$axios.get('/api/monitoring')
                 .then(response => {
@@ -125,7 +131,8 @@
                 this.$store.commit('setCurrencyHtml', data.currency);
                 this.character = data.character;
                 this.adminSidebar = data.sidebar.admin;
-                this.news = data.news;
+                data.news.enabled ? this.$store.commit('enableNews') : this.$store.commit('disableNews');
+                this.news = data.news.portion;
                 this.server = data.server;
                 this.github = data.github;
                 this.$store.commit('setBalance', data.auth.user.balance);

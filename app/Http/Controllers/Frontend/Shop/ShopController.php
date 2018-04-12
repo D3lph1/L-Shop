@@ -15,6 +15,7 @@ use App\Services\Infrastructure\Response\Status;
 use App\Services\Infrastructure\Server\Persistence\Persistence;
 use App\Services\Media\Character\Cloak\Accessor as CloakAccessor;
 use App\Services\Media\Character\Skin\Accessor as SkinAccessor;
+use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
 
 class ShopController extends Controller
@@ -41,6 +42,12 @@ class ShopController extends Controller
             $balance = $auth->getUser()->getBalance();
         }
 
+        $newsEnabled = $settings->get('system.news.enabled')->getValue(DataType::BOOL);
+        $news = null;
+        if ($newsEnabled) {
+            $news = $loadHandler->load(1);
+        }
+
         return new JsonResponse(Status::SUCCESS, [
             'currency' => $settings->get('shop.currency.html')->getValue(),
             'character' => $character,
@@ -55,7 +62,10 @@ class ShopController extends Controller
             'cart' => [
                 'amount' => $persistence->retrieve() ? count($cart->retrieveServer($persistence->retrieve())) : null
             ],
-            'news' => $loadHandler->load(1),
+            'news' => [
+                'enabled' => $newsEnabled,
+                'portion' => $news,
+            ],
             'server' => $server,
             'github' => System::githubRepositoryUrl()
         ]);

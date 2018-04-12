@@ -13,6 +13,8 @@ class DataType
 
     public const JSON = 'json';
 
+    public const SERIALIZED = 'serialized';
+
     private function __construct()
     {
     }

@@ -21,7 +21,7 @@ class VisitHandler
 
     public function handle(): VisitResult
     {
-        $dto = (new VisitResult())
+        return (new VisitResult())
             ->setName($this->settings->get('shop.name')->getValue())
             ->setDescription($this->settings->get('shop.description')->getValue())
             ->setKeywords($this->settings->get('shop.keywords')->getValue(DataType::JSON))
@@ -56,7 +56,5 @@ class VisitHandler
             ->setMonitoringRconResponsePattern($this->settings->get('system.monitoring.rcon.pattern')->getValue())
 
             ->setMaintenanceModeEnabled($this->settings->get('system.maintenance.enabled')->getValue(DataType::BOOL));
-
-        return $dto;
     }
 }

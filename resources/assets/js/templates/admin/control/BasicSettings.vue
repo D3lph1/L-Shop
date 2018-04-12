@@ -217,7 +217,7 @@
                         ></v-switch>
                         <v-text-field
                                 :label="$t('content.admin.control.basic.news_per_portion')"
-                                v-model="catalogPerPage"
+                                v-model="newsPerPortion"
                                 type="number"
                                 class="no-spinners"
                         ></v-text-field>
@@ -310,7 +310,7 @@
                 maintenanceMode: false,
 
                 finishDisabled: false,
-                finishLoading: false,
+                finishLoading: false
             }
         },
         beforeRouteEnter (to, from, next) {
@@ -336,7 +336,54 @@
                 return result;
             },
             perform() {
-                //
+                this.finishLoading = true;
+
+                function normalizeSizes(src) {
+                    let result = [];
+
+                    src.forEach(item => {
+                        const sizes = item.match(/^([0-9]{1,4})x([1-9]{1,4})$/);
+                        result.push([Number(sizes[1]), Number(sizes[2])]);
+                    });
+
+                    return result;
+                }
+
+
+                this.$axios.post('/api/admin/control/basic', {
+                    name: this.name,
+                    description: this.description,
+                    keywords: this.keywords,
+                    access_mode: this.accessMode,
+                    register_enabled: this.registerEnabled,
+                    send_activation_enabled: this.sendActivationEnabled,
+                    custom_redirect_enabled: this.customRedirectAfterRegistrationEnabled,
+                    custom_redirect_url: this.customRedirectAfterRegistrationUrl,
+                    skin_enabled: this.skinEnabled,
+                    skin_max_file_size: this.maxSkinFileSize,
+                    skin_list: normalizeSizes(this.skinSizes),
+                    skin_hd_enabled: this.hdSkinEnabled,
+                    skin_hd_list: normalizeSizes(this.skinSizesHd),
+                    cloak_enabled: this.cloakEnabled,
+                    cloak_max_file_size: this.maxCloakFileSize,
+                    cloak_list: normalizeSizes(this.cloakSizes),
+                    cloak_hd_enabled: this.hdCloakEnabled,
+                    cloak_hd_list: normalizeSizes(this.cloakSizesHd),
+                    catalog_per_page: this.catalogPerPage,
+                    sort_products_by: this.sortProducts.value.by,
+                    sort_products_descending: this.sortProducts.value.descending,
+                    news_enabled: this.newsEnabled,
+                    news_per_portion: this.newsPerPortion,
+                    monitoring_enabled: this.monitoringEnabled,
+                    monitoring_rcon_timeout: this.monitoringRconTimeout,
+                    monitoring_rcon_command: this.monitoringRconCommand,
+                    monitoring_rcon_response_pattern: this.monitoringRconResponsePattern,
+                    maintenance_mode: this.maintenanceMode,
+                })
+                    .then(response => {
+                        this.finishLoading = false;
+                        this.$router.push({query: {update: Math.random()}});
+                    });
             },
             setData(response) {
                 const data = response.data;
@@ -352,15 +399,19 @@
                 this.maxSkinFileSize = data.maxSkinFileSize;
                 this.maxCloakFileSize = data.maxCloakFileSize;
 
+                this.skinSizes = [];
                 data.skinSizes.forEach(item => {
                     this.skinSizes.push(`${item[0]}x${item[1]}`);
                 });
+                this.skinSizesHd = [];
                 data.skinSizesHd.forEach(item => {
                     this.skinSizesHd.push(`${item[0]}x${item[1]}`);
                 });
+                this.cloakSizes = [];
                 data.cloakSizes.forEach(item => {
                     this.cloakSizes.push(`${item[0]}x${item[1]}`);
                 });
+                this.cloakSizesHd = [];
                 data.cloakSizesHd.forEach(item => {
                     this.cloakSizesHd.push(`${item[0]}x${item[1]}`);
                 });
@@ -371,7 +422,14 @@
                 this.hdCloakEnabled = data.hdCloakEnabled;
 
                 this.catalogPerPage = data.catalogPerPage;
-                this.sortProducts = `${data.sortProductsBy}:${data.sortProductsDescending}`;
+                this.sortProducts = {
+                    text: null,
+                    value: {
+                        by: data.sortProductsBy,
+                        descending: data.sortProductsDescending,
+                        value: `${data.sortProductsBy}:${data.sortProductsDescending}`
+                    }
+                };
 
                 this.newsEnabled = data.newsEnabled;
                 this.newsPerPortion = data.newsPerPortion;

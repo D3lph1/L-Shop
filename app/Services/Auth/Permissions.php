@@ -72,6 +72,21 @@ class Permissions
     public const ADMIN_CONTROL_BASIC_ACCESS = 'admin_control_basic_access';
 
     /**
+     * Gives the user the right to use the `admin->control->payments settings` section
+     */
+    public const ADMIN_CONTROL_PAYMENTS_ACCESS = 'admin_control_payments_access';
+
+    /**
+     * Gives the user the right to use the `admin->control->security` section
+     */
+    public const ADMIN_CONTROL_SECURITY_ACCESS = 'admin_control_security_access';
+
+    /**
+     * Gives the user the right to use the `admin->control->optimization` section
+     */
+    public const ADMIN_CONTROL_OPTIMIZATION_ACCESS = 'admin_control_optimization_access';
+
+    /**
      * Allows the user to add/edit/delete items.
      */
     public const ADMIN_ITEMS_CRUD_ACCESS = 'admin_items_crud_access';
@@ -105,6 +120,11 @@ class Permissions
      * Allows the user to access the `admin->information->about` section
      */
     public const ADMIN_INFORMATION_ABOUT_ACCESS = 'admin_information_about_access';
+
+    /**
+     * Allows the user to access the application while the maintenance mode is on.
+     */
+    public const ACCESS_WHILE_MAINTENANCE = 'access_while_maintenance';
 
     private function __construct()
     {

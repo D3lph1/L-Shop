@@ -23,6 +23,9 @@ export default new Vuex.Store({
             },
             cart: {
                 amount: 0
+            },
+            news: {
+                enabled: false
             }
         }
     },
@@ -89,6 +92,12 @@ export default new Vuex.Store({
             }
 
             state.shop.cart.amount -= amount;
+        },
+        enableNews(state) {
+            state.shop.news.enabled = true;
+        },
+        disableNews(state) {
+            state.shop.news.enabled = false;
         }
     },
     getters: {

@@ -216,6 +216,47 @@ return [
                 'service_section' => 'Сервис',
                 'maintenance_mode_enabled' => 'Включить режим обслуживания'
             ],
+            'payments' => [
+                'title' => 'Настройки платежей',
+                'basic_section' => 'Общее',
+                'min_fill_balance_sum' => 'Минимальная сумма пополнения баланса',
+                'aggregators_section' => 'Платежные агрегаторы',
+                'robokassa' => [
+                    'title' => 'Robokassa',
+                    'enabled' => 'Использователь Robokassa',
+                    'login' => 'Логин',
+                    'payment_password' => 'Пароль #1',
+                    'validation_password' => 'Пароль #2',
+                    'algorithm' => 'Алгоритм расчёта контрольной суммы',
+                    'test' => 'Тестовый режим'
+                ],
+                'interkassa' => [
+                    'title' => 'Interkassa',
+                    'enabled' => 'Использовать Interkassa',
+                    'key' => 'Ключ',
+                    'checkout_id' => 'Идентификатор кассы',
+                    'test_key' => 'Тестовый ключ',
+                    'currency' => 'Валюта',
+                    'algorithm' => 'Алгоритм расчёта контрольной суммы',
+                    'test' => 'Тестовый режим'
+                ]
+            ],
+            'security' => [
+                'title' => 'Безопаснсть',
+                'recaptcha' => [
+                    'title' => 'reCAPTCHA',
+                    'public_key' => 'Публичный ключ',
+                    'secret_key' => 'Секретный ключ'
+                ],
+                'user_section' => 'Пользователь',
+                'reset_password_enabled' => 'Разрешить пользователю "сбрасывать" пароль',
+                'change_password_enabled' => 'Разрешить пользователю менять пароль от своего аккаунта',
+            ],
+            'optimization' => [
+                'title' => 'Оптимизация',
+                'caching_section' => 'Кеширование',
+                'monitoring_ttl' => 'Время существования кэша мониторинга серверов (минут)',
+            ]
         ],
         'products' => [
             'add' => [
@@ -461,7 +502,7 @@ return [
                         'title' => 'Управление',
                         'sub_items' => [
                             'main_settings' => 'Основные настройки',
-                            'payments' => 'Платежи',
+                            'payments' => 'Настройки платежей',
                             'api' => 'API',
                             'security' => 'Безопасность',
                             'optimization' => 'Оптимизация'

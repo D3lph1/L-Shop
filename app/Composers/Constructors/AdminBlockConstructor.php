@@ -30,20 +30,23 @@ class AdminBlockConstructor
                         'permissions' => [Permissions::ADMIN_CONTROL_BASIC_ACCESS]
                     ],
                     [
-                        'link' => '',
-                        'title' => __('content.layout.shop.sidebar.admin.control.sub_items.payments')
+                        'link' => 'admin.control.payments',
+                        'title' => __('content.layout.shop.sidebar.admin.control.sub_items.payments'),
+                        'permissions' => [Permissions::ADMIN_CONTROL_PAYMENTS_ACCESS]
                     ],
                     [
                         'link' => '',
                         'title' => __('content.layout.shop.sidebar.admin.control.sub_items.api')
                     ],
                     [
-                        'link' => '',
-                        'title' => __('content.layout.shop.sidebar.admin.control.sub_items.security')
+                        'link' => 'admin.control.security',
+                        'title' => __('content.layout.shop.sidebar.admin.control.sub_items.security'),
+                        'permissions' => [Permissions::ADMIN_CONTROL_SECURITY_ACCESS]
                     ],
                     [
-                        'link' => '',
-                        'title' => __('content.layout.shop.sidebar.admin.control.sub_items.optimization')
+                        'link' => 'admin.control.optimization',
+                        'title' => __('content.layout.shop.sidebar.admin.control.sub_items.optimization'),
+                        'permissions' => [Permissions::ADMIN_CONTROL_OPTIMIZATION_ACCESS]
                     ],
                 ]
             ],

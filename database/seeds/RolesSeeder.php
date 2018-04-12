@@ -25,13 +25,17 @@ class RolesSeeder extends Seeder
             Permissions::PROFILE_PURCHASE_HISTORY_ACCESS,
             Permissions::PROFILE_GAME_CART_ACCESS,
             Permissions::ADMIN_CONTROL_BASIC_ACCESS,
+            Permissions::ADMIN_CONTROL_PAYMENTS_ACCESS,
+            Permissions::ADMIN_CONTROL_SECURITY_ACCESS,
+            Permissions::ADMIN_CONTROL_OPTIMIZATION_ACCESS,
             Permissions::ADMIN_ITEMS_CRUD_ACCESS,
             Permissions::ADMIN_PRODUCTS_CRUD_ACCESS,
             Permissions::ADMIN_NEWS_CRUD_ACCESS,
             Permissions::ADMIN_PAGES_CRUD_ACCESS,
             Permissions::ADMIN_USERS_CRUD_ACCESS,
             Permissions::ADMIN_STATISTIC_SHOW_ACCESS,
-            Permissions::ADMIN_INFORMATION_ABOUT_ACCESS
+            Permissions::ADMIN_INFORMATION_ABOUT_ACCESS,
+            Permissions::ACCESS_WHILE_MAINTENANCE
         ]
     ];
 

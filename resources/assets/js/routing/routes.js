@@ -21,6 +21,9 @@ const News = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/
 const Page = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/Page.vue');
 
 const BasicSettings = () => import(/* webpackChunkName: "admin" */ '../templates/admin/control/BasicSettings.vue');
+const PaymentsSettings = () => import(/* webpackChunkName: "admin" */ '../templates/admin/control/Payments.vue');
+const Security = () => import(/* webpackChunkName: "admin" */ '../templates/admin/control/Security.vue');
+const Optimization = () => import(/* webpackChunkName: "admin" */ '../templates/admin/control/Optimization.vue');
 const ProductsAdd = () => import(/* webpackChunkName: "admin" */ '../templates/admin/products/Add.vue');
 const ProductsEdit = () => import(/* webpackChunkName: "admin" */ '../templates/admin/products/Edit.vue');
 const ProductsList = () => import(/* webpackChunkName: "admin" */ '../templates/admin/products/List.vue');
@@ -233,6 +236,36 @@ export default [
                 },
                 meta: {
                     title: $t('content.admin.control.basic.title')
+                }
+            },
+            {
+                path: 'control/payments',
+                name: 'admin.control.payments',
+                components: {
+                    content: PaymentsSettings
+                },
+                meta: {
+                    title: $t('content.admin.control.payments.title')
+                }
+            },
+            {
+                path: 'control/security',
+                name: 'admin.control.security',
+                components: {
+                    content: Security
+                },
+                meta: {
+                    title: $t('content.admin.control.security.title')
+                }
+            },
+            {
+                path: 'control/optimization',
+                name: 'admin.control.optimization',
+                components: {
+                    content: Optimization
+                },
+                meta: {
+                    title: $t('content.admin.control.optimization.title')
                 }
             },
             {

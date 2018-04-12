@@ -61,6 +61,8 @@ class Setting
                 return (float)$this->value;
             case DataType::JSON:
                 return json_decode($this->value);
+            case DataType::SERIALIZED:
+                return unserialize($this->value);
             default:
                 return $this->value;
         }

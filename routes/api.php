@@ -73,6 +73,13 @@ $router->post('/profile/cart', 'Frontend\Profile\CartController@pagination');
 
 // Admin
 $router->get('/admin/control/basic', 'Admin\Control\BasicController@render');
+$router->post('/admin/control/basic', 'Admin\Control\BasicController@save');
+$router->get('/admin/control/payments', 'Admin\Control\PaymentsController@render');
+$router->post('/admin/control/payments', 'Admin\Control\PaymentsController@save');
+$router->get('/admin/control/security', 'Admin\Control\SecurityController@render');
+$router->post('/admin/control/security', 'Admin\Control\SecurityController@save');
+$router->get('/admin/control/optimization', 'Admin\Control\OptimizationController@render');
+$router->post('/admin/control/optimization', 'Admin\Control\OptimizationController@save');
 $router->get('/admin/products/add', 'Admin\Products\AddController@render');
 $router->post('/admin/products/add', 'Admin\Products\AddController@add');
 $router->get('/admin/products/edit/{product}', 'Admin\Products\EditController@render');
