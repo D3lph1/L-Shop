@@ -19,6 +19,7 @@ export default new Vuex.Store({
         shop: {
             server: null,
             currency: {
+                plain: '',
                 html: ''
             },
             cart: {
@@ -30,6 +31,9 @@ export default new Vuex.Store({
         }
     },
     mutations: {
+        setCurrencyPlain(state, currency) {
+            state.shop.currency.plain = currency;
+        },
         setCurrencyHtml(state, currency) {
             state.shop.currency.html = currency;
         },

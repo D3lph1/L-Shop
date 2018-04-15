@@ -4,8 +4,70 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "19083daf7b01038208b0fb1e6e8d3842",
+    "content-hash": "0030e70eb34bc45255c67dd97cd07e66",
     "packages": [
+        {
+            "name": "beberlei/DoctrineExtensions",
+            "version": "v1.0.21",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/beberlei/DoctrineExtensions.git",
+                "reference": "b4dc688b5f7f9645920f4c81703e83a45cab09c2"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/beberlei/DoctrineExtensions/zipball/b4dc688b5f7f9645920f4c81703e83a45cab09c2",
+                "reference": "b4dc688b5f7f9645920f4c81703e83a45cab09c2",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.3.2"
+            },
+            "require-dev": {
+                "doctrine/orm": "~2.1",
+                "nesbot/carbon": "*",
+                "phpunit/phpunit": "~4.5",
+                "symfony/yaml": "~2.6",
+                "zf1/zend-date": "~1.12",
+                "zf1/zend-registry": "~1.12"
+            },
+            "suggest": {
+                "nesbot/carbon": "Alternative to DateTime",
+                "zf1/zend-date": "Alternative to DateTime"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "1.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "DoctrineExtensions\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "BSD-3-Clause"
+            ],
+            "authors": [
+                {
+                    "name": "Benjamin Eberlei",
+                    "email": "kontakt@beberlei.de"
+                },
+                {
+                    "name": "Steve Lacey",
+                    "email": "steve@stevelacey.net"
+                }
+            ],
+            "description": "A set of extensions to Doctrine 2 that add support for additional query functions available in MySQL and Oracle.",
+            "keywords": [
+                "database",
+                "doctrine",
+                "orm"
+            ],
+            "time": "2018-01-27T07:05:10+00:00"
+        },
         {
             "name": "d3lph1/minecraft-rcon-manager",
             "version": "1.2",

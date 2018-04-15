@@ -116,7 +116,12 @@ return [
     | DQL custom datetime functions
     |--------------------------------------------------------------------------
     */
-    'custom_datetime_functions'  => [],
+    'custom_datetime_functions'  => [
+        'DATE_FORMAT' => \DoctrineExtensions\Query\Mysql\DateFormat::class,
+        'YEAR' => \DoctrineExtensions\Query\Mysql\Year::class,
+        'MONTH' => \DoctrineExtensions\Query\Mysql\Month::class,
+        'DAY' => \DoctrineExtensions\Query\Mysql\Day::class
+    ],
     /*
     |--------------------------------------------------------------------------
     | DQL custom numeric functions

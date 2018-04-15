@@ -49,7 +49,10 @@ class ShopController extends Controller
         }
 
         return new JsonResponse(Status::SUCCESS, [
-            'currency' => $settings->get('shop.currency.html')->getValue(),
+            'currency' => [
+                'plain' => $settings->get('shop.currency.name')->getValue(),
+                'html' => $settings->get('shop.currency.html')->getValue()
+            ],
             'character' => $character,
             'sidebar' => [
                 'admin' => $adminBlockConstructor->construct()

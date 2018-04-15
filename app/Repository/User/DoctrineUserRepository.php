@@ -121,6 +121,37 @@ class DoctrineUserRepository implements UserRepository
         );
     }
 
+    public function retrieveCreatedForYear(): array
+    {
+        return $this->createQueryBuilder('u')
+            ->select('YEAR(u.createdAt) as year, MONTH(u.createdAt) as month, COUNT(u.id) as amount')
+            ->groupBy('year, month')
+            ->orderBy('year', 'desc')
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function retrieveCreatedForMonth(int $year, int $month): array
+    {
+        return $this->createQueryBuilder('u')
+            ->select('DAY(u.createdAt) as day, COUNT(u.id) as amount')
+            ->where('YEAR(u.createdAt) = :year')
+            ->andWhere('MONTH(u.createdAt) = :month')
+            ->groupBy('day')
+            ->setParameter('year', $year)
+            ->setParameter('month', $month)
+            ->getQuery()
+            ->getResult();
+    }
+
+    public function retrieveCreatedAmount(): int
+    {
+        return (int)$this->createQueryBuilder('u')
+            ->select('COUNT(u.id) as amount')
+            ->getQuery()
+            ->getSingleScalarResult();
+    }
+
     /**
      * {@inheritdoc}
      */

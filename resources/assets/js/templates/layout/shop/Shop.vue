@@ -128,7 +128,8 @@
             setData(response) {
                 const data = response.data;
 
-                this.$store.commit('setCurrencyHtml', data.currency);
+                this.$store.commit('setCurrencyPlain', data.currency.plain);
+                this.$store.commit('setCurrencyHtml', data.currency.html);
                 this.character = data.character;
                 this.adminSidebar = data.sidebar.admin;
                 data.news.enabled ? this.$store.commit('enableNews') : this.$store.commit('disableNews');

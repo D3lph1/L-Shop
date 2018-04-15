@@ -16,6 +16,7 @@ use App\Entity\Permission;
 use App\Entity\Persistence;
 use App\Entity\Product;
 use App\Entity\Purchase;
+use App\Entity\PurchaseItem;
 use App\Entity\Reminder;
 use App\Entity\Role;
 use App\Entity\Server;
@@ -47,6 +48,8 @@ use App\Repository\Product\DoctrineProductRepository;
 use App\Repository\Product\ProductRepository;
 use App\Repository\Purchase\DoctrinePurchaseRepository;
 use App\Repository\Purchase\PurchaseRepository;
+use App\Repository\PurchaseItem\DoctrinePurchaseItemRepository;
+use App\Repository\PurchaseItem\PurchaseItemRepository;
 use App\Repository\Reminder\DoctrineReminderRepository;
 use App\Repository\Reminder\ReminderRepository;
 use App\Repository\Role\DoctrineRoleRepository;
@@ -127,6 +130,10 @@ class RepositoryServiceProvider extends ServiceProvider
         PurchaseRepository::class => [
             'concrete' => DoctrinePurchaseRepository::class,
             'entity' => Purchase::class
+        ],
+        PurchaseItemRepository::class => [
+            'concrete' => DoctrinePurchaseItemRepository::class,
+            'entity' => PurchaseItem::class
         ],
         BalanceTransactionRepository::class => [
             'concrete' => DoctrineBalanceTransactionRepository::class,

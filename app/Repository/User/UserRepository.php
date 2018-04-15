@@ -29,4 +29,10 @@ interface UserRepository
     public function findPaginateWithSearch(string $search, int $perPage): LengthAwarePaginator;
 
     public function findPaginatedWithOrderAndSearch(string $orderBy, bool $descending, string $search, int $perPage): LengthAwarePaginator;
+
+    public function retrieveCreatedForYear(): array;
+
+    public function retrieveCreatedForMonth(int $year, int $month): array;
+
+    public function retrieveCreatedAmount(): int;
 }

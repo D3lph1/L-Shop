@@ -112,6 +112,9 @@ $router->post('/admin/users/edit/{user}', 'Admin\Users\EditController@edit');
 $router->post('/admin/users/list', 'Admin\Users\ListController@pagination');
 $router->delete('/admin/users', 'Admin\Users\ListController@delete');
 $router->get('/admin/statistic/show', 'Admin\Statistic\ShowController@render');
+$router->post('/admin/statistic/show/profit/month', 'Admin\Statistic\ShowController@profitForMonth');
+$router->post('/admin/statistic/show/purchases/month', 'Admin\Statistic\ShowController@purchasesForMonth');
+$router->post('/admin/statistic/show/registered/month', 'Admin\Statistic\ShowController@registeredForMonth');
 $router->get('/admin/information/about', 'Admin\Information\AboutController@render');
 
 
