@@ -37,6 +37,7 @@ const PagesList = () => import(/* webpackChunkName: "admin" */ '../templates/adm
 const UsersList = () => import(/* webpackChunkName: "admin" */ '../templates/admin/users/List.vue');
 const UsersEdit = () => import(/* webpackChunkName: "admin" */ '../templates/admin/users/Edit.vue');
 const StatisticShow = () => import(/* webpackChunkName: "admin" */ '../templates/admin/statistic/Show.vue');
+const StatisticPurchases = () => import(/* webpackChunkName: "admin" */ '../templates/admin/statistic/Purchases.vue');
 const About = () => import(/* webpackChunkName: "admin" */'../templates/admin/information/About.vue');
 
 export default [
@@ -396,6 +397,16 @@ export default [
                 },
                 meta: {
                     title: $t('content.admin.statistic.show.title')
+                }
+            },
+            {
+                path: 'statistic/purchases',
+                name: 'admin.statistic.purchases',
+                components: {
+                    content: StatisticPurchases
+                },
+                meta: {
+                    title: $t('content.admin.statistic.purchases.title')
                 }
             },
             {

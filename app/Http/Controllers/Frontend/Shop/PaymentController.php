@@ -17,11 +17,10 @@ class PaymentController extends Controller
     public function render(Request $request, VisitHandler $handler): Response
     {
         try {
-            $dto = $handler->handle((int)$request->route('purchase'));
+            $payers = $handler->handle((int)$request->route('purchase'));
 
             return new Response(new JsonResponse(Status::SUCCESS, [
-                'robokassaUrl' => $dto->getRobokassaUrl(),
-                'interkassaUrl' => $dto->getInterkassaUrl()
+                'payers' => $payers
             ]));
         } catch (DoesNotExistsException $e) {
             return new Response(new JsonResponse('purchase_not_found'), 404);

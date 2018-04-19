@@ -7,9 +7,8 @@
         </v-layout>
         <v-layout>
             <v-flex xs12 class="text-xs-center">
-                <v-btn color="blue" dark :href="robokassa" v-if="robokassa !== null">Robokassa</v-btn>
-                <v-btn color="green" dark :href="interkassa" v-if="interkassa !== null">Interkassa</v-btn>
-                <v-alert type="warning" :value="true" v-if="robokassa === null && interkassa === null">
+                <v-btn color="blue" dark :href="payer.url" v-for="(payer, index) in payers" :key="index">{{ payer.name }}</v-btn>
+                <v-alert type="warning" :value="payers.length === 0">
                     {{ $t('content.frontend.shop.payment.methods_not_available') }}
                 </v-alert>
             </v-flex>
@@ -23,8 +22,7 @@
     export default {
         data() {
             return {
-                robokassa: null,
-                interkassa: null,
+                payers: []
             }
         },
         beforeRouteEnter(to, from, next) {
@@ -37,8 +35,7 @@
             setData(response) {
                 const data = response.data;
 
-                this.robokassa = data.robokassaUrl;
-                this.interkassa = data.interkassaUrl;
+                this.payers = data.payers;
             }
         }
     }

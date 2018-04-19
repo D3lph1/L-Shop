@@ -26,6 +26,11 @@
                 </td>
                 <td class="text-xs-center">{{ props.item.createdAt }}</td>
                 <td class="text-xs-center">{{ props.item.completedAt !== null ? props.item.completedAt : '-' }}</td>
+                <td class="text-xs-center">
+                    <span v-if="props.item.via.quick">-</span>
+                    <span v-else-if="props.item.via.byAdmin">{{ $t('content.frontend.profile.purchases.via.by_admin') }}</span>
+                    <span v-else>{{ props.item.via.value }}</span>
+                </td>
                 <td class="text-xs-left layout px-0">
                     <v-btn icon class="mx-0" v-if="props.item.items.length !== 0" @click="openDetailsDialog(props.item)">
                         <v-icon color="secondary">more_horiz</v-icon>
@@ -59,7 +64,7 @@
                 pagination: {
                     page: this.$route.query.page ? this.$route.query.page : 1,
                     rowsPerPage: this.$route.query.per_page ? parseInt(this.$route.query.per_page) : 25,
-                    sortBy: this.$route.query.order_by ? this.$route.query.order_by : 'id',
+                    sortBy: this.$route.query.order_by ? this.$route.query.order_by : 'purchase.id',
                     descending: this.$route.query.descending === 'true',
                 },
                 headers: [
@@ -67,31 +72,37 @@
                         text: $t('content.frontend.profile.purchases.table.headers.id'),
                         align: 'center',
                         sortable: true,
-                        value: 'id'
+                        value: 'purchase.id'
                     },
                     {
                         text: $t('content.frontend.profile.purchases.table.headers.cost'),
                         align: 'center',
                         sortable: true,
-                        value: 'cost'
+                        value: 'purchase.cost'
                     },
                     {
                         text: $t('common.type'),
                         align: 'center',
                         sortable: true,
-                        value: 'type'
+                        value: 'purchase.purchase.type'
                     },
                     {
                         text: $t('content.frontend.profile.purchases.table.headers.created_at'),
                         align: 'center',
                         sortable: true,
-                        value: 'createdAt'
+                        value: 'purchase.createdAt'
                     },
                     {
                         text: $t('content.frontend.profile.purchases.table.headers.completed_at'),
                         align: 'center',
                         sortable: true,
-                        value: 'completedAt'
+                        value: 'purchase.completedAt'
+                    },
+                    {
+                        text: $t('content.frontend.profile.purchases.table.headers.via'),
+                        align: 'center',
+                        sortable: true,
+                        value: 'purchase.via'
                     },
                     {
                         text: $t('common.actions'),

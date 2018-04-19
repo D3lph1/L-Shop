@@ -8,6 +8,7 @@ use App\Repository\Item\ItemRepository;
 use App\Services\Item\Image\Hashing\Hasher;
 use App\Services\Item\Image\Image;
 use App\Services\Item\Type;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
@@ -98,7 +99,7 @@ class EditTest extends TestCase
         $originalPath = $this->app->basePath("{$path}/coal_ore_original.png");
         $uploadablePath = $this->app->basePath("{$path}/coal_ore.png");
         // Copy the file as it will removed when it is uploaded.
-        \File::copy($originalPath, $uploadablePath);
+        $this->app->make(Filesystem::class)->copy($originalPath, $uploadablePath);
         $file = new UploadedFile($uploadablePath, 'coal_ore.png', 'image/png', null, null, true);
 
         $name = 'New coal ore';
@@ -136,7 +137,7 @@ class EditTest extends TestCase
         self::assertNull($item->getExtra());
 
         // Delete uploaded image.
-        \File::delete(Image::absolutePath($filename));
+        $this->app->make(Filesystem::class)->delete(Image::absolutePath($filename));
 
         $this->rollback();
     }
@@ -183,7 +184,7 @@ class EditTest extends TestCase
 
     private function image(): string
     {
-        \File::copy(
+        $this->app->make(Filesystem::class)->copy(
             $this->app->basePath("tests/Feature/Admin/Items/coal_ore_original.png"),
             $this->filePath()
         );
@@ -193,7 +194,7 @@ class EditTest extends TestCase
 
     private function deleteFile(): void
     {
-        \File::delete($this->filePath());
+        $this->app->make(Filesystem::class)->delete($this->filePath());
     }
 
     private function createItem(?string $image = null): Item

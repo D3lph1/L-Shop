@@ -5,10 +5,8 @@ namespace App\Repository\Purchase;
 
 use App\Entity\Purchase;
 use App\Entity\PurchaseItem;
-use Doctrine\ORM\AbstractQuery;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Doctrine\ORM\QueryBuilder;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use LaravelDoctrine\ORM\Pagination\PaginatesFromParams;
 
@@ -38,6 +36,12 @@ class DoctrinePurchaseRepository implements PurchaseRepository
         $this->em->flush();
     }
 
+    public function update(Purchase $purchase): void
+    {
+        $this->em->merge($purchase);
+        $this->em->flush();
+    }
+
     public function find(int $id): ?Purchase
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
@@ -52,8 +56,8 @@ class DoctrinePurchaseRepository implements PurchaseRepository
     public function findPaginatedWithOrder(int $page, string $orderBy, bool $descending, int $perPage): LengthAwarePaginator
     {
         return $this->paginate(
-            $this->createQueryBuilder('i')
-                ->orderBy("i.{$orderBy}", $descending ? 'DESC' : 'ASC')
+            $this->createQueryBuilder('purchase')
+                ->orderBy($orderBy, $descending ? 'DESC' : 'ASC')
                 ->getQuery(),
             $perPage,
             $page,

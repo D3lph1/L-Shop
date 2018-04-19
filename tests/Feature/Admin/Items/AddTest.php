@@ -8,6 +8,7 @@ use App\Repository\Item\ItemRepository;
 use App\Services\Item\Image\Hashing\Hasher;
 use App\Services\Item\Image\Image;
 use App\Services\Item\Type;
+use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
@@ -56,7 +57,7 @@ class AddTest extends TestCase
         $originalPath = $this->app->basePath("{$path}/coal_ore_original.png");
         $uploadablePath = $this->app->basePath("{$path}/coal_ore.png");
         // Copy the file as it will removed when it is uploaded.
-        \File::copy($originalPath, $uploadablePath);
+        $this->app->make(Filesystem::class)->copy($originalPath, $uploadablePath);
 
         $file = new UploadedFile($uploadablePath, 'coal_ore.png', 'image/png', null, null, true);
 
@@ -91,7 +92,7 @@ class AddTest extends TestCase
         self::assertNull($item->getExtra());
 
         // Delete uploaded image.
-        \File::delete(Image::absolutePath($filename));
+        $this->app->make(Filesystem::class)->delete(Image::absolutePath($filename));
 
         $this->rollback();
     }
@@ -103,7 +104,7 @@ class AddTest extends TestCase
 
         $filename = 'coal_ore.png';
         $filePath = public_path("img/shop/items/{$filename}");
-        \File::copy(
+        $this->app->make(Filesystem::class)->copy(
             $this->app->basePath("tests/Feature/Admin/Items/coal_ore_original.png"),
             $filePath
         );
@@ -138,7 +139,7 @@ class AddTest extends TestCase
         self::assertEquals($extra, $item->getExtra());
 
         // Delete copied file.
-        \File::delete($filePath);
+        $this->app->make(Filesystem::class)->delete($filePath);
 
         $this->rollback();
     }

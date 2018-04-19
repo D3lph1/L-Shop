@@ -128,12 +128,12 @@ class Purchase
         return $this->ip;
     }
 
-    public function getVia(): string
+    public function getVia(): ?string
     {
         return $this->via;
     }
 
-    public function setVia(string $via): Purchase
+    public function setVia(?string $via): Purchase
     {
         $this->via = $via;
 

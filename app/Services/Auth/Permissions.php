@@ -117,6 +117,11 @@ class Permissions
     public const ADMIN_STATISTIC_SHOW_ACCESS = 'admin_statistic_show_access';
 
     /**
+     * Allows to purchases history in admin panel.
+     */
+    public const ADMIN_STATISTIC_PURCHASES_ACCESS = 'admin_statistic_purchases_access';
+
+    /**
      * Allows the user to access the `admin->information->about` section
      */
     public const ADMIN_INFORMATION_ABOUT_ACCESS = 'admin_information_about_access';

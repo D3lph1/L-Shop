@@ -10,7 +10,6 @@
                             :headers="headers"
                             :items="items"
                             hide-actions
-                            class="elevation-1"
                     >
                         <template slot="items" slot-scope="props">
                             <td class="text-xs-center"><img :src="props.item.image" height="30"></td>

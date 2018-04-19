@@ -5,6 +5,7 @@ namespace App\DataTransferObjects\Frontend\Profile\Purchases;
 
 use App\Entity\Purchase as Entity;
 use App\Services\DateTime\Formatting\JavaScriptFormatter;
+use App\Services\Purchasing\ViaContext;
 
 class Purchase implements \JsonSerializable
 {
@@ -34,6 +35,11 @@ class Purchase implements \JsonSerializable
             'createdAt' => (new JavaScriptFormatter())->format($this->entity->getCreatedAt()),
             'completedAt' => $this->entity->getCompletedAt() !== null ?
                 (new JavaScriptFormatter())->format($this->entity->getCompletedAt()) : null,
+            'via' => [
+                'quick' => $this->entity->getVia() === ViaContext::QUICK,
+                'byAdmin' => $this->entity->getVia() === ViaContext::BY_ADMIN,
+                'value' => $this->entity->getVia()
+            ],
             'items' => $items
         ];
     }

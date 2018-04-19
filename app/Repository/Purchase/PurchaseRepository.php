@@ -10,6 +10,8 @@ interface PurchaseRepository
 {
     public function create(Purchase $purchase): void;
 
+    public function update(Purchase $purchase): void;
+
     public function find(int $id): ?Purchase;
 
     public function findPaginated(int $page, int $perPage): LengthAwarePaginator;

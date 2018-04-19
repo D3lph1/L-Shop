@@ -14,7 +14,13 @@ class PaginationHandler
     /**
      * @var array
      */
-    private $availableOrders = ['id', 'cost', 'createdAt', 'completedAt'];
+    private $availableOrders = [
+        'purchase.id',
+        'purchase.cost',
+        'purchase.createdAt',
+        'purchase.completedAt',
+        'purchase.via'
+    ];
 
     /**
      * @var PurchaseRepository
@@ -40,7 +46,7 @@ class PaginationHandler
                 self::PER_PAGE
             );
         } else {
-            $paginator = $this->repository->findPaginated($page, $perPage);
+            $paginator = $this->repository->findPaginated($page, self::PER_PAGE);
         }
 
         return new ListResult($paginator);

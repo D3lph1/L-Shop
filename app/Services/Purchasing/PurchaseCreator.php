@@ -49,11 +49,8 @@ class PurchaseCreator
     public function create(array $dto, $user, string $ip): Purchase
     {
         $this->through($dto);
-        $enoughMoney = $this->enoughMoney($user);
-        if ($enoughMoney) {
-            $this->writeOffMoney($user);
-        }
-        return $this->persist($dto, $user, $ip, $enoughMoney);
+
+        return $this->persist($dto, $user, $ip);
     }
 
     /**
@@ -63,7 +60,7 @@ class PurchaseCreator
      *
      * @throws HiddenException
      */
-    public function through(array $dto)
+    private function through(array $dto)
     {
         foreach ($dto as $each) {
             $product = $each->getProduct();
@@ -123,40 +120,21 @@ class PurchaseCreator
         return null;
     }
 
-    private function enoughMoney($user): bool
-    {
-        // If the user is not authorized, he must pay for purchases directly.
-        if (!($user instanceof User)) {
-            return false;
-        }
-
-        return $user->getBalance() - $this->cost >= 0;
-    }
-
-    private function writeOffMoney(User $user): void
-    {
-        $this->transactor->sub($user, $this->cost);
-    }
-
     /**
      * @param DTO[]       $dto
      * @param User|string $user
      * @param string      $ip
-     * @param bool        $isCompleted
      *
      * @return Purchase
      * @throws \Exception
      */
-    private function persist(array $dto, $user, string $ip, bool $isCompleted): Purchase
+    private function persist(array $dto, $user, string $ip): Purchase
     {
         $purchase = new Purchase($this->cost, $ip);
         foreach ($dto as $each) {
             $purchaseItem = new PurchaseItem($each->getProduct(), $each->getAmount());
             $purchaseItem->setPurchase($purchase);
             $purchase->getItems()->add($purchaseItem);
-        }
-        if ($isCompleted) {
-            $purchase->setCompletedAt(new \DateTimeImmutable());
         }
         if ($user instanceof User) {
             $purchase->setUser($user);

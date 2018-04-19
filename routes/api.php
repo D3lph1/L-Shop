@@ -53,6 +53,7 @@ $router->get('/monitoring', 'Api\MonitoringController@monitor');
 $router->get('/cart/{server}', 'Frontend\Shop\CartController@render');
 $router->put('/cart', 'Frontend\Shop\CartController@put');
 $router->delete('/cart', 'Frontend\Shop\CartController@remove');
+$router->post('/cart/{server}', 'Frontend\Shop\CartController@purchase');
 
 $router->get('/news/load', 'Frontend\News\NewsController@load');
 $router->get('/news/{news}', 'Frontend\News\NewsController@render');
@@ -115,8 +116,9 @@ $router->get('/admin/statistic/show', 'Admin\Statistic\ShowController@render');
 $router->post('/admin/statistic/show/profit/month', 'Admin\Statistic\ShowController@profitForMonth');
 $router->post('/admin/statistic/show/purchases/month', 'Admin\Statistic\ShowController@purchasesForMonth');
 $router->post('/admin/statistic/show/registered/month', 'Admin\Statistic\ShowController@registeredForMonth');
+$router->post('/admin/statistic/purchases', 'Admin\Statistic\PurchasesController@pagination');
+$router->post('/admin/statistic/purchases/complete/{purchase}', 'Admin\Statistic\PurchasesController@complete');
 $router->get('/admin/information/about', 'Admin\Information\AboutController@render');
-
 
 $router->any('/skin/front/{username}', 'Api\User\SkinController@front')
     ->name('api.skin.front');

@@ -34,6 +34,7 @@ class RolesSeeder extends Seeder
             Permissions::ADMIN_PAGES_CRUD_ACCESS,
             Permissions::ADMIN_USERS_CRUD_ACCESS,
             Permissions::ADMIN_STATISTIC_SHOW_ACCESS,
+            Permissions::ADMIN_STATISTIC_PURCHASES_ACCESS,
             Permissions::ADMIN_INFORMATION_ABOUT_ACCESS,
             Permissions::ACCESS_WHILE_MAINTENANCE
         ]

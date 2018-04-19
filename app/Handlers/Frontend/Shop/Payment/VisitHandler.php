@@ -3,11 +3,13 @@ declare(strict_types = 1);
 
 namespace App\Handlers\Frontend\Shop\Payment;
 
+use App\DataTransferObjects\Frontend\Shop\Payer;
 use App\DataTransferObjects\Frontend\Shop\Payment;
 use App\Exceptions\ForbiddenException;
 use App\Exceptions\Purchase\DoesNotExistsException;
 use App\Repository\Purchase\PurchaseRepository;
 use App\Services\Auth\Auth;
+use App\Services\Purchasing\Payers\Pool;
 use App\Services\Purchasing\Payments\Interkassa\Checkout as InterkassaCheckout;
 use App\Services\Purchasing\Payments\Robokassa\Checkout as RobokassaCheckout;
 use App\Services\Purchasing\Payments\Robokassa\Payment as RobokassaPayment;
@@ -28,14 +30,9 @@ class VisitHandler
     private $purchaseRepository;
 
     /**
-     * @var RobokassaCheckout
+     * @var Pool
      */
-    private $robokassaCheckout;
-
-    /**
-     * @var InterkassaCheckout
-     */
-    private $interkassaCheckout;
+    private $payersPool;
 
     /**
      * @var Settings
@@ -45,18 +42,21 @@ class VisitHandler
     public function __construct(
         Auth $auth,
         PurchaseRepository $purchaseRepository,
-        RobokassaCheckout $robokassaCheckout,
-        InterkassaCheckout $interkassaCheckout,
+        Pool $payersPool,
         Settings $settings)
     {
         $this->auth = $auth;
         $this->purchaseRepository = $purchaseRepository;
-        $this->robokassaCheckout = $robokassaCheckout;
-        $this->interkassaCheckout = $interkassaCheckout;
+        $this->payersPool = $payersPool;
         $this->settings = $settings;
     }
 
-    public function handle(int $purchaseId): Payment
+    /**
+     * @param int $purchaseId
+     *
+     * @return Payer[]
+     */
+    public function handle(int $purchaseId): array
     {
         $purchase = $this->purchaseRepository->find($purchaseId);
         if ($purchase === null) {
@@ -69,25 +69,12 @@ class VisitHandler
             }
         }
 
-        $dto = new Payment();
+        $result = [];
 
-        if ($this->settings->get('purchasing.services.robokassa.enabled')->getValue(DataType::BOOL)) {
-            $payment = new RobokassaPayment($purchase->getId(), $purchase->getCost());
-            $payment->setDescription('Purchased by L-Shop');
-
-            $dto->setRobokassaUrl(
-                $this->robokassaCheckout->paymentUrl($payment)
-            );
-        }
-        if ($this->settings->get('purchasing.services.interkassa.enabled')->getValue(DataType::BOOL)) {
-            $payment = new InterkassaPayment($purchase->getId(), $purchase->getCost());
-            $payment->setDescription('Purchased by L-Shop');
-
-            $dto->setInterkassaUrl(
-                $this->interkassaCheckout->paymentUrl($payment)
-            );
+        foreach ($this->payersPool->allEnabled() as $payer) {
+            $result[] = new Payer($payer->name(), $payer->paymentUrl($purchase));
         }
 
-        return $dto;
+        return $result;
     }
 }

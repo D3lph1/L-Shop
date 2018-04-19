@@ -123,7 +123,7 @@ class Checkout
         return $hash === $sign;
     }
 
-    public function getSuccessAnswer(): string
+    public function successAnswer(): string
     {
         return 'OK';
     }

@@ -149,7 +149,7 @@ class Checkout
         return $valid;
     }
 
-    public function getSuccessAnswer(int $invoiceId): string
+    public function successAnswer(int $invoiceId): string
     {
         return "OK{$invoiceId}\n";
     }
