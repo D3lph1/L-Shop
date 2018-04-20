@@ -5,10 +5,12 @@ namespace App\Services\Purchasing;
 
 use App\Entity\Distribution;
 use App\Entity\Purchase;
+use App\Entity\PurchaseItem;
+use App\Exceptions\Distributor\DoesNotExistsException;
 use App\Exceptions\Purchase\AlreadyCompletedException;
 use App\Repository\Distribution\DistributionRepository;
 use App\Repository\Purchase\PurchaseRepository;
-use App\Services\Purchasing\Distributors\Distributor;
+use App\Services\Purchasing\Distributors\Pool;
 use App\Services\User\Balance\Transactor;
 
 class PurchaseCompleter
@@ -19,9 +21,9 @@ class PurchaseCompleter
     private $purchaseRepository;
 
     /**
-     * @var Distributor
+     * @var Pool
      */
-    private $distributor;
+    private $distributors;
 
     /**
      * @var DistributionRepository
@@ -35,12 +37,12 @@ class PurchaseCompleter
 
     public function __construct(
         PurchaseRepository $purchaseRepository,
-        Distributor $distributor,
+        Pool $distributors,
         DistributionRepository $distributionRepository,
         Transactor $transactor)
     {
         $this->purchaseRepository = $purchaseRepository;
-        $this->distributor = $distributor;
+        $this->distributors = $distributors;
         $this->distributionRepository = $distributionRepository;
         $this->transactor = $transactor;
     }
@@ -66,10 +68,28 @@ class PurchaseCompleter
         $this->purchaseRepository->update($purchase);
 
         if (count($purchase->getItems()) !== 0) {
+            // Retrieve name of distributor class.
+            $distributorClass = $purchase
+                ->getItems()
+                ->first()
+                ->getProduct()
+                ->getCategory()
+                ->getServer()
+                ->getDistributor();
+
+            // Retrieve distributor for server of this product.
+            $distributor = $this->distributors->retrieveByName($distributorClass);
+
+            if ($distributor === null) {
+                throw new DoesNotExistsException($distributorClass);
+            }
+
+            /** @var PurchaseItem $purchaseItem */
             foreach ($purchase->getItems() as $purchaseItem) {
                 $distribution = new Distribution($purchaseItem);
                 $this->distributionRepository->create($distribution);
-                $this->distributor->distribute($distribution);
+
+                $distributor->distribute($distribution);
             }
         } else {
             $this->transactor->add($purchase->getUser(), $purchase->getCost());

@@ -44,14 +44,23 @@ class AddToResponse
             if (
                 $response->headers->has('Content-Type') &&
                 $response->headers->get('Content-Type') === 'application/json') {
+
                 $json = json_decode($response->getContent(), true);
+                $httpStatus = 200;
+                if (isset($json['http_status'])) {
+                    $httpStatus = $json['http_status'];
+                    // Remove element 'http_status' from resulting content.
+                    unset($json['http_status']);
+                }
                 if (isset($json['notifications'])) {
+                    // Add notifications to response.
                     foreach ($this->notificator->pull() as $item) {
                         $json['notifications'][] = $item;
                     }
                 }
                 try {
                     if ($this->auth->check() && $response->status() !== 500) {
+                        // Add information about user authentication status.
                         if (isset($json['auth'])) {
                             $json['auth'] = array_merge($json['auth'], [
                                 'username' => $this->auth->getUser()->getUsername()
@@ -62,12 +71,17 @@ class AddToResponse
                             ];
                         }
                     }
-                    $response->setContent(json_encode($json));
+
+                    $response
+                        ->setStatusCode($httpStatus)
+                        ->setContent(json_encode($json));
                 } catch (BannedException $e) {
                     $this->auth->logout();
 
+                    // Creating user ban notification.
                     $banMessages = $this->banMessage->buildMessageAuto($e->getBans());
                     if (count($banMessages->getMessages()) === 0) {
+                        // Return response with ban notifications without points.
                         return response()->json((new JsonResponse('banned', [
                             'early_redirect' => 'frontend.auth.login'
                         ]))

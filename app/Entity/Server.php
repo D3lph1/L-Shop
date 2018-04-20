@@ -41,6 +41,11 @@ class Server
     private $password;
 
     /**
+     * @ORM\Column(name="distributor", type="string", length=255, nullable=false)
+     */
+    private $distributor;
+
+    /**
      * @ORM\Column(name="enabled", type="boolean", nullable=false)
      */
     private $enabled;
@@ -55,9 +60,10 @@ class Server
      */
     private $categories;
 
-    public function __construct(string $name)
+    public function __construct(string $name, string $distributor)
     {
         $this->name = $name;
+        $this->distributor = $distributor;
         $this->categories = new ArrayCollection();
     }
 
@@ -112,6 +118,18 @@ class Server
         $this->password = $password;
 
         return $this;
+    }
+
+    public function setDistributor(string $distributor)
+    {
+        $this->distributor = $distributor;
+
+        return $this;
+    }
+
+    public function getDistributor(): string
+    {
+        return $this->distributor;
     }
 
     public function isEnabled(): bool

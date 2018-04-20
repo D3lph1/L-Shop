@@ -14,6 +14,11 @@ class JsonResponse implements \JsonSerializable
     private $status;
 
     /**
+     * @var int
+     */
+    private $httpStatus = 200;
+
+    /**
      * @var array|JsonRespondent
      */
     private $data;
@@ -48,6 +53,13 @@ class JsonResponse implements \JsonSerializable
         return $this->status;
     }
 
+    public function setHttpStatus(int $httpStatus): JsonResponse
+    {
+        $this->httpStatus = $httpStatus;
+
+        return $this;
+    }
+
     /**
      * @return array|object
      */
@@ -61,6 +73,11 @@ class JsonResponse implements \JsonSerializable
         $this->notifications[] = $notification;
 
         return $this;
+    }
+
+    public function getHttpStatus(): int
+    {
+        return $this->httpStatus;
     }
 
     public function setEarlyRedirect(string $to, array $params = []): JsonResponse
@@ -89,6 +106,7 @@ class JsonResponse implements \JsonSerializable
 
         $result = array_merge([
             'status' => $this->status,
+            'httpStatus' => $this->httpStatus
         ], $data);
 
         $result = array_merge($result, [

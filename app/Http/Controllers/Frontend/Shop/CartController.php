@@ -66,6 +66,7 @@ class CartController extends Controller
                 ->addNotification(new Info(__('msg.frontend.shop.cart.remove.success')));
         } catch (DoesNotExistException $e) {
             return (new JsonResponse('product_does_not_exist'))
+                ->setHttpStatus(403)
                 ->addNotification(new Warning(__('msg.frontend.shop.cart.remove.fail')));
         }
     }
@@ -89,6 +90,7 @@ class CartController extends Controller
             }
         } catch (ServerDoesNotExistException $e) {
             return (new JsonResponse('server_not_found'))
+                ->setHttpStatus(403)
                 ->addNotification(new Error(__('msg.frontend.shop.cart.purchase.server_not_found')));
         }
     }

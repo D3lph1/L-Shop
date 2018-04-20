@@ -5,7 +5,7 @@ namespace Database\Migrations;
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema as Schema;
 
-class Version20180404153440 extends AbstractMigration
+class Version20180420153235 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -34,7 +34,7 @@ class Version20180404153440 extends AbstractMigration
         $this->addSql('CREATE TABLE lshop_reminders (id INT AUTO_INCREMENT NOT NULL, user_id INT DEFAULT NULL, code VARCHAR(64) NOT NULL, created_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', INDEX IDX_7586A178A76ED395 (user_id), INDEX code_idx (code), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE lshop_roles (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(32) NOT NULL, UNIQUE INDEX UNIQ_A3EBA9F05E237E06 (name), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE lshop_role_user (role_id INT NOT NULL, user_id INT NOT NULL, INDEX IDX_2B38BC71D60322AC (role_id), INDEX IDX_2B38BC71A76ED395 (user_id), PRIMARY KEY(role_id, user_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE lshop_servers (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, ip VARCHAR(45) DEFAULT NULL, port INT DEFAULT NULL, password VARCHAR(255) DEFAULT NULL, enabled TINYINT(1) NOT NULL, monitoring_enabled TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE lshop_servers (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, ip VARCHAR(45) DEFAULT NULL, port INT DEFAULT NULL, password VARCHAR(255) DEFAULT NULL, distributor VARCHAR(255) NOT NULL, enabled TINYINT(1) NOT NULL, monitoring_enabled TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE lshop_shopping_cart (id INT AUTO_INCREMENT NOT NULL, server INT DEFAULT NULL, distribution_id INT DEFAULT NULL, player VARCHAR(255) NOT NULL, type VARCHAR(16) NOT NULL, item VARCHAR(255) NOT NULL, amount INT NOT NULL, extra LONGTEXT DEFAULT NULL, INDEX IDX_5AE0CF805A6DD5F6 (server), UNIQUE INDEX UNIQ_5AE0CF806EB6DDB5 (distribution_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE lshop_users (id INT AUTO_INCREMENT NOT NULL, username VARCHAR(32) NOT NULL, email VARCHAR(255) NOT NULL, password VARCHAR(60) NOT NULL, balance DOUBLE PRECISION NOT NULL, created_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', UNIQUE INDEX UNIQ_15622DEF85E0677 (username), UNIQUE INDEX UNIQ_15622DEE7927C74 (email), INDEX username_idx (username), INDEX email_idx (email), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE lshop_settings (id INT AUTO_INCREMENT NOT NULL, `key` VARCHAR(255) NOT NULL, value LONGTEXT DEFAULT NULL, updated_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime_immutable)\', UNIQUE INDEX UNIQ_461A7B124E645A7E (`key`), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
