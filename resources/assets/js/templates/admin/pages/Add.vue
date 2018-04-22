@@ -78,7 +78,7 @@
             perform() {
                 this.finishLoading = true;
 
-                this.$axios.post('/api/admin/pages/add', {
+                this.$axios.post('/spa/admin/pages/add', {
                     title: this.title,
                     content: this.content,
                     url: this.url

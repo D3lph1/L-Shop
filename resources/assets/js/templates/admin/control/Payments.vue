@@ -155,15 +155,15 @@
             }
         },
         beforeRouteEnter (to, from, next) {
-            loader.beforeRouteEnter('/api/admin/control/payments', to, from, next);
+            loader.beforeRouteEnter('/spa/admin/control/payments', to, from, next);
         },
         beforeRouteUpdate (to, from, next) {
-            loader.beforeRouteUpdate('/api/admin/control/payments', to, from, next, this);
+            loader.beforeRouteUpdate('/spa/admin/control/payments', to, from, next, this);
         },
         methods: {
             perform() {
                 this.finishLoading = true;
-                this.$axios.post('/api/admin/control/payments', {
+                this.$axios.post('/spa/admin/control/payments', {
                     min_fill_balance_sum: this.minFillBalanceSum,
                     robokassa_enabled: this.robokassaEnabled,
                     robokassa_login: this.robokassaLogin,

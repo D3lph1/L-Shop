@@ -47,10 +47,10 @@
             }
         },
         beforeRouteEnter (to, from, next) {
-            loader.beforeRouteEnter('/api/servers', to, from, next);
+            loader.beforeRouteEnter('/spa/servers', to, from, next);
         },
         beforeRouteUpdate (to, from, next) {
-            loader.beforeRouteUpdate('/api/servers', to, from, next, this);
+            loader.beforeRouteUpdate('/spa/servers', to, from, next, this);
         },
         computed: {
             disabledBtn() {
@@ -63,7 +63,7 @@
         methods: {
             logout() {
                 this.disabledLogoutBtn = true;
-                this.$axios.post('/api/logout')
+                this.$axios.post('/spa/logout')
                     .then((response) => {
                         if (response.data.status === 'success') {
                             this.$notification.info($t('msg.frontend.auth.logout.success'));

@@ -31,10 +31,10 @@
             }
         },
         beforeRouteEnter(to, from, next) {
-            loader.beforeRouteEnter(`/api/cart/${to.params.server}`, to, from, next);
+            loader.beforeRouteEnter(`/spa/cart/${to.params.server}`, to, from, next);
         },
         beforeRouteUpdate(to, from, next) {
-            loader.beforeRouteUpdate(`/api/cart/${to.params.server}`, to, from, next, this);
+            loader.beforeRouteUpdate(`/spa/cart/${to.params.server}`, to, from, next, this);
         },
         watch: {
             '$store.state.shop.cart.amount'(val) {

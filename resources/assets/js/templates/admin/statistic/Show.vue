@@ -110,10 +110,10 @@
             }
         },
         beforeRouteEnter (to, from, next) {
-            loader.beforeRouteEnter('/api/admin/statistic/show', to, from, next);
+            loader.beforeRouteEnter('/spa/admin/statistic/show', to, from, next);
         },
         beforeRouteUpdate (to, from, next) {
-            loader.beforeRouteUpdate('/api/admin/statistic/show', to, from, next, this);
+            loader.beforeRouteUpdate('/spa/admin/statistic/show', to, from, next, this);
         },
         methods: {
             setData(response) {
@@ -173,7 +173,7 @@
                 const dataset = this.profitForYear[targets[datasetIndex]._datasetIndex];
                 // Increment the index since the indexing of the months in the chart starts from zero.
                 this.loadForMonth(
-                    '/api/admin/statistic/show/profit/month',
+                    '/spa/admin/statistic/show/profit/month',
                     dataset.label,
                     targets[datasetIndex]._index + 1,
                     'profitForMonth',
@@ -186,7 +186,7 @@
                 const dataset = this.purchasesForYear[targets[datasetIndex]._datasetIndex];
                 // Increment the index since the indexing of the months in the chart starts from zero.
                 this.loadForMonth(
-                    '/api/admin/statistic/show/purchases/month',
+                    '/spa/admin/statistic/show/purchases/month',
                     dataset.label,
                     targets[datasetIndex]._index + 1,
                     'purchasesForMonth',
@@ -199,7 +199,7 @@
                 const dataset = this.registeredForYear[targets[datasetIndex]._datasetIndex];
                 // Increment the index since the indexing of the months in the chart starts from zero.
                 this.loadForMonth(
-                    '/api/admin/statistic/show/registered/month',
+                    '/spa/admin/statistic/show/registered/month',
                     dataset.label,
                     targets[datasetIndex]._index + 1,
                     'registeredForMonth',

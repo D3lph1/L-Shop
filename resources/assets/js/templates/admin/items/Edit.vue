@@ -145,10 +145,10 @@
             }
         },
         beforeRouteEnter (to, from, next) {
-            loader.beforeRouteEnter(`/api/admin/items/edit/${to.params.item}`, to, from, next);
+            loader.beforeRouteEnter(`/spa/admin/items/edit/${to.params.item}`, to, from, next);
         },
         beforeRouteUpdate (to, from, next) {
-            loader.beforeRouteUpdate(`/api/admin/items/edit/${to.params.item}`, to, from, next, this);
+            loader.beforeRouteUpdate(`/spa/admin/items/edit/${to.params.item}`, to, from, next, this);
         },
         computed: {
             finishDisabled() {
@@ -199,7 +199,7 @@
                 data.append('enchantments', JSON.stringify(this.readyEnchantments));
                 data.append('extra', this.item.extra);
 
-                this.$axios.post(`/api/admin/items/edit/${this.$route.params.item}`, data)
+                this.$axios.post(`/spa/admin/items/edit/${this.$route.params.item}`, data)
                     .then((response) => {
                         if (response.data.status === 'success') {
                             this.$router.push({name: 'admin.items.list'});

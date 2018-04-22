@@ -134,10 +134,10 @@
             }
         },
         beforeRouteEnter (to, from, next) {
-            loader.beforeRouteEnter('/api/admin/items/add', to, from, next);
+            loader.beforeRouteEnter('/spa/admin/items/add', to, from, next);
         },
         beforeRouteUpdate (to, from, next) {
-            loader.beforeRouteUpdate('/api/admin/items/add', to, from, next, this);
+            loader.beforeRouteUpdate('/spa/admin/items/add', to, from, next, this);
         },
         computed: {
             finishDisabled() {
@@ -188,7 +188,7 @@
                 data.append('enchantments', JSON.stringify(this.readyEnchantments));
                 data.append('extra', this.extra);
 
-                this.$axios.post('/api/admin/items/add', data)
+                this.$axios.post('/spa/admin/items/add', data)
                     .then((response) => {
                         if (response.data.status === 'success') {
                             this.$router.push({name: 'admin.items.list'});

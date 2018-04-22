@@ -16,10 +16,10 @@
             }
         },
         beforeRouteEnter (to, from, next) {
-            loader.beforeRouteEnter(`/api/page/${to.params.url}`, to, from, next);
+            loader.beforeRouteEnter(`/spa/page/${to.params.url}`, to, from, next);
         },
         beforeRouteUpdate (to, from, next) {
-            loader.beforeRouteUpdate(`/api/page/${to.params.url}`, to, from, next, this);
+            loader.beforeRouteUpdate(`/spa/page/${to.params.url}`, to, from, next, this);
         },
         methods: {
             setData(response) {

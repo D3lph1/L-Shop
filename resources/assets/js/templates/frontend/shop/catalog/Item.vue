@@ -119,7 +119,7 @@
         methods: {
             put() {
                 this.loading = true;
-                this.$axios.post('/api/cart', {
+                this.$axios.post('/spa/cart', {
                     _method: 'PUT',
                     product: this.id
                 })

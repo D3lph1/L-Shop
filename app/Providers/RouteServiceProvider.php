@@ -32,6 +32,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function map(Router $router): void
     {
+        $this->mapSpaRoutes($router);
         $this->mapApiRoutes($router);
         $this->mapWebRoutes($router);
     }
@@ -51,6 +52,19 @@ class RouteServiceProvider extends ServiceProvider
     }
 
     /**
+     * Define the "spa" routes for the application.
+     *
+     * @param Router $router
+     */
+    protected function mapSpaRoutes(Router $router): void
+    {
+        $router->prefix('spa')
+             ->middleware('spa')
+             ->namespace($this->namespace)
+             ->group(base_path('routes/spa.php'));
+    }
+
+    /**
      * Define the "api" routes for the application.
      *
      * These routes are typically stateless.
@@ -60,8 +74,8 @@ class RouteServiceProvider extends ServiceProvider
     protected function mapApiRoutes(Router $router): void
     {
         $router->prefix('api')
-             ->middleware('api')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/api.php'));
+            ->middleware('api')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/api.php'));
     }
 }

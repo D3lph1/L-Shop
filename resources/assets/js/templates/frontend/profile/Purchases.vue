@@ -139,7 +139,7 @@
             retrieveFromApi() {
                 this.loading = true;
 
-                this.$axios.post('/api/profile/purchases', {
+                this.$axios.post('/spa/profile/purchases', {
                     page: this.$route.query.page,
                     order_by: this.$route.query.order_by,
                     descending: this.$route.query.descending

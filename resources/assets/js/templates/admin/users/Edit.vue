@@ -168,10 +168,10 @@
             }
         },
         beforeRouteEnter (to, from, next) {
-            loader.beforeRouteEnter(`/api/admin/users/edit/${to.params.user}`, to, from, next);
+            loader.beforeRouteEnter(`/spa/admin/users/edit/${to.params.user}`, to, from, next);
         },
         beforeRouteUpdate (to, from, next) {
-            loader.beforeRouteUpdate(`/api/admin/users/edit/${to.params.user}`, to, from, next, this);
+            loader.beforeRouteUpdate(`/spa/admin/users/edit/${to.params.user}`, to, from, next, this);
         },
         computed: {
             uploadSkinDisabled() {
@@ -190,7 +190,7 @@
             },
             uploadSkin() {
                 this.skin.uploadLoading = true;
-                this.$axios.post(`/api/admin/users/edit/${this.user.id}/skin`, this.skin.upload, {headers: { 'content-type': 'multipart/form-data' }})
+                this.$axios.post(`/spa/admin/users/edit/${this.user.id}/skin`, this.skin.upload, {headers: { 'content-type': 'multipart/form-data' }})
                     .then(response => {
                         this.skin.uploadLoading = false;
                         if (response.data.status === 'success') {
@@ -202,7 +202,7 @@
             },
             deleteSkin() {
                 this.skin.deleteLoading = true;
-                this.$axios.post(`/api/admin/users/edit/${this.user.id}/skin`, {
+                this.$axios.post(`/spa/admin/users/edit/${this.user.id}/skin`, {
                     _method: 'DELETE'
                 })
                     .then(response => {
@@ -215,7 +215,7 @@
             },
             uploadCloak() {
                 this.cloak.uploadLoading = true;
-                this.$axios.post(`/api/admin/users/edit/${this.user.id}/cloak`, this.cloak.upload, {headers: { 'content-type': 'multipart/form-data'}})
+                this.$axios.post(`/spa/admin/users/edit/${this.user.id}/cloak`, this.cloak.upload, {headers: { 'content-type': 'multipart/form-data'}})
                     .then(response => {
                         this.cloak.uploadLoading = false;
                         if (response.data.status === 'success') {
@@ -227,7 +227,7 @@
             },
             deleteCloak() {
                 this.cloak.deleteLoading = true;
-                this.$axios.post(`/api/admin/users/edit/${this.user.id}/cloak`, {
+                this.$axios.post(`/spa/admin/users/edit/${this.user.id}/cloak`, {
                     _method: 'DELETE'
                 })
                     .then(response => {
@@ -277,7 +277,7 @@
             },
             perform() {
                 this.finishLoading = true;
-                this.$axios.post(`/api/admin/users/edit/${this.user.id}`, {
+                this.$axios.post(`/spa/admin/users/edit/${this.user.id}`, {
                     username: this.user.username,
                     email: this.user.email,
                     password: this.password,

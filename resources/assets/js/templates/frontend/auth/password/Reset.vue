@@ -72,10 +72,10 @@
             }
         },
         beforeRouteEnter (to, from, next) {
-            loader.beforeRouteEnter(`/api/password/reset/${to.params.code}`, to, from, next);
+            loader.beforeRouteEnter(`/spa/password/reset/${to.params.code}`, to, from, next);
         },
         beforeRouteUpdate (to, from, next) {
-            loader.beforeRouteUpdate(`/api/password/reset/${to.params.code}`, to, from, next, this);
+            loader.beforeRouteUpdate(`/spa/password/reset/${to.params.code}`, to, from, next, this);
         },
         computed: {
             disabledBtn() {
@@ -92,7 +92,7 @@
             },
             send() {
                 this.loadingBtn = true;
-                this.$axios.post(`/api/password/reset/${this.$route.params.code}`, {
+                this.$axios.post(`/spa/password/reset/${this.$route.params.code}`, {
                     password: this.password,
                     password_confirmation: this.passwordConfirmation
                 })

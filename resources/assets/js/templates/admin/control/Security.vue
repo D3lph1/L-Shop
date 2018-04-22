@@ -58,15 +58,15 @@
             }
         },
         beforeRouteEnter (to, from, next) {
-            loader.beforeRouteEnter('/api/admin/control/security', to, from, next);
+            loader.beforeRouteEnter('/spa/admin/control/security', to, from, next);
         },
         beforeRouteUpdate (to, from, next) {
-            loader.beforeRouteUpdate('/api/admin/control/security', to, from, next, this);
+            loader.beforeRouteUpdate('/spa/admin/control/security', to, from, next, this);
         },
         methods: {
             perform() {
                 this.finishLoading = true;
-                this.$axios.post('/api/admin/control/security', {
+                this.$axios.post('/spa/admin/control/security', {
                     recaptcha_public_key: this.recaptchaPublicKey,
                     recaptcha_secret_key: this.recaptchaPublicKey,
                     reset_password_enabled: this.resetPasswordEnabled,

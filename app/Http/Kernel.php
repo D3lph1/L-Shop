@@ -6,6 +6,7 @@ namespace App\Http;
 use App\Http\Middleware\AddToResponse;
 use App\Http\Middleware\Captcha;
 use App\Http\Middleware\NeedPermission;
+use App\Http\Middleware\ValidateSignature;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -42,12 +43,16 @@ class Kernel extends HttpKernel
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
 
-        'api' => [
+        'spa' => [
             \App\Http\Middleware\EncryptCookies::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class
         ],
+
+        'api' => [
+            //
+        ]
     ];
 
     /**
@@ -63,6 +68,7 @@ class Kernel extends HttpKernel
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'captcha' => Captcha::class,
-        'permission' => NeedPermission::class
+        'permission' => NeedPermission::class,
+        'signed' => ValidateSignature::class
     ];
 }

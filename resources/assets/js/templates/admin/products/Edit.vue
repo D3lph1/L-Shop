@@ -127,10 +127,10 @@
             }
         },
         beforeRouteEnter (to, from, next) {
-            loader.beforeRouteEnter(`/api/admin/products/edit/${to.params.product}`, to, from, next);
+            loader.beforeRouteEnter(`/spa/admin/products/edit/${to.params.product}`, to, from, next);
         },
         beforeRouteUpdate (to, from, next) {
-            loader.beforeRouteUpdate(`/api/admin/products/edit/${to.params.product}`, to, from, next, this);
+            loader.beforeRouteUpdate(`/spa/admin/products/edit/${to.params.product}`, to, from, next, this);
         },
         watch: {
             item(val) {
@@ -164,7 +164,7 @@
                 return true;
             },
             perform() {
-                this.$axios.post(`/api/admin/products/edit/${this.product.id}`, {
+                this.$axios.post(`/spa/admin/products/edit/${this.product.id}`, {
                     item: this.item.id,
                     category: this.category.id,
                     stack: this.amount,

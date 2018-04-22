@@ -139,7 +139,7 @@
                 }
                 */
                 this.loadingPurchaseBtn = true;
-                this.$axios.post('/api/catalog/purchase', {
+                this.$axios.post('/spa/catalog/purchase', {
                     username: this.username,
                     product: this.id,
                     amount: this.amount

@@ -23,6 +23,11 @@ use Illuminate\Http\Request;
 
 class ActivationController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('guest');
+    }
+
     public function sent(Settings $settings, Captcha $captcha)
     {
         return new JsonResponse(Status::SUCCESS, [

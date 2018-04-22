@@ -126,10 +126,10 @@
             }
         },
         beforeRouteEnter (to, from, next) {
-            loader.beforeRouteEnter('/api/admin/products/add', to, from, next);
+            loader.beforeRouteEnter('/spa/admin/products/add', to, from, next);
         },
         beforeRouteUpdate (to, from, next) {
-            loader.beforeRouteUpdate('/api/admin/products/add', to, from, next, this);
+            loader.beforeRouteUpdate('/spa/admin/products/add', to, from, next, this);
         },
         watch: {
             item(val) {
@@ -162,7 +162,7 @@
                 return true;
             },
             perform() {
-                this.$axios.post('/api/admin/products/add', {
+                this.$axios.post('/spa/admin/products/add', {
                     item: this.item.id,
                     category: this.category.id,
                     stack: this.amount,

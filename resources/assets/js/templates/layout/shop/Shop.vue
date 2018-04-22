@@ -91,10 +91,10 @@
             this.configureLayout();
         },
         beforeRouteEnter (to, from, next) {
-            loader.beforeRouteEnter('/api/shop', to, from, next);
+            loader.beforeRouteEnter('/spa/shop', to, from, next);
         },
         beforeRouteUpdate (to, from, next) {
-            loader.beforeRouteUpdate('/api/shop', to, from, next, this);
+            loader.beforeRouteUpdate('/spa/shop', to, from, next, this);
         },
         watch: {
             '$store.state.shop.server'(val) {
@@ -107,7 +107,7 @@
             }
         },
         mounted() {
-            this.$axios.get('/api/monitoring')
+            this.$axios.get('/spa/monitoring')
                 .then(response => {
                     if (response.data.status === 'success') {
                         this.monitoring = response.data.monitoring;

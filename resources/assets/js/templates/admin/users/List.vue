@@ -130,7 +130,7 @@
             retrieveFromApi() {
                 this.loading = true;
 
-                this.$axios.post('/api/admin/users/list', {
+                this.$axios.post('/spa/admin/users/list', {
                     page: this.$route.query.page,
                     per_page: this.$route.query.per_page,
                     order_by: this.$route.query.order_by,
@@ -149,7 +149,7 @@
             },
             deleteUser(user) {
                 if (confirm($t('content.admin.users.list.delete'))) {
-                    this.$axios.post('/api/admin/users', {
+                    this.$axios.post('/spa/admin/users', {
                         _method: 'DELETE',
                         user: user.id
                     })

@@ -56,10 +56,10 @@
             }
         },
         beforeRouteEnter (to, from, next) {
-            loader.beforeRouteEnter('/api/activation/sent', to, from, next);
+            loader.beforeRouteEnter('/spa/activation/sent', to, from, next);
         },
         beforeRouteUpdate (to, from, next) {
-            loader.beforeRouteUpdate('/api/activation/sent', to, from, next, this);
+            loader.beforeRouteUpdate('/spa/activation/sent', to, from, next, this);
         },
         computed: {
             disabledBtn() {
@@ -72,7 +72,7 @@
             },
             send() {
                 this.loadingBtn = true;
-                this.$axios.post('/api/activation/repeat', {
+                this.$axios.post('/spa/activation/repeat', {
                     email: this.email
                 })
                     .then((response) => {

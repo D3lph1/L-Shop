@@ -184,7 +184,7 @@
             },
             finish() {
                 this.finishLoading = true;
-                this.$axios.post(`/api/admin/users/edit/${this.userId}/ban`, {
+                this.$axios.post(`/spa/admin/users/edit/${this.userId}/ban`, {
                     forever: this.forever,
                     mode: this.mode,
                     date_time: !this.forever ? new Date(`${this.date} ${this.time}`) : null,

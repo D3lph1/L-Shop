@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace App\Http\Controllers\Api\User;
+namespace App\Http\Controllers\Frontend\Character;
 
 use App\Handlers\Api\User\SkinHandler;
 use App\Http\Controllers\Controller;

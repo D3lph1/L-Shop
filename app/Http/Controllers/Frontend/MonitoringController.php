@@ -1,7 +1,7 @@
 <?php
 declare(strict_types = 1);
 
-namespace App\Http\Controllers\Api;
+namespace App\Http\Controllers\Frontend;
 
 use App\Handlers\Api\MonitoringHandler;
 use App\Http\Controllers\Controller;

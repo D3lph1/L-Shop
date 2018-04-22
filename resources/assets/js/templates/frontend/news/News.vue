@@ -35,10 +35,10 @@
             }
         },
         beforeRouteEnter (to, from, next) {
-            loader.beforeRouteEnter(`/api/news/${to.params.news}`, to, from, next);
+            loader.beforeRouteEnter(`/spa/news/${to.params.news}`, to, from, next);
         },
         beforeRouteUpdate (to, from, next) {
-            loader.beforeRouteUpdate(`/api/news/${to.params.news}`, to, from, next, this);
+            loader.beforeRouteUpdate(`/spa/news/${to.params.news}`, to, from, next, this);
         },
         methods: {
             setData(response) {

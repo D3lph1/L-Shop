@@ -48,7 +48,7 @@
         methods: {
             loadMore() {
                 this.loading = true;
-                this.$axios.get('/api/news/load', {
+                this.$axios.get('/spa/news/load', {
                     params: {
                         portion: ++this.items.portion
                     }

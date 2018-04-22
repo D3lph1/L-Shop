@@ -54,10 +54,10 @@
             }
         },
         beforeRouteEnter (to, from, next) {
-            loader.beforeRouteEnter('/api/password/forgot', to, from, next);
+            loader.beforeRouteEnter('/spa/password/forgot', to, from, next);
         },
         beforeRouteUpdate (to, from, next) {
-            loader.beforeRouteUpdate('/api/password/forgot', to, from, next, this);
+            loader.beforeRouteUpdate('/spa/password/forgot', to, from, next, this);
         },
         computed: {
             disabledBtn() {
@@ -70,7 +70,7 @@
             },
             send() {
                 this.loadingBtn = true;
-                this.$axios.post('/api/password/forgot', {
+                this.$axios.post('/spa/password/forgot', {
                     email: this.email
                 })
                     .then((response) => {

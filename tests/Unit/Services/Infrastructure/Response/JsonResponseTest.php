@@ -16,22 +16,24 @@ class JsonResponseTest extends TestCase
         $response = new JsonResponse('success');
         $expected = [
             'status' => 'success',
-            'notifications' => []
+            'httpStatus' => 200,
+            'notifications' => [],
         ];
         self::assertEquals($expected, $response->jsonSerialize());
     }
 
     public function testWithData()
     {
-        $response = new JsonResponse('fail', [
+        $response = (new JsonResponse('fail', [
             'key1' => 'value1',
             'key2' => [
                 'item1',
                 'item2'
             ]
-        ]);
+        ]))->setHttpStatus(500);
         $expected = [
             'status' => 'fail',
+            'httpStatus' => 500,
             'key1' => 'value1',
             'key2' => [
                 'item1',
@@ -49,6 +51,7 @@ class JsonResponseTest extends TestCase
         $response->addNotification(new Success('lorem ipsum2'));
         $expected = [
             'status' => 'success',
+            'httpStatus' => 200,
             'notifications' => [
                 [
                     'type' => 'success',
@@ -70,6 +73,7 @@ class JsonResponseTest extends TestCase
         $response->addNotification(new Error('lorem ipsum2'));
         $expected = [
             'status' => 'success',
+            'httpStatus' => 200,
             'key' => 1,
             'notifications' => [
                 [

@@ -116,7 +116,7 @@
             retrieveFromApi() {
                 this.loading = true;
 
-                this.$axios.post('/api/admin/pages/list', {
+                this.$axios.post('/spa/admin/pages/list', {
                     page: this.$route.query.page,
                     per_page: this.$route.query.per_page,
                     order_by: this.$route.query.order_by,
@@ -129,7 +129,7 @@
             },
             deletePage(page) {
                 if (confirm($t('content.admin.pages.list.delete'))) {
-                    this.$axios.post('/api/admin/pages', {
+                    this.$axios.post('/spa/admin/pages', {
                         _method: 'DELETE',
                         page: page.id
                     })

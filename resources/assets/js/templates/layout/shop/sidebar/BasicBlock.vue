@@ -88,7 +88,7 @@
         },
         methods: {
             logout() {
-                this.$axios.post('/api/logout')
+                this.$axios.post('/spa/logout')
                     .then((response) => {
                         if (response.data.status === 'success') {
                             this.$notification.info($t('msg.frontend.auth.logout.success'));

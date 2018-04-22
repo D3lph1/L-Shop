@@ -50,7 +50,7 @@
             },
             passwordChange() {
                 this.passwordChangeLoading = true;
-                this.$axios.post('/api/profile/settings/password', {
+                this.$axios.post('/spa/profile/settings/password', {
                     password: this.newPassword,
                     password_confirmation: this.newPasswordConfirmation
                 })
@@ -67,7 +67,7 @@
             },
             resetLoginSessions() {
                 this.resetSessionsLoading = true;
-                this.$axios.post('/api/profile/settings/sessions/reset', {
+                this.$axios.post('/spa/profile/settings/sessions/reset', {
                     password: this.newPassword,
                     password_confirmation: this.newPasswordConfirmation
                 })

@@ -115,10 +115,10 @@
             }
         },
         beforeRouteEnter (to, from, next) {
-            loader.beforeRouteEnter('/api/admin/information/about', to, from, next);
+            loader.beforeRouteEnter('/spa/admin/information/about', to, from, next);
         },
         beforeRouteUpdate (to, from, next) {
-            loader.beforeRouteUpdate('/api/admin/information/about', to, from, next, this);
+            loader.beforeRouteUpdate('/spa/admin/information/about', to, from, next, this);
         },
         methods: {
             setData(response) {

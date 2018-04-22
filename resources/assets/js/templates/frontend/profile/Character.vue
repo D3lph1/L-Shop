@@ -83,10 +83,10 @@
             }
         },
         beforeRouteEnter(to, from, next) {
-            loader.beforeRouteEnter('/api/profile/character', to, from, next);
+            loader.beforeRouteEnter('/spa/profile/character', to, from, next);
         },
         beforeRouteUpdate(to, from, next) {
-            loader.beforeRouteUpdate('/api/profile/character', to, from, next, this);
+            loader.beforeRouteUpdate('/spa/profile/character', to, from, next, this);
         },
         computed: {
             uploadSkinDisabled() {
@@ -105,7 +105,7 @@
             },
             uploadSkin() {
                 this.skin.uploadLoading = true;
-                this.$axios.post('/api/profile/character/skin/upload', this.skin.upload, {headers: { 'content-type': 'multipart/form-data' }})
+                this.$axios.post('/spa/profile/character/skin/upload', this.skin.upload, {headers: { 'content-type': 'multipart/form-data' }})
                     .then(response => {
                         this.skin.uploadLoading = false;
                         if (response.data.status === 'success') {
@@ -117,7 +117,7 @@
             },
             deleteSkin() {
                 this.skin.deleteLoading = true;
-                this.$axios.post('/api/profile/character/skin/delete')
+                this.$axios.post('/spa/profile/character/skin/delete')
                     .then(response => {
                         this.skin.deleteLoading = false;
                         if (response.data.status === 'success') {
@@ -128,7 +128,7 @@
             },
             uploadCloak() {
                 this.cloak.uploadLoading = true;
-                this.$axios.post('/api/profile/character/cloak/upload', this.cloak.upload)
+                this.$axios.post('/spa/profile/character/cloak/upload', this.cloak.upload)
                     .then(response => {
                         this.cloak.uploadLoading = false;
                         if (response.data.status === 'success') {
@@ -140,7 +140,7 @@
             },
             deleteCloak() {
                 this.cloak.deleteLoading = true;
-                this.$axios.post('/api/profile/character/cloak/delete')
+                this.$axios.post('/spa/profile/character/cloak/delete')
                     .then(response => {
                         this.cloak.deleteLoading = false;
                         if (response.data.status === 'success') {

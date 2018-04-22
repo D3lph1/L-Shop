@@ -37,15 +37,15 @@
             }
         },
         beforeRouteEnter (to, from, next) {
-            loader.beforeRouteEnter('/api/admin/control/optimization', to, from, next);
+            loader.beforeRouteEnter('/spa/admin/control/optimization', to, from, next);
         },
         beforeRouteUpdate (to, from, next) {
-            loader.beforeRouteUpdate('/api/admin/control/optimization', to, from, next, this);
+            loader.beforeRouteUpdate('/spa/admin/control/optimization', to, from, next, this);
         },
         methods: {
             perform() {
                 this.finishLoading = true;
-                this.$axios.post('/api/admin/control/optimization', {
+                this.$axios.post('/spa/admin/control/optimization', {
                     monitoring_ttl: this.monitoringTtl
                 })
                     .then(response => {

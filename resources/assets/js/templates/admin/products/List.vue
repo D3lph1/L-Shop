@@ -154,7 +154,7 @@
             retrieveFromApi() {
                 this.loading = true;
 
-                this.$axios.post('/api/admin/products/list', {
+                this.$axios.post('/spa/admin/products/list', {
                     page: this.$route.query.page,
                     per_page: this.$route.query.per_page,
                     order_by: this.$route.query.order_by,
@@ -167,7 +167,7 @@
             },
             deleteProduct(product) {
                 if (confirm($t('content.admin.products.list.delete'))) {
-                    this.$axios.post('/api/admin/products', {
+                    this.$axios.post('/spa/admin/products', {
                         _method: 'DELETE',
                         product: product.id
                     })

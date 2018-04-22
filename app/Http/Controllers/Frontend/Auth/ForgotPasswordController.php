@@ -17,6 +17,11 @@ use App\Services\Settings\Settings;
 
 class ForgotPasswordController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('guest');
+    }
+
     public function render(Settings $settings, Captcha $captcha)
     {
         return new JsonResponse(Status::SUCCESS, [

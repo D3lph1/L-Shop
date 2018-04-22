@@ -60,10 +60,10 @@
             }
         },
         beforeRouteEnter (to, from, next) {
-            loader.beforeRouteEnter('/api/login', to, from, next);
+            loader.beforeRouteEnter('/spa/login', to, from, next);
         },
         beforeRouteUpdate (to, from, next) {
-            loader.beforeRouteUpdate('/api/login', to, from, next, this);
+            loader.beforeRouteUpdate('/spa/login', to, from, next, this);
         },
         computed: {
             disabledBtn() {
@@ -77,7 +77,7 @@
             },
             send() {
                 this.loadingBtn = true;
-                this.$axios.post('/api/login', {
+                this.$axios.post('/spa/login', {
                     username: this.username,
                     password: this.password
                 })

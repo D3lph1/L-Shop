@@ -78,10 +78,10 @@
             }
         },
         beforeRouteEnter (to, from, next) {
-            loader.beforeRouteEnter('/api/register', to, from, next);
+            loader.beforeRouteEnter('/spa/register', to, from, next);
         },
         beforeRouteUpdate (to, from, next) {
-            loader.beforeRouteEnter('/api/register', to, from, next, this);
+            loader.beforeRouteEnter('/spa/register', to, from, next, this);
         },
         computed: {
             disabledBtn() {
@@ -97,7 +97,7 @@
             },
             send() {
                 this.loadingBtn = true;
-                this.$axios.post('/api/register', {
+                this.$axios.post('/spa/register', {
                     username: this.username,
                     email: this.email,
                     password: this.password,

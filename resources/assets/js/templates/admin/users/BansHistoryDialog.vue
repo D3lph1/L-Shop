@@ -107,7 +107,7 @@
             },
             deleteItem(ban) {
                 if (confirm($t('content.admin.users.edit.actions.bans_history.delete'))) {
-                    this.$axios.post(`/api/admin/users/edit/ban/${ban.id}`, {
+                    this.$axios.post(`/spa/admin/users/edit/ban/${ban.id}`, {
                         _method: 'DELETE'
                     })
                         .then(response => {

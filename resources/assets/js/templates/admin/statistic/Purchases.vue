@@ -156,7 +156,7 @@
             retrieveFromApi() {
                 this.loading = true;
 
-                this.$axios.post('/api/admin/statistic/purchases', {
+                this.$axios.post('/spa/admin/statistic/purchases', {
                     page: this.$route.query.page,
                     rowsPerPage: this.$route.query.per_page ? parseInt(this.$route.query.per_page) : 25,
                     order_by: this.$route.query.order_by,
@@ -184,7 +184,7 @@
                 this.detailsDialog = false;
             },
             complete(purchase) {
-                this.$axios.post(`/api/admin/statistic/purchases/complete/${purchase.id}`)
+                this.$axios.post(`/spa/admin/statistic/purchases/complete/${purchase.id}`)
                     .then(response => {
                         if (response.data.status === 'success') {
                             purchase.completedAt = DateTime.localize(response.data.completedAt);

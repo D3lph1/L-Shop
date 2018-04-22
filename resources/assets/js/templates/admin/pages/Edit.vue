@@ -54,10 +54,10 @@
             }
         },
         beforeRouteEnter (to, from, next) {
-            loader.beforeRouteEnter(`/api/admin/pages/edit/${to.params.page}`, to, from, next);
+            loader.beforeRouteEnter(`/spa/admin/pages/edit/${to.params.page}`, to, from, next);
         },
         beforeRouteUpdate (to, from, next) {
-            loader.beforeRouteUpdate(`/api/admin/pages/edit/${to.params.page}`, to, from, next, this);
+            loader.beforeRouteUpdate(`/spa/admin/pages/edit/${to.params.page}`, to, from, next, this);
         },
         watch: {
             title(val) {
@@ -84,7 +84,7 @@
             },
             perform() {
                 this.finishLoading = true;
-                this.$axios.post(`/api/admin/pages/edit/${this.$route.params.page}`, {
+                this.$axios.post(`/spa/admin/pages/edit/${this.$route.params.page}`, {
                     title: this.title,
                     content: this.content,
                     url: this.url

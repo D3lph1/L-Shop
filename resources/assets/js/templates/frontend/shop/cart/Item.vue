@@ -142,7 +142,7 @@
             },
             remove() {
                 this.removeBtnLoading = true;
-                this.$axios.post('/api/cart', {
+                this.$axios.post('/spa/cart', {
                     _method: 'DELETE',
                     product: this.id
                 })

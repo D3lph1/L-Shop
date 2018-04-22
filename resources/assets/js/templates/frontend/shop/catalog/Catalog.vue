@@ -99,7 +99,7 @@
     import AboutDialog from './AboutDialog.vue'
 
     function buildUrlApi(server, category, page) {
-        return '/api' + buildUrl(server, category, page);
+        return '/spa' + buildUrl(server, category, page);
     }
     function buildUrl(server, category, page) {
         return `/catalog/${server}${category ? `/${category}` : ''}${typeof page !== 'undefined' ? `?page=${page}` : ''}`;

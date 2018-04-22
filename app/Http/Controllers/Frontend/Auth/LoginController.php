@@ -20,6 +20,11 @@ use App\Services\Support\Lang\Ban\BanMessage;
 
 class LoginController extends Controller
 {
+    public function __construct()
+    {
+        $this->middleware('guest');
+    }
+
     public function render(Settings $settings)
     {
         return new JsonResponse(Status::SUCCESS, [

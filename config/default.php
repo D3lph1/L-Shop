@@ -118,5 +118,10 @@ return [
                 'test' => true
             ]
         ]
+    ],
+    'api' => [
+        'algorithm' => 'sha256',
+        'key' => str_random(64),
+        'separator' => ':'
     ]
 ];

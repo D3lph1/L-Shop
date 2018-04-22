@@ -314,10 +314,10 @@
             }
         },
         beforeRouteEnter (to, from, next) {
-            loader.beforeRouteEnter('/api/admin/control/basic', to, from, next);
+            loader.beforeRouteEnter('/spa/admin/control/basic', to, from, next);
         },
         beforeRouteUpdate (to, from, next) {
-            loader.beforeRouteUpdate('/api/admin/control/basic', to, from, next, this);
+            loader.beforeRouteUpdate('/spa/admin/control/basic', to, from, next, this);
         },
         methods: {
             removeItem(target, from) {
@@ -350,7 +350,7 @@
                 }
 
 
-                this.$axios.post('/api/admin/control/basic', {
+                this.$axios.post('/spa/admin/control/basic', {
                     name: this.name,
                     description: this.description,
                     keywords: this.keywords,

@@ -122,7 +122,7 @@
             retrieveFromApi() {
                 this.loading = true;
 
-                this.$axios.post('/api/admin/news/list', {
+                this.$axios.post('/spa/admin/news/list', {
                     page: this.$route.query.page,
                     per_page: this.$route.query.per_page,
                     order_by: this.$route.query.order_by,

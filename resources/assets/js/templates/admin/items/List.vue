@@ -125,7 +125,7 @@
             retrieveFromApi() {
                 this.loading = true;
 
-                this.$axios.post('/api/admin/items/list', {
+                this.$axios.post('/spa/admin/items/list', {
                     page: this.$route.query.page,
                     per_page: this.$route.query.per_page,
                     order_by: this.$route.query.order_by,
@@ -138,7 +138,7 @@
             },
             deleteItem(item) {
                 if (confirm($t('content.admin.items.list.delete', {name: item.name}))) {
-                    this.$axios.post('/api/admin/items', {
+                    this.$axios.post('/spa/admin/items', {
                         _method: 'DELETE',
                         item: item.id
                     })

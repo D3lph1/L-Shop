@@ -26,10 +26,10 @@
             }
         },
         beforeRouteEnter(to, from, next) {
-            loader.beforeRouteEnter(`/api/payment/${to.params.purchase}`, to, from, next);
+            loader.beforeRouteEnter(`/spa/payment/${to.params.purchase}`, to, from, next);
         },
         beforeRouteUpdate(to, from, next) {
-            loader.beforeRouteUpdate(`/api/payment/${to.params.purchase}`, to, from, next, this);
+            loader.beforeRouteUpdate(`/spa/payment/${to.params.purchase}`, to, from, next, this);
         },
         methods: {
             setData(response) {
