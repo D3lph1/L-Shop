@@ -108,5 +108,22 @@ return [
         |
         */
         'lifetime' => 720, // 12 hours
-    ]
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Password hasher class.
+    |--------------------------------------------------------------------------
+    |
+    | The class specified here is responsible for hashing passwords. He must
+    | implement the App\Services\Auth\Hashing\Hasher interface.
+    | Builtin hashers:
+    | - App\Services\Auth\Hashing\BcryptHasher (Recommended)
+    | - App\Services\Auth\Hashing\CallbackHasher
+    | - App\Services\Auth\Hashing\Sha256Hasher
+    | - App\Services\Auth\Hashing\Sha512Hasher
+    | - App\Services\Auth\Hashing\WhirlpoolHasher
+    |
+    */
+    'hasher' => \App\Services\Auth\Hashing\BcryptHasher::class
 ];

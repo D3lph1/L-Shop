@@ -12,6 +12,8 @@ use App\Services\User\Balance\Transactor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Ramsey\Uuid\Uuid;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * @ORM\Entity
@@ -51,6 +53,25 @@ class User implements HasRoles, HasPermissions
      * @ORM\Column(name="balance", type="float", nullable=false, unique=false)
      */
     private $balance = 0;
+
+    /**
+     * @ORM\Column(name="uuid", type="guid", unique=true)
+     */
+    private $uuid;
+
+    /**
+     * This column is used by sashok724's launcher.
+     *
+     * @ORM\Column(name="accessToken", type="string", length=36, nullable=true, options={"fixed" = true})
+     */
+    private $accessToken;
+
+    /**
+     * This column is used by sashok724's launcher.
+     *
+     * @ORM\Column(name="serverId", type="string", length=41, nullable=true)
+     */
+    private $serverId;
 
     /**
      * @ORM\ManyToMany(targetEntity="App\Entity\Role", mappedBy="users", cascade={"persist", "merge"})
@@ -98,6 +119,7 @@ class User implements HasRoles, HasPermissions
         $this->persistences = new ArrayCollection();
         $this->bans = new ArrayCollection();
         $this->reminders = new ArrayCollection();
+        $this->uuid = Uuid::uuid4();
     }
 
     public function getId(): int
@@ -161,6 +183,11 @@ class User implements HasRoles, HasPermissions
         $this->balance = $balance;
 
         return $this;
+    }
+
+    public function getUuid(): UuidInterface
+    {
+        return Uuid::fromString($this->uuid);
     }
 
     public function getPermissions(): Collection

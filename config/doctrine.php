@@ -28,7 +28,8 @@ return [
             'namespaces'    => [],
             'paths'         => [
                 base_path('app/Entity'),
-                base_path('app/Services/Settings')
+                base_path('app/Services/Settings'),
+                base_path('app/Services/Game/Permissions/LuckPerms/Entity')
             ],
             'repository'    => Doctrine\ORM\EntityRepository::class,
             'proxies'       => [

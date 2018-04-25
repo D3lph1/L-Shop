@@ -60,6 +60,18 @@ use App\Repository\ShoppingCart\DoctrineShoppingCartRepository;
 use App\Repository\ShoppingCart\ShoppingCartRepository;
 use App\Repository\User\DoctrineUserRepository;
 use App\Repository\User\UserRepository;
+use App\Services\Game\Permissions\LuckPerms\Entity\Group;
+use App\Services\Game\Permissions\LuckPerms\Entity\GroupPermission;
+use App\Services\Game\Permissions\LuckPerms\Entity\Player;
+use App\Services\Game\Permissions\LuckPerms\Entity\PlayerPermission;
+use App\Services\Game\Permissions\LuckPerms\Repository\Group\DoctrineGroupRepository;
+use App\Services\Game\Permissions\LuckPerms\Repository\Group\GroupRepository;
+use App\Services\Game\Permissions\LuckPerms\Repository\GroupPermission\DoctrineGroupPermissionRepository;
+use App\Services\Game\Permissions\LuckPerms\Repository\GroupPermission\GroupPermissionRepository;
+use App\Services\Game\Permissions\LuckPerms\Repository\Player\DoctrinePlayerRepository;
+use App\Services\Game\Permissions\LuckPerms\Repository\Player\PlayerRepository;
+use App\Services\Game\Permissions\LuckPerms\Repository\PlayerPermission\DoctrinePlayerPermissionRepository;
+use App\Services\Game\Permissions\LuckPerms\Repository\PlayerPermission\PlayerPermissionRepository;
 use App\Services\Settings\Repository\Doctrine\DoctrineRepository;
 use App\Services\Settings\Repository\Repository;
 use App\Services\Settings\Setting;
@@ -150,7 +162,23 @@ class RepositoryServiceProvider extends ServiceProvider
         Repository::class => [
             'concrete' => DoctrineRepository::class,
             'entity' => Setting::class
-        ]
+        ],
+        GroupRepository::class => [
+            'concrete' => DoctrineGroupRepository::class,
+            'entity' => Group::class
+        ],
+        PlayerRepository::class => [
+            'concrete' => DoctrinePlayerRepository::class,
+            'entity' => Player::class
+        ],
+        GroupPermissionRepository::class => [
+            'concrete' => DoctrineGroupPermissionRepository::class,
+            'entity' => GroupPermission::class
+        ],
+        PlayerPermissionRepository::class => [
+            'concrete' => DoctrinePlayerPermissionRepository::class,
+            'entity' => PlayerPermission::class
+        ],
     ];
 
     public function boot(): void

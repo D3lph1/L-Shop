@@ -64,10 +64,10 @@ class User extends \App\Entity\User implements \Doctrine\ORM\Proxy\Proxy
     public function __sleep()
     {
         if ($this->__isInitialized__) {
-            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\User' . "\0" . 'id', '' . "\0" . 'App\\Entity\\User' . "\0" . 'username', '' . "\0" . 'App\\Entity\\User' . "\0" . 'email', '' . "\0" . 'App\\Entity\\User' . "\0" . 'password', '' . "\0" . 'App\\Entity\\User' . "\0" . 'balance', '' . "\0" . 'App\\Entity\\User' . "\0" . 'roles', '' . "\0" . 'App\\Entity\\User' . "\0" . 'permissions', '' . "\0" . 'App\\Entity\\User' . "\0" . 'activations', '' . "\0" . 'App\\Entity\\User' . "\0" . 'persistences', '' . "\0" . 'App\\Entity\\User' . "\0" . 'bans', '' . "\0" . 'App\\Entity\\User' . "\0" . 'reminders', '' . "\0" . 'App\\Entity\\User' . "\0" . 'createdAt'];
+            return ['__isInitialized__', '' . "\0" . 'App\\Entity\\User' . "\0" . 'id', '' . "\0" . 'App\\Entity\\User' . "\0" . 'username', '' . "\0" . 'App\\Entity\\User' . "\0" . 'email', '' . "\0" . 'App\\Entity\\User' . "\0" . 'password', '' . "\0" . 'App\\Entity\\User' . "\0" . 'balance', '' . "\0" . 'App\\Entity\\User' . "\0" . 'uuid', '' . "\0" . 'App\\Entity\\User' . "\0" . 'accessToken', '' . "\0" . 'App\\Entity\\User' . "\0" . 'serverId', '' . "\0" . 'App\\Entity\\User' . "\0" . 'roles', '' . "\0" . 'App\\Entity\\User' . "\0" . 'permissions', '' . "\0" . 'App\\Entity\\User' . "\0" . 'activations', '' . "\0" . 'App\\Entity\\User' . "\0" . 'persistences', '' . "\0" . 'App\\Entity\\User' . "\0" . 'bans', '' . "\0" . 'App\\Entity\\User' . "\0" . 'reminders', '' . "\0" . 'App\\Entity\\User' . "\0" . 'createdAt'];
         }
 
-        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\User' . "\0" . 'id', '' . "\0" . 'App\\Entity\\User' . "\0" . 'username', '' . "\0" . 'App\\Entity\\User' . "\0" . 'email', '' . "\0" . 'App\\Entity\\User' . "\0" . 'password', '' . "\0" . 'App\\Entity\\User' . "\0" . 'balance', '' . "\0" . 'App\\Entity\\User' . "\0" . 'roles', '' . "\0" . 'App\\Entity\\User' . "\0" . 'permissions', '' . "\0" . 'App\\Entity\\User' . "\0" . 'activations', '' . "\0" . 'App\\Entity\\User' . "\0" . 'persistences', '' . "\0" . 'App\\Entity\\User' . "\0" . 'bans', '' . "\0" . 'App\\Entity\\User' . "\0" . 'reminders', '' . "\0" . 'App\\Entity\\User' . "\0" . 'createdAt'];
+        return ['__isInitialized__', '' . "\0" . 'App\\Entity\\User' . "\0" . 'id', '' . "\0" . 'App\\Entity\\User' . "\0" . 'username', '' . "\0" . 'App\\Entity\\User' . "\0" . 'email', '' . "\0" . 'App\\Entity\\User' . "\0" . 'password', '' . "\0" . 'App\\Entity\\User' . "\0" . 'balance', '' . "\0" . 'App\\Entity\\User' . "\0" . 'uuid', '' . "\0" . 'App\\Entity\\User' . "\0" . 'accessToken', '' . "\0" . 'App\\Entity\\User' . "\0" . 'serverId', '' . "\0" . 'App\\Entity\\User' . "\0" . 'roles', '' . "\0" . 'App\\Entity\\User' . "\0" . 'permissions', '' . "\0" . 'App\\Entity\\User' . "\0" . 'activations', '' . "\0" . 'App\\Entity\\User' . "\0" . 'persistences', '' . "\0" . 'App\\Entity\\User' . "\0" . 'bans', '' . "\0" . 'App\\Entity\\User' . "\0" . 'reminders', '' . "\0" . 'App\\Entity\\User' . "\0" . 'createdAt'];
     }
 
     /**
@@ -274,6 +274,17 @@ class User extends \App\Entity\User implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'setBalance', [$balance]);
 
         return parent::setBalance($balance);
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function getUuid(): string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUuid', []);
+
+        return parent::getUuid();
     }
 
     /**

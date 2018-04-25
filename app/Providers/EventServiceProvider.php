@@ -1,7 +1,13 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Providers;
 
+use App\Events\Auth\PasswordReminderCreated;
+use App\Events\Auth\RegistrationSuccessEvent;
+use App\Listeners\Auth\CreateLuckPermPlayer;
+use App\Listeners\Auth\SendEmailConfirmation;
+use App\Listeners\Auth\SendPasswordReminder;
 use Illuminate\Support\Facades\Event;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
 
@@ -13,11 +19,11 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        'App\Events\Auth\RegistrationSuccessEvent' => [
-            'App\Listeners\Auth\SendEmailConfirmation',
+        RegistrationSuccessEvent::class => [
+            SendEmailConfirmation::class
         ],
-        'App\Events\Auth\PasswordReminderCreated' => [
-            'App\Listeners\Auth\SendPasswordReminder'
+        PasswordReminderCreated::class => [
+            SendPasswordReminder::class
         ]
     ];
 

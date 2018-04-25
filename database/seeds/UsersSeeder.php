@@ -15,6 +15,10 @@ use App\Repository\ShoppingCart\ShoppingCartRepository;
 use App\Repository\User\UserRepository;
 use App\Services\Auth\Auth;
 use App\Services\Auth\Roles;
+use App\Services\Game\Permissions\LuckPerms\Repository\Group\GroupRepository;
+use App\Services\Game\Permissions\LuckPerms\Repository\GroupPermission\GroupPermissionRepository;
+use App\Services\Game\Permissions\LuckPerms\Repository\Player\PlayerRepository;
+use App\Services\Game\Permissions\LuckPerms\Repository\PlayerPermission\PlayerPermissionRepository;
 use Illuminate\Database\Seeder;
 
 class UsersSeeder extends Seeder
@@ -31,7 +35,11 @@ class UsersSeeder extends Seeder
         BalanceTransactionRepository $balanceTransactionRepository,
         PurchaseRepository $purchaseRepository,
         DistributionRepository $distributionRepository,
-        ShoppingCartRepository $shoppingCartRepository): void
+        ShoppingCartRepository $shoppingCartRepository,
+        PlayerRepository $lpPlayerRepository,
+        PlayerPermissionRepository $lpPlayerPermissionRepository,
+        GroupRepository $lpGroupRepository,
+        GroupPermissionRepository $lpGroupPermissionRepository): void
     {
         $activationRepository->deleteAll();
         $reminderRepository->deleteAll();
@@ -42,6 +50,10 @@ class UsersSeeder extends Seeder
         $shoppingCartRepository->deleteAll();
         $distributionRepository->deleteAll();
         $purchaseRepository->deleteAll();
+        $lpPlayerPermissionRepository->deleteAll();
+        $lpPlayerRepository->deleteAll();
+        $lpGroupPermissionRepository->deleteAll();
+        $lpGroupRepository->deleteAll();
         $userRepository->deleteAll();
 
         $user = $auth->register(new User('admin', 'admin@example.com', 'admin'), true);

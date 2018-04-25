@@ -5,7 +5,7 @@ namespace Database\Migrations;
 use Doctrine\DBAL\Migrations\AbstractMigration;
 use Doctrine\DBAL\Schema\Schema as Schema;
 
-class Version20180420153235 extends AbstractMigration
+class Version20180425195829 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -36,8 +36,15 @@ class Version20180420153235 extends AbstractMigration
         $this->addSql('CREATE TABLE lshop_role_user (role_id INT NOT NULL, user_id INT NOT NULL, INDEX IDX_2B38BC71D60322AC (role_id), INDEX IDX_2B38BC71A76ED395 (user_id), PRIMARY KEY(role_id, user_id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE lshop_servers (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, ip VARCHAR(45) DEFAULT NULL, port INT DEFAULT NULL, password VARCHAR(255) DEFAULT NULL, distributor VARCHAR(255) NOT NULL, enabled TINYINT(1) NOT NULL, monitoring_enabled TINYINT(1) NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE lshop_shopping_cart (id INT AUTO_INCREMENT NOT NULL, server INT DEFAULT NULL, distribution_id INT DEFAULT NULL, player VARCHAR(255) NOT NULL, type VARCHAR(16) NOT NULL, item VARCHAR(255) NOT NULL, amount INT NOT NULL, extra LONGTEXT DEFAULT NULL, INDEX IDX_5AE0CF805A6DD5F6 (server), UNIQUE INDEX UNIQ_5AE0CF806EB6DDB5 (distribution_id), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
-        $this->addSql('CREATE TABLE lshop_users (id INT AUTO_INCREMENT NOT NULL, username VARCHAR(32) NOT NULL, email VARCHAR(255) NOT NULL, password VARCHAR(60) NOT NULL, balance DOUBLE PRECISION NOT NULL, created_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', UNIQUE INDEX UNIQ_15622DEF85E0677 (username), UNIQUE INDEX UNIQ_15622DEE7927C74 (email), INDEX username_idx (username), INDEX email_idx (email), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE lshop_users (id INT AUTO_INCREMENT NOT NULL, username VARCHAR(32) NOT NULL, email VARCHAR(255) NOT NULL, password VARCHAR(60) NOT NULL, balance DOUBLE PRECISION NOT NULL, uuid CHAR(36) NOT NULL COMMENT \'(DC2Type:guid)\', accessToken CHAR(36) DEFAULT NULL, serverId VARCHAR(41) DEFAULT NULL, created_at DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', UNIQUE INDEX UNIQ_15622DEF85E0677 (username), UNIQUE INDEX UNIQ_15622DEE7927C74 (email), UNIQUE INDEX UNIQ_15622DED17F50A6 (uuid), INDEX username_idx (username), INDEX email_idx (email), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('CREATE TABLE lshop_settings (id INT AUTO_INCREMENT NOT NULL, `key` VARCHAR(255) NOT NULL, value LONGTEXT DEFAULT NULL, updated_at DATETIME DEFAULT NULL COMMENT \'(DC2Type:datetime_immutable)\', UNIQUE INDEX UNIQ_461A7B124E645A7E (`key`), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE lshop_lp_actions (id INT AUTO_INCREMENT NOT NULL, time BIGINT NOT NULL, actor_uuid VARCHAR(36) NOT NULL, actor_name VARCHAR(100) DEFAULT NULL, type CHAR(1) NOT NULL, acted_uuid VARCHAR(36) NOT NULL, acted_name VARCHAR(36) NOT NULL, action VARCHAR(300) DEFAULT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE lshop_lp_groups (`name` VARCHAR(36) NOT NULL, PRIMARY KEY(`name`)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE lshop_lp_group_permissions (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(36) DEFAULT NULL, value TINYINT(1) NOT NULL, server VARCHAR(36) NOT NULL, world VARCHAR(36) NOT NULL, expiry INT NOT NULL, contexts VARCHAR(200) NOT NULL, permission VARCHAR(200) NOT NULL, INDEX name_idx (name), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE lshop_lp_messages (id INT AUTO_INCREMENT NOT NULL, time DATETIME NOT NULL COMMENT \'(DC2Type:datetime_immutable)\', msg LONGTEXT NOT NULL, PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE lshop_lp_players (uuid CHAR(36) NOT NULL COMMENT \'(DC2Type:guid)\', primary_group VARCHAR(36) DEFAULT NULL, username VARCHAR(32) NOT NULL, INDEX IDX_30AEC934F8D69D18 (primary_group), PRIMARY KEY(uuid)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE lshop_lp_user_permissions (id INT AUTO_INCREMENT NOT NULL, uuid CHAR(36) DEFAULT NULL COMMENT \'(DC2Type:guid)\', value TINYINT(1) NOT NULL, server VARCHAR(36) NOT NULL, world VARCHAR(36) NOT NULL, expiry INT NOT NULL, contexts VARCHAR(200) NOT NULL, permission VARCHAR(200) NOT NULL, INDEX uuid_idx (uuid), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
+        $this->addSql('CREATE TABLE lshop_lp_tracks (name VARCHAR(36) NOT NULL, groups LONGTEXT NOT NULL, PRIMARY KEY(name)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
         $this->addSql('ALTER TABLE lshop_activations ADD CONSTRAINT FK_C4AD3053A76ED395 FOREIGN KEY (user_id) REFERENCES lshop_users (id)');
         $this->addSql('ALTER TABLE lshop_balance_transactions ADD CONSTRAINT FK_3515718AA76ED395 FOREIGN KEY (user_id) REFERENCES lshop_users (id)');
         $this->addSql('ALTER TABLE lshop_bans ADD CONSTRAINT FK_C4A65971A76ED395 FOREIGN KEY (user_id) REFERENCES lshop_users (id)');
@@ -62,6 +69,9 @@ class Version20180420153235 extends AbstractMigration
         $this->addSql('ALTER TABLE lshop_role_user ADD CONSTRAINT FK_2B38BC71A76ED395 FOREIGN KEY (user_id) REFERENCES lshop_users (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE lshop_shopping_cart ADD CONSTRAINT FK_5AE0CF805A6DD5F6 FOREIGN KEY (server) REFERENCES lshop_servers (id) ON DELETE CASCADE');
         $this->addSql('ALTER TABLE lshop_shopping_cart ADD CONSTRAINT FK_5AE0CF806EB6DDB5 FOREIGN KEY (distribution_id) REFERENCES lshop_distributions (id)');
+        $this->addSql('ALTER TABLE lshop_lp_group_permissions ADD CONSTRAINT FK_B9AE8D3E5E237E06 FOREIGN KEY (name) REFERENCES lshop_lp_groups (name)');
+        $this->addSql('ALTER TABLE lshop_lp_players ADD CONSTRAINT FK_30AEC934F8D69D18 FOREIGN KEY (primary_group) REFERENCES lshop_lp_groups (name)');
+        $this->addSql('ALTER TABLE lshop_lp_user_permissions ADD CONSTRAINT FK_7441B1C1D17F50A6 FOREIGN KEY (uuid) REFERENCES lshop_lp_players (uuid)');
     }
 
     /**
@@ -95,6 +105,9 @@ class Version20180420153235 extends AbstractMigration
         $this->addSql('ALTER TABLE lshop_purchases DROP FOREIGN KEY FK_B2702952A76ED395');
         $this->addSql('ALTER TABLE lshop_reminders DROP FOREIGN KEY FK_7586A178A76ED395');
         $this->addSql('ALTER TABLE lshop_role_user DROP FOREIGN KEY FK_2B38BC71A76ED395');
+        $this->addSql('ALTER TABLE lshop_lp_group_permissions DROP FOREIGN KEY FK_B9AE8D3E5E237E06');
+        $this->addSql('ALTER TABLE lshop_lp_players DROP FOREIGN KEY FK_30AEC934F8D69D18');
+        $this->addSql('ALTER TABLE lshop_lp_user_permissions DROP FOREIGN KEY FK_7441B1C1D17F50A6');
         $this->addSql('DROP TABLE lshop_activations');
         $this->addSql('DROP TABLE lshop_balance_transactions');
         $this->addSql('DROP TABLE lshop_bans');
@@ -119,5 +132,12 @@ class Version20180420153235 extends AbstractMigration
         $this->addSql('DROP TABLE lshop_shopping_cart');
         $this->addSql('DROP TABLE lshop_users');
         $this->addSql('DROP TABLE lshop_settings');
+        $this->addSql('DROP TABLE lshop_lp_actions');
+        $this->addSql('DROP TABLE lshop_lp_groups');
+        $this->addSql('DROP TABLE lshop_lp_group_permissions');
+        $this->addSql('DROP TABLE lshop_lp_messages');
+        $this->addSql('DROP TABLE lshop_lp_players');
+        $this->addSql('DROP TABLE lshop_lp_user_permissions');
+        $this->addSql('DROP TABLE lshop_lp_tracks');
     }
 }
