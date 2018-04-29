@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Services\Game\Permissions;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 /**
@@ -31,9 +32,27 @@ class Group
      */
     private $permissions;
 
+    /**
+     * @var Collection
+     */
+    private $parents;
+
+    /**
+     * @var Collection
+     */
+    private $childs;
+
+    /**
+     * @var \DateTimeImmutable|null
+     */
+    private $expireAt;
+
     public function __construct(string $name)
     {
         $this->name = $name;
+        $this->permissions = new ArrayCollection();
+        $this->parents = new ArrayCollection();
+        $this->childs = new ArrayCollection();
     }
 
     public function getName(): string
@@ -46,9 +65,24 @@ class Group
         return $this->permissions;
     }
 
-    public function setPermissions(Collection $permissions): Group
+    public function getParents(): Collection
     {
-        $this->permissions = $permissions;
+        return $this->parents;
+    }
+
+    public function getChilds(): Collection
+    {
+        return $this->childs;
+    }
+
+    public function getExpireAt(): ?\DateTimeImmutable
+    {
+        return $this->expireAt;
+    }
+
+    public function setExpireAt(?\DateTimeImmutable $expireAt): Group
+    {
+        $this->expireAt = $expireAt;
 
         return $this;
     }

@@ -27,6 +27,7 @@ class PurchasesController extends Controller
         $dto = $handler->handle($page, $orderBy, $descending);
 
         return new JsonResponse(Status::SUCCESS, [
+            'canComplete' => $dto->canComplete(),
             'paginator' => $dto->getPaginator(),
             'items' => $dto->getItems()
         ]);

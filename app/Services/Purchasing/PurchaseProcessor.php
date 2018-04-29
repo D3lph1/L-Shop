@@ -6,8 +6,11 @@ namespace App\Services\Purchasing;
 use App\DataTransferObjects\Frontend\Shop\Catalog\Purchase as ResultDTO;
 use App\DataTransferObjects\Frontend\Shop\Purchase;
 use App\Entity\User;
+use App\Events\Purchase\PurchaseCompletedEvent;
+use App\Events\Purchase\PurchaseCreatedEvent;
 use App\Services\Auth\Auth;
 use App\Services\User\Balance\Transactor;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class PurchaseProcessor
 {
@@ -31,16 +34,23 @@ class PurchaseProcessor
      */
     private $transactor;
 
+    /**
+     * @var Dispatcher
+     */
+    private $eventDispatcher;
+
     public function __construct(
         Auth $auth,
         PurchaseCreator $creator,
         PurchaseCompleter $completer,
-        Transactor $transactor)
+        Transactor $transactor,
+        Dispatcher $eventDispatcher)
     {
         $this->auth = $auth;
         $this->creator = $creator;
         $this->completer = $completer;
         $this->transactor = $transactor;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -59,10 +69,12 @@ class PurchaseProcessor
             $user = $username;
         }
         $purchase = $this->creator->create($DTOs, $user, $ip);
+        $this->eventDispatcher->dispatch(new PurchaseCreatedEvent($purchase));
 
         if ($this->enoughMoney($user, $purchase->getCost())) {
             $this->writeOffMoney($user, $purchase->getCost());
             $this->completer->complete($purchase, ViaContext::QUICK);
+            $this->eventDispatcher->dispatch(new PurchaseCompletedEvent($purchase));
 
             return (new ResultDTO(true))
                 ->setNewBalance($purchase->getUser()->getBalance());

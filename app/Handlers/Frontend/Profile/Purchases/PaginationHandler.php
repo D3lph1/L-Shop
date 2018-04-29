@@ -6,6 +6,8 @@ namespace App\Handlers\Frontend\Profile\Purchases;
 use App\DataTransferObjects\Frontend\Profile\Purchases\ListResult;
 use App\Exceptions\InvalidArgumentException;
 use App\Repository\Purchase\PurchaseRepository;
+use App\Services\Auth\Auth;
+use App\Services\Auth\Permissions;
 
 class PaginationHandler
 {
@@ -27,9 +29,15 @@ class PaginationHandler
      */
     private $repository;
 
-    public function __construct(PurchaseRepository $repository)
+    /**
+     * @var Auth
+     */
+    private $auth;
+
+    public function __construct(PurchaseRepository $repository, Auth $auth)
     {
         $this->repository = $repository;
+        $this->auth = $auth;
     }
 
     public function handle(int $page, ?string $orderBy, bool $descending): ListResult
@@ -49,6 +57,7 @@ class PaginationHandler
             $paginator = $this->repository->findPaginated($page, self::PER_PAGE);
         }
 
-        return new ListResult($paginator);
+        return (new ListResult($paginator))
+            ->setCanComplete($this->auth->getUser()->hasPermission(Permissions::ALLOW_COMPLETE_PURCHASES));
     }
 }

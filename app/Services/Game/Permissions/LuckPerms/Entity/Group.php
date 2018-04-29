@@ -22,7 +22,7 @@ class Group
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Services\Game\Permissions\LuckPerms\Entity\GroupPermission", mappedBy="group", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Services\Game\Permissions\LuckPerms\Entity\GroupPermission", mappedBy="group", cascade={"persist"}, orphanRemoval=true, fetch="EAGER")
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="name", referencedColumnName="name")
      * })

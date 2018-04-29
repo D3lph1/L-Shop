@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace App\Handlers\Frontend\Auth;
 
 use App\DataTransferObjects\Frontend\Auth\Server as ServerDTO;
+use App\DataTransferObjects\Frontend\Auth\Servers;
 use App\Entity\Server;
 use App\Repository\Server\ServerRepository;
 use App\Services\Auth\Auth;
@@ -28,40 +29,41 @@ class ServersHandler
     }
 
     /**
-     * @return ServerDTO[]
+     * @return Servers
      */
-    public function servers(): array
+    public function servers(): Servers
     {
         /** @var Server[] $servers */
         $servers = $this->repository->findAll();
-        if ($this->auth->check()) {
-            if ($this->auth->getUser()->hasPermission(Permissions::VIEWING_DISABLED_SERVERS)) {
-                $serverDTOs = [];
-                foreach ($servers as $server) {
-                    $serverDTOs[] = new ServerDTO(
-                        $server->getId(),
-                        $server->getName(),
-                        $server->isEnabled(),
-                        'frontend.shop.catalog'
-                    );
-                }
-
-                return $serverDTOs;
-            }
-        }
 
         $serverDTOs = [];
         foreach ($servers as $server) {
-            if ($server->isEnabled()) {
-                $serverDTOs[] = new ServerDTO(
+            if (
+                $server->isEnabled() ||
+                (
+                    $this->auth->check() &&
+                    $this->auth->getUser()->hasPermission(Permissions::SWITCH_SERVERS_STATE)
+                )
+            ) {
+                $dto = new ServerDTO(
                     $server->getId(),
                     $server->getName(),
                     $server->isEnabled(),
                     'frontend.shop.catalog'
                 );
+
+                $serverDTOs[] = $dto;
             }
         }
 
-        return $serverDTOs;
+        return (new Servers($serverDTOs))
+            ->setCanServersCrud(
+                $this->auth->check()
+                    ? $this->auth->getUser()->hasPermission(Permissions::ADMIN_SERVERS_CRUD_ACCESS) : false
+            )
+            ->setCanEnableDisableServers(
+                $this->auth->check()
+                    ? $this->auth->getUser()->hasPermission(Permissions::SWITCH_SERVERS_STATE) : false
+            );
     }
 }

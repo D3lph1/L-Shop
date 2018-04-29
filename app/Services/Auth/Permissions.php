@@ -12,9 +12,9 @@ namespace App\Services\Auth;
 class Permissions
 {
     /**
-     * Allows the user to see disabled servers in the server list.
+     * Allows the user to see disabled servers in the server list and enable disable their.
      */
-    public const VIEWING_DISABLED_SERVERS = 'viewing_disabled_servers';
+    public const SWITCH_SERVERS_STATE = 'switch_servers_state';
 
     /**
      * Allows the user to access a page with a purchase history (Profile->Information->Purchase History).
@@ -87,6 +87,11 @@ class Permissions
     public const ADMIN_CONTROL_OPTIMIZATION_ACCESS = 'admin_control_optimization_access';
 
     /**
+     * Allows the user to add/edit/delete servers and categories.
+     */
+    public const ADMIN_SERVERS_CRUD_ACCESS = 'admin_servers_crud_access';
+
+    /**
      * Allows the user to add/edit/delete items.
      */
     public const ADMIN_ITEMS_CRUD_ACCESS = 'admin_items_crud_access';
@@ -112,6 +117,16 @@ class Permissions
     public const ADMIN_USERS_CRUD_ACCESS = 'admin_users_crud_access';
 
     /**
+     * Allows the user to access to rcon console.
+     */
+    public const ADMIN_OTHER_RCON_ACCESS = 'admin_other_rcon_access';
+
+    /**
+     * Allows the user to access to debug page.
+     */
+    public const ADMIN_OTHER_DEBUG_ACCESS = 'admin_other_debug_access';
+
+    /**
      * Allows to show shop statistic.
      */
     public const ADMIN_STATISTIC_SHOW_ACCESS = 'admin_statistic_show_access';
@@ -120,6 +135,11 @@ class Permissions
      * Allows to purchases history in admin panel.
      */
     public const ADMIN_STATISTIC_PURCHASES_ACCESS = 'admin_statistic_purchases_access';
+
+    /**
+     * Allow the user to complete purchase.
+     */
+    public const ALLOW_COMPLETE_PURCHASES = 'allow_complete_purchases';
 
     /**
      * Allows the user to access the `admin->information->about` section

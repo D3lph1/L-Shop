@@ -11,6 +11,7 @@ use App\Exceptions\Item\DoesNotExistException;
 use App\Repository\Enchantment\EnchantmentRepository;
 use App\Repository\Item\ItemRepository;
 use App\Services\Item\Image\Image;
+use Illuminate\Filesystem\Filesystem;
 
 class RenderHandler
 {
@@ -24,10 +25,19 @@ class RenderHandler
      */
     private $enchantmentRepository;
 
-    public function __construct(ItemRepository $itemRepository, EnchantmentRepository $enchantmentRepository)
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    public function __construct(
+        ItemRepository $itemRepository,
+        EnchantmentRepository $enchantmentRepository,
+        Filesystem $filesystem)
     {
         $this->itemRepository = $itemRepository;
         $this->enchantmentRepository = $enchantmentRepository;
+        $this->filesystem = $filesystem;
     }
 
     public function handle(int $itemId): Result
@@ -37,7 +47,7 @@ class RenderHandler
             throw new DoesNotExistException($itemId);
         }
         $images = [];
-        foreach (\File::allFiles(Image::absolutePath()) as $image) {
+        foreach ($this->filesystem->allFiles(Image::absolutePath()) as $image) {
             $images[] = new \App\DataTransferObjects\Admin\Items\Add\Image($image);
         }
 

@@ -9,6 +9,8 @@ interface PlayerRepository
 {
     public function create(Player $player): void;
 
+    public function update(Player $player): void;
+
     public function deleteAll(): bool;
 
     public function findByUsername(string $username): ?Player;

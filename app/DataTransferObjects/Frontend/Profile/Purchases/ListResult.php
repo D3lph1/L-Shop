@@ -17,6 +17,11 @@ class ListResult
      */
     private $items = [];
 
+    /**
+     * @var bool
+     */
+    protected $canComplete = false;
+
     public function __construct(LengthAwarePaginator $paginator)
     {
         $this->paginator = $paginator;
@@ -39,5 +44,17 @@ class ListResult
     public function getItems(): array
     {
         return $this->items;
+    }
+
+    public function setCanComplete(bool $value): ListResult
+    {
+        $this->canComplete = $value;
+
+        return $this;
+    }
+
+    public function canComplete(): bool
+    {
+        return $this->canComplete;
     }
 }

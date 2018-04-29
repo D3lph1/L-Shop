@@ -7,7 +7,7 @@ use App\Services\Auth\Generators\CodeGenerator;
 use App\Services\Auth\Hashing\Hasher;
 use App\Entity\Reminder as Entity;
 use App\Entity\User;
-use App\Events\Auth\PasswordReminderCreated;
+use App\Events\Auth\PasswordReminderCreatedEvent;
 use App\Repository\Reminder\ReminderRepository;
 use App\Repository\User\UserRepository;
 use App\Services\DateTime\DateTimeUtil;
@@ -85,7 +85,7 @@ class Reminder
         } while ($this->reminderRepository->findByCode($code));
         $entity = new Entity($user, $code);
         $this->reminderRepository->create($entity);
-        $this->eventDispatcher->dispatch(new PasswordReminderCreated($entity, $this->request->ip()));
+        $this->eventDispatcher->dispatch(new PasswordReminderCreatedEvent($entity, $this->request->ip()));
 
         return $entity;
     }

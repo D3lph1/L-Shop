@@ -18,6 +18,11 @@ class PaginationResult implements JsonRespondent
      */
     private $items = [];
 
+    /**
+     * @var bool
+     */
+    protected $canComplete;
+
     public function __construct(LengthAwarePaginator $paginator)
     {
         $this->paginator = $paginator;
@@ -26,11 +31,19 @@ class PaginationResult implements JsonRespondent
         }
     }
 
+    public function setCanComplete(bool $value): PaginationResult
+    {
+        $this->canComplete = $value;
+
+        return $this;
+    }
+
     public function response(): array
     {
         return [
             'paginator' => $this->paginator,
-            'items' => $this->items
+            'items' => $this->items,
+            'canComplete' => $this->canComplete
         ];
     }
 }

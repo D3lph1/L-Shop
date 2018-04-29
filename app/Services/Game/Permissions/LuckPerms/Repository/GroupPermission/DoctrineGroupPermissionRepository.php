@@ -24,6 +24,11 @@ class DoctrineGroupPermissionRepository implements GroupPermissionRepository
         $this->er = $er;
     }
 
+    public function findAll(): array
+    {
+        return $this->er->findAll();
+    }
+
     public function deleteAll(): bool
     {
         return (bool)$this->er->createQueryBuilder('gp')

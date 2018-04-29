@@ -5,7 +5,7 @@ namespace App\Events\Auth;
 
 use App\Entity\Reminder;
 
-class PasswordReminderCreated
+class PasswordReminderCreatedEvent
 {
     /**
      * @var Reminder

@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Statistic;
 
+use App\Entity\Purchase;
 use App\Exceptions\Purchase\AlreadyCompletedException;
 use App\Handlers\Admin\Statistic\Purchases\CompleteHandler;
 use App\Handlers\Admin\Statistic\Purchases\PaginationHandler;
@@ -14,13 +15,17 @@ use App\Services\Infrastructure\Notification\Notifications\Success;
 use App\Services\Infrastructure\Notification\Notifications\Warning;
 use App\Services\Infrastructure\Response\JsonResponse;
 use App\Services\Infrastructure\Response\Status;
+use App\Services\Purchasing\ViaContext;
 use Illuminate\Http\Request;
 
 class PurchasesController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(permission_middleware(Permissions::ADMIN_STATISTIC_PURCHASES_ACCESS));
+        $this->middleware(permission_middleware(Permissions::ADMIN_STATISTIC_PURCHASES_ACCESS))
+            ->only('pagination');
+        $this->middleware(permission_middleware(Permissions::ALLOW_COMPLETE_PURCHASES))
+            ->only('complete');
     }
 
     public function pagination(Request $request, PaginationHandler $handler): JsonResponse
@@ -49,6 +54,11 @@ class PurchasesController extends Controller
             $purchase = $handler->handle((int)$request->route('purchase'));
 
             return (new JsonResponse(Status::SUCCESS, [
+                'via' => [
+                    'quick' => $purchase->getVia() === ViaContext::QUICK,
+                    'byAdmin' => $purchase->getVia() === ViaContext::BY_ADMIN,
+                    'value' => $purchase->getVia()
+                ],
                 'completedAt' => (new JavaScriptFormatter())->format($purchase->getCompletedAt())
             ]))
                 ->addNotification(new Success(__('msg.admin.statistic.purchases.complete.success')));

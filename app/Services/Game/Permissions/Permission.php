@@ -11,6 +11,8 @@ use App\Entity\Server;
  */
 class Permission
 {
+    public const GLOBAL_WORLD = 'global';
+
     /**
      * Raw permission name. This name was obtained directly from the repository and has not
      * yet been processed.
@@ -93,12 +95,20 @@ class Permission
 
     public function getWorld(): ?string
     {
-        return $this->world;
+        if ($this->world !== self::GLOBAL_WORLD) {
+            return $this->world;
+        }
+
+        return null;
     }
 
     public function setWorld(?string $world): Permission
     {
-        $this->world = $world;
+        if ($world === null) {
+            $this->world = self::GLOBAL_WORLD;
+        } else {
+            $this->world = $world;
+        }
 
         return $this;
     }
@@ -108,7 +118,7 @@ class Permission
         return $this->expireAt;
     }
 
-    public function setExpiredAt(?\DateTimeImmutable $expireAt): Permission
+    public function setExpireAt(?\DateTimeImmutable $expireAt): Permission
     {
         $this->expireAt = $expireAt;
 

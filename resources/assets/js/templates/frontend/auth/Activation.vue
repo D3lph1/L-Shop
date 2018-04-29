@@ -1,44 +1,77 @@
 <template>
-    <v-content>
-        <v-container fluid fill-height>
-            <v-layout align-center justify-center>
-                <v-flex xs12 sm5 md4 lg3>
-                    <v-card class="elevation-12">
-                        <v-toolbar dark color="primary">
-                            <v-icon>repeat</v-icon>
-                            <v-toolbar-title>{{ $t('content.frontend.auth.activation.sent.title') }}</v-toolbar-title>
-                            <v-spacer></v-spacer>
-                        </v-toolbar>
-                        <v-card-text>
-                            <p class="body-1" v-html="$t('content.frontend.auth.activation.sent.description')"></p>
+    <v-container
+            id="full"
+            fluid
+            align-center
+            justify-center
+    >
+        <v-card
+                id="enter-card"
+                width="300px"
+        >
+            <v-card
+                    id="form-header"
+                    color="primary"
+            >
+                <v-icon medium color="white">hourglass_empty</v-icon>
+                <h1 class="text-xs-center">{{ $t('content.frontend.auth.activation.sent.short_title') }}</h1>
+            </v-card>
 
-                            <v-form>
-                                <v-text-field prepend-icon="mail" v-model="email" :label="$t('validation.attributes.email')" type="text" @keyup.enter="perform"></v-text-field>
-                            </v-form>
-                            <!--<v-form>
-                                <div v-html="captcha"></div>
-                            </v-form>-->
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-layout flex align-center justify-center>
-                                <v-btn color="primary" :loading="loadingBtn" :disabled="loadingBtn || disabledBtn" @click="perform">{{ $t('content.frontend.auth.activation.sent.repeat') }}</v-btn>
-                            </v-layout>
-                        </v-card-actions>
-                        <v-card-actions class="text-xs-center" v-if="accessModeAny || accessModeAuth">
-                            <v-layout flex align-center justify-center>
-                                <v-btn flat small color="secondary" :to="{name: 'frontend.auth.login'}">{{ $t('content.frontend.auth.login.title') }}</v-btn>
-                            </v-layout>
-                        </v-card-actions>
-                        <v-card-actions>
-                            <v-layout flex align-center justify-center v-if="accessModeAny">
-                                <v-btn flat small color="secondary" :to="{name: 'frontend.auth.password.forgot'}">{{ $t('content.frontend.auth.login.purchase_without_auth') }}</v-btn>
-                            </v-layout>
-                        </v-card-actions>
-                    </v-card>
-                </v-flex>
-            </v-layout>
-        </v-container>
-    </v-content>
+            <v-card-text>
+                <p class="body-1" v-html="$t('content.frontend.auth.activation.sent.description')"></p>
+            </v-card-text>
+
+            <v-form id="form">
+                <v-text-field
+                        v-model="email"
+                        :label="$t('validation.attributes.email')"
+                        required
+                        prepend-icon="mail_outline"
+                ></v-text-field>
+                <v-btn
+                        @click="perform"
+                        :loading="loadingBtn"
+                        :disabled="disabledBtn"
+                        block
+                        color="primary"
+                >
+                    {{ $t('content.frontend.auth.password.forgot.continue') }}</v-btn>
+            </v-form>
+
+            <v-footer
+                    height="auto"
+                    id="form-footer"
+            >
+                <v-tooltip bottom v-if="accessModeAny || accessModeAuth">
+                    <v-btn
+                            large
+                            outline
+                            icon
+                            color="green"
+                            slot="activator"
+                            :to="{name: 'frontend.auth.login'}"
+                    >
+                        <v-icon>vpn_key</v-icon>
+                    </v-btn>
+                    <span>{{ $t('content.frontend.auth.login.title') }}</span>
+                </v-tooltip>
+
+                <v-tooltip bottom v-if="accessModeAny">
+                    <v-btn
+                            large
+                            outline
+                            icon
+                            color="orange"
+                            slot="activator"
+                            :to="{name: 'frontend.auth.password.forgot'}"
+                    >
+                        <v-icon>shopping_cart</v-icon>
+                    </v-btn>
+                    <span>{{ $t('content.frontend.auth.login.purchase_without_auth') }}</span>
+                </v-tooltip>
+            </v-footer>
+        </v-card>
+    </v-container>
 </template>
 
 <script>
@@ -68,7 +101,7 @@
         },
         methods: {
             check() {
-                return this.email !== '';
+                return this.email.match(/.+@.+\..+/i);
             },
             send() {
                 this.loadingBtn = true;

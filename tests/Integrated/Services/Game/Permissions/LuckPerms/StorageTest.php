@@ -32,10 +32,10 @@ class StorageTest extends TestCase
         $this->app->make(PlayerRepository::class)->create($adminPlayer);
         $player = $storage->retrievePlayer($user);
         self::assertNotNull($player);
-        self::assertEquals('default', $player->getGroup()->getName());
-        self::assertEquals(2, $player->getGroup()->getPermissions()->count());
-        self::assertEquals('ingroup.one', $player->getGroup()->getPermissions()->first()->getName());
-        self::assertEquals('ingroup.two', $player->getGroup()->getPermissions()->next()->getName());
+        self::assertEquals('default', $player->getPrimaryGroup()->getName());
+        self::assertEquals(2, $player->getPrimaryGroup()->getPermissions()->count());
+        self::assertEquals('ingroup.one', $player->getPrimaryGroup()->getPermissions()->first()->getName());
+        self::assertEquals('ingroup.two', $player->getPrimaryGroup()->getPermissions()->next()->getName());
         self::assertEquals(1, $player->getPermissions()->count());
         self::assertEquals('inplayer.one', $player->getPermissions()->first()->getName());
 

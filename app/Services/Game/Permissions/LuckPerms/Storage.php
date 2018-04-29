@@ -13,7 +13,6 @@ use App\Services\Game\Permissions\LuckPerms\Repository\Player\PlayerRepository;
 use App\Services\Game\Permissions\Permission;
 use App\Services\Game\Permissions\Player;
 use App\Services\Game\Permissions\Storage as StorageInterface;
-use Doctrine\Common\Collections\ArrayCollection;
 
 class Storage implements StorageInterface
 {
@@ -46,22 +45,30 @@ class Storage implements StorageInterface
     {
         $playerFromStorage = $this->playerRepository->findByUsername($user->getUsername());
         if ($playerFromStorage !== null) {
-            $groupPermissions = new ArrayCollection();
-            /** @var GroupPermission $permission */
-            foreach ($playerFromStorage->getPrimaryGroup()->getPermissions() as $permission) {
-                $groupPermissions->add($this->fillPermission($permission));
-            }
-            $group = (new Group($playerFromStorage->getPrimaryGroup()->getName()))
-                ->setPermissions($groupPermissions);
+            $group = $this->retrieveGroup($playerFromStorage->getPrimaryGroup()->getName());
 
-
-            $playerPermissions = new ArrayCollection();
+            $player = new Player($user, $group);
             /** @var PlayerPermission $permission */
             foreach ($playerFromStorage->getPermissions() as $permission) {
-                $playerPermissions->add($this->fillPermission($permission));
-            }
+                $newPermission = $this->fillPermission($permission);
+                if ($this->expired($newPermission->getExpireAt())) {
+                    // Remove permission if it has expired.
+                    $playerFromStorage->getPermissions()->removeElement($permission);
+                } else {
+                    $player->getPermissions()->add($newPermission);
 
-            $player = (new Player($user, $group))->setPermissions($playerPermissions);
+                    $parentGroupName = $this->getGroupNameByPermission($newPermission);
+                    if ($parentGroupName !== null) {
+                        $parentGroup = $this->retrieveGroup($parentGroupName);
+                        if ($parentGroup !== null) {
+                            $player->getGroups()->add($parentGroup);
+                        }
+                    }
+                }
+            }
+            // Updates the player. If he has removed the permissions, the changes will
+            // take effect in the repository.
+            $this->playerRepository->update($playerFromStorage);
 
             return $player;
         }
@@ -73,14 +80,30 @@ class Storage implements StorageInterface
     {
         $groupFromStorage = $this->groupRepository->findByName($name);
         if ($groupFromStorage !== null) {
-            $groupPermissions = new ArrayCollection();
+            $group = new Group($groupFromStorage->getName());
             /** @var GroupPermission $permission */
             foreach ($groupFromStorage->getPermissions() as $permission) {
-                $groupPermissions->add($this->fillPermission($permission));
-            }
+                $newPermission = $this->fillPermission($permission);
+                if ($this->expired($newPermission->getExpireAt())) {
+                    // Remove permission if it has expired.
+                    $groupFromStorage->getPermissions()->removeElement($permission);
+                } else {
+                    $group->getPermissions()->add($newPermission);
 
-            return (new Group($groupFromStorage->getName()))
-                ->setPermissions($groupPermissions);
+                    $parentGroupName = $this->getGroupNameByPermission($newPermission);
+                    if ($parentGroupName !== null) {
+                        $parentGroup = $this->retrieveGroup($parentGroupName);
+                        $group->setExpireAt($newPermission->getExpireAt());
+                        $group->getParents()->add($parentGroup);
+                        $parentGroup->getChilds()->add($group);
+                    }
+                }
+            }
+            // Updates the group. If he has removed the permissions, the changes will
+            // take effect in the repository.
+            $this->groupRepository->update($groupFromStorage);
+
+            return $group;
         }
 
         return null;
@@ -102,9 +125,33 @@ class Storage implements StorageInterface
         $newPermission->setAllowed($from->getValue())
             ->setServer($server)
             ->setWorld($from->getWorld())
-            ->setExpiredAt($from->getExpiredAt())
+            ->setExpireAt(
+                $from->getExpireAt() !== 0
+                    ? \DateTimeImmutable::createFromFormat('U', (string)$from->getExpireAt())
+                    : null
+            )
             ->setContexts($from->getContext());
 
         return $newPermission;
+    }
+
+    private function getGroupNameByPermission(Permission $permission): ?string
+    {
+        if (mb_strpos($permission->getName(), 'group') === 0) {
+            return mb_substr($permission->getName(), mb_strlen('group.'));
+        }
+
+        return null;
+    }
+
+    private function expired(?\DateTimeImmutable $expireAt): bool
+    {
+        if ($expireAt === null) {
+            return false;
+        }
+
+        return (new \DateTimeImmutable())
+                ->diff($expireAt)
+                ->invert !== 0;
     }
 }

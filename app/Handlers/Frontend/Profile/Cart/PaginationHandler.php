@@ -106,7 +106,7 @@ class PaginationHandler
         /** @var \App\Entity\Server $server */
         foreach ($this->serverRepository->findAll() as $server) {
             if (!$server->isEnabled()) {
-                if ($this->auth->getUser()->hasPermission(Permissions::VIEWING_DISABLED_SERVERS)) {
+                if ($this->auth->getUser()->hasPermission(Permissions::SWITCH_SERVERS_STATE)) {
                     $servers[] = new Server($server);
                 }
             } else {

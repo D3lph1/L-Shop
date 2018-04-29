@@ -279,7 +279,7 @@ class User extends \App\Entity\User implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
-    public function getUuid(): string
+    public function getUuid(): \Ramsey\Uuid\UuidInterface
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getUuid', []);

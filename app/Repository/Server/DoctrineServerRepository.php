@@ -31,6 +31,12 @@ class DoctrineServerRepository implements ServerRepository
         $this->em->flush();
     }
 
+    public function update(Server $server): void
+    {
+        $this->em->merge($server);
+        $this->em->flush();
+    }
+
     public function deleteAll(): bool
     {
         return (bool)$this->er->createQueryBuilder('s')

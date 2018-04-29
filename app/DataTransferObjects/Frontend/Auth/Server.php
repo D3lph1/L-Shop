@@ -25,6 +25,16 @@ class Server implements \JsonSerializable
      */
     private $route;
 
+    /**
+     * @var bool
+     */
+    private $canServersCrud;
+
+    /**
+     * @var bool
+     */
+    private $canEnableDisableServers;
+
     public function __construct(int $id, string $name, bool $enabled, string $route)
     {
         $this->id = $id;
@@ -33,36 +43,16 @@ class Server implements \JsonSerializable
         $this->route = $route;
     }
 
-    public function getId(): int
-    {
-        return $this->id;
-    }
-
-    public function getName(): string
-    {
-        return $this->name;
-    }
-
-    public function isEnabled(): bool
-    {
-        return $this->enabled;
-    }
-
-    public function getRoute(): string
-    {
-        return $this->route;
-    }
-
     /**
      * @inheritDoc
      */
     public function jsonSerialize(): array
     {
         return [
-            'id' => $this->getId(),
-            'name' => $this->getName(),
-            'enabled' => $this->isEnabled(),
-            'route' => $this->getRoute()
+            'id' => $this->id,
+            'name' => $this->name,
+            'enabled' => $this->enabled,
+            'route' => $this->route
         ];
     }
 }

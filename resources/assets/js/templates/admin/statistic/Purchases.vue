@@ -37,8 +37,8 @@
                     <v-btn icon class="mx-0" v-if="props.item.items.length !== 0" @click="openDetailsDialog(props.item)">
                         <v-icon color="secondary">more_horiz</v-icon>
                     </v-btn>
-                    <v-btn icon class="mx-0" v-if="props.item.completedAt === null" @click="complete(props.item)">
-                        <v-icon color="success">navigate_next</v-icon>
+                    <v-btn icon class="mx-0" v-if="props.item.completedAt === null && canComplete" @click="complete(props.item)">
+                        <v-icon color="success">check</v-icon>
                     </v-btn>
                 </td>
             </template>
@@ -58,6 +58,7 @@
     export default {
         data() {
             return {
+                canComplete: false,
                 detailsDialog: false,
                 details: [],
                 totalItems: 0,
@@ -173,6 +174,7 @@
                     item.createdAt = DateTime.localize(new Date(item.createdAt));
                     item.completedAt = item.completedAt !== null ? DateTime.localize(new Date(item.completedAt)) : null;
                 });
+                this.canComplete = data.canComplete;
 
                 this.loading = false;
             },
@@ -187,7 +189,8 @@
                 this.$axios.post(`/spa/admin/statistic/purchases/complete/${purchase.id}`)
                     .then(response => {
                         if (response.data.status === 'success') {
-                            purchase.completedAt = DateTime.localize(response.data.completedAt);
+                            purchase.completedAt = DateTime.localize(new Date(response.data.completedAt));
+                            purchase.via = response.data.via;
                         }
                     });
             }

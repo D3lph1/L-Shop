@@ -1,42 +1,73 @@
 <template>
-    <v-content>
-        <v-container fluid fill-height>
-            <v-layout align-center justify-center>
-                <v-flex xs12 sm5 md4 lg3>
-                    <v-card class="elevation-12">
-                        <v-toolbar dark color="primary">
-                            <v-icon>add</v-icon>
-                            <v-toolbar-title>{{ $t('content.frontend.auth.password.forgot.title') }}</v-toolbar-title>
-                            <v-spacer></v-spacer>
-                        </v-toolbar>
-                        <v-card-text>
-                            <v-form>
-                                <v-text-field prepend-icon="mail" v-model="email" :label="$t('validation.attributes.email')" type="text" @keyup.enter="perform"></v-text-field>
-                            </v-form>
-                            <!--<v-form>
-                                <div v-html="captcha"></div>
-                            </v-form>-->
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-layout flex align-center justify-center>
-                                <v-btn color="primary" :loading="loadingBtn" :disabled="loadingBtn || disabledBtn" @click="perform">{{ $t('content.frontend.auth.password.forgot.continue') }}</v-btn>
-                            </v-layout>
-                        </v-card-actions>
-                        <v-card-actions class="text-xs-center" v-if="accessModeAny || accessModeAuth">
-                            <v-layout flex align-center justify-center>
-                                <v-btn flat small color="secondary" :to="{name: 'frontend.auth.login'}">{{ $t('content.frontend.auth.login.title') }}</v-btn>
-                            </v-layout>
-                        </v-card-actions>
-                        <v-card-actions>
-                            <v-layout flex align-center justify-center v-if="accessModeAny">
-                                <v-btn flat small color="secondary" :to="{name: 'frontend.auth.password.forgot'}">{{ $t('content.frontend.auth.login.purchase_without_auth') }}</v-btn>
-                            </v-layout>
-                        </v-card-actions>
-                    </v-card>
-                </v-flex>
-            </v-layout>
-        </v-container>
-    </v-content>
+    <v-container
+            id="full"
+            fluid
+            align-center
+            justify-center
+    >
+        <v-card
+                id="enter-card"
+                width="300px"
+        >
+            <v-card
+                    id="form-header"
+                    color="primary"
+            >
+                <v-icon medium color="white">autorenew</v-icon>
+                <h1 class="text-xs-center">{{ $t('content.frontend.auth.password.forgot.title') }}</h1>
+            </v-card>
+
+            <v-form id="form">
+                <v-text-field
+                        v-model="email"
+                        :label="$t('validation.attributes.email')"
+                        required
+                        prepend-icon="mail_outline"
+                ></v-text-field>
+                <v-btn
+                        @click="perform"
+                        :loading="loadingBtn"
+                        :disabled="disabledBtn"
+                        block
+                        color="primary"
+                >
+                    {{ $t('content.frontend.auth.password.forgot.continue') }}</v-btn>
+            </v-form>
+
+            <v-footer
+                    height="auto"
+                    id="form-footer"
+            >
+                <v-tooltip bottom>
+                    <v-btn
+                            large
+                            outline
+                            icon
+                            color="green"
+                            slot="activator"
+                            :to="{name: 'frontend.auth.login'}"
+                    >
+                        <v-icon>vpn_key</v-icon>
+                    </v-btn>
+                    <span>{{ $t('content.frontend.auth.login.title') }}</span>
+                </v-tooltip>
+
+                <v-tooltip bottom>
+                    <v-btn
+                            large
+                            outline
+                            icon
+                            color="orange"
+                            slot="activator"
+                            :to="{name: 'frontend.auth.password.forgot'}"
+                    >
+                        <v-icon>shopping_cart</v-icon>
+                    </v-btn>
+                    <span>{{ $t('content.frontend.auth.login.purchase_without_auth') }}</span>
+                </v-tooltip>
+            </v-footer>
+        </v-card>
+    </v-container>
 </template>
 
 <script>
@@ -73,7 +104,7 @@
                 this.$axios.post('/spa/password/forgot', {
                     email: this.email
                 })
-                    .then((response) => {
+                    .then(response => {
                         let data = response.data;
                         let status = data.status;
                         if (status === 'success') {
@@ -81,7 +112,7 @@
                         }
                         this.loadingBtn = false;
                     })
-                    .catch((err) => {
+                    .catch(() => {
                         this.loadingBtn = false;
                     });
             },

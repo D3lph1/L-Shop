@@ -9,6 +9,8 @@ interface GroupRepository
 {
     public function create(Group $group): void;
 
+    public function update(Group $group): void;
+
     public function findByName(string $name): ?Group;
 
     public function deleteAll(): bool;

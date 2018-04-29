@@ -144,12 +144,14 @@ class AdminBlockConstructor
                 'icon' => 'more_horiz',
                 'subItems' => [
                     [
-                        'link' => '',
-                        'title' => __('content.layout.shop.sidebar.admin.other.sub_items.rcon')
+                        'link' => 'admin.other.rcon',
+                        'title' => __('content.layout.shop.sidebar.admin.other.sub_items.rcon'),
+                        'permissions' => [Permissions::ADMIN_USERS_CRUD_ACCESS]
                     ],
                     [
-                        'link' => '',
-                        'title' => __('content.layout.shop.sidebar.admin.other.sub_items.debug')
+                        'link' => 'admin.other.debug',
+                        'title' => __('content.layout.shop.sidebar.admin.other.sub_items.debug'),
+                        'permissions' => [Permissions::ADMIN_USERS_CRUD_ACCESS]
                     ],
                 ]
             ],

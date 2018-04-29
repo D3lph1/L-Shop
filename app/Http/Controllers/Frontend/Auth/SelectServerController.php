@@ -21,10 +21,9 @@ class SelectServerController extends Controller
 
     public function render(ServersHandler $handler, Settings $settings)
     {
-        return new JsonResponse(Status::SUCCESS, [
-            'servers' => $handler->servers(),
+        return new JsonResponse(Status::SUCCESS, array_merge($handler->servers()->jsonSerialize(), [
             'allowLogin' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY ||
                 $settings->get('auth.access_mode')->getValue() === AccessMode::AUTH
-        ]);
+        ]));
     }
 }

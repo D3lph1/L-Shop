@@ -1,37 +1,87 @@
 <template>
-    <v-content>
-        <v-container fluid fill-height>
-            <v-layout align-center justify-center>
-                <v-flex xs12 sm5 md4 lg3>
-                    <v-card class="elevation-12">
-                        <v-toolbar dark color="primary">
-                            <v-icon>check_box</v-icon>
-                            <v-toolbar-title>{{ $t('content.frontend.auth.servers.title') }}</v-toolbar-title>
-                            <v-spacer></v-spacer>
-                        </v-toolbar>
-                        <v-card-text>
-                            <v-list>
-                                <v-list-tile avatar v-for="(server, index) in servers" :key="index" :to="{name: server.route, params: {server: server.id}}">
-                                    <v-list-tile-action>
-                                        <v-icon v-if="!server.enabled">power_settings_new</v-icon>
-                                    </v-list-tile-action>
-                                    <v-list-tile-content>
-                                        <v-list-tile-title v-text="server.name"></v-list-tile-title>
-                                    </v-list-tile-content>
-                                </v-list-tile>
-                            </v-list>
-                        </v-card-text>
-                        <v-card-actions>
-                            <v-layout flex align-center justify-center>
-                                <v-btn v-if="isAuth" color="secondary" @click="logout" :loading="disabledLogoutBtn" :disabled="disabledLogoutBtn">{{ $t('content.frontend.auth.login.logout') }}</v-btn>
-                                <v-btn v-else-if="!isAuth && allowLogin" :to="{name: 'frontend.auth.login'}" color="secondary">{{ $t('content.frontend.auth.login.login') }}</v-btn>
-                            </v-layout>
-                        </v-card-actions>
-                    </v-card>
-                </v-flex>
-            </v-layout>
-        </v-container>
-    </v-content>
+    <v-container
+            id="full"
+            fluid
+            align-center
+            justify-center
+    >
+        <v-card
+                id="enter-card"
+                width="300px"
+        >
+            <v-card
+                    id="form-header"
+                    color="primary"
+            >
+                <v-icon medium color="white">check_circle</v-icon>
+                <h1>{{ $t('content.frontend.auth.servers.title') }}</h1>
+            </v-card>
+
+            <v-list>
+                <v-list-tile
+                        avatar
+                        v-for="(server, index) in servers"
+                        :key="index"
+                        :to="{name: server.route, params: {server: server.id}}"
+                        @contextmenu="contextMenu($event, server)"
+                >
+                    <v-list-tile-action>
+                        <v-icon v-if="!server.enabled">power_settings_new</v-icon>
+                    </v-list-tile-action>
+                    <v-list-tile-content>
+                        <v-list-tile-title v-text="server.name"></v-list-tile-title>
+                    </v-list-tile-content>
+                </v-list-tile>
+            </v-list>
+
+            <v-menu
+                    offset-y
+                    v-model="menu.show"
+                    absolute
+                    :position-x="menu.x"
+                    :position-y="menu.y"
+            >
+                <v-list>
+                    <v-list-tile v-for="(item, index) in menu.items" :key="index" @click="contextMenuClick(item)">
+                        <v-list-tile-title>{{ item.title }}</v-list-tile-title>
+                    </v-list-tile>
+                </v-list>
+            </v-menu>
+
+            <v-footer
+                    height="auto"
+                    id="form-footer"
+            >
+                <v-tooltip bottom v-if="isAuth">
+                    <v-btn
+                            large
+                            outline
+                            icon
+                            color="blue"
+                            slot="activator"
+                            :disabled="disabledLogoutBtn"
+                            @click="logout"
+                    >
+                        <v-icon>exit_to_app</v-icon>
+                    </v-btn>
+                    <span>{{ $t('content.frontend.auth.login.logout') }}</span>
+                </v-tooltip>
+                <v-tooltip bottom v-else-if="!isAuth && allowLogin">
+                    <v-btn
+                            large
+                            outline
+                            icon
+                            color="blue"
+                            slot="activator"
+                            :to="{name: 'frontend.auth.login'}"
+                    >
+                        <v-icon>vpn_key</v-icon>
+                    </v-btn>
+                    <span>{{ $t('content.frontend.auth.login.title') }}</span>
+                </v-tooltip>
+            </v-footer>
+        </v-card>
+    </v-container>
 </template>
 
 <script>
@@ -40,8 +90,22 @@
     export default {
         data() {
             return {
+                // Servers list.
                 servers: [],
+                // Is the user authorized to authenticate.
                 allowLogin: false,
+                menu: {
+                    // The current status of the context menu. True - displayed, false - hidden.
+                    show: false,
+                    // Horizontal coordinate of context menu.
+                    x: 0,
+                    // Vertical coordinate of context menu.
+                    y: 0,
+                    // The server object on which the context menu was called.
+                    clicked: null,
+                    // List of context menu items.
+                    items: []
+                },
 
                 disabledLogoutBtn: false
             }
@@ -61,6 +125,44 @@
             }
         },
         methods: {
+            contextMenu(event, server) {
+                event.preventDefault();
+                this.menu.show = false;
+                this.menu.x = event.clientX;
+                this.menu.y = event.clientY;
+                this.menu.clicked = server;
+                this.$nextTick(() => {
+                    this.menu.show = true
+                })
+            },
+            contextMenuClick(listItem) {
+                if (this.menu.clicked === null) {
+                    return;
+                }
+
+                switch (listItem.action) {
+                    case 'edit':
+                        // TODO: Change route! This value only for test.
+                        this.$router.push({name: 'admin.control.basic'});
+                        break;
+                    case 'switch':
+                        const self = this;
+                        function onComplete(response) {
+                            if (response.data.status === 'success') {
+                                self.menu.clicked.enabled = !self.menu.clicked.enabled;
+                            }
+                        }
+
+                        if (this.menu.clicked.enabled) {
+                            this.$axios.post(`/spa/admin/servers/disable/${this.menu.clicked.id}`)
+                                .then(onComplete);
+                        } else {
+                            this.$axios.post(`/spa/admin/servers/enable/${this.menu.clicked.id}`)
+                                .then(onComplete);
+                        }
+                        break;
+                }
+            },
             logout() {
                 this.disabledLogoutBtn = true;
                 this.$axios.post('/spa/logout')
@@ -78,6 +180,19 @@
 
                 this.servers = data.servers;
                 this.allowLogin = data.allowLogin;
+                if (data.canServersCrud) {
+                    this.menu.items.push({
+                        title: 'Редактировать',
+                        action: 'edit'
+                    });
+                }
+
+                if (data.canEnableDisableServers) {
+                    this.menu.items.push({
+                        title: 'Переключить',
+                        action: 'switch'
+                    });
+                }
             }
         }
     }

@@ -95,18 +95,14 @@ abstract class Permission
         return $this;
     }
 
-    public function getExpiredAt(): \DateTimeImmutable
+    public function getExpireAt(): int
     {
-        return \DateTimeImmutable::createFromFormat('U', (string)$this->expireAt);
+        return $this->expireAt;
     }
 
-    public function setExpiredAt(?\DateTimeImmutable $expireAt): Permission
+    public function setExpireAt(int $expireAt): Permission
     {
-        if ($expireAt !== null) {
-            $this->expireAt = $expireAt->getTimestamp();
-        } else {
-            $this->expireAt = 0;
-        }
+        $this->expireAt = $expireAt;
 
         return $this;
     }

@@ -31,6 +31,12 @@ class DoctrinePlayerRepository implements PlayerRepository
         $this->em->flush();
     }
 
+    public function update(Player $player): void
+    {
+        $this->em->merge($player);
+        $this->em->flush();
+    }
+
     public function deleteAll(): bool
     {
         return (bool)$this->er->createQueryBuilder('p')

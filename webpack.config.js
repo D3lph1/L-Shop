@@ -46,6 +46,12 @@ module.exports = {
                 })
             },
             {
+                test: /\.(less)$/,
+                use: ExtractTextPlugin.extract({
+                    use: ['css-loader', 'less-loader']
+                })
+            },
+            {
                 test: /\.(eot|svg|ttf|woff|woff2|otf)$/,
                 use: [{
                     loader: "url-loader",

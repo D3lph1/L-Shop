@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace App\Services\Game\Permissions;
 
 use App\Entity\User;
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 
 /**
@@ -25,12 +26,19 @@ class Player
     /**
      * @var Group
      */
-    private $group;
+    private $primaryGroup;
 
-    public function __construct(User $user, Group $group)
+    /**
+     * @var Collection
+     */
+    private $groups;
+
+    public function __construct(User $user, Group $primaryGroup)
     {
         $this->user = $user;
-        $this->group = $group;
+        $this->primaryGroup = $primaryGroup;
+        $this->groups = new ArrayCollection();
+        $this->permissions = new ArrayCollection();
     }
 
     public function getUser(): User
@@ -38,9 +46,9 @@ class Player
         return $this->user;
     }
 
-    public function getGroup(): Group
+    public function getPrimaryGroup(): Group
     {
-        return $this->group;
+        return $this->primaryGroup;
     }
 
     public function getPermissions(): Collection
@@ -48,10 +56,8 @@ class Player
         return $this->permissions;
     }
 
-    public function setPermissions(Collection $permissions): Player
+    public function getGroups(): Collection
     {
-        $this->permissions = $permissions;
-
-        return $this;
+        return $this->groups;
     }
 }

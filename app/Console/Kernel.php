@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Console;
 
-use App\Console\Commands\DB\Setup as SetupDB;
+use App\Console\Commands\Purchase\Complete as CompletePurchase;
 use App\Console\Commands\User\Create as CreateUser;
 use App\Console\Commands\User\Delete as DeleteUser;
 use App\Console\Commands\User\Roles\Attach as UserAttachRoles;
@@ -20,12 +20,12 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        SetupDB::class,
         CreateUser::class,
         DeleteUser::class,
         UserAttachRoles::class,
         UserDetachRoles::class,
-        UserRolesList::class
+        UserRolesList::class,
+        CompletePurchase::class
     ];
 
     /**

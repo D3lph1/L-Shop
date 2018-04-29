@@ -31,6 +31,12 @@ class DoctrineGroupRepository implements GroupRepository
         $this->em->flush();
     }
 
+    public function update(Group $group): void
+    {
+        $this->em->merge($group);
+        $this->em->flush();
+    }
+
     public function findByName(string $name): ?Group
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */

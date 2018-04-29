@@ -36,6 +36,8 @@ const PagesEdit = () => import(/* webpackChunkName: "admin" */ '../templates/adm
 const PagesList = () => import(/* webpackChunkName: "admin" */ '../templates/admin/pages/List.vue');
 const UsersList = () => import(/* webpackChunkName: "admin" */ '../templates/admin/users/List.vue');
 const UsersEdit = () => import(/* webpackChunkName: "admin" */ '../templates/admin/users/Edit.vue');
+const Rcon = () => import(/* webpackChunkName: "admin" */ '../templates/admin/other/Rcon.vue');
+const Debug = () => import(/* webpackChunkName: "admin" */ '../templates/admin/other/Debug.vue');
 const StatisticShow = () => import(/* webpackChunkName: "admin" */ '../templates/admin/statistic/Show.vue');
 const StatisticPurchases = () => import(/* webpackChunkName: "admin" */ '../templates/admin/statistic/Purchases.vue');
 const About = () => import(/* webpackChunkName: "admin" */'../templates/admin/information/About.vue');
@@ -66,7 +68,7 @@ export default [
         path: '/activation/sent',
         name: 'frontend.auth.activation.sent',
         component: Activation,
-        mata: {
+        meta: {
             title: $t('content.frontend.auth.activation.sent.title')
         }
     },
@@ -387,6 +389,26 @@ export default [
                 },
                 meta: {
                     title: $t('content.admin.users.list.title')
+                }
+            },
+            {
+                path: 'other/rcon',
+                name: 'admin.other.rcon',
+                components: {
+                    content: Rcon
+                },
+                meta: {
+                    title: $t('content.admin.other.rcon.title')
+                }
+            },
+            {
+                path: 'other/debug',
+                name: 'admin.other.debug',
+                components: {
+                    content: Debug
+                },
+                meta: {
+                    title: $t('content.admin.other.debug.title')
                 }
             },
             {

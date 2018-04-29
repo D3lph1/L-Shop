@@ -15,11 +15,6 @@ class Confirmation extends Mailable
     use Queueable;
 
     /**
-     * {@inheritdoc}
-     */
-    public $subject;
-
-    /**
      * @var Activation
      */
     private $activation;

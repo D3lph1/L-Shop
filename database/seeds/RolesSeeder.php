@@ -19,7 +19,7 @@ class RolesSeeder extends Seeder
             Permissions::PROFILE_GAME_CART_ACCESS
         ],
         Roles::ADMIN => [
-            Permissions::VIEWING_DISABLED_SERVERS,
+            Permissions::SWITCH_SERVERS_STATE,
             Permissions::ALLOW_SET_HD_SKINS_IMPORTANT,
             Permissions::ALLOW_SET_HD_CLOAKS_IMPORTANT,
             Permissions::PROFILE_PURCHASE_HISTORY_ACCESS,
@@ -28,13 +28,17 @@ class RolesSeeder extends Seeder
             Permissions::ADMIN_CONTROL_PAYMENTS_ACCESS,
             Permissions::ADMIN_CONTROL_SECURITY_ACCESS,
             Permissions::ADMIN_CONTROL_OPTIMIZATION_ACCESS,
+            Permissions::ADMIN_SERVERS_CRUD_ACCESS,
             Permissions::ADMIN_ITEMS_CRUD_ACCESS,
             Permissions::ADMIN_PRODUCTS_CRUD_ACCESS,
             Permissions::ADMIN_NEWS_CRUD_ACCESS,
             Permissions::ADMIN_PAGES_CRUD_ACCESS,
             Permissions::ADMIN_USERS_CRUD_ACCESS,
+            Permissions::ADMIN_OTHER_RCON_ACCESS,
+            Permissions::ADMIN_OTHER_DEBUG_ACCESS,
             Permissions::ADMIN_STATISTIC_SHOW_ACCESS,
             Permissions::ADMIN_STATISTIC_PURCHASES_ACCESS,
+            Permissions::ALLOW_COMPLETE_PURCHASES,
             Permissions::ADMIN_INFORMATION_ABOUT_ACCESS,
             Permissions::ACCESS_WHILE_MAINTENANCE
         ]

@@ -46,7 +46,7 @@ class AddToResponse
                 $response->headers->get('Content-Type') === 'application/json') {
 
                 $json = json_decode($response->getContent(), true);
-                $httpStatus = 200;
+                $httpStatus = $response->getStatusCode();
                 if (isset($json['http_status'])) {
                     $httpStatus = $json['http_status'];
                     // Remove element 'http_status' from resulting content.

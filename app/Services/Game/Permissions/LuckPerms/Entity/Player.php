@@ -35,7 +35,7 @@ class Player
     private $primaryGroup;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Services\Game\Permissions\LuckPerms\Entity\PlayerPermission", mappedBy="player", cascade={"persist"})
+     * @ORM\OneToMany(targetEntity="App\Services\Game\Permissions\LuckPerms\Entity\PlayerPermission", mappedBy="player", cascade={"persist"}, orphanRemoval=true)
      * @ORM\JoinColumns({
      *   @ORM\JoinColumn(name="uuid", referencedColumnName="uuid")
      * })

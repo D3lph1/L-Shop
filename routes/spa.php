@@ -30,17 +30,21 @@ $router->get('/servers', 'Frontend\Auth\SelectServerController@render');
 
 // Shop
 $router->get('/shop', 'Frontend\Shop\ShopController@render');
-$router->get('/catalog/{server}/{category?}', 'Frontend\Shop\CatalogController@render');
+$router->get('/catalog/{server}/{category?}', 'Frontend\Shop\CatalogController@render')
+    ->where('server', '[0-9]+');
 $router->post('/catalog/purchase', 'Frontend\Shop\CatalogController@purchase');
 
-$router->get('/payment/{purchase}', 'Frontend\Shop\PaymentController@render');
+$router->get('/payment/{purchase}', 'Frontend\Shop\PaymentController@render')
+    ->where('purchase', '[0-9]+');
 
 $router->get('/monitoring', 'Frontend\MonitoringController@monitor');
 
-$router->get('/cart/{server}', 'Frontend\Shop\CartController@render');
+$router->get('/cart/{server}', 'Frontend\Shop\CartController@render')
+    ->where('server', '[0-9]+');
 $router->put('/cart', 'Frontend\Shop\CartController@put');
 $router->delete('/cart', 'Frontend\Shop\CartController@remove');
-$router->post('/cart/{server}', 'Frontend\Shop\CartController@purchase');
+$router->post('/cart/{server}', 'Frontend\Shop\CartController@purchase')
+    ->where('server', '[0-9]+');
 
 $router->get('/news/load', 'Frontend\News\NewsController@load');
 $router->get('/news/{news}', 'Frontend\News\NewsController@render');
@@ -69,18 +73,27 @@ $router->post('/admin/control/security', 'Admin\Control\SecurityController@save'
 $router->get('/admin/control/optimization', 'Admin\Control\OptimizationController@render');
 $router->post('/admin/control/optimization', 'Admin\Control\OptimizationController@save');
 
+$router->post('/admin/servers/enable/{server}', 'Admin\Servers\SwitchController@enable')
+    ->where('server', '[0-9]+');
+$router->post('/admin/servers/disable/{server}', 'Admin\Servers\SwitchController@disable')
+    ->where('server', '[0-9]+');
+
 $router->get('/admin/products/add', 'Admin\Products\AddController@render');
 $router->post('/admin/products/add', 'Admin\Products\AddController@add');
-$router->get('/admin/products/edit/{product}', 'Admin\Products\EditController@render');
-$router->post('/admin/products/edit/{product}', 'Admin\Products\EditController@edit');
+$router->get('/admin/products/edit/{product}', 'Admin\Products\EditController@render')
+    ->where('product', '[0-9]+');
+$router->post('/admin/products/edit/{product}', 'Admin\Products\EditController@edit')
+    ->where('product', '[0-9]+');
 $router->post('/admin/products/list', 'Admin\Products\ListController@pagination');
 $router->delete('/admin/products', 'Admin\Products\ListController@delete');
 
 $router->get('/admin/items/add', 'Admin\Items\AddController@render');
 $router->post('/admin/items/add', 'Admin\Items\AddController@add')
     ->name('admin.items.add');
-$router->get('/admin/items/edit/{item}', 'Admin\Items\EditController@render');
+$router->get('/admin/items/edit/{item}', 'Admin\Items\EditController@render')
+    ->where('item', '[0-9]+');
 $router->post('/admin/items/edit/{item}', 'Admin\Items\EditController@edit')
+    ->where('item', '[0-9]+')
     ->name('admin.items.edit');
 $router->delete('/admin/items', 'Admin\Items\ListController@delete');
 $router->post('/admin/items/list', 'Admin\Items\ListController@pagination');
@@ -88,29 +101,43 @@ $router->post('/admin/items/list', 'Admin\Items\ListController@pagination');
 $router->post('/admin/news/list', 'Admin\News\ListController@pagination');
 
 $router->post('/admin/pages/add', 'Admin\Pages\AddController@add');
-$router->get('/admin/pages/edit/{page}', 'Admin\Pages\EditController@render');
-$router->post('/admin/pages/edit/{page}', 'Admin\Pages\EditController@edit');
+$router->get('/admin/pages/edit/{page}', 'Admin\Pages\EditController@render')
+    ->where('page', '[0-9]+');
+$router->post('/admin/pages/edit/{page}', 'Admin\Pages\EditController@edit')
+    ->where('page', '[0-9]+');
 $router->post('/admin/pages/list', 'Admin\Pages\ListController@pagination');
 $router->delete('/admin/pages', 'Admin\Pages\ListController@delete');
 
-$router->get('/admin/users/edit/{user}', 'Admin\Users\EditController@render');
-$router->post('/admin/users/edit/{user}', 'Admin\Users\EditController@edit');
-$router->post('/admin/users/edit/{user}/skin', 'Admin\Users\EditController@uploadSkin');
-$router->post('/admin/users/edit/{user}/cloak', 'Admin\Users\EditController@uploadCloak');
-$router->delete('/admin/users/edit/{user}/skin', 'Admin\Users\EditController@deleteSkin');
-$router->delete('/admin/users/edit/{user}/cloak', 'Admin\Users\EditController@deleteCloak');
+$router->get('/admin/users/edit/{user}', 'Admin\Users\EditController@render')
+    ->where('user', '[0-9]+');
+$router->post('/admin/users/edit/{user}', 'Admin\Users\EditController@edit')
+    ->where('user', '[0-9]+');
+$router->post('/admin/users/edit/{user}/skin', 'Admin\Users\EditController@uploadSkin')
+    ->where('user', '[0-9]+');
+$router->post('/admin/users/edit/{user}/cloak', 'Admin\Users\EditController@uploadCloak')
+    ->where('user', '[0-9]+');
+$router->delete('/admin/users/edit/{user}/skin', 'Admin\Users\EditController@deleteSkin')
+    ->where('user', '[0-9]+');
+$router->delete('/admin/users/edit/{user}/cloak', 'Admin\Users\EditController@deleteCloak')
+    ->where('user', '[0-9]+');
 $router->delete('/admin/users/edit/ban/{ban}', 'Admin\Users\EditController@deleteBan');
-$router->post('/admin/users/edit/{user}/ban', 'Admin\Users\EditController@addBan');
-$router->post('/admin/users/edit/{user}', 'Admin\Users\EditController@edit');
+$router->post('/admin/users/edit/{user}/ban', 'Admin\Users\EditController@addBan')
+    ->where('user', '[0-9]+');
+$router->post('/admin/users/edit/{user}', 'Admin\Users\EditController@edit')
+    ->where('user', '[0-9]+');
 $router->post('/admin/users/list', 'Admin\Users\ListController@pagination');
 $router->delete('/admin/users', 'Admin\Users\ListController@delete');
+
+$router->get('/admin/other/debug', 'Admin\Other\DebugController@render');
+$router->post('/admin/other/debug/send', 'Admin\Other\DebugController@sendEmail');
 
 $router->get('/admin/statistic/show', 'Admin\Statistic\ShowController@render');
 $router->post('/admin/statistic/show/profit/month', 'Admin\Statistic\ShowController@profitForMonth');
 $router->post('/admin/statistic/show/purchases/month', 'Admin\Statistic\ShowController@purchasesForMonth');
 $router->post('/admin/statistic/show/registered/month', 'Admin\Statistic\ShowController@registeredForMonth');
 $router->post('/admin/statistic/purchases', 'Admin\Statistic\PurchasesController@pagination');
-$router->post('/admin/statistic/purchases/complete/{purchase}', 'Admin\Statistic\PurchasesController@complete');
+$router->post('/admin/statistic/purchases/complete/{purchase}', 'Admin\Statistic\PurchasesController@complete')
+    ->where('purchase', '[0-9]+');
 
 $router->get('/admin/information/about', 'Admin\Information\AboutController@render');
 

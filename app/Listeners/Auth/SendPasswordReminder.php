@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Listeners\Auth;
 
-use App\Events\Auth\PasswordReminderCreated;
+use App\Events\Auth\PasswordReminderCreatedEvent;
 use App\Mail\Auth\Reminder;
 use Illuminate\Contracts\Mail\Mailer;
 
@@ -19,7 +19,7 @@ class SendPasswordReminder
         $this->mailer= $mailer;
     }
 
-    public function handle(PasswordReminderCreated $event): void
+    public function handle(PasswordReminderCreatedEvent $event): void
     {
         $this->mailer
             ->to($event->getReminder()->getUser()->getEmail())
