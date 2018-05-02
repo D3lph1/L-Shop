@@ -72,8 +72,7 @@ class Resolution
     {
         foreach ($list as $item) {
             // [<image width>, <image height>]
-            //      /\             /\
-            //      |              |
+            //       ↑                ↑
             $width = $item[0];
             $height = $item[1];
 

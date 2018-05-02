@@ -24,6 +24,9 @@ class AccessMode
      */
     public const ANY = 'any';
 
+    /**
+     * Private constructor because this class contains only constants.
+     */
     private function __construct()
     {
     }

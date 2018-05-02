@@ -5,7 +5,7 @@ namespace App\Handlers\Frontend\Shop\Page;
 
 use App\DataTransferObjects\Frontend\Page as DTO;
 use App\Entity\Page;
-use App\Exceptions\Page\DoesNotExistException;
+use App\Exceptions\Page\PageNotFoundException;
 use App\Repository\Page\PageRepository;
 
 class VisitHandler
@@ -24,13 +24,13 @@ class VisitHandler
      * @param string $url
      *
      * @return DTO
-     * @throws DoesNotExistException
+     * @throws PageNotFoundException
      */
     public function handle(string $url): DTO
     {
         $page = $this->pageRepository->findByUrl($url);
         if ($page === null) {
-            throw new DoesNotExistException($url);
+            throw PageNotFoundException::byUrl($url);
         }
 
         return new DTO($page);

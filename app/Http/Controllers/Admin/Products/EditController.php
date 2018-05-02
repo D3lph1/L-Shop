@@ -4,20 +4,20 @@ declare(strict_types = 1);
 namespace App\Http\Controllers\Admin\Products;
 
 use App\DataTransferObjects\Admin\Products\Edit\Edit;
+use App\Exceptions\Category\CategoryNotFoundException;
+use App\Exceptions\Item\ItemNotFoundException;
+use App\Exceptions\Product\ProductNotFoundException;
 use App\Handlers\Admin\Products\Edit\EditHandler;
 use App\Handlers\Admin\Products\Edit\RenderHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Products\EditRequest;
-use function App\permission_middleware;
 use App\Services\Auth\Permissions;
 use App\Services\Infrastructure\Notification\Notifications\Error;
 use App\Services\Infrastructure\Notification\Notifications\Success;
 use App\Services\Infrastructure\Response\JsonResponse;
 use App\Services\Infrastructure\Response\Status;
 use Illuminate\Http\Request;
-use App\Exceptions\Item\DoesNotExistException as ItemDoesNotExistException;
-use App\Exceptions\Category\DoesNotExistException as CategoryDoesNotExistException;
-use App\Exceptions\Product\DoesNotExistException as ProductDoesNotExistException;
+use function App\permission_middleware;
 
 class EditController extends Controller
 {
@@ -53,13 +53,13 @@ class EditController extends Controller
 
             return (new JsonResponse(Status::SUCCESS))
                 ->addNotification(new Success(__('msg.admin.products.edit.success')));
-        }  catch (ProductDoesNotExistException $e) {
+        }  catch (ProductNotFoundException $e) {
             return (new JsonResponse('product_not_found'))
                 ->addNotification(new Error(__('msg.admin.products.edit.product_not_found')));
-        } catch (ItemDoesNotExistException $e) {
+        } catch (ItemNotFoundException $e) {
             return (new JsonResponse('item_not_found'))
                 ->addNotification(new Error(__('msg.admin.products.edit.item_not_found')));
-        } catch (CategoryDoesNotExistException $e) {
+        } catch (CategoryNotFoundException $e) {
             return (new JsonResponse('category_not_found'))
                 ->addNotification(new Error(__('msg.admin.products.edit.category_not_found')));
         }

@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace App\Handlers\Admin\Users;
 
 use App\Exceptions\LogicException;
-use App\Exceptions\User\DoesNotExistException;
+use App\Exceptions\User\UserNotFoundException;
 use App\Repository\User\UserRepository;
 use App\Services\Auth\Auth;
 
@@ -26,11 +26,16 @@ class DeleteHandler
         $this->userRepository = $userRepository;
     }
 
+    /**
+     * @param int $userId
+     *
+     * @throws UserNotFoundException
+     */
     public function handle(int $userId): void
     {
         $user = $this->userRepository->find($userId);
         if ($user === null) {
-            throw new DoesNotExistException($userId);
+            throw UserNotFoundException::byId($userId);
         }
 
         if ($this->auth->getUser()->getId() === $user->getId()) {

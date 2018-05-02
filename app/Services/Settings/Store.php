@@ -3,6 +3,10 @@ declare(strict_types = 1);
 
 namespace App\Services\Settings;
 
+/**
+ * Class Store
+ * Represents a local configuration store. The data here live during the query.
+ */
 class Store
 {
     /**

@@ -5,9 +5,10 @@ namespace App\Http\Controllers\Admin\Users;
 
 use App\DataTransferObjects\Admin\Users\Edit\AddBan;
 use App\DataTransferObjects\Admin\Users\Edit\Edit;
+use App\Exceptions\Ban\BanNotFoundException;
 use App\Exceptions\InvalidArgumentException;
 use App\Exceptions\Media\Character\InvalidRatioException;
-use App\Exceptions\User\DoesNotExistException;
+use App\Exceptions\User\UserNotFoundException;
 use App\Handlers\Admin\Users\Edit\AddBanHandler;
 use App\Handlers\Admin\Users\Edit\DeleteBanHandler;
 use App\Handlers\Admin\Users\Edit\DeleteCloakHandler;
@@ -49,7 +50,7 @@ class EditController extends Controller
                 'roles' => $dto->getRoles(),
                 'permissions' => $dto->getPermissions()
             ]);
-        } catch (DoesNotExistException $e) {
+        } catch (UserNotFoundException $e) {
             throw new NotFoundHttpException();
         }
     }
@@ -69,7 +70,7 @@ class EditController extends Controller
 
             return (new JsonResponse(Status::SUCCESS))
                 ->addNotification(new Success(__('msg.admin.users.edit.success')));
-        } catch (DoesNotExistException $e) {
+        } catch (UserNotFoundException $e) {
             return (new JsonResponse(__('msg.admin.users.edit.user_not_found')))
                 ->addNotification(new Error(__('msg.admin.users.edit.user_not_found')));
         } catch (UsernameAlreadyExistsException $e) {
@@ -88,7 +89,7 @@ class EditController extends Controller
 
             return (new JsonResponse(Status::SUCCESS))
                 ->addNotification(new Success(__('msg.frontend.profile.skin.success')));
-        } catch (DoesNotExistException $e) {
+        } catch (UserNotFoundException $e) {
             return (new JsonResponse('user_not_found'))
                 ->addNotification(new Error(__('msg.user_not_found')));
         } catch (InvalidRatioException $e) {
@@ -104,7 +105,7 @@ class EditController extends Controller
 
             return (new JsonResponse(Status::SUCCESS))
                 ->addNotification(new Success(__('msg.frontend.profile.cloak.success')));
-        } catch (DoesNotExistException $e) {
+        } catch (UserNotFoundException $e) {
             return (new JsonResponse('user_not_found'))
                 ->addNotification(new Error(__('msg.user_not_found')));
         } catch (InvalidRatioException $e) {
@@ -123,7 +124,7 @@ class EditController extends Controller
 
             return (new JsonResponse(Status::SUCCESS))
                 ->addNotification(new Error(__('msg.frontend.profile.skin.delete.fail')));
-        } catch (DoesNotExistException $e) {
+        } catch (UserNotFoundException $e) {
             return (new JsonResponse('user_not_found'))
                 ->addNotification(new Error(__('msg.user_not_found')));
         }
@@ -139,7 +140,7 @@ class EditController extends Controller
 
             return (new JsonResponse(Status::FAILURE))
                 ->addNotification(new Error(__('msg.frontend.profile.cloak.delete.fail')));
-        } catch (DoesNotExistException $e) {
+        } catch (UserNotFoundException $e) {
             return (new JsonResponse('user_not_found'))
                 ->addNotification(new Error(__('msg.user_not_found')));
         }
@@ -162,7 +163,7 @@ class EditController extends Controller
                 'ban' => $ban
             ]))
                 ->addNotification(new Info(__('msg.admin.users.edit.ban.add.success')));
-        } catch (DoesNotExistException $e) {
+        } catch (UserNotFoundException $e) {
             return (new JsonResponse('user_not_found'))
                 ->addNotification(new Error(__('msg.admin.users.edit.ban.add.user_not_found')));
         } catch (InvalidArgumentException $e) {
@@ -180,8 +181,8 @@ class EditController extends Controller
 
             return (new JsonResponse(Status::SUCCESS))
                 ->addNotification(new Info(__('msg.admin.users.edit.ban.delete.success')));
-        } catch (\App\Exceptions\Ban\DoesNotExistException $e) {
-            return (new JsonResponse(''))
+        } catch (BanNotFoundException $e) {
+            return (new JsonResponse('not_found'))
                 ->addNotification(new Error(__('msg.admin.users.edit.ban.delete.not_found')));
         }
     }

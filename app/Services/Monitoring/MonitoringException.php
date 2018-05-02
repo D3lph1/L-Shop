@@ -6,10 +6,11 @@ namespace App\Services\Monitoring;
 use App\Exceptions\RuntimeException;
 use Throwable;
 
+/**
+ * Class MonitoringException
+ * An exception is thrown in the event of an error in the receipt or processing of monitoring statics.
+ */
 class MonitoringException extends RuntimeException
 {
-    public function __construct(string $message = "", int $code = 0, Throwable $previous = null)
-    {
-        parent::__construct($message, $code, $previous);
-    }
+    //
 }

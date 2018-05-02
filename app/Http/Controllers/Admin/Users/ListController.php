@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Users;
 
-use App\Exceptions\User\DoesNotExistException;
+use App\Exceptions\User\UserNotFoundException;
 use App\Handlers\Admin\Users\DeleteHandler;
 use App\Handlers\Admin\Users\ListHandler;
 use App\Http\Controllers\Controller;
@@ -44,7 +44,7 @@ class ListController extends Controller
 
             return (new JsonResponse(Status::SUCCESS))
                 ->addNotification(new Info(__('msg.admin.users.list.delete.success')));
-        } catch (DoesNotExistException $e) {
+        } catch (UserNotFoundException $e) {
             return (new JsonResponse('user_not_found'))
                 ->addNotification(new Error(__('msg.admin.users.list.delete.user_not_found')));
         }

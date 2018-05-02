@@ -6,7 +6,7 @@ namespace App\Services\Purchasing;
 use App\Entity\Distribution;
 use App\Entity\Purchase;
 use App\Entity\PurchaseItem;
-use App\Exceptions\Distributor\DoesNotExistsException;
+use App\Exceptions\Distributor\DistributorNotFoundException;
 use App\Exceptions\Purchase\AlreadyCompletedException;
 use App\Repository\Distribution\DistributionRepository;
 use App\Repository\Purchase\PurchaseRepository;
@@ -54,8 +54,8 @@ class PurchaseCompleter
      *
      * @param null|string $via Specifies the context in which the purchase was completed.
      *
-     * @AlreadyCompletedException If the purchase has already been completed.
-     * @throws \Exception
+     * @throws AlreadyCompletedException If the purchase has already been completed.
+     * @throws DistributorNotFoundException
      */
     public function complete(Purchase $purchase, ?string $via = null): void
     {
@@ -81,7 +81,7 @@ class PurchaseCompleter
             $distributor = $this->distributors->retrieveByName($distributorClass);
 
             if ($distributor === null) {
-                throw new DoesNotExistsException($distributorClass);
+                throw DistributorNotFoundException::byId($distributorClass);
             }
 
             /** @var PurchaseItem $purchaseItem */

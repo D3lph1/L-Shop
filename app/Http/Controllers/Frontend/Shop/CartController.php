@@ -4,8 +4,8 @@ declare(strict_types = 1);
 namespace App\Http\Controllers\Frontend\Shop;
 
 use App\DataTransferObjects\Frontend\Shop\Server;
-use App\Exceptions\Product\DoesNotExistException;
-use App\Exceptions\Server\DoesNotExistException as ServerDoesNotExistException;
+use App\Exceptions\Product\ProductNotFoundException;
+use App\Exceptions\Server\ServerNotFoundException;
 use App\Handlers\Frontend\Shop\Cart\PurchaseHandler;
 use App\Handlers\Frontend\Shop\Cart\PutHandler;
 use App\Handlers\Frontend\Shop\Cart\RemoveHandler;
@@ -64,7 +64,7 @@ class CartController extends Controller
 
             return (new JsonResponse(Status::SUCCESS))
                 ->addNotification(new Info(__('msg.frontend.shop.cart.remove.success')));
-        } catch (DoesNotExistException $e) {
+        } catch (ProductNotFoundException $e) {
             return (new JsonResponse('product_does_not_exist'))
                 ->setHttpStatus(403)
                 ->addNotification(new Warning(__('msg.frontend.shop.cart.remove.fail')));
@@ -88,7 +88,7 @@ class CartController extends Controller
                     'purchaseId' => $result->getPurchaseId()
                 ]);
             }
-        } catch (ServerDoesNotExistException $e) {
+        } catch (ServerNotFoundException $e) {
             return (new JsonResponse('server_not_found'))
                 ->setHttpStatus(403)
                 ->addNotification(new Error(__('msg.frontend.shop.cart.purchase.server_not_found')));

@@ -3,6 +3,11 @@ declare(strict_types = 1);
 
 namespace App\Services\Item\Enchantment;
 
+/**
+ * Class Enchantments
+ * Defines constants enchanted. The value of the constant is the in-game identifier of
+ * the enchantment.
+ */
 class Enchantments
 {
     // ** Armour **

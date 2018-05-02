@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Frontend;
 
-use App\Exceptions\Page\DoesNotExistException;
+use App\Exceptions\Page\PageNotFoundException;
 use App\Handlers\Frontend\Shop\Page\VisitHandler;
 use App\Http\Controllers\Controller;
 use App\Services\Infrastructure\Response\JsonResponse;
@@ -21,7 +21,7 @@ class PageController extends Controller
             return new JsonResponse(Status::SUCCESS, [
                 'page' => $page
             ]);
-        } catch (DoesNotExistException $e) {
+        } catch (PageNotFoundException $e) {
             throw new NotFoundHttpException();
         }
     }

@@ -9,6 +9,9 @@ use App\Services\Item\Type;
 
 class Stack
 {
+    /**
+     * Private constructor because this class contains only static methods.
+     */
     private function __construct()
     {
     }

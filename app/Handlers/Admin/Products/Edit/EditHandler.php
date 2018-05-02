@@ -4,12 +4,12 @@ declare(strict_types = 1);
 namespace App\Handlers\Admin\Products\Edit;
 
 use App\DataTransferObjects\Admin\Products\Edit\Edit;
+use App\Exceptions\Category\CategoryNotFoundException;
+use App\Exceptions\Item\ItemNotFoundException;
+use App\Exceptions\Product\ProductNotFoundException;
 use App\Repository\Category\CategoryRepository;
 use App\Repository\Item\ItemRepository;
 use App\Repository\Product\ProductRepository;
-use App\Exceptions\Item\DoesNotExistException as ItemDoesNotExistException;
-use App\Exceptions\Category\DoesNotExistException as CategoryDoesNotExistException;
-use App\Exceptions\Product\DoesNotExistException as ProductDoesNotExistException;
 
 class EditHandler
 {
@@ -38,21 +38,28 @@ class EditHandler
         $this->categoryRepository = $categoryRepository;
     }
 
+    /**
+     * @param Edit $dto
+     *
+     * @throws ProductNotFoundException
+     * @throws ItemNotFoundException
+     * @throws CategoryNotFoundException
+     */
     public function handle(Edit $dto): void
     {
         $product = $this->productRepository->find($dto->getProduct());
         if ($product === null) {
-            throw new ProductDoesNotExistException($dto->getProduct());
+            throw ProductNotFoundException::byId($dto->getProduct());
         }
 
         $item = $this->itemRepository->find($dto->getItem());
         if ($item === null) {
-            throw new ItemDoesNotExistException($dto->getItem());
+            throw ItemNotFoundException::byId($dto->getItem());
         }
 
         $category = $this->categoryRepository->find($dto->getCategory());
         if ($category === null) {
-            throw new CategoryDoesNotExistException($dto->getCategory());
+            throw CategoryNotFoundException::byId($dto->getCategory());
         }
 
         $product

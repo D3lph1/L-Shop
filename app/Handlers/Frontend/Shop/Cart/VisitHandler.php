@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace App\Handlers\Frontend\Shop\Cart;
 
 use App\DataTransferObjects\Frontend\Shop\CartResult;
-use App\Exceptions\Server\DoesNotExistException;
+use App\Exceptions\Server\ServerNotFoundException;
 use App\Repository\Server\ServerRepository;
 use App\Services\Cart\Cart;
 use App\Services\Infrastructure\Server\Persistence\Persistence;
@@ -37,13 +37,13 @@ class VisitHandler
      * @param int $serverId
      *
      * @return CartResult[]
-     * @throws DoesNotExistException
+     * @throws ServerNotFoundException
      */
     public function handle(int $serverId): array
     {
         $server = $this->serverRepository->find($serverId);
         if ($server === null) {
-            throw new DoesNotExistException($serverId);
+            throw ServerNotFoundException::byId($serverId);
         }
         $this->persistence->persist($server);
 

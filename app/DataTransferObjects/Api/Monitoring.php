@@ -3,16 +3,16 @@ declare(strict_types = 1);
 
 namespace App\DataTransferObjects\Api;
 
-use App\Services\Monitoring\Entity;
+use App\Services\Monitoring\Statistic;
 
 class Monitoring implements \JsonSerializable
 {
     /**
-     * @var Entity
+     * @var Statistic
      */
     private $entity;
 
-    public function __construct(Entity $entity)
+    public function __construct(Statistic $entity)
     {
         $this->entity = $entity;
     }

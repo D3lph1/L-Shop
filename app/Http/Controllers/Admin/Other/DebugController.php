@@ -10,6 +10,7 @@ use function App\permission_middleware;
 use App\Services\Auth\Permissions;
 use App\Services\Infrastructure\Response\JsonResponse;
 use App\Services\Infrastructure\Response\Status;
+use Psr\Log\LoggerInterface;
 
 class DebugController extends Controller
 {
@@ -23,13 +24,15 @@ class DebugController extends Controller
         return new JsonResponse(Status::SUCCESS);
     }
 
-    public function sendEmail(SendTestEmailRequest $request, SendTestEmailHandler $handler): JsonResponse
+    public function sendEmail(SendTestEmailRequest $request, SendTestEmailHandler $handler, LoggerInterface $logger): JsonResponse
     {
         try {
             $handler->handle($request->get('email'));
 
             return new JsonResponse(Status::SUCCESS);
         } catch (\Exception $e) {
+            $logger->error($e);
+
             return new JsonResponse(Status::FAILURE, [
                 'message' => $e->getMessage()
             ]);

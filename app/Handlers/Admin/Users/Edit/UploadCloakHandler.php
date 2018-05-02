@@ -5,7 +5,7 @@ namespace App\Handlers\Admin\Users\Edit;
 
 use App\Entity\User;
 use App\Exceptions\Media\Character\InvalidRatioException;
-use App\Exceptions\User\DoesNotExistException;
+use App\Exceptions\User\UserNotFoundException;
 use App\Repository\User\UserRepository;
 use App\Services\Validation\CloakValidator;
 use Illuminate\Http\UploadedFile;
@@ -37,11 +37,17 @@ class UploadCloakHandler
         $this->validator = $validator;
     }
 
+    /**
+     * @param int          $userId
+     * @param UploadedFile $file
+     *
+     * @throws UserNotFoundException
+     */
     public function handle(int $userId, UploadedFile $file): void
     {
         $user = $this->userRepository->find($userId);
         if ($user === null) {
-            throw new DoesNotExistException($userId);
+            throw UserNotFoundException::byId($userId);
         }
 
         $image = $this->imageManager->make($file);
@@ -53,8 +59,8 @@ class UploadCloakHandler
     }
 
     /**
-     * @param User $user
-     * @param Image  $image
+     * @param User  $user
+     * @param Image $image
      */
     private function move(User $user, Image $image): void
     {

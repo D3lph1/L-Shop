@@ -10,12 +10,13 @@ use App\Services\Monitoring\Drivers\Driver;
 use App\Services\Monitoring\Drivers\DTO;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class Monitoring
+ * Keeps the logic of obtaining information about online gaming servers.
+ */
 class Monitoring
 {
-    /**
-     * @var string
-     */
-    private $cacheKey = 'monitoring.{server}';
+    private const CACHE_KEY = 'monitoring.{server}';
 
     /**
      * @var ServerRepository
@@ -57,7 +58,9 @@ class Monitoring
     }
 
     /**
-     * @return Entity[]
+     * Gets statistical information for all servers that have the monitoring option enabled.
+     *
+     * @return Statistic[]
      */
     public function monitorAll(): array
     {
@@ -70,7 +73,14 @@ class Monitoring
         return $result;
     }
 
-    public function monitorOne(Server $server): Entity
+    /**
+     * Gets information about statistics for a specific server.
+     *
+     * @param Server $server
+     *
+     * @return Statistic
+     */
+    public function monitorOne(Server $server): Statistic
     {
         $key = $this->key($server->getId());
 
@@ -93,11 +103,11 @@ class Monitoring
             return $dto;
         });
 
-        return new Entity($server, $dto->getNow(), $dto->getTotal(), $dto->isDisabled(), $dto->isFailed());
+        return new Statistic($server, $dto->getNow(), $dto->getTotal(), $dto->isDisabled(), $dto->isFailed());
     }
 
     private function key(int $id): string
     {
-        return str_replace('{server}', $id, $this->cacheKey);
+        return str_replace('{server}', $id, self::CACHE_KEY);
     }
 }

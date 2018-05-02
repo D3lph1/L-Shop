@@ -7,7 +7,7 @@ use App\DataTransferObjects\Admin\Items\Edit\Edit;
 use App\Entity\Enchantment;
 use App\Entity\EnchantmentItem;
 use App\Exceptions\InvalidArgumentTypeException;
-use App\Exceptions\Item\DoesNotExistException;
+use App\Exceptions\Item\ItemNotFoundException;
 use App\Exceptions\UnexpectedValueException;
 use App\Repository\Enchantment\EnchantmentRepository;
 use App\Repository\Item\ItemRepository;
@@ -48,11 +48,16 @@ class EditHandler
         $this->imageHasher = $imageHasher;
     }
 
+    /**
+     * @param Edit $dto
+     *
+     * @throws ItemNotFoundException
+     */
     public function handle(Edit $dto): void
     {
         $item = $this->itemRepository->find($dto->getId());
         if ($item === null) {
-            throw new DoesNotExistException($dto->getId());
+            throw ItemNotFoundException::byId($dto->getId());
         }
 
         $image = $this->imageName($dto->getImageType(), $dto->getFile() ?: $dto->getImageName(), $item->getImage());

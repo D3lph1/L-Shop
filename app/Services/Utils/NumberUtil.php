@@ -7,6 +7,9 @@ use App\Exceptions\InvalidArgumentException;
 
 class NumberUtil
 {
+    /**
+     * Private constructor because this class contains only static methods.
+     */
     private function __construct()
     {
     }

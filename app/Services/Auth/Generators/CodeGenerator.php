@@ -8,16 +8,16 @@ namespace App\Services\Auth\Generators;
  * The generator is used to generate various codes. for example, activation codes, password
  * recovery codes, etc.
  * It should be noted that the generation of codes should occur through the use of
- * cryptographically stable functions.
+ * cryptographically safe functions.
  */
 interface CodeGenerator
 {
     /**
-     * Creates a cryptographically secure string of a given length.
+     * Creates a cryptographically safe string of a given length.
      *
-     * @param int $length
+     * @param int $length Length of the generated key.
      *
-     * @return string
+     * @return string Generated key.
      */
     public function generate(int $length): string;
 }

@@ -5,7 +5,7 @@ namespace App\Services\Monitoring;
 
 use App\Entity\Server;
 
-class Entity
+class Statistic
 {
     /**
      * @var Server

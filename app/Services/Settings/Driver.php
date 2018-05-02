@@ -38,7 +38,7 @@ class Driver
             }
 
             if (!$f) {
-                $this->repository->delete($oldDatum);
+                $this->repository->remove($oldDatum);
                 continue;
             }
 

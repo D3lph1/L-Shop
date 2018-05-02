@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Frontend\News;
 
-use App\Exceptions\News\DoesNotExistException;
+use App\Exceptions\News\NewsNotFoundException;
 use App\Handlers\Frontend\News\LoadHandler;
 use App\Handlers\Frontend\News\VisitHandler;
 use App\Http\Controllers\Controller;
@@ -25,7 +25,7 @@ class NewsController extends Controller
                 'news' => $news,
                 'formatter' => $formatter
             ]);
-        } catch (DoesNotExistException $e) {
+        } catch (NewsNotFoundException $e) {
             throw new NotFoundHttpException();
         }
     }

@@ -5,7 +5,7 @@ namespace App\Handlers\Admin\Statistic\Purchases;
 
 use App\Entity\Purchase;
 use App\Exceptions\Purchase\AlreadyCompletedException;
-use App\Exceptions\Purchase\DoesNotExistsException;
+use App\Exceptions\Purchase\PurchaseNotFoundException;
 use App\Repository\Purchase\PurchaseRepository;
 use App\Services\Purchasing\PurchaseCompleter;
 use App\Services\Purchasing\ViaContext;
@@ -33,14 +33,14 @@ class CompleteHandler
      *
      * @return Purchase
      *
-     * @throws DoesNotExistsException If the purchase with the received identifier is not found.
+     * @throws PurchaseNotFoundException If the purchase with the received identifier is not found.
      * @throws AlreadyCompletedException If this purchase is already completed.
      */
     public function handle(int $purchaseId): Purchase
     {
         $purchase = $this->repository->find($purchaseId);
         if ($purchase === null) {
-            throw new DoesNotExistsException($purchaseId);
+            throw PurchaseNotFoundException::byId($purchaseId);
         }
 
         $this->completer->complete($purchase, ViaContext::BY_ADMIN);

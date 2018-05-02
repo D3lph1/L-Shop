@@ -6,7 +6,7 @@ namespace App\Handlers\Frontend\Shop\Payment;
 use App\DataTransferObjects\Frontend\Shop\Payer;
 use App\DataTransferObjects\Frontend\Shop\Payment;
 use App\Exceptions\ForbiddenException;
-use App\Exceptions\Purchase\DoesNotExistsException;
+use App\Exceptions\Purchase\PurchaseNotFoundException;
 use App\Repository\Purchase\PurchaseRepository;
 use App\Services\Auth\Auth;
 use App\Services\Purchasing\Payers\Pool;
@@ -55,12 +55,14 @@ class VisitHandler
      * @param int $purchaseId
      *
      * @return Payer[]
+     *
+     * @throws PurchaseNotFoundException
      */
     public function handle(int $purchaseId): array
     {
         $purchase = $this->purchaseRepository->find($purchaseId);
         if ($purchase === null) {
-            throw new DoesNotExistsException($purchase);
+            throw PurchaseNotFoundException::byId($purchaseId);
         }
 
         if (!$purchase->isAnonymously()) {

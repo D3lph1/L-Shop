@@ -6,7 +6,6 @@ use App\Entity\Server;
 use App\Repository\Category\CategoryRepository;
 use App\Repository\Product\ProductRepository;
 use App\Repository\Server\ServerRepository;
-use App\Services\Database\Truncater\Truncater;
 use App\Services\Purchasing\Distributors\ShoppingCartDistributor;
 use Illuminate\Database\Seeder;
 

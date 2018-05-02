@@ -7,7 +7,7 @@ use App\DataTransferObjects\Admin\Products\Add\Item;
 use App\DataTransferObjects\Admin\Products\Add\Server;
 use App\DataTransferObjects\Admin\Products\Edit\Product;
 use App\DataTransferObjects\Admin\Products\Edit\Result;
-use App\Exceptions\Product\DoesNotExistException;
+use App\Exceptions\Product\ProductNotFoundException;
 use App\Repository\Item\ItemRepository;
 use App\Repository\Product\ProductRepository;
 use App\Repository\Server\ServerRepository;
@@ -39,11 +39,18 @@ class RenderHandler
         $this->serverRepository = $serverRepository;
     }
 
+    /**
+     * @param int $productId
+     *
+     * @return Result
+     *
+     * @throws ProductNotFoundException
+     */
     public function handle(int $productId): Result
     {
         $product = $this->productRepository->find($productId);
         if ($product === null) {
-            throw new DoesNotExistException($productId);
+            throw ProductNotFoundException::byId($productId);
         }
 
         $items = [];

@@ -7,6 +7,9 @@ use App\Exceptions\InvalidArgumentException;
 
 class DateTimeUtil
 {
+    /**
+     * Private constructor because this class contains only static methods.
+     */
     private function __construct()
     {
     }

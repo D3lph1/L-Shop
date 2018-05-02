@@ -5,7 +5,7 @@ namespace App\Console\Commands\User\Roles;
 
 use App\Console\Command;
 use App\Handlers\Consoe\User\Roles\ListHandler;
-use App\Exceptions\User\DoesNotExistException;
+use App\Exceptions\User\UserNotFoundException;
 
 class RolesList extends Command
 {
@@ -61,7 +61,7 @@ class RolesList extends Command
             );
 
             return 0;
-        } catch (DoesNotExistException $e) {
+        } catch (UserNotFoundException $e) {
             $this->error(__('commands.user.roles.attach.user_not_found', ['username' => $e->getCriteria()]));
 
             return 1;

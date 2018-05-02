@@ -18,9 +18,18 @@ class SendTestEmailHandler
         $this->mailer = $mailer;
     }
 
+    /**
+     * Sends a test email.
+     *
+     * @param string $address
+     *
+     * @throws \Exception
+     */
     public function handle(string $address): void
     {
+        // In order to make sure, at the end or vice versa, a procedure error, the letter
+        // is sent immediately.
         $this->mailer->to($address)
-            ->queue(new Test());
+            ->sendNow(new Test());
     }
 }

@@ -5,7 +5,7 @@ namespace App\Handlers\Frontend\Shop\Catalog;
 
 use App\DataTransferObjects\Frontend\Shop\Catalog\Purchase as ResultDTO;
 use App\DataTransferObjects\Frontend\Shop\Purchase;
-use App\Exceptions\Product\DoesNotExistException;
+use App\Exceptions\Product\ProductNotFoundException;
 use App\Repository\Product\ProductRepository;
 use App\Services\Purchasing\PurchaseProcessor;
 
@@ -27,11 +27,21 @@ class PurchaseHandler
         $this->processor = $processor;
     }
 
+    /**
+     * @param int         $productId
+     * @param int         $amount
+     * @param null|string $username
+     * @param string      $ip
+     *
+     * @return ResultDTO
+     *
+     * @throws ProductNotFoundException
+     */
     public function handle(int $productId, int $amount, ?string $username, string $ip): ResultDTO
     {
         $product = $this->productRepository->find($productId);
         if ($product === null) {
-            throw new DoesNotExistException($productId);
+            throw ProductNotFoundException::byId($productId);
         }
 
         $DTO = new Purchase($product, $amount);

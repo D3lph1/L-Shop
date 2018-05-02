@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace App\Handlers\Consoe\User\Roles;
 
 use App\Entity\Role;
-use App\Exceptions\Role\DoesNotExistException as RoleDoesNotExistException;
-use App\Exceptions\User\DoesNotExistException as UserDoesNotExistException;
+use App\Exceptions\Role\RoleNotFoundException;
+use App\Exceptions\User\UserNotFoundException;
 use App\Repository\Role\RoleRepository;
 use App\Repository\User\UserRepository;
 
@@ -31,14 +31,14 @@ class DetachHandler
      * @param string $username User who needs to detach a roles. User is identified by username.
      * @param array      $roles    Roles that will be detached from the user. Roles are identified by name.
      *
-     * @throws UserDoesNotExistException
-     * @throws RoleDoesNotExistException
+     * @throws UserNotFoundException
+     * @throws RoleNotFoundException
      */
     public function handle(string $username, array $roles)
     {
         $user = $this->userRepository->findByUsername($username);
         if ($user === null) {
-            throw new UserDoesNotExistException($user);
+            throw UserNotFoundException::byUsername($username);
         }
 
         /** @var Role[] $rs */
@@ -55,7 +55,7 @@ class DetachHandler
             }
 
             if ($f) {
-                throw new RoleDoesNotExistException($role);
+                throw RoleNotFoundException::byName($role);
             }
         }
 

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Servers;
 
-use App\Exceptions\Server\DoesNotExistException;
+use App\Exceptions\Server\ServerNotFoundException;
 use App\Handlers\Admin\Servers\SwitchState\DisableHandler;
 use App\Handlers\Admin\Servers\SwitchState\EnableHandler;
 use App\Http\Controllers\Controller;
@@ -29,7 +29,7 @@ class SwitchController extends Controller
 
             return (new JsonResponse(Status::SUCCESS))
                 ->addNotification(new Info(__('msg.admin.servers.switch.enabled')));
-        } catch (DoesNotExistException $e) {
+        } catch (ServerNotFoundException $e) {
             return (new JsonResponse('server_not_found'))
                 ->addNotification(new Error(__('msg.admin.servers.switch.server_not_found')));
         }
@@ -42,7 +42,7 @@ class SwitchController extends Controller
 
             return (new JsonResponse(Status::SUCCESS))
                 ->addNotification(new Info(__('msg.admin.servers.switch.disabled')));
-        } catch (DoesNotExistException $e) {
+        } catch (ServerNotFoundException $e) {
             return (new JsonResponse('server_not_found'))
                 ->addNotification(new Error(__('msg.admin.servers.switch.server_not_found')));
         }

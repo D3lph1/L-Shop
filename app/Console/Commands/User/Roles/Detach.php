@@ -4,9 +4,9 @@ declare(strict_types = 1);
 namespace App\Console\Commands\User\Roles;
 
 use App\Console\Command;
+use App\Exceptions\Role\RoleNotFoundException;
+use App\Exceptions\User\UserNotFoundException;
 use App\Handlers\Consoe\User\Roles\DetachHandler;
-use App\Exceptions\Role\DoesNotExistException as RoleDoesNotExistException;
-use App\Exceptions\User\DoesNotExistException as UserDoesNotExistException;
 
 class Detach extends Command
 {
@@ -52,12 +52,12 @@ class Detach extends Command
             $this->info(__('commands.user.roles.attach.success'));
 
             return 0;
-        } catch (UserDoesNotExistException $e) {
-            $this->error(__('commands.user.roles.attach.not_found.user_by_username', ['username' => $e->getCriteria()]));
+        } catch (UserNotFoundException $e) {
+            $this->error(__('commands.user.roles.attach.not_found.user_by_username', ['username' => $this->argument('user')]));
 
             return 1;
-        } catch (RoleDoesNotExistException $e) {
-            $this->error(__('commands.user.roles.detach.role_not_found', ['name' => $e->getCriteria()]));
+        } catch (RoleNotFoundException $e) {
+            $this->error(__('commands.user.roles.detach.role_not_found', ['name' => $this->argument('role')]));
 
             return 1;
         }

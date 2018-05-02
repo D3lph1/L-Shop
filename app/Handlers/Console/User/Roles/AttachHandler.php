@@ -3,9 +3,9 @@ declare(strict_types=1);
 
 namespace App\Handlers\Consoe\User\Roles;
 
-use App\Exceptions\Role\DoesNotExistException as RoleDoesNotExistException;
-use App\Exceptions\User\DoesNotExistException as UserDoesNotExistException;
+use App\Exceptions\Role\RoleNotFoundException;
 use App\Exceptions\User\RoleAlreadyAttachedException;
+use App\Exceptions\User\UserNotFoundException;
 use App\Repository\Role\RoleRepository;
 use App\Repository\User\UserRepository;
 
@@ -31,8 +31,8 @@ class AttachHandler
      * @param string $username User who needs to assign a roles. User is identified by username.
      * @param array      $roles    Roles that will be attached to the user. Roles are identified by name.
      *
-     * @throws UserDoesNotExistException
-     * @throws RoleDoesNotExistException
+     * @throws UserNotFoundException
+     * @throws RoleNotFoundException
      * @throws RoleAlreadyAttachedException
      */
     public function handle(string $username, array $roles)
@@ -40,7 +40,7 @@ class AttachHandler
         $user = $this->userRepository->findByUsername($username);
 
         if ($user === null) {
-            throw new UserDoesNotExistException($user);
+            throw UserNotFoundException::byUsername($username);
         }
 
         $rs = $this->roleRepository->findWhereNameIn($roles);
@@ -56,7 +56,7 @@ class AttachHandler
             }
 
             if ($f) {
-                throw new RoleDoesNotExistException($role);
+                throw RoleNotFoundException::byName($role);
             }
         }
 

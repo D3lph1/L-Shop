@@ -1,8 +1,6 @@
 <?php
 declare(strict_types = 1);
 
-use App\Services\Database\Truncater\Truncater;
-use App\Services\Settings\Setting;
 use App\Services\Settings\Settings;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Database\Seeder;

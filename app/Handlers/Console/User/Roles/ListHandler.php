@@ -1,10 +1,10 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Handlers\Consoe\User\Roles;
 
 use App\DataTransferObjects\Commands\User\Roles\RolesList;
-use App\Exceptions\User\DoesNotExistException;
+use App\Exceptions\User\UserNotFoundException;
 use App\Repository\User\UserRepository;
 
 class ListHandler
@@ -20,17 +20,16 @@ class ListHandler
     }
 
     /**
-     * @param string $username    The user whose list of roles need to get.
-     *
-     * @throws DoesNotExistException
+     * @param string $username The user whose list of roles need to get.
      *
      * @return RolesList
+     * @throws UserNotFoundException
      */
     public function handle(string $username): RolesList
     {
         $user = $this->userRepository->findByUsername($username);
         if ($user === null) {
-            throw new DoesNotExistException($user);
+            throw UserNotFoundException::byUsername($username);
         }
 
         return new RolesList($user->getRoles()->toArray(), $user);

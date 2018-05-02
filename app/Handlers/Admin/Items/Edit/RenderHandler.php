@@ -7,7 +7,7 @@ use App\DataTransferObjects\Admin\Items\Edit\Enchantment;
 use App\DataTransferObjects\Admin\Items\Edit\Item;
 use App\DataTransferObjects\Admin\Items\Edit\Result;
 use App\Entity\EnchantmentItem;
-use App\Exceptions\Item\DoesNotExistException;
+use App\Exceptions\Item\ItemNotFoundException;
 use App\Repository\Enchantment\EnchantmentRepository;
 use App\Repository\Item\ItemRepository;
 use App\Services\Item\Image\Image;
@@ -40,11 +40,18 @@ class RenderHandler
         $this->filesystem = $filesystem;
     }
 
+    /**
+     * @param int $itemId
+     *
+     * @return Result
+     *
+     * @throws ItemNotFoundException
+     */
     public function handle(int $itemId): Result
     {
         $item = $this->itemRepository->find($itemId);
         if ($item === null) {
-            throw new DoesNotExistException($itemId);
+            throw ItemNotFoundException::byId($itemId);
         }
         $images = [];
         foreach ($this->filesystem->allFiles(Image::absolutePath()) as $image) {

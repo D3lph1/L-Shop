@@ -5,9 +5,9 @@ namespace App\Http\Controllers\Frontend\Shop;
 
 use function App\auth_middleware;
 use App\DataTransferObjects\Frontend\Shop\Server;
-use App\Exceptions\Category\DoesNotExistException as CategoryDoesNotExistException;
-use App\Exceptions\Product\DoesNotExistException;
-use App\Exceptions\Server\DoesNotExistException as ServerDoesNotExistException;
+use App\Exceptions\Category\CategoryNotFoundException as CategoryDoesNotExistException;
+use App\Exceptions\Product\ProductNotFoundException;
+use App\Exceptions\Server\ServerNotFoundException as ServerDoesNotExistException;
 use App\Handlers\Frontend\Shop\Catalog\PurchaseHandler;
 use App\Handlers\Frontend\Shop\Catalog\VisitHandler;
 use App\Http\Controllers\Controller;
@@ -96,7 +96,7 @@ class CatalogController extends Controller
                     'purchaseId' => $result->getPurchaseId()
                 ]);
             }
-        } catch (DoesNotExistException $e) {
+        } catch (ProductNotFoundException $e) {
             return (new JsonResponse('product_not_found'))
                 ->addNotification(new Error(__('msg.frontend.shop.catalog.product_not_found')));
         }

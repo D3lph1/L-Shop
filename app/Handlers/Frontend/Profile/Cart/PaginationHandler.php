@@ -6,7 +6,7 @@ namespace App\Handlers\Frontend\Profile\Cart;
 use App\DataTransferObjects\Frontend\Profile\Cart\ListResult;
 use App\DataTransferObjects\Frontend\Profile\Cart\Server;
 use App\Exceptions\InvalidArgumentException;
-use App\Exceptions\Server\DoesNotExistException;
+use App\Exceptions\Server\ServerNotFoundException;
 use App\Repository\Distribution\DistributionRepository;
 use App\Repository\Server\ServerRepository;
 use App\Services\Auth\Auth;
@@ -46,6 +46,16 @@ class PaginationHandler
         $this->auth = $auth;
     }
 
+    /**
+     * @param int         $page
+     * @param int|null    $serverId
+     * @param null|string $orderBy
+     * @param bool        $descending
+     *
+     * @return ListResult
+     *
+     * @throws ServerNotFoundException
+     */
     public function handle(int $page, ?int $serverId, ?string $orderBy, bool $descending): ListResult
     {
         if (!empty($orderBy) && !in_array($orderBy, $this->availableOrders)) {
@@ -56,7 +66,7 @@ class PaginationHandler
         if ($serverId !== null) {
             $server = $this->serverRepository->find($serverId);
             if ($server === null) {
-                throw new DoesNotExistException($serverId);
+                throw ServerNotFoundException::byId($serverId);
             }
         }
 

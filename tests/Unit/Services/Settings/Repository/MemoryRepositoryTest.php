@@ -24,7 +24,7 @@ class MemoryRepositoryTest extends TestCase
         self::assertEquals('ipsum', $all[1]->getValue());
         self::assertNull($all[1]->getUpdatedAt());
 
-        $repository->delete($all[1]);
+        $repository->remove($all[1]);
         $all = $repository->findAll();
         self::assertCount(1, $all);
         self::assertEquals('key', $all[0]->getKey());

@@ -12,13 +12,7 @@ use LaravelDoctrine\ORM\Pagination\PaginatesFromRequest;
 
 class DoctrineNewsRepository implements NewsRepository
 {
-    use PaginatesFromParams, PaginatesFromRequest
-    {
-        // Resolution of conflict methods in traits.
-        PaginatesFromRequest::paginateAll insteadof PaginatesFromParams;
-        PaginatesFromRequest::paginate insteadof PaginatesFromParams;
-        PaginatesFromParams::paginateAll as paginateAllFromParams;
-    }
+    use PaginatesFromParams;
 
     /**
      * @var EntityManagerInterface
@@ -64,17 +58,17 @@ class DoctrineNewsRepository implements NewsRepository
         return $this->er->find($id);
     }
 
-    public function findAllPaginated(int $perPage, int $page): LengthAwarePaginator
+    public function findAllPaginated(int $page, int $perPage): LengthAwarePaginator
     {
-        return $this->paginateAllFromParams($perPage, $page);
+        return $this->paginateAll($perPage, $page);
     }
 
-    public function findPaginated(int $perPage): LengthAwarePaginator
+    public function findPaginated(int $page, int $perPage): LengthAwarePaginator
     {
-        return $this->paginateAll($perPage);
+        return $this->paginateAll($perPage, $page);
     }
 
-    public function findPaginatedWithOrder(string $orderBy, bool $descending, int $perPage): LengthAwarePaginator
+    public function findPaginatedWithOrder(string $orderBy, bool $descending, int $page, int $perPage): LengthAwarePaginator
     {
         return $this->paginate(
             $this->createQueryBuilder('news')
@@ -82,12 +76,12 @@ class DoctrineNewsRepository implements NewsRepository
                 ->orderBy($orderBy, $descending ? 'DESC' : 'ASC')
                 ->getQuery(),
             $perPage,
-            'page',
+            $page,
             false
         );
     }
 
-    public function findPaginateWithSearch(string $search, int $perPage): LengthAwarePaginator
+    public function findPaginateWithSearch(string $search, int $page, int $perPage): LengthAwarePaginator
     {
         return $this->paginate(
             $this->createQueryBuilder('n')
@@ -99,12 +93,12 @@ class DoctrineNewsRepository implements NewsRepository
                 ->setParameter('search', "%{$search}%")
                 ->getQuery(),
             $perPage,
-            'page',
+            $page,
             false
         );
     }
 
-    public function findPaginatedWithOrderAndSearch(string $orderBy, bool $descending, string $search, int $perPage): LengthAwarePaginator
+    public function findPaginatedWithOrderAndSearch(string $orderBy, bool $descending, string $search, int $page, int $perPage): LengthAwarePaginator
     {
         return $this->paginate(
             $this->createQueryBuilder('news')
@@ -117,7 +111,7 @@ class DoctrineNewsRepository implements NewsRepository
                 ->setParameter('search', "%{$search}%")
                 ->getQuery(),
             $perPage,
-            'page',
+            $page,
             false
         );
     }

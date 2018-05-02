@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace App\Handlers\Frontend\News;
 
 use App\DataTransferObjects\Frontend\News\News as DTO;
-use App\Exceptions\News\DoesNotExistException;
+use App\Exceptions\News\NewsNotFoundException;
 use App\Repository\News\NewsRepository;
 
 class VisitHandler
@@ -23,13 +23,13 @@ class VisitHandler
      * @param int $newsId
      *
      * @return DTO
-     * @throws DoesNotExistException
+     * @throws NewsNotFoundException
      */
     public function handle(int $newsId): DTO
     {
         $news = $this->newsRepository->find($newsId);
         if ($news === null) {
-            throw new DoesNotExistException($newsId);
+            throw NewsNotFoundException::byId($newsId);
         }
 
         return new DTO($news);

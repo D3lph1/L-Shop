@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace App\Http\Controllers\Frontend\Shop;
 
 use App\Exceptions\ForbiddenException;
-use App\Exceptions\Purchase\DoesNotExistsException;
+use App\Exceptions\Purchase\PurchaseNotFoundException;
 use App\Handlers\Frontend\Shop\Payment\VisitHandler;
 use App\Http\Controllers\Controller;
 use App\Services\Infrastructure\Response\JsonResponse;
@@ -22,7 +22,7 @@ class PaymentController extends Controller
             return new Response(new JsonResponse(Status::SUCCESS, [
                 'payers' => $payers
             ]));
-        } catch (DoesNotExistsException $e) {
+        } catch (PurchaseNotFoundException $e) {
             return new Response(new JsonResponse('purchase_not_found'), 404);
         } catch (ForbiddenException $e) {
             return new Response(new JsonResponse(Status::FORBIDDEN), 403);

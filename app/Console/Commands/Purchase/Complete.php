@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace App\Console\Commands\Purchase;
 
 use App\Exceptions\Purchase\AlreadyCompletedException;
-use App\Exceptions\Purchase\DoesNotExistsException;
+use App\Exceptions\Purchase\PurchaseNotFoundException;
 use App\Handlers\Console\Purchase\CompleteHandler;
 use Illuminate\Console\Command;
 
@@ -46,7 +46,7 @@ class Complete extends Command
         $id = (int)$this->argument('purchase_id');
         try {
             $handler->handle($id);
-        } catch (DoesNotExistsException $e) {
+        } catch (PurchaseNotFoundException $e) {
             $this->error(__('commands.purchase.complete.not_found'));
 
             return 1;

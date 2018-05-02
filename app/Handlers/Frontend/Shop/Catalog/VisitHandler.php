@@ -9,14 +9,15 @@ use App\DataTransferObjects\Frontend\Shop\Catalog\Result;
 use App\DataTransferObjects\Frontend\Shop\Catalog\Server as ServerDTO;
 use App\Entity\Category;
 use App\Entity\Server;
+use App\Exceptions\Category\CategoryNotFoundException;
+use App\Exceptions\Category\CategoryNotFoundException as CategoryDoesNotExistException;
+use App\Exceptions\Server\ServerNotFoundException;
 use App\Exceptions\UnexpectedValueException;
 use App\Repository\Product\ProductRepository;
+use App\Repository\Server\ServerRepository;
 use App\Services\Cart\Cart;
 use App\Services\Cart\Item;
 use App\Services\Infrastructure\Server\Persistence\Persistence;
-use App\Exceptions\Category\DoesNotExistException as CategoryDoesNotExistException;
-use App\Exceptions\Server\DoesNotExistException as ServerDoesNotExistException;
-use App\Repository\Server\ServerRepository;
 use App\Services\Product\Order;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
@@ -68,7 +69,7 @@ class VisitHandler
      * @param int $categoryId
      *
      * @return Result
-     * @throws ServerDoesNotExistException
+     * @throws ServerNotFoundException
      * @throws CategoryDoesNotExistException
      */
     public function handle(int $serverId, ?int $categoryId): Result
@@ -113,14 +114,14 @@ class VisitHandler
      * @param int|null $categoryId
      *
      * @return Server
-     * @throws ServerDoesNotExistException
-     * @throws CategoryDoesNotExistException
+     * @throws ServerNotFoundException
+     * @throws CategoryNotFoundException
      */
     private function checkServerAndCategory(int $serverId, ?int $categoryId): Server
     {
         $server = $this->serverRepository->find($serverId);
         if ($server === null) {
-            throw new ServerDoesNotExistException($serverId);
+            throw ServerNotFoundException::byId($serverId);
         }
 
         if ($categoryId === 0) {
@@ -130,7 +131,7 @@ class VisitHandler
         }
 
         if (count($server->getCategories()) === 0 && $categoryId !== null) {
-            throw new CategoryDoesNotExistException();
+            throw new CategoryNotFoundException();
         }
 
         /** @var Category $category */
@@ -142,7 +143,7 @@ class VisitHandler
             }
         }
 
-        throw new CategoryDoesNotExistException($categoryId);
+        throw CategoryNotFoundException::byId($categoryId);
     }
 
     private function fromPaginatorToDTO(LengthAwarePaginator $paginator): array

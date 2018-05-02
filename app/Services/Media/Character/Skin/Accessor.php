@@ -8,6 +8,10 @@ use App\Services\Auth\Permissions;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
 
+/**
+ * Class Accessor
+ * This class is used to determine if the user has the right to set skins / HD skins.
+ */
 class Accessor
 {
     /**
@@ -20,6 +24,13 @@ class Accessor
         $this->settings = $settings;
     }
 
+    /**
+     * Checks if the given user has the right to set skins.
+     *
+     * @param User $user
+     *
+     * @return bool True - the user has the right. false - does not have.
+     */
     public function allowSet(User $user): bool
     {
         if ($this->allowSetHD($user)) {
@@ -37,6 +48,13 @@ class Accessor
         return $user->hasPermission(Permissions::ALLOW_SET_SKINS);
     }
 
+    /**
+     * Checks if the given user has the right to set HD skins.
+     *
+     * @param User $user
+     *
+     * @return bool True - the user has the right. false - does not have.
+     */
     public function allowSetHD(User $user): bool
     {
         if ($user->hasPermission(Permissions::ALLOW_SET_HD_SKINS_IMPORTANT)) {
@@ -58,7 +76,7 @@ class Accessor
     /**
      * @return bool Is it possible to set skins at all?
      */
-    public function enabled(): bool
+    private function enabled(): bool
     {
         return $this->settings->get('system.profile.character.skin.enabled')->getValue(DataType::BOOL);
     }

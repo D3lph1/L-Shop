@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace App\Http\Controllers\Admin\Pages;
 
 use App\DataTransferObjects\Admin\Pages\Edit\Edit;
-use App\Exceptions\Page\DoesNotExistException;
+use App\Exceptions\Page\PageNotFoundException;
 use App\Handlers\Admin\Pages\Edit\EditHandler;
 use App\Handlers\Admin\Pages\Edit\RenderHandler;
 use App\Http\Controllers\Controller;
@@ -45,7 +45,7 @@ class EditController extends Controller
 
             return (new JsonResponse(Status::SUCCESS))
                 ->addNotification(new Success(__('msg.admin.pages.edit.success')));
-        } catch (DoesNotExistException $e) {
+        } catch (PageNotFoundException $e) {
             return (new JsonResponse(Status::SUCCESS))
                 ->addNotification(new Error(__('msg.admin.pages.edit.not_found')));
         }

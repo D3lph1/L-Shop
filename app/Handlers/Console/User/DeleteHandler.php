@@ -1,9 +1,9 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Handlers\Consoe\User;
 
-use App\Exceptions\User\DoesNotExistException;
+use App\Exceptions\User\UserNotFoundException;
 use App\Repository\User\UserRepository;
 
 class DeleteHandler
@@ -19,13 +19,15 @@ class DeleteHandler
     }
 
     /**
-     * @param string $username        User who needs to assign a role. User is identified by username.
+     * @param string $username User who needs to assign a role. User is identified by username.
+     *
+     * @throws UserNotFoundException
      */
     public function handle(string $username)
     {
         $user = $this->userRepository->findByUsername($username);
         if ($user === null) {
-            throw new DoesNotExistException($username);
+            throw UserNotFoundException::byUsername($username);
         }
 
         $this->userRepository->remove($user);

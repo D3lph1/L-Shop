@@ -6,8 +6,10 @@ namespace App\Services\Auth;
 /**
  * Class Roles
  * Defines available roles.
- * @example
+ * <p>For example:</p>
+ * <code>
  *  $user->hasRole(Roles::ADMIN);
+ * </code>
  */
 class Roles
 {
@@ -15,6 +17,9 @@ class Roles
 
     public const ADMIN = 'admin';
 
+    /**
+     * Private constructor because this class contains only constants.
+     */
     private function __construct()
     {
     }

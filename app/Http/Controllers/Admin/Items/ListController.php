@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Items;
 
-use App\Exceptions\Item\DoesNotExistException;
+use App\Exceptions\Item\ItemNotFoundException;
 use App\Handlers\Admin\Items\DeleteHandler;
 use App\Handlers\Admin\Items\ListHandler;
 use App\Http\Controllers\Controller;
@@ -45,7 +45,7 @@ class ListController extends Controller
             $notificator->notify(new Info(__('msg.admin.items.list.delete.success')));
 
             return new JsonResponse(Status::SUCCESS);
-        } catch (DoesNotExistException $e) {
+        } catch (ItemNotFoundException $e) {
             $notificator->notify(new Warning(__('msg.admin.items.list.delete.not_found')));
 
             return new JsonResponse('not_found');

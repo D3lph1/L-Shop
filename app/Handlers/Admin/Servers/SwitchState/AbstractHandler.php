@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Handlers\Admin\Servers\SwitchState;
 
-use App\Exceptions\Server\DoesNotExistException;
+use App\Exceptions\Server\ServerNotFoundException;
 use App\Repository\Server\ServerRepository;
 
 abstract class AbstractHandler
@@ -18,11 +18,16 @@ abstract class AbstractHandler
         $this->repository = $repository;
     }
 
+    /**
+     * @param int $serverId
+     *
+     * @throws ServerNotFoundException
+     */
     public function handle(int $serverId): void
     {
         $server = $this->repository->find($serverId);
         if ($server === null) {
-            throw new DoesNotExistException($serverId);
+            throw ServerNotFoundException::byId($serverId);
         }
 
         $server->setEnabled($this->enabled());

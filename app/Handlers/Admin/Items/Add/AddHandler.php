@@ -6,7 +6,7 @@ namespace App\Handlers\Admin\Items\Add;
 use App\DataTransferObjects\Admin\Items\Add\Add;
 use App\Entity\EnchantmentItem;
 use App\Entity\Item;
-use App\Exceptions\Enchantment\DoesNotExistException;
+use App\Exceptions\Enchantment\EnchantmentNotFoundException;
 use App\Exceptions\InvalidArgumentTypeException;
 use App\Exceptions\UnexpectedValueException;
 use App\Repository\Enchantment\EnchantmentRepository;
@@ -46,6 +46,11 @@ class AddHandler
         $this->imageHasher = $imageHasher;
     }
 
+    /**
+     * @param Add $dto
+     *
+     * @throws EnchantmentNotFoundException
+     */
     public function handle(Add $dto): void
     {
         $image = $this->imageName($dto->getImageType(), $dto->getFile() ?: $dto->getImageName());
@@ -60,7 +65,7 @@ class AddHandler
             foreach ($dto->getEnchantments() as $each) {
                 $enchantment = $this->enchantmentRepository->find($each->getId());
                 if ($enchantment === null) {
-                    throw new DoesNotExistException($each->getId());
+                    throw EnchantmentNotFoundException::byId($each->getId());
                 }
 
                 $ei = new EnchantmentItem($enchantment, $each->getLevel());

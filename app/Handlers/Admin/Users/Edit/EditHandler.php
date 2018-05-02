@@ -5,7 +5,7 @@ namespace App\Handlers\Admin\Users\Edit;
 
 use App\DataTransferObjects\Admin\Users\Edit\Edit;
 use App\Entity\User;
-use App\Exceptions\User\DoesNotExistException;
+use App\Exceptions\User\UserNotFoundException;
 use App\Repository\Permission\PermissionRepository;
 use App\Repository\Role\RoleRepository;
 use App\Repository\User\UserRepository;
@@ -47,11 +47,16 @@ class EditHandler
         $this->hasher = $hasher;
     }
 
+    /**
+     * @param Edit $dto
+     *
+     * @throws UserNotFoundException
+     */
     public function handle(Edit $dto)
     {
         $user = $this->userRepository->find($dto->getUserId());
         if ($user === null) {
-            throw new DoesNotExistException($dto->getUserId());
+            throw UserNotFoundException::byId($dto->getUserId());
         }
 
         $userByUsername = $this->userRepository->findByUsername($dto->getUsername());

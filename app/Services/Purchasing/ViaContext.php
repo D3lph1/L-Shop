@@ -3,6 +3,10 @@ declare(strict_types = 1);
 
 namespace App\Services\Purchasing;
 
+/**
+ * Class ViaContext
+ * Defines the constants of the purchase completion context.
+ */
 class ViaContext
 {
     /**
@@ -16,6 +20,9 @@ class ViaContext
      */
     public const BY_ADMIN = '@admin';
 
+    /**
+     * Private constructor because this class contains only constants.
+     */
     private function __construct()
     {
     }

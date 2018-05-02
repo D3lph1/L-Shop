@@ -7,7 +7,7 @@ use App\DataTransferObjects\Admin\Users\Edit\RenderResult;
 use App\DataTransferObjects\Admin\Users\Edit\User;
 use App\Entity\Permission;
 use App\Entity\Role;
-use App\Exceptions\User\DoesNotExistException;
+use App\Exceptions\User\UserNotFoundException;
 use App\Repository\Permission\PermissionRepository;
 use App\Repository\Role\RoleRepository;
 use App\Repository\User\UserRepository;
@@ -58,11 +58,17 @@ class RenderHandler
         $this->permissionRepository = $permissionRepository;
     }
 
+    /**
+     * @param int $userId
+     *
+     * @return RenderResult
+     * @throws UserNotFoundException
+     */
     public function handle(int $userId): RenderResult
     {
         $user = $this->userRepository->find($userId);
         if ($user === null) {
-            throw new DoesNotExistException($userId);
+            throw UserNotFoundException::byId($userId);
         }
 
         $activation = $this->activator->activation($user);

@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Pages;
 
-use App\Exceptions\Page\DoesNotExistException;
+use App\Exceptions\Page\PageNotFoundException;
 use App\Handlers\Admin\Pages\DeleteHandler;
 use App\Handlers\Admin\Pages\ListHandler;
 use App\Http\Controllers\Controller;
@@ -44,7 +44,7 @@ class ListController extends Controller
 
             return (new JsonResponse(Status::SUCCESS))
                 ->addNotification(new Info(__('msg.admin.pages.list.delete.success')));
-        } catch (DoesNotExistException $e) {
+        } catch (PageNotFoundException $e) {
             return (new JsonResponse('does_not_exists'))
                 ->addNotification(new Error(__('msg.admin.pages.list.delete.not_found')));
         }

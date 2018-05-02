@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Products;
 
-use App\Exceptions\Product\DoesNotExistException;
+use App\Exceptions\Product\ProductNotFoundException;
 use App\Handlers\Admin\Products\DeleteHandler;
 use App\Handlers\Admin\Products\ListHandler;
 use App\Http\Controllers\Controller;
@@ -44,7 +44,7 @@ class ListController extends Controller
 
             return (new JsonResponse(Status::SUCCESS))
                 ->addNotification(new Info(__('msg.admin.products.delete.success')));
-        } catch (DoesNotExistException $e) {
+        } catch (ProductNotFoundException $e) {
             return (new JsonResponse('not_found'))
                 ->addNotification(new Error(__('msg.admin.products.delete.not_found')));
         }

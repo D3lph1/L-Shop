@@ -1,7 +1,6 @@
 <?php
 declare(strict_types=1);
 
-use App\Entity\Role;
 use App\Entity\User;
 use App\Repository\Activation\ActivationRepository;
 use App\Repository\News\NewsRepository;
@@ -12,7 +11,6 @@ use App\Repository\User\UserRepository;
 use App\Services\Auth\Activator;
 use App\Services\Auth\Auth;
 use App\Services\Auth\Roles;
-use App\Services\Database\Truncater\Truncater;
 use Illuminate\Database\Seeder;
 
 class TestsSeeder extends Seeder

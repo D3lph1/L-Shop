@@ -6,8 +6,10 @@ namespace App\Services\Auth;
 /**
  * Class Permissions
  * Defines available permissions.
- * @example
+ * <p>For example:</p>
+ * <code>
  *  $user->hasPermission(Permissions::ADMIN_ITEMS_CRUD_ACCESS);
+ * </code>
  */
 class Permissions
 {
@@ -151,6 +153,9 @@ class Permissions
      */
     public const ACCESS_WHILE_MAINTENANCE = 'access_while_maintenance';
 
+    /**
+     * Private constructor because this class contains only constants.
+     */
     private function __construct()
     {
     }

@@ -48,6 +48,9 @@ class AnsiColors
 
     public const BOLD = "\033[1m";
 
+    /**
+     * Private constructor because this class contains only constants.
+     */
     private function __construct()
     {
         //

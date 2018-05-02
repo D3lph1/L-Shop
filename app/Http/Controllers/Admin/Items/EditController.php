@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin\Items;
 
 use App\DataTransferObjects\Admin\Items\Add\EnchantmentFromFrontend;
 use App\DataTransferObjects\Admin\Items\Edit\Edit;
-use App\Exceptions\Item\DoesNotExistException;
+use App\Exceptions\Item\ItemNotFoundException;
 use App\Handlers\Admin\Items\Edit\EditHandler;
 use App\Handlers\Admin\Items\Edit\RenderHandler;
 use App\Http\Controllers\Controller;
@@ -36,7 +36,7 @@ class EditController extends Controller
                 'images' => $item->getImages(),
                 'enchantments' => $item->getEnchantments()
             ]);
-        } catch (DoesNotExistException $e) {
+        } catch (ItemNotFoundException $e) {
             throw new NotFoundHttpException();
         }
     }
@@ -65,7 +65,7 @@ class EditController extends Controller
 
             return (new JsonResponse(Status::SUCCESS))
                 ->addNotification(new Success(__('msg.admin.items.edit.success')));
-        } catch (DoesNotExistException $e) {
+        } catch (ItemNotFoundException $e) {
             return (new JsonResponse('not_found'))
                 ->addNotification(new Error(__('msg.admin.items.edit.not_found')));
         }

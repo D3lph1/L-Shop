@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Handlers\Admin\Items;
 
-use App\Exceptions\Item\DoesNotExistException;
+use App\Exceptions\Item\ItemNotFoundException;
 use App\Repository\Item\ItemRepository;
 
 class DeleteHandler
@@ -21,17 +21,15 @@ class DeleteHandler
     /**
      * @param int $itemId
      *
-     * @throws DoesNotExistException
+     * @throws ItemNotFoundException
      */
     public function handle(int $itemId): void
     {
         $item = $this->repository->find($itemId);
-        if ($item) {
-            $this->repository->remove($item);
-
-            return;
+        if ($item === null) {
+            throw ItemNotFoundException::byId($itemId);
         }
 
-        throw new DoesNotExistException($itemId);
+        $this->repository->remove($item);
     }
 }

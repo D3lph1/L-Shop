@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Handlers\Admin\Products;
 
-use App\Exceptions\Product\DoesNotExistException;
+use App\Exceptions\Product\ProductNotFoundException;
 use App\Repository\Product\ProductRepository;
 
 class DeleteHandler
@@ -18,11 +18,16 @@ class DeleteHandler
         $this->repository = $repository;
     }
 
+    /**
+     * @param int $productId
+     *
+     * @throws ProductNotFoundException
+     */
     public function handle(int $productId): void
     {
         $product = $this->repository->find($productId);
         if ($product === null) {
-            throw new DoesNotExistException($productId);
+            throw ProductNotFoundException::byId($productId);
         }
 
         $this->repository->remove($product);

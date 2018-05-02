@@ -8,7 +8,7 @@ use App\DataTransferObjects\Admin\Users\Edit\Ban as BanDTO;
 use App\Entity\Ban;
 use App\Exceptions\InvalidArgumentException;
 use App\Exceptions\UnexpectedValueException;
-use App\Exceptions\User\DoesNotExistException;
+use App\Exceptions\User\UserNotFoundException;
 use App\Repository\Ban\BanRepository;
 use App\Repository\User\UserRepository;
 use App\Services\Auth\BanManager;
@@ -41,11 +41,17 @@ class AddBanHandler
         $this->banManager = $banManager;
     }
 
+    /**
+     * @param AddBan $dto
+     *
+     * @return BanDTO
+     * @throws UserNotFoundException
+     */
     public function handle(AddBan $dto): BanDTO
     {
         $user = $this->userRepository->find($dto->getUserId());
         if ($user === null) {
-            throw new DoesNotExistException($dto->getUserId());
+            throw UserNotFoundException::byId($dto->getUserId());
         }
 
         if ($dto->isForever()) {

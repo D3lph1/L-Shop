@@ -7,6 +7,13 @@ use App\Entity\Product;
 
 class Cost
 {
+    /**
+     * Private constructor because this class contains only static methods.
+     */
+    private function __construct()
+    {
+    }
+
     public static function calculate(int $amount, Product $product): float
     {
         if (Stack::isForever($product)) {
