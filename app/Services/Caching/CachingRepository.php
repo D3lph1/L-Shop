@@ -11,7 +11,7 @@ interface CachingRepository
      *
      * @return mixed
      */
-    public function get(string $key, $default);
+    public function get(string $key, $default = null);
 
     /**
      * @param string $key

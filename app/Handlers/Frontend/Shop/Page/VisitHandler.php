@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace App\Handlers\Frontend\Shop\Page;
 
 use App\DataTransferObjects\Frontend\Page as DTO;
-use App\Entity\Page;
 use App\Exceptions\Page\PageNotFoundException;
 use App\Repository\Page\PageRepository;
 
@@ -21,6 +20,8 @@ class VisitHandler
     }
 
     /**
+     * Gets the data to render the static page.
+     *
      * @param string $url
      *
      * @return DTO

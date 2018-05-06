@@ -8,9 +8,6 @@ use App\Services\Caching\CachingRepository;
 use App\Services\Caching\IlluminateCachingRepository;
 use App\Services\Cart\Storage\Session as SessionCartStorage;
 use App\Services\Cart\Storage\Storage as ClassStorage;
-use App\Services\Database\Truncater\MySQLTruncater;
-use App\Services\Database\Truncater\PostgreSQLTruncater;
-use App\Services\Database\Truncater\Truncater;
 use App\Services\DateTime\Formatting\Formatter;
 use App\Services\DateTime\Formatting\HumanizeFormatter;
 use App\Services\Infrastructure\Notification\Drivers\Driver;
@@ -35,7 +32,6 @@ use App\Services\Url\Signing\Signer;
 use App\Services\Url\Signing\Validator;
 use D3lph1\MinecraftRconManager\Connector;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Contracts\Routing\UrlGenerator;
 use Illuminate\Support\ServiceProvider;
 use Psr\Log\LoggerInterface;
 
@@ -54,8 +50,6 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->registerTruncater();
-
         $this->app->singleton(Driver::class, Session::class);
         $this->app->singleton(PersistenceStorage::class, SessionPersistenceStorage::class);
         $this->app->singleton(ClassStorage::class, SessionCartStorage::class);
@@ -115,19 +109,5 @@ class AppServiceProvider extends ServiceProvider
                 $settings->get('api.separator')->getValue()
             );
         });
-    }
-
-    private function registerTruncater(): void
-    {
-        $defaultConnection = config('database.default');
-        $driver = config("database.connections.{$defaultConnection}.driver");
-        switch ($driver) {
-            case 'mysql':
-                $this->app->singleton(Truncater::class, MySQLTruncater::class);
-                break;
-            case 'pgsql':
-                $this->app->singleton(Truncater::class, PostgreSQLTruncater::class);
-                break;
-        }
     }
 }

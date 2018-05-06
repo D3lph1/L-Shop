@@ -12,6 +12,10 @@ use App\Services\Infrastructure\Response\JsonResponse;
 use App\Services\Infrastructure\Response\Status;
 use App\Services\Settings\Settings;
 
+/**
+ * Class SelectServerController
+ * Handles requests related to select server page.
+ */
 class SelectServerController extends Controller
 {
     public function __construct()
@@ -19,6 +23,14 @@ class SelectServerController extends Controller
         $this->middleware(auth_middleware(Auth::SOFT));
     }
 
+    /**
+     * Returns the data needed to render the select server page.
+     *
+     * @param ServersHandler $handler
+     * @param Settings       $settings
+     *
+     * @return JsonResponse
+     */
     public function render(ServersHandler $handler, Settings $settings)
     {
         return new JsonResponse(Status::SUCCESS, array_merge($handler->servers()->jsonSerialize(), [

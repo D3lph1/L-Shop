@@ -15,8 +15,21 @@ use App\Services\Infrastructure\Response\Status;
 use App\Services\Settings\Settings;
 use Illuminate\Http\Request;
 
+/**
+ * Class ResetPasswordController
+ * Handles requests related to reset user password.
+ */
 class ResetPasswordController extends Controller
 {
+    /**
+     * Returns the data needed to render the page with reset password form.
+     *
+     * @param Request              $request
+     * @param ResetPasswordHandler $handler
+     * @param Settings             $settings
+     *
+     * @return JsonResponse
+     */
     public function render(Request $request, ResetPasswordHandler $handler, Settings $settings)
     {
         if (!$handler->isValidCode($request->route('code'))) {
@@ -30,6 +43,15 @@ class ResetPasswordController extends Controller
         ]);
     }
 
+    /**
+     * Handles a reset user password request.
+     *
+     * @param ResetPasswordRequest $request
+     * @param ResetPasswordHandler $handler
+     * @param Notificator          $notificator
+     *
+     * @return JsonResponse
+     */
     public function handle(ResetPasswordRequest $request, ResetPasswordHandler $handler, Notificator $notificator)
     {
         $result = $handler->handle((string)$request->route('code'), (string)$request->get('password'));

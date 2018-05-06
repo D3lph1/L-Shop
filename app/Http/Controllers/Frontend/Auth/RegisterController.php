@@ -17,6 +17,10 @@ use App\Services\Infrastructure\Security\Captcha\Captcha;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
 
+/**
+ * Class RegisterController
+ * Handles requests related to user registration.
+ */
 class RegisterController extends Controller
 {
     public function __construct()
@@ -24,6 +28,14 @@ class RegisterController extends Controller
         $this->middleware('guest');
     }
 
+    /**
+     * Returns the data needed to render the page with the registration form.
+     *
+     * @param Settings $settings
+     * @param Captcha  $captcha
+     *
+     * @return JsonResponse
+     */
     public function render(Settings $settings, Captcha $captcha)
     {
         return new JsonResponse(Status::SUCCESS, [
@@ -33,6 +45,15 @@ class RegisterController extends Controller
         ]);
     }
 
+    /**
+     * Handles a user register request.
+     *
+     * @param RegisterRequest $request
+     * @param RegisterHandler $handler
+     * @param Settings        $settings
+     *
+     * @return JsonResponse
+     */
     public function handle(
         RegisterRequest $request,
         RegisterHandler $handler,

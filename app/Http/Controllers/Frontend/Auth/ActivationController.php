@@ -21,6 +21,10 @@ use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 
+/**
+ * Class ActivationController
+ * Handles requests related to user activation.
+ */
 class ActivationController extends Controller
 {
     public function __construct()
@@ -28,7 +32,15 @@ class ActivationController extends Controller
         $this->middleware('guest');
     }
 
-    public function sent(Settings $settings, Captcha $captcha)
+    /**
+     * Returns the data needed to render the page with the activation sent form.
+     *
+     * @param Settings $settings
+     * @param Captcha  $captcha
+     *
+     * @return JsonResponse
+     */
+    public function sent(Settings $settings, Captcha $captcha): JsonResponse
     {
         return new JsonResponse(Status::SUCCESS, [
             'accessModeAny' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY,
@@ -37,6 +49,14 @@ class ActivationController extends Controller
         ]);
     }
 
+    /**
+     * Handles a repeat send user activation request.
+     *
+     * @param RepeatActivationRequest $request
+     * @param RepeatActivationHandler $handler
+     *
+     * @return JsonResponse
+     */
     public function repeat(RepeatActivationRequest $request, RepeatActivationHandler $handler): JsonResponse
     {
         try {
@@ -53,6 +73,16 @@ class ActivationController extends Controller
         }
     }
 
+    /**
+     * Processes the complete activation request. This action will be processed when the user
+     * clicks on the link to activate the account from the email.
+     *
+     * @param Request                   $request
+     * @param CompleteActivationHandler $handler
+     * @param Notificator               $notificator
+     *
+     * @return RedirectResponse
+     */
     public function complete(Request $request, CompleteActivationHandler $handler, Notificator $notificator): RedirectResponse
     {
         if ($handler->handle($request->route('code'))) {
@@ -61,6 +91,6 @@ class ActivationController extends Controller
             $notificator->notify(new Error(__('msg.frontend.auth.activation.fail')));
         }
 
-        return redirect()->to('/login');
+        return redirect()->to('login');
     }
 }

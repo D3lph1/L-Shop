@@ -8,12 +8,21 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * Each server in the store is divided into categories. In each category, an unlimited number
+ * of products can be sold. This division is convenient, if you want to divide the products
+ * on some basis.
+ *
+ * @see \App\Entity\Server
+ * @see \App\Entity\Product
+ *
  * @ORM\Entity
  * @ORM\Table(name="categories")
  */
 class Category
 {
     /**
+     * Category identifier.
+     *
      * @ORM\Id
      * @ORM\Column(name="id", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -21,6 +30,8 @@ class Category
     private $id;
 
     /**
+     * The category name will be displayed on the store pages.
+     *
      * @ORM\Column(name="name", type="string", length=255, nullable=false)
      */
     private $name;
@@ -79,5 +90,22 @@ class Category
         $this->products->add($product);
 
         return $this;
+    }
+
+    /**
+     * Creates string representation of object.
+     * <p>For example:</p>
+     * <p>App\Entity\Category(id=2, name="Blocks")</p>
+     *
+     * @return string
+     */
+    public function __toString(): string
+    {
+        return sprintf(
+            '%s(id=%d, name="%s")',
+            self::class,
+            $this->getId(),
+            $this->getName()
+        );
     }
 }

@@ -8,12 +8,17 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * Represents enchanting in the game. The {@see \App\Entity\Item} can be enchanted if
+ * {@see \App\Entity\Item::type} = {@see \App\Services\Item\Type::ITEM}.
+ *
  * @ORM\Entity
  * @ORM\Table(name="enchantments")
  */
 class Enchantment
 {
     /**
+     * Enchantment identifier.
+     *
      * @ORM\Id
      * @ORM\Column(name="id", type="integer")
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -21,16 +26,30 @@ class Enchantment
     private $id;
 
     /**
+     * In-game enchantment identifier.
+     *
      * @ORM\Column(name="game_id", type="integer", unique=true)
      */
     private $gameId;
 
     /**
+     * The maximum level that this enchantment can have.
+     *
      * @ORM\Column(name="max_level", type="smallint")
      */
     private $maxLevel;
 
     /**
+     * Groups enchantments by type. Charms belonging to different groups can not be superimposed
+     * on the same thing.
+     *
+     * <p>If it is null, then the enchantment does not have a group and can be cast along with
+     * enchantments from other groups. An example of a enchantment without a group is
+     * {@see \App\Services\Item\Enchantment\Enchantments::UNBREAKING}, since it is
+     * possible to make absolutely any enchanting target durable.</p>
+     *
+     * @see \App\Services\Item\Enchantment\Enchantments
+     *
      * @ORM\Column(name="`group`", type="string", length=32, nullable=true)
      */
     private $group;
@@ -85,16 +104,27 @@ class Enchantment
         return $this;
     }
 
+    /**
+     * @return int
+     */
     public function getMaxLevel(): int
     {
         return $this->maxLevel;
     }
 
+    /**
+     * @return null|string
+     */
     public function getGroup(): ?string
     {
         return $this->group;
     }
 
+    /**
+     * @param null|string $group
+     *
+     * @return Enchantment
+     */
     public function setGroup(?string $group): Enchantment
     {
         $this->group = $group;
@@ -102,6 +132,9 @@ class Enchantment
         return $this;
     }
 
+    /**
+     * @return Collection
+     */
     public function getEnchantmentItems(): Collection
     {
         return $this->enchantmentItems;

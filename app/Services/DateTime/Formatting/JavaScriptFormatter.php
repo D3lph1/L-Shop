@@ -12,11 +12,15 @@ use DateTimeInterface;
  */
 class JavaScriptFormatter implements Formatter
 {
+    public const FORMAT = 'D M d Y H:i:s O';
+
     /**
+     * Creates javascript-friendly date time representation.
+     *
      * {@inheritdoc}
      */
     public function format(DateTimeInterface $dateTime): string
     {
-        return $dateTime->format('D M d Y H:i:s O');
+        return $dateTime->format(self::FORMAT);
     }
 }

@@ -15,6 +15,10 @@ use App\Services\Infrastructure\Response\Status;
 use App\Services\Infrastructure\Security\Captcha\Captcha;
 use App\Services\Settings\Settings;
 
+/**
+ * Class ForgotPasswordController
+ * Handles requests related to forgot user password actions.
+ */
 class ForgotPasswordController extends Controller
 {
     public function __construct()
@@ -22,6 +26,14 @@ class ForgotPasswordController extends Controller
         $this->middleware('guest');
     }
 
+    /**
+     * Returns the data needed to render the page with the request form for password recovery.
+     *
+     * @param Settings $settings
+     * @param Captcha  $captcha
+     *
+     * @return JsonResponse
+     */
     public function render(Settings $settings, Captcha $captcha)
     {
         return new JsonResponse(Status::SUCCESS, [
@@ -31,9 +43,15 @@ class ForgotPasswordController extends Controller
         ]);
     }
 
-    public function handle(
-        ForgotPasswordRequest $request,
-        ForgotPasswordHandler $handler): JsonResponse
+    /**
+     * Processes the request for password recovery.
+     *
+     * @param ForgotPasswordRequest $request
+     * @param ForgotPasswordHandler $handler
+     *
+     * @return JsonResponse
+     */
+    public function handle(ForgotPasswordRequest $request, ForgotPasswordHandler $handler): JsonResponse
     {
         try {
             $handler->handle($request->get('email'));

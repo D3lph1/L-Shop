@@ -1,23 +1,17 @@
 <template>
     <div>
-        <v-toolbar flat class="transparent" v-if="$store.getters.isAuth">
-            <v-list class="pa-0">
-                <v-list-tile avatar>
-                    <v-list-tile-content>
-                        <v-list-tile-title>
-                            <v-layout row wrap align-center>
-                                <v-flex class="text-xs-center">
-                                    {{ $store.state.auth.user.username }}
-                                </v-flex>
-                            </v-layout>
-                        </v-list-tile-title>
-                    </v-list-tile-content>
-                </v-list-tile>
-            </v-list>
+        <v-toolbar flat v-if="$store.getters.isAuth">
+            <v-toolbar-title id="drawer-username">
+                <v-icon>person_outline</v-icon>
+                <span>{{ $store.state.auth.user.username }}</span>
+            </v-toolbar-title>
         </v-toolbar>
-        <v-list class="pt-0" dense>
+
+        <v-list class="pt-0 pb-0" subheader>
             <v-divider></v-divider>
-            <v-list-tile :to="toCatalog()">
+            <v-subheader>Магазин</v-subheader>
+
+            <v-list-tile ripple :to="toCatalog()">
                 <v-list-tile-action>
                     <v-icon>view_module</v-icon>
                 </v-list-tile-action>
@@ -25,7 +19,7 @@
                     <v-list-tile-title>{{ $t('content.layout.shop.sidebar.basic.catalog') }}</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
-            <v-list-tile :to="toCart()">
+            <v-list-tile ripple :to="toCart()">
                 <v-list-tile-action>
                     <v-badge v-model="cartBadges" right>
                         <span slot="badge">{{ $store.state.shop.cart.amount }}</span>
@@ -33,9 +27,7 @@
                     </v-badge>
                 </v-list-tile-action>
                 <v-list-tile-content>
-                    <v-list-tile-title>
-                        {{ $t('content.layout.shop.sidebar.basic.cart') }}
-                    </v-list-tile-title>
+                    <v-list-tile-title>{{ $t('content.layout.shop.sidebar.basic.cart') }}</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
             <v-list-tile @click="$router.push({name: 'frontend.auth.servers'})">
@@ -46,30 +38,22 @@
                     <v-list-tile-title>{{ $t('content.layout.shop.sidebar.basic.servers') }}</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
-            <div v-if="$store.getters.isAuth">
-                <v-divider></v-divider>
-                <v-list-tile @click="logout">
-                    <v-list-tile-action>
-                        <v-icon>exit_to_app</v-icon>
-                    </v-list-tile-action>
-                    <v-list-tile-content>
-                        <v-list-tile-title>{{ $t('content.frontend.auth.login.logout') }}</v-list-tile-title>
-                    </v-list-tile-content>
-                </v-list-tile>
-                <v-divider></v-divider>
-            </div>
-            <div v-else>
-                <v-divider></v-divider>
-                <v-list-tile @click="$router.push({name: 'frontend.auth.login' })">
-                    <v-list-tile-action>
-                        <v-icon>vpn_key</v-icon>
-                    </v-list-tile-action>
-                    <v-list-tile-content>
-                        <v-list-tile-title>{{ $t('content.frontend.auth.login.login') }}</v-list-tile-title>
-                    </v-list-tile-content>
-                </v-list-tile>
-                <v-divider></v-divider>
-            </div>
+            <v-list-tile v-if="$store.getters.isAuth" @click="logout">
+                <v-list-tile-action>
+                    <v-icon>exit_to_app</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                    <v-list-tile-title>{{ $t('content.frontend.auth.login.logout') }}</v-list-tile-title>
+                </v-list-tile-content>
+            </v-list-tile>
+            <v-list-tile v-else @click="$router.push({name: 'frontend.auth.login' })">
+                <v-list-tile-action>
+                    <v-icon>vpn_key</v-icon>
+                </v-list-tile-action>
+                <v-list-tile-content>
+                    <v-list-tile-title>{{ $t('content.frontend.auth.login.login') }}</v-list-tile-title>
+                </v-list-tile-content>
+            </v-list-tile>
         </v-list>
     </div>
 </template>
@@ -117,3 +101,16 @@
         }
     }
 </script>
+
+<style lang="less" scoped>
+    #drawer-username {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
+        margin: 0;
+        span {
+            margin-left: 10px;
+        }
+    }
+</style>

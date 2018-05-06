@@ -16,6 +16,8 @@ use Ramsey\Uuid\Uuid;
 use Ramsey\Uuid\UuidInterface;
 
 /**
+ * Represents a user in the system.
+ *
  * @ORM\Entity
  * @ORM\Table(name="users", indexes={
  *     @ORM\Index(name="username_idx", columns={"username"}),
@@ -28,6 +30,8 @@ class User implements HasRoles, HasPermissions
     use RoleTrait, PermissionTrait;
 
     /**
+     * User identifier.
+     *
      * @ORM\Column(name="id", type="integer")
      * @ORM\Id
      * @ORM\GeneratedValue(strategy="AUTO")
@@ -35,26 +39,36 @@ class User implements HasRoles, HasPermissions
     private $id;
 
     /**
+     * User's username.
+     *
      * @ORM\Column(name="username", type="string", length=32, unique=true)
      */
     private $username;
 
     /**
+     * User's email.
+     *
      * @ORM\Column(name="email", type="string", length=255, unique=true)
      */
     private $email;
 
     /**
+     * Hashed user password.
+     *
      * @ORM\Column(name="password", type="string", length=60)
      */
     private $password;
 
     /**
+     * The amount of funds on the balance of the user.
+     *
      * @ORM\Column(name="balance", type="float", nullable=false, unique=false)
      */
     private $balance = 0;
 
     /**
+     * User's UUID.
+     *
      * @ORM\Column(name="uuid", type="guid", unique=true)
      */
     private $uuid;
@@ -62,23 +76,27 @@ class User implements HasRoles, HasPermissions
     /**
      * This column is used by sashok724's launcher.
      *
-     * @ORM\Column(name="accessToken", type="string", length=36, nullable=true, options={"fixed" = true})
+     * @ORM\Column(name="access_token", type="string", length=36, nullable=true, options={"fixed" = true})
      */
     private $accessToken;
 
     /**
      * This column is used by sashok724's launcher.
      *
-     * @ORM\Column(name="serverId", type="string", length=41, nullable=true)
+     * @ORM\Column(name="server_id", type="string", length=41, nullable=true)
      */
     private $serverId;
 
     /**
+     * Roles that the user has.
+     *
      * @ORM\ManyToMany(targetEntity="App\Entity\Role", mappedBy="users", cascade={"persist", "merge"})
      */
     private $roles;
 
     /**
+     * Permissions that the user has.
+     *
      * @ORM\ManyToMany(targetEntity="App\Entity\Permission", mappedBy="users")
      */
     private $permissions;
@@ -104,10 +122,19 @@ class User implements HasRoles, HasPermissions
     private $reminders;
 
     /**
+     * Date and time when the user was created.
+     *
      * @ORM\Column(name="created_at", type="datetime_immutable", nullable=false)
      */
     private $createdAt;
 
+    /**
+     * User constructor.
+     *
+     * @param string $username
+     * @param string $email
+     * @param string $password
+     */
     public function __construct(string $username, string $email, string $password)
     {
         $this->setUsername($username);
@@ -122,16 +149,27 @@ class User implements HasRoles, HasPermissions
         $this->uuid = Uuid::uuid4();
     }
 
+    /**
+     * @return int
+     */
     public function getId(): int
     {
         return $this->id;
     }
 
+    /**
+     * @return string
+     */
     public function getUsername(): string
     {
         return $this->username;
     }
 
+    /**
+     * @param string $username
+     *
+     * @return User
+     */
     public function setUsername(string $username): User
     {
         $this->username = $username;
@@ -139,11 +177,19 @@ class User implements HasRoles, HasPermissions
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getEmail(): string
     {
         return $this->email;
     }
 
+    /**
+     * @param string $email
+     *
+     * @return User
+     */
     public function setEmail(string $email): User
     {
         $this->email = $email;
@@ -151,11 +197,19 @@ class User implements HasRoles, HasPermissions
         return $this;
     }
 
+    /**
+     * @return string
+     */
     public function getPassword(): string
     {
         return $this->password;
     }
 
+    /**
+     * @param string $password
+     *
+     * @return User
+     */
     public function setPassword(string $password): User
     {
         $this->password = $password;
@@ -163,6 +217,9 @@ class User implements HasRoles, HasPermissions
         return $this;
     }
 
+    /**
+     * @return float
+     */
     public function getBalance(): float
     {
         return $this->balance;
@@ -185,16 +242,27 @@ class User implements HasRoles, HasPermissions
         return $this;
     }
 
+    /**
+     * @return UuidInterface
+     */
     public function getUuid(): UuidInterface
     {
         return Uuid::fromString($this->uuid);
     }
 
+    /**
+     * @return Collection
+     */
     public function getPermissions(): Collection
     {
         return $this->permissions;
     }
 
+    /**
+     * @param Role $role
+     *
+     * @return User
+     */
     public function addRole(Role $role): User
     {
         $this->roles->add($role);
@@ -202,11 +270,19 @@ class User implements HasRoles, HasPermissions
         return $this;
     }
 
+    /**
+     * @return Collection
+     */
     public function getRoles(): Collection
     {
         return $this->roles;
     }
 
+    /**
+     * @param Reminder $reminder
+     *
+     * @return User
+     */
     public function addReminder(Reminder $reminder): User
     {
         $this->reminders->add($reminder);
@@ -214,16 +290,27 @@ class User implements HasRoles, HasPermissions
         return $this;
     }
 
+    /**
+     * @return Collection
+     */
     public function getActivations(): Collection
     {
         return $this->activations;
     }
 
+    /**
+     * @return Collection
+     */
     public function getPersistences(): Collection
     {
         return $this->persistences;
     }
 
+    /**
+     * @param Ban $ban
+     *
+     * @return User
+     */
     public function addBan(Ban $ban): User
     {
         $this->bans->add($ban);
@@ -231,16 +318,25 @@ class User implements HasRoles, HasPermissions
         return $this;
     }
 
+    /**
+     * @return Collection
+     */
     public function getBans(): Collection
     {
         return $this->bans;
     }
 
+    /**
+     * @return Collection
+     */
     public function getReminders(): Collection
     {
         return $this->reminders;
     }
 
+    /**
+     * @return \DateTimeImmutable
+     */
     public function getCreatedAt(): \DateTimeImmutable
     {
         return $this->createdAt;

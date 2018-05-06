@@ -25,8 +25,8 @@
             setData(response) {
                 const data = response.data;
 
-                this.content = data.page.content;
-                document.title = data.page.title + ' | ' + document.title;
+                this.content = data.content;
+                document.title = data.title + ' | ' + document.title;
             }
         }
     }

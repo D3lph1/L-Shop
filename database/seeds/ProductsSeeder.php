@@ -53,11 +53,11 @@ class ProductsSeeder extends Seeder
         $item = (new Item(__('seeding.items.diamond_sword'), \App\Services\Item\Type::ITEM, '276'))
             ->setImage('9d8feda602d70231f0297a3b7e436d4b.png');
 
-        $item->addEnchantmentItem(
+        $item->getEnchantmentItems()->add(
             (new EnchantmentItem($enchantmentRepository->findByGameId(Enchantments::SHARPNESS), 4))
                 ->setItem($item)
         );
-        $item->addEnchantmentItem(
+        $item->getEnchantmentItems()->add(
             (new EnchantmentItem($enchantmentRepository->findByGameId(Enchantments::FIRE_ASPECT), 2))
                 ->setItem($item)
         );

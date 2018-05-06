@@ -11,16 +11,26 @@ use App\Services\Infrastructure\Response\Status;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * Class PageController
+ * This controller works with static pages.
+ */
 class PageController extends Controller
 {
-    public function render(Request $request, VisitHandler $handler)
+    /**
+     * Returns data to render a static page.
+     *
+     * @param Request      $request
+     * @param VisitHandler $handler
+     *
+     * @return JsonResponse
+     */
+    public function render(Request $request, VisitHandler $handler): JsonResponse
     {
         try {
             $page = $handler->handle($request->route('url'));
 
-            return new JsonResponse(Status::SUCCESS, [
-                'page' => $page
-            ]);
+            return new JsonResponse(Status::SUCCESS, $page);
         } catch (PageNotFoundException $e) {
             throw new NotFoundHttpException();
         }

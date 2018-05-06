@@ -5,6 +5,10 @@ namespace App\Services\Auth\Acl;
 
 use Doctrine\Common\Collections\Collection;
 
+/**
+ * Interface HasRoles
+ * Represents entities that can have roles.
+ */
 interface HasRoles
 {
     /**
@@ -34,5 +38,10 @@ interface HasRoles
      */
     public function hasAtLeastOneRole(array $roles): bool;
 
+    /**
+     * Returns the roles that belong to an entity.
+     *
+     * @return Collection
+     */
     public function getRoles(): Collection;
 }

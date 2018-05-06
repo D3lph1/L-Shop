@@ -10,7 +10,7 @@
 
     <title>{{ $title }}</title>
 
-    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="{{ asset('fonts.css') }}" rel="stylesheet">
     <link href="{{ asset('css/app.min.css') }}" type="text/css" rel="stylesheet">
 
     <script src='https://www.google.com/recaptcha/api.js' type="text/javascript" async defer></script>

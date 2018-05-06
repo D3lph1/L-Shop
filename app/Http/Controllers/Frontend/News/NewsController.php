@@ -16,7 +16,7 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class NewsController extends Controller
 {
-    public function render(Request $request, VisitHandler $handler, Formatter $formatter)
+    public function render(Request $request, VisitHandler $handler, Formatter $formatter): JsonResponse
     {
         try {
             $news = $handler->handle((int)$request->route('news'));
@@ -30,7 +30,7 @@ class NewsController extends Controller
         }
     }
 
-    public function load(LoadRequest $request, LoadHandler $handler)
+    public function load(LoadRequest $request, LoadHandler $handler): JsonResponse
     {
         $items = $handler->load((int) $request->get('portion'));
 

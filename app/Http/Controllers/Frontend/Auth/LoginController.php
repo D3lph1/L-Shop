@@ -18,6 +18,10 @@ use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
 use App\Services\Support\Lang\Ban\BanMessage;
 
+/**
+ * Class LoginController
+ * Handles requests related to user authentication.
+ */
 class LoginController extends Controller
 {
     public function __construct()
@@ -25,9 +29,17 @@ class LoginController extends Controller
         $this->middleware('guest');
     }
 
+    /**
+     * Returns the data needed to render the page with the authorization form.
+     *
+     * @param Settings $settings
+     *
+     * @return JsonResponse
+     */
     public function render(Settings $settings)
     {
         return new JsonResponse(Status::SUCCESS, [
+            // TODO: only for admins ???
             'onlyForAdmins' => false,
             'accessModeAny' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY,
             'downForMaintenance' => $settings->get('system.maintenance.enabled')->getValue(DataType::BOOL),
@@ -36,6 +48,16 @@ class LoginController extends Controller
         ]);
     }
 
+    /**
+     * Handles a user authentication request.
+     *
+     * @param LoginRequest $request
+     * @param AuthHandler  $handler
+     * @param Notificator  $notificator
+     * @param BanMessage   $banMessage
+     *
+     * @return JsonResponse
+     */
     public function handle(LoginRequest $request, AuthHandler $handler, Notificator $notificator, BanMessage $banMessage)
     {
         try {

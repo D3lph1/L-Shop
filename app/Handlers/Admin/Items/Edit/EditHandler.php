@@ -99,7 +99,7 @@ class EditHandler
                 foreach ($enchantments as $enchantment) {
                     if ($each->getId() === $enchantment->getId()) {
                         $enchantmentItem = new EnchantmentItem($each, $enchantment->getLevel());
-                        $item->addEnchantmentItem($enchantmentItem);
+                        $item->getEnchantmentItems()->add($enchantmentItem);
                         $enchantmentItem->setItem($item);
                     }
                 }
@@ -118,7 +118,7 @@ class EditHandler
 
                 if (!$f) {
                     $enchantment->deleteItem();
-                    $item->removeEnchantmentItem($enchantment);
+                    $item->getEnchantmentItems()->removeElement($enchantment);
                 }
             }
         }

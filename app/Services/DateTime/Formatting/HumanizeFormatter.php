@@ -8,7 +8,7 @@ use Illuminate\Contracts\Translation\Translator;
 
 /**
  * Class HumanizeFormatter
- * Creates a human-friendly datetime view.
+ * Creates a human-friendly DateTime view.
  */
 class HumanizeFormatter implements Formatter
 {
@@ -28,7 +28,7 @@ class HumanizeFormatter implements Formatter
     public function format(DateTimeInterface $dateTime): string
     {
         $month = $dateTime->format('n');
-        return $this->translator->trans("datetime.humanized.{$month}", [
+        return $this->translator->trans("DateTime.humanized.{$month}", [
             'day' => $dateTime->format('j'),
             'year' => $dateTime->format('Y'),
             'time' => $dateTime->format('H:i:s')

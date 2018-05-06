@@ -34,7 +34,7 @@ class Item implements \JsonSerializable
             'image' => Image::assetPathOrDefault($item->getImage()),
             'stack' => Stack::formatUnits($product),
             'amount' => $this->entity->getAmount() !== 0 ? $this->entity->getAmount() : 1,
-            'cost' => Cost::calculate($this->entity->getAmount(), $product),
+            'cost' => Cost::calculate($product, $this->entity->getAmount()),
             'enchanted' => Enchantment::isEnchanted($item)
         ];
     }

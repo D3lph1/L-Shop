@@ -3,9 +3,7 @@
         <v-toolbar
                 color="primary"
                 dark
-                temporary
                 app
-                clipped-right
         >
             <v-toolbar-side-icon @click.stop="drawer = !drawer" style></v-toolbar-side-icon>
             <v-toolbar-title>
@@ -18,9 +16,10 @@
             <v-toolbar-side-icon v-show="newsAllowed" @click.stop="right = !right"><v-icon>library_books</v-icon></v-toolbar-side-icon>
         </v-toolbar>
         <v-navigation-drawer
-                fixed
                 v-model="drawer"
+                class="drawer"
                 app
+                floating
                 :mobile-break-point="mobileBreakPoint"
         >
 
@@ -36,12 +35,14 @@
         </v-content>
         <v-navigation-drawer
                 v-show="newsAllowed"
+                app
+                v-model="right"
+                class="drawer"
+                id="news-drawer"
                 right
                 temporary
-                v-model="right"
-                fixed
         >
-            <news v-if="newsAllowed" :news="news"></news>
+            <aside-news v-if="newsAllowed" :news="news"></aside-news>
         </v-navigation-drawer>
         <v-footer color="primary" fixed class="white--text" inset app height="40">
             <settings></settings>
@@ -65,7 +66,7 @@
     import ProfileBlock from './sidebar/ProfileBlock.vue'
     import AdminBlock from './sidebar/AdminBlock.vue'
     import Settings from './sidebar/Settings.vue'
-    import News from './news/Block.vue'
+    import AsideNews from './AsideNews.vue'
     import MonitoringDialog from './MonitoringDialog.vue'
 
     export default {
@@ -142,11 +143,12 @@
             }
         },
         components: {
+            AsideNews,
             'basic-block': BasicBlock,
             'profile-block': ProfileBlock,
             'admin-block': AdminBlock,
             'settings': Settings,
-            'news': News,
+            'aside-news': AsideNews,
             'monitoring-dialog': MonitoringDialog
         }
     }

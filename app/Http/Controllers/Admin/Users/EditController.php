@@ -169,7 +169,7 @@ class EditController extends Controller
         } catch (InvalidArgumentException $e) {
             return (new JsonResponse('date_time_empty'))
                 ->addNotification(new Error(__('validation.required', [
-                    'attribute' => __('content.admin.users.edit.actions.add_ban.datetime')
+                    'attribute' => __('content.admin.users.edit.actions.add_ban.DateTime')
                 ])));
         }
     }

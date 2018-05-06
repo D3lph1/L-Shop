@@ -23,7 +23,7 @@
 
 <script>
     import loader from '../../../core/http/loader'
-    import datetime from '../../../core/common/datetime'
+    import DateTime from '../../../core/common/datetime'
 
     export default {
         data() {
@@ -48,7 +48,7 @@
                 this.title = data.news.title;
                 this.content = data.news.content;
                 this.user = data.news.user;
-                this.publishedAt = datetime.localize(data.news.publishedAt);
+                this.publishedAt = DateTime.localize(data.news.publishedAt);
             }
         }
     }

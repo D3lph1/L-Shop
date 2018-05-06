@@ -107,7 +107,7 @@ class BanManager
     }
 
     /**
-     * Ban the user before the specified datetime.
+     * Ban the user before the specified DateTime.
      *
      * @param User               $user The user you want to ban.
      * @param \DateTimeImmutable $until Datetime when the ban ends.

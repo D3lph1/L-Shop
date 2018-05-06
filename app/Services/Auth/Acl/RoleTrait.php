@@ -3,6 +3,10 @@ declare(strict_types = 1);
 
 namespace App\Services\Auth\Acl;
 
+/**
+ * Trait RoleTrait
+ * Represents functionality for checking for roles.
+ */
 trait RoleTrait
 {
     /**

@@ -70,7 +70,7 @@ class AddHandler
 
                 $ei = new EnchantmentItem($enchantment, $each->getLevel());
                 $ei->setItem($item);
-                $item->addEnchantmentItem($ei);
+                $item->getEnchantmentItems()->add($ei);
             }
         }
 

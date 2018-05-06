@@ -5,6 +5,10 @@ namespace App\Services\Auth\Acl;
 
 use Doctrine\Common\Collections\Collection;
 
+/**
+ * Interface HasPermissions
+ * Represents entities that can have permissions.
+ */
 interface HasPermissions
 {
     /**
@@ -42,5 +46,10 @@ interface HasPermissions
      */
     public function hasAtLeastOnePermission(array $permissions): bool;
 
+    /**
+     * Returns the permissions that belong to an entity.
+     *
+     * @return Collection
+     */
     public function getPermissions(): Collection;
 }

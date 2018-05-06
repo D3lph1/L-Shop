@@ -3,6 +3,10 @@ declare(strict_types = 1);
 
 namespace App\Services\Product;
 
+/**
+ * Class Order
+ * Encapsulates the logic of work with the order of products.
+ */
 class Order
 {
     /**

@@ -21,7 +21,7 @@ class IlluminateCachingRepository implements CachingRepository
     /**
      * @inheritDoc
      */
-    public function get(string $key, $default)
+    public function get(string $key, $default = null)
     {
         return $this->cache->get($key, $default);
     }

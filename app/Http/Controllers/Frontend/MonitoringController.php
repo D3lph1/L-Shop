@@ -8,8 +8,19 @@ use App\Http\Controllers\Controller;
 use App\Services\Infrastructure\Response\JsonResponse;
 use App\Services\Infrastructure\Response\Status;
 
+/**
+ * Class MonitoringController
+ * Handles requests related to online server statistics.
+ */
 class MonitoringController extends Controller
 {
+    /**
+     * Processes a request for statistics on online servers.
+     *
+     * @param MonitoringHandler $handler
+     *
+     * @return JsonResponse
+     */
     public function monitor(MonitoringHandler $handler): JsonResponse
     {
         $objects = $handler->handle();

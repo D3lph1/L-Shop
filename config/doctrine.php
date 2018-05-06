@@ -114,7 +114,7 @@ return [
     ],
     /*
     |--------------------------------------------------------------------------
-    | DQL custom datetime functions
+    | DQL custom DateTime functions
     |--------------------------------------------------------------------------
     */
     'custom_datetime_functions'  => [

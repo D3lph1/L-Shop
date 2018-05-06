@@ -1,6 +1,6 @@
 <template>
-    <v-list class="pt-0" dense v-if="$store.getters.isAuth">
-        <v-subheader inset>{{ $t('content.layout.shop.sidebar.profile.title') }}</v-subheader>
+    <v-list class="pt-0 pb-0" subheader v-if="$store.getters.isAuth">
+        <v-subheader>{{ $t('content.layout.shop.sidebar.profile.title') }}</v-subheader>
         <div v-for="item in items" v-if="(typeof item.visible === 'undefined') || item.visible">
             <v-list-tile v-if="typeof item.subItems === 'undefined' || item.subItems.length === 0" :to="item.to">
                 <v-list-tile-action>
