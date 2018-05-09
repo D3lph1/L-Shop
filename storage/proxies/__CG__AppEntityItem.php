@@ -334,45 +334,23 @@ class Item extends \App\Entity\Item implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
-    public function addProduct(\App\Entity\Product $product): \App\Entity\Item
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addProduct', [$product]);
-
-        return parent::addProduct($product);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function addEnchantmentItem(\App\Entity\EnchantmentItem $enchantmentItem): \App\Entity\Item
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addEnchantmentItem', [$enchantmentItem]);
-
-        return parent::addEnchantmentItem($enchantmentItem);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function removeEnchantmentItem(\App\Entity\EnchantmentItem $element): bool
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'removeEnchantmentItem', [$element]);
-
-        return parent::removeEnchantmentItem($element);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getEnchantmentItems(): \Doctrine\Common\Collections\Collection
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getEnchantmentItems', []);
 
         return parent::getEnchantmentItems();
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    public function __toString(): string
+    {
+
+        $this->__initializer__ && $this->__initializer__->__invoke($this, '__toString', []);
+
+        return parent::__toString();
     }
 
 }

@@ -43,6 +43,18 @@ class DoctrineDistributionRepository implements DistributionRepository
         $this->em->flush();
     }
 
+    public function remove(Distribution $distribution): void
+    {
+        $this->em->remove($distribution);
+        $this->em->flush();
+    }
+
+    public function find(int $id): ?Distribution
+    {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        return $this->er->find($id);
+    }
+
     public function findByUserPaginated(User $user, int $page, int $perPage): LengthAwarePaginator
     {
         return $this->paginate(

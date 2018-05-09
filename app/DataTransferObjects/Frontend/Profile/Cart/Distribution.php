@@ -6,6 +6,7 @@ namespace App\DataTransferObjects\Frontend\Profile\Cart;
 use App\Entity\Distribution as Entity;
 use App\Services\Item\Image\Image;
 use App\Services\Product\Stack;
+use App\Services\Purchasing\Distributors\Attempting;
 
 class Distribution implements \JsonSerializable
 {
@@ -25,8 +26,16 @@ class Distribution implements \JsonSerializable
     public function jsonSerialize(): array
     {
         $purchaseItem = $this->entity->getPurchaseItem();
+        $distributorClass = $this
+            ->entity
+            ->getPurchaseItem()
+            ->getProduct()
+            ->getCategory()
+            ->getServer()
+            ->getDistributor();
 
         return [
+            'id' => $this->entity->getId(),
             'amount' => Stack::formatUnitsForAmount($purchaseItem->getProduct(), $purchaseItem->getAmount()),
             'item' => [
                 'name' => $purchaseItem->getProduct()->getItem()->getName(),
@@ -35,7 +44,8 @@ class Distribution implements \JsonSerializable
             'product' => [
                 'server' => $purchaseItem->getProduct()->getCategory()->getServer()->getName(),
                 'category' => $purchaseItem->getProduct()->getCategory()->getName()
-            ]
+            ],
+            'attempting' => in_array(Attempting::class, class_implements($distributorClass))
         ];
     }
 }

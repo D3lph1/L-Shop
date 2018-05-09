@@ -4,8 +4,14 @@ declare(strict_types = 1);
 namespace App\Providers;
 
 use App\Exceptions\UnexpectedValueException;
+use App\Repository\Distribution\DistributionRepository;
 use App\Services\Purchasing\Distributors\Distributor;
 use App\Services\Purchasing\Distributors\Pool as DistributorsPool;
+use App\Services\Purchasing\Distributors\RconDistribution\Commands;
+use App\Services\Purchasing\Distributors\RconDistribution\CommandBuilder;
+use App\Services\Purchasing\Distributors\RconDistribution\Connections;
+use App\Services\Purchasing\Distributors\RconDistribution\ExtraCommands;
+use App\Services\Purchasing\Distributors\RconDistributor;
 use App\Services\Purchasing\Payers\InterkassaPayer;
 use App\Services\Purchasing\Payers\Payer;
 use App\Services\Purchasing\Payers\Pool;
@@ -14,7 +20,10 @@ use App\Services\Purchasing\Payments\Interkassa\Checkout as InterkassaCheckout;
 use App\Services\Purchasing\Payments\Robokassa\Checkout as RobokassaCheckout;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
+use D3lph1\MinecraftRconManager\Connector;
+use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Config\Repository;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 
 class PurchaseServiceProvider extends ServiceProvider
@@ -35,11 +44,6 @@ class PurchaseServiceProvider extends ServiceProvider
      * @return void
      */
     public function register(): void
-    {
-        $this->registerServices();
-    }
-
-    private function registerServices(): void
     {
         $this->app->singleton(RobokassaCheckout::class, function () {
             $settings = $this->app->make(Settings::class);
@@ -70,6 +74,7 @@ class PurchaseServiceProvider extends ServiceProvider
 
         $this->registerPayers();
         $this->registerPayersPool();
+        $this->registerRconDistributionServices();
         $this->registerDistributorsPool();
     }
 
@@ -116,7 +121,7 @@ class PurchaseServiceProvider extends ServiceProvider
     {
         $this->app->singleton(DistributorsPool::class, function () {
             $distributors = [];
-            foreach ($this->app->make(Repository::class)->get('purchasing.distributors') as $distributor) {
+            foreach ($this->app->make(Repository::class)->get('purchasing.distribution.distributors') as $distributor) {
                 $instance = $this->app->make($distributor);
                 if ($instance instanceof Distributor) {
                     $distributors[] = $instance;
@@ -128,6 +133,47 @@ class PurchaseServiceProvider extends ServiceProvider
             }
 
             return new DistributorsPool($distributors);
+        });
+    }
+
+    private function registerRconDistributionServices(): void
+    {
+        $this->app->singleton(Commands::class, function (Application $app) {
+            $config = $app->make(Repository::class);
+
+            return (new Commands())
+                ->setGiveNonEnchantedItemCommand($config->get('purchasing.distribution.rcon.commands.give_non_enchanted_item'))
+                ->setGiveEnchantedItemCommand($config->get('purchasing.distribution.rcon.commands.give_enchanted_item'))
+                ->setGiveNonExpiredPermgroupCommand($config->get('purchasing.distribution.rcon.commands.give_non_expired_permgroup'))
+                ->setGiveExpiredPermgroupCommand($config->get('purchasing.distribution.rcon.commands.give_expired_permgroup'));
+        });
+
+        $this->app->singleton(ExtraCommands::class, function (Application $app) {
+            $config = $app->make(Repository::class);
+
+            return (new ExtraCommands())
+                ->setExtraBeforeCommands($config->get('purchasing.distribution.rcon.extra.before'))
+                ->setExtraAfterCommands($config->get('purchasing.distribution.rcon.extra.after'));
+        });
+
+        $this->app->singleton(Connections::class, function (Application $app) {
+            $config = $app->make(Repository::class);
+
+            return new Connections(
+                $app->make(Connector::class),
+                $config->get('purchasing.distribution.rcon.timeout')
+            );
+        });
+
+        $this->app->singleton(RconDistributor::class, function (Application $app) {
+            $config = $app->make(Repository::class);
+
+            return new RconDistributor(
+                $app->make(CommandBuilder::class),
+                $app->make(ExtraCommands::class),
+                $config->get('purchasing.distribution.rcon.success_response'),
+                $app->make(Dispatcher::class)
+            );
         });
     }
 }

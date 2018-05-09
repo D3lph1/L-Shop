@@ -103,6 +103,9 @@ class Item
 
     /**
      * Additional information that is used by means of issuing items in the game.
+     * <p>The data in NBT format is stored here.</p>
+     *
+     * @see https://minecraft.gamepedia.com/NBT_tag
      *
      * @ORM\Column(name="extra", type="text", nullable=true)
      */

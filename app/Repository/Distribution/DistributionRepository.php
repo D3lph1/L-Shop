@@ -14,6 +14,10 @@ interface DistributionRepository
 
     public function update(Distribution $distribution): void;
 
+    public function remove(Distribution $distribution): void;
+
+    public function find(int $id): ?Distribution;
+
     public function findByUserPaginated(User $user, int $page, int $perPage): LengthAwarePaginator;
 
     public function findByUserPaginatedWithOrder(User $user, int $page, string $orderBy, bool $descending, int $perPage): LengthAwarePaginator;

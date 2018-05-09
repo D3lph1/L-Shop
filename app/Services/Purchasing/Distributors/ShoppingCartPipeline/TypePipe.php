@@ -19,7 +19,7 @@ class TypePipe
             $entity->setType(ShoppingCart::TYPE_PERMGROUP);
         } else {
             throw new NotImplementedException(
-                "Feature to handle this product type {$product} not implemented"
+                "Feature to handle this item type {$product->getItem()} not implemented"
             );
         }
 

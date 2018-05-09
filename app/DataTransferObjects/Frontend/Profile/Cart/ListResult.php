@@ -3,9 +3,10 @@ declare(strict_types=1);
 
 namespace App\DataTransferObjects\Frontend\Profile\Cart;
 
+use App\Services\Infrastructure\Response\JsonRespondent;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-class ListResult
+class ListResult implements JsonRespondent
 {
     /**
      * @var LengthAwarePaginator
@@ -59,5 +60,17 @@ class ListResult
     public function getServers(): array
     {
         return $this->servers;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function response(): array
+    {
+        return [
+            'paginator' => $this->paginator,
+            'items' => $this->items,
+            'servers' => $this->servers
+        ];
     }
 }

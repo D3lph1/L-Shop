@@ -32,6 +32,11 @@
                 <td class="text-xs-center">{{ props.item.item.name }}</td>
                 <td class="text-xs-center">{{ props.item.amount }}</td>
                 <td class="text-xs-center">{{ props.item.product.server }}</td>
+                <td class="text-xs-center">
+                    <v-btn icon class="mx-0" :disabled="distributionDisabled" v-if="props.item.attempting" @click="distribute(props.item)">
+                        <v-icon color="secondary">play_for_work</v-icon>
+                    </v-btn>
+                </td>
             </template>
         </v-data-table>
     </v-card>
@@ -45,6 +50,7 @@
                 totalItems: 0,
                 items: [],
                 loading: false,
+                distributionDisabled: false,
                 pagination: {
                     page: this.$route.query.page ? this.$route.query.page : 1,
                     sortBy: this.$route.query.order_by ? this.$route.query.order_by : 'distribution.id',
@@ -75,6 +81,11 @@
                         align: 'center',
                         sortable: true,
                         value: 'server.name'
+                    },
+                    {
+                        text: $t('common.actions'),
+                        align: 'center',
+                        sortable: false
                     }
                 ]
             }
@@ -128,6 +139,13 @@
 
                 this.loading = false;
             },
+            distribute(distribution) {
+                this.distributionDisabled = true;
+                this.$axios.post(`/spa/profile/cart/distribute/${distribution.id}`)
+                    .then(() => {
+                        this.distributionDisabled = false;
+                    });
+            }
         }
     }
 </script>

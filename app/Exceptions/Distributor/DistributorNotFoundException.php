@@ -7,8 +7,8 @@ use App\Exceptions\DomainException;
 
 class DistributorNotFoundException extends DomainException
 {
-    public static function byId(int $id): DistributorNotFoundException
+    public static function byClassName(string $className): DistributorNotFoundException
     {
-        return new DistributorNotFoundException("Distributor with id {$id} not found");
+        return new DistributorNotFoundException("Distributor {$className} not found");
     }
 }

@@ -62,6 +62,8 @@ $router->post('/profile/settings/sessions/reset', 'Frontend\Profile\SettingsCont
 
 $router->post('/profile/purchases', 'Frontend\Profile\PurchasesController@pagination');
 $router->post('/profile/cart', 'Frontend\Profile\CartController@pagination');
+$router->post('/profile/cart/distribute/{distribution}', 'Frontend\Profile\CartController@distribute')
+    ->where('distribution', '[0-9]+');
 
 // Admin
 $router->get('/admin/control/basic', 'Admin\Control\BasicController@render');
