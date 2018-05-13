@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\DataTransferObjects\Admin\Statistic\Purchases;
 
-use App\Services\Infrastructure\Response\JsonRespondent;
+use App\Services\Response\JsonRespondent;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class PaginationResult implements JsonRespondent

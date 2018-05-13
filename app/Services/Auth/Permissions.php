@@ -79,6 +79,11 @@ class Permissions
     public const ADMIN_CONTROL_PAYMENTS_ACCESS = 'admin_control_payments_access';
 
     /**
+     * Gives the user the right to use the `admin->control->API settings` section
+     */
+    public const ADMIN_CONTROL_API_ACCESS = 'admin_control_api_access';
+
+    /**
      * Gives the user the right to use the `admin->control->security` section
      */
     public const ADMIN_CONTROL_SECURITY_ACCESS = 'admin_control_security_access';

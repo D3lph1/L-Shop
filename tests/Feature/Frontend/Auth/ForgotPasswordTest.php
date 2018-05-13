@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace Tests\Feature\Frontend\Auth;
 
-use App\Services\Infrastructure\Response\Status;
+use App\Services\Response\Status;
 use Tests\TestCase;
 
 class ForgotPasswordTest extends TestCase

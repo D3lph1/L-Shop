@@ -18,22 +18,45 @@ class CommandBuilder
      */
     private $commands;
 
-    public function __construct(Commands $commands)
+    /**
+     * @var ExtraCommands
+     */
+    private $extraCommands;
+
+    public function __construct(Commands $commands, ExtraCommands $extraCommands)
     {
         $this->commands = $commands;
+        $this->extraCommands = $extraCommands;
     }
 
     /**
      * @param PurchaseItem $purchaseItem
      *
-     * @return string[]
+     * @return ExecutableCommands
      */
-    public function build(PurchaseItem $purchaseItem): array
+    public function build(PurchaseItem $purchaseItem): ExecutableCommands
     {
         $product = $purchaseItem->getProduct();
         $item = $product->getItem();
         $purchase = $purchaseItem->getPurchase();
         $player = $purchase->getUser() !== null ? $purchase->getUser()->getUsername() : $purchase->getPlayer();
+        $executableCommands = new ExecutableCommands();
+
+        $before = [];
+        foreach ($this->extraCommands->getExtraBeforeCommands() as $extraBeforeCommand) {
+            $after[] = $this->replace($extraBeforeCommand, [
+                'player' => $player
+            ]);
+        }
+        $after = [];
+        foreach ($this->extraCommands->getExtraAfterCommands() as $extraAfterCommand) {
+            $after[] = $this->replace($extraAfterCommand, [
+                'player' => $player
+            ]);
+        }
+
+        $executableCommands->setExtraBeforeCommands($before);
+        $executableCommands->setExtraAfterCommands($after);
         $commands = [];
 
         if ($item->getType() === Type::ITEM) {
@@ -69,7 +92,7 @@ class CommandBuilder
             );
         }
 
-        return $commands;
+        return $executableCommands->setMainCommands($commands);
     }
 
     private function processItem(PurchaseItem $purchaseItem, $amount): string
@@ -104,7 +127,7 @@ class CommandBuilder
                 'player' => $player,
                 'item' => $item->getGameId(),
                 'amount' => $amount,
-                'tags' => $this->encode($nbt)
+                'nbt' => $this->encode($nbt)
             ]);
         } else {
             return $this->replace($this->commands->getGiveEnchantedItemCommand(), [
@@ -112,7 +135,7 @@ class CommandBuilder
                 'item' => $item->getGameId(),
                 'amount' => $amount,
                 // If extra is empty, create an empty NBT object. If not, add them to the team.
-                'tags' => $item->getExtra() !== null ? $this->encode($item->getExtra()) : '{}'
+                'nbt' => $item->getExtra() !== null ? $this->encode($item->getExtra()) : '{}'
             ]);
         }
     }

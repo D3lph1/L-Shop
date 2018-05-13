@@ -8,11 +8,11 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Frontend\Auth\ForgotPasswordRequest;
 use App\Services\Auth\AccessMode;
 use App\Services\Auth\Exceptions\UserDoesNotExistException;
-use App\Services\Infrastructure\Notification\Notifications\Error;
-use App\Services\Infrastructure\Notification\Notifications\Success;
-use App\Services\Infrastructure\Response\JsonResponse;
-use App\Services\Infrastructure\Response\Status;
-use App\Services\Infrastructure\Security\Captcha\Captcha;
+use App\Services\Notification\Notifications\Error;
+use App\Services\Notification\Notifications\Success;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
+use App\Services\Security\Captcha\Captcha;
 use App\Services\Settings\Settings;
 
 /**
@@ -34,7 +34,7 @@ class ForgotPasswordController extends Controller
      *
      * @return JsonResponse
      */
-    public function render(Settings $settings, Captcha $captcha)
+    public function render(Settings $settings, Captcha $captcha): JsonResponse
     {
         return new JsonResponse(Status::SUCCESS, [
             'accessModeAny' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY,

@@ -59,16 +59,11 @@ class UsersSeeder extends Seeder
         $user = $auth->register(new User('admin', 'admin@example.com', 'admin'), true);
 
         $adminRole = $roleRepository->findByName(Roles::ADMIN);
-        $user->addRole($adminRole);
+        $user->getRoles()->add($adminRole);
         $adminRole->addUser($user);
         $userRepository->update($user);
         $roleRepository->update($adminRole);
 
-        $user = $auth->register(new User('user', 'user@example.com', '123456'), true);
-        $userRole = $roleRepository->findByName(Roles::USER);
-        $user->addRole($userRole);
-        $userRole->addUser($user);
-        $userRepository->update($user);
-        $roleRepository->update($userRole);
+        $auth->register(new User('user', 'user@example.com', '123456'), true);
     }
 }

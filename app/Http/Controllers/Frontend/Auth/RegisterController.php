@@ -9,11 +9,11 @@ use App\Http\Requests\Frontend\Auth\RegisterRequest;
 use App\Services\Auth\AccessMode;
 use App\Services\Auth\Exceptions\EmailAlreadyExistsException;
 use App\Services\Auth\Exceptions\UsernameAlreadyExistsException;
-use App\Services\Infrastructure\Notification\Notifications\Error;
-use App\Services\Infrastructure\Notification\Notifications\Success;
-use App\Services\Infrastructure\Response\JsonResponse;
-use App\Services\Infrastructure\Response\Status;
-use App\Services\Infrastructure\Security\Captcha\Captcha;
+use App\Services\Notification\Notifications\Error;
+use App\Services\Notification\Notifications\Success;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
+use App\Services\Security\Captcha\Captcha;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
 

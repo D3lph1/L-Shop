@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace App\Http\Middleware;
 
 use App\Services\Auth\Auth;
-use App\Services\Infrastructure\Response\JsonResponse;
+use App\Services\Response\JsonResponse;
 use Closure;
 
 class RedirectIfAuthenticated

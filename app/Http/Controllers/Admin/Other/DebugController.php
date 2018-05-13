@@ -8,8 +8,8 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Other\SendTestEmailRequest;
 use function App\permission_middleware;
 use App\Services\Auth\Permissions;
-use App\Services\Infrastructure\Response\JsonResponse;
-use App\Services\Infrastructure\Response\Status;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 use Psr\Log\LoggerInterface;
 
 class DebugController extends Controller

@@ -8,11 +8,11 @@ use App\Handlers\Admin\Items\DeleteHandler;
 use App\Handlers\Admin\Items\ListHandler;
 use App\Http\Controllers\Controller;
 use App\Services\Auth\Permissions;
-use App\Services\Infrastructure\Notification\Notifications\Info;
-use App\Services\Infrastructure\Notification\Notifications\Warning;
-use App\Services\Infrastructure\Notification\Notificator;
-use App\Services\Infrastructure\Response\JsonResponse;
-use App\Services\Infrastructure\Response\Status;
+use App\Services\Notification\Notifications\Info;
+use App\Services\Notification\Notifications\Warning;
+use App\Services\Notification\Notificator;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 use Illuminate\Http\Request;
 use function App\permission_middleware;
 

@@ -6,8 +6,8 @@ namespace App\Http\Controllers\Frontend;
 use App\Exceptions\Page\PageNotFoundException;
 use App\Handlers\Frontend\Shop\Page\VisitHandler;
 use App\Http\Controllers\Controller;
-use App\Services\Infrastructure\Response\JsonResponse;
-use App\Services\Infrastructure\Response\Status;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 

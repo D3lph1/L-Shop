@@ -38,7 +38,7 @@ class TestsSeeder extends Seeder
         $activator->activate($user);
 
         $adminRole = $roleRepository->findByName(Roles::ADMIN);
-        $user->addRole($adminRole);
+        $user->getRoles()->add($adminRole);
         $adminRole->addUser($user);
         $userRepository->update($user);
         $roleRepository->update($adminRole);

@@ -8,8 +8,8 @@ use App\Handlers\Admin\Statistic\Show\PurchasesForMonthHandler;
 use App\Handlers\Admin\Statistic\Show\RegisteredForMonthHandler;
 use App\Handlers\Admin\Statistic\Show\VisitHandler;
 use App\Http\Controllers\Controller;
-use App\Services\Infrastructure\Response\JsonResponse;
-use App\Services\Infrastructure\Response\Status;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 use Illuminate\Http\Request;
 
 class ShowController extends Controller

@@ -3,9 +3,9 @@ declare(strict_types = 1);
 
 namespace App\Http\Middleware;
 
-use App\Services\Infrastructure\Notification\Notifications\Error;
-use App\Services\Infrastructure\Response\JsonResponse;
-use App\Services\Infrastructure\Security\Captcha\Captcha as CaptchaInterface;
+use App\Services\Notification\Notifications\Error;
+use App\Services\Response\JsonResponse;
+use App\Services\Security\Captcha\Captcha as CaptchaInterface;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Http\Request;
 

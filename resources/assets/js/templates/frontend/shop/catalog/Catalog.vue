@@ -1,17 +1,15 @@
 <template>
-    <div>
-        <catalog-header :shop-name="shopName" :logo="logo"></catalog-header>
+    <div style="margin: -15px">
         <div v-if="server.categories.length !== 0">
             <v-tabs
                     centered
-                    color="primary"
+                    color="white"
                     slot="extension"
-                    slider-color="secondary"
+                    slider-color="primary"
                     v-model="tab"
                     grow
                     show-arrows
                     class="mb-3"
-                    dark
             >
                 <v-tab v-for="category in server.categories" :key="category.id" @click="changeCategory(category.id)">
                     {{ category.name }}
@@ -19,7 +17,7 @@
             </v-tabs>
             <v-tabs-items v-model="tab">
                 <v-tab-item v-for="category in server.categories" :key="category.id">
-                    <v-layout align-center justify-center wrap>
+                    <section class="shop-grid">
                         <catalog-item
                                 v-for="(product, index) in products"
                                 :key="index"
@@ -39,7 +37,7 @@
                                 @about-dialog-opening="openAboutDialog"
                                 v-if="!loading"
                         ></catalog-item>
-                    </v-layout>
+                    </section>
 
                     <div class="text-xs-center" v-if="paginator.last_page > 1 && !loading">
                         <v-pagination
@@ -248,3 +246,13 @@
         }
     }
 </script>
+
+<style lang="less" scoped>
+    .shop-grid {
+        padding: 15px;
+        display: grid;
+        grid-gap: 20px;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        justify-items: center;
+    }
+</style>

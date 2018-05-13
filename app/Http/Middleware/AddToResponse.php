@@ -5,9 +5,9 @@ namespace App\Http\Middleware;
 
 use App\Services\Auth\Auth;
 use App\Services\Auth\Exceptions\BannedException;
-use App\Services\Infrastructure\Notification\Notifications\Error;
-use App\Services\Infrastructure\Notification\Notificator;
-use App\Services\Infrastructure\Response\JsonResponse;
+use App\Services\Notification\Notifications\Error;
+use App\Services\Notification\Notificator;
+use App\Services\Response\JsonResponse;
 use App\Services\Support\Lang\Ban\BanMessage;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

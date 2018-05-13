@@ -8,8 +8,8 @@ use App\Handlers\Frontend\Auth\ServersHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\Auth;
 use App\Services\Auth\AccessMode;
-use App\Services\Infrastructure\Response\JsonResponse;
-use App\Services\Infrastructure\Response\Status;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 use App\Services\Settings\Settings;
 
 /**

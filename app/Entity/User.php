@@ -259,35 +259,11 @@ class User implements HasRoles, HasPermissions
     }
 
     /**
-     * @param Role $role
-     *
-     * @return User
-     */
-    public function addRole(Role $role): User
-    {
-        $this->roles->add($role);
-
-        return $this;
-    }
-
-    /**
      * @return Collection
      */
     public function getRoles(): Collection
     {
         return $this->roles;
-    }
-
-    /**
-     * @param Reminder $reminder
-     *
-     * @return User
-     */
-    public function addReminder(Reminder $reminder): User
-    {
-        $this->reminders->add($reminder);
-
-        return $this;
     }
 
     /**
@@ -304,18 +280,6 @@ class User implements HasRoles, HasPermissions
     public function getPersistences(): Collection
     {
         return $this->persistences;
-    }
-
-    /**
-     * @param Ban $ban
-     *
-     * @return User
-     */
-    public function addBan(Ban $ban): User
-    {
-        $this->bans->add($ban);
-
-        return $this;
     }
 
     /**

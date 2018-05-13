@@ -35,7 +35,7 @@
         "mockery/mockery": "1.0",
         "phpunit/phpunit": "6.5.5",
         "symfony/thanks": "1.0.1",
-        "barryvdh/laravel-ide-helper": "2.4.1"
+        "barryvdh/laravel-ide-helper": "2.4.3"
     },
     "autoload": {
         "classmap": [

@@ -15,17 +15,21 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Frontend\Profile\Character\UploadCloakRequest;
 use App\Http\Requests\Frontend\Profile\Character\UploadSkinRequest;
 use App\Services\Auth\Auth;
-use App\Services\Infrastructure\Notification\Notifications\Error;
-use App\Services\Infrastructure\Notification\Notifications\Info;
-use App\Services\Infrastructure\Notification\Notifications\Success;
-use App\Services\Infrastructure\Response\JsonResponse;
-use App\Services\Infrastructure\Response\Status;
+use App\Services\Notification\Notifications\Error;
+use App\Services\Notification\Notifications\Info;
+use App\Services\Notification\Notifications\Success;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 use App\Services\Media\Character\Cloak\Accessor as CloakAccessor;
 use App\Services\Media\Character\Skin\Accessor as SkinAccessor;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
+/**
+ * Class CharacterController
+ * Responsible for handling requests from the character's page.
+ */
 class CharacterController extends Controller
 {
     public function __construct(Auth $auth, SkinAccessor $skinAccessor, CloakAccessor $cloakAccessor)
@@ -40,6 +44,15 @@ class CharacterController extends Controller
         });
     }
 
+    /**
+     * Returns the data to render the page with the character.
+     *
+     * @param Auth         $auth
+     * @param Settings     $settings
+     * @param VisitHandler $handler
+     *
+     * @return JsonResponse
+     */
     public function render(
         Auth $auth,
         Settings $settings,
@@ -50,11 +63,11 @@ class CharacterController extends Controller
 
         $skinImageSizes = [];
         foreach ($dto->getAvailableSkinImageSizes() as $item) {
-            $skinImageSizes[] = $item[0] . 'x' . $item[1];
+            $skinImageSizes[] = "{$item[0]}x{$item[1]}";
         }
         $cloakImageSizes = [];
         foreach ($dto->getAvailableCloakImageSizes() as $item) {
-            $cloakImageSizes[] = $item[0] . 'x' . $item[1];
+            $cloakImageSizes[] = "{$item[0]}x{$item[1]}";
         }
 
         return new JsonResponse(Status::SUCCESS, [
@@ -77,6 +90,14 @@ class CharacterController extends Controller
         ]);
     }
 
+    /**
+     * Handles the request to load the user skin image.
+     *
+     * @param UploadSkinRequest $request
+     * @param UploadSkinHandler $handler
+     *
+     * @return JsonResponse
+     */
     public function uploadSkin(UploadSkinRequest $request, UploadSkinHandler $handler): JsonResponse
     {
         try {
@@ -93,6 +114,14 @@ class CharacterController extends Controller
             ->addNotification(new Success(__('msg.frontend.profile.skin.success')));
     }
 
+    /**
+     * Handles the request to load the user cloak image.
+     *
+     * @param UploadCloakRequest $request
+     * @param UploadCloakHandler $handler
+     *
+     * @return JsonResponse
+     */
     public function uploadCloak(UploadCloakRequest $request, UploadCloakHandler $handler): JsonResponse
     {
         try {
@@ -109,6 +138,13 @@ class CharacterController extends Controller
             ->addNotification(new Success(__('msg.frontend.profile.cloak.success')));
     }
 
+    /**
+     * Handles the request to delete the user skin image.
+     *
+     * @param DeleteSkinHandler $handler
+     *
+     * @return JsonResponse
+     */
     public function deleteSkin(DeleteSkinHandler $handler): JsonResponse
     {
         if ($handler->handle()) {
@@ -120,6 +156,13 @@ class CharacterController extends Controller
             ->addNotification(new Error(__('msg.frontend.profile.skin.delete.fail')));
     }
 
+    /**
+     * Handles the request to delete the user cloak image.
+     *
+     * @param DeleteCloakHandler $handler
+     *
+     * @return JsonResponse
+     */
     public function deleteCloak(DeleteCloakHandler $handler): JsonResponse
     {
         if ($handler->handle()) {

@@ -3,9 +3,9 @@ declare(strict_types = 1);
 
 namespace Tests\Integrated\Services\Infrastructure\Notification\Drivers;
 
-use App\Services\Infrastructure\Notification\Drivers\Session;
-use App\Services\Infrastructure\Notification\Notifications\Info;
-use App\Services\Infrastructure\Notification\Notifications\Success;
+use App\Services\Notification\Drivers\Session;
+use App\Services\Notification\Notifications\Info;
+use App\Services\Notification\Notifications\Success;
 use Illuminate\Session\Store;
 use Tests\TestCase;
 

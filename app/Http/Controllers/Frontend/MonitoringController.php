@@ -5,8 +5,8 @@ namespace App\Http\Controllers\Frontend;
 
 use App\Handlers\Api\MonitoringHandler;
 use App\Http\Controllers\Controller;
-use App\Services\Infrastructure\Response\JsonResponse;
-use App\Services\Infrastructure\Response\Status;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 
 /**
  * Class MonitoringController

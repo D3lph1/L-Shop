@@ -8,8 +8,8 @@ use App\Handlers\Admin\News\ListHandler;
 use App\Http\Controllers\Controller;
 use function App\permission_middleware;
 use App\Services\Auth\Permissions;
-use App\Services\Infrastructure\Response\JsonResponse;
-use App\Services\Infrastructure\Response\Status;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 use Illuminate\Http\Request;
 
 class ListController extends Controller

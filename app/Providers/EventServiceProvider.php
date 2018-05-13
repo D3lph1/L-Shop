@@ -7,6 +7,7 @@ use App\Events\Auth\PasswordReminderCreatedEvent;
 use App\Events\Auth\RegistrationSuccessEvent;
 use App\Events\Purchase\PurchaseCompletedEvent;
 use App\Events\Purchase\PurchaseCreatedEvent;
+use App\Listeners\Auth\AttachDefaultRoles;
 use App\Listeners\Auth\SendEmailConfirmation;
 use App\Listeners\Auth\SendPasswordReminder;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -20,7 +21,8 @@ class EventServiceProvider extends ServiceProvider
      */
     protected $listen = [
         RegistrationSuccessEvent::class => [
-            SendEmailConfirmation::class
+            SendEmailConfirmation::class,
+            AttachDefaultRoles::class,
         ],
         PasswordReminderCreatedEvent::class => [
             SendPasswordReminder::class

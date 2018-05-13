@@ -7,6 +7,7 @@ use App\Entity\Distribution;
 use App\Exceptions\Distributor\DistributionException;
 use App\Repository\Distribution\DistributionRepository;
 use App\Services\Purchasing\Distributors\RconDistribution\Connections;
+use App\Services\Purchasing\Distributors\RconDistribution\ExecutableCommands;
 use App\Services\Purchasing\Distributors\RconDistribution\ExtraCommands;
 use D3lph1\MinecraftRconManager\Exceptions\RuntimeException;
 use Illuminate\Bus\Queueable;
@@ -14,6 +15,10 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Class DistributeByRcon
+ * Performs execution of Rcon commands in the queue for the distributing of products to the player.
+ */
 class DistributeByRcon implements ShouldQueue
 {
     use InteractsWithQueue, Queueable;
@@ -28,14 +33,9 @@ class DistributeByRcon implements ShouldQueue
     /**
      * Commands waiting to be executed.
      *
-     * @var string[]
+     * @var ExecutableCommands
      */
     private $commands;
-
-    /**
-     * @var ExtraCommands
-     */
-    private $extraCommands;
 
     /**
      * The regular expression (pattern) of a successful answer.
@@ -48,21 +48,18 @@ class DistributeByRcon implements ShouldQueue
      * Create a new job instance.
      *
      * @param Distribution  $distribution
-     * @param string[]      $commands
-     * @param ExtraCommands $extraCommands
+     * @param ExecutableCommands      $commands
      * @param string        $successResponse
      */
     public function __construct(
         Distribution $distribution,
-        array $commands,
-        ExtraCommands $extraCommands,
+        ExecutableCommands $commands,
         string $successResponse)
     {
         // Only the distribution identifier is saved, so that you do not have problems with the
         // serialization of the entity.
         $this->distributionId = $distribution->getId();
         $this->commands = $commands;
-        $this->extraCommands = $extraCommands;
         $this->successResponse = $successResponse;
     }
 
@@ -93,7 +90,7 @@ class DistributeByRcon implements ShouldQueue
 
         try {
             // Execute extra commands one by one.
-            foreach ($this->extraCommands->getExtraBeforeCommands() as $command) {
+            foreach ($this->commands->getExtraBeforeCommands() as $command) {
                 $connection->send($command);
             }
         } catch (\Exception $e) {
@@ -103,7 +100,7 @@ class DistributeByRcon implements ShouldQueue
         }
 
         $step = 1;
-        $total = count($this->commands);
+        $total = count($this->commands->getMainCommands());
         // Execute main commands one by one.
         foreach ($this->commands as $command) {
             $logger->debug("Attempting to execute command: ({$step}/{$total})\"{$command}\"", $this->context());
@@ -134,7 +131,7 @@ class DistributeByRcon implements ShouldQueue
 
         try {
             // Execute extra commands one by one.
-            foreach ($this->extraCommands->getExtraAfterCommands() as $extraAfterCommand) {
+            foreach ($this->commands->getExtraAfterCommands() as $extraAfterCommand) {
                 $connection->send($extraAfterCommand);
             }
         } catch (\Exception $e) {

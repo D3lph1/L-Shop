@@ -7,7 +7,7 @@ use App\DataTransferObjects\Frontend\Shop\CartResult;
 use App\Exceptions\Server\ServerNotFoundException;
 use App\Repository\Server\ServerRepository;
 use App\Services\Cart\Cart;
-use App\Services\Infrastructure\Server\Persistence\Persistence;
+use App\Services\Server\Persistence\Persistence;
 
 class VisitHandler
 {

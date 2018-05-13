@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Mail\Auth;
 
-use App\Services\Infrastructure\Routing\SpaRouteResolver;
+use App\Services\Routing\SpaRouteResolver;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Translation\Translator;
 use Illuminate\Mail\Mailable;

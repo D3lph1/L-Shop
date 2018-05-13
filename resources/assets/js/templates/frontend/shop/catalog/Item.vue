@@ -1,33 +1,34 @@
 <template>
-    <v-flex xs12 sm12 md4 lg3>
-        <v-card class="product-block">
-            <div class="product-header title">
-                <div class="product-name">
-                    {{ name }}
-                    <v-enchanted class="enchanted" v-if="enchantments.length !== 0"></v-enchanted>
-                </div>
-                <div class="product-menu">
-                    <v-menu bottom left>
-                        <v-btn flat icon small slot="activator">
-                            <v-icon>more_vert</v-icon>
-                        </v-btn>
-                        <v-list>
-                            <v-list-tile @click="openAboutDialog">
-                                <v-list-tile-title>{{ $t('content.frontend.shop.catalog.item.about') }}</v-list-tile-title>
-                            </v-list-tile>
-                            <v-list-tile v-if="productsCrudAccess" :to="{name: 'admin.products.edit', params: {product: id}}">
-                                <v-list-tile-title>{{ $t('content.frontend.shop.catalog.item.go_to_product') }}</v-list-tile-title>
-                            </v-list-tile>
-                            <v-list-tile v-if="itemsCrudAccess" :to="{name: 'admin.items.edit', params: {item: itemId}}">
-                                <v-list-tile-title>{{ $t('content.frontend.shop.catalog.item.go_to_item') }}</v-list-tile-title>
-                            </v-list-tile>
-                        </v-list>
-                    </v-menu>
-                </div>
-            </div>
-            <img :src="image" class="product-image" :alt="name">
-            <p class="product-price subheading">{{ price }} <span v-html="$store.state.shop.currency.html"></span></p>
-            <p class="product-count subheading">
+    <v-card hover class="shop-product">
+        <v-card-title class="product-title">
+            <span>{{ name }}</span>
+            <v-spacer></v-spacer>
+            <v-menu bottom left>
+                <v-btn class="product-menu-btn" slot="activator" icon>
+                    <v-icon>more_vert</v-icon>
+                </v-btn>
+                <v-list>
+                    <v-list-tile @click="openAboutDialog">
+                        <v-list-tile-title>{{ $t('content.frontend.shop.catalog.item.about') }}</v-list-tile-title>
+                    </v-list-tile>
+                    <v-list-tile v-if="productsCrudAccess" :to="{name: 'admin.products.edit', params: {product: id}}">
+                        <v-list-tile-title>{{ $t('content.frontend.shop.catalog.item.go_to_product') }}</v-list-tile-title>
+                    </v-list-tile>
+                    <v-list-tile v-if="itemsCrudAccess" :to="{name: 'admin.items.edit', params: {item: itemId}}">
+                        <v-list-tile-title>{{ $t('content.frontend.shop.catalog.item.go_to_item') }}</v-list-tile-title>
+                    </v-list-tile>
+                </v-list>
+            </v-menu>
+        </v-card-title>
+
+        <div class="product-img">
+            <img :src="image">
+        </div>
+
+        <v-card-title class="product-price">
+            <span>
+                {{ price }}
+                <span v-html="$store.state.shop.currency.html"></span>
                 <span v-if="isItem">
                     {{ $t('content.frontend.shop.catalog.item.stack_item', {stack}) }}
                 </span>
@@ -39,18 +40,64 @@
                         {{ $t('content.frontend.shop.catalog.item.stack_permgroup', {stack}) }}
                     </span>
                 </span>
-            </p>
+            </span>
+        </v-card-title>
 
-            <v-btn block small color="secondary" :loading="loading" :disabled="alreadyInCart" @click="put">
-                <v-icon left small>add_shopping_cart</v-icon>
-                <span v-if="alreadyInCart">{{ $t('content.frontend.shop.catalog.item.already_in_cart') }}</span>
-                <span v-else>{{ $t('content.frontend.shop.catalog.item.put_in_cart') }}</span>
-            </v-btn>
-            <v-btn block small color="primary" @click.native.stop="openPurchaseDialog"><v-icon left small>attach_money</v-icon>
-                {{ $t('content.frontend.shop.catalog.item.quick_purchase') }}
-            </v-btn>
-        </v-card>
-    </v-flex>
+        <v-divider></v-divider>
+
+        <v-card-actions class="product-footer">
+            <v-tooltip bottom>
+                <v-btn class="product-btn"
+                       icon
+                       flat
+                       color="purple lighten-1"
+                       slot="activator"
+                >
+                    <v-icon>flash_on</v-icon>
+                </v-btn>
+                <span>{{ $t('content.frontend.shop.catalog.item.enchanted') }}</span>
+            </v-tooltip>
+
+            <v-spacer></v-spacer>
+
+            <v-tooltip bottom>
+                <v-btn
+                        class="product-btn"
+                        icon
+                        flat
+                        outline
+                        color="primary"
+                        slot="activator"
+                        :loading="loading"
+                        :disabled="alreadyInCart"
+                        @click="put"
+                >
+                    <v-icon>add_shopping_cart</v-icon>
+                </v-btn>
+                <span>
+                    <span v-if="alreadyInCart">{{ $t('content.frontend.shop.catalog.item.already_in_cart') }}</span>
+                    <span v-else>{{ $t('content.frontend.shop.catalog.item.put_in_cart') }}</span>
+                </span>
+            </v-tooltip>
+
+            <v-tooltip bottom>
+                <v-btn
+                        class="product-btn"
+                        icon
+                        flat
+                        outline
+                        color="orange"
+                        slot="activator"
+                        @click.native.stop="openPurchaseDialog"
+                >
+                    <v-icon>attach_money</v-icon>
+                </v-btn>
+                <span>
+                    {{ $t('content.frontend.shop.catalog.item.quick_purchase') }}
+                </span>
+            </v-tooltip>
+        </v-card-actions>
+    </v-card>
 </template>
 
 <script>
@@ -141,38 +188,31 @@
     }
 </script>
 
-<style lang="sass">
-    .product-block
-        padding: .5rem
-        margin: .5rem
-        text-align: center
-        flex-basis: 200px
-        flex-grow: 1
-        max-width: 450px
-        .product-image
-            max-width: 150px
-            margin-bottom: .5rem
-        .product-header
-            margin-top: 7px
-            word-wrap: break-word
-            margin-bottom: 1.5rem
-            font-weight: 400
-            .product-name
-                display: inline-block
-                width: 200px
-                word-wrap: break-word
-                .enchanted
-                    cursor: pointer
-            .product-menu
-                position: absolute
-                top: 5px
-                right: 0
-                display: inline-block
-        .product-price
-            margin-bottom: 0
-        .product-count
-            margin-bottom: .25rem
-        button
-            font-size: 12px
-            margin-left: 0
+<style lang="less" scoped>
+    .shop-product {
+        width: 100%;
+        max-width: 250px;
+        .product-title {
+            flex-wrap: nowrap;
+            padding: 8px;
+            .product-menu-btn {
+                margin: 0;
+            }
+        }
+        .product-img {
+            padding: 15px;
+            img {
+                display: block;
+                width: 100%;
+            }
+        }
+        .product-price {
+            padding: 8px;
+        }
+        .product-footer {
+            display: flex;
+            align-items: center;
+            background-color: #f5f5f5;
+        }
+    }
 </style>

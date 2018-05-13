@@ -3,6 +3,8 @@ declare(strict_types=1);
 
 namespace App\Services\Auth\Acl;
 
+use Doctrine\Common\Collections\Collection;
+
 /**
  * Trait PermissionTrait
  * Represents functionality for checking for permissions.
@@ -45,14 +47,14 @@ trait PermissionTrait
     {
         /** @var PermissionInterface $each */
         foreach ($this->getPermissions() as $each) {
-            foreach ($permissions as $permission) {
+            foreach ($permissions as $key => &$permission) {
                 if ($permission instanceof PermissionInterface) {
-                    if ($permission->getName() !== $each->getName()) {
-                        return false;
+                    if ($permission->getName() === $each->getName()) {
+                        unset($permissions[$key]);
                     }
                 } else {
-                    if ($permission !== $each->getName()) {
-                        return false;
+                    if ($permission === $each->getName()) {
+                        unset($permissions[$key]);
                     }
                 }
             }
@@ -60,15 +62,15 @@ trait PermissionTrait
 
         if ($this instanceof HasRoles) {
             foreach ($this->getRoles() as $role) {
-                foreach ($permissions as $permission) {
-                    if (!$role->hasPermission($permission)) {
-                        return false;
+                foreach ($permissions as $key => &$permission) {
+                    if ($role->hasPermission($permission)) {
+                        unset($permissions[$key]);
                     }
                 }
             }
         }
 
-        return true;
+        return count($permissions) === 0;
     }
 
     /**
@@ -103,4 +105,9 @@ trait PermissionTrait
 
         return false;
     }
+
+    /**
+     * @return Collection
+     */
+    abstract public function getPermissions(): Collection;
 }

@@ -26,6 +26,7 @@ class RolesSeeder extends Seeder
             Permissions::PROFILE_GAME_CART_ACCESS,
             Permissions::ADMIN_CONTROL_BASIC_ACCESS,
             Permissions::ADMIN_CONTROL_PAYMENTS_ACCESS,
+            Permissions::ADMIN_CONTROL_API_ACCESS,
             Permissions::ADMIN_CONTROL_SECURITY_ACCESS,
             Permissions::ADMIN_CONTROL_OPTIMIZATION_ACCESS,
             Permissions::ADMIN_SERVERS_CRUD_ACCESS,

@@ -56,7 +56,7 @@ class Attach extends Command
 
             return 1;
         } catch (RoleNotFoundException $e) {
-            $this->error(__('commands.user.roles.attach.role_not_found', ['name' => $this->argument('role')]));
+            $this->error(__('commands.user.roles.attach.role_not_found', ['name' => $e->getCause()]));
 
             return 1;
         } catch (RoleAlreadyAttachedException $e) {

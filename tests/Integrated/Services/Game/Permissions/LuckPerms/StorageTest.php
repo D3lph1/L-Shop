@@ -19,7 +19,7 @@ class StorageTest extends TestCase
     public function testRetrievePlayer(): void
     {
         $this->transaction();
-        $user = new User('admin', 'admin@example.com', 'admin');
+        $user = new User('admin1', 'admin1@example.com', 'admin');
         $this->app->make(Auth::class)->register($user, true);
 
         $storage = $this->app->make(Storage::class);

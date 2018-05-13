@@ -3,8 +3,8 @@ declare(strict_types = 1);
 
 namespace Tests\Unit\Services\Infrastructure\Meta;
 
-use App\Services\Infrastructure\Meta\AdditionalVersion\ReleaseCandidate;
-use App\Services\Infrastructure\Meta\Version;
+use App\Services\Meta\AdditionalVersion\ReleaseCandidate;
+use App\Services\Meta\Version;
 use Tests\TestCase;
 
 class VersionTest extends TestCase

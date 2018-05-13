@@ -7,11 +7,24 @@ use App\Handlers\Api\User\CloakHandler;
 use App\Http\Controllers\Controller;
 use App\Services\Auth\Exceptions\UserDoesNotExistException;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * Class CloakController
+ * Responsible for displaying images of the cloak sides.
+ */
 class CloakController extends Controller
 {
-    public function front(Request $request, CloakHandler $handler)
+    /**
+     * It is responsible for the output of the front side of the cloak image.
+     *
+     * @param Request      $request
+     * @param CloakHandler $handler
+     *
+     * @return Response
+     */
+    public function front(Request $request, CloakHandler $handler): Response
     {
         try {
             $image = $handler->front($request->route('username'));
@@ -29,7 +42,15 @@ class CloakController extends Controller
         }
     }
 
-    public function back(Request $request, CloakHandler $handler)
+    /**
+     * It is responsible for the output of the back side of the cloak image.
+     *
+     * @param Request      $request
+     * @param CloakHandler $handler
+     *
+     * @return Response
+     */
+    public function back(Request $request, CloakHandler $handler): Response
     {
         try {
             $image = $handler->back($request->route('username'));

@@ -47,10 +47,10 @@
             }
         },
         beforeRouteEnter (to, from, next) {
-            loader.beforeRouteEnter('/admin/other/debug', to, from, next);
+            loader.beforeRouteEnter('/spa/admin/other/debug', to, from, next);
         },
         beforeRouteUpdate (to, from, next) {
-            loader.beforeRouteUpdate('/admin/other/debug', to, from, next, this);
+            loader.beforeRouteUpdate('/spa/admin/other/debug', to, from, next, this);
         },
         methods: {
             validateEmail() {

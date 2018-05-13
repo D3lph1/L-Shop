@@ -3,7 +3,9 @@ declare(strict_types = 1);
 
 namespace App\Console;
 
+use App\Console\Commands\DB\Transfer;
 use App\Console\Commands\Purchase\Complete as CompletePurchase;
+use App\Console\Commands\Rcon;
 use App\Console\Commands\User\Create as CreateUser;
 use App\Console\Commands\User\Delete as DeleteUser;
 use App\Console\Commands\User\Roles\Attach as UserAttachRoles;
@@ -20,12 +22,14 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
+        Transfer::class,
         CreateUser::class,
         DeleteUser::class,
         UserAttachRoles::class,
         UserDetachRoles::class,
         UserRolesList::class,
-        CompletePurchase::class
+        CompletePurchase::class,
+        Rcon::class
     ];
 
     /**

@@ -12,10 +12,10 @@ use App\Handlers\Admin\Products\Edit\RenderHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Products\EditRequest;
 use App\Services\Auth\Permissions;
-use App\Services\Infrastructure\Notification\Notifications\Error;
-use App\Services\Infrastructure\Notification\Notifications\Success;
-use App\Services\Infrastructure\Response\JsonResponse;
-use App\Services\Infrastructure\Response\Status;
+use App\Services\Notification\Notifications\Error;
+use App\Services\Notification\Notifications\Success;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 use Illuminate\Http\Request;
 use function App\permission_middleware;
 

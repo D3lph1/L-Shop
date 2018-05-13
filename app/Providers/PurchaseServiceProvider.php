@@ -170,7 +170,6 @@ class PurchaseServiceProvider extends ServiceProvider
 
             return new RconDistributor(
                 $app->make(CommandBuilder::class),
-                $app->make(ExtraCommands::class),
                 $config->get('purchasing.distribution.rcon.success_response'),
                 $app->make(Dispatcher::class)
             );

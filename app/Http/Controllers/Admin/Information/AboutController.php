@@ -6,9 +6,9 @@ namespace App\Http\Controllers\Admin\Information;
 use App\Http\Controllers\Controller;
 use function App\permission_middleware;
 use App\Services\Auth\Permissions;
-use App\Services\Infrastructure\Meta\System;
-use App\Services\Infrastructure\Response\JsonResponse;
-use App\Services\Infrastructure\Response\Status;
+use App\Services\Meta\System;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 
 class AboutController extends Controller
 {

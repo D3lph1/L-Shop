@@ -1,11 +1,11 @@
 <template>
-    <div>
+    <v-container fluid>
         <v-toolbar
                 color="primary"
                 dark
                 app
         >
-            <v-toolbar-side-icon @click.stop="drawer = !drawer" style></v-toolbar-side-icon>
+            <v-toolbar-side-icon @click.stop="drawer = !drawer"></v-toolbar-side-icon>
             <v-toolbar-title>
                 {{ $t('content.layout.shop.server') }}
                 <span v-if="server !== null">{{ server.name }}</span>
@@ -28,10 +28,10 @@
             <admin-block v-if="adminSidebar.length !== 0" :items="adminSidebar"></admin-block>
 
         </v-navigation-drawer>
-        <v-content>
-            <div class="px-4 pt-4">
+        <v-content style="padding-bottom: 40px">
+            <v-container fluid pa-0>
                 <router-view name="content"></router-view>
-            </div>
+            </v-container>
         </v-content>
         <v-navigation-drawer
                 v-show="newsAllowed"
@@ -57,7 +57,7 @@
                 :monitoring="monitoring"
                 @close="closeMonitoringDialog"
         ></monitoring-dialog>
-    </div>
+    </v-container>
 </template>
 
 <script>

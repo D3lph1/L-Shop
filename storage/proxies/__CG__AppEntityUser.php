@@ -301,34 +301,12 @@ class User extends \App\Entity\User implements \Doctrine\ORM\Proxy\Proxy
     /**
      * {@inheritDoc}
      */
-    public function addRole(\App\Entity\Role $role): \App\Entity\User
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addRole', [$role]);
-
-        return parent::addRole($role);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
     public function getRoles(): \Doctrine\Common\Collections\Collection
     {
 
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getRoles', []);
 
         return parent::getRoles();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function addReminder(\App\Entity\Reminder $reminder): \App\Entity\User
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addReminder', [$reminder]);
-
-        return parent::addReminder($reminder);
     }
 
     /**
@@ -351,17 +329,6 @@ class User extends \App\Entity\User implements \Doctrine\ORM\Proxy\Proxy
         $this->__initializer__ && $this->__initializer__->__invoke($this, 'getPersistences', []);
 
         return parent::getPersistences();
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    public function addBan(\App\Entity\Ban $ban): \App\Entity\User
-    {
-
-        $this->__initializer__ && $this->__initializer__->__invoke($this, 'addBan', [$ban]);
-
-        return parent::addBan($ban);
     }
 
     /**

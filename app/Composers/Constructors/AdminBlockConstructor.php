@@ -5,7 +5,7 @@ namespace App\Composers\Constructors;
 
 use App\Services\Auth\Auth;
 use App\Services\Auth\Permissions;
-use App\Services\Infrastructure\Meta\System;
+use App\Services\Meta\System;
 
 class AdminBlockConstructor
 {
@@ -36,7 +36,8 @@ class AdminBlockConstructor
                     ],
                     [
                         'link' => '',
-                        'title' => __('content.layout.shop.sidebar.admin.control.sub_items.api')
+                        'title' => __('content.layout.shop.sidebar.admin.control.sub_items.api'),
+                        'permissions' => [Permissions::ADMIN_CONTROL_API_ACCESS]
                     ],
                     [
                         'link' => 'admin.control.security',
@@ -56,11 +57,13 @@ class AdminBlockConstructor
                 'subItems' => [
                     [
                         'link' => '',
-                        'title' => __('content.layout.shop.sidebar.admin.servers.sub_items.add')
+                        'title' => __('content.layout.shop.sidebar.admin.servers.sub_items.add'),
+                        'permissions' => [Permissions::ADMIN_SERVERS_CRUD_ACCESS]
                     ],
                     [
                         'link' => '',
-                        'title' => __('content.layout.shop.sidebar.admin.servers.sub_items.edit')
+                        'title' => __('content.layout.shop.sidebar.admin.servers.sub_items.edit'),
+                        'permissions' => [Permissions::ADMIN_SERVERS_CRUD_ACCESS]
                     ],
                 ]
             ],
@@ -166,7 +169,8 @@ class AdminBlockConstructor
                     ],
                     [
                         'link' => 'admin.statistic.purchases',
-                        'title' => __('content.layout.shop.sidebar.admin.statistic.sub_items.payments')
+                        'title' => __('content.layout.shop.sidebar.admin.statistic.sub_items.payments'),
+                        'permissions' => [Permissions::ADMIN_STATISTIC_PURCHASES_ACCESS]
                     ],
                 ]
             ],
@@ -178,7 +182,8 @@ class AdminBlockConstructor
                         'link' => System::documentationUrL(),
                         'absolute' => true,
                         'title' => __('content.layout.shop.sidebar.admin.info.sub_items.docs'),
-                        'target' => '_blank'
+                        'target' => '_blank',
+                        'permissions' => [Permissions::ADMIN_INFORMATION_ABOUT_ACCESS]
                     ],
                     [
                         'link' => 'admin.information.about',

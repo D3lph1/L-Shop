@@ -5,7 +5,7 @@ namespace Tests\Feature\Frontend\Auth;
 
 use App\Services\Auth\Checkpoint\ActivationCheckpoint;
 use App\Services\Auth\Checkpoint\Pool;
-use App\Services\Infrastructure\Response\Status;
+use App\Services\Response\Status;
 use Tests\TestCase;
 
 class ActivationTest extends TestCase

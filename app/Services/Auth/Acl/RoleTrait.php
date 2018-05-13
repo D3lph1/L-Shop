@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace App\Services\Auth\Acl;
 
+use Doctrine\Common\Collections\Collection;
+
 /**
  * Trait RoleTrait
  * Represents functionality for checking for roles.
@@ -35,6 +37,10 @@ trait RoleTrait
      */
     public function hasAllRoles(array $roles): bool
     {
+        if (count($this->getRoles()) === 0) {
+            return false;
+        }
+
         /** @var PermissionInterface $each */
         foreach ($this->getRoles() as $each) {
             /** @var RoleInterface $role */
@@ -65,4 +71,9 @@ trait RoleTrait
 
         return false;
     }
+
+    /**
+     * @return Collection
+     */
+    abstract public function getRoles(): Collection;
 }

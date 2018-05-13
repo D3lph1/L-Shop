@@ -7,11 +7,15 @@ use App\Handlers\Frontend\Profile\Character\ChangePasswordHandler;
 use App\Handlers\Frontend\Profile\Character\ResetSessionsHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Frontend\Profile\Character\ChangePasswordRequest;
-use App\Services\Infrastructure\Notification\Notifications\Info;
-use App\Services\Infrastructure\Notification\Notifications\Success;
-use App\Services\Infrastructure\Response\JsonResponse;
-use App\Services\Infrastructure\Response\Status;
+use App\Services\Notification\Notifications\Info;
+use App\Services\Notification\Notifications\Success;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 
+/**
+ * Class SettingsController
+ * Processes requests from the user's settings page.
+ */
 class SettingsController extends Controller
 {
     public function __construct()
@@ -19,6 +23,14 @@ class SettingsController extends Controller
         $this->middleware('auth');
     }
 
+    /**
+     * Processes a request to change the user's password.
+     *
+     * @param ChangePasswordRequest $request
+     * @param ChangePasswordHandler $handler
+     *
+     * @return JsonResponse
+     */
     public function password(ChangePasswordRequest $request, ChangePasswordHandler $handler): JsonResponse
     {
         $password = $request->get('password');
@@ -28,6 +40,13 @@ class SettingsController extends Controller
             ->addNotification(new Success(__('msg.frontend.profile.settings.password_change.success')));
     }
 
+    /**
+     * Handles a request to reset the login of user sessions.
+     *
+     * @param ResetSessionsHandler $handler
+     *
+     * @return JsonResponse
+     */
     public function resetSessions(ResetSessionsHandler $handler): JsonResponse
     {
         $handler->handle();

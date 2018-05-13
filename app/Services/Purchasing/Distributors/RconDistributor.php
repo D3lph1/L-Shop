@@ -6,7 +6,6 @@ namespace App\Services\Purchasing\Distributors;
 use App\Entity\Distribution;
 use App\Jobs\Purchasing\Distribution\DistributeByRcon;
 use App\Services\Purchasing\Distributors\RconDistribution\CommandBuilder;
-use App\Services\Purchasing\Distributors\RconDistribution\ExtraCommands;
 use Illuminate\Contracts\Bus\Dispatcher;
 
 class RconDistributor implements Distributor, Attempting
@@ -15,11 +14,6 @@ class RconDistributor implements Distributor, Attempting
      * @var CommandBuilder
      */
     private $commandBuilder;
-
-    /**
-     * @var ExtraCommands
-     */
-    private $extraCommands;
 
     /**
      * @var string
@@ -33,14 +27,12 @@ class RconDistributor implements Distributor, Attempting
 
     public function __construct(
         CommandBuilder $commandBuilder,
-        ExtraCommands $extraCommands,
         string $successResponse,
         Dispatcher $dispatcher)
     {
         $this->commandBuilder = $commandBuilder;
         $this->successResponse = $successResponse;
         $this->dispatcher = $dispatcher;
-        $this->extraCommands = $extraCommands;
     }
 
     /**
@@ -52,7 +44,6 @@ class RconDistributor implements Distributor, Attempting
         $this->dispatcher->dispatch(new DistributeByRcon(
             $distribution,
             $commands,
-            $this->extraCommands,
             $this->successResponse
         ));
     }

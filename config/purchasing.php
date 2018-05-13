@@ -1,6 +1,15 @@
 <?php
 
 return [
+    /*
+    |--------------------------------------------------------------------------
+    | Registered application payers.
+    |--------------------------------------------------------------------------
+    |
+    | The array contains the full names of the classes of payers. All classes listed here
+    | in the mandatory order must implement the interface App\Services\Purchasing\Payers\Payer.
+    |
+    */
     'payers' => [
         // Builtin payers...
         \App\Services\Purchasing\Payers\RobokassaPayer::class,
@@ -9,23 +18,139 @@ return [
         // Custom payers...
     ],
     'distribution' => [
+        /*
+        |--------------------------------------------------------------------------
+        | Registered application distributors.
+        |--------------------------------------------------------------------------
+        |
+        | The array contains the full names of the classes of distributors. All classes listed here
+        | in the mandatory order must implement the interface App\Services\Purchasing\Distributors\Distributor.
+        |
+        */
         'distributors' => [
+            // Builtin distributors...
             \App\Services\Purchasing\Distributors\ShoppingCartDistributor::class,
-            \App\Services\Purchasing\Distributors\RconDistributor::class
+            \App\Services\Purchasing\Distributors\RconDistributor::class,
+
+            // Custom distributors...
         ],
         'rcon' => [
-            // Connection timeout (in seconds).
+            /*
+            |--------------------------------------------------------------------------
+            | Connection timeout.
+            |--------------------------------------------------------------------------
+            |
+            | After the number of seconds specified here, there will be a forced disconnection from
+            | the minecraft server, if the connection has not been established.
+            |
+            */
             'timeout' => 1,
             'commands' => [
-                'give_non_enchanted_item' => 'give {player} {item} {amount} 0 {tags}',
-                'give_enchanted_item' => 'give {player} {item} {amount} 0 {tags}',
+                /*
+                |--------------------------------------------------------------------------
+                | Command to distribute a non enchanted item.
+                |--------------------------------------------------------------------------
+                |
+                | This command will be executed to issue the non enchanted item. In the commands
+                | there are placeholders. They will be replaced by the corresponding values ​​in
+                | the runtime:
+                | - {player} The name of the player who wants to distribute the item.
+                | - {item} In-game identifier of the distributed item.
+                | - {amount} The amount of the item to be distributed.
+                | - {nbt} Nbt tags for this item. Here comes the information from Extra field of the
+                | item.
+                |
+                */
+                'give_non_enchanted_item' => 'give {player} {item} {amount} 0 {nbt}',
+                /*
+                |--------------------------------------------------------------------------
+                | Command to distribute an enchanted item.
+                |--------------------------------------------------------------------------
+                |
+                | This command will be executed to issue the enchanted item. In the commands there
+                | are placeholders. They will be replaced by the corresponding values ​​in the runtime:
+                | - {player} The name of the player who wants to distribute the item.
+                | - {item} In-game identifier of the distributed item.
+                | - {amount} The amount of the item to be distributed.
+                | - {nbt} Nbt tags for this item. If the given item is enchanted, enchantments will
+                | be prescribed here. In addition, the information from the Extra field of the item.
+                |
+                */
+                'give_enchanted_item' => 'give {player} {item} {amount} 0 {nbt}',
+                /*
+                |--------------------------------------------------------------------------
+                | Command to distribute a permanent permission group.
+                |--------------------------------------------------------------------------
+                |
+                | This command will be executed to issue the permanent permission group. In the commands
+                | there are placeholders. They will be replaced by the corresponding values ​​in the
+                | runtime:
+                | - {player} The name of the player who wants to distribute the permission group.
+                | - {permgroup} In-game identifier of the distributed permission group.
+                |
+                */
                 'give_non_expired_permgroup' => 'pex user {player} group add {permgroup} *',
+                /*
+                |--------------------------------------------------------------------------
+                | Command to distribute a permanent permission group.
+                |--------------------------------------------------------------------------
+                |
+                | This command will be executed to issue the permanent permission group. In the commands
+                | there are placeholders. They will be replaced by the corresponding values ​​in the
+                | runtime:
+                | - {player} The name of the player who wants to distribute the permission group.
+                | - {permgroup} In-game identifier of the distributed permission group.
+                | - {lifetime} Lifetime of permission group (in seconds).
+                |
+                */
                 'give_expired_permgroup' => 'pex user {player} group add {permgroup} * {lifetime}'
             ],
+            /*
+            |--------------------------------------------------------------------------
+            | The pattern of a successful response.
+            |--------------------------------------------------------------------------
+            |
+            | When executing the distribution commands, the system will check the response that came
+            | from the server. If it matches this regular expression, then the output will be
+            | considered successful. Otherwise, the process will be forced to abort.
+            |
+            | Note: To test several possible results, use the | character.
+            | For example: #(one)|(two)#ui
+            |
+            */
             'success_response' => '#Given \[.+\] \* \d+ to .*#ui',
             'extra' => [
+                /*
+                |--------------------------------------------------------------------------
+                | The pattern of a successful response.
+                |--------------------------------------------------------------------------
+                |
+                | The additional commands specified in the array below will be executed before the
+                | distribution commands are executed. In the commands there are placeholders.
+                | They will be replaced by the corresponding values ​​in the runtime:
+                | - {player} The name of the player who purchased the products.
+                |
+                */
                 'before' => [],
-                'after' => []
+                /*
+                |--------------------------------------------------------------------------
+                | The pattern of a successful response.
+                |--------------------------------------------------------------------------
+                |
+                | The additional commands specified in the array below will be executed after the
+                | distribution commands are executed.
+                | You can, for example, indicate here the messages about the successful delivery
+                | of products.
+                | In the commands there are placeholders. They will be replaced by the corresponding
+                | values ​​in the runtime:
+                | - {player} The name of the player who purchased the products.
+                |
+                |
+                */
+                'after' => [
+                    // After the successful distributing of products, the player will be notified of this.
+                    'tell {player} Purchased items was distributed.'
+                ]
             ]
         ]
     ]

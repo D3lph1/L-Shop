@@ -6,6 +6,8 @@ namespace App\Repository\User;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Internal\Hydration\IterableResult;
+use Doctrine\ORM\Query;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use LaravelDoctrine\ORM\Pagination\PaginatesFromRequest;
 
@@ -119,6 +121,16 @@ class DoctrineUserRepository implements UserRepository
             'page',
             false
         );
+    }
+
+    public function findAllAsIterable(): IterableResult
+    {
+        return $this
+            ->er
+            ->createQueryBuilder('u')
+            ->select()
+            ->getQuery()
+            ->iterate();
     }
 
     public function retrieveCreatedForYear(): array

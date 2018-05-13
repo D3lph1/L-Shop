@@ -119,7 +119,7 @@ class BanManager
     {
         $ban = (new Ban($user, $until))
             ->setReason($reason);
-        $user->addBan($ban);
+        $user->getBans()->add($ban);
         $this->userRepository->update($user);
 
         return $ban;
@@ -165,7 +165,7 @@ class BanManager
     {
         $ban = (new Ban($user, null))
             ->setReason($reason);
-        $user->addBan($ban);
+        $user->getBans()->add($ban);
         $this->userRepository->update($user);
 
         return $ban;

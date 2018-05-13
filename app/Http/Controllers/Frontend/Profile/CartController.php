@@ -9,12 +9,16 @@ use App\Handlers\Frontend\Profile\Cart\PaginationHandler;
 use App\Http\Controllers\Controller;
 use function App\permission_middleware;
 use App\Services\Auth\Permissions;
-use App\Services\Infrastructure\Notification\Notifications\Info;
-use App\Services\Infrastructure\Notification\Notifications\Warning;
-use App\Services\Infrastructure\Response\JsonResponse;
-use App\Services\Infrastructure\Response\Status;
+use App\Services\Notification\Notifications\Info;
+use App\Services\Notification\Notifications\Warning;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 use Illuminate\Http\Request;
 
+/**
+ * Class CartController
+ * Responsible for processing data for the in-game cart page.
+ */
 class CartController extends Controller
 {
     public function __construct()
@@ -22,6 +26,14 @@ class CartController extends Controller
         $this->middleware(permission_middleware(Permissions::PROFILE_GAME_CART_ACCESS));
     }
 
+    /**
+     * Displays information for paginating items on the page.
+     *
+     * @param Request           $request
+     * @param PaginationHandler $handler
+     *
+     * @return JsonResponse
+     */
     public function pagination(Request $request, PaginationHandler $handler): JsonResponse
     {
         $page = is_numeric($request->get('page')) ? (int)$request->get('page') : 1;
@@ -34,6 +46,14 @@ class CartController extends Controller
         return new JsonResponse(Status::SUCCESS, $dto);
     }
 
+    /**
+     * Handles a request for the distributing of products.
+     *
+     * @param Request             $request
+     * @param DistributionHandler $handler
+     *
+     * @return JsonResponse
+     */
     public function distribute(Request $request, DistributionHandler $handler): JsonResponse
     {
         try {

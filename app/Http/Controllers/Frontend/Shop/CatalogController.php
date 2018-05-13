@@ -16,16 +16,20 @@ use App\Http\Requests\Frontend\Shop\Catalog\PurchaseRequest;
 use App\Services\Auth\Auth;
 use App\Services\Auth\Permissions;
 use App\Services\Cart\Cart;
-use App\Services\Infrastructure\Notification\Notifications\Error;
-use App\Services\Infrastructure\Notification\Notifications\Success;
-use App\Services\Infrastructure\Response\JsonResponse;
-use App\Services\Infrastructure\Response\Status;
-use App\Services\Infrastructure\Security\Captcha\Captcha;
-use App\Services\Infrastructure\Server\Persistence\Persistence;
+use App\Services\Notification\Notifications\Error;
+use App\Services\Notification\Notifications\Success;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
+use App\Services\Security\Captcha\Captcha;
+use App\Services\Server\Persistence\Persistence;
 use App\Services\Settings\Settings;
 use Illuminate\Http\Request;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
+/**
+ * Class CatalogController
+ * Handles requests from the catalog page.
+ */
 class CatalogController extends Controller
 {
     public function __construct()
@@ -33,6 +37,19 @@ class CatalogController extends Controller
         $this->middleware(auth_middleware(AuthMiddleware::SOFT));
     }
 
+    /**
+     * Returns the data to render the catalog page.
+     *
+     * @param Request      $request
+     * @param VisitHandler $handler
+     * @param Settings     $settings
+     * @param Cart         $cart
+     * @param Captcha      $captcha
+     * @param Auth         $auth
+     * @param Persistence  $persistence
+     *
+     * @return JsonResponse
+     */
     public function render(
         Request $request,
         VisitHandler $handler,
@@ -74,6 +91,14 @@ class CatalogController extends Controller
         ]);
     }
 
+    /**
+     * Processes the quick purchase for execution request from the directory.
+     *
+     * @param PurchaseRequest $request
+     * @param PurchaseHandler $handler
+     *
+     * @return JsonResponse
+     */
     public function purchase(PurchaseRequest $request, PurchaseHandler $handler): JsonResponse
     {
         try {

@@ -17,7 +17,7 @@ use App\Repository\Product\ProductRepository;
 use App\Repository\Server\ServerRepository;
 use App\Services\Cart\Cart;
 use App\Services\Cart\Item;
-use App\Services\Infrastructure\Server\Persistence\Persistence;
+use App\Services\Server\Persistence\Persistence;
 use App\Services\Product\Order;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;

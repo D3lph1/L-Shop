@@ -11,10 +11,10 @@ use App\Http\Controllers\Controller;
 use function App\permission_middleware;
 use App\Services\Auth\Permissions;
 use App\Services\DateTime\Formatting\JavaScriptFormatter;
-use App\Services\Infrastructure\Notification\Notifications\Success;
-use App\Services\Infrastructure\Notification\Notifications\Warning;
-use App\Services\Infrastructure\Response\JsonResponse;
-use App\Services\Infrastructure\Response\Status;
+use App\Services\Notification\Notifications\Success;
+use App\Services\Notification\Notifications\Warning;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 use App\Services\Purchasing\ViaContext;
 use Illuminate\Http\Request;
 

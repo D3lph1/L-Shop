@@ -7,13 +7,25 @@ use App\Exceptions\ForbiddenException;
 use App\Exceptions\Purchase\PurchaseNotFoundException;
 use App\Handlers\Frontend\Shop\Payment\VisitHandler;
 use App\Http\Controllers\Controller;
-use App\Services\Infrastructure\Response\JsonResponse;
-use App\Services\Infrastructure\Response\Status;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 
+/**
+ * Class PaymentController
+ * Processes requests from the payment method selection page.
+ */
 class PaymentController extends Controller
 {
+    /**
+     * Returns the data to render the payment method selection page.
+     *
+     * @param Request      $request
+     * @param VisitHandler $handler
+     *
+     * @return Response
+     */
     public function render(Request $request, VisitHandler $handler): Response
     {
         try {

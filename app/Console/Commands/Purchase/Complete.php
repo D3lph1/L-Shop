@@ -3,10 +3,10 @@ declare(strict_types = 1);
 
 namespace App\Console\Commands\Purchase;
 
+use App\Console\Command;
 use App\Exceptions\Purchase\AlreadyCompletedException;
 use App\Exceptions\Purchase\PurchaseNotFoundException;
 use App\Handlers\Console\Purchase\CompleteHandler;
-use Illuminate\Console\Command;
 
 class Complete extends Command
 {

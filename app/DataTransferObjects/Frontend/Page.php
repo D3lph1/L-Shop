@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace App\DataTransferObjects\Frontend;
 
 use App\Entity\Page as Entity;
-use App\Services\Infrastructure\Response\JsonRespondent;
+use App\Services\Response\JsonRespondent;
 
 /**
  * Class Page

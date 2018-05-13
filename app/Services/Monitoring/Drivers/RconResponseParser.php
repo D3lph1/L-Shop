@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Services\Monitoring\Drivers;
 
-use App\Services\Rcon\Colorizers\StripColorizer;
+use App\Services\Game\Colorizers\StripColorizer;
 
 /**
  * Class RconResponseParser

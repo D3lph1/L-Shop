@@ -1,4 +1,5 @@
 <?php
+/** @noinspection PhpStrictTypeCheckingInspection */
 declare(strict_types = 1);
 
 namespace App\Providers;
@@ -8,14 +9,19 @@ use App\Services\Caching\CachingRepository;
 use App\Services\Caching\IlluminateCachingRepository;
 use App\Services\Cart\Storage\Session as SessionCartStorage;
 use App\Services\Cart\Storage\Storage as ClassStorage;
+use App\Services\Database\GarbageCollection\DoctrineGarbageCollector;
+use App\Services\Database\GarbageCollection\GarbageCollector;
+use App\Services\Database\Transfer\Pool;
+use App\Services\Database\Transfer\Queries\Version050a\MySQLQuery;
+use App\Services\Database\Transfer\Version050ATransfer;
 use App\Services\DateTime\Formatting\Formatter;
 use App\Services\DateTime\Formatting\HumanizeFormatter;
-use App\Services\Infrastructure\Notification\Drivers\Driver;
-use App\Services\Infrastructure\Notification\Drivers\Session;
-use App\Services\Infrastructure\Security\Captcha\Captcha;
-use App\Services\Infrastructure\Security\Captcha\ReCaptcha;
-use App\Services\Infrastructure\Server\Persistence\Storage\Session as SessionPersistenceStorage;
-use App\Services\Infrastructure\Server\Persistence\Storage\Storage as PersistenceStorage;
+use App\Services\Notification\Drivers\Driver;
+use App\Services\Notification\Drivers\Session;
+use App\Services\Security\Captcha\Captcha;
+use App\Services\Security\Captcha\ReCaptcha;
+use App\Services\Server\Persistence\Storage\Session as SessionPersistenceStorage;
+use App\Services\Server\Persistence\Storage\Storage as PersistenceStorage;
 use App\Services\Item\Image\Hashing\Hasher;
 use App\Services\Item\Image\Hashing\MD5Hasher;
 use App\Services\Media\Character\Cloak\Applicators\Applicator as CloakApplicator;
@@ -31,6 +37,7 @@ use App\Services\Settings\Settings;
 use App\Services\Url\Signing\Signer;
 use App\Services\Url\Signing\Validator;
 use D3lph1\MinecraftRconManager\Connector;
+use Doctrine\ORM\EntityManagerInterface;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Psr\Log\LoggerInterface;
@@ -58,6 +65,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->bind(CloakApplicator::class, DefaultCloakApplicator::class);
         $this->app->singleton(Captcha::class, function (Application $app) {
             $settings = $app->make(Settings::class);
+
             return new ReCaptcha(
                 $settings->get('system.security.captcha.recaptcha.public_key')->getValue(),
                 $settings->get('system.security.captcha.recaptcha.secret_key')->getValue()
@@ -75,7 +83,7 @@ class AppServiceProvider extends ServiceProvider
                 'command' => $settings->get('system.monitoring.rcon.command')->getValue(),
                 'timeout' => $settings->get('system.monitoring.rcon.timeout')->getValue(DataType::INT),
                 'parser' => $app->make(RconResponseParser::class, [
-                    'pattern' =>  $settings->get('system.monitoring.rcon.pattern')->getValue()
+                    'pattern' => $settings->get('system.monitoring.rcon.pattern')->getValue()
                 ])
             ]);
         });
@@ -109,5 +117,17 @@ class AppServiceProvider extends ServiceProvider
                 $settings->get('api.separator')->getValue()
             );
         });
+
+        $this->app->singleton(Pool::class, function (Application $app) {
+            $pool = new Pool();
+            $pool->put('0.5.0a', new Version050ATransfer(
+                $app->make(EntityManagerInterface::class),
+                $app->make(MySQLQuery::class)
+            ));
+
+            return $pool;
+        });
+
+        $this->app->singleton(GarbageCollector::class, DoctrineGarbageCollector::class);
     }
 }

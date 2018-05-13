@@ -4,6 +4,8 @@ declare(strict_types = 1);
 namespace App\Repository\User;
 
 use App\Entity\User;
+use Doctrine\ORM\Internal\Hydration\IterableResult;
+use Doctrine\ORM\Query;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface UserRepository
@@ -29,6 +31,8 @@ interface UserRepository
     public function findPaginateWithSearch(string $search, int $perPage): LengthAwarePaginator;
 
     public function findPaginatedWithOrderAndSearch(string $orderBy, bool $descending, string $search, int $perPage): LengthAwarePaginator;
+
+    public function findAllAsIterable(): IterableResult;
 
     public function retrieveCreatedForYear(): array;
 

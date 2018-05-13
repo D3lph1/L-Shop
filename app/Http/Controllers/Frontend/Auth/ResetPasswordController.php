@@ -7,11 +7,11 @@ use App\Handlers\Frontend\Auth\ResetPasswordHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Frontend\Auth\ResetPasswordRequest;
 use App\Services\Auth\AccessMode;
-use App\Services\Infrastructure\Notification\Notifications\Error;
-use App\Services\Infrastructure\Notification\Notifications\Success;
-use App\Services\Infrastructure\Notification\Notificator;
-use App\Services\Infrastructure\Response\JsonResponse;
-use App\Services\Infrastructure\Response\Status;
+use App\Services\Notification\Notifications\Error;
+use App\Services\Notification\Notifications\Success;
+use App\Services\Notification\Notificator;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 use App\Services\Settings\Settings;
 use Illuminate\Http\Request;
 

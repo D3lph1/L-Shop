@@ -9,17 +9,35 @@ use App\Handlers\Frontend\News\LoadHandler;
 use App\Http\Controllers\Controller;
 use App\Services\Auth\Auth;
 use App\Services\Cart\Cart;
-use App\Services\Infrastructure\Meta\System;
-use App\Services\Infrastructure\Response\JsonResponse;
-use App\Services\Infrastructure\Response\Status;
-use App\Services\Infrastructure\Server\Persistence\Persistence;
+use App\Services\Meta\System;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
+use App\Services\Server\Persistence\Persistence;
 use App\Services\Media\Character\Cloak\Accessor as CloakAccessor;
 use App\Services\Media\Character\Skin\Accessor as SkinAccessor;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
 
+/**
+ * Class ShopController
+ * Handles requests that come from the shop layer.
+ */
 class ShopController extends Controller
 {
+    /**
+     * Returns the data to render the store layer.
+     *
+     * @param AdminBlockConstructor $adminBlockConstructor
+     * @param Settings              $settings
+     * @param LoadHandler           $loadHandler
+     * @param Persistence           $persistence
+     * @param Auth                  $auth
+     * @param Cart                  $cart
+     * @param SkinAccessor          $skinAccessor
+     * @param CloakAccessor         $cloakAccessor
+     *
+     * @return JsonResponse
+     */
     public function render(
         AdminBlockConstructor $adminBlockConstructor,
         Settings $settings,

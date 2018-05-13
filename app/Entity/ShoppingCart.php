@@ -6,6 +6,8 @@ namespace App\Entity;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
+ * @see http://rubukkit.org/threads/admn-shoppingcart-reloaded-1-2-plagin-dlja-vydachi-predmetov-iz-bd-1-4-7-1-7-2r-0-3.28052/
+ *
  * @ORM\Entity
  * @ORM\Table(name="shopping_cart")
  */
