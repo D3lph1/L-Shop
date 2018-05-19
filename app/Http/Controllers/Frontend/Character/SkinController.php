@@ -8,7 +8,6 @@ use App\Http\Controllers\Controller;
 use App\Services\Auth\Exceptions\UserDoesNotExistException;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class SkinController
@@ -29,11 +28,11 @@ class SkinController extends Controller
         try {
             $image = $handler->front($request->route('username'));
 
-            return response($image->encode('png'), 200, [
+            return new Response($image->encode('png'), 200, [
                 'Content-Type' => 'image/png'
             ]);
         } catch (UserDoesNotExistException $e) {
-            throw new NotFoundHttpException();
+            return new Response('user_not_found', Response::HTTP_NOT_FOUND);
         }
     }
 
@@ -50,11 +49,11 @@ class SkinController extends Controller
         try {
             $image = $handler->back($request->route('username'));
 
-            return response($image->encode('png'), 200, [
+            return new Response($image->encode('png'), 200, [
                 'Content-Type' => 'image/png'
             ]);
         } catch (UserDoesNotExistException $e) {
-            throw new NotFoundHttpException();
+            return new Response('user_not_found', Response::HTTP_NOT_FOUND);
         }
     }
 }

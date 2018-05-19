@@ -107,7 +107,7 @@ class Checkout
     public function validate(array $request): bool
     {
         if ($request['ik_co_id'] !== $this->id) {
-            throw new UnexpectedValueException($request['ik_co_id']);
+            throw new UnexpectedValueException("Checkout identifier {$request['ik_co_id']} is invalid");
         }
         if ($request['ik_inv_st'] !== 'success') {
             throw new RuntimeException('Bad invoice status');

@@ -6,6 +6,7 @@ namespace App\Services\Purchasing;
 use App\Entity\Distribution;
 use App\Entity\Purchase;
 use App\Entity\PurchaseItem;
+use App\Events\Purchase\PurchaseCompletedEvent;
 use App\Exceptions\Distributor\DistributionException;
 use App\Exceptions\Distributor\DistributorNotFoundException;
 use App\Exceptions\Purchase\AlreadyCompletedException;
@@ -13,6 +14,7 @@ use App\Repository\Distribution\DistributionRepository;
 use App\Repository\Purchase\PurchaseRepository;
 use App\Services\Purchasing\Distributors\Pool;
 use App\Services\User\Balance\Transactor;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class PurchaseCompleter
 {
@@ -36,16 +38,23 @@ class PurchaseCompleter
      */
     private $transactor;
 
+    /**
+     * @var Dispatcher
+     */
+    private $eventDispatcher;
+
     public function __construct(
         PurchaseRepository $purchaseRepository,
         Pool $distributors,
         DistributionRepository $distributionRepository,
-        Transactor $transactor)
+        Transactor $transactor,
+        Dispatcher $eventDispatcher)
     {
         $this->purchaseRepository = $purchaseRepository;
         $this->distributors = $distributors;
         $this->distributionRepository = $distributionRepository;
         $this->transactor = $transactor;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -94,7 +103,10 @@ class PurchaseCompleter
                 $distributor->distribute($distribution);
             }
         } else {
+            // If this purchase is replenishment.
             $this->transactor->add($purchase->getUser(), $purchase->getCost());
         }
+
+        $this->eventDispatcher->dispatch(new PurchaseCompletedEvent($purchase));
     }
 }

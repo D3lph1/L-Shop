@@ -6,7 +6,7 @@ namespace App\Handlers\Frontend\Auth;
 use App\DataTransferObjects\Frontend\Auth\LoginResult;
 use App\Services\Auth\Auth;
 
-class AuthHandler
+class LoginHandler
 {
     /**
      * @var Auth

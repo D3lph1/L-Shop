@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Frontend\Profile;
 
-use App\Exceptions\ForbiddenException;
+use function App\accessor_middleware;
 use App\Exceptions\Media\Character\InvalidRatioException;
 use App\Exceptions\Media\Character\InvalidResolutionException;
 use App\Handlers\Frontend\Profile\Character\DeleteCloakHandler;
@@ -15,16 +15,16 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\Frontend\Profile\Character\UploadCloakRequest;
 use App\Http\Requests\Frontend\Profile\Character\UploadSkinRequest;
 use App\Services\Auth\Auth;
+use App\Services\Media\Character\Cloak\Accessor as CloakAccessor;
+use App\Services\Media\Character\Skin\Accessor as SkinAccessor;
 use App\Services\Notification\Notifications\Error;
 use App\Services\Notification\Notifications\Info;
 use App\Services\Notification\Notifications\Success;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
-use App\Services\Media\Character\Cloak\Accessor as CloakAccessor;
-use App\Services\Media\Character\Skin\Accessor as SkinAccessor;
+use App\Services\Security\Accessors\Frontend\Profile\CharacterAccessor;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
-use Symfony\Component\HttpKernel\Exception\HttpException;
 
 /**
  * Class CharacterController
@@ -34,14 +34,7 @@ class CharacterController extends Controller
 {
     public function __construct(Auth $auth, SkinAccessor $skinAccessor, CloakAccessor $cloakAccessor)
     {
-        $this->middleware(function ($request, \Closure $next) use ($auth, $skinAccessor, $cloakAccessor) {
-            // Checking user's rights to set skin and/or cloak.
-            if (!$auth->check() || !($skinAccessor->allowSet($auth->getUser()) || $cloakAccessor->allowSet($auth->getUser()))) {
-                throw new HttpException(403);
-            }
-
-            return $next($request);
-        });
+        $this->middleware(accessor_middleware(CharacterAccessor::class))->only('render');
     }
 
     /**

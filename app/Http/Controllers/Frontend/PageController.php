@@ -9,6 +9,7 @@ use App\Http\Controllers\Controller;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -32,7 +33,8 @@ class PageController extends Controller
 
             return new JsonResponse(Status::SUCCESS, $page);
         } catch (PageNotFoundException $e) {
-            throw new NotFoundHttpException();
+            return (new JsonResponse('page_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND);
         }
     }
 }

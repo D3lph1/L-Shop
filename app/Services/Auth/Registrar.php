@@ -10,30 +10,8 @@ use App\Entity\User;
 use App\Repository\User\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
-class Registrar
+interface Registrar
 {
-    /**
-     * @var UserRepository
-     */
-    private $userRepository;
-
-    /**
-     * @var EntityManagerInterface
-     */
-    private $em;
-
-    /**
-     * @var Hasher
-     */
-    private $hasher;
-
-    public function __construct(UserRepository $userRepository, EntityManagerInterface $em, Hasher $hasher)
-    {
-        $this->userRepository = $userRepository;
-        $this->em = $em;
-        $this->hasher = $hasher;
-    }
-
     /**
      * Registers a new user.
      *
@@ -41,30 +19,5 @@ class Registrar
      *
      * @return User
      */
-    public function register(User $user): User
-    {
-        $this->checkUsername($user->getUsername());
-        $this->checkEmail($user->getEmail());
-
-        // Create hashed password.
-        $user->setPassword($this->hasher->make($user->getPassword()));
-        $this->em->persist($user);
-        $this->em->flush();
-
-        return $user;
-    }
-
-    private function checkUsername(string $username): void
-    {
-        if ($this->userRepository->findByUsername($username)) {
-            throw new UsernameAlreadyExistsException($username);
-        }
-    }
-
-    private function checkEmail(string $email): void
-    {
-        if ($this->userRepository->findByEmail($email)) {
-            throw new EmailAlreadyExistsException($email);
-        }
-    }
+    public function register(User $user): User;
 }

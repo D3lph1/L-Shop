@@ -112,7 +112,7 @@ class User implements HasRoles, HasPermissions
     private $persistences;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Ban", mappedBy="user", cascade={"persist", "merge"})
+     * @ORM\OneToMany(targetEntity="App\Entity\Ban", mappedBy="user", cascade={"persist", "merge", "remove"})
      */
     private $bans;
 

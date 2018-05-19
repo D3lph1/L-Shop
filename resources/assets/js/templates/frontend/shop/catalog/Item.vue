@@ -1,7 +1,7 @@
 <template>
     <v-card hover class="shop-product">
         <v-card-title class="product-title">
-            <span>{{ name }}</span>
+            <span class="subheading">{{ name }}</span>
             <v-spacer></v-spacer>
             <v-menu bottom left>
                 <v-btn class="product-menu-btn" slot="activator" icon>
@@ -26,7 +26,7 @@
         </div>
 
         <v-card-title class="product-price">
-            <span>
+            <span class="subheading">
                 {{ price }}
                 <span v-html="$store.state.shop.currency.html"></span>
                 <span v-if="isItem">
@@ -46,7 +46,7 @@
         <v-divider></v-divider>
 
         <v-card-actions class="product-footer">
-            <v-tooltip bottom>
+            <v-tooltip bottom v-if="enchantments.length !== 0">
                 <v-btn class="product-btn"
                        icon
                        flat
@@ -86,9 +86,9 @@
                         icon
                         flat
                         outline
-                        color="orange"
+                        color="green"
                         slot="activator"
-                        @click.native.stop="openPurchaseDialog"
+                        @click="$emit('open-purchase-dialog')"
                 >
                     <v-icon>attach_money</v-icon>
                 </v-btn>
@@ -200,7 +200,7 @@
             }
         }
         .product-img {
-            padding: 15px;
+            padding: 0 40px;
             img {
                 display: block;
                 width: 100%;

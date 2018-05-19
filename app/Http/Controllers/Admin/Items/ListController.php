@@ -15,6 +15,7 @@ use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use Illuminate\Http\Request;
 use function App\permission_middleware;
+use Illuminate\Http\Response;
 
 class ListController extends Controller
 {
@@ -48,7 +49,8 @@ class ListController extends Controller
         } catch (ItemNotFoundException $e) {
             $notificator->notify(new Warning(__('msg.admin.items.list.delete.not_found')));
 
-            return new JsonResponse('not_found');
+            return (new JsonResponse('item_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND);
         }
     }
 }

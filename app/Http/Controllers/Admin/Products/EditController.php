@@ -18,6 +18,7 @@ use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use Illuminate\Http\Request;
 use function App\permission_middleware;
+use Illuminate\Http\Response;
 
 class EditController extends Controller
 {
@@ -55,12 +56,15 @@ class EditController extends Controller
                 ->addNotification(new Success(__('msg.admin.products.edit.success')));
         }  catch (ProductNotFoundException $e) {
             return (new JsonResponse('product_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.admin.products.edit.product_not_found')));
         } catch (ItemNotFoundException $e) {
             return (new JsonResponse('item_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.admin.products.edit.item_not_found')));
         } catch (CategoryNotFoundException $e) {
             return (new JsonResponse('category_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.admin.products.edit.category_not_found')));
         }
     }

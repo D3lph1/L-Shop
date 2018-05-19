@@ -17,6 +17,7 @@ use App\Services\Notification\Notifications\Success;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class EditController extends Controller
@@ -37,7 +38,8 @@ class EditController extends Controller
                 'enchantments' => $item->getEnchantments()
             ]);
         } catch (ItemNotFoundException $e) {
-            throw new NotFoundHttpException();
+            return (new JsonResponse('item_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND);
         }
     }
 

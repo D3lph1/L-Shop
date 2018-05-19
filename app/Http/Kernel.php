@@ -3,10 +3,6 @@ declare(strict_types = 1);
 
 namespace App\Http;
 
-use App\Http\Middleware\AddToResponse;
-use App\Http\Middleware\Captcha;
-use App\Http\Middleware\NeedPermission;
-use App\Http\Middleware\ValidateSignature;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -24,7 +20,7 @@ class Kernel extends HttpKernel
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
         \App\Http\Middleware\TrustProxies::class,
-        AddToResponse::class
+        \App\Http\Middleware\AddToResponse::class
     ];
 
     /**
@@ -51,7 +47,10 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            //
+            \App\Http\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class
         ]
     ];
 
@@ -66,9 +65,10 @@ class Kernel extends HttpKernel
         'auth' => \App\Http\Middleware\Auth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
+        'accessor' => \App\Http\Middleware\PassAccessors::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
-        'captcha' => Captcha::class,
-        'permission' => NeedPermission::class,
-        'signed' => ValidateSignature::class
+        'captcha' => \App\Http\Middleware\Captcha::class,
+        'permission' => \App\Http\Middleware\NeedPermission::class,
+        'signed' => \App\Http\Middleware\ValidateSignature::class
     ];
 }

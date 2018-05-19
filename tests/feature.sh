@@ -2,7 +2,7 @@
 cd ./../
 # Refresh database.
 php artisan doctrine:migrations:refresh
-# Seeding database.
+# Seed database.
 php artisan db:seed --class=TestsSeeder
 # Run tests.
 php vendor/phpunit/phpunit/phpunit --configuration phpunit.xml tests/Feature

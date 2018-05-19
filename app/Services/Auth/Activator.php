@@ -10,33 +10,8 @@ use App\Repository\Activation\ActivationRepository;
 use App\Services\DateTime\DateTimeUtil;
 use Illuminate\Contracts\Config\Repository;
 
-class Activator
+interface Activator
 {
-    /**
-     * @var ActivationRepository
-     */
-    private $activationRepository;
-
-    /**
-     * @var CodeGenerator
-     */
-    private $codeGenerator;
-
-    /**
-     * @var Repository
-     */
-    private $config;
-
-    public function __construct(
-        ActivationRepository $activationRepository,
-        CodeGenerator $codeGenerator,
-        Repository $config)
-    {
-        $this->activationRepository = $activationRepository;
-        $this->codeGenerator = $codeGenerator;
-        $this->config = $config;
-    }
-
     /**
      * Creates a new activation for the passed user.
      *
@@ -44,17 +19,7 @@ class Activator
      *
      * @return Activation
      */
-    public function makeActivation(User $user): Activation
-    {
-        $this->activationRepository->deleteByUser($user);
-        do {
-            $code = $this->codeGenerator->generate(Activation::CODE_LENGTH);
-        } while ($this->activationRepository->findByCode($code));
-        $activation = new Activation($user, $code);
-        $this->activationRepository->create($activation);
-
-        return $activation;
-    }
+    public function makeActivation(User $user): Activation;
 
     /**
      * Activates the passed user.
@@ -63,17 +28,7 @@ class Activator
      *
      * @return Activation
      */
-    public function activate(User $user): Activation
-    {
-        do {
-            $code = $this->codeGenerator->generate(Activation::CODE_LENGTH);
-        } while ($this->activationRepository->findByCode($code));
-        $activation = (new Activation($user, $code))
-            ->complete();
-        $this->activationRepository->create($activation);
-
-        return $activation;
-    }
+    public function activate(User $user): Activation;
 
     /**
      * Attempts to complete activation. In the event that the passed code exists
@@ -83,16 +38,7 @@ class Activator
      *
      * @return bool True - if the activation was completed, false - otherwise.
      */
-    public function complete(string $code): bool
-    {
-        $activation = $this->activationRepository->findByCode($code);
-        if ($activation === null || $this->isExpired($activation) || $activation->isCompleted()) {
-            return false;
-        }
-        $this->activationRepository->update($activation->complete());
-
-        return true;
-    }
+    public function complete(string $code): bool;
 
     /**
      * Checks activation has expired.
@@ -101,12 +47,7 @@ class Activator
      *
      * @return bool
      */
-    public function isExpired(Activation $activation): bool
-    {
-        return (new \DateTimeImmutable())
-            ->diff(DateTimeUtil::addMinutes($activation->getCreatedAt(), $this->config->get('auth.activation.lifetime')))
-            ->invert !== 0;
-    }
+    public function isExpired(Activation $activation): bool;
 
     /**
      * Checks if the user is activated.
@@ -115,17 +56,7 @@ class Activator
      *
      * @return bool
      */
-    public function isActivated(User $user): bool
-    {
-        /** @var Activation $activation */
-        foreach ($user->getActivations() as $activation) {
-            if ($activation->isCompleted()) {
-                return true;
-            }
-        }
-
-        return false;
-    }
+    public function isActivated(User $user): bool;
 
     /**
      * Gets the first complete activation of this user.
@@ -134,15 +65,5 @@ class Activator
      *
      * @return Activation|null
      */
-    public function activation(User $user): ?Activation
-    {
-        /** @var Activation $activation */
-        foreach ($user->getActivations() as $activation) {
-            if ($activation->isCompleted()) {
-                return $activation;
-            }
-        }
-
-        return null;
-    }
+    public function activation(User $user): ?Activation;
 }

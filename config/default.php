@@ -122,6 +122,13 @@ return [
     'api' => [
         'algorithm' => 'sha256',
         'key' => str_random(64),
-        'separator' => ':'
+        'separator' => ':',
+        'login_enabled' => false,
+        'register_enabled' => false,
+        'auth' => [
+            'sashok724sV3Launcher' => [
+                'enabled' => true
+            ]
+        ]
     ]
 ];

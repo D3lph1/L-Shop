@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\DataTransferObjects\Frontend\Shop;
 
+use App\DataTransferObjects\Frontend\Shop\Catalog\Enchantment;
 use App\Services\Cart\Item;
 use App\Services\Item\Image\Image;
 use App\Services\Item\Type;
@@ -24,6 +25,11 @@ class CartResult implements \JsonSerializable
      */
     public function jsonSerialize(): array
     {
+        $enchantments = [];
+        foreach ($this->cartItem->getProduct()->getItem()->getEnchantmentItems() as $enchantmentItem) {
+            $enchantments[] = new Enchantment($enchantmentItem);
+        }
+
         return [
             'product' => [
                 'id' => $this->cartItem->getProduct()->getId(),
@@ -35,7 +41,8 @@ class CartResult implements \JsonSerializable
                         'isItem' => $this->cartItem->getProduct()->getItem()->getType() === Type::ITEM,
                         'isPermgroup' => $this->cartItem->getProduct()->getItem()->getType() === Type::PERMGROUP,
                     ],
-                    'image' => Image::assetPathOrDefault($this->cartItem->getProduct()->getItem()->getImage())
+                    'image' => Image::assetPathOrDefault($this->cartItem->getProduct()->getItem()->getImage()),
+                    'enchantments' => $enchantments
                 ]
             ],
             'amount' => $this->cartItem->getAmount()

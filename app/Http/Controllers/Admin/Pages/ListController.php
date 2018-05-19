@@ -14,6 +14,7 @@ use App\Services\Notification\Notifications\Info;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class ListController extends Controller
 {
@@ -45,7 +46,8 @@ class ListController extends Controller
             return (new JsonResponse(Status::SUCCESS))
                 ->addNotification(new Info(__('msg.admin.pages.list.delete.success')));
         } catch (PageNotFoundException $e) {
-            return (new JsonResponse('does_not_exists'))
+            return (new JsonResponse('page_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.admin.pages.list.delete.not_found')));
         }
     }

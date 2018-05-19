@@ -12,6 +12,7 @@ use App\Services\DateTime\Formatting\Formatter;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -39,7 +40,8 @@ class NewsController extends Controller
                 'formatter' => $formatter
             ]);
         } catch (NewsNotFoundException $e) {
-            throw new NotFoundHttpException();
+            return (new JsonResponse('news_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND);
         }
     }
 

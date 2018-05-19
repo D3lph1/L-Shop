@@ -24,6 +24,7 @@ use App\Services\Security\Captcha\Captcha;
 use App\Services\Server\Persistence\Persistence;
 use App\Services\Settings\Settings;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
@@ -62,9 +63,11 @@ class CatalogController extends Controller
         try {
             $dto = $handler->handle((int)$request->route('server'), (int)$request->route('category'));
         } catch (ServerDoesNotExistException $e) {
-            throw new NotFoundHttpException();
+            return (new JsonResponse('server_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND);
         } catch (CategoryDoesNotExistException $e) {
-            throw new NotFoundHttpException();
+            return (new JsonResponse('category_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND);
         }
 
         $server = $persistence->retrieve();
@@ -123,6 +126,7 @@ class CatalogController extends Controller
             }
         } catch (ProductNotFoundException $e) {
             return (new JsonResponse('product_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.frontend.shop.catalog.product_not_found')));
         }
     }

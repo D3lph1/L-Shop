@@ -5,9 +5,10 @@ namespace App\DataTransferObjects\Admin\Users;
 
 use App\Services\Auth\Activator;
 use App\Services\Auth\BanManager;
+use App\Services\Response\JsonRespondent;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-class ListResult
+class ListResult implements JsonRespondent
 {
     /**
      * @var LengthAwarePaginator
@@ -28,18 +29,13 @@ class ListResult
     }
 
     /**
-     * @return LengthAwarePaginator
+     * @inheritDoc
      */
-    public function getPaginator(): LengthAwarePaginator
+    public function response(): array
     {
-        return $this->paginator;
-    }
-
-    /**
-     * @return User[]
-     */
-    public function getUsers(): array
-    {
-        return $this->users;
+        return [
+            'paginator' => $this->paginator,
+            'users' => $this->users
+        ];
     }
 }

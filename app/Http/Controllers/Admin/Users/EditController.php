@@ -30,6 +30,7 @@ use App\Services\Notification\Notifications\Success;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use function App\permission_middleware;
 
@@ -71,13 +72,16 @@ class EditController extends Controller
             return (new JsonResponse(Status::SUCCESS))
                 ->addNotification(new Success(__('msg.admin.users.edit.success')));
         } catch (UserNotFoundException $e) {
-            return (new JsonResponse(__('msg.admin.users.edit.user_not_found')))
+            return (new JsonResponse('user_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.admin.users.edit.user_not_found')));
         } catch (UsernameAlreadyExistsException $e) {
-            return (new JsonResponse(__('msg.admin.users.edit.success')))
+            return (new JsonResponse('username_already_exists'))
+                ->setHttpStatus(Response::HTTP_CONFLICT)
                 ->addNotification(new Error(__('msg.admin.users.edit.username_already_exists')));
         } catch (EmailAlreadyExistsException $e) {
-            return (new JsonResponse(__('msg.admin.users.edit.success')))
+            return (new JsonResponse('email_already_exists'))
+                ->setHttpStatus(Response::HTTP_CONFLICT)
                 ->addNotification(new Error(__('msg.admin.users.edit.email_already_exists')));
         }
     }
@@ -91,9 +95,11 @@ class EditController extends Controller
                 ->addNotification(new Success(__('msg.frontend.profile.skin.success')));
         } catch (UserNotFoundException $e) {
             return (new JsonResponse('user_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.user_not_found')));
         } catch (InvalidRatioException $e) {
-            return (new JsonResponse('invalid_ration'))
+            return (new JsonResponse('invalid_ratio'))
+                ->setHttpStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
                 ->addNotification(new Error(__('msg.frontend.profile.skin.invalid_ratio')));
         }
     }
@@ -107,9 +113,11 @@ class EditController extends Controller
                 ->addNotification(new Success(__('msg.frontend.profile.cloak.success')));
         } catch (UserNotFoundException $e) {
             return (new JsonResponse('user_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.user_not_found')));
         } catch (InvalidRatioException $e) {
-            return (new JsonResponse('invalid_ration'))
+            return (new JsonResponse('invalid_ratio'))
+                ->setHttpStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
                 ->addNotification(new Error(__('msg.frontend.profile.cloak.invalid_ratio')));
         }
     }
@@ -122,10 +130,12 @@ class EditController extends Controller
                     ->addNotification(new Info(__('msg.frontend.profile.skin.delete.success')));
             }
 
-            return (new JsonResponse(Status::SUCCESS))
+            return (new JsonResponse(Status::FAILURE))
+                ->setHttpStatus(Response::HTTP_INTERNAL_SERVER_ERROR)
                 ->addNotification(new Error(__('msg.frontend.profile.skin.delete.fail')));
         } catch (UserNotFoundException $e) {
             return (new JsonResponse('user_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.user_not_found')));
         }
     }
@@ -142,6 +152,7 @@ class EditController extends Controller
                 ->addNotification(new Error(__('msg.frontend.profile.cloak.delete.fail')));
         } catch (UserNotFoundException $e) {
             return (new JsonResponse('user_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.user_not_found')));
         }
     }
@@ -165,9 +176,11 @@ class EditController extends Controller
                 ->addNotification(new Info(__('msg.admin.users.edit.ban.add.success')));
         } catch (UserNotFoundException $e) {
             return (new JsonResponse('user_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.admin.users.edit.ban.add.user_not_found')));
         } catch (InvalidArgumentException $e) {
             return (new JsonResponse('date_time_empty'))
+                ->setHttpStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
                 ->addNotification(new Error(__('validation.required', [
                     'attribute' => __('content.admin.users.edit.actions.add_ban.DateTime')
                 ])));
@@ -182,7 +195,8 @@ class EditController extends Controller
             return (new JsonResponse(Status::SUCCESS))
                 ->addNotification(new Info(__('msg.admin.users.edit.ban.delete.success')));
         } catch (BanNotFoundException $e) {
-            return (new JsonResponse('not_found'))
+            return (new JsonResponse('ban_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.admin.users.edit.ban.delete.not_found')));
         }
     }

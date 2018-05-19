@@ -14,6 +14,7 @@ use App\Services\Notification\Notifications\Info;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class SwitchController extends Controller
 {
@@ -31,6 +32,7 @@ class SwitchController extends Controller
                 ->addNotification(new Info(__('msg.admin.servers.switch.enabled')));
         } catch (ServerNotFoundException $e) {
             return (new JsonResponse('server_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.admin.servers.switch.server_not_found')));
         }
     }
@@ -44,6 +46,7 @@ class SwitchController extends Controller
                 ->addNotification(new Info(__('msg.admin.servers.switch.disabled')));
         } catch (ServerNotFoundException $e) {
             return (new JsonResponse('server_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.admin.servers.switch.server_not_found')));
         }
     }

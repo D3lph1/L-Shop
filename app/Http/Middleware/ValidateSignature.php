@@ -9,6 +9,8 @@ use Symfony\Component\HttpKernel\Exception\BadRequestHttpException;
 
 class ValidateSignature
 {
+    public const SIGNATURE_REQUEST_PARAM = 'signature';
+
     /**
      * @var Validator
      */
@@ -30,14 +32,20 @@ class ValidateSignature
      */
     public function handle($request, \Closure $next, string ...$parameters)
     {
+        if (!$request->has(self::SIGNATURE_REQUEST_PARAM)) {
+            throw new BadRequestHttpException(
+                'Parameter with name "' . self::SIGNATURE_REQUEST_PARAM . '" does not exist in the request'
+            );
+        }
+
         $resultParameters = [];
         foreach ($parameters as $parameter) {
             $resultParameters[$parameter] = $request->get($parameter);
         }
 
-        $valid = $this->validator->validate(new Signed($request->get('signature'), $resultParameters));
+        $valid = $this->validator->validate(new Signed($request->get(self::SIGNATURE_REQUEST_PARAM), $resultParameters));
         if (!$valid) {
-            return new BadRequestHttpException();
+            throw new BadRequestHttpException('The request has an invalid signature');
         }
 
         return $next($request);

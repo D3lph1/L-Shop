@@ -17,7 +17,7 @@
             </v-tabs>
             <v-tabs-items v-model="tab">
                 <v-tab-item v-for="category in server.categories" :key="category.id">
-                    <section class="shop-grid">
+                    <shop-grid>
                         <catalog-item
                                 v-for="(product, index) in products"
                                 :key="index"
@@ -33,11 +33,11 @@
                                 :products-crud-access="productsCrudAccess"
                                 :items-crud-access="itemsCrudAccess"
                                 :enchantments="product.item.enchantments"
-                                @purchase-dialog-opening="openPurchaseDialog"
+                                @open-purchase-dialog="openPurchaseDialog(product.id)"
                                 @about-dialog-opening="openAboutDialog"
                                 v-if="!loading"
                         ></catalog-item>
-                    </section>
+                    </shop-grid>
 
                     <div class="text-xs-center" v-if="paginator.last_page > 1 && !loading">
                         <v-pagination
@@ -72,7 +72,7 @@
                 :stack="purchasableProduct.stack"
                 :is-item="purchasableProduct.item.isItem"
                 :is-permgroup="purchasableProduct.item.isPermgroup"
-                @close="closePurchaseDialog"
+                @hide="hidePurchaseDialog"
         ></purchase-dialog>
 
         <about-dialog
@@ -217,7 +217,7 @@
                 this.purchase.dialog = true;
                 this.purchase.product = id;
             },
-            closePurchaseDialog() {
+            hidePurchaseDialog() {
                 this.purchase.dialog = false;
             },
             openAboutDialog(id) {
@@ -246,13 +246,3 @@
         }
     }
 </script>
-
-<style lang="less" scoped>
-    .shop-grid {
-        padding: 15px;
-        display: grid;
-        grid-gap: 20px;
-        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-        justify-items: center;
-    }
-</style>

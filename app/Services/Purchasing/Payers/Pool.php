@@ -24,6 +24,17 @@ class Pool
         $this->payers = $payers;
     }
 
+    public function retrieveByName(string $name): ?Payer
+    {
+        foreach ($this->payers as $payer) {
+            if ($payer->name() === $name) {
+                return $payer;
+            }
+        }
+
+        return null;
+    }
+
     /**
      * @return Payer[]
      */

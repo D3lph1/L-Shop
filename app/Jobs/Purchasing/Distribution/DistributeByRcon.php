@@ -10,6 +10,7 @@ use App\Services\Purchasing\Distributors\RconDistribution\Connections;
 use App\Services\Purchasing\Distributors\RconDistribution\ExecutableCommands;
 use App\Services\Purchasing\Distributors\RconDistribution\ExtraCommands;
 use D3lph1\MinecraftRconManager\Exceptions\RuntimeException;
+use D3lph1\MinecraftRconManager\Rcon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -47,9 +48,9 @@ class DistributeByRcon implements ShouldQueue
     /**
      * Create a new job instance.
      *
-     * @param Distribution  $distribution
-     * @param ExecutableCommands      $commands
-     * @param string        $successResponse
+     * @param Distribution       $distribution
+     * @param ExecutableCommands $commands
+     * @param string             $successResponse
      */
     public function __construct(
         Distribution $distribution,
@@ -77,9 +78,20 @@ class DistributeByRcon implements ShouldQueue
             return;
         }
 
-        $connection = null;
+        $connection = $this->retrieveConnection($connections, $distribution, $logger);
+        $this->sendExtraCommands($this->commands->getExtraBeforeCommands(), $connection, $logger);
+        $this->sendCommands($connection, $logger);
+
+        // The products were successfully delivered, the distribution was deleted.
+        $repository->remove($distribution);
+
+        $this->sendExtraCommands($this->commands->getExtraAfterCommands(), $connection, $logger);
+    }
+
+    private function retrieveConnection(Connections $connections, Distribution $distribution, LoggerInterface $logger): Rcon
+    {
         try {
-            $connection = $connections->connect(
+            return $connections->connect(
                 $distribution->getPurchaseItem()->getProduct()->getCategory()->getServer()
             );
         } catch (RuntimeException $e) {
@@ -87,18 +99,10 @@ class DistributeByRcon implements ShouldQueue
 
             throw new DistributionException('', 0, $e);
         }
+    }
 
-        try {
-            // Execute extra commands one by one.
-            foreach ($this->commands->getExtraBeforeCommands() as $command) {
-                $connection->send($command);
-            }
-        } catch (\Exception $e) {
-            $logger->error("Error sending request: {$e->getMessage()}", $this->context());
-
-            throw new DistributionException('', 0, $e);
-        }
-
+    private function sendCommands(Rcon $connection, LoggerInterface $logger)
+    {
         $step = 1;
         $total = count($this->commands->getMainCommands());
         // Execute main commands one by one.
@@ -125,14 +129,14 @@ class DistributeByRcon implements ShouldQueue
             $logger->debug("The response received from the server has been successfully mapped to a "
                 . "successful response pattern.", $this->context());
         }
+    }
 
-        // The products were successfully delivered, the distribution was deleted.
-        $repository->remove($distribution);
-
+    private function sendExtraCommands(array $commands, Rcon $connection, LoggerInterface $logger)
+    {
         try {
             // Execute extra commands one by one.
-            foreach ($this->commands->getExtraAfterCommands() as $extraAfterCommand) {
-                $connection->send($extraAfterCommand);
+            foreach ($commands as $command) {
+                $connection->send($command);
             }
         } catch (\Exception $e) {
             $logger->error("Error sending request: {$e->getMessage()}", $this->context());
@@ -149,9 +153,8 @@ class DistributeByRcon implements ShouldQueue
     private function context(): array
     {
         return [
-            'distribution',
-            ['distribution_id' => $this->distributionId],
             self::class,
+            ['distribution_id' => $this->distributionId],
             'in queue'
         ];
     }

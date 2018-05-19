@@ -7,13 +7,14 @@ use App\DataTransferObjects\Frontend\Shop\Purchase as DTO;
 use App\Entity\Purchase;
 use App\Entity\PurchaseItem;
 use App\Entity\User;
+use App\Events\Purchase\PurchaseCreatedEvent;
 use App\Exceptions\NotImplementedException;
 use App\Exceptions\Product\HiddenException;
 use App\Exceptions\Purchase\InvalidAmountException;
 use App\Repository\Purchase\PurchaseRepository;
 use App\Services\Item\Type;
 use App\Services\Product\Stack;
-use App\Services\User\Balance\Transactor;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class PurchaseCreator
 {
@@ -23,19 +24,21 @@ class PurchaseCreator
     private $purchaseRepository;
 
     /**
-     * @var Transactor
+     * @var Dispatcher
      */
-    private $transactor;
+    private $eventDispatcher;
 
     /**
      * @var float
      */
     private $cost = 0;
 
-    public function __construct(PurchaseRepository $purchaseRepository, Transactor $transactor)
+    public function __construct(
+        PurchaseRepository $purchaseRepository,
+        Dispatcher $eventDispatcher)
     {
         $this->purchaseRepository = $purchaseRepository;
-        $this->transactor = $transactor;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -49,8 +52,10 @@ class PurchaseCreator
     public function create(array $dto, $user, string $ip): Purchase
     {
         $this->through($dto);
+        $purchase = $this->persist($dto, $user, $ip);
+        $this->eventDispatcher->dispatch(new PurchaseCreatedEvent($purchase));
 
-        return $this->persist($dto, $user, $ip);
+        return $purchase;
     }
 
     /**

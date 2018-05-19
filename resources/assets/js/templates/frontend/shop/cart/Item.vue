@@ -1,48 +1,84 @@
 <template>
-    <div v-if="visible" class="c-product z-depth-1">
-        <v-card>
-            <v-card-media class="product-cart-card">
-                <div class="c-1-info">
-                    <p class="c-p-name title mb-3 fw400">{{ name }}</p>
+    <v-card hover class="shop-product">
+        <v-card-title class="product-title pa-2">
+            <span class="subheading">{{ name }}</span>
+            <v-spacer></v-spacer>
+            <v-btn
+                    class="mr-1"
+                    icon
+                    flat
+                    color="red"
+                    :loading="removeBtnLoading"
+                    @click="remove"
+            >
+                <v-icon>close</v-icon>
+            </v-btn>
+        </v-card-title>
 
-                    <img :src="image" :alt="name" class="product-image image-fluid">
+        <div class="product-img" :src="image" :alt="name">
+            <img :src="image">
+        </div>
 
-                    <v-btn color="error" small block :loading="removeBtnLoading" @click="remove">
-                        <v-icon left small>clear</v-icon>
-                        {{ $t('content.frontend.shop.cart.item.remove') }}
-                    </v-btn>
-
+        <v-card-title class="product-price py-2 px-3">
+            <div class="mb-0">
+                <v-text-field
+                        v-if="stack !== 0"
+                        type="number"
+                        class="pt-1 no-spinners"
+                        :prefix="amountLabel()"
+                        :value="amount"
+                        v-model="amount"
+                        @blur="recount"
+                ></v-text-field>
+                <div v-else>
+                    {{ $t('content.frontend.shop.cart.item.forever') }}
                 </div>
-                <div class="c-2-info">
-                    <div v-if="stack !== 0">
-                        <div class="md-form">
-                            <v-text-field
-                                    v-model="amount"
-                                    @blur="recount"
-                                    type="number"
-                                    :label="amountLabel()"
-                                    class="centered no-spinners"
-                            >
-                            </v-text-field>
-                        </div>
+            </div>
+            <p class="subheading my-0">
+                {{ $t('content.frontend.shop.cart.item.cost') }}
+                {{ cost }}
+                <span v-html="$store.state.shop.currency.html"></span>
+            </p>
+        </v-card-title>
 
-                        <div class="c-p-cbuttons">
-                            <v-btn color="primary" small @click="increment"><v-icon>add</v-icon></v-btn>
-                            <v-btn color="primary" small @click="decrement" :disabled="amount <= stack"><v-icon>remove</v-icon></v-btn>
-                        </div>
-                    </div>
-                    <div v-else>
-                        {{ $t('content.frontend.shop.cart.item.forever') }}
-                    </div>
+        <v-divider></v-divider>
 
-                    <div class="body-2 mt-2">
-                        <p class="c-p-pay">{{ $t('content.frontend.shop.cart.item.cost') }}</p>
-                        <p class="c-p-pay-money"><span>{{ cost }}</span> <span v-html="$store.state.shop.currency.html"></span></p>
-                    </div>
-                </div>
-            </v-card-media>
-        </v-card>
-    </div>
+        <v-card-actions class="product-footer">
+            <v-tooltip bottom v-if="enchantments.length !== 0">
+                <v-btn class="product-btn"
+                       icon
+                       flat
+                       color="purple lighten-1"
+                       slot="activator"
+                >
+                    <v-icon>flash_on</v-icon>
+                </v-btn>
+                <span>{{ $t('content.frontend.shop.catalog.item.enchanted') }}</span>
+            </v-tooltip>
+            <v-spacer></v-spacer>
+            <v-btn
+                    icon
+                    flat
+                    outline
+                    color="red"
+                    @click="decrement"
+                    :disabled="amount <= stack"
+            >
+                <v-icon>remove</v-icon>
+            </v-btn>
+
+            <v-btn
+                    class="mr-2"
+                    icon
+                    flat
+                    outline
+                    color="green"
+                    @click="increment"
+            >
+                <v-icon>add</v-icon>
+            </v-btn>
+        </v-card-actions>
+    </v-card>
 </template>
 
 <script>
@@ -75,6 +111,10 @@
             isPermgroup: {
                 required: true,
                 type: Boolean
+            },
+            enchantments: {
+                required: true,
+                type: Array
             }
         },
         data() {
@@ -151,6 +191,7 @@
                             this.visible = false;
                             // this.$store.commit('removeFromCart');
                             this.$store.commit('subCartAmount', 1);
+                            this.$emit('remove', this.id);
                         }
                         this.removeBtnLoading = false;
                     });
@@ -168,7 +209,27 @@
     }
 </script>
 
-<style lang="sass">
-    .product-cart-card
-            padding: 15px
+<style lang="less">
+    .shop-product {
+        width: 100%;
+        max-width: 250px;
+        .product-title {
+            flex-wrap: nowrap;
+            .product-menu-btn {
+                margin: 0;
+            }
+        }
+        .product-img {
+            padding: 0 40px;
+            img {
+                display: block;
+                width: 100%;
+            }
+        }
+        .product-footer {
+            display: flex;
+            align-items: center;
+            background-color: #f5f5f5;
+        }
+    }
 </style>

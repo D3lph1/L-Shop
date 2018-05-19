@@ -14,6 +14,7 @@ use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use App\Services\Security\Captcha\Captcha;
 use App\Services\Settings\Settings;
+use Illuminate\Http\Response;
 
 /**
  * Class ForgotPasswordController
@@ -61,6 +62,7 @@ class ForgotPasswordController extends Controller
             ]))->addNotification(new Success(__('msg.frontend.auth.password.forgot.success')));
         } catch (UserDoesNotExistException $e) {
             return (new JsonResponse('user_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.frontend.auth.password.forgot.user_not_found')));
         }
     }

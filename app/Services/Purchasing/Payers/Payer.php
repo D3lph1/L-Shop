@@ -33,6 +33,17 @@ interface Payer
     public function validate(array $data): bool;
 
     /**
+     * Retrieves purchase identifier from an array of incoming data.
+     * These data are usually taken from a request that the payment service performs in
+     * order to notify the store of the successful payment.
+     *
+     * @param array $data
+     *
+     * @return int
+     */
+    public function purchaseId(array $data): int;
+
+    /**
      * Returns the string that the payment service expects to receive in case of successful
      * processing of the notification request by the shop.
      *

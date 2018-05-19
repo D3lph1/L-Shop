@@ -49,6 +49,14 @@ class RobokassaPayer implements Payer
     /**
      * @inheritDoc
      */
+    public function purchaseId(array $data): int
+    {
+        return (int)$data['InvId'];
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function successAnswer(Purchase $purchase): string
     {
         return $this->checkout->successAnswer($purchase->getId());

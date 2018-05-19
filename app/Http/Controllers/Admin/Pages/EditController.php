@@ -16,6 +16,7 @@ use App\Services\Notification\Notifications\Success;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class EditController extends Controller
 {
@@ -46,7 +47,8 @@ class EditController extends Controller
             return (new JsonResponse(Status::SUCCESS))
                 ->addNotification(new Success(__('msg.admin.pages.edit.success')));
         } catch (PageNotFoundException $e) {
-            return (new JsonResponse(Status::SUCCESS))
+            return (new JsonResponse('page_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.admin.pages.edit.not_found')));
         }
     }

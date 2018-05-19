@@ -16,6 +16,7 @@ use App\Services\Response\Status;
 use App\Services\Security\Captcha\Captcha;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
+use Illuminate\Http\Response;
 
 /**
  * Class RegisterController
@@ -89,9 +90,11 @@ class RegisterController extends Controller
 
         } catch (UsernameAlreadyExistsException $e) {
             return (new JsonResponse('username_already_exists'))
+                ->setHttpStatus(Response::HTTP_CONFLICT)
                 ->addNotification(new Error(__('msg.frontend.auth.register.username_already_exist')));
         } catch (EmailAlreadyExistsException $e) {
             return (new JsonResponse('email_already_exists'))
+                ->setHttpStatus(Response::HTTP_CONFLICT)
                 ->addNotification(new Error(__('msg.frontend.auth.register.email_already_exist')));
         }
     }

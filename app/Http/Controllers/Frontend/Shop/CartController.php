@@ -25,6 +25,7 @@ use App\Services\Security\Captcha\Captcha;
 use App\Services\Server\Persistence\Persistence;
 use Illuminate\Http\Request;
 use function App\auth_middleware;
+use Illuminate\Http\Response;
 
 /**
  * Class CartController
@@ -98,7 +99,7 @@ class CartController extends Controller
                 ->addNotification(new Info(__('msg.frontend.shop.cart.remove.success')));
         } catch (ProductNotFoundException $e) {
             return (new JsonResponse('product_does_not_exist'))
-                ->setHttpStatus(403)
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Warning(__('msg.frontend.shop.cart.remove.fail')));
         }
     }
@@ -130,7 +131,7 @@ class CartController extends Controller
             }
         } catch (ServerNotFoundException $e) {
             return (new JsonResponse('server_not_found'))
-                ->setHttpStatus(403)
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.frontend.shop.cart.purchase.server_not_found')));
         }
     }

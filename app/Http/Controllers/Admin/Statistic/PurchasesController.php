@@ -17,6 +17,7 @@ use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use App\Services\Purchasing\ViaContext;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 class PurchasesController extends Controller
 {
@@ -64,6 +65,7 @@ class PurchasesController extends Controller
                 ->addNotification(new Success(__('msg.admin.statistic.purchases.complete.success')));
         } catch (AlreadyCompletedException $e) {
             return (new JsonResponse('already_completed'))
+                ->setHttpStatus(Response::HTTP_CONFLICT)
                 ->addNotification(new Warning(__('msg.admin.statistic.purchases.complete.already_completed')));
         }
     }

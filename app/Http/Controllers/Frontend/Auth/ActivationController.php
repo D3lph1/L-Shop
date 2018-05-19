@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Http\Controllers\Frontend\Auth;
 
@@ -17,9 +17,11 @@ use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use App\Services\Security\Captcha\Captcha;
 use App\Services\Settings\Settings;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 /**
  * Class ActivationController
@@ -66,9 +68,11 @@ class ActivationController extends Controller
                 ->addNotification(new Success(__('msg.frontend.auth.activation.repeat')));
         } catch (UserDoesNotExistException $e) {
             return (new JsonResponse('user_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.frontend.auth.activation.user_not_found')));
         } catch (AlreadyActivatedException $e) {
             return (new JsonResponse('already_activated'))
+                ->setHttpStatus(Response::HTTP_CONFLICT)
                 ->addNotification(new Error(__('msg.frontend.auth.activation.already')));
         }
     }
@@ -80,10 +84,11 @@ class ActivationController extends Controller
      * @param Request                   $request
      * @param CompleteActivationHandler $handler
      * @param Notificator               $notificator
+     * @param Repository                $config
      *
      * @return RedirectResponse
      */
-    public function complete(Request $request, CompleteActivationHandler $handler, Notificator $notificator): RedirectResponse
+    public function complete(Request $request, CompleteActivationHandler $handler, Notificator $notificator, Repository $config): RedirectResponse
     {
         if ($handler->handle($request->route('code'))) {
             $notificator->notify(new Success(__('msg.frontend.auth.activation.success')));
@@ -91,6 +96,6 @@ class ActivationController extends Controller
             $notificator->notify(new Error(__('msg.frontend.auth.activation.fail')));
         }
 
-        return redirect()->to('login');
+        return redirect()->to($config->get('app.url'));
     }
 }

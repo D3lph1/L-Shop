@@ -7,13 +7,14 @@ use App\Exceptions\Distributor\DistributionNotFoundException;
 use App\Handlers\Frontend\Profile\Cart\DistributionHandler;
 use App\Handlers\Frontend\Profile\Cart\PaginationHandler;
 use App\Http\Controllers\Controller;
-use function App\permission_middleware;
 use App\Services\Auth\Permissions;
 use App\Services\Notification\Notifications\Info;
 use App\Services\Notification\Notifications\Warning;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use function App\permission_middleware;
 
 /**
  * Class CartController
@@ -62,7 +63,8 @@ class CartController extends Controller
             return (new JsonResponse(Status::SUCCESS))
                 ->addNotification(new Info(__('msg.frontend.profile.cart.distribution.wait')));
         } catch (DistributionNotFoundException $e) {
-            return (new JsonResponse('not_found'))
+            return (new JsonResponse('distribution_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Warning(__('msg.frontend.profile.cart.distribution.not_found')));
         }
     }

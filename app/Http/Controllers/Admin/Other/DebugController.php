@@ -10,6 +10,7 @@ use function App\permission_middleware;
 use App\Services\Auth\Permissions;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
+use Illuminate\Http\Response;
 use Psr\Log\LoggerInterface;
 
 class DebugController extends Controller
@@ -33,9 +34,10 @@ class DebugController extends Controller
         } catch (\Exception $e) {
             $logger->error($e);
 
-            return new JsonResponse(Status::FAILURE, [
+            return (new JsonResponse(Status::FAILURE, [
                 'message' => $e->getMessage()
-            ]);
+            ]))
+                ->setHttpStatus(Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
 }

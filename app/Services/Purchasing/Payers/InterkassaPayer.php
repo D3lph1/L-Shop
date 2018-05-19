@@ -49,6 +49,14 @@ class InterkassaPayer implements Payer
     /**
      * @inheritDoc
      */
+    public function purchaseId(array $data): int
+    {
+        return (int)$data['ik_pm_no'];
+    }
+
+    /**
+     * @inheritDoc
+     */
     public function successAnswer(Purchase $purchase): string
     {
         return $this->checkout->successAnswer();

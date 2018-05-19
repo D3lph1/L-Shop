@@ -14,6 +14,7 @@ use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use App\Services\Settings\Settings;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 
 /**
  * Class ResetPasswordController
@@ -62,6 +63,7 @@ class ResetPasswordController extends Controller
         }
 
         return (new JsonResponse(Status::FAILURE))
+            ->setHttpStatus(Response::HTTP_INTERNAL_SERVER_ERROR)
             ->addNotification(new Error(__('msg.frontend.auth.reset.fail')));
     }
 }

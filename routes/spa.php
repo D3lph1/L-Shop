@@ -34,8 +34,10 @@ $router->get('/catalog/{server}/{category?}', 'Frontend\Shop\CatalogController@r
     ->where('server', '[0-9]+');
 $router->post('/catalog/purchase', 'Frontend\Shop\CatalogController@purchase');
 
-$router->get('/payment/{purchase}', 'Frontend\Shop\PaymentController@render')
+$router->get('/payment/{purchase}', 'Frontend\Shop\PaymentMethodsController@render')
     ->where('purchase', '[0-9]+');
+
+$router->post('/replenishment', 'Frontend\Shop\ReplenishmentController@handle');
 
 $router->get('/monitoring', 'Frontend\MonitoringController@monitor');
 

@@ -14,6 +14,7 @@ use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use Illuminate\Http\Request;
 use function App\permission_middleware;
+use Illuminate\Http\Response;
 
 class ListController extends Controller
 {
@@ -31,10 +32,7 @@ class ListController extends Controller
 
         $dto = $handler->handle($orderBy, $descending, $search, $perPage);
 
-        return new JsonResponse(Status::SUCCESS, [
-            'paginator' => $dto->getPaginator(),
-            'users' => $dto->getUsers()
-        ]);
+        return new JsonResponse(Status::SUCCESS, $dto);
     }
 
     public function delete(Request $request, DeleteHandler $handler): JsonResponse
@@ -46,6 +44,7 @@ class ListController extends Controller
                 ->addNotification(new Info(__('msg.admin.users.list.delete.success')));
         } catch (UserNotFoundException $e) {
             return (new JsonResponse('user_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.admin.users.list.delete.user_not_found')));
         }
     }

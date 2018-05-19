@@ -6,6 +6,7 @@ namespace Tests\Feature\Frontend\Auth;
 use App\Services\Auth\Checkpoint\ActivationCheckpoint;
 use App\Services\Auth\Checkpoint\Pool;
 use App\Services\Response\Status;
+use Illuminate\Http\Response;
 use Tests\TestCase;
 
 class LoginTest extends TestCase
@@ -51,9 +52,9 @@ class LoginTest extends TestCase
             'username' => 'D3lph1',
             'password' => '123456'
         ]);
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_CONFLICT);
         $response->assertJson([
-            'status' => 'not_activated'
+            'status' => 'user_not_activated'
         ]);
         $this->rollback();
     }
@@ -69,9 +70,9 @@ class LoginTest extends TestCase
             'username' => 'admin',
             'password' => 'qwerty'
         ]);
-        $response->assertStatus(200);
+        $response->assertStatus(Response::HTTP_NOT_FOUND);
         $response->assertJson([
-            'status' => Status::FAILURE
+            'status' => 'user_not_found'
         ]);
         $this->rollback();
     }

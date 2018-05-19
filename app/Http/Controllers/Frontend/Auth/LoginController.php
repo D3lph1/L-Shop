@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Frontend\Auth;
 
-use App\Handlers\Frontend\Auth\AuthHandler;
+use App\Handlers\Frontend\Auth\LoginHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Frontend\Auth\LoginRequest;
 use App\Services\Auth\AccessMode;
@@ -17,6 +17,7 @@ use App\Services\Response\Status;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
 use App\Services\Support\Lang\Ban\BanMessage;
+use Illuminate\Http\Response;
 
 /**
  * Class LoginController
@@ -52,13 +53,13 @@ class LoginController extends Controller
      * Handles a user authentication request.
      *
      * @param LoginRequest $request
-     * @param AuthHandler  $handler
+     * @param LoginHandler $handler
      * @param Notificator  $notificator
      * @param BanMessage   $banMessage
      *
      * @return JsonResponse
      */
-    public function handle(LoginRequest $request, AuthHandler $handler, Notificator $notificator, BanMessage $banMessage)
+    public function handle(LoginRequest $request, LoginHandler $handler, Notificator $notificator, BanMessage $banMessage)
     {
         try {
             $dto = $handler->handle(
@@ -75,16 +76,19 @@ class LoginController extends Controller
                 return new JsonResponse(Status::SUCCESS);
             }
 
-            return (new JsonResponse(Status::FAILURE))
+            return (new JsonResponse('user_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.frontend.auth.login.invalid_credentials')));
 
         } catch (NotActivatedException $e) {
-            return (new JsonResponse('not_activated'))
+            return (new JsonResponse('user_not_activated'))
+                ->setHttpStatus(Response::HTTP_CONFLICT)
                 ->addNotification(new Error(__('msg.frontend.auth.login.not_activated')));
         } catch (BannedException $e) {
             $banMessages = $banMessage->buildMessageAuto($e->getBans());
             if (count($banMessages->getMessages()) === 0) {
                 return (new JsonResponse('banned'))
+                    ->setHttpStatus(Response::HTTP_CONFLICT)
                     ->addNotification(new Error($banMessages->getTitle()));
             }
 
@@ -96,6 +100,7 @@ class LoginController extends Controller
             }
 
             return (new JsonResponse('banned'))
+                ->setHttpStatus(Response::HTTP_CONFLICT)
                 ->addNotification(new Error($notification));
         }
     }

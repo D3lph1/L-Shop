@@ -15,6 +15,7 @@ use App\Services\Notification\Notifications\Success;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use function App\permission_middleware;
+use Illuminate\Http\Response;
 
 class AddController extends Controller
 {
@@ -50,9 +51,11 @@ class AddController extends Controller
                 ->addNotification(new Success(__('msg.admin.products.add.success')));
         } catch (ItemNotFoundException $e) {
             return (new JsonResponse('item_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Success(__('msg.admin.products.add.item_not_found')));
         } catch (CategoryNotFoundException $e) {
             return (new JsonResponse('category_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Success(__('msg.admin.products.add.category_not_found')));
         }
     }

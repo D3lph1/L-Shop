@@ -14,6 +14,7 @@ use App\Services\Notification\Notifications\Success;
 use App\Services\Notification\Notifications\Warning;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
+use Illuminate\Http\Response;
 
 class AddController extends Controller
 {
@@ -35,7 +36,8 @@ class AddController extends Controller
             return (new JsonResponse(Status::SUCCESS))
                 ->addNotification(new Success(__('msg.admin.pages.add.success')));
         } catch (AlreadyExistException $e) {
-            return (new JsonResponse('already_exists'))
+            return (new JsonResponse('page_already_exists'))
+                ->setHttpStatus(Response::HTTP_CONFLICT)
                 ->addNotification(new Warning(__('msg.admin.pages.add.already_exists')));
         }
     }
