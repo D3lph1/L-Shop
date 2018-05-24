@@ -73,6 +73,7 @@ class Version050ATransfer implements Transfer
             ->getConnection()
             ->prepare($this->query->selectPaymentsQuery());
         $stmt->execute();
+
         while (($payment = $stmt->fetch(\PDO::FETCH_ASSOC)) !== false) {
             $this->execute(
                 $this->query->insertPurchaseQuery(),
@@ -88,16 +89,18 @@ class Version050ATransfer implements Transfer
                 ]
             );
 
-            $productsAndAmount = json_decode($payment['products'], true);
-            foreach ($productsAndAmount as $product => $amount) {
-                try {
-                    $this->execute($this->query->insertPurchaseItemQuery(), [
-                        (int)$product,
-                        (int)$payment['id'],
-                        (int)$amount
-                    ]);
-                } catch (\Exception $e) {
-                    $this->execute($this->query->deletePurchaseQuery(), [(int)$payment['id']]);
+            if ($payment['products'] !== null) {
+                $productsAndAmount = json_decode($payment['products']);
+                foreach ($productsAndAmount as $product => $amount) {
+                    try {
+                        $this->execute($this->query->insertPurchaseItemQuery(), [
+                            (int)$product,
+                            (int)$payment['id'],
+                            (int)$amount
+                        ]);
+                    } catch (\Exception $e) {
+                        $this->execute($this->query->deletePurchaseQuery(), [(int)$payment['id']]);
+                    }
                 }
             }
         }

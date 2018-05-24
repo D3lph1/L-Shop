@@ -307,6 +307,9 @@ SQL;
 SQL;
     }
 
+    /**
+     * {@inheritdoc}
+     */
     public function deletePurchaseQuery(): string
     {
         return "DELETE FROM {$this->to}purchases WHERE id = ?";

@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace App\Repository\Purchase;
 
 use App\Entity\Purchase;
+use App\Entity\User;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface PurchaseRepository
@@ -16,7 +17,11 @@ interface PurchaseRepository
 
     public function findPaginated(int $page, int $perPage): LengthAwarePaginator;
 
+    public function findPaginatedByUser(User $user, int $page, int $perPage): LengthAwarePaginator;
+
     public function findPaginatedWithOrder(int $page, string $orderBy, bool $descending, int $perPage): LengthAwarePaginator;
+
+    public function findPaginatedWithOrderByUser(User $user, int $page, string $orderBy, bool $descending, int $perPage): LengthAwarePaginator;
 
     public function retrieveTotalProfitForYearCompleted(): array;
 

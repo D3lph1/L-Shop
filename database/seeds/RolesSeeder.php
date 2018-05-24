@@ -15,6 +15,7 @@ class RolesSeeder extends Seeder
         Roles::USER => [
             Permissions::ALLOW_SET_SKINS,
             Permissions::ALLOW_SET_CLOAKS,
+            Permissions::PROFILE_SETTINGS_ACCESS,
             Permissions::PROFILE_PURCHASE_HISTORY_ACCESS,
             Permissions::PROFILE_GAME_CART_ACCESS
         ],

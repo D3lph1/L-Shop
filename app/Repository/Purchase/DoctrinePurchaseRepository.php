@@ -5,6 +5,7 @@ namespace App\Repository\Purchase;
 
 use App\Entity\Purchase;
 use App\Entity\PurchaseItem;
+use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -53,11 +54,38 @@ class DoctrinePurchaseRepository implements PurchaseRepository
         return $this->paginateAll($perPage, $page);
     }
 
+    public function findPaginatedByUser(User $user, int $page, int $perPage): LengthAwarePaginator
+    {
+        return $this->paginate(
+            $this->createQueryBuilder('purchase')
+                ->where('purchase.user = :user')
+                ->setParameter('user', $user)
+                ->getQuery(),
+            $perPage,
+            $page,
+            false
+        );
+    }
+
     public function findPaginatedWithOrder(int $page, string $orderBy, bool $descending, int $perPage): LengthAwarePaginator
     {
         return $this->paginate(
             $this->createQueryBuilder('purchase')
                 ->orderBy($orderBy, $descending ? 'DESC' : 'ASC')
+                ->getQuery(),
+            $perPage,
+            $page,
+            false
+        );
+    }
+
+    public function findPaginatedWithOrderByUser(User $user, int $page, string $orderBy, bool $descending, int $perPage): LengthAwarePaginator
+    {
+        return $this->paginate(
+            $this->createQueryBuilder('purchase')
+                ->where('purchase.user = :user')
+                ->orderBy($orderBy, $descending ? 'DESC' : 'ASC')
+                ->setParameter('user', $user)
                 ->getQuery(),
             $perPage,
             $page,

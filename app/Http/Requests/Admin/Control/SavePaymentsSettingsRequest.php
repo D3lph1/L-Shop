@@ -37,7 +37,7 @@ class SavePaymentsSettingsRequest extends FormRequest
             'interkassa_checkout_id' => 'nullable|required_if:interkassa_enabled,true',
             'interkassa_key' => 'nullable|required_if:interkassa_enabled,true',
             'interkassa_test_key' => 'nullable|required_if:interkassa_enabled,true',
-            'interkassa_currency' => 'nullable|required_if:interkassa_enabled,true',
+            'interkassa_currency' => 'nullable',
             'interkassa_algorithm' => 'nullable|required_if:interkassa_enabled,true',
             'interkassa_test' => 'required|boolean',
         ];

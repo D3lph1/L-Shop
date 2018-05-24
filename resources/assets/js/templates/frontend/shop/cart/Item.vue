@@ -189,7 +189,6 @@
                     .then((response) => {
                         if (response.data.status === 'success') {
                             this.visible = false;
-                            // this.$store.commit('removeFromCart');
                             this.$store.commit('subCartAmount', 1);
                             this.$emit('remove', this.id);
                         }

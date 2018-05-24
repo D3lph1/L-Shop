@@ -3,25 +3,26 @@
  * The meta title field serves to specify the header that the route page will have.
  */
 
-const Login = () => import(/* webpackChunkName: "shop" */ './../templates/frontend/auth/Login.vue');
-const Register = () => import(/* webpackChunkName: "shop" */ './../templates/frontend/auth/Register.vue');
-const Activation = () => import(/* webpackChunkName: "shop" */ './../templates/frontend/auth/Activation.vue');
-const ForgotPassword = () => import(/* webpackChunkName: "shop" */ './../templates/frontend/auth/password/Forgot.vue');
-const ResetPassword = () => import(/* webpackChunkName: "shop" */ './../templates/frontend/auth/password/Reset.vue');
-const Servers = () => import(/* webpackChunkName: "shop" */ './../templates/frontend/auth/Servers.vue');
-const Shop = () => import(/* webpackChunkName: "shop" */ '../templates/layout/shop/Shop.vue');
-const Catalog = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/shop/catalog/Catalog.vue');
-const Cart = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/shop/cart/Cart.vue');
-const Payment = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/shop/Payment.vue');
-const Character = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/profile/Character.vue');
-const ProfileSettings = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/profile/Settings.vue');
-const ProfilePurchases = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/profile/Purchases.vue');
-const ProfileCart = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/profile/Cart.vue');
-const News = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/news/News.vue');
-const Page = () => import(/* webpackChunkName: "shop" */ '../templates/frontend/Page.vue');
+const Login = () => import(/* webpackChunkName: "frontend" */ './../templates/frontend/auth/Login.vue');
+const Register = () => import(/* webpackChunkName: "frontend" */ './../templates/frontend/auth/Register.vue');
+const Activation = () => import(/* webpackChunkName: "frontend" */ './../templates/frontend/auth/Activation.vue');
+const ForgotPassword = () => import(/* webpackChunkName: "frontend" */ './../templates/frontend/auth/password/Forgot.vue');
+const ResetPassword = () => import(/* webpackChunkName: "frontend" */ './../templates/frontend/auth/password/Reset.vue');
+const Servers = () => import(/* webpackChunkName: "frontend" */ './../templates/frontend/auth/Servers.vue');
+const Shop = () => import(/* webpackChunkName: "frontend" */ '../templates/layout/shop/Shop.vue');
+const Catalog = () => import(/* webpackChunkName: "frontend" */ '../templates/frontend/shop/catalog/Catalog.vue');
+const Cart = () => import(/* webpackChunkName: "frontend" */ '../templates/frontend/shop/cart/Cart.vue');
+const Payment = () => import(/* webpackChunkName: "frontend" */ '../templates/frontend/shop/Payment.vue');
+const Character = () => import(/* webpackChunkName: "frontend" */ '../templates/frontend/profile/Character.vue');
+const ProfileSettings = () => import(/* webpackChunkName: "frontend" */ '../templates/frontend/profile/Settings.vue');
+const ProfilePurchases = () => import(/* webpackChunkName: "frontend" */ '../templates/frontend/profile/Purchases.vue');
+const ProfileCart = () => import(/* webpackChunkName: "frontend" */ '../templates/frontend/profile/Cart.vue');
+const News = () => import(/* webpackChunkName: "frontend" */ '../templates/frontend/news/News.vue');
+const Page = () => import(/* webpackChunkName: "frontend" */ '../templates/frontend/Page.vue');
 
-const BasicSettings = () => import(/* webpackChunkName: "admin" */ '../templates/admin/control/BasicSettings.vue');
+const BasicSettings = () => import(/* webpackChunkName: "admin" */ '../templates/admin/control/Basic.vue');
 const PaymentsSettings = () => import(/* webpackChunkName: "admin" */ '../templates/admin/control/Payments.vue');
+const ApiSettings = () => import(/* webpackChunkName: "admin" */ '../templates/admin/control/Api.vue');
 const Security = () => import(/* webpackChunkName: "admin" */ '../templates/admin/control/Security.vue');
 const Optimization = () => import(/* webpackChunkName: "admin" */ '../templates/admin/control/Optimization.vue');
 const ProductsAdd = () => import(/* webpackChunkName: "admin" */ '../templates/admin/products/Add.vue');
@@ -249,6 +250,16 @@ export default [
                 },
                 meta: {
                     title: $t('content.admin.control.payments.title')
+                }
+            },
+            {
+                path: 'control/api',
+                name: 'admin.control.api',
+                components: {
+                    content: ApiSettings
+                },
+                meta: {
+                    title: $t('content.admin.control.api.title')
                 }
             },
             {

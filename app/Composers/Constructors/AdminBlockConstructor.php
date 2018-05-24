@@ -3,9 +3,12 @@ declare(strict_types = 1);
 
 namespace App\Composers\Constructors;
 
+use App\Exceptions\UnexpectedValueException;
 use App\Services\Auth\Auth;
 use App\Services\Auth\Permissions;
 use App\Services\Meta\System;
+use App\Services\Security\Accessors\Accessor;
+use Illuminate\Contracts\Container\Container;
 
 class AdminBlockConstructor
 {
@@ -14,11 +17,20 @@ class AdminBlockConstructor
      */
     private $auth;
 
+    /**
+     * @var Container
+     */
+    private $container;
+
+    /**
+     * @var array
+     */
     private $items;
 
-    public function __construct(Auth $auth)
+    public function __construct(Auth $auth, Container $container)
     {
         $this->auth = $auth;
+        $this->container = $container;
         $this->items = [
             [
                 'title' => __('content.layout.shop.sidebar.admin.control.title'),
@@ -35,7 +47,7 @@ class AdminBlockConstructor
                         'permissions' => [Permissions::ADMIN_CONTROL_PAYMENTS_ACCESS]
                     ],
                     [
-                        'link' => '',
+                        'link' => 'admin.control.api',
                         'title' => __('content.layout.shop.sidebar.admin.control.sub_items.api'),
                         'permissions' => [Permissions::ADMIN_CONTROL_API_ACCESS]
                     ],
@@ -204,7 +216,7 @@ class AdminBlockConstructor
         foreach ($this->items as $k => &$item) {
             foreach ($item['subItems'] as $key => &$subItem) {
                 if (isset($subItem['permissions'])) {
-                    if (!$this->auth->getUser()->hasAllPermissions($subItem['permissions'])) {
+                    if (!$this->allowed($subItem)) {
                         unset($item['subItems'][$key]);
                     }
                 }
@@ -216,5 +228,36 @@ class AdminBlockConstructor
         }
 
         return array_values($this->items);
+    }
+
+    public function allowed(array $subItem): bool
+    {
+        if (isset($subItem['permissions'])) {
+            if (!$this->auth->getUser()->hasAllPermissions($subItem['permissions'])) {
+                return false;
+            }
+        }
+
+        if (isset($subItem['accessors'])) {
+            foreach ($subItem['accessors'] as $accessor) {
+                if (is_object($accessor)) {
+                    $instance = $accessor;
+                } else {
+                    /** @var Accessor $instance */
+                    $instance = $this->container->make($accessor);
+                }
+                if (!($instance instanceof Accessor)) {
+                    throw new UnexpectedValueException(
+                        "Accessor {$accessor} must be implements interface App\Services\Security\Accessors\Accessor"
+                    );
+                }
+
+                if (!$instance->resolve()) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
     }
 }

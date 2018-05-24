@@ -93,10 +93,16 @@ class PurchaseServiceProvider extends ServiceProvider
         $this->app->singleton(InterkassaPayer::class, function () {
             $settings = $this->app->make(Settings::class);
 
+            $currency = $settings->get('purchasing.services.interkassa.currency')->getValue();
+            if (empty($currency)) {
+                $currency = null;
+            }
+
             /** @noinspection PhpStrictTypeCheckingInspection */
             return new InterkassaPayer(
                 $this->app->make(InterkassaCheckout::class),
-                $settings->get('purchasing.services.interkassa.enabled')->getValue(DataType::BOOL)
+                $settings->get('purchasing.services.interkassa.enabled')->getValue(DataType::BOOL),
+                $currency
             );
         });
     }

@@ -185,6 +185,7 @@ return [
         'auth' => [
             'sashok724sV3Launcher' => [
                 'disabled' => 'Функция отключена',
+                'ip_not_in_whitelist' => 'Запрос не может быть выполнен с этого IP',
                 'banned' => 'Пользователь заблокирован.'
             ]
         ]

@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Api\Auth;
 
+use App\Exceptions\Api\InvalidIpAddressException;
 use App\Exceptions\ForbiddenException;
 use App\Handlers\Api\Auth\Sashok724sV3Handler;
 use App\Http\Controllers\Controller;
@@ -14,7 +15,7 @@ use Illuminate\Http\Response;
 class Sashok724sV3LauncherController extends Controller
 {
     /**
-     * Notice: http code of errors must be equal to 200 so that the server displays the message by the user.
+     * <p>Notice: http code of errors must be equal to 200 so that the server displays the message by the user.</p>
      *
      * @param Request             $request
      * @param Sashok724sV3Handler $handler
@@ -24,7 +25,7 @@ class Sashok724sV3LauncherController extends Controller
     public function authenticate(Request $request, Sashok724sV3Handler $handler): Response
     {
         try {
-            $response = $handler->handle($request->get('username'), $request->get('password'));
+            $response = $handler->handle($request->get('username'), $request->get('password'), $request->ip());
             if ($response !== null) {
                 return new Response($response);
             }
@@ -34,6 +35,8 @@ class Sashok724sV3LauncherController extends Controller
             return new Response(__('msg.frontend.auth.login.not_activated'));
         } catch (BannedException $e) {
             return new Response(__('msg.api.auth.sashok724sV3Launcher.banned'));
+        } catch (InvalidIpAddressException $e) {
+            return new Response(__('msg.api.auth.sashok724sV3Launcher.ip_not_in_whitelist'));
         } catch (ForbiddenException $e) {
             return new Response(__('msg.api.auth.sashok724sV3Launcher.disabled'));
         }

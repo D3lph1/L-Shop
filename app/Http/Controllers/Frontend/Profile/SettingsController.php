@@ -7,6 +7,8 @@ use App\Handlers\Frontend\Profile\Character\ChangePasswordHandler;
 use App\Handlers\Frontend\Profile\Character\ResetSessionsHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Frontend\Profile\Character\ChangePasswordRequest;
+use function App\permission_middleware;
+use App\Services\Auth\Permissions;
 use App\Services\Notification\Notifications\Info;
 use App\Services\Notification\Notifications\Success;
 use App\Services\Response\JsonResponse;
@@ -21,6 +23,12 @@ class SettingsController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware(permission_middleware(Permissions::PROFILE_SETTINGS_ACCESS));
+    }
+
+    public function render(): JsonResponse
+    {
+        return new JsonResponse(Status::SUCCESS);
     }
 
     /**

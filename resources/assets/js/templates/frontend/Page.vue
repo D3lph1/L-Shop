@@ -1,9 +1,7 @@
 <template>
-    <v-container>
-        <v-card>
-            <v-card-text v-html="content"></v-card-text>
-        </v-card>
-    </v-container>
+    <v-card>
+        <v-card-text v-html="content"></v-card-text>
+    </v-card>
 </template>
 
 <script>
@@ -15,10 +13,10 @@
                 content: null
             }
         },
-        beforeRouteEnter (to, from, next) {
+        beforeRouteEnter(to, from, next) {
             loader.beforeRouteEnter(`/spa/page/${to.params.url}`, to, from, next);
         },
-        beforeRouteUpdate (to, from, next) {
+        beforeRouteUpdate(to, from, next) {
             loader.beforeRouteUpdate(`/spa/page/${to.params.url}`, to, from, next, this);
         },
         methods: {

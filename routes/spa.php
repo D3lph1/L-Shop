@@ -59,6 +59,7 @@ $router->post('/profile/character/skin/delete', 'Frontend\Profile\CharacterContr
 $router->post('/profile/character/cloak/upload', 'Frontend\Profile\CharacterController@uploadCloak');
 $router->post('/profile/character/cloak/delete', 'Frontend\Profile\CharacterController@deleteCloak');
 
+$router->get('/profile/settings', 'Frontend\Profile\SettingsController@render');
 $router->post('/profile/settings/password', 'Frontend\Profile\SettingsController@password');
 $router->post('/profile/settings/sessions/reset', 'Frontend\Profile\SettingsController@resetSessions');
 
@@ -72,6 +73,8 @@ $router->get('/admin/control/basic', 'Admin\Control\BasicController@render');
 $router->post('/admin/control/basic', 'Admin\Control\BasicController@save');
 $router->get('/admin/control/payments', 'Admin\Control\PaymentsController@render');
 $router->post('/admin/control/payments', 'Admin\Control\PaymentsController@save');
+$router->get('/admin/control/api', 'Admin\Control\ApiController@render');
+$router->post('/admin/control/api', 'Admin\Control\ApiController@save');
 $router->get('/admin/control/security', 'Admin\Control\SecurityController@render');
 $router->post('/admin/control/security', 'Admin\Control\SecurityController@save');
 $router->get('/admin/control/optimization', 'Admin\Control\OptimizationController@render');

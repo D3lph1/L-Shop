@@ -21,10 +21,16 @@ class InterkassaPayer implements Payer
      */
     private $enabled;
 
-    public function __construct(Checkout $checkout, bool $enabled)
+    /**
+     * @var null|string
+     */
+    private $currency;
+
+    public function __construct(Checkout $checkout, bool $enabled, ?string $currency = null)
     {
         $this->checkout = $checkout;
         $this->enabled = $enabled;
+        $this->currency = $currency;
     }
 
     /**
@@ -34,6 +40,9 @@ class InterkassaPayer implements Payer
     {
         $payment = new Payment($purchase->getId(), $purchase->getCost());
         $payment->setDescription('Purchased by L-Shop');
+        if ($this->currency !== null) {
+            $payment->setCurrency($this->currency);
+        }
 
         return $this->checkout->paymentUrl($payment);
     }

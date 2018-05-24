@@ -247,8 +247,26 @@ return [
                     'test' => 'Тестовый режим'
                 ]
             ],
+            'api' => [
+                'title' => 'API',
+                'basic' => 'Основное',
+                'enabled' => 'Включить API',
+                'key' => 'Ключ доступа',
+                'delimiter' => 'Разделитель аргументов',
+                'algorithm' => 'Алгоритм расчета контрольной суммы',
+                'functions' => 'Функции',
+                'auth' => 'Авторизация',
+                'auth_enabled' => 'Включить API аутентификацию',
+                'register_enabled' => 'Включить API регистрацию пользователей',
+                'sashok724s_launcher' => [
+                    'title' => 'Интеграция с Sashok724\'s Launcher',
+                    'enabled' => 'Включить интеграцию',
+                    'format' => 'Формат усешного ответа сервиса',
+                    'ips' => 'Список разрешенных IP-адресов'
+                ]
+            ],
             'security' => [
-                'title' => 'Безопаснсть',
+                'title' => 'Безопасность',
                 'recaptcha' => [
                     'title' => 'reCAPTCHA',
                     'public_key' => 'Публичный ключ',
@@ -406,7 +424,7 @@ return [
                 ],
                 'actions' => [
                     'title' => 'Действия с пользователем',
-                    'activated_at' => 'Пользователь активирован :DateTime.',
+                    'activated_at' => 'Пользователь активирован :datetime.',
                     'banned' => 'Пользователь заблокирован',
                     'show_bans_history' => 'Просмотр истории блокировок',
                     'bans_history' => [

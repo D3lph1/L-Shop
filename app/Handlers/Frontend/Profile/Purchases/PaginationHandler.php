@@ -47,14 +47,19 @@ class PaginationHandler
         }
 
         if ($orderBy !== null) {
-            $paginator = $this->repository->findPaginatedWithOrder(
+            $paginator = $this->repository->findPaginatedWithOrderByUser(
+                $this->auth->getUser(),
                 $page,
                 $orderBy,
                 $descending,
                 self::PER_PAGE
             );
         } else {
-            $paginator = $this->repository->findPaginated($page, self::PER_PAGE);
+            $paginator = $this->repository->findPaginatedByUser(
+                $this->auth->getUser(),
+                $page,
+                self::PER_PAGE
+            );
         }
 
         return (new ListResult($paginator))

@@ -32,6 +32,8 @@
 </template>
 
 <script>
+    import loader from '../../../core/http/loader'
+
     export default {
         data() {
             return {
@@ -40,6 +42,12 @@
                 passwordChangeLoading: false,
                 resetSessionsLoading: false
             }
+        },
+        beforeRouteEnter(to, from, next) {
+            loader.beforeRouteEnter(`/spa/profile/settings`, to, from, next);
+        },
+        beforeRouteUpdate(to, from, next) {
+            loader.beforeRouteUpdate(`/spa/profile/settings`, to, from, next, this);
         },
         methods: {
             passwordChangeDisabled() {

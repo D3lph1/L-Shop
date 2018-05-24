@@ -120,14 +120,17 @@ return [
         ]
     ],
     'api' => [
+        'enabled' => false,
+        'key' => str_random(32),
+        'delimiter' => ':',
         'algorithm' => 'sha256',
-        'key' => str_random(64),
-        'separator' => ':',
         'login_enabled' => false,
         'register_enabled' => false,
         'auth' => [
             'sashok724sV3Launcher' => [
-                'enabled' => true
+                'enabled' => true,
+                'format' => 'OK:{username}',
+                'ips' => []
             ]
         ]
     ]
