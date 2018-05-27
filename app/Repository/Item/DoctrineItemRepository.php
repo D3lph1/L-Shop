@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace App\Repository\Item;
 
 use App\Entity\Item;
+use App\Services\Caching\ClearsCache;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -11,7 +12,7 @@ use LaravelDoctrine\ORM\Pagination\PaginatesFromRequest;
 
 class DoctrineItemRepository implements ItemRepository
 {
-    use PaginatesFromRequest;
+    use PaginatesFromRequest, ClearsCache;
 
     /**
      * @var EntityManagerInterface
@@ -31,12 +32,14 @@ class DoctrineItemRepository implements ItemRepository
 
     public function create(Item $item): void
     {
+        $this->clearResultCache();
         $this->em->persist($item);
         $this->em->flush();
     }
 
     public function update(Item $item): void
     {
+        $this->clearResultCache();
         $this->em->merge($item);
         $this->em->flush();
     }
@@ -100,12 +103,15 @@ class DoctrineItemRepository implements ItemRepository
 
     public function remove(Item $item): void
     {
+        $this->clearResultCache();
         $this->em->remove($item);
         $this->em->flush();
     }
 
     public function deleteAll(): bool
     {
+        $this->clearResultCache();
+
         return (bool)$this->er->createQueryBuilder('i')
             ->delete()
             ->getQuery()
@@ -118,5 +124,10 @@ class DoctrineItemRepository implements ItemRepository
     public function createQueryBuilder($alias, $indexBy = null)
     {
         return $this->er->createQueryBuilder($alias, $indexBy);
+    }
+
+    protected function getEntityManager(): EntityManagerInterface
+    {
+        return $this->em;
     }
 }

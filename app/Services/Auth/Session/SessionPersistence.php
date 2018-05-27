@@ -107,6 +107,9 @@ class SessionPersistence
             return $this->createEmpty();
         }
         $user = $this->userRepository->find($persistence->getUser()->getId());
+        if ($user === null) {
+            return $this->createEmpty();
+        }
 
         if (!$this->checkpointsPool->passCheck($user)) {
             return $this->createEmpty();

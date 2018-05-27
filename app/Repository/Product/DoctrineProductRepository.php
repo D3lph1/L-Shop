@@ -5,6 +5,8 @@ namespace App\Repository\Product;
 
 use App\Entity\Category;
 use App\Entity\Product;
+use App\Services\Caching\CachingOptions;
+use App\Services\Caching\ClearsCache;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -12,7 +14,7 @@ use LaravelDoctrine\ORM\Pagination\PaginatesFromRequest;
 
 class DoctrineProductRepository implements ProductRepository
 {
-    use PaginatesFromRequest;
+    use PaginatesFromRequest, ClearsCache;
 
     /**
      * @var EntityManagerInterface
@@ -24,32 +26,43 @@ class DoctrineProductRepository implements ProductRepository
      */
     private $er;
 
-    public function __construct(EntityManagerInterface $em, EntityRepository $er)
+    /**
+     * @var CachingOptions
+     */
+    private $cachingOptions;
+
+    public function __construct(EntityManagerInterface $em, EntityRepository $er, CachingOptions $cachingOptions)
     {
         $this->em = $em;
         $this->er = $er;
+        $this->cachingOptions = $cachingOptions;
     }
 
     public function create(Product $product): void
     {
+        $this->clearResultCache();
         $this->em->persist($product);
         $this->em->flush();
     }
 
     public function update(Product $product): void
     {
+        $this->clearResultCache();
         $this->em->merge($product);
         $this->em->flush();
     }
 
     public function remove(Product $product): void
     {
+        $this->clearResultCache();
         $this->em->remove($product);
         $this->em->flush();
     }
 
     public function deleteAll(): bool
     {
+        $this->clearResultCache();
+
         return (bool)$this->er->createQueryBuilder('p')
             ->delete()
             ->getQuery()
@@ -59,19 +72,29 @@ class DoctrineProductRepository implements ProductRepository
     public function find(int $id): ?Product
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->er->find($id);
+        return $this
+            ->er
+            ->createQueryBuilder('product')
+            ->select(['product', 'item'])
+            ->join('product.item', 'item')
+            ->getQuery()
+            ->getOneOrNullResult();
     }
 
     public function findForCategoryPaginated(Category $category, string $orderBy, bool $descending, int $perPage): LengthAwarePaginator
     {
         return $this->paginate(
             $this->createQueryBuilder('product')
+                ->select(['product', 'item', 'enchantmentItems', 'enchantment'])
                 ->join('product.item', 'item')
+                ->leftJoin('item.enchantmentItems', 'enchantmentItems')
+                ->leftJoin('enchantmentItems.enchantment', 'enchantment')
                 ->where('product.category = :category')
                 ->andWhere('product.hidden = false')
                 ->orderBy($orderBy, $descending ? 'DESC' : 'ASC')
                 ->setParameter('category', $category)
-                ->getQuery(),
+                ->getQuery()
+                ->useResultCache($this->cachingOptions->isEnabled(), $this->cachingOptions->getLifetime()),
             $perPage,
             'page',
             false
@@ -149,5 +172,10 @@ class DoctrineProductRepository implements ProductRepository
     public function createQueryBuilder($alias, $indexBy = null)
     {
         return $this->er->createQueryBuilder($alias, $indexBy);
+    }
+
+    protected function getEntityManager(): EntityManagerInterface
+    {
+        return $this->em;
     }
 }

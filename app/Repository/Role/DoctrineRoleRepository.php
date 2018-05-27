@@ -4,11 +4,15 @@ declare(strict_types = 1);
 namespace App\Repository\Role;
 
 use App\Entity\Role;
+use App\Services\Caching\CachingOptions;
+use App\Services\Caching\ClearsCache;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
 class DoctrineRoleRepository implements RoleRepository
 {
+    use ClearsCache;
+
     /**
      * @var EntityManagerInterface
      */
@@ -19,16 +23,54 @@ class DoctrineRoleRepository implements RoleRepository
      */
     private $er;
 
-    public function __construct(EntityManagerInterface $em, EntityRepository $er)
+    /**
+     * @var CachingOptions
+     */
+    private $cachingOptions;
+
+    public function __construct(EntityManagerInterface $em, EntityRepository $er, CachingOptions $cachingOptions)
     {
         $this->em = $em;
         $this->er = $er;
+        $this->cachingOptions = $cachingOptions;
+    }
+
+    public function create(Role $role): void
+    {
+        $this->clearResultCache();
+        $this->em->persist($role);
+        $this->em->flush();
+    }
+
+    public function update(Role $role): void
+    {
+        $this->clearResultCache();
+        $this->em->merge($role);
+        $this->em->flush();
+    }
+
+    public function deleteAll(): bool
+    {
+        $this->clearResultCache();
+
+        return (bool)$this->er->createQueryBuilder('r')
+            ->delete()
+            ->getQuery()
+            ->getResult();
     }
 
     public function findByName(string $name): ?Role
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->er->findOneBy(['name' => $name]);
+        return $this
+            ->er
+            ->createQueryBuilder('role')
+            ->select('role')
+            ->where('role.name = :name')
+            ->setParameter('name', $name)
+            ->getQuery()
+            ->useResultCache($this->cachingOptions->isEnabled(), $this->cachingOptions->getLifetime())
+            ->getOneOrNullResult();
     }
 
     /**
@@ -36,10 +78,11 @@ class DoctrineRoleRepository implements RoleRepository
      */
     public function findWhereIdIn(array $identifiers): array
     {
-        return $this->er->createQueryBuilder('r')
-            ->where('r.id IN (:identifiers)')
+        return $this->er->createQueryBuilder('role')
+            ->where('role.id IN (:identifiers)')
             ->setParameter('identifiers', $identifiers)
             ->getQuery()
+            ->useResultCache($this->cachingOptions->isEnabled(), $this->cachingOptions->getLifetime())
             ->getResult();
     }
 
@@ -48,10 +91,12 @@ class DoctrineRoleRepository implements RoleRepository
      */
     public function findWhereNameIn(array $names): array
     {
-        return $this->er->createQueryBuilder('r')
-            ->where('r.name IN (:names)')
+        return $this->er->createQueryBuilder('role')
+            ->select('role')
+            ->where('role.name IN (:names)')
             ->setParameter('names', $names)
             ->getQuery()
+            ->useResultCache($this->cachingOptions->isEnabled(), $this->cachingOptions->getLifetime())
             ->getResult();
     }
 
@@ -60,26 +105,17 @@ class DoctrineRoleRepository implements RoleRepository
      */
     public function findByAll(): array
     {
-        return $this->er->findAll();
-    }
-
-    public function create(Role $role): void
-    {
-        $this->em->persist($role);
-        $this->em->flush();
-    }
-
-    public function update(Role $role): void
-    {
-        $this->em->merge($role);
-        $this->em->flush();
-    }
-
-    public function deleteAll(): bool
-    {
-        return (bool)$this->er->createQueryBuilder('r')
-            ->delete()
+        return $this
+            ->er
+            ->createQueryBuilder('role')
+            ->select('role')
             ->getQuery()
+            ->useResultCache($this->cachingOptions->isEnabled(), $this->cachingOptions->getLifetime())
             ->getResult();
+    }
+
+    protected function getEntityManager(): EntityManagerInterface
+    {
+        return $this->em;
     }
 }

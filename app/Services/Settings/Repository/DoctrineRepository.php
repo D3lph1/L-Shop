@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace App\Services\Settings\Repository\Doctrine;
 
+use App\Services\Caching\CachingOptions;
+use App\Services\Caching\ClearsCache;
 use App\Services\Settings\Repository\Repository;
 use App\Services\Settings\Setting;
 use Doctrine\ORM\EntityManagerInterface;
@@ -16,15 +18,7 @@ use Doctrine\ORM\EntityRepository;
  */
 class DoctrineRepository implements Repository
 {
-    /**
-     * Settings cache lifetime (in seconds).
-     */
-    private const CACHE_LIFETIME = 60 * 60;
-
-    /**
-     * The name of the key under which the cache settings will be stored.
-     */
-    private const CACHE_KEY = 'settings';
+    use ClearsCache;
 
     /**
      * @var EntityManagerInterface
@@ -36,10 +30,16 @@ class DoctrineRepository implements Repository
      */
     private $er;
 
-    public function __construct(EntityManagerInterface $em, EntityRepository $er)
+    /**
+     * @var CachingOptions
+     */
+    private $cachingOptions;
+
+    public function __construct(EntityManagerInterface $em, EntityRepository $er, CachingOptions $cachingOptions)
     {
         $this->em = $em;
         $this->er = $er;
+        $this->cachingOptions = $cachingOptions;
     }
 
     /**
@@ -50,7 +50,7 @@ class DoctrineRepository implements Repository
         return $this->er->createQueryBuilder('s')
             ->select()
             ->getQuery()
-            ->useResultCache(true, self::CACHE_LIFETIME, self::CACHE_KEY)
+            ->useResultCache($this->cachingOptions->isEnabled(), $this->cachingOptions->getLifetime())
             ->getResult();
     }
 
@@ -59,7 +59,7 @@ class DoctrineRepository implements Repository
      */
     public function create(Setting $setting): void
     {
-        $this->clearCache();
+        $this->clearResultCache();
         $this->em->persist($setting);
         $this->em->flush();
     }
@@ -69,7 +69,7 @@ class DoctrineRepository implements Repository
      */
     public function update(Setting $setting): void
     {
-        $this->clearCache();
+        $this->clearResultCache();
         $this->em->merge($setting);
         $this->em->flush();
     }
@@ -79,7 +79,7 @@ class DoctrineRepository implements Repository
      */
     public function remove(Setting $setting): void
     {
-        $this->clearCache();
+        $this->clearResultCache();
         $this->em->remove($setting);
         $this->em->flush();
     }
@@ -89,7 +89,7 @@ class DoctrineRepository implements Repository
      */
     public function deleteAll(): bool
     {
-        $this->clearCache();
+        $this->clearResultCache();
 
         return (bool)$this->er->createQueryBuilder('s')
             ->delete()
@@ -97,11 +97,8 @@ class DoctrineRepository implements Repository
             ->getResult();
     }
 
-    private function clearCache(): void
+    protected function getEntityManager(): EntityManagerInterface
     {
-        $cache = $this->em->getConfiguration()->getResultCacheImpl();
-        if ($cache !== null) {
-            $cache->delete(self::CACHE_KEY);
-        }
+        return $this->em;
     }
 }

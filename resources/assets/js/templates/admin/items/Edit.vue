@@ -191,13 +191,13 @@
             perform() {
                 const data = this.image !== null ? this.image : new FormData();
                 data.append('name', this.item.name);
-                data.append('description', this.item.description);
+                data.append('description', this.item.description !== null ? this.item.description : '');
                 data.append('item_type', this.item.type);
                 data.append('image_type', this.imageType);
                 data.append('image_name', this.imageBrowser);
                 data.append('game_id', this.item.game_id);
                 data.append('enchantments', JSON.stringify(this.readyEnchantments));
-                data.append('extra', this.item.extra);
+                data.append('extra', this.item.extra !== null ? this.item.extra : '');
 
                 this.$axios.post(`/spa/admin/items/edit/${this.$route.params.item}`, data)
                     .then((response) => {

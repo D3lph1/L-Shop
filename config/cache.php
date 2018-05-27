@@ -91,4 +91,54 @@ return [
         str_slug(env('APP_NAME', 'laravel'), '_').'_cache'
     ),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Caching application entities options
+    |--------------------------------------------------------------------------
+    |
+    | Below is the caching of application entities. This cache allows you to reduce
+    | the load on the database. You can enable or disable it, as well as adjust the
+    | lifetime of the cache (specified in seconds). Setting the lifetime to 0
+    | allows you to make a cache without expiration.
+    |
+    */
+
+    'options' => [
+        'settings' => [
+            'enabled' => true,
+            'lifetime' => 86400
+        ],
+        'servers' => [
+            'enabled' => true,
+            'lifetime' => 3600
+        ],
+        'categories' => [
+            'enabled' => true,
+            'lifetime' => 3600
+        ],
+        'items' => [
+            'enabled' => true,
+            'lifetime' => 3600
+        ],
+        'products' => [
+            'enabled' => true,
+            'lifetime' => 3600
+        ],
+        'users' => [
+            'enabled' => true,
+            'lifetime' => 600
+        ],
+        'roles' => [
+            'enabled' => true,
+            'lifetime' => 3600
+        ],
+        'permissions' => [
+            'enabled' => true,
+            'lifetime' => 3600
+        ],
+        'pages' => [
+            'enabled' => true,
+            'lifetime' => 86400
+        ],
+    ]
 ];

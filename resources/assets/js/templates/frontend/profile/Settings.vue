@@ -84,6 +84,9 @@
                             this.$router.push({name: 'frontend.auth.login'});
                         }
                     });
+            },
+            setData(response) {
+                //
             }
         }
     }

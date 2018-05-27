@@ -9,6 +9,8 @@ use Doctrine\ORM\Query\ResultSetMapping;
 
 class Version050ATransfer implements Transfer
 {
+    public const VERSION = '0.5.0a';
+
     /**
      * @var EntityManagerInterface
      */
@@ -90,7 +92,7 @@ class Version050ATransfer implements Transfer
             );
 
             if ($payment['products'] !== null) {
-                $productsAndAmount = json_decode($payment['products']);
+                $productsAndAmount = json_decode($payment['products'], true);
                 foreach ($productsAndAmount as $product => $amount) {
                     try {
                         $this->execute($this->query->insertPurchaseItemQuery(), [

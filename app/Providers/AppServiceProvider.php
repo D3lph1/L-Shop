@@ -120,7 +120,7 @@ class AppServiceProvider extends ServiceProvider
 
         $this->app->singleton(Pool::class, function (Application $app) {
             $pool = new Pool();
-            $pool->put('0.5.0a', new Version050ATransfer(
+            $pool->put(Version050ATransfer::VERSION, new Version050ATransfer(
                 $app->make(EntityManagerInterface::class),
                 $app->make(MySQLQuery::class)
             ));

@@ -4,6 +4,8 @@ declare(strict_types = 1);
 namespace App\Repository\Page;
 
 use App\Entity\Page;
+use App\Services\Caching\CachingOptions;
+use App\Services\Caching\ClearsCache;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -11,7 +13,7 @@ use LaravelDoctrine\ORM\Pagination\PaginatesFromRequest;
 
 class DoctrinePageRepository implements PageRepository
 {
-    use PaginatesFromRequest;
+    use PaginatesFromRequest, ClearsCache;
 
     /**
      * @var EntityManagerInterface
@@ -23,20 +25,28 @@ class DoctrinePageRepository implements PageRepository
      */
     private $er;
 
-    public function __construct(EntityManagerInterface $em, EntityRepository $er)
+    /**
+     * @var CachingOptions
+     */
+    private $cachingOptions;
+
+    public function __construct(EntityManagerInterface $em, EntityRepository $er, CachingOptions $cachingOptions)
     {
         $this->em = $em;
         $this->er = $er;
+        $this->cachingOptions = $cachingOptions;
     }
 
     public function create(Page $page): void
     {
+        $this->clearResultCache();
         $this->em->persist($page);
         $this->em->flush();
     }
 
     public function update(Page $page): void
     {
+        $this->clearResultCache();
         $this->em->merge($page);
         $this->em->flush();
     }
@@ -50,7 +60,15 @@ class DoctrinePageRepository implements PageRepository
     public function findByUrl(string $url): ?Page
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->er->findOneBy(['url' => $url]);
+        return $this
+            ->er
+            ->createQueryBuilder('page')
+            ->select('page')
+            ->where('page.url = :url')
+            ->setParameter('url', $url)
+            ->getQuery()
+            ->useResultCache($this->cachingOptions->isEnabled(), $this->cachingOptions->getLifetime())
+            ->getOneOrNullResult();
     }
 
     public function findPaginated(int $perPage): LengthAwarePaginator
@@ -103,12 +121,15 @@ class DoctrinePageRepository implements PageRepository
 
     public function remove(Page $page): void
     {
+        $this->clearResultCache();
         $this->em->remove($page);
         $this->em->flush();
     }
 
     public function deleteAll(): bool
     {
+        $this->clearResultCache();
+
         return (bool)$this->er->createQueryBuilder('p')
             ->delete()
             ->getQuery()
@@ -121,5 +142,10 @@ class DoctrinePageRepository implements PageRepository
     public function createQueryBuilder($alias, $indexBy = null)
     {
         return $this->er->createQueryBuilder($alias, $indexBy);
+    }
+
+    protected function getEntityManager(): EntityManagerInterface
+    {
+        return $this->em;
     }
 }

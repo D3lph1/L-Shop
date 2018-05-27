@@ -60,6 +60,7 @@ use App\Repository\ShoppingCart\DoctrineShoppingCartRepository;
 use App\Repository\ShoppingCart\ShoppingCartRepository;
 use App\Repository\User\DoctrineUserRepository;
 use App\Repository\User\UserRepository;
+use App\Services\Caching\CachingOptions;
 use App\Services\Game\Permissions\LuckPerms\Entity\Group;
 use App\Services\Game\Permissions\LuckPerms\Entity\GroupPermission;
 use App\Services\Game\Permissions\LuckPerms\Entity\Player;
@@ -82,113 +83,162 @@ use Illuminate\Support\ServiceProvider;
 
 class RepositoryServiceProvider extends ServiceProvider
 {
-    private $repositories = [
-        UserRepository::class => [
-            'concrete' => DoctrineUserRepository::class,
-            'entity' => User::class
-        ],
-        RoleRepository::class => [
-            'concrete' => DoctrineRoleRepository::class,
-            'entity' => Role::class
-        ],
-        PermissionRepository::class => [
-            'concrete' => DoctrinePermissionRepository::class,
-            'entity' => Permission::class
-        ],
-        PersistenceRepository::class => [
-            'concrete' => DoctrinePersistenceRepository::class,
-            'entity' => Persistence::class
-        ],
-        ActivationRepository::class => [
-            'concrete' => DoctrineActivationRepository::class,
-            'entity' => Activation::class
-        ],
-        BanRepository::class => [
-            'concrete' => DoctrineBanRepository::class,
-            'entity' => Ban::class
-        ],
-        ReminderRepository::class => [
-            'concrete' => DoctrineReminderRepository::class,
-            'entity' => Reminder::class
-        ],
-        ServerRepository::class => [
-            'concrete' => DoctrineServerRepository::class,
-            'entity' => Server::class
-        ],
-        CategoryRepository::class => [
-            'concrete' => DoctrineCategoryRepository::class,
-            'entity' => Category::class
-        ],
-        ItemRepository::class => [
-            'concrete' => DoctrineItemRepository::class,
-            'entity' => Item::class
-        ],
-        ProductRepository::class => [
-            'concrete' => DoctrineProductRepository::class,
-            'entity' => Product::class
-        ],
-        NewsRepository::class => [
-            'concrete' => DoctrineNewsRepository::class,
-            'entity' => News::class
-        ],
-        PageRepository::class => [
-            'concrete' => DoctrinePageRepository::class,
-            'entity' => Page::class
-        ],
-        EnchantmentRepository::class => [
-            'concrete' => DoctrineEnchantmentRepository::class,
-            'entity' => Enchantment::class
-        ],
-        PurchaseRepository::class => [
-            'concrete' => DoctrinePurchaseRepository::class,
-            'entity' => Purchase::class
-        ],
-        PurchaseItemRepository::class => [
-            'concrete' => DoctrinePurchaseItemRepository::class,
-            'entity' => PurchaseItem::class
-        ],
-        BalanceTransactionRepository::class => [
-            'concrete' => DoctrineBalanceTransactionRepository::class,
-            'entity' => BalanceTransaction::class
-        ],
-        DistributionRepository::class => [
-            'concrete' => DoctrineDistributionRepository::class,
-            'entity' => Distribution::class
-        ],
-        ShoppingCartRepository::class => [
-            'concrete' => DoctrineShoppingCartRepository::class,
-            'entity' => ShoppingCart::class
-        ],
-        Repository::class => [
-            'concrete' => DoctrineRepository::class,
-            'entity' => Setting::class
-        ],
-        GroupRepository::class => [
-            'concrete' => DoctrineGroupRepository::class,
-            'entity' => Group::class
-        ],
-        PlayerRepository::class => [
-            'concrete' => DoctrinePlayerRepository::class,
-            'entity' => Player::class
-        ],
-        GroupPermissionRepository::class => [
-            'concrete' => DoctrineGroupPermissionRepository::class,
-            'entity' => GroupPermission::class
-        ],
-        PlayerPermissionRepository::class => [
-            'concrete' => DoctrinePlayerPermissionRepository::class,
-            'entity' => PlayerPermission::class
-        ],
-    ];
-
     public function boot(): void
     {
-        foreach ($this->repositories as $key => $value) {
+        $config = $this->app->make(\Illuminate\Contracts\Config\Repository::class);
+
+        $repositories = [
+            UserRepository::class => [
+                'concrete' => DoctrineUserRepository::class,
+                'entity' => User::class,
+                'caching' => [
+                    'enabled' => $config->get('cache.options.users.enabled'),
+                    'lifetime' => $config->get('cache.options.users.lifetime')
+                ]
+            ],
+            RoleRepository::class => [
+                'concrete' => DoctrineRoleRepository::class,
+                'entity' => Role::class,
+                'caching' => [
+                    'enabled' => $config->get('cache.options.roles.enabled'),
+                    'lifetime' => $config->get('cache.options.roles.lifetime')
+                ]
+            ],
+            PermissionRepository::class => [
+                'concrete' => DoctrinePermissionRepository::class,
+                'entity' => Permission::class,
+                'caching' => [
+                    'enabled' => $config->get('cache.options.permissions.enabled'),
+                    'lifetime' => $config->get('cache.options.permissions.lifetime')
+                ]
+            ],
+            PersistenceRepository::class => [
+                'concrete' => DoctrinePersistenceRepository::class,
+                'entity' => Persistence::class
+            ],
+            ActivationRepository::class => [
+                'concrete' => DoctrineActivationRepository::class,
+                'entity' => Activation::class
+            ],
+            BanRepository::class => [
+                'concrete' => DoctrineBanRepository::class,
+                'entity' => Ban::class
+            ],
+            ReminderRepository::class => [
+                'concrete' => DoctrineReminderRepository::class,
+                'entity' => Reminder::class
+            ],
+            ServerRepository::class => [
+                'concrete' => DoctrineServerRepository::class,
+                'entity' => Server::class,
+                'caching' => [
+                    'enabled' => $config->get('cache.options.servers.enabled'),
+                    'lifetime' => $config->get('cache.options.servers.lifetime')
+                ]
+            ],
+            CategoryRepository::class => [
+                'concrete' => DoctrineCategoryRepository::class,
+                'entity' => Category::class,
+                'caching' => [
+                    'enabled' => $config->get('cache.options.categories.enabled'),
+                    'lifetime' => $config->get('cache.options.categories.lifetime')
+                ]
+            ],
+            ItemRepository::class => [
+                'concrete' => DoctrineItemRepository::class,
+                'entity' => Item::class,
+                'caching' => [
+                    'enabled' => $config->get('cache.options.items.enabled'),
+                    'lifetime' => $config->get('cache.options.items.lifetime')
+                ]
+            ],
+            ProductRepository::class => [
+                'concrete' => DoctrineProductRepository::class,
+                'entity' => Product::class,
+                'caching' => [
+                    'enabled' => $config->get('cache.options.products.enabled'),
+                    'lifetime' => $config->get('cache.options.products.lifetime')
+                ]
+            ],
+            NewsRepository::class => [
+                'concrete' => DoctrineNewsRepository::class,
+                'entity' => News::class
+            ],
+            PageRepository::class => [
+                'concrete' => DoctrinePageRepository::class,
+                'entity' => Page::class,
+                'caching' => [
+                    'enabled' => $config->get('cache.options.pages.enabled'),
+                    'lifetime' => $config->get('cache.options.pages.lifetime')
+                ]
+            ],
+            EnchantmentRepository::class => [
+                'concrete' => DoctrineEnchantmentRepository::class,
+                'entity' => Enchantment::class
+            ],
+            PurchaseRepository::class => [
+                'concrete' => DoctrinePurchaseRepository::class,
+                'entity' => Purchase::class
+            ],
+            PurchaseItemRepository::class => [
+                'concrete' => DoctrinePurchaseItemRepository::class,
+                'entity' => PurchaseItem::class
+            ],
+            BalanceTransactionRepository::class => [
+                'concrete' => DoctrineBalanceTransactionRepository::class,
+                'entity' => BalanceTransaction::class
+            ],
+            DistributionRepository::class => [
+                'concrete' => DoctrineDistributionRepository::class,
+                'entity' => Distribution::class
+            ],
+            ShoppingCartRepository::class => [
+                'concrete' => DoctrineShoppingCartRepository::class,
+                'entity' => ShoppingCart::class
+            ],
+            Repository::class => [
+                'concrete' => DoctrineRepository::class,
+                'entity' => Setting::class,
+                'caching' => [
+                    'enabled' => $config->get('cache.options.settings.enabled'),
+                    'lifetime' => $config->get('cache.options.settings.lifetime')
+                ]
+            ],
+            GroupRepository::class => [
+                'concrete' => DoctrineGroupRepository::class,
+                'entity' => Group::class
+            ],
+            PlayerRepository::class => [
+                'concrete' => DoctrinePlayerRepository::class,
+                'entity' => Player::class
+            ],
+            GroupPermissionRepository::class => [
+                'concrete' => DoctrineGroupPermissionRepository::class,
+                'entity' => GroupPermission::class
+            ],
+            PlayerPermissionRepository::class => [
+                'concrete' => DoctrinePlayerPermissionRepository::class,
+                'entity' => PlayerPermission::class
+            ],
+        ];
+
+        foreach ($repositories as $key => $value) {
             $this->app->when($value['concrete'])
                 ->needs(EntityRepository::class)
                 ->give(function () use ($value) {
                     return $this->buildEntityRepository($value['entity']);
                 });
+            if (isset($value['caching'])) {
+                $enabled = $value['caching']['enabled'];
+                $lifetime = $value['caching']['lifetime'];
+
+                $this->app->when($value['concrete'])
+                    ->needs(CachingOptions::class)
+                    ->give(function () use ($enabled, $lifetime) {
+                        return (new CachingOptions($enabled))
+                            ->setLifetime($lifetime);
+                    });
+            }
             $this->app->singleton($key, $value['concrete']);
         }
     }

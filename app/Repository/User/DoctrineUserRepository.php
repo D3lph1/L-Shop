@@ -4,6 +4,8 @@ declare(strict_types = 1);
 namespace App\Repository\User;
 
 use App\Entity\User;
+use App\Services\Caching\CachingOptions;
+use App\Services\Caching\ClearsCache;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Internal\Hydration\IterableResult;
@@ -13,7 +15,7 @@ use LaravelDoctrine\ORM\Pagination\PaginatesFromRequest;
 
 class DoctrineUserRepository implements UserRepository
 {
-    use PaginatesFromRequest;
+    use PaginatesFromRequest, ClearsCache;
 
     /**
      * @var EntityManagerInterface
@@ -25,32 +27,43 @@ class DoctrineUserRepository implements UserRepository
      */
     private $er;
 
-    public function __construct(EntityManagerInterface $em, EntityRepository $er)
+    /**
+     * @var CachingOptions
+     */
+    private $cachingOptions;
+
+    public function __construct(EntityManagerInterface $em, EntityRepository $er, CachingOptions $cachingOptions)
     {
         $this->em = $em;
         $this->er = $er;
+        $this->cachingOptions = $cachingOptions;
     }
 
     public function create(User $user): void
     {
+        $this->clearResultCache();
         $this->em->persist($user);
         $this->em->flush();
     }
 
     public function update(User $user): void
     {
+        $this->clearResultCache();
         $this->em->merge($user);
         $this->em->flush();
     }
 
     public function remove(User $user): void
     {
+        $this->clearResultCache();
         $this->em->remove($user);
         $this->em->flush();
     }
 
     public function deleteAll(): bool
     {
+        $this->clearResultCache();
+
         return (bool)$this->er->createQueryBuilder('u')
             ->delete()
             ->getQuery()
@@ -60,19 +73,46 @@ class DoctrineUserRepository implements UserRepository
     public function find(int $id): ?User
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->er->find($id);
+        return $this
+            ->er
+            ->createQueryBuilder('user')
+            ->select(['user', 'permissions', 'roles', 'rolePermissions'])
+            ->leftJoin('user.permissions', 'permissions')
+            ->leftJoin('user.roles', 'roles')
+            ->leftJoin('roles.permissions', 'rolePermissions')
+            ->where('user.id = :id')
+            ->setParameter('id', $id)
+            ->getQuery()
+            ->useResultCache($this->cachingOptions->isEnabled(), $this->cachingOptions->getLifetime())
+            ->getOneOrNullResult();
     }
 
     public function findByUsername(string $username): ?User
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->er->findOneBy(['username' => $username]);
+        return $this
+            ->er
+            ->createQueryBuilder('user')
+            ->select('user')
+            ->where('user.username = :username')
+            ->setParameter('username', $username)
+            ->getQuery()
+            ->useResultCache($this->cachingOptions->isEnabled(), $this->cachingOptions->getLifetime())
+            ->getOneOrNullResult();
     }
 
     public function findByEmail(string $email): ?User
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
-        return $this->er->findOneBy(['email' => $email]);
+        return $this
+            ->er
+            ->createQueryBuilder('user')
+            ->select('user')
+            ->where('user.email = :email')
+            ->setParameter('email', $email)
+            ->getQuery()
+            ->useResultCache($this->cachingOptions->isEnabled(), $this->cachingOptions->getLifetime())
+            ->getOneOrNullResult();
     }
 
     public function findPaginated(int $perPage): LengthAwarePaginator
@@ -170,5 +210,10 @@ class DoctrineUserRepository implements UserRepository
     public function createQueryBuilder($alias, $indexBy = null)
     {
         return $this->er->createQueryBuilder($alias, $indexBy);
+    }
+
+    protected function getEntityManager(): EntityManagerInterface
+    {
+        return $this->em;
     }
 }
