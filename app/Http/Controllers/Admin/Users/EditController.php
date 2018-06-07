@@ -5,15 +5,18 @@ namespace App\Http\Controllers\Admin\Users;
 
 use App\DataTransferObjects\Admin\Users\Edit\AddBan;
 use App\DataTransferObjects\Admin\Users\Edit\Edit;
+use App\DataTransferObjects\Admin\Users\Edit\PaginationList;
 use App\Exceptions\Ban\BanNotFoundException;
 use App\Exceptions\InvalidArgumentException;
 use App\Exceptions\Media\Character\InvalidRatioException;
 use App\Exceptions\User\UserNotFoundException;
 use App\Handlers\Admin\Users\Edit\AddBanHandler;
+use App\Handlers\Admin\Users\Edit\CartHandler;
 use App\Handlers\Admin\Users\Edit\DeleteBanHandler;
 use App\Handlers\Admin\Users\Edit\DeleteCloakHandler;
 use App\Handlers\Admin\Users\Edit\DeleteSkinHandler;
 use App\Handlers\Admin\Users\Edit\EditHandler;
+use App\Handlers\Admin\Users\Edit\PurchasesHandler;
 use App\Handlers\Admin\Users\Edit\RenderHandler;
 use App\Handlers\Admin\Users\Edit\UploadCloakHandler;
 use App\Handlers\Admin\Users\Edit\UploadSkinHandler;
@@ -39,18 +42,14 @@ class EditController extends Controller
     public function __construct()
     {
         $this->middleware(permission_middleware(Permissions::ADMIN_USERS_CRUD_ACCESS));
+        $this->middleware(permission_middleware(Permissions::ADMIN_PURCHASES_ACCESS))->only('purchases');
+        $this->middleware(permission_middleware(Permissions::ADMIN_GAME_CART_ACCESS))->only('cart');
     }
 
     public function render(Request $request, RenderHandler $handler): JsonResponse
     {
         try {
-            $dto = $handler->handle((int)$request->route('user'));
-
-            return new JsonResponse(Status::SUCCESS, [
-                'user' => $dto->getUser(),
-                'roles' => $dto->getRoles(),
-                'permissions' => $dto->getPermissions()
-            ]);
+            return new JsonResponse(Status::SUCCESS, $handler->handle((int)$request->route('user')));
         } catch (UserNotFoundException $e) {
             throw new NotFoundHttpException();
         }
@@ -63,6 +62,7 @@ class EditController extends Controller
             ->setUsername($request->get('username'))
             ->setEmail($request->get('email'))
             ->setPassword($request->get('password'))
+            ->setBalance((float)$request->get('balance'))
             ->setRoles($request->get('roles'))
             ->setPermissions($request->get('permissions'));
 
@@ -199,5 +199,32 @@ class EditController extends Controller
                 ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.admin.users.edit.ban.delete.not_found')));
         }
+    }
+
+    public function purchases(Request $request, PurchasesHandler $handler): JsonResponse
+    {
+        $dto = new PaginationList();
+        $dto
+            ->setUserId((int)$request->route('user'))
+            ->setPage((int)$request->get('page'))
+            ->setPerPage((int)$request->get('per_page'))
+            ->setOrderBy($request->get('order_by'))
+            ->setDescending((bool)$request->get('descending'));
+
+
+        return new JsonResponse(Status::SUCCESS, $handler->handle($dto));
+    }
+
+    public function cart(Request $request, CartHandler $handler): JsonResponse
+    {
+        $dto = new PaginationList();
+        $dto
+            ->setUserId((int)$request->route('user'))
+            ->setPage((int)$request->get('page'))
+            ->setPerPage((int)$request->get('per_page'))
+            ->setOrderBy($request->get('order_by'))
+            ->setDescending((bool)$request->get('descending'));
+
+        return new JsonResponse(Status::SUCCESS, $handler->handle($dto));
     }
 }

@@ -39,7 +39,7 @@ class IlluminateCachingRepository implements CachingRepository
      */
     public function add(string $key, $value, $ttl = null): bool
     {
-        return $this->cache->add($key, $value, $ttl);
+        return (bool)$this->cache->add($key, $value, $ttl);
     }
 
     /**
@@ -47,7 +47,7 @@ class IlluminateCachingRepository implements CachingRepository
      */
     public function set(string $key, $value, $ttl = null): bool
     {
-        return $this->cache->set($key, $value, $ttl);
+        return (bool)$this->cache->set($key, $value, $ttl);
     }
 
     /**
@@ -55,6 +55,6 @@ class IlluminateCachingRepository implements CachingRepository
      */
     public function delete(string $key): bool
     {
-        return $this->cache->delete($key);
+        return (bool)$this->cache->delete($key);
     }
 }

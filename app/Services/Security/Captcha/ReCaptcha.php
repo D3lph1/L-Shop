@@ -34,9 +34,9 @@ class ReCaptcha implements Captcha
         return false;
     }
 
-    public function view(): string
+    public function key(): string
     {
-        return view('components.captcha.recaptcha', ['key' => $this->publicKey])->render();
+        return $this->publicKey;
     }
 
     private function send(string $url): \stdClass

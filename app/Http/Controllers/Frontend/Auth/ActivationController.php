@@ -6,6 +6,7 @@ namespace App\Http\Controllers\Frontend\Auth;
 use App\Handlers\Frontend\Auth\CompleteActivationHandler;
 use App\Handlers\Frontend\Auth\RepeatActivationHandler;
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\Captcha as CaptchaMiddleware;
 use App\Http\Requests\Frontend\Auth\RepeatActivationRequest;
 use App\Services\Auth\AccessMode;
 use App\Services\Auth\Exceptions\AlreadyActivatedException;
@@ -16,6 +17,7 @@ use App\Services\Notification\Notificator;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use App\Services\Security\Captcha\Captcha;
+use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\View\View;
@@ -32,6 +34,7 @@ class ActivationController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+        $this->middleware(CaptchaMiddleware::NAME)->only('repeat');
     }
 
     /**
@@ -47,7 +50,7 @@ class ActivationController extends Controller
         return new JsonResponse(Status::SUCCESS, [
             'accessModeAny' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY,
             'accessModeAuth' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY,
-            'captcha' => $captcha->view()
+            'captchaKey' => $settings->get('system.security.captcha.enabled')->getValue(DataType::BOOL) ? $captcha->key() : null
         ]);
     }
 

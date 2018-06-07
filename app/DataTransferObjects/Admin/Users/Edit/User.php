@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\DataTransferObjects\Admin\Users\Edit;
 
+use App\DataTransferObjects\Admin\Statistic\Purchases\Purchase;
 use App\Entity\Permission;
 use App\Entity\Role;
 use App\Entity\User as Entity;
@@ -148,6 +149,7 @@ class User implements \JsonSerializable
             'id' => $this->user->getId(),
             'username' => $this->user->getUsername(),
             'email' => $this->user->getEmail(),
+            'balance' => $this->user->getBalance(),
             'roles' => $roles,
             'permissions' => $permissions,
             'character' => [

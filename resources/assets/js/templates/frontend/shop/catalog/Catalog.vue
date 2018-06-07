@@ -72,6 +72,7 @@
                 :stack="purchasableProduct.stack"
                 :is-item="purchasableProduct.item.isItem"
                 :is-permgroup="purchasableProduct.item.isPermgroup"
+                :captcha-key="captchaKey"
                 @hide="hidePurchaseDialog"
         ></purchase-dialog>
 
@@ -142,6 +143,7 @@
 
                 productsCrudAccess: false,
                 itemsCrudAccess: false,
+                captchaKey: null
             }
         },
         beforeRouteEnter(to, from, next) {
@@ -179,6 +181,7 @@
                 this.server = data.server;
                 this.productsCrudAccess = data.productsCrudAccess;
                 this.itemsCrudAccess = data.itemsCrudAccess;
+                this.captchaKey = data.captchaKey;
 
                 this.$store.commit('setServer', data.currentServer);
 

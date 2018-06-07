@@ -130,6 +130,10 @@ $router->delete('/admin/users/edit/{user}/cloak', 'Admin\Users\EditController@de
 $router->delete('/admin/users/edit/ban/{ban}', 'Admin\Users\EditController@deleteBan');
 $router->post('/admin/users/edit/{user}/ban', 'Admin\Users\EditController@addBan')
     ->where('user', '[0-9]+');
+$router->get('/admin/users/edit/{user}/purchases', 'Admin\Users\EditController@purchases')
+    ->where('user', '[0-9]+');
+$router->get('/admin/users/edit/{user}/cart', 'Admin\Users\EditController@cart')
+    ->where('user', '[0-9]+');
 $router->post('/admin/users/edit/{user}', 'Admin\Users\EditController@edit')
     ->where('user', '[0-9]+');
 $router->post('/admin/users/list', 'Admin\Users\ListController@pagination');

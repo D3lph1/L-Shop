@@ -77,6 +77,8 @@ class DoctrineProductRepository implements ProductRepository
             ->createQueryBuilder('product')
             ->select(['product', 'item'])
             ->join('product.item', 'item')
+            ->where('product.id = :id')
+            ->setParameter('id', $id)
             ->getQuery()
             ->getOneOrNullResult();
     }

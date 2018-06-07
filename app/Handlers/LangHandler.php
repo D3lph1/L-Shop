@@ -36,13 +36,16 @@ class LangHandler
 
     public function handle(): array
     {
+        $data = $this->build();
         if (EnvironmentUtil::inProduction()) {
-            return $this->cachingRepository->get(self::CACHE_KEY, function () {
-                $this->cachingRepository->set(self::CACHE_KEY, $this->build());
+            return $this->cachingRepository->get(self::CACHE_KEY, function () use ($data) {
+                $this->cachingRepository->set(self::CACHE_KEY, $data);
+
+                return $data;
             });
         }
 
-        return $this->build();
+        return $data;
     }
 
     private function build(): array

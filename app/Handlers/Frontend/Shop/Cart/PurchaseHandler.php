@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Handlers\Frontend\Shop\Cart;
 
+use App\DataTransferObjects\Frontend\Shop\Cart\Purchase as PurchaseDTO;
 use App\DataTransferObjects\Frontend\Shop\Catalog\Purchase as ResultDTO;
 use App\DataTransferObjects\Frontend\Shop\Purchase;
 use App\Exceptions\Server\ServerNotFoundException;
@@ -16,6 +17,7 @@ class PurchaseHandler
      * @var Cart
      */
     private $cart;
+
     /**
      * @var ServerRepository
      */
@@ -34,28 +36,37 @@ class PurchaseHandler
     }
 
     /**
-     * @param int         $serverId
-     * @param null|string $username
-     * @param string      $ip
+     * @param PurchaseDTO $dto
      *
      * @return ResultDTO
-     *
-     * @throws ServerNotFoundException
      */
-    public function handle(int $serverId, ?string $username, string $ip): ResultDTO
+    public function handle(PurchaseDTO $dto): ResultDTO
     {
-        $server = $this->serverRepository->find($serverId);
+        $server = $this->serverRepository->find($dto->getServerId());
         if ($server === null) {
-            throw ServerNotFoundException::byId($serverId);
+            throw ServerNotFoundException::byId($dto->getServerId());
         }
 
         $items = $this->cart->retrieveServer($server);
-
-        $DTOs = [];
-        foreach ($items as $item) {
-            $DTOs[] = new Purchase($item->getProduct(), $item->getAmount());
+        // If cart is empty for this server.
+        if (count($items) === 0) {
+            throw new \LogicException("Cart can not been empty");
         }
 
-        return $this->processor->process($DTOs, $username, $ip);
+        $DTOs = [];
+        foreach ($items as $fromServerCart) {
+            foreach ($dto->getItems() as $fromClientCartProduct => $fromClientCartAmount) {
+                if ($fromServerCart->getProduct()->getId() === $fromClientCartProduct) {
+                    $DTOs[] = new Purchase($fromServerCart->getProduct(), $fromClientCartAmount);
+                }
+            }
+        }
+
+        $result = $this->processor->process($DTOs, $dto->getUsername(), $dto->getIp());
+
+        // Remove all data in cart for this server.
+        $this->cart->removeServer($server);
+
+        return $result;
     }
 }

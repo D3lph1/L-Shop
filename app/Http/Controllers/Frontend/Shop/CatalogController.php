@@ -12,6 +12,7 @@ use App\Handlers\Frontend\Shop\Catalog\PurchaseHandler;
 use App\Handlers\Frontend\Shop\Catalog\VisitHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\Auth as AuthMiddleware;
+use App\Http\Middleware\Captcha as CaptchaMiddleware;
 use App\Http\Requests\Frontend\Shop\Catalog\PurchaseRequest;
 use App\Services\Auth\Auth;
 use App\Services\Auth\Permissions;
@@ -36,6 +37,7 @@ class CatalogController extends Controller
     public function __construct()
     {
         $this->middleware(auth_middleware(AuthMiddleware::SOFT));
+        $this->middleware(CaptchaMiddleware::NAME)->only('purchase');
     }
 
     /**
@@ -87,7 +89,7 @@ class CatalogController extends Controller
             'paginator' => $dto->getPaginator(),
             'products' => $dto->getProducts(),
             'cart' => $cart,
-            'captcha' => $captcha->view(),
+            'captchaKey' => $captcha->key(),
             'currentServer' => $server,
             'productsCrudAccess' => $productsCrudAccess,
             'itemsCrudAccess' => $itemsCrudAccess

@@ -38,6 +38,7 @@ class User implements \JsonSerializable
             'id' => $this->user->getId(),
             'username' => $this->user->getUsername(),
             'email' => $this->user->getEmail(),
+            'balance' => $this->user->getBalance(),
             'isActivated' => $this->isActivated,
             'isBanned' => $this->isBanned
         ];

@@ -9,15 +9,21 @@
                 </v-card-title>
                 <v-card-text>
                     <v-subheader>{{ $t('content.admin.control.security.recaptcha.title') }}</v-subheader>
+                    <v-switch
+                            color="secondary"
+                            class="mt-4"
+                            :label="$t('content.admin.control.security.recaptcha.enabled')"
+                            v-model="captchaEnabled"
+                    ></v-switch>
                     <v-text-field
                             :label="$t('content.admin.control.security.recaptcha.public_key')"
                             v-model="recaptchaPublicKey"
-                            type="password"
+                            :disabled="!captchaEnabled"
                     ></v-text-field>
                     <v-text-field
                             :label="$t('content.admin.control.security.recaptcha.secret_key')"
                             v-model="recaptchaSecretKey"
-                            type="password"
+                            :disabled="!captchaEnabled"
                     ></v-text-field>
 
                     <v-subheader>{{ $t('content.admin.control.security.user_section') }}</v-subheader>
@@ -48,6 +54,7 @@
     export default {
         data() {
             return {
+                captchaEnabled: false,
                 recaptchaPublicKey: '',
                 recaptchaSecretKey: '',
                 resetPasswordEnabled: false,
@@ -67,18 +74,20 @@
             perform() {
                 this.finishLoading = true;
                 this.$axios.post('/spa/admin/control/security', {
+                    captcha_enabled: this.captchaEnabled,
                     recaptcha_public_key: this.recaptchaPublicKey,
                     recaptcha_secret_key: this.recaptchaPublicKey,
                     reset_password_enabled: this.resetPasswordEnabled,
                     change_password_enabled: this.changePasswordEnabled,
                 })
-                    .then(response => {
+                    .then(() => {
                         this.finishLoading = false;
                     })
             },
             setData(response) {
                 const data = response.data;
 
+                this.captchaEnabled = data.captchaEnabled;
                 this.recaptchaPublicKey = data.recaptchaPublicKey;
                 this.recaptchaSecretKey = data.recaptchaSecretKey;
                 this.resetPasswordEnabled = data.resetPasswordEnabled;

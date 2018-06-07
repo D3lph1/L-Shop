@@ -2,7 +2,6 @@ import Vue from 'vue'
 import Vuetify from 'vuetify'
 
 import 'vuetify/dist/vuetify.min.css'
-import './../sass/main.sass'
 import './../less/main.less'
 
 import colors from 'vuetify/es5/util/colors'

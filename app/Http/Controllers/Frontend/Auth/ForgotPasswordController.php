@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend\Auth;
 
 use App\Handlers\Frontend\Auth\ForgotPasswordHandler;
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\Captcha as CaptchaMiddleware;
 use App\Http\Requests\Frontend\Auth\ForgotPasswordRequest;
 use App\Services\Auth\AccessMode;
 use App\Services\Auth\Exceptions\UserDoesNotExistException;
@@ -13,6 +14,7 @@ use App\Services\Notification\Notifications\Success;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use App\Services\Security\Captcha\Captcha;
+use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
 use Illuminate\Http\Response;
 
@@ -25,6 +27,7 @@ class ForgotPasswordController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+        $this->middleware(CaptchaMiddleware::NAME)->only('handle');
     }
 
     /**
@@ -40,7 +43,7 @@ class ForgotPasswordController extends Controller
         return new JsonResponse(Status::SUCCESS, [
             'accessModeAny' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY,
             'accessModeAuth' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY,
-            'captcha' => $captcha->view()
+            'captchaKey' => $settings->get('system.security.captcha.enabled')->getValue(DataType::BOOL) ? $captcha->key() : null
         ]);
     }
 

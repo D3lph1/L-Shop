@@ -49,6 +49,7 @@ class EditRequest extends FormRequest
             'username' => $usernameRules,
             'email' => 'required|email',
             'password' => $passwordRules,
+            'balance' => 'required|numeric|min:0',
             'roles' => 'required|array',
             'permissions' => 'array'
         ];

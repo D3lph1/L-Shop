@@ -22,7 +22,7 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="secondary" flat @click.native="dialogData = false">{{ $t('common.cancel') }}</v-btn>
+                    <v-btn color="primary" flat @click.native="dialogData = false">{{ $t('common.cancel') }}</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>

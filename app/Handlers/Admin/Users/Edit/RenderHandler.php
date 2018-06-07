@@ -12,13 +12,20 @@ use App\Repository\Permission\PermissionRepository;
 use App\Repository\Role\RoleRepository;
 use App\Repository\User\UserRepository;
 use App\Services\Auth\Activator;
+use App\Services\Auth\Auth;
 use App\Services\Auth\BanManager;
+use App\Services\Auth\Permissions;
 use App\Services\DateTime\Formatting\JavaScriptFormatter;
 use App\Services\Media\Character\Cloak\Image as CloakImage;
 use App\Services\Media\Character\Skin\Image as SkinImage;
 
 class RenderHandler
 {
+    /**
+     * @var Auth
+     */
+    private $auth;
+
     /**
      * @var UserRepository
      */
@@ -45,12 +52,14 @@ class RenderHandler
     private $permissionRepository;
 
     public function __construct(
+        Auth $auth,
         UserRepository $userRepository,
         Activator $activator,
         BanManager $banManager,
         RoleRepository $roleRepository,
         PermissionRepository $permissionRepository)
     {
+        $this->auth = $auth;
         $this->userRepository = $userRepository;
         $this->activator = $activator;
         $this->banManager = $banManager;
@@ -88,7 +97,10 @@ class RenderHandler
         return (new RenderResult())
             ->setUser($userDTO)
             ->setRoles($this->roles())
-            ->setPermissions($this->permissions());
+            ->setPermissions($this->permissions())
+            ->setPurchasesAccess($this->auth->getUser()->hasPermission(Permissions::ADMIN_PURCHASES_ACCESS))
+            ->setCanCompletePurchase($this->auth->getUser()->hasPermission(Permissions::ALLOW_COMPLETE_PURCHASES))
+            ->setCartAccess($this->auth->getUser()->hasPermission(Permissions::ADMIN_GAME_CART_ACCESS));
     }
 
     /**

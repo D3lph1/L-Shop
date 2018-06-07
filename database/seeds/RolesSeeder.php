@@ -39,7 +39,8 @@ class RolesSeeder extends Seeder
             Permissions::ADMIN_OTHER_RCON_ACCESS,
             Permissions::ADMIN_OTHER_DEBUG_ACCESS,
             Permissions::ADMIN_STATISTIC_SHOW_ACCESS,
-            Permissions::ADMIN_STATISTIC_PURCHASES_ACCESS,
+            Permissions::ADMIN_PURCHASES_ACCESS,
+            Permissions::ADMIN_GAME_CART_ACCESS,
             Permissions::ALLOW_COMPLETE_PURCHASES,
             Permissions::ADMIN_INFORMATION_ABOUT_ACCESS,
             Permissions::ACCESS_WHILE_MAINTENANCE

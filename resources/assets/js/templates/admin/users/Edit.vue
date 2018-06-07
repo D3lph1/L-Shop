@@ -25,6 +25,13 @@
                                 prepend-icon="lock"
                                 :label="$t('content.admin.users.edit.main.new_password')"
                         ></v-text-field>
+                        <v-text-field
+                                type="number"
+                                class="no-spinners"
+                                v-model="user.balance"
+                                prepend-icon="attach_money"
+                                :label="$t('content.admin.users.edit.main.balance')"
+                        ></v-text-field>
                         <v-select
                                 v-model="user.roles"
                                 :label="$t('content.admin.users.edit.main.roles')"
@@ -52,7 +59,7 @@
                     </v-card-title>
                     <v-card-text>
                         <v-layout row wrap>
-                            <v-expansion-panel>
+                            <v-expansion-panel class="elevation-0">
                                 <v-expansion-panel-content>
                                     <div slot="header">{{ $t('common.skin') }}</div>
                                     <v-card class="text-xs-center">
@@ -115,7 +122,7 @@
                                         @update="updateBans"
                                 ></bans-history>
                             </v-flex>
-                            <v-flex xs12 class="text-xs-center" >
+                            <v-flex xs12 class="text-xs-center">
                                 <v-btn color="error" flat @click="addBanDialog = true">
                                     <span v-if="user.bans.length === 0">{{ $t('content.admin.users.edit.actions.show_ban_dialog') }}</span>
                                     <span v-else>{{ $t('content.admin.users.edit.actions.show_add_ban_dialog') }}</span>
@@ -127,6 +134,27 @@
                                         @close="closeAddBanDialog"
                                         @add="addBan"
                                 ></add-ban-dialog>
+                            </v-flex>
+                            <v-flex xs12 class="text-xs-center" v-if="purchasesAccess">
+                                <v-btn color="primary" flat @click="purchaseHistoryDialog = true">
+                                    {{ $t('content.admin.users.edit.actions.purchase_history.title') }}
+                                </v-btn>
+                                <purchase-history-dialog
+                                        :dialog="purchaseHistoryDialog"
+                                        :user-id="user.id"
+                                        :can-complete="canCompletePurchase"
+                                        @close="closePurchaseHistoryDialog"
+                                ></purchase-history-dialog>
+                            </v-flex>
+                            <v-flex xs12 class="text-xs-center" v-if="cartAccess">
+                                <v-btn color="primary" flat @click="cartDialog = true">
+                                    {{ $t('content.admin.users.edit.actions.cart.title') }}
+                                </v-btn>
+                                <cart-dialog
+                                        :dialog="cartDialog"
+                                        :user-id="user.id"
+                                        @close="closeCartDialog"
+                                ></cart-dialog>
                             </v-flex>
                         </v-layout>
                     </v-card-text>
@@ -141,6 +169,8 @@
     import datetime from './../../../core/common/datetime'
     import BansHistory from './BansHistoryDialog.vue'
     import AddBanDialog from './AddBanDialog.vue'
+    import PurchaseHistoryDialog from './PurchaseHistoryDialog.vue'
+    import CartDialog from './CartDialog.vue'
 
     export default {
         data() {
@@ -154,6 +184,11 @@
                 finishLoading: false,
                 bansHistoryDialog: false,
                 addBanDialog: false,
+                purchasesAccess: false,
+                purchaseHistoryDialog: false,
+                cartAccess: false,
+                canCompletePurchase: false,
+                cartDialog: false,
 
                 skin: {
                     upload: null,
@@ -252,6 +287,12 @@
             closeAddBanDialog() {
                 this.addBanDialog = false;
             },
+            closePurchaseHistoryDialog() {
+                this.purchaseHistoryDialog = false;
+            },
+            closeCartDialog() {
+                this.cartDialog = false;
+            },
             updateBans(bans) {
                 this.user.bans = bans;
                 let f = false;
@@ -281,6 +322,7 @@
                     username: this.user.username,
                     email: this.user.email,
                     password: this.password,
+                    balance: this.user.balance,
                     roles: this.user.roles,
                     permissions: this.user.permissions,
                 })
@@ -298,11 +340,16 @@
                 this.user.activatedAt = datetime.localize(data.user.activatedAt);
                 this.roles = data.roles;
                 this.permissions = data.permissions;
+                this.purchasesAccess = data.purchasesAccess;
+                this.canCompletePurchase = data.canCompletePurchase;
+                this.cartAccess = data.cartAccess;
             }
         },
         components: {
             'bans-history': BansHistory,
-            'add-ban-dialog': AddBanDialog
+            'add-ban-dialog': AddBanDialog,
+            'purchase-history-dialog': PurchaseHistoryDialog,
+            'cart-dialog': CartDialog
         }
     }
 </script>

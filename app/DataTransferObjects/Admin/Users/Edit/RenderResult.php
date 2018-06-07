@@ -6,8 +6,9 @@ namespace App\DataTransferObjects\Admin\Users\Edit;
 use App\DataTransferObjects\Admin\Users\Edit\User as UserDTO;
 use App\Entity\Permission;
 use App\Entity\Role;
+use App\Services\Response\JsonRespondent;
 
-class RenderResult
+class RenderResult implements JsonRespondent
 {
     /**
      * @var UserDTO
@@ -24,19 +25,26 @@ class RenderResult
      */
     private $permissions = [];
 
+    /**
+     * @var bool
+     */
+    private $cartAccess = false;
+
+    /**
+     * @var bool
+     */
+    private $purchasesAccess = false;
+
+    /**
+     * @var bool
+     */
+    private $canCompletePurchase = false;
+
     public function setUser(UserDTO $user): RenderResult
     {
         $this->user = $user;
 
         return $this;
-    }
-
-    /**
-     * @return UserDTO
-     */
-    public function getUser(): UserDTO
-    {
-        return $this->user;
     }
 
     /**
@@ -52,14 +60,6 @@ class RenderResult
     }
 
     /**
-     * @return Role[]
-     */
-    public function getRoles(): array
-    {
-        return $this->roles;
-    }
-
-    /**
      * @param Permission[] $permissions
      *
      * @return RenderResult
@@ -72,10 +72,53 @@ class RenderResult
     }
 
     /**
-     * @return Permission[]
+     * @param bool $canCompletePurchase
+     *
+     * @return RenderResult
      */
-    public function getPermissions(): array
+    public function setCanCompletePurchase(bool $canCompletePurchase): RenderResult
     {
-        return $this->permissions;
+        $this->canCompletePurchase = $canCompletePurchase;
+
+        return $this;
+    }
+
+    /**
+     * @param bool $purchasesAccess
+     *
+     * @return RenderResult
+     */
+    public function setPurchasesAccess(bool $purchasesAccess): RenderResult
+    {
+        $this->purchasesAccess = $purchasesAccess;
+
+        return $this;
+    }
+
+    /**
+     * @param bool $cartAccess
+     *
+     * @return RenderResult
+     */
+    public function setCartAccess(bool $cartAccess): RenderResult
+    {
+        $this->cartAccess = $cartAccess;
+
+        return $this;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function response(): array
+    {
+        return [
+            'user' => $this->user,
+            'roles' => $this->roles,
+            'permissions' => $this->permissions,
+            'cartAccess' => $this->cartAccess,
+            'canCompletePurchase' => $this->canCompletePurchase,
+            'purchasesAccess' => $this->purchasesAccess
+        ];
     }
 }

@@ -11,7 +11,7 @@ use App\Services\Auth\BanManager;
 
 class ListHandler
 {
-    private $availableOrders = ['id', 'username', 'email'];
+    private $availableOrders = ['id', 'username', 'email', 'balance'];
 
     /**
      * @var UserRepository

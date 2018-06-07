@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend\Auth;
 
 use App\Handlers\Frontend\Auth\RegisterHandler;
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\Captcha as CaptchaMiddleware;
 use App\Http\Requests\Frontend\Auth\RegisterRequest;
 use App\Services\Auth\AccessMode;
 use App\Services\Auth\Exceptions\EmailAlreadyExistsException;
@@ -27,6 +28,7 @@ class RegisterController extends Controller
     public function __construct()
     {
         $this->middleware('guest');
+        $this->middleware(CaptchaMiddleware::NAME)->only('handle');
     }
 
     /**
@@ -42,7 +44,7 @@ class RegisterController extends Controller
         return new JsonResponse(Status::SUCCESS, [
             'accessModeAny' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY,
             'accessModeAuth' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY,
-            'captcha' => $captcha->view()
+            'captchaKey' => $settings->get('system.security.captcha.enabled')->getValue(DataType::BOOL) ? $captcha->key() : null
         ]);
     }
 

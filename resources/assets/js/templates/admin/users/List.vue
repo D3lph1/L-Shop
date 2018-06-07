@@ -31,6 +31,7 @@
                 <td class="text-xs-center">{{ props.item.id }}</td>
                 <td class="text-xs-center">{{ props.item.username }}</td>
                 <td class="text-xs-center">{{ props.item.email }}</td>
+                <td class="text-xs-center">{{ props.item.balance }}</td>
                 <td class="text-xs-center">
                     <v-tooltip top v-if="props.item.isActivated">
                         <v-icon class="cp" slot="activator">done</v-icon>
@@ -86,6 +87,12 @@
                         align: 'center',
                         sortable: true,
                         value: 'email'
+                    },
+                    {
+                        text: $t('content.admin.users.list.table.headers.balance'),
+                        align: 'center',
+                        sortable: true,
+                        value: 'balance'
                     },
                     {
                         text: $t('content.admin.users.list.table.headers.states'),

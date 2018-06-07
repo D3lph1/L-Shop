@@ -111,8 +111,8 @@
                 </v-card-text>
                 <v-card-actions>
                     <v-spacer></v-spacer>
-                    <v-btn color="secondary" flat :loading="finishLoading" :disabled="finishDisabled" @click.native="finish">{{ $t('content.admin.users.edit.actions.add_ban.finish') }}</v-btn>
-                    <v-btn color="secondary" flat @click.native="dialogData = false">{{ $t('common.close') }}</v-btn>
+                    <v-btn color="primary" flat :loading="finishLoading" :disabled="finishDisabled" @click.native="finish">{{ $t('content.admin.users.edit.actions.add_ban.finish') }}</v-btn>
+                    <v-btn color="primary" flat @click.native="dialogData = false">{{ $t('common.close') }}</v-btn>
                 </v-card-actions>
             </v-card>
         </v-dialog>

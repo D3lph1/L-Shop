@@ -8,6 +8,11 @@ use App\Services\Response\JsonRespondent;
 class VisitResult implements JsonRespondent
 {
     /**
+     * @var bool
+     */
+    private $captchaEnabled;
+
+    /**
      * @var string|null
      */
     private $recaptchaPublicKey;
@@ -27,6 +32,18 @@ class VisitResult implements JsonRespondent
      */
     private $resetPasswordEnabled;
 
+
+    /**
+     * @param bool $captchaEnabled
+     *
+     * @return VisitResult
+     */
+    public function setCaptchaEnabled(bool $captchaEnabled): VisitResult
+    {
+        $this->captchaEnabled = $captchaEnabled;
+
+        return $this;
+    }
 
     /**
      * @param null|string $recaptchaPublicKey
@@ -82,6 +99,7 @@ class VisitResult implements JsonRespondent
     public function response(): array
     {
         return [
+            'captchaEnabled' => $this->captchaEnabled,
             'recaptchaPublicKey' => $this->recaptchaPublicKey,
             'recaptchaSecretKey' => $this->recaptchaSecretKey,
             'changePasswordEnabled' => $this->changePasswordEnabled,

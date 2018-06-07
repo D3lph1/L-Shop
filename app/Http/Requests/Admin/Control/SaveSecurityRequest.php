@@ -25,6 +25,7 @@ class SaveSecurityRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'captcha_enabled' => 'required|boolean',
             'recaptcha_public_key' => 'required|string|size:40',
             'recaptcha_secret_key' => 'required|string|size:40',
             'reset_password_enabled' => 'required|boolean',

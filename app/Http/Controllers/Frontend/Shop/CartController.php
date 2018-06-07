@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Frontend\Shop;
 
+use App\DataTransferObjects\Frontend\Shop\Cart\Purchase;
 use App\DataTransferObjects\Frontend\Shop\Server;
 use App\Exceptions\Product\ProductNotFoundException;
 use App\Exceptions\Server\ServerNotFoundException;
@@ -12,6 +13,8 @@ use App\Handlers\Frontend\Shop\Cart\RemoveHandler;
 use App\Handlers\Frontend\Shop\Cart\VisitHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\Auth as AuthMiddleware;
+use App\Http\Middleware\Captcha as CaptchaMiddleware;
+use App\Http\Requests\Frontend\Shop\Cart\PurchaseRequest;
 use App\Http\Requests\Frontend\Shop\Cart\PutRequest;
 use App\Http\Requests\Frontend\Shop\Cart\RemoveRequest;
 use App\Services\Cart\Cart;
@@ -23,6 +26,8 @@ use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use App\Services\Security\Captcha\Captcha;
 use App\Services\Server\Persistence\Persistence;
+use App\Services\Settings\DataType;
+use App\Services\Settings\Settings;
 use Illuminate\Http\Request;
 use function App\auth_middleware;
 use Illuminate\Http\Response;
@@ -36,6 +41,7 @@ class CartController extends Controller
     public function __construct()
     {
         $this->middleware(auth_middleware(AuthMiddleware::SOFT));
+        $this->middleware(CaptchaMiddleware::NAME)->only('purchase');
     }
 
     /**
@@ -45,10 +51,11 @@ class CartController extends Controller
      * @param VisitHandler $handler
      * @param Captcha      $captcha
      * @param Persistence  $persistence
+     * @param Settings     $settings
      *
      * @return JsonResponse
      */
-    public function render(Request $request, VisitHandler $handler, Captcha $captcha, Persistence $persistence): JsonResponse
+    public function render(Request $request, VisitHandler $handler, Captcha $captcha, Persistence $persistence, Settings $settings): JsonResponse
     {
         $server = $persistence->retrieve();
         if ($server !== null) {
@@ -57,7 +64,7 @@ class CartController extends Controller
 
         return new JsonResponse(Status::SUCCESS, [
             'cart' => $handler->handle((int)$request->route('server')),
-            'captcha' => $captcha->view(),
+            'captchaKey' => $settings->get('system.security.captcha.enabled')->getValue(DataType::BOOL) ? $captcha->key() : null,
             'currentServer' => $server
         ]);
     }
@@ -107,15 +114,21 @@ class CartController extends Controller
     /**
      * Processes a request for the purchase of products that are currently in the cart.
      *
-     * @param Request         $request
+     * @param PurchaseRequest $request
      * @param PurchaseHandler $handler
      *
      * @return JsonResponse
      */
-    public function purchase(Request $request, PurchaseHandler $handler): JsonResponse
+    public function purchase(PurchaseRequest $request, PurchaseHandler $handler): JsonResponse
     {
         try {
-        $result = $handler->handle((int)$request->route('server'), $request->get('username'), $request->ip());
+            $dto = (new Purchase())
+                ->setItems($request->get('items'))
+                ->setServerId((int)$request->route('server'))
+                ->setUsername($request->get('username'))
+                ->setIp($request->ip());
+
+            $result = $handler->handle($dto);
 
             if ($result->isQuick()) {
                 return (new JsonResponse(Status::SUCCESS, [

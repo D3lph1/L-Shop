@@ -12,6 +12,8 @@ import NotificationPlugin from './notification/plugin'
 import AxiosPlugin from './http/plugin'
 import './http/interceptor'
 
+__webpack_public_path__ = window.baseUrl + '/';
+
 Vue.use(NotificationPlugin);
 Vue.use(AxiosPlugin);
 import './../components'

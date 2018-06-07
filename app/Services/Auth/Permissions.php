@@ -146,12 +146,17 @@ class Permissions
     /**
      * Allows to purchases history in admin panel.
      */
-    public const ADMIN_STATISTIC_PURCHASES_ACCESS = 'admin_statistic_purchases_access';
+    public const ADMIN_PURCHASES_ACCESS = 'admin_purchases_access';
 
     /**
      * Allow the user to complete purchase.
      */
     public const ALLOW_COMPLETE_PURCHASES = 'allow_complete_purchases';
+
+    /**
+     * Allows to show other users in-game cart.
+     */
+    public const ADMIN_GAME_CART_ACCESS = 'admin_game_cart_access';
 
     /**
      * Allows the user to access the `admin->information->about` section

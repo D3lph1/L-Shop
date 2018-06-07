@@ -12,6 +12,7 @@ use App\Repository\User\UserRepository;
 use App\Services\Auth\Exceptions\EmailAlreadyExistsException;
 use App\Services\Auth\Exceptions\UsernameAlreadyExistsException;
 use App\Services\Auth\Hashing\Hasher;
+use App\Services\User\Balance\Transactor;
 
 class EditHandler
 {
@@ -35,16 +36,23 @@ class EditHandler
      */
     private $hasher;
 
+    /**
+     * @var Transactor
+     */
+    private $transactor;
+
     public function __construct(
         UserRepository $userRepository,
         RoleRepository $roleRepository,
         PermissionRepository $permissionRepository,
-        Hasher $hasher)
+        Hasher $hasher,
+        Transactor $transactor)
     {
         $this->userRepository = $userRepository;
         $this->roleRepository = $roleRepository;
         $this->permissionRepository = $permissionRepository;
         $this->hasher = $hasher;
+        $this->transactor = $transactor;
     }
 
     /**
@@ -81,6 +89,8 @@ class EditHandler
         $this->updatePermissions($user, $dto->getPermissions());
 
         $this->userRepository->update($user);
+
+        $this->transactor->set($user, $dto->getBalance());
     }
 
     private function updateRoles(User $user, array $roles): void

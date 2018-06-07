@@ -18,6 +18,7 @@ return [
         ],
         'security' => [
             'captcha' => [
+                'enabled' => true,
                 'recaptcha' => [
                     'public_key' => '',
                     'secret_key' => ''

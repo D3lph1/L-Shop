@@ -26,6 +26,11 @@ class Edit
     private $password;
 
     /**
+     * @var float
+     */
+    private $balance;
+
+    /**
      * @var string[]
      */
     private $roles;
@@ -111,6 +116,26 @@ class Edit
     public function setPassword(?string $password): Edit
     {
         $this->password = $password;
+
+        return $this;
+    }
+
+    /**
+     * @return float
+     */
+    public function getBalance(): float
+    {
+        return $this->balance;
+    }
+
+    /**
+     * @param float $balance
+     *
+     * @return Edit
+     */
+    public function setBalance(float $balance): Edit
+    {
+        $this->balance = $balance;
 
         return $this;
     }

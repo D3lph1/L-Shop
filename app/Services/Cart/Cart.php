@@ -108,4 +108,9 @@ class Cart
     {
         return $this->storage->remove($item->getProduct()->getCategory()->getServer()->getId(), $item->getProduct()->getId());
     }
+
+    public function removeServer(Server $server): bool
+    {
+        return $this->storage->removeServer($server->getId());
+    }
 }

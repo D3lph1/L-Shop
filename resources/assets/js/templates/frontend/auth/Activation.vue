@@ -28,6 +28,14 @@
                         required
                         prepend-icon="mail_outline"
                 ></v-text-field>
+                <vue-recaptcha
+                        v-if="reCaptchaKey"
+                        :sitekey="reCaptchaKey"
+                        style="transform:scale(0.86);-webkit-transform:scale(0.86);transform-origin:0 0;
+                            -webkit-transform-origin:0 0;"
+                        @verify="setReCaptchaResponse"
+                >
+                </vue-recaptcha>
                 <v-btn
                         @click="perform"
                         :loading="loadingBtn"
@@ -76,6 +84,7 @@
 
 <script>
     import loader from './../../../core/http/loader'
+    import VueRecaptcha from 'vue-recaptcha';
 
     export default {
         data() {
@@ -85,7 +94,8 @@
 
                 accessModeAny: false,
                 accessModeAuth: false,
-                captcha: ''
+                reCaptchaKey: null,
+                reCaptchaResponse: null
             }
         },
         beforeRouteEnter (to, from, next) {
@@ -100,23 +110,34 @@
             }
         },
         methods: {
+            setReCaptchaResponse(response) {
+                this.reCaptchaResponse = response;
+            },
+            resetCaptcha() {
+                if (this.reCaptchaKey) {
+                    grecaptcha.reset();
+                }
+            },
             check() {
                 return this.email.match(/.+@.+\..+/i);
             },
             send() {
                 this.loadingBtn = true;
                 this.$axios.post('/spa/activation/repeat', {
-                    email: this.email
+                    email: this.email,
+                    _captcha: this.reCaptchaResponse
                 })
                     .then((response) => {
                         let data = response.data;
                         let status = data.status;
+                        this.resetCaptcha();
                         if (status === 'success') {
-                            //
+                            this.email = '';
                         }
                         this.loadingBtn = false;
                     })
                     .catch((err) => {
+                        this.resetCaptcha();
                         this.loadingBtn = false;
                     });
             },
@@ -131,8 +152,11 @@
 
                 this.accessModeAny = data.accessModeAny;
                 this.accessModeAuth = data.accessModeAuth;
-                this.captcha = data.captcha;
+                this.reCaptchaKey = data.captchaKey;
             }
+        },
+        components: {
+            'vue-recaptcha': VueRecaptcha
         }
     }
 </script>

@@ -35,15 +35,13 @@
                 </div>
             </div>
             <p class="subheading my-0">
-                {{ $t('content.frontend.shop.cart.item.cost') }}
-                {{ cost }}
-                <span v-html="$store.state.shop.currency.html"></span>
+                <span v-html="$t('content.frontend.shop.cart.item.cost', {cost, currency: $store.state.shop.currency.html})"></span>
             </p>
         </v-card-title>
 
-        <v-divider></v-divider>
+        <v-divider v-if="isItem"></v-divider>
 
-        <v-card-actions class="product-footer">
+        <v-card-actions class="product-footer" v-if="isItem || (isPermgroup && stack !== 0)">
             <v-tooltip bottom v-if="enchantments.length !== 0">
                 <v-btn class="product-btn"
                        icon
@@ -125,6 +123,13 @@
                 removeBtnLoading: false
             }
         },
+        /**
+         * Init component.
+         */
+        mounted() {
+            this.$emit('recount', this.id, this.amount);
+            this.$emit('resum', 0, this.cost);
+        },
         methods: {
             /**
              * Increases the amount of the product by 1 stack.
@@ -176,9 +181,10 @@
              * the amount should be recalculated only with a normalized amount of products.
              */
             resum() {
-                //this.$store.commit('subCartCost', this.cost);
+                const old = this.cost;
                 this.cost = this.price * this.amount / this.stack;
-                // this.$store.commit('addCartCost', this.cost);
+                this.$emit('recount', this.id, this.amount);
+                this.$emit('resum', old, this.cost)
             },
             remove() {
                 this.removeBtnLoading = true;
@@ -190,6 +196,11 @@
                         if (response.data.status === 'success') {
                             this.visible = false;
                             this.$store.commit('subCartAmount', 1);
+                            // Emit event to notify parent about deleting element.
+                            this.$emit('recount', this.id, -1);
+                            // Emit event to decrement cost of deletable product from total sum.
+                            this.$emit('resum', this.cost, 0);
+                            // Emit event to remove product from cart.
                             this.$emit('remove', this.id);
                         }
                         this.removeBtnLoading = false;

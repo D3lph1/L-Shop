@@ -6,7 +6,7 @@ namespace App\DataTransferObjects;
 class PaginationList
 {
     /**
-     * @var string
+     * @var string|null
      */
     private $orderBy;
 
@@ -30,12 +30,12 @@ class PaginationList
      */
     private $perPage;
 
-    public function getOrderBy(): string
+    public function getOrderBy(): ?string
     {
         return $this->orderBy;
     }
 
-    public function setOrderBy(string $by): PaginationList
+    public function setOrderBy(?string $by): PaginationList
     {
         $this->orderBy = $by;
 

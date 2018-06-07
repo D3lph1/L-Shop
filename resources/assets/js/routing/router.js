@@ -11,7 +11,8 @@ Vue.use(Router);
 
 const router = new Router({
     mode: 'history',
-    routes
+    routes,
+    base: window.baseUrlPath
 });
 
 const title = document.title;

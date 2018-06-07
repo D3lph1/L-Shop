@@ -23,7 +23,7 @@ class PurchasesController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(permission_middleware(Permissions::ADMIN_STATISTIC_PURCHASES_ACCESS))
+        $this->middleware(permission_middleware(Permissions::ADMIN_PURCHASES_ACCESS))
             ->only('pagination');
         $this->middleware(permission_middleware(Permissions::ALLOW_COMPLETE_PURCHASES))
             ->only('complete');

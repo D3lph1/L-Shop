@@ -7,5 +7,5 @@ interface Captcha
 {
     public function verify(string $code, string $ip): bool;
 
-    public function view(): string;
+    public function key(): string;
 }

@@ -29,7 +29,8 @@
                     ></v-text-field>
                 </div>
                 <h2 class="headline">
-                    {{ $t('content.frontend.shop.catalog.purchase.cost', {cost, currency: $store.state.shop.currency.html}) }}
+                    {{ $t('content.frontend.shop.catalog.purchase.cost', {cost, currency:
+                    $store.state.shop.currency.html}) }}
                 </h2>
                 <v-alert class="mt-4" type="info" :value="notEnough">
                     <span>{{ $t('content.frontend.shop.catalog.purchase.not_enough') }}</span>
@@ -37,6 +38,14 @@
                 <v-alert class="mt-4" type="info" :value="notAuthAlert">
                     <span>{{ $t('content.frontend.shop.catalog.purchase.not_auth') }}</span>
                 </v-alert>
+                <vue-recaptcha
+                        class="recaptcha-in-dialog"
+                        v-if="captcha"
+                        :sitekey="captcha"
+                        @verify="setReCaptchaResponse"
+                >
+                </vue-recaptcha>
+
             </v-card-text>
             <v-divider></v-divider>
             <v-card-actions>
@@ -64,6 +73,8 @@
 </template>
 
 <script>
+    import VueRecaptcha from 'vue-recaptcha';
+
     export default {
         props: {
             dialog: {
@@ -93,6 +104,9 @@
             isPermgroup: {
                 required: true,
                 type: Boolean
+            },
+            captchaKey: {
+                required: false
             }
         },
         data() {
@@ -100,7 +114,9 @@
                 username: '',
                 amount: this.stack,
                 cost: this.price,
-                loadingPurchaseBtn: false
+                loadingPurchaseBtn: false,
+                captcha: this.captchaKey,
+                reCaptchaResponse: null
             }
         },
         watch: {
@@ -115,6 +131,9 @@
              */
             price(val) {
                 this.cost = val;
+            },
+            captchaKey(val) {
+                this.captcha = val;
             }
         },
         computed: {
@@ -130,34 +149,41 @@
             }
         },
         methods: {
+            setReCaptchaResponse(response) {
+                this.reCaptchaResponse = response;
+            },
+            resetCaptcha() {
+                if (this.reCaptchaKey) {
+                    grecaptcha.reset();
+                }
+            },
             /**
              * Executes the order, by sending a request to the server.
              */
             purchase() {
                 this.recount();
-                /*
-                if (!captcha.getToken()) {
-                    msg.warning(this.$t('msg.captcha_required'));
-                    return;
-                }
-                */
                 this.loadingPurchaseBtn = true;
                 this.$axios.post('/spa/catalog/purchase', {
                     username: this.username,
                     product: this.id,
-                    amount: this.amount
+                    amount: this.amount,
+                    _captcha: this.reCaptchaResponse
                 })
                     .then((response) => {
                         this.loadingPurchaseBtn = false;
                         const data = response.data;
+                        this.resetCaptcha();
                         if (data.status === 'success') {
                             if (data.quick) {
                                 this.$store.commit('setBalance', data.newBalance);
                             } else {
                                 this.$router.push({name: 'frontend.shop.payment', params: {purchase: data.purchaseId}});
                             }
+                            this.$emit('hide');
                         }
-                        this.$emit('hide');
+                    })
+                    .catch(err => {
+                        this.resetCaptcha();
                     });
             },
             /**
@@ -210,6 +236,10 @@
              * the amount should be recalculated only with a normalized amount of products.
              */
             resum() {
+                if (this.stack === 0) {
+                    return
+                }
+
                 this.cost = this.price * this.amount / this.stack;
             },
             amountLabel() {
@@ -221,6 +251,9 @@
 
                 return '';
             }
+        },
+        components: {
+            'vue-recaptcha': VueRecaptcha
         }
     }
 </script>

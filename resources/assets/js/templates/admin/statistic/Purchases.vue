@@ -34,12 +34,30 @@
                     <span v-else>{{ props.item.via.value }}</span>
                 </td>
                 <td class="text-xs-left layout px-0">
-                    <v-btn icon class="mx-0" v-if="props.item.items.length !== 0" @click="openDetailsDialog(props.item)">
-                        <v-icon color="secondary">more_horiz</v-icon>
-                    </v-btn>
-                    <v-btn icon class="mx-0" v-if="props.item.completedAt === null && canComplete" @click="complete(props.item)">
-                        <v-icon color="success">check</v-icon>
-                    </v-btn>
+                    <v-tooltip bottom v-if="props.item.items.length !== 0">
+                        <v-btn class="product-btn mx-0"
+                               color="secondary"
+                               icon
+                               flat
+                               slot="activator"
+                               @click="openDetailsDialog(props.item)"
+                        >
+                            <v-icon>more_horiz</v-icon>
+                        </v-btn>
+                        <span>{{ $t('content.frontend.profile.purchases.table.details') }}</span>
+                    </v-tooltip>
+                    <v-tooltip bottom v-if="props.item.completedAt === null && canComplete">
+                        <v-btn class="product-btn mx-0"
+                               color="success"
+                               icon
+                               flat
+                               slot="activator"
+                               @click="complete(props.item)"
+                        >
+                            <v-icon>check</v-icon>
+                        </v-btn>
+                        <span>{{ $t('content.frontend.profile.purchases.table.complete') }}</span>
+                    </v-tooltip>
                 </td>
             </template>
         </v-data-table>

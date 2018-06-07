@@ -70,7 +70,7 @@ class DoctrinePermissionRepository implements PermissionRepository
             ->setParameter('name', $name)
             ->getQuery()
             ->useResultCache($this->cachingOptions->isEnabled(), $this->cachingOptions->getLifetime())
-            ->getResult();
+            ->getOneOrNullResult();
     }
 
     /**

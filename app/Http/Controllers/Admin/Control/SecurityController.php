@@ -31,6 +31,7 @@ class SecurityController extends Controller
             'system' => [
                 'security' => [
                     'captcha' => [
+                        'enabled' => (bool)$request->get('captcha_enabled'),
                         'recaptcha' => [
                             'public_key' => $request->get('recaptcha_public_key'),
                             'secret_key' => $request->get('recaptcha_secret_key')

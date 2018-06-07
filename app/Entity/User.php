@@ -122,6 +122,11 @@ class User implements HasRoles, HasPermissions
     private $reminders;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Purchase", mappedBy="user")
+     */
+    private $purchases;
+
+    /**
      * Date and time when the user was created.
      *
      * @ORM\Column(name="created_at", type="datetime_immutable", nullable=false)
@@ -146,6 +151,7 @@ class User implements HasRoles, HasPermissions
         $this->persistences = new ArrayCollection();
         $this->bans = new ArrayCollection();
         $this->reminders = new ArrayCollection();
+        $this->purchases = new ArrayCollection();
         $this->uuid = Uuid::uuid4();
     }
 
@@ -296,6 +302,14 @@ class User implements HasRoles, HasPermissions
     public function getReminders(): Collection
     {
         return $this->reminders;
+    }
+
+    /**
+     * @return Collection
+     */
+    public function getPurchases(): Collection
+    {
+        return $this->purchases;
     }
 
     /**

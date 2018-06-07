@@ -182,7 +182,7 @@ class AdminBlockConstructor
                     [
                         'link' => 'admin.statistic.purchases',
                         'title' => __('content.layout.shop.sidebar.admin.statistic.sub_items.payments'),
-                        'permissions' => [Permissions::ADMIN_STATISTIC_PURCHASES_ACCESS]
+                        'permissions' => [Permissions::ADMIN_PURCHASES_ACCESS]
                     ],
                 ]
             ],
