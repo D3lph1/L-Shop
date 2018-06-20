@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace App\Services\Monitoring\Drivers;
 
 use App\Entity\Server;
+use App\Services\Monitoring\MonitoringException;
 
 /**
  * Interface Driver
@@ -19,6 +20,7 @@ interface Driver
      * @param Server $server
      *
      * @return DTO Resultant data transfer object.
+     * @throws MonitoringException
      */
     public function retrieve(Server $server): DTO;
 }

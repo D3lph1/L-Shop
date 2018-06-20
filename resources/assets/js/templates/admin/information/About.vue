@@ -87,9 +87,9 @@
                     laravel: null,
                     vue: null,
                     doctrine: null,
-                    vuetify: null,
-                    github: null
+                    vuetify: null
                 },
+                github: null,
                 version: null,
                 items: [
                     {

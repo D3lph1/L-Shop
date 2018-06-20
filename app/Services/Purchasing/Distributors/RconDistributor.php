@@ -8,6 +8,12 @@ use App\Jobs\Purchasing\Distribution\DistributeByRcon;
 use App\Services\Purchasing\Distributors\RconDistribution\CommandBuilder;
 use Illuminate\Contracts\Bus\Dispatcher;
 
+/**
+ * Class RconDistributor
+ * Produces the delivery of products by RCON protocol.
+ *
+ * @see http://wiki.vg/RCON
+ */
 class RconDistributor implements Distributor, Attempting
 {
     /**

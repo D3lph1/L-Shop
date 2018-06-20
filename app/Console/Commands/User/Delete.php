@@ -44,6 +44,13 @@ class Delete extends Command
     {
         $this->alert(__('commands.user.delete.title'));
         $this->warn(__('commands.user.delete.description'));
+        $username = $this->argument('user');
+
+        if (!$handler->check($username)) {
+            $this->error(__('commands.user.roles.attach.user_not_found', ['username' => $username]));
+
+            return 1;
+        }
 
         // Confirm user deletion.
         $confirmation = $this->choice(
@@ -59,12 +66,12 @@ class Delete extends Command
         }
 
         try {
-            $handler->handle($this->argument('user'));
+            $handler->handle($username);
             $this->info(__('commands.user.delete.success'));
 
             return 0;
         } catch (UserNotFoundException $e) {
-            $this->error(__('commands.user.roles.attach.user_not_found', ['username' => $e->getCriteria()]));
+            $this->error(__('commands.user.roles.attach.user_not_found', ['username' => $username]));
 
             return 1;
         }

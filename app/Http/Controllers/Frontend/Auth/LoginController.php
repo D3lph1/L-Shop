@@ -9,6 +9,7 @@ use App\Http\Requests\Frontend\Auth\LoginRequest;
 use App\Services\Auth\AccessMode;
 use App\Services\Auth\Exceptions\BannedException;
 use App\Services\Auth\Exceptions\NotActivatedException;
+use App\Services\Auth\Exceptions\ThrottlingException;
 use App\Services\Notification\Notifications\Error;
 use App\Services\Notification\Notifications\Success;
 use App\Services\Notification\Notificator;
@@ -84,6 +85,12 @@ class LoginController extends Controller
             return (new JsonResponse('user_not_activated'))
                 ->setHttpStatus(Response::HTTP_CONFLICT)
                 ->addNotification(new Error(__('msg.frontend.auth.login.not_activated')));
+        } catch (ThrottlingException $e) {
+            return (new JsonResponse('too_many_attempts'))
+                ->setHttpStatus(Response::HTTP_LOCKED)
+                ->addNotification(new Error(__('msg.frontend.auth.login.too_many_attempts', [
+                    'remaining' => $e->getCooldownRemaining()
+                ])));
         } catch (BannedException $e) {
             $banMessages = $banMessage->buildMessageAuto($e->getBans());
             if (count($banMessages->getMessages()) === 0) {

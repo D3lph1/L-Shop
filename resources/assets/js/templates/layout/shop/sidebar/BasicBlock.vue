@@ -21,8 +21,8 @@
             </v-list-tile>
             <v-list-tile ripple :to="toCart()">
                 <v-list-tile-action>
-                    <v-badge v-model="cartBadges" right>
-                        <span slot="badge">{{ $store.state.shop.cart.amount }}</span>
+                    <v-badge color="secondary" v-model="cartBadge" overlap right>
+                        <span slot="badge">{{ cartAmount }}</span>
                         <v-icon>shopping_cart</v-icon>
                     </v-badge>
                 </v-list-tile-action>
@@ -60,14 +60,12 @@
 
 <script>
     export default {
-        data() {
-            return {
-                cartBadges: false
-            }
-        },
-        watch: {
-            '$store.state.shop.cart.amount'(val) {
-                this.cartBadges = Boolean(val);
+        computed: {
+            cartBadge() {
+                return Boolean(this.$store.state.shop.cart.amount);
+            },
+            cartAmount() {
+                return this.$store.state.shop.cart.amount;
             }
         },
         methods: {

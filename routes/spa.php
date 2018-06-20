@@ -152,12 +152,3 @@ $router->post('/admin/statistic/purchases/complete/{purchase}', 'Admin\Statistic
     ->where('purchase', '[0-9]+');
 
 $router->get('/admin/information/about', 'Admin\Information\AboutController@render');
-
-$router->any('/skin/front/{username}', 'Frontend\Character\SkinController@front')
-    ->name('api.skin.front');
-$router->any('/skin/back/{username}', 'Frontend\Character\SkinController@back')
-    ->name('api.skin.back');
-$router->any('/cloak/front/{username}', 'Frontend\Character\CloakController@front')
-    ->name('api.cloak.front');
-$router->any('/cloak/back/{username}', 'Frontend\Character\CloakController@back')
-    ->name('api.cloak.back');

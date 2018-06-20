@@ -22,26 +22,35 @@
         <v-card-title class="product-price py-2 px-3">
             <div class="mb-0">
                 <v-text-field
-                        v-if="stack !== 0"
                         type="number"
                         class="pt-1 no-spinners"
                         :prefix="amountLabel()"
                         :value="amount"
+                        :disabled="isPermgroup && stack === 0"
                         v-model="amount"
                         @blur="recount"
                 ></v-text-field>
-                <div v-else>
-                    {{ $t('content.frontend.shop.cart.item.forever') }}
-                </div>
             </div>
             <p class="subheading my-0">
                 <span v-html="$t('content.frontend.shop.cart.item.cost', {cost, currency: $store.state.shop.currency.html})"></span>
             </p>
         </v-card-title>
 
-        <v-divider v-if="isItem"></v-divider>
+        <v-divider></v-divider>
 
-        <v-card-actions class="product-footer" v-if="isItem || (isPermgroup && stack !== 0)">
+        <v-card-actions class="product-footer">
+            <v-tooltip v-if="isPermgroup && stack === 0" bottom>
+                <v-btn
+                        class="product-btn"
+                        icon
+                        flat
+                        color="primary"
+                        slot="activator"
+                >
+                    <v-icon>alarm</v-icon>
+                </v-btn>
+                <span>{{ $t('content.frontend.shop.cart.item.forever') }}</span>
+            </v-tooltip>
             <v-tooltip bottom v-if="enchantments.length !== 0">
                 <v-btn class="product-btn"
                        icon
@@ -54,27 +63,30 @@
                 <span>{{ $t('content.frontend.shop.catalog.item.enchanted') }}</span>
             </v-tooltip>
             <v-spacer></v-spacer>
-            <v-btn
-                    icon
-                    flat
-                    outline
-                    color="red"
-                    @click="decrement"
-                    :disabled="amount <= stack"
-            >
-                <v-icon>remove</v-icon>
-            </v-btn>
+            <div v-if="isItem || (isPermgroup && stack !== 0)">
+                <v-spacer></v-spacer>
+                <v-btn
+                        icon
+                        flat
+                        outline
+                        color="red"
+                        @click="decrement"
+                        :disabled="amount <= stack"
+                >
+                    <v-icon>remove</v-icon>
+                </v-btn>
 
-            <v-btn
-                    class="mr-2"
-                    icon
-                    flat
-                    outline
-                    color="green"
-                    @click="increment"
-            >
-                <v-icon>add</v-icon>
-            </v-btn>
+                <v-btn
+                        class="mr-2"
+                        icon
+                        flat
+                        outline
+                        color="green"
+                        @click="increment"
+                >
+                    <v-icon>add</v-icon>
+                </v-btn>
+            </div>
         </v-card-actions>
     </v-card>
 </template>

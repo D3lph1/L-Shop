@@ -176,12 +176,14 @@ class Pool
 
     /**
      * Proceeds through the checkpoints and the loginFail() method.
+     *
+     * @param User|null $user
      */
-    public function passLoginFail(): void
+    public function passLoginFail(?User $user = null): void
     {
         if ($this->isEnabled()) {
             foreach ($this->all() as $checkpoint) {
-                $checkpoint->loginFail();
+                $checkpoint->loginFail($user);
             }
         }
     }

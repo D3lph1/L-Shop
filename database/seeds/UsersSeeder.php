@@ -12,6 +12,7 @@ use App\Repository\Purchase\PurchaseRepository;
 use App\Repository\Reminder\ReminderRepository;
 use App\Repository\Role\RoleRepository;
 use App\Repository\ShoppingCart\ShoppingCartRepository;
+use App\Repository\Throttle\ThrottleRepository;
 use App\Repository\User\UserRepository;
 use App\Services\Auth\Auth;
 use App\Services\Auth\Roles;
@@ -31,6 +32,7 @@ class UsersSeeder extends Seeder
         ActivationRepository $activationRepository,
         ReminderRepository $reminderRepository,
         PersistenceRepository $persistenceRepository,
+        ThrottleRepository $throttleRepository,
         NewsRepository $newsRepository,
         BalanceTransactionRepository $balanceTransactionRepository,
         PurchaseRepository $purchaseRepository,
@@ -44,6 +46,7 @@ class UsersSeeder extends Seeder
         $activationRepository->deleteAll();
         $reminderRepository->deleteAll();
         $persistenceRepository->deleteAll();
+        $throttleRepository->deleteAll();
         $newsRepository->deleteAll();
         $banRepository->deleteAll();
         $balanceTransactionRepository->deleteAll();

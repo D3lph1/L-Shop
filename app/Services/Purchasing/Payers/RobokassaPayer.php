@@ -7,6 +7,11 @@ use App\Entity\Purchase;
 use App\Services\Purchasing\Payments\Robokassa\Checkout;
 use App\Services\Purchasing\Payments\Robokassa\Payment;
 
+/**
+ * Class RobokassaPayer
+ *
+ * @see https://docs.robokassa.ru/en/
+ */
 class RobokassaPayer implements Payer
 {
     public const NAME = 'robokassa';

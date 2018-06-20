@@ -53,7 +53,7 @@ class ActivationCheckpoint implements Checkpoint
     /**
      * {@inheritdoc}
      */
-    public function loginFail(): void
+    public function loginFail(?User $user = null): void
     {
         //
     }

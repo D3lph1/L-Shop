@@ -4,6 +4,7 @@ declare(strict_types = 1);
 
 namespace App\Providers;
 
+use App\Exceptions\UnexpectedValueException;
 use App\Repository\Server\ServerRepository;
 use App\Services\Caching\CachingRepository;
 use App\Services\Caching\IlluminateCachingRepository;
@@ -29,7 +30,7 @@ use App\Services\Media\Character\Cloak\Applicators\DefaultApplicator as DefaultC
 use App\Services\Media\Character\Skin\Applicators\Applicator as SkinApplicator;
 use App\Services\Media\Character\Skin\Applicators\DefaultApplicator as DefaultSkinApplicator;
 use App\Services\Monitoring\Drivers\Driver as MonitoringDriver;
-use App\Services\Monitoring\Drivers\Rcon as RconMonitoring;
+use App\Services\Monitoring\Drivers\RconDriver as RconMonitoring;
 use App\Services\Monitoring\Drivers\RconResponseParser;
 use App\Services\Monitoring\Monitoring;
 use App\Services\Settings\DataType;
@@ -38,6 +39,7 @@ use App\Services\Url\Signing\Signer;
 use App\Services\Url\Signing\Validator;
 use D3lph1\MinecraftRconManager\Connector;
 use Doctrine\ORM\EntityManagerInterface;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
 use Psr\Log\LoggerInterface;
@@ -76,16 +78,28 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(CachingRepository::class, IlluminateCachingRepository::class);
 
         $this->app->singleton(MonitoringDriver::class, function (Application $app) {
+            $driverClass = $app->make(Repository::class)->get('monitoring.driver');
+            $driver = $app->make($driverClass);
+            if (!($driver instanceof MonitoringDriver)) {
+                throw new UnexpectedValueException(
+                    'Monitoring driver must be implements ' . MonitoringDriver::class . ' interface'
+                );
+            }
+
+            return $driver;
+        });
+
+        $this->app->singleton(RconMonitoring::class, function (Application $app) {
             $settings = $app->make(Settings::class);
 
-            return $this->app->make(RconMonitoring::class, [
-                'connector' => new Connector(),
-                'command' => $settings->get('system.monitoring.rcon.command')->getValue(),
-                'timeout' => $settings->get('system.monitoring.rcon.timeout')->getValue(DataType::INT),
-                'parser' => $app->make(RconResponseParser::class, [
+            return new RconMonitoring(
+                new Connector(),
+                $settings->get('system.monitoring.rcon.command')->getValue(),
+                $settings->get('system.monitoring.rcon.timeout')->getValue(DataType::INT),
+                $app->make(RconResponseParser::class, [
                     'pattern' => $settings->get('system.monitoring.rcon.pattern')->getValue()
                 ])
-            ]);
+            );
         });
 
         $this->app->singleton(Monitoring::class, function (Application $app) {

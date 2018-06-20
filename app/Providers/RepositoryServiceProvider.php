@@ -21,6 +21,7 @@ use App\Entity\Reminder;
 use App\Entity\Role;
 use App\Entity\Server;
 use App\Entity\ShoppingCart;
+use App\Entity\Throttle;
 use App\Entity\User;
 use App\Repository\Activation\ActivationRepository;
 use App\Repository\Activation\DoctrineActivationRepository;
@@ -58,6 +59,8 @@ use App\Repository\Server\DoctrineServerRepository;
 use App\Repository\Server\ServerRepository;
 use App\Repository\ShoppingCart\DoctrineShoppingCartRepository;
 use App\Repository\ShoppingCart\ShoppingCartRepository;
+use App\Repository\Throttle\DoctrineThrottleRepository;
+use App\Repository\Throttle\ThrottleRepository;
 use App\Repository\User\DoctrineUserRepository;
 use App\Repository\User\UserRepository;
 use App\Services\Caching\CachingOptions;
@@ -127,6 +130,10 @@ class RepositoryServiceProvider extends ServiceProvider
             ReminderRepository::class => [
                 'concrete' => DoctrineReminderRepository::class,
                 'entity' => Reminder::class
+            ],
+            ThrottleRepository::class => [
+                'concrete' => DoctrineThrottleRepository::class,
+                'entity' => Throttle::class
             ],
             ServerRepository::class => [
                 'concrete' => DoctrineServerRepository::class,

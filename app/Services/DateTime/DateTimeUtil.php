@@ -45,6 +45,23 @@ class DateTimeUtil
     }
 
     /**
+     * Adds the specified number of seconds to the current time.
+     *
+     * @param int $seconds
+     *
+     * @return \DateTimeImmutable
+     */
+    public static function nowAddSeconds(int $seconds): \DateTimeImmutable
+    {
+        if ($seconds < 0) {
+            throw new InvalidArgumentException('Argument $seconds must be greater or equals 0, ' . $seconds . ' given');
+        }
+        $interval = \DateInterval::createFromDateString("{$seconds} seconds");
+
+        return (new \DateTimeImmutable())->add($interval);
+    }
+
+    /**
      * Adds the specified number of minutes to the current time.
      *
      * @param int $minutes
@@ -70,6 +87,23 @@ class DateTimeUtil
      */
     public static function nowSub(\DateInterval $interval): \DateTimeImmutable
     {
+        return (new \DateTimeImmutable())->sub($interval);
+    }
+
+    /**
+     * Takes from the current time a specified number of seconds.
+     *
+     * @param int $seconds
+     *
+     * @return \DateTimeImmutable
+     */
+    public static function nowSubSeconds(int $seconds): \DateTimeImmutable
+    {
+        if ($seconds < 0) {
+            throw new InvalidArgumentException('Argument $seconds must be greater or equals 0, ' . $seconds . ' given');
+        }
+        $interval = \DateInterval::createFromDateString("{$seconds} seconds");
+
         return (new \DateTimeImmutable())->sub($interval);
     }
 

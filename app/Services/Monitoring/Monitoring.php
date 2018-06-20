@@ -93,7 +93,7 @@ class Monitoring
 
                 $dto = new DTO(0, 0, false, true);
             } catch (MonitoringException $e) {
-                $this->logger->warning($e);
+                $this->logger->error($e);
 
                 $dto = new DTO(0, 0, true, false);
             }

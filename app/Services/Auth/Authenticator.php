@@ -22,8 +22,8 @@ interface Authenticator
     /**
      * Produces "quick" user authentication. "Quick" authentication is characterized by
      * the fact that it does not require data from the account (login / password),
-     * only the essence of the user is sufficient for it. In addition, this
-     * authentication does not call checkpoints.
+     * only the essence of the user is sufficient for it. Checkpoints will still
+     * be called.
      *
      * @param User $user User to be authenticated.
      * @param bool $remember If true, the user session will exist even after the browser is closed.

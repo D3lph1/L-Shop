@@ -38,8 +38,10 @@ interface Checkpoint
 
     /**
      * Called in case of unsuccessful login attempt.
+     *
+     * @param User|null $user
      */
-    public function loginFail(): void;
+    public function loginFail(?User $user = null): void;
 
     /**
      * Each checkpoint in the system must have a name so that it can be uniquely identified. This method returns the name of the checkpoint.

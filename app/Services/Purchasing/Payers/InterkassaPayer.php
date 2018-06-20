@@ -7,6 +7,11 @@ use App\Entity\Purchase;
 use App\Services\Purchasing\Payments\Interkassa\Checkout;
 use App\Services\Purchasing\Payments\Interkassa\Payment;
 
+/**
+ * Class InterkassaPayer
+ *
+ * @see https://www.interkassa.com/documentation-api/
+ */
 class InterkassaPayer implements Payer
 {
     public const NAME = 'interkassa';

@@ -12,7 +12,7 @@ use D3lph1\MinecraftRconManager\Exceptions\ConnectSocketException;
  * Class Rcon
  * Organizes the receipt of online statistics via the RCON protocol.
  */
-class Rcon implements Driver
+class RconDriver implements Driver
 {
     /**
      * @var Connector

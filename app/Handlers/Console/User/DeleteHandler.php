@@ -19,7 +19,17 @@ class DeleteHandler
     }
 
     /**
-     * @param string $username User who needs to assign a role. User is identified by username.
+     * @param string $username User who needs to check on existing.
+     *
+     * @return bool
+     */
+    public function check(string $username): bool
+    {
+        return $this->userRepository->findByUsername($username) !== null;
+    }
+
+    /**
+     * @param string $username User who needs to delete. User is identified by username.
      *
      * @throws UserNotFoundException
      */

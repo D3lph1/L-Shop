@@ -40,10 +40,10 @@ class RegisterController extends Controller
             }
         } catch (UsernameAlreadyExistsException $e) {
             return (new JsonResponse('username_already_exists'))
-                ->setHttpStatus(Response::HTTP_NOT_FOUND);
+                ->setHttpStatus(Response::HTTP_CONFLICT);
         } catch (EmailAlreadyExistsException $e) {
             return (new JsonResponse('email_already_exists'))
-                ->setHttpStatus(Response::HTTP_NOT_FOUND);
+                ->setHttpStatus(Response::HTTP_CONFLICT);
         }
     }
 }

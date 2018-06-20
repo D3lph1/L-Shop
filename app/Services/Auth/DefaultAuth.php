@@ -79,6 +79,16 @@ class DefaultAuth implements Auth
     /**
      * {@inheritdoc}
      */
+    public function authenticateQuick(User $user, bool $remember): bool
+    {
+        $this->session = $this->authenticator->authenticateQuick($user, $remember);
+
+        return $this->session->check();
+    }
+
+    /**
+     * {@inheritdoc}
+     */
     public function register(User $user, bool $activate = false): User
     {
         $this->eventDispatcher->dispatch(new RegistrationBeginEvent());

@@ -12,6 +12,12 @@ return [
     */
     'cookie' => 'l_shop_auth',
 
+    'checkpoints' => [
+        \App\Services\Auth\Checkpoint\ActivationCheckpoint::class,
+        \App\Services\Auth\Checkpoint\BanCheckpoint::class,
+        \App\Services\Auth\Checkpoint\ThrottleCheckpoint::class
+    ],
+
     'validation' => [
         'username' => [
             /*
@@ -108,6 +114,40 @@ return [
         |
         */
         'lifetime' => 720, // 12 hours
+    ],
+    /*
+    |--------------------------------------------------------------------------
+    | Application authentication throttling options.
+    |--------------------------------------------------------------------------
+    |
+    | This function is used to protect against account corruption. If you use the
+    | allowed number of login attempts, the account, ip-address or the whole
+    | application will be frozen for authentication.
+    |
+    | Set number of attempts 0 to disable throttling section.
+    |
+    */
+    'throttling' => [
+        'global' => [
+            // [!] Global throttling control disabled by default.
+
+            // The number of login attempts after which there is a lockout.
+            'attempts' => 0,
+            // Global throttling cooldown (in seconds).
+            'cooldown' => 0
+        ],
+        'ip' => [
+            // The number of login attempts after which there is a lockout for this IP-address.
+            'attempts' => 5,
+            // Ip throttling cooldown (in seconds).
+            'cooldown' => 500
+        ],
+        'user' => [
+            // The number of login attempts after which there is a lockout for this user.
+            'attempts' => 5,
+            // User throttling cooldown (in seconds).
+            'cooldown' => 500
+        ]
     ],
     'role' => [
         /*

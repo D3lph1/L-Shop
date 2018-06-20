@@ -58,7 +58,7 @@ class DefaultAuthenticator implements Authenticator
 
         // If passwords are equals.
         if (!$this->hasher->check($password, $user->getPassword())) {
-            $this->checkpointPool->passLoginFail();
+            $this->checkpointPool->passLoginFail($user);
 
             return $this->emptySession();
         }
@@ -75,6 +75,10 @@ class DefaultAuthenticator implements Authenticator
      */
     public function authenticateQuick(User $user, bool $remember): Session
     {
+        if (!$this->checkpointPool->passLogin($user)) {
+            return $this->emptySession();
+        }
+
         return $this->sessionPersistence->createFromUser($user, $remember);
     }
 

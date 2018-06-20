@@ -1,5 +1,5 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
 
 namespace App\Services\Auth;
 
@@ -26,10 +26,21 @@ interface Auth
     public function authenticate(string $username, string $password, bool $remember = false): bool;
 
     /**
+     * Authenticate user from given object.
+     *
+     * @param User $user     A user whose login session is required to create.
+     * @param bool $remember If true, the user session will exist even after the browser is closed.
+     *
+     * @return mixed
+     * @see Authenticator::authenticateQuick()
+     */
+    public function authenticateQuick(User $user, bool $remember): bool;
+
+    /**
      * Registers a new user in the system.
      *
-     * @param User $user         Entity of new user.
-     * @param bool $activate     If true, the user will be activated immediately after registration.
+     * @param User $user     Entity of new user.
+     * @param bool $activate If true, the user will be activated immediately after registration.
      *
      * @return User
      * @throws \Exception
