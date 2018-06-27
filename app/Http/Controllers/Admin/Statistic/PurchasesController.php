@@ -3,21 +3,20 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Statistic;
 
-use App\Entity\Purchase;
 use App\Exceptions\Purchase\AlreadyCompletedException;
 use App\Handlers\Admin\Statistic\Purchases\CompleteHandler;
 use App\Handlers\Admin\Statistic\Purchases\PaginationHandler;
 use App\Http\Controllers\Controller;
-use function App\permission_middleware;
 use App\Services\Auth\Permissions;
 use App\Services\DateTime\Formatting\JavaScriptFormatter;
 use App\Services\Notification\Notifications\Success;
 use App\Services\Notification\Notifications\Warning;
+use App\Services\Purchasing\ViaContext;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
-use App\Services\Purchasing\ViaContext;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use function App\permission_middleware;
 
 class PurchasesController extends Controller
 {

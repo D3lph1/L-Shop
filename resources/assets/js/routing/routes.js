@@ -19,6 +19,8 @@ const ProfilePurchases = () => import(/* webpackChunkName: "frontend" */ '../tem
 const ProfileCart = () => import(/* webpackChunkName: "frontend" */ '../templates/frontend/profile/Cart.vue');
 const News = () => import(/* webpackChunkName: "frontend" */ '../templates/frontend/news/News.vue');
 const Page = () => import(/* webpackChunkName: "frontend" */ '../templates/frontend/Page.vue');
+const Error404 = () => import(/* webpackChunkName: "frontend" */ '../templates/errors/404.vue');
+const Error503 = () => import(/* webpackChunkName: "frontend" */ '../templates/errors/503.vue');
 
 const BasicSettings = () => import(/* webpackChunkName: "admin" */ '../templates/admin/control/Basic.vue');
 const PaymentsSettings = () => import(/* webpackChunkName: "admin" */ '../templates/admin/control/Payments.vue');
@@ -453,5 +455,21 @@ export default [
                 }
             }
         ]
-    }
+    },
+    // Errors...
+    {
+        path: '/not-found',
+        name: 'error.404',
+        component: Error404
+    },
+    {
+        path: '/service-unavailable',
+        name: 'error.503',
+        component: Error503
+    },
+    {
+        path: '*',
+        name: 'error.404',
+        component: Error404
+    },
 ];

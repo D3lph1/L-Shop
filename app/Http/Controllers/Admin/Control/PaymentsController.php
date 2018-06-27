@@ -6,12 +6,12 @@ namespace App\Http\Controllers\Admin\Control;
 use App\Handlers\Admin\Control\Payments\VisitHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Control\SavePaymentsSettingsRequest;
-use function App\permission_middleware;
 use App\Services\Auth\Permissions;
 use App\Services\Notification\Notifications\Success;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use App\Services\Settings\Settings;
+use function App\permission_middleware;
 
 class PaymentsController extends Controller
 {

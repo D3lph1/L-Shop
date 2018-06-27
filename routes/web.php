@@ -19,4 +19,5 @@ $router->any('/cloak/back/{username}', 'Frontend\Character\CloakController@back'
     ->name('api.cloak.back');
 
 $router->get('{all}', 'SpaController@render')
-    ->where('all', '(.*)');
+    ->where('all', '(.*)')
+    ->name('spa');

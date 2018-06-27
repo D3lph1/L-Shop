@@ -6,7 +6,6 @@ namespace App\Handlers\Admin\Users\Edit;
 use App\DataTransferObjects\Admin\Users\Edit\CartResult;
 use App\DataTransferObjects\Admin\Users\Edit\PaginationList;
 use App\Exceptions\InvalidArgumentException;
-use App\Exceptions\Server\ServerNotFoundException;
 use App\Repository\Distribution\DistributionRepository;
 use App\Services\Auth\Auth;
 

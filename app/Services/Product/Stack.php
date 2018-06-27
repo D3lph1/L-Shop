@@ -5,7 +5,6 @@ namespace App\Services\Product;
 
 use App\Entity\Product;
 use App\Exceptions\Item\InvalidTypeException;
-use App\Exceptions\LogicException;
 use App\Exceptions\UnexpectedValueException;
 use App\Services\Item\Type;
 

@@ -6,8 +6,6 @@ namespace App\Handlers\Frontend\Auth;
 use App\DataTransferObjects\Frontend\Auth\RegisterResult;
 use App\Entity\User;
 use App\Services\Auth\Auth;
-use App\Services\Auth\Checkpoint\ActivationCheckpoint;
-use App\Services\Auth\Checkpoint\Pool;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
 

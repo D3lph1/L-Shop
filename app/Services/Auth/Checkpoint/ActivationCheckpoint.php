@@ -3,10 +3,10 @@ declare(strict_types = 1);
 
 namespace App\Services\Auth\Checkpoint;
 
-use App\Services\Auth\Exceptions\NotActivatedException;
 use App\Entity\Activation;
 use App\Entity\User;
 use App\Repository\Activation\ActivationRepository;
+use App\Services\Auth\Exceptions\NotActivatedException;
 
 /**
  * Class ActivationCheckpoint

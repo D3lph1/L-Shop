@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Middleware\Captcha as CaptchaMiddleware;
 use App\Http\Requests\Frontend\Auth\ForgotPasswordRequest;
 use App\Services\Auth\AccessMode;
+use App\Services\Auth\Auth;
 use App\Services\Auth\Exceptions\UserDoesNotExistException;
 use App\Services\Notification\Notifications\Error;
 use App\Services\Notification\Notifications\Success;
@@ -33,14 +34,16 @@ class ForgotPasswordController extends Controller
     /**
      * Returns the data needed to render the page with the request form for password recovery.
      *
+     * @param Auth     $auth
      * @param Settings $settings
      * @param Captcha  $captcha
      *
      * @return JsonResponse
      */
-    public function render(Settings $settings, Captcha $captcha): JsonResponse
+    public function render(Auth $auth, Settings $settings, Captcha $captcha): JsonResponse
     {
         return new JsonResponse(Status::SUCCESS, [
+            'onlyForAdmins' => !$auth->check() && $settings->get('auth.access_mode')->getValue() === AccessMode::GUEST,
             'accessModeAny' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY,
             'accessModeAuth' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY,
             'captchaKey' => $settings->get('system.security.captcha.enabled')->getValue(DataType::BOOL) ? $captcha->key() : null

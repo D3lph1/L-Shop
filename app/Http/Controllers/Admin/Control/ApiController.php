@@ -8,11 +8,11 @@ use App\Handlers\Admin\Control\Api\SaveHandler;
 use App\Handlers\Admin\Control\Api\VisitHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Control\SaveApiSettingsRequest;
-use function App\permission_middleware;
 use App\Services\Auth\Permissions;
 use App\Services\Notification\Notifications\Success;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
+use function App\permission_middleware;
 
 class ApiController extends Controller
 {

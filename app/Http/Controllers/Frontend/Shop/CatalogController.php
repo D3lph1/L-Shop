@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Frontend\Shop;
 
-use function App\auth_middleware;
 use App\DataTransferObjects\Frontend\Shop\Server;
 use App\Exceptions\Category\CategoryNotFoundException as CategoryDoesNotExistException;
 use App\Exceptions\Product\ProductNotFoundException;
@@ -26,7 +25,7 @@ use App\Services\Server\Persistence\Persistence;
 use App\Services\Settings\Settings;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use function App\auth_middleware;
 
 /**
  * Class CatalogController
@@ -36,7 +35,7 @@ class CatalogController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(auth_middleware(AuthMiddleware::SOFT));
+        $this->middleware(auth_middleware(AuthMiddleware::ANY));
         $this->middleware(CaptchaMiddleware::NAME)->only('purchase');
     }
 

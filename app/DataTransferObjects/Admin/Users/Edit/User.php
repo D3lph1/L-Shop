@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace App\DataTransferObjects\Admin\Users\Edit;
 
-use App\DataTransferObjects\Admin\Statistic\Purchases\Purchase;
 use App\Entity\Permission;
 use App\Entity\Role;
 use App\Entity\User as Entity;

@@ -5,7 +5,6 @@ namespace App\Repository\Persistence;
 
 use App\Entity\Persistence;
 use App\Entity\User;
-use Doctrine\Common\Collections\Collection;
 
 interface PersistenceRepository
 {

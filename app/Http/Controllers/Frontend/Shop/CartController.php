@@ -29,8 +29,8 @@ use App\Services\Server\Persistence\Persistence;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
 use Illuminate\Http\Request;
-use function App\auth_middleware;
 use Illuminate\Http\Response;
+use function App\auth_middleware;
 
 /**
  * Class CartController
@@ -40,7 +40,7 @@ class CartController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(auth_middleware(AuthMiddleware::SOFT));
+        $this->middleware(auth_middleware(AuthMiddleware::ANY));
         $this->middleware(CaptchaMiddleware::NAME)->only('purchase');
     }
 

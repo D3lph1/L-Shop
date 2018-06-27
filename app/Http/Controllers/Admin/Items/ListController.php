@@ -14,8 +14,8 @@ use App\Services\Notification\Notificator;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use Illuminate\Http\Request;
-use function App\permission_middleware;
 use Illuminate\Http\Response;
+use function App\permission_middleware;
 
 class ListController extends Controller
 {

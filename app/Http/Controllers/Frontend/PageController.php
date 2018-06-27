@@ -10,7 +10,6 @@ use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 /**
  * Class PageController

@@ -5,7 +5,6 @@ namespace App\Services\Database\Transfer;
 
 use App\Services\Database\Transfer\Queries\Version050a\Query;
 use Doctrine\ORM\EntityManagerInterface;
-use Doctrine\ORM\Query\ResultSetMapping;
 
 class Version050ATransfer implements Transfer
 {

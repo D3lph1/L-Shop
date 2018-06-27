@@ -10,8 +10,6 @@ use App\Services\Auth\Activator;
 use App\Services\Auth\Auth;
 use App\Services\Auth\Authenticator;
 use App\Services\Auth\BanManager;
-use App\Services\Auth\Checkpoint\ActivationCheckpoint;
-use App\Services\Auth\Checkpoint\BanCheckpoint;
 use App\Services\Auth\Checkpoint\Checkpoint;
 use App\Services\Auth\Checkpoint\Pool;
 use App\Services\Auth\Checkpoint\ThrottleCheckpoint;

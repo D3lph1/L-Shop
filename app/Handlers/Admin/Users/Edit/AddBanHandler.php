@@ -5,7 +5,6 @@ namespace App\Handlers\Admin\Users\Edit;
 
 use App\DataTransferObjects\Admin\Users\Edit\AddBan;
 use App\DataTransferObjects\Admin\Users\Edit\Ban as BanDTO;
-use App\Entity\Ban;
 use App\Exceptions\InvalidArgumentException;
 use App\Exceptions\UnexpectedValueException;
 use App\Exceptions\User\UserNotFoundException;

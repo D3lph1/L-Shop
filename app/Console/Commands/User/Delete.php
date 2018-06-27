@@ -4,8 +4,8 @@ declare(strict_types = 1);
 namespace App\Console\Commands\User;
 
 use App\Console\Command;
-use App\Handlers\Consoe\User\DeleteHandler;
 use App\Exceptions\User\UserNotFoundException;
+use App\Handlers\Consoe\User\DeleteHandler;
 
 class Delete extends Command
 {

@@ -7,7 +7,6 @@ use App\Http\Controllers\Controller;
 use App\Services\Auth\Auth;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
-use Illuminate\Http\RedirectResponse;
 
 /**
  * Class LogoutController

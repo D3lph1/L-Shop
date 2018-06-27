@@ -4,8 +4,8 @@ declare(strict_types=1);
 namespace App\Console\Commands\User;
 
 use App\Console\Command;
-use App\Handlers\Consoe\User\CreateHandler;
 use App\Exceptions\InvalidArgumentException;
+use App\Handlers\Consoe\User\CreateHandler;
 use App\Services\Auth\Exceptions\EmailAlreadyExistsException;
 use App\Services\Auth\Exceptions\UsernameAlreadyExistsException;
 use Illuminate\Validation\ValidationException;

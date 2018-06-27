@@ -13,9 +13,6 @@ return [
         ]
     ],
     'system' => [
-        'maintenance' => [
-            'enabled' => false
-        ],
         'security' => [
             'captcha' => [
                 'enabled' => true,

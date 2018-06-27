@@ -3,10 +3,10 @@ declare(strict_types=1);
 
 namespace App\Services\Auth;
 
-use App\Services\Auth\Generators\CodeGenerator;
 use App\Entity\Activation;
 use App\Entity\User;
 use App\Repository\Activation\ActivationRepository;
+use App\Services\Auth\Generators\CodeGenerator;
 use App\Services\DateTime\DateTimeUtil;
 use Illuminate\Contracts\Config\Repository;
 

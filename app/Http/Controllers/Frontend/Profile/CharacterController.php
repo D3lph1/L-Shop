@@ -3,7 +3,6 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Frontend\Profile;
 
-use function App\accessor_middleware;
 use App\Exceptions\Media\Character\InvalidRatioException;
 use App\Exceptions\Media\Character\InvalidResolutionException;
 use App\Handlers\Frontend\Profile\Character\DeleteCloakHandler;
@@ -25,6 +24,7 @@ use App\Services\Response\Status;
 use App\Services\Security\Accessors\Frontend\Profile\CharacterAccessor;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
+use function App\accessor_middleware;
 
 /**
  * Class CharacterController

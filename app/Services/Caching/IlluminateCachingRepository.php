@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace App\Services\Caching;
 
 use Illuminate\Cache\CacheManager;
-use Illuminate\Contracts\Cache\Repository;
 
 class IlluminateCachingRepository implements CachingRepository
 {

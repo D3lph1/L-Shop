@@ -3,13 +3,13 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Frontend\Shop;
 
-use function App\auth_middleware;
 use App\Handlers\Frontend\Shop\ReplenishmentHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Frontend\Shop\BalanceReplenishmentRequest;
 use App\Services\Auth\AccessMode;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
+use function App\auth_middleware;
 
 class ReplenishmentController extends Controller
 {

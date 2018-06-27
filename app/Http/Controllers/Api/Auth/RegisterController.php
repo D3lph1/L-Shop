@@ -9,9 +9,9 @@ use App\Services\Auth\Exceptions\EmailAlreadyExistsException;
 use App\Services\Auth\Exceptions\UsernameAlreadyExistsException;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
-use function App\signed_middleware;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use function App\signed_middleware;
 
 class RegisterController extends Controller
 {

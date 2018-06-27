@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     /*
     |--------------------------------------------------------------------------
     | Name of cookie with session persistence code.
@@ -10,7 +11,18 @@ return [
     | the authenticated user.
     |
     */
+
     'cookie' => 'l_shop_auth',
+
+    /*
+    |--------------------------------------------------------------------------
+    | List of active checkpoints.
+    |--------------------------------------------------------------------------
+    |
+    | The array contains a set of checkpoint classes that will be used by the
+    | auth system.
+    |
+    */
 
     'checkpoints' => [
         \App\Services\Auth\Checkpoint\ActivationCheckpoint::class,
@@ -20,6 +32,7 @@ return [
 
     'validation' => [
         'username' => [
+
             /*
             |--------------------------------------------------------------------------
             | Username minimum length
@@ -29,7 +42,9 @@ return [
             | the user-entered username.
             |
             */
+
             'min' => 4,
+
             /*
             |--------------------------------------------------------------------------
             | Username maximum length
@@ -39,7 +54,9 @@ return [
             | the user-entered username.
             |
             */
+
             'max' => 32,
+
             /**
             |--------------------------------------------------------------------------
             | Username validation rule
@@ -51,10 +68,12 @@ return [
             * @see \App\Providers\ValidationServiceProvider::boot()
             |
             */
+
             'rule' => 'alpha_dash_strict'
         ],
 
         'password' => [
+
             /*
             |--------------------------------------------------------------------------
             | Password minimal length
@@ -66,6 +85,7 @@ return [
             |
             */
             'min' => 5,
+
             /*
             |--------------------------------------------------------------------------
             | Password maximum length
@@ -75,11 +95,13 @@ return [
             | the user-entered password.
             |
             */
+
             'max' => 32
         ]
     ],
 
     'persistence' => [
+
         /*
         |--------------------------------------------------------------------------
         | Persistence code lifetime
@@ -89,9 +111,11 @@ return [
         | become invalid and the user will be logged out.
         |
         */
+
         'lifetime' => 43800 // 1 month
     ],
     'activation' => [
+
         /*
         |--------------------------------------------------------------------------
         | Activation code lifetime
@@ -101,9 +125,11 @@ return [
         | invalid.
         |
         */
+
         'lifetime' => 720 // 12 hours
     ],
     'reminder' => [
+
         /*
         |--------------------------------------------------------------------------
         | Password reminder code lifetime
@@ -113,8 +139,10 @@ return [
         | invalid.
         |
         */
+
         'lifetime' => 720, // 12 hours
     ],
+
     /*
     |--------------------------------------------------------------------------
     | Application authentication throttling options.
@@ -127,6 +155,7 @@ return [
     | Set number of attempts 0 to disable throttling section.
     |
     */
+
     'throttling' => [
         'global' => [
             // [!] Global throttling control disabled by default.
@@ -150,6 +179,7 @@ return [
         ]
     ],
     'role' => [
+
         /*
         |--------------------------------------------------------------------------
         | Default roles
@@ -158,6 +188,7 @@ return [
         | These roles will be attached to users when they create a registration.
         |
         */
+
         'default' => [
             \App\Services\Auth\Roles::USER
         ]
@@ -178,5 +209,6 @@ return [
     | - App\Services\Auth\Hashing\WhirlpoolHasher
     |
     */
+
     'hasher' => \App\Services\Auth\Hashing\BcryptHasher::class
 ];

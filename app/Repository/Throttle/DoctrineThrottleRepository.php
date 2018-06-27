@@ -7,7 +7,6 @@ use App\Entity\Throttle;
 use App\Entity\User;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
-use Psr\Log\LoggerInterface;
 
 class DoctrineThrottleRepository implements ThrottleRepository
 {

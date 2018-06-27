@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Frontend\Auth;
 
-use function App\auth_middleware;
 use App\Handlers\Frontend\Auth\ServersHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\Auth;
@@ -11,6 +10,7 @@ use App\Services\Auth\AccessMode;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use App\Services\Settings\Settings;
+use function App\auth_middleware;
 
 /**
  * Class SelectServerController
@@ -20,7 +20,7 @@ class SelectServerController extends Controller
 {
     public function __construct()
     {
-        $this->middleware(auth_middleware(Auth::SOFT));
+        $this->middleware(auth_middleware(Auth::ANY));
     }
 
     /**

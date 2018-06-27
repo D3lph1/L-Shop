@@ -8,7 +8,6 @@ use App\Services\Auth\Acl\HasPermissions;
 use App\Services\Auth\Acl\HasRoles;
 use App\Services\Auth\Acl\PermissionTrait;
 use App\Services\Auth\Acl\RoleTrait;
-use App\Services\User\Balance\Transactor;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;

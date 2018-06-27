@@ -4,11 +4,11 @@ declare(strict_types = 1);
 namespace App\Http\Controllers\Admin\Information;
 
 use App\Http\Controllers\Controller;
-use function App\permission_middleware;
 use App\Services\Auth\Permissions;
 use App\Services\Meta\System;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
+use function App\permission_middleware;
 
 class AboutController extends Controller
 {

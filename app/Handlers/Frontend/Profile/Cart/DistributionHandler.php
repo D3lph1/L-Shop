@@ -9,7 +9,6 @@ use App\Exceptions\Distributor\NotAttemptedException;
 use App\Repository\Distribution\DistributionRepository;
 use App\Services\Purchasing\Distributors\Attempting;
 use App\Services\Purchasing\Distributors\Pool;
-use App\Services\Purchasing\PurchaseCompleter;
 
 /**
  * Class DistributionHandler

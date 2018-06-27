@@ -14,8 +14,8 @@ use App\Services\Auth\Permissions;
 use App\Services\Notification\Notifications\Success;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
-use function App\permission_middleware;
 use Illuminate\Http\Response;
+use function App\permission_middleware;
 
 class AddController extends Controller
 {

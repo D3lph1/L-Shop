@@ -17,12 +17,17 @@
                 <h1 class="text-xs-center">{{ $t('content.frontend.auth.password.forgot.title') }}</h1>
             </v-card>
 
+            <v-card-text>
+                <p class="body-1 mb-0" v-html="$t('content.frontend.auth.password.forgot.description')"></p>
+            </v-card-text>
+
             <v-form id="form">
                 <v-text-field
                         v-model="email"
                         :label="$t('validation.attributes.email')"
                         required
                         prepend-icon="mail_outline"
+                        @keyup.enter="perform"
                 ></v-text-field>
                 <vue-recaptcha
                         v-if="reCaptchaKey"
@@ -60,7 +65,7 @@
                     <span>{{ $t('content.frontend.auth.login.title') }}</span>
                 </v-tooltip>
 
-                <v-tooltip bottom>
+                <v-tooltip bottom v-if="!onlyForAdmins">
                     <v-btn
                             large
                             outline
@@ -88,6 +93,7 @@
                 email: '',
                 loadingBtn: false,
 
+                onlyForAdmins: false,
                 accessModeAny: false,
                 accessModeAuth: false,
                 reCaptchaKey: null,
@@ -146,6 +152,7 @@
             setData(response) {
                 const data = response.data;
 
+                this.onlyForAdmins = data.onlyForAdmins;
                 this.accessModeAny = data.accessModeAny;
                 this.accessModeAuth = data.accessModeAuth;
                 this.reCaptchaKey = data.captchaKey;

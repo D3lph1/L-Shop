@@ -8,7 +8,6 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 use LaravelDoctrine\ORM\Pagination\PaginatesFromParams;
-use LaravelDoctrine\ORM\Pagination\PaginatesFromRequest;
 
 class DoctrineNewsRepository implements NewsRepository
 {

@@ -9,12 +9,10 @@ use App\Handlers\Admin\Items\Add\AddHandler;
 use App\Handlers\Admin\Items\Add\RenderHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Items\AddRequest;
-use App\Services\Auth\Permissions;
 use App\Services\Notification\Notifications\Success;
 use App\Services\Notification\Notificator;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
-use function App\permission_middleware;
 
 class AddController extends Controller
 {

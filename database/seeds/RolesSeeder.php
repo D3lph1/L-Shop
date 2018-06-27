@@ -43,7 +43,8 @@ class RolesSeeder extends Seeder
             Permissions::ADMIN_GAME_CART_ACCESS,
             Permissions::ALLOW_COMPLETE_PURCHASES,
             Permissions::ADMIN_INFORMATION_ABOUT_ACCESS,
-            Permissions::ACCESS_WHILE_MAINTENANCE
+            Permissions::ACCESS_WHILE_MAINTENANCE,
+            Permissions::ACCESS_WHILE_ACCESS_MODE_GUEST
         ]
     ];
 

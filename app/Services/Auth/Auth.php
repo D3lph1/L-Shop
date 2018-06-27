@@ -3,14 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Services\Auth;
 
-use App\Services\Auth\Checkpoint\Pool;
-use App\Services\Auth\Session\Session;
-use App\Services\Auth\Session\SessionPersistence;
 use App\Entity\User;
-use App\Events\Auth\RegistrationBeginEvent;
-use App\Events\Auth\RegistrationFailedEvent;
-use App\Events\Auth\RegistrationSuccessEvent;
-use Illuminate\Events\Dispatcher;
 
 interface Auth
 {

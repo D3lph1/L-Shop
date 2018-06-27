@@ -8,13 +8,13 @@ use App\Exceptions\Page\AlreadyExistException;
 use App\Handlers\Admin\Pages\AddHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Pages\AddRequest;
-use function App\permission_middleware;
 use App\Services\Auth\Permissions;
 use App\Services\Notification\Notifications\Success;
 use App\Services\Notification\Notifications\Warning;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use Illuminate\Http\Response;
+use function App\permission_middleware;
 
 class AddController extends Controller
 {

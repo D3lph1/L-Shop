@@ -6,6 +6,7 @@ namespace App\Handlers\Admin\Control\Basic;
 use App\DataTransferObjects\Admin\Control\Basic\VisitResult;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
+use Illuminate\Contracts\Foundation\Application;
 
 class VisitHandler
 {
@@ -14,9 +15,15 @@ class VisitHandler
      */
     private $settings;
 
-    public function __construct(Settings $settings)
+    /**
+     * @var Application
+     */
+    private $app;
+
+    public function __construct(Settings $settings, Application $app)
     {
         $this->settings = $settings;
+        $this->app = $app;
     }
 
     public function handle(): VisitResult
@@ -55,6 +62,6 @@ class VisitHandler
             ->setMonitoringRconCommand($this->settings->get('system.monitoring.rcon.command')->getValue())
             ->setMonitoringRconResponsePattern($this->settings->get('system.monitoring.rcon.pattern')->getValue())
 
-            ->setMaintenanceModeEnabled($this->settings->get('system.maintenance.enabled')->getValue(DataType::BOOL));
+            ->setMaintenanceModeEnabled($this->app->isDownForMaintenance());
     }
 }

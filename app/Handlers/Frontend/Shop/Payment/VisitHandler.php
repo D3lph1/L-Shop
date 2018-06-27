@@ -10,11 +10,6 @@ use App\Exceptions\Purchase\PurchaseNotFoundException;
 use App\Repository\Purchase\PurchaseRepository;
 use App\Services\Auth\Auth;
 use App\Services\Purchasing\Payers\Pool;
-use App\Services\Purchasing\Payments\Interkassa\Checkout as InterkassaCheckout;
-use App\Services\Purchasing\Payments\Robokassa\Checkout as RobokassaCheckout;
-use App\Services\Purchasing\Payments\Robokassa\Payment as RobokassaPayment;
-use App\Services\Purchasing\Payments\Interkassa\Payment as InterkassaPayment;
-use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
 
 class VisitHandler

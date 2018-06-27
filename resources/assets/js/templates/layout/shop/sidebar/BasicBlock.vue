@@ -46,7 +46,7 @@
                     <v-list-tile-title>{{ $t('content.frontend.auth.login.logout') }}</v-list-tile-title>
                 </v-list-tile-content>
             </v-list-tile>
-            <v-list-tile v-else @click="$router.push({name: 'frontend.auth.login' })">
+            <v-list-tile v-if="accessModeAny && !$store.getters.isAuth" @click="$router.push({name: 'frontend.auth.login' })">
                 <v-list-tile-action>
                     <v-icon>vpn_key</v-icon>
                 </v-list-tile-action>
@@ -60,6 +60,12 @@
 
 <script>
     export default {
+        props: {
+            accessModeAny: {
+                required: true,
+                type: Boolean
+            }
+        },
         computed: {
             cartBadge() {
                 return Boolean(this.$store.state.shop.cart.amount);

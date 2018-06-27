@@ -7,11 +7,11 @@ use App\Entity\User;
 use App\Exceptions\Media\Character\InvalidRatioException;
 use App\Exceptions\User\UserNotFoundException;
 use App\Repository\User\UserRepository;
+use App\Services\Media\Character\Cloak\Image as CloakImage;
 use App\Services\Validation\CloakValidator;
 use Illuminate\Http\UploadedFile;
 use Intervention\Image\Image;
 use Intervention\Image\ImageManager;
-use App\Services\Media\Character\Cloak\Image as CloakImage;
 
 class UploadCloakHandler
 {

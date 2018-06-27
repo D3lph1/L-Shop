@@ -5,8 +5,6 @@ namespace App\Services\Auth;
 
 use App\Entity\Ban;
 use App\Entity\User;
-use App\Repository\User\UserRepository;
-use App\Services\DateTime\DateTimeUtil;
 
 interface BanManager
 {

@@ -3,22 +3,28 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Frontend\Auth;
 
+use App\Exceptions\ForbiddenException;
 use App\Handlers\Frontend\Auth\LoginHandler;
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\Auth as AuthMiddleware;
 use App\Http\Requests\Frontend\Auth\LoginRequest;
 use App\Services\Auth\AccessMode;
+use App\Services\Auth\Auth;
 use App\Services\Auth\Exceptions\BannedException;
 use App\Services\Auth\Exceptions\NotActivatedException;
 use App\Services\Auth\Exceptions\ThrottlingException;
 use App\Services\Notification\Notifications\Error;
 use App\Services\Notification\Notifications\Success;
+use App\Services\Notification\Notifications\Warning;
 use App\Services\Notification\Notificator;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
 use App\Services\Support\Lang\Ban\BanMessage;
+use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Http\Response;
+use function App\auth_middleware;
 
 /**
  * Class LoginController
@@ -28,23 +34,24 @@ class LoginController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware(auth_middleware(AuthMiddleware::GUEST));
     }
 
     /**
      * Returns the data needed to render the page with the authorization form.
      *
-     * @param Settings $settings
+     * @param Auth        $auth
+     * @param Settings    $settings
+     * @param Application $app
      *
      * @return JsonResponse
      */
-    public function render(Settings $settings)
+    public function render(Auth $auth, Settings $settings, Application $app)
     {
         return new JsonResponse(Status::SUCCESS, [
-            // TODO: only for admins ???
-            'onlyForAdmins' => false,
+            'onlyForAdmins' => !$auth->check() && $settings->get('auth.access_mode')->getValue() === AccessMode::GUEST,
             'accessModeAny' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY,
-            'downForMaintenance' => $settings->get('system.maintenance.enabled')->getValue(DataType::BOOL),
+            'downForMaintenance' => $app->isDownForMaintenance(),
             'enabledPasswordReset' => $settings->get('auth.reset_password.enabled')->getValue(DataType::BOOL),
             'enabledRegister' => $settings->get('auth.register.enabled')->getValue(DataType::BOOL)
         ]);
@@ -81,6 +88,10 @@ class LoginController extends Controller
                 ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.frontend.auth.login.invalid_credentials')));
 
+        } catch (ForbiddenException $e) {
+            return (new JsonResponse('no_rights'))
+                ->setHttpStatus(Response::HTTP_FORBIDDEN)
+                ->addNotification(new Warning(__('msg.no_rights')));
         } catch (NotActivatedException $e) {
             return (new JsonResponse('user_not_activated'))
                 ->setHttpStatus(Response::HTTP_CONFLICT)

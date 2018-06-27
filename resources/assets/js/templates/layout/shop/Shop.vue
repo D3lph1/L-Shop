@@ -23,7 +23,7 @@
                 :mobile-break-point="mobileBreakPoint"
         >
 
-            <basic-block></basic-block>
+            <basic-block :access-mode-any="accessModeAny"></basic-block>
             <profile-block v-if="$store.getters.isAuth" :character="character"></profile-block>
             <admin-block v-if="adminSidebar.length !== 0" :items="adminSidebar"></admin-block>
 
@@ -81,6 +81,7 @@
                 monitoring: [],
                 monitoringDialog: false,
 
+                accessModeAny: false,
                 character: false,
                 server: null,
                 adminSidebar: [],
@@ -131,6 +132,7 @@
 
                 this.$store.commit('setCurrencyPlain', data.currency.plain);
                 this.$store.commit('setCurrencyHtml', data.currency.html);
+                this.accessModeAny = data.accessModeAny;
                 this.character = data.character;
                 this.adminSidebar = data.sidebar.admin;
                 data.news.enabled ? this.$store.commit('enableNews') : this.$store.commit('disableNews');

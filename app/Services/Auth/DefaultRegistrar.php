@@ -3,11 +3,11 @@ declare(strict_types = 1);
 
 namespace App\Services\Auth;
 
+use App\Entity\User;
+use App\Repository\User\UserRepository;
 use App\Services\Auth\Exceptions\EmailAlreadyExistsException;
 use App\Services\Auth\Exceptions\UsernameAlreadyExistsException;
 use App\Services\Auth\Hashing\Hasher;
-use App\Entity\User;
-use App\Repository\User\UserRepository;
 use Doctrine\ORM\EntityManagerInterface;
 
 class DefaultRegistrar implements Registrar

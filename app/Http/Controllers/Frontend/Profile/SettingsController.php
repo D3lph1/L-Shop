@@ -7,12 +7,12 @@ use App\Handlers\Frontend\Profile\Character\ChangePasswordHandler;
 use App\Handlers\Frontend\Profile\Character\ResetSessionsHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Frontend\Profile\Character\ChangePasswordRequest;
-use function App\permission_middleware;
 use App\Services\Auth\Permissions;
 use App\Services\Notification\Notifications\Info;
 use App\Services\Notification\Notifications\Success;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
+use function App\permission_middleware;
 
 /**
  * Class SettingsController

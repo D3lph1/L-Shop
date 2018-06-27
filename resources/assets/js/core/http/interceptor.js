@@ -51,6 +51,8 @@ axios.interceptors.response.use((response) => {
     // Show internal error notification.
     if (err.response.status === 500) {
         notification.error($t('msg.request_error.title'));
+    } else if (err.response.status === 503) {
+        router.push({name: 'error.503'});
     } else {
         // Show validation error notification.
         // Example of structure:

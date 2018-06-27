@@ -3,10 +3,9 @@ declare(strict_types = 1);
 
 namespace App\Listeners\Auth;
 
-use App\Services\Auth\Activator;
 use App\Events\Auth\RegistrationSuccessEvent;
 use App\Mail\Auth\Confirmation;
-use App\Services\Auth\Checkpoint\ActivationCheckpoint;
+use App\Services\Auth\Activator;
 use App\Services\Auth\Checkpoint\Pool;
 use Illuminate\Contracts\Mail\Mailer;
 

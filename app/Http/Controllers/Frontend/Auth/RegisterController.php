@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend\Auth;
 
 use App\Handlers\Frontend\Auth\RegisterHandler;
 use App\Http\Controllers\Controller;
+use App\Http\Middleware\Auth as AuthMiddleware;
 use App\Http\Middleware\Captcha as CaptchaMiddleware;
 use App\Http\Requests\Frontend\Auth\RegisterRequest;
 use App\Services\Auth\AccessMode;
@@ -18,6 +19,7 @@ use App\Services\Security\Captcha\Captcha;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
 use Illuminate\Http\Response;
+use function App\auth_middleware;
 
 /**
  * Class RegisterController
@@ -27,7 +29,7 @@ class RegisterController extends Controller
 {
     public function __construct()
     {
-        $this->middleware('guest');
+        $this->middleware(auth_middleware(AuthMiddleware::GUEST));
         $this->middleware(CaptchaMiddleware::NAME)->only('handle');
     }
 
@@ -39,7 +41,7 @@ class RegisterController extends Controller
      *
      * @return JsonResponse
      */
-    public function render(Settings $settings, Captcha $captcha)
+    public function render(Settings $settings, Captcha $captcha): JsonResponse
     {
         return new JsonResponse(Status::SUCCESS, [
             'accessModeAny' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY,

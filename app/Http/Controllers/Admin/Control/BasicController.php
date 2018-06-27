@@ -6,12 +6,14 @@ namespace App\Http\Controllers\Admin\Control;
 use App\Handlers\Admin\Control\Basic\VisitHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Control\SaveBasicSettingsRequest;
-use function App\permission_middleware;
 use App\Services\Auth\Permissions;
 use App\Services\Notification\Notifications\Success;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use App\Services\Settings\Settings;
+use Illuminate\Contracts\Console\Kernel;
+use Illuminate\Contracts\Foundation\Application;
+use function App\permission_middleware;
 
 class BasicController extends Controller
 {
@@ -25,7 +27,7 @@ class BasicController extends Controller
         return new JsonResponse(Status::SUCCESS, $handler->handle());
     }
 
-    public function save(SaveBasicSettingsRequest $request, Settings $settings): JsonResponse
+    public function save(SaveBasicSettingsRequest $request, Settings $settings, Application $app, Kernel $console): JsonResponse
     {
         $settings->setArray([
             'shop' => [
@@ -91,6 +93,12 @@ class BasicController extends Controller
             ]
         ]);
         $settings->save();
+
+        if ($request->get('maintenance_mode')) {
+            $console->call('down');
+        } else {
+            $console->call('up');
+        }
 
         return (new JsonResponse(Status::SUCCESS))
             ->addNotification(new Success(__('common.changed')));

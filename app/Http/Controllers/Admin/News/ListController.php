@@ -6,11 +6,11 @@ namespace App\Http\Controllers\Admin\News;
 use App\DataTransferObjects\PaginationList;
 use App\Handlers\Admin\News\ListHandler;
 use App\Http\Controllers\Controller;
-use function App\permission_middleware;
 use App\Services\Auth\Permissions;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use Illuminate\Http\Request;
+use function App\permission_middleware;
 
 class ListController extends Controller
 {

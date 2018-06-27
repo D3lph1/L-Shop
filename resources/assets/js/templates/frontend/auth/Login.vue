@@ -18,10 +18,15 @@
             </v-card>
 
             <v-form id="form">
+                <v-alert color="info" :value="onlyForAdmins || downForMaintenance" outline>
+                    {{ $t('content.frontend.auth.login.maintenance') }}
+                </v-alert>
+
                 <v-text-field
                         v-model="username"
                         :label="$t('validation.attributes.username')"
                         prepend-icon="person_outline"
+                        @keyup.enter="perform"
                 ></v-text-field>
                 <v-text-field
                         v-model="password"
@@ -30,6 +35,7 @@
                         :append-icon="visible ? 'visibility' : 'visibility_off'"
                         :type="visible ? 'text' : 'password'"
                         prepend-icon="lock_open"
+                        @keyup.enter="perform"
                 ></v-text-field>
                 <v-btn
                         @click="perform"
@@ -46,7 +52,7 @@
                     height="auto"
                     id="form-footer"
             >
-                <v-tooltip bottom v-if="enabledPasswordReset">
+                <v-tooltip bottom v-if="enabledPasswordReset && !downForMaintenance">
                     <v-btn
                             large
                             outline
@@ -60,7 +66,7 @@
                     <span>{{ $t('content.frontend.auth.login.forgot_password') }}</span>
                 </v-tooltip>
 
-                <v-tooltip bottom v-if="enabledRegister && !onlyForAdmins">
+                <v-tooltip bottom v-if="enabledRegister && !onlyForAdmins && !downForMaintenance">
                     <v-btn
                             large
                             outline
@@ -74,7 +80,7 @@
                     <span>{{ $t('content.frontend.auth.register.title') }}</span>
                 </v-tooltip>
 
-                <v-tooltip bottom v-if="accessModeAny">
+                <v-tooltip bottom v-if="accessModeAny && !downForMaintenance">
                     <v-btn
                             large
                             outline

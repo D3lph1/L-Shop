@@ -20,7 +20,6 @@ use App\Services\Security\Captcha\Captcha;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
 use Illuminate\Contracts\Config\Repository;
-use Illuminate\Contracts\View\View;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;

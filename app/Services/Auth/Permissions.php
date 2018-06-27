@@ -169,6 +169,11 @@ class Permissions
     public const ACCESS_WHILE_MAINTENANCE = 'access_while_maintenance';
 
     /**
+     * Allows the user to access to pages while application has access = @see AccessMode::GUEST.
+     */
+    public const ACCESS_WHILE_ACCESS_MODE_GUEST = 'access_while_access_mode_guest';
+
+    /**
      * Private constructor because this class contains only constants.
      */
     private function __construct()

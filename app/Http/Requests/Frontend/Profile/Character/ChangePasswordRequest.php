@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace App\Http\Requests\Frontend\Profile\Character;
 
-use App\Services\Settings\Settings;
 use App\Services\Validation\Rule;
 use App\Services\Validation\RulesBuilder;
 use Illuminate\Contracts\Config\Repository;

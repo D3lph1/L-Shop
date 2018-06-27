@@ -7,14 +7,15 @@ use App\Composers\Constructors\AdminBlockConstructor;
 use App\DataTransferObjects\Frontend\Shop\Server;
 use App\Handlers\Frontend\News\LoadHandler;
 use App\Http\Controllers\Controller;
+use App\Services\Auth\AccessMode;
 use App\Services\Auth\Auth;
 use App\Services\Cart\Cart;
+use App\Services\Media\Character\Cloak\Accessor as CloakAccessor;
+use App\Services\Media\Character\Skin\Accessor as SkinAccessor;
 use App\Services\Meta\System;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use App\Services\Server\Persistence\Persistence;
-use App\Services\Media\Character\Cloak\Accessor as CloakAccessor;
-use App\Services\Media\Character\Skin\Accessor as SkinAccessor;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
 
@@ -80,6 +81,7 @@ class ShopController extends Controller
                     'balance' => $balance
                 ]
             ],
+            'accessModeAny' => $settings->get('auth.access_mode')->getValue() === AccessMode::ANY,
             'cart' => [
                 'amount' => $persistence->retrieve() ? count($cart->retrieveServer($persistence->retrieve())) : null
             ],

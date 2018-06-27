@@ -4,11 +4,11 @@ declare(strict_types = 1);
 namespace App\Http\Controllers\Admin\Other;
 
 use App\Http\Controllers\Controller;
-use function App\permission_middleware;
 use App\Services\Auth\Permissions;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use Illuminate\Http\Request;
+use function App\permission_middleware;
 
 class RconController extends Controller
 {

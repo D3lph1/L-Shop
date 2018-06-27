@@ -13,14 +13,20 @@ use App\Services\Response\Status;
 use App\Services\Settings\Settings;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Router;
 
 class Auth
 {
     public const GUEST = 'guest';
 
-    public const SOFT = 'soft';
+    public const AUTH = 'auth';
 
-    public const HARD = 'hard';
+    public const ANY = 'any';
+
+    protected $except = [
+        'frontend.auth.login.render',
+        'frontend.auth.login.handle'
+    ];
 
     /**
      * @var AuthService
@@ -32,10 +38,16 @@ class Auth
      */
     private $settings;
 
-    public function __construct(AuthService $auth, Settings $settings)
+    /**
+     * @var Router
+     */
+    private $router;
+
+    public function __construct(AuthService $auth, Settings $settings, Router $router)
     {
         $this->auth = $auth;
         $this->settings = $settings;
+        $this->router = $router;
     }
 
     public function handle(Request $request, \Closure $next, ?string $mode = null)
@@ -54,17 +66,31 @@ class Auth
                     return $this->response('frontend.auth.servers', new Warning(__('msg.only_for_guests')));
                 }
 
+                if ($this->settings->get('auth.access_mode')->getValue() === AccessMode::GUEST) {
+                    $f = false;
+                    foreach ($this->except as $except) {
+                        if ($except === $this->router->currentRouteName()) {
+                            $f = true;
+                            break;
+                        }
+                    }
+
+                    if (!$f) {
+                        return $this->response('frontend.auth.servers', new Warning(__('msg.forbidden')));
+                    }
+                }
+
                 return $next($request);
 
-            case self::SOFT:
-                if ($this->settings->get('auth.access_mode')->getValue() === AccessMode::AUTH && !$this->auth->check()) {
+            case self::AUTH:
+                if (!$this->auth->check()) {
                     return $this->response('frontend.auth.login', new Warning(__('msg.only_for_auth')));
                 }
 
                 return $next($request);
 
-            case self::HARD:
-                if (!$this->auth->check()) {
+            case self::ANY:
+                if ($this->settings->get('auth.access_mode')->getValue() === AccessMode::AUTH && !$this->auth->check()) {
                     return $this->response('frontend.auth.login', new Warning(__('msg.only_for_auth')));
                 }
 
@@ -75,8 +101,8 @@ class Auth
                     sprintf(
                         '$mode must be has next values: "%s", "%s", "%s", "%s". %s given',
                         self::GUEST,
-                        self::SOFT,
-                        self::HARD,
+                        self::ANY,
+                        self::AUTH,
                         $mode
                     )
                 );

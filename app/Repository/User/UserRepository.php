@@ -5,7 +5,6 @@ namespace App\Repository\User;
 
 use App\Entity\User;
 use Doctrine\ORM\Internal\Hydration\IterableResult;
-use Doctrine\ORM\Query;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 interface UserRepository
