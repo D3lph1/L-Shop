@@ -67,7 +67,7 @@ class Kernel extends HttpKernel
         'auth' => \App\Http\Middleware\Auth::class,
         'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'accessor' => \App\Http\Middleware\PassAccessors::class,
+        'accessor' => \App\Http\Middleware\PassAccessor::class,
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'captcha' => \App\Http\Middleware\Captcha::class,
         'permission' => \App\Http\Middleware\NeedPermission::class,

@@ -48,11 +48,18 @@ axios.interceptors.response.use((response) => {
 
     return response;
 }, (err) => {
-    // Show internal error notification.
-    if (err.response.status === 500) {
+    // Show relevant error.
+    if (err.response.status === 500 && err.response.config.method === 'get') {
+        router.replace({name: 'error.500'});
+    } else if (err.response.status === 500) {
+        // Show internal error notification.
         notification.error($t('msg.request_error.title'));
-    } else if (err.response.status === 503) {
-        router.push({name: 'error.503'});
+    } else if (err.response.status === 503 && err.response.config.method === 'get') {
+        router.replace({name: 'error.503'});
+    } else if (err.response.status === 403 && err.response.config.method === 'get') {
+        router.replace({name: 'error.403'});
+    } else if (err.response.status === 404 && err.response.config.method === 'get') {
+        router.replace({name: 'error.404'});
     } else {
         // Show validation error notification.
         // Example of structure:

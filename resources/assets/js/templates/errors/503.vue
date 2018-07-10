@@ -13,7 +13,7 @@
                     id="form-header"
                     color="primary"
             >
-                <v-icon medium color="white">pan_tool</v-icon>
+                <v-icon medium color="white">access_time</v-icon>
                 <h1>503</h1>
             </v-card>
 

@@ -10,11 +10,11 @@ use App\Services\Caching\ClearsCache;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use LaravelDoctrine\ORM\Pagination\PaginatesFromRequest;
+use LaravelDoctrine\ORM\Pagination\PaginatesFromParams;
 
 class DoctrineProductRepository implements ProductRepository
 {
-    use PaginatesFromRequest, ClearsCache;
+    use PaginatesFromParams, ClearsCache;
 
     /**
      * @var EntityManagerInterface
@@ -83,32 +83,36 @@ class DoctrineProductRepository implements ProductRepository
             ->getOneOrNullResult();
     }
 
-    public function findForCategoryPaginated(Category $category, string $orderBy, bool $descending, int $perPage): LengthAwarePaginator
+    public function findForCategoryPaginated(Category $category, string $orderBy, bool $descending, int $page, int $perPage, bool $withHidden): LengthAwarePaginator
     {
+        $qb = $this->createQueryBuilder('product')
+            ->select(['product', 'item', 'enchantmentItems', 'enchantment'])
+            ->join('product.item', 'item')
+            ->leftJoin('item.enchantmentItems', 'enchantmentItems')
+            ->leftJoin('enchantmentItems.enchantment', 'enchantment')
+            ->where('product.category = :category')
+            ->orderBy($orderBy, $descending ? 'DESC' : 'ASC')
+            ->setParameter('category', $category);
+
+        if (!$withHidden) {
+            $qb->andWhere('product.hidden = false');
+        }
+
         return $this->paginate(
-            $this->createQueryBuilder('product')
-                ->select(['product', 'item', 'enchantmentItems', 'enchantment'])
-                ->join('product.item', 'item')
-                ->leftJoin('item.enchantmentItems', 'enchantmentItems')
-                ->leftJoin('enchantmentItems.enchantment', 'enchantment')
-                ->where('product.category = :category')
-                ->andWhere('product.hidden = false')
-                ->orderBy($orderBy, $descending ? 'DESC' : 'ASC')
-                ->setParameter('category', $category)
-                ->getQuery()
-                ->useResultCache($this->cachingOptions->isEnabled(), $this->cachingOptions->getLifetime()),
+            $qb->getQuery()
+            ->useResultCache($this->cachingOptions->isEnabled(), $this->cachingOptions->getLifetime()),
             $perPage,
-            'page',
+            $page,
             false
         );
     }
 
-    public function findPaginated(int $perPage): LengthAwarePaginator
+    public function findPaginated(int $page, int $perPage): LengthAwarePaginator
     {
-        return $this->paginateAll($perPage, 'page');
+        return $this->paginateAll($perPage, $page);
     }
 
-    public function findPaginatedWithOrder(string $orderBy, bool $descending, int $perPage): LengthAwarePaginator
+    public function findPaginatedWithOrder(string $orderBy, bool $descending, int $page, int $perPage): LengthAwarePaginator
     {
         return $this->paginate(
             $this->createQueryBuilder('product')
@@ -118,12 +122,12 @@ class DoctrineProductRepository implements ProductRepository
                 ->orderBy($orderBy, $descending ? 'DESC' : 'ASC')
                 ->getQuery(),
             $perPage,
-            'page',
+            $page,
             false
         );
     }
 
-    public function findPaginateWithSearch(string $search, int $perPage): LengthAwarePaginator
+    public function findPaginateWithSearch(string $search, int $page, int $perPage): LengthAwarePaginator
     {
         return $this->paginate(
             $this->createQueryBuilder('product')
@@ -140,12 +144,12 @@ class DoctrineProductRepository implements ProductRepository
                 ->setParameter('search', "%{$search}%")
                 ->getQuery(),
             $perPage,
-            'page',
+            $page,
             false
         );
     }
 
-    public function findPaginatedWithOrderAndSearch(string $orderBy, bool $descending, string $search, int $perPage): LengthAwarePaginator
+    public function findPaginatedWithOrderAndSearch(string $orderBy, bool $descending, string $search, int $page, int $perPage): LengthAwarePaginator
     {
         return $this->paginate(
             $this->createQueryBuilder('product')
@@ -163,7 +167,7 @@ class DoctrineProductRepository implements ProductRepository
                 ->setParameter('search', "%{$search}%")
                 ->getQuery(),
             $perPage,
-            'page',
+            $page,
             false
         );
     }

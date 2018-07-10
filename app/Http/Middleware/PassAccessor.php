@@ -9,7 +9,7 @@ use Closure;
 use Illuminate\Contracts\Container\Container;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-class PassAccessors
+class PassAccessor
 {
     /**
      * @var Container

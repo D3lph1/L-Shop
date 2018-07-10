@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace Tests\Integrated\Services\Game\Permissions\LuckPerms;
 
 use App\Entity\User;
+use App\Repository\User\UserRepository;
 use App\Services\Auth\Auth;
 use App\Services\Game\Permissions\LuckPerms\Entity\Group;
 use App\Services\Game\Permissions\LuckPerms\Entity\GroupPermission;
@@ -12,6 +13,9 @@ use App\Services\Game\Permissions\LuckPerms\Entity\PlayerPermission;
 use App\Services\Game\Permissions\LuckPerms\Repository\Group\GroupRepository;
 use App\Services\Game\Permissions\LuckPerms\Repository\Player\PlayerRepository;
 use App\Services\Game\Permissions\LuckPerms\Storage;
+use App\Services\Game\Permissions\Funnel;
+use App\Services\Game\Permissions\Predicates\PermissionPredicate;
+use App\Services\Game\Permissions\Predicates\Regex;
 use Tests\TestCase;
 
 class StorageTest extends TestCase
@@ -30,7 +34,7 @@ class StorageTest extends TestCase
         $adminPlayer = new Player($user, $groupDefault);
         $adminPlayer->getPermissions()->add(new PlayerPermission('inplayer.one', $adminPlayer));
         $this->app->make(PlayerRepository::class)->create($adminPlayer);
-        $player = $storage->retrievePlayer($user);
+        $player = $storage->retrievePlayerByUser($user);
         self::assertNotNull($player);
         self::assertEquals('default', $player->getPrimaryGroup()->getName());
         self::assertEquals(2, $player->getPrimaryGroup()->getPermissions()->count());

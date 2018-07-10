@@ -19,19 +19,17 @@ class ListController extends Controller
         $this->middleware(permission_middleware(Permissions::ADMIN_NEWS_CRUD_ACCESS));
     }
 
-    public function pagination(Request $request, ListHandler $handler)
+    public function pagination(Request $request, ListHandler $handler): JsonResponse
     {
         $dto = $handler->handle(
             (new PaginationList())
                 ->setOrderBy($request->get('order_by'))
                 ->setDescending((bool)$request->get('descending'))
                 ->setSearch($request->get('search'))
+                ->setPage((int)$request->get('page'))
                 ->setPerPage((int)$request->get('per_page'))
         );
 
-        return new JsonResponse(Status::SUCCESS, [
-            'paginator' => $dto->getPaginator(),
-            'news' => $dto->getNews()
-        ]);
+        return new JsonResponse(Status::SUCCESS, $dto);
     }
 }

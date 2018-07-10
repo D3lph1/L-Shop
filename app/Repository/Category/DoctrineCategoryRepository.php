@@ -35,6 +35,20 @@ class DoctrineCategoryRepository implements CategoryRepository
         $this->em->flush();
     }
 
+    public function update(Category $category): void
+    {
+        $this->clearResultCache();
+        $this->em->merge($category);
+        $this->em->flush();
+    }
+
+    public function remove(Category $category): void
+    {
+        $this->clearResultCache();
+        $this->em->remove($category);
+        $this->em->flush();
+    }
+
     public function deleteAll(): bool
     {
         $this->clearResultCache();

@@ -4,7 +4,7 @@ declare(strict_types=1);
 namespace App\Handlers\Consoe\User\Roles;
 
 use App\Entity\Role;
-use App\Exceptions\Role\RoleNotFoundException;
+use App\Exceptions\Role\PermissionNotFoundException;
 use App\Exceptions\User\UserNotFoundException;
 use App\Repository\Role\RoleRepository;
 use App\Repository\User\UserRepository;
@@ -32,7 +32,7 @@ class DetachHandler
      * @param array      $roles    Roles that will be detached from the user. Roles are identified by name.
      *
      * @throws UserNotFoundException
-     * @throws RoleNotFoundException
+     * @throws PermissionNotFoundException
      */
     public function handle(string $username, array $roles)
     {
@@ -55,7 +55,7 @@ class DetachHandler
             }
 
             if ($f) {
-                throw RoleNotFoundException::byName($role);
+                throw PermissionNotFoundException::byName($role);
             }
         }
 

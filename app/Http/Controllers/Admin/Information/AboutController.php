@@ -23,7 +23,7 @@ class AboutController extends Controller
             'version' => System::version()->formatted(),
             'github' => System::githubRepositoryUrl(),
             'images' => [
-                'logo' => asset('img/layout/logo/small.png'),
+                'logo' => asset('img/layout/logo/medium.png'),
                 'laravel' => asset('img/layout/admin/logo/laravel.png'),
                 'vue' => asset('img/layout/admin/logo/vue.png'),
                 'doctrine' => asset('img/layout/admin/logo/doctrine.png'),

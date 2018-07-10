@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace App\Services\Game\Permissions;
 
 use App\Entity\User;
+use Ramsey\Uuid\UuidInterface;
 
 /**
  * Interface Storage
@@ -20,7 +21,29 @@ interface Storage
      *
      * @return Player|null
      */
-    public function retrievePlayer(User $user): ?Player;
+    public function retrievePlayerByUser(User $user): ?Player;
+
+    /**
+     * Gets the player and repositories and converts the received storage entity
+     * to the subject domain entity {@see Player}. Returns null - if the
+     * specified player is not found.
+     *
+     * @param string $username The username whose player you want to receive.
+     *
+     * @return Player|null
+     */
+    public function retrievePlayerByUsername(string $username): ?Player;
+
+    /**
+     * Gets the player and repositories and converts the received storage entity
+     * to the subject domain entity {@see Player}. Returns null - if the
+     * specified player is not found.
+     *
+     * @param UuidInterface $uuid The UUID whose player you want to receive.
+     *
+     * @return Player|null
+     */
+    public function retrievePlayerByUuid(UuidInterface $uuid): ?Player;
 
     /**
      * Gets the group and repositories and converts the received storage entity

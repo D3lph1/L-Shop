@@ -11,7 +11,7 @@
         <p class="subheading" v-html="$t('content.admin.information.about.description')"></p>
             <div class="text-xs-center mt-5">
                 <a :href="github" target="_blank" class="l-shop-version" title="GitHub">
-                    <v-chip outline color="primary" style="cursor: pointer !important;">
+                    <v-chip outline color="primary" class="cp">
                         <v-avatar>
                             <img :src="images.logo" class="cp" alt="L-Shop logo">
                         </v-avatar>

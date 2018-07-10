@@ -9,11 +9,11 @@ use App\Services\Caching\ClearsCache;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use LaravelDoctrine\ORM\Pagination\PaginatesFromRequest;
+use LaravelDoctrine\ORM\Pagination\PaginatesFromParams;
 
 class DoctrinePageRepository implements PageRepository
 {
-    use PaginatesFromRequest, ClearsCache;
+    use PaginatesFromParams, ClearsCache;
 
     /**
      * @var EntityManagerInterface
@@ -71,50 +71,50 @@ class DoctrinePageRepository implements PageRepository
             ->getOneOrNullResult();
     }
 
-    public function findPaginated(int $perPage): LengthAwarePaginator
+    public function findPaginated(int $page, int $perPage): LengthAwarePaginator
     {
-        return $this->paginateAll($perPage);
+        return $this->paginateAll($perPage, $page);
     }
 
-    public function findPaginatedWithOrder(string $orderBy, bool $descending, int $perPage): LengthAwarePaginator
+    public function findPaginatedWithOrder(string $orderBy, bool $descending, int $page, int $perPage): LengthAwarePaginator
     {
         return $this->paginate(
-            $this->createQueryBuilder('p')
-                ->orderBy("p.{$orderBy}", $descending ? 'DESC' : 'ASC')
+            $this->createQueryBuilder('page')
+                ->orderBy("page.{$orderBy}", $descending ? 'DESC' : 'ASC')
                 ->getQuery(),
             $perPage,
-            'page',
+            $page,
             false
         );
     }
 
-    public function findPaginateWithSearch(string $search, int $perPage): LengthAwarePaginator
+    public function findPaginateWithSearch(string $search, int $page, int $perPage): LengthAwarePaginator
     {
         return $this->paginate(
-            $this->createQueryBuilder('p')
-                ->where('p.id LIKE :search')
-                ->orWhere('p.title LIKE :search')
-                ->orWhere('p.url LIKE :search')
+            $this->createQueryBuilder('page')
+                ->where('page.id LIKE :search')
+                ->orWhere('page.title LIKE :search')
+                ->orWhere('page.url LIKE :search')
                 ->setParameter('search', "%{$search}%")
                 ->getQuery(),
             $perPage,
-            'page',
+            $page,
             false
         );
     }
 
-    public function findPaginatedWithOrderAndSearch(string $orderBy, bool $descending, string $search, int $perPage): LengthAwarePaginator
+    public function findPaginatedWithOrderAndSearch(string $orderBy, bool $descending, string $search, int $page, int $perPage): LengthAwarePaginator
     {
         return $this->paginate(
-            $this->createQueryBuilder('p')
-                ->orderBy("p.{$orderBy}", $descending ? 'DESC' : 'ASC')
-                ->where('p.id LIKE :search')
-                ->orWhere('p.title LIKE :search')
-                ->orWhere('p.url LIKE :search')
+            $this->createQueryBuilder('page')
+                ->orderBy("page.{$orderBy}", $descending ? 'DESC' : 'ASC')
+                ->where('page.id LIKE :search')
+                ->orWhere('page.title LIKE :search')
+                ->orWhere('page.url LIKE :search')
                 ->setParameter('search', "%{$search}%")
                 ->getQuery(),
             $perPage,
-            'page',
+            $page,
             false
         );
     }
@@ -130,7 +130,7 @@ class DoctrinePageRepository implements PageRepository
     {
         $this->clearResultCache();
 
-        return (bool)$this->er->createQueryBuilder('p')
+        return (bool)$this->er->createQueryBuilder('page')
             ->delete()
             ->getQuery()
             ->getResult();

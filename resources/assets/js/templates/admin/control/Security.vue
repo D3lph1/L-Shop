@@ -76,7 +76,7 @@
                 this.$axios.post('/spa/admin/control/security', {
                     captcha_enabled: this.captchaEnabled,
                     recaptcha_public_key: this.recaptchaPublicKey,
-                    recaptcha_secret_key: this.recaptchaPublicKey,
+                    recaptcha_secret_key: this.recaptchaSecretKey,
                     reset_password_enabled: this.resetPasswordEnabled,
                     change_password_enabled: this.changePasswordEnabled,
                 })

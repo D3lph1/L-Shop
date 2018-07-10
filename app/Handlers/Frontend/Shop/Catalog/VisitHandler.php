@@ -15,6 +15,8 @@ use App\Exceptions\Server\ServerNotFoundException;
 use App\Exceptions\UnexpectedValueException;
 use App\Repository\Product\ProductRepository;
 use App\Repository\Server\ServerRepository;
+use App\Services\Auth\Auth;
+use App\Services\Auth\Permissions;
 use App\Services\Cart\Cart;
 use App\Services\Cart\Item;
 use App\Services\Product\Order;
@@ -25,6 +27,11 @@ use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class VisitHandler
 {
+    /**
+     * @var Auth
+     */
+    private $auth;
+
     /**
      * @var ServerRepository
      */
@@ -51,12 +58,14 @@ class VisitHandler
     private $cart;
 
     public function __construct(
+        Auth $auth,
         ServerRepository $serverRepository,
         ProductRepository $productRepository,
         Settings $settings,
         Persistence $persistence,
         Cart $cart)
     {
+        $this->auth = $auth;
         $this->serverRepository = $serverRepository;
         $this->productRepository = $productRepository;
         $this->settings = $settings;
@@ -65,6 +74,7 @@ class VisitHandler
     }
 
     /**
+     * @param int $page
      * @param int $serverId
      * @param int $categoryId
      *
@@ -72,7 +82,7 @@ class VisitHandler
      * @throws ServerNotFoundException
      * @throws CategoryDoesNotExistException
      */
-    public function handle(int $serverId, ?int $categoryId): Result
+    public function handle(int $page, int $serverId, ?int $categoryId): Result
     {
         $server = $this->checkServerAndCategory($serverId, $categoryId);
 
@@ -102,7 +112,9 @@ class VisitHandler
             $currentCategory,
             $orderBy,
             $this->settings->get('system.catalog.pagination.descending')->getValue(DataType::BOOL),
-            $this->settings->get('system.catalog.pagination.per_page')->getValue(DataType::INT)
+            $page,
+            $this->settings->get('system.catalog.pagination.per_page')->getValue(DataType::INT),
+            $this->auth->check() && $this->auth->getUser()->hasPermission(Permissions::ACCESS_TO_HIDDEN_PRODUCTS)
         );
         $products = $this->fromPaginatorToDTO($paginator);
 

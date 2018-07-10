@@ -15,7 +15,7 @@ return [
     'system' => [
         'security' => [
             'captcha' => [
-                'enabled' => true,
+                'enabled' => false,
                 'recaptcha' => [
                     'public_key' => '',
                     'secret_key' => ''

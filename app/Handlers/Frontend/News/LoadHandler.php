@@ -29,7 +29,7 @@ class LoadHandler
 
     public function load(int $portion): Container
     {
-        $paginator = $this->newsRepository->findAllPaginated(
+        $paginator = $this->newsRepository->findPaginatedOrderByCreatedAtDesc(
             $portion, $this->settings->get('system.news.pagination.per_page')->getValue(DataType::INT));
 
         $items = $paginator->items();

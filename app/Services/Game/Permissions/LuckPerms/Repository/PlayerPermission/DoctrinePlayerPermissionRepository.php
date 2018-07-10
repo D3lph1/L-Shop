@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Services\Game\Permissions\LuckPerms\Repository\PlayerPermission;
 
+use App\Services\Game\Permissions\LuckPerms\Entity\PlayerPermission;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 
@@ -22,6 +23,12 @@ class DoctrinePlayerPermissionRepository implements PlayerPermissionRepository
     {
         $this->em = $em;
         $this->er = $er;
+    }
+
+    public function create(PlayerPermission $permission): void
+    {
+        $this->em->persist($permission);
+        $this->em->flush();
     }
 
     public function deleteAll(): bool

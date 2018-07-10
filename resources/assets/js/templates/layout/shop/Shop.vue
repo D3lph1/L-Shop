@@ -23,6 +23,8 @@
                 :mobile-break-point="mobileBreakPoint"
         >
 
+            <header-block v-if="$store.getters.isAuth"></header-block>
+            <balance-block v-if="$store.getters.isAuth"></balance-block>
             <basic-block :access-mode-any="accessModeAny"></basic-block>
             <profile-block v-if="$store.getters.isAuth" :character="character"></profile-block>
             <admin-block v-if="adminSidebar.length !== 0" :items="adminSidebar"></admin-block>
@@ -62,6 +64,8 @@
 
 <script>
     import loader from './../../../core/http/loader'
+    import HeaderBlock from './sidebar/HeaderBlock.vue'
+    import BalanceBlock from './sidebar/BalanceBlock.vue'
     import BasicBlock from './sidebar/BasicBlock.vue'
     import ProfileBlock from './sidebar/ProfileBlock.vue'
     import AdminBlock from './sidebar/AdminBlock.vue'
@@ -146,6 +150,8 @@
         },
         components: {
             AsideNews,
+            'header-block': HeaderBlock,
+            'balance-block': BalanceBlock,
             'basic-block': BasicBlock,
             'profile-block': ProfileBlock,
             'admin-block': AdminBlock,

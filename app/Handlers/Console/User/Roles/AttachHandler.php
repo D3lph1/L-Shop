@@ -3,7 +3,7 @@ declare(strict_types=1);
 
 namespace App\Handlers\Consoe\User\Roles;
 
-use App\Exceptions\Role\RoleNotFoundException;
+use App\Exceptions\Permission\PermissionNotFoundException;
 use App\Exceptions\User\RoleAlreadyAttachedException;
 use App\Exceptions\User\UserNotFoundException;
 use App\Repository\Role\RoleRepository;
@@ -32,7 +32,7 @@ class AttachHandler
      * @param array      $roles    Roles that will be attached to the user. Roles are identified by name.
      *
      * @throws UserNotFoundException
-     * @throws RoleNotFoundException
+     * @throws PermissionNotFoundException
      * @throws RoleAlreadyAttachedException
      */
     public function handle(string $username, array $roles)
@@ -56,7 +56,7 @@ class AttachHandler
             }
 
             if ($f) {
-                throw RoleNotFoundException::byName($role);
+                throw PermissionNotFoundException::byName($role);
             }
         }
 

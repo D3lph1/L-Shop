@@ -38,11 +38,6 @@ class Group
     private $parents;
 
     /**
-     * @var Collection
-     */
-    private $childs;
-
-    /**
      * @var \DateTimeImmutable|null
      */
     private $expireAt;
@@ -52,7 +47,6 @@ class Group
         $this->name = $name;
         $this->permissions = new ArrayCollection();
         $this->parents = new ArrayCollection();
-        $this->childs = new ArrayCollection();
     }
 
     public function getName(): string
@@ -68,11 +62,6 @@ class Group
     public function getParents(): Collection
     {
         return $this->parents;
-    }
-
-    public function getChilds(): Collection
-    {
-        return $this->childs;
     }
 
     public function getExpireAt(): ?\DateTimeImmutable

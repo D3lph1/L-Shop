@@ -21,6 +21,8 @@ class RolesSeeder extends Seeder
         ],
         Roles::ADMIN => [
             Permissions::SWITCH_SERVERS_STATE,
+            Permissions::ACCESS_TO_DISABLED_SERVER,
+            Permissions::ACCESS_TO_HIDDEN_PRODUCTS,
             Permissions::ALLOW_SET_HD_SKINS_IMPORTANT,
             Permissions::ALLOW_SET_HD_CLOAKS_IMPORTANT,
             Permissions::PROFILE_PURCHASE_HISTORY_ACCESS,
@@ -36,6 +38,7 @@ class RolesSeeder extends Seeder
             Permissions::ADMIN_NEWS_CRUD_ACCESS,
             Permissions::ADMIN_PAGES_CRUD_ACCESS,
             Permissions::ADMIN_USERS_CRUD_ACCESS,
+            Permissions::ADMIN_ROLES_CRUD_ACCESS,
             Permissions::ADMIN_OTHER_RCON_ACCESS,
             Permissions::ADMIN_OTHER_DEBUG_ACCESS,
             Permissions::ADMIN_STATISTIC_SHOW_ACCESS,

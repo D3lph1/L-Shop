@@ -3,8 +3,6 @@ declare(strict_types = 1);
 
 namespace App\Services\Game\Permissions;
 
-use App\Entity\Server;
-
 /**
  * Class Permission
  * Represents the permission of a user or group.
@@ -34,7 +32,7 @@ class Permission
     /**
      * The server on which this permission is available. If null is available globally.
      *
-     * @var Server|null
+     * @var mixed
      */
     private $server;
 
@@ -46,7 +44,7 @@ class Permission
     private $world;
 
     /**
-     * Date and time to which the user owns this privilege. If null - privilege does not expire ever.
+     * Date and time to which the user owns this permission. If null - permission does not expire ever.
      *
      * @var \DateTimeImmutable|null
      */
@@ -81,12 +79,12 @@ class Permission
         return $this;
     }
 
-    public function getServer(): ?Server
+    public function getServer()
     {
         return $this->server;
     }
 
-    public function setServer(?Server $server): Permission
+    public function setServer($server): Permission
     {
         $this->server = $server;
 

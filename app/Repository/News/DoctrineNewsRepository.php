@@ -35,6 +35,18 @@ class DoctrineNewsRepository implements NewsRepository
         $this->em->flush();
     }
 
+    public function update(News $news): void
+    {
+        $this->em->merge($news);
+        $this->em->flush();
+    }
+
+    public function remove(News $news): void
+    {
+        $this->em->remove($news);
+        $this->em->flush();
+    }
+
     public function deleteAll(): bool
     {
         return (bool)$this->er->createQueryBuilder('n')
@@ -57,9 +69,16 @@ class DoctrineNewsRepository implements NewsRepository
         return $this->er->find($id);
     }
 
-    public function findAllPaginated(int $page, int $perPage): LengthAwarePaginator
+    public function findPaginatedOrderByCreatedAtDesc(int $page, int $perPage): LengthAwarePaginator
     {
-        return $this->paginateAll($perPage, $page);
+        return $this->paginate(
+            $this->createQueryBuilder('news')
+                ->orderBy('news.createdAt', 'DESC')
+                ->getQuery(),
+            $perPage,
+            $page,
+            false
+        );
     }
 
     public function findPaginated(int $page, int $perPage): LengthAwarePaginator

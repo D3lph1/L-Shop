@@ -42,7 +42,6 @@ class EditRequest extends FormRequest
             ->addRule(new Rule('string'))
             ->addRule(new Rule('min', $config->get('auth.validation.password.min')))
             ->addRule(new Rule('max', $config->get('auth.validation.password.max')))
-            ->addRule(new Rule('confirmed'))
             ->build();
 
         return [

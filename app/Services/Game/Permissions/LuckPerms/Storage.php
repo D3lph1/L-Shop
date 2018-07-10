@@ -7,12 +7,19 @@ use App\Entity\User;
 use App\Repository\Server\ServerRepository;
 use App\Services\Game\Permissions\Group;
 use App\Services\Game\Permissions\LuckPerms\Entity\GroupPermission;
+use App\Services\Game\Permissions\LuckPerms\Entity\Permission as PermissionEntity;
+use App\Services\Game\Permissions\LuckPerms\Entity\Player as PlayerEntity;
 use App\Services\Game\Permissions\LuckPerms\Entity\PlayerPermission;
 use App\Services\Game\Permissions\LuckPerms\Repository\Group\GroupRepository;
+use App\Services\Game\Permissions\LuckPerms\Repository\GroupPermission\GroupPermissionRepository;
 use App\Services\Game\Permissions\LuckPerms\Repository\Player\PlayerRepository;
 use App\Services\Game\Permissions\Permission;
 use App\Services\Game\Permissions\Player;
+use App\Services\Game\Permissions\PlayerWithUser;
+use App\Services\Game\Permissions\PlayerWithUsername;
+use App\Services\Game\Permissions\PlayerWithUuid;
 use App\Services\Game\Permissions\Storage as StorageInterface;
+use Ramsey\Uuid\UuidInterface;
 
 class Storage implements StorageInterface
 {
@@ -27,6 +34,11 @@ class Storage implements StorageInterface
     private $groupRepository;
 
     /**
+     * @var GroupPermissionRepository
+     */
+    private $groupPermissionRepository;
+
+    /**
      * @var ServerRepository
      */
     private $serverRepository;
@@ -34,46 +46,79 @@ class Storage implements StorageInterface
     public function __construct(
         PlayerRepository $playerRepository,
         GroupRepository $groupRepository,
-        ServerRepository $serverRepository)
+        ServerRepository $serverRepository,
+        GroupPermissionRepository $groupPermissionRepository)
     {
         $this->playerRepository = $playerRepository;
         $this->groupRepository = $groupRepository;
+        $this->groupPermissionRepository = $groupPermissionRepository;
         $this->serverRepository = $serverRepository;
     }
 
-    public function retrievePlayer(User $user): ?Player
+    public function retrievePlayerByUser(User $user): ?Player
     {
         $playerFromStorage = $this->playerRepository->findByUsername($user->getUsername());
         if ($playerFromStorage !== null) {
-            $group = $this->retrieveGroup($playerFromStorage->getPrimaryGroup()->getName());
+            $primaryGroup = $this->retrieveGroup($playerFromStorage->getPrimaryGroup()->getName());
+            $player = new PlayerWithUser($user, $primaryGroup);
 
-            $player = new Player($user, $group);
-            /** @var PlayerPermission $permission */
-            foreach ($playerFromStorage->getPermissions() as $permission) {
-                $newPermission = $this->fillPermission($permission);
-                if ($this->expired($newPermission->getExpireAt())) {
-                    // Remove permission if it has expired.
-                    $playerFromStorage->getPermissions()->removeElement($permission);
-                } else {
-                    $player->getPermissions()->add($newPermission);
-
-                    $parentGroupName = $this->getGroupNameByPermission($newPermission);
-                    if ($parentGroupName !== null) {
-                        $parentGroup = $this->retrieveGroup($parentGroupName);
-                        if ($parentGroup !== null) {
-                            $player->getGroups()->add($parentGroup);
-                        }
-                    }
-                }
-            }
-            // Updates the player. If he has removed the permissions, the changes will
-            // take effect in the repository.
-            $this->playerRepository->update($playerFromStorage);
-
-            return $player;
+            return $this->fillPlayer($playerFromStorage, $player);
         }
 
         return null;
+    }
+
+    public function retrievePlayerByUsername(string $username): ?Player
+    {
+        $playerFromStorage = $this->playerRepository->findByUsername($username);
+        if ($playerFromStorage !== null) {
+            $primaryGroup = $this->retrieveGroup($playerFromStorage->getPrimaryGroup()->getName());
+            $player = new PlayerWithUsername($username, $primaryGroup);
+
+            return $this->fillPlayer($playerFromStorage, $player);
+        }
+
+        return null;
+    }
+
+    public function retrievePlayerByUuid(UuidInterface $uuid): ?Player
+    {
+        $playerFromStorage = $this->playerRepository->findByUuid($uuid);
+        if ($playerFromStorage !== null) {
+            $primaryGroup = $this->retrieveGroup($playerFromStorage->getPrimaryGroup()->getName());
+            $player = new PlayerWithUuid($uuid, $primaryGroup);
+
+            return $this->fillPlayer($playerFromStorage, $player);
+        }
+
+        return null;
+    }
+
+    private function fillPlayer(PlayerEntity $playerFromStorage, Player $player): Player
+    {
+        /** @var PlayerPermission $permission */
+        foreach ($playerFromStorage->getPermissions() as $permission) {
+            $newPermission = $this->fillPermission($permission);
+            if ($this->expired($newPermission->getExpireAt())) {
+                // Remove permission if it has expired.
+                $playerFromStorage->getPermissions()->removeElement($permission);
+            } else {
+                $player->getPermissions()->add($newPermission);
+
+                $parentGroupName = $this->getGroupNameByPermission($newPermission);
+                if ($parentGroupName !== null) {
+                    $parentGroup = $this->retrieveGroup($parentGroupName);
+                    if ($parentGroup !== null) {
+                        $player->getGroups()->add($parentGroup);
+                    }
+                }
+            }
+        }
+        // Updates the player. If he has removed the permissions, the changes will
+        // take effect in the repository.
+        $this->playerRepository->update($playerFromStorage);
+
+        return $player;
     }
 
     public function retrieveGroup(string $name): ?Group
@@ -81,6 +126,7 @@ class Storage implements StorageInterface
         $groupFromStorage = $this->groupRepository->findByName($name);
         if ($groupFromStorage !== null) {
             $group = new Group($groupFromStorage->getName());
+
             /** @var GroupPermission $permission */
             foreach ($groupFromStorage->getPermissions() as $permission) {
                 $newPermission = $this->fillPermission($permission);
@@ -95,7 +141,6 @@ class Storage implements StorageInterface
                         $parentGroup = $this->retrieveGroup($parentGroupName);
                         $group->setExpireAt($newPermission->getExpireAt());
                         $group->getParents()->add($parentGroup);
-                        $parentGroup->getChilds()->add($group);
                     }
                 }
             }
@@ -110,20 +155,14 @@ class Storage implements StorageInterface
     }
 
     /**
-     * @param GroupPermission|PlayerPermission $from
+     * @param PermissionEntity $from
      *
      * @return Permission
      */
-    private function fillPermission($from): Permission
+    private function fillPermission(PermissionEntity $from): Permission
     {
-        $newPermission = new Permission($from->getPermission());
-        $server = null;
-        if ($from->getServer() !== 'global') {
-            $server = $this->serverRepository->find((int)$from->getServer());
-        }
-
-        $newPermission->setAllowed($from->getValue())
-            ->setServer($server)
+        return (new Permission($from->getPermission()))->setAllowed($from->getValue())
+            ->setServer($from->getServer())
             ->setWorld($from->getWorld())
             ->setExpireAt(
                 $from->getExpireAt() !== 0
@@ -131,8 +170,6 @@ class Storage implements StorageInterface
                     : null
             )
             ->setContexts($from->getContext());
-
-        return $newPermission;
     }
 
     private function getGroupNameByPermission(Permission $permission): ?string
@@ -144,6 +181,12 @@ class Storage implements StorageInterface
         return null;
     }
 
+    /**
+     * @param \DateTimeImmutable|null $expireAt
+     *
+     * @return bool
+     * @throws \Exception
+     */
     private function expired(?\DateTimeImmutable $expireAt): bool
     {
         if ($expireAt === null) {

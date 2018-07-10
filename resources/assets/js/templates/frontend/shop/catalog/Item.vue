@@ -46,6 +46,17 @@
         <v-divider></v-divider>
 
         <v-card-actions class="product-footer">
+            <v-tooltip bottom v-if="hidden">
+                <v-btn class="product-btn"
+                       icon
+                       flat
+                       slot="activator"
+                >
+                    <v-icon>visibility_off</v-icon>
+                </v-btn>
+                <span>{{ $t('content.frontend.shop.catalog.item.hidden') }}</span>
+            </v-tooltip>
+
             <v-tooltip bottom v-if="enchantments.length !== 0">
                 <v-btn class="product-btn"
                        icon
@@ -150,6 +161,10 @@
             enchantments: {
                 required: true,
                 type: Array
+            },
+            hidden: {
+                required: true,
+                type: Boolean
             }
         },
         data() {

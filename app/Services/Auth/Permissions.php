@@ -19,6 +19,16 @@ class Permissions
     public const SWITCH_SERVERS_STATE = 'switch_servers_state';
 
     /**
+     * Allows the user to access a disabled server.
+     */
+    public const ACCESS_TO_DISABLED_SERVER = 'access_to_disabled_server';
+
+    /**
+     * Allows the user to show/make purchases with hidden products.
+     */
+    public const ACCESS_TO_HIDDEN_PRODUCTS = 'access_to_hidden_products';
+
+    /**
      * Allows the user to access a page with a purchase history (Profile->Information->Purchase History).
      */
     public const PROFILE_PURCHASE_HISTORY_ACCESS = 'purchase_history_access';
@@ -127,6 +137,11 @@ class Permissions
      * Allows the user to add/edit/delete users.
      */
     public const ADMIN_USERS_CRUD_ACCESS = 'admin_users_crud_access';
+
+    /**
+     * Allows the user to add/edit/delete roles and permissions.
+     */
+    public const ADMIN_ROLES_CRUD_ACCESS = 'admin_roles_crud_access';
 
     /**
      * Allows the user to access to rcon console.

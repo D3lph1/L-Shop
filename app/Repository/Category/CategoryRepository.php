@@ -9,6 +9,10 @@ interface CategoryRepository
 {
     public function create(Category $category): void;
 
+    public function update(Category $category): void;
+
+    public function remove(Category $category): void;
+
     public function deleteAll(): bool;
 
     public function find(int $id): ?Category;

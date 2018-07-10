@@ -2,7 +2,7 @@
     <v-card>
         <v-card-title>
             {{ $t('content.admin.news.list.title') }}
-            <v-btn flat color="primary" small icon><v-icon>add</v-icon></v-btn>
+            <v-btn flat color="primary" small icon :to="{name: 'admin.news.add'}"><v-icon>add</v-icon></v-btn>
             <v-spacer></v-spacer>
             <v-text-field
                     append-icon="search"
@@ -15,7 +15,6 @@
         <v-data-table
                 :headers="headers"
                 :items="items"
-                :search="search"
                 :pagination.sync="pagination"
                 :total-items="totalItems"
                 :loading="loading"
@@ -34,8 +33,11 @@
                 <td class="text-xs-center">{{ props.item.user.username }}</td>
                 <td class="text-xs-center">{{ props.item.created_at }}</td>
                 <td class="justify-center layout px-0">
-                    <v-btn icon class="mx-0">
+                    <v-btn icon class="mx-0" :to="{name: 'admin.news.edit', params: {news: props.item.id}}">
                         <v-icon color="secondary">edit</v-icon>
+                    </v-btn>
+                    <v-btn icon class="mx-0" @click="deleteNews(props.item)">
+                        <v-icon color="pink">delete</v-icon>
                     </v-btn>
                 </td>
             </template>
@@ -56,8 +58,8 @@
                 pagination: {
                     page: this.$route.query.page ? this.$route.query.page : 1,
                     rowsPerPage: this.$route.query.per_page ? parseInt(this.$route.query.per_page) : 25,
-                    sortBy: this.$route.query.order_by ? this.$route.query.order_by : 'news.id',
-                    descending: this.$route.query.descending === 'true',
+                    sortBy: this.$route.query.order_by ? this.$route.query.order_by : 'news.createdAt',
+                    descending: this.$route.query.descending !== 'true',
                 },
                 headers: [
                     {
@@ -132,6 +134,22 @@
                     .then((response) => {
                         this.setTable(response.data)
                     });
+            },
+            deleteNews(news) {
+                if (confirm($t('content.admin.news.list.delete'))) {
+                    this.$axios.post(`/spa/admin/news/${news.id}`, {
+                        _method: 'DELETE'
+                    })
+                        .then(response => {
+                            if (response.data.status === 'success') {
+                                this.items.forEach((each, index) => {
+                                    if (each.id === news.id) {
+                                        this.items.splice(index, 1);
+                                    }
+                                });
+                            }
+                        });
+                }
             },
             setTable(data) {
                 this.totalItems = data.paginator.total;

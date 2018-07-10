@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Items;
 
+use App\DataTransferObjects\PaginationList;
 use App\Exceptions\Item\ItemNotFoundException;
 use App\Handlers\Admin\Items\DeleteHandler;
 use App\Handlers\Admin\Items\ListHandler;
@@ -26,12 +27,14 @@ class ListController extends Controller
 
     public function pagination(Request $request, ListHandler $handler)
     {
-        $orderBy = $request->get('order_by');
-        $descending = (bool)$request->get('descending');
-        $search = $request->get('search');
-        $perPage = (int)$request->get('per_page');
-
-        $dto = $handler->handle($orderBy, $descending, $search, $perPage);
+        $dto = $handler->handle(
+            (new PaginationList())
+                ->setOrderBy($request->get('order_by') ?? 'id')
+                ->setDescending((bool)$request->get('descending'))
+                ->setSearch($request->get('search'))
+                ->setPage((int)($request->get('page') ?? 1))
+                ->setPerPage((int)($request->get('per_page') ?? 25))
+        );
 
         return new JsonResponse(Status::SUCCESS, [
             'paginator' => $dto->getPaginator(),

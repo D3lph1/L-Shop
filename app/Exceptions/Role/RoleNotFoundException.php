@@ -18,9 +18,9 @@ class RoleNotFoundException extends DomainException
         $this->cause = $cause;
     }
 
-    public static function byName(string $name): RoleNotFoundException
+    public static function byName(string $name): PermissionNotFoundException
     {
-        return new RoleNotFoundException("Role with name \"{$name}\" not found", $name);
+        return new PermissionNotFoundException("Role with name \"{$name}\" not found", $name);
     }
 
     /**

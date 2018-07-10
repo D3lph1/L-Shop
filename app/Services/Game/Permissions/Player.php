@@ -11,13 +11,8 @@ use Doctrine\Common\Collections\Collection;
  * Class Player
  * Encapsulates the player's state by storing the user to which it belongs, permissions. groups.
  */
-class Player
+abstract class Player
 {
-    /**
-     * @var User
-     */
-    private $user;
-
     /**
      * @var Collection
      */
@@ -33,17 +28,11 @@ class Player
      */
     private $groups;
 
-    public function __construct(User $user, Group $primaryGroup)
+    public function __construct(Group $primaryGroup)
     {
-        $this->user = $user;
         $this->primaryGroup = $primaryGroup;
         $this->groups = new ArrayCollection();
         $this->permissions = new ArrayCollection();
-    }
-
-    public function getUser(): User
-    {
-        return $this->user;
     }
 
     public function getPrimaryGroup(): Group

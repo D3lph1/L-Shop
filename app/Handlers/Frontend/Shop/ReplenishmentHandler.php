@@ -24,8 +24,10 @@ class ReplenishmentHandler
         $this->creator = $creator;
     }
 
-    public function handle(float $sum, string $ip): void
+    public function handle(float $sum, string $ip): int
     {
-        $this->creator->create($sum, $this->auth->getUser(), $ip);
+        $purchase = $this->creator->create($sum, $this->auth->getUser(), $ip);
+
+        return $purchase->getId();
     }
 }

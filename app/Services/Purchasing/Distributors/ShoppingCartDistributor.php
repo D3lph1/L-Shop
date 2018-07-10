@@ -67,7 +67,6 @@ class ShoppingCartDistributor implements Distributor
             ->through($this->pipes)
             ->then(function (ShoppingCart $entity) {
                 $this->shoppingCartRepository->create($entity);
-                $entity->getDistribution()->setShoppingCart($entity);
                 $this->distributionRepository->update($entity->getDistribution());
             });
     }

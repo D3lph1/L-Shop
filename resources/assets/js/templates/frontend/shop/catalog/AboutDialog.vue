@@ -28,8 +28,8 @@
                                 </span>
                             </v-flex>
                         </v-layout>
-                        <v-divider v-if="enchantments.length !== 0"></v-divider>
-                        <v-layout v-if="enchantments.length !== 0">
+
+                        <v-layout v-if="enchantments.length !== 0" class="mt-3">
                             <v-flex xs6>{{ $t('content.frontend.shop.catalog.about.enchantments') }}</v-flex>
                             <v-flex xs6 class="text-xs-right">
                                 <div v-for="enchantment in enchantments" class="purple--text">

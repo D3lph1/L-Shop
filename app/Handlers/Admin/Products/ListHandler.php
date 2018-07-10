@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace App\Handlers\Admin\Products;
 
 use App\DataTransferObjects\Admin\Products\EditList\Result;
+use App\DataTransferObjects\PaginationList;
 use App\Exceptions\InvalidArgumentException;
 use App\Repository\Product\ProductRepository;
 
@@ -29,32 +30,38 @@ class ListHandler
         $this->repository = $repository;
     }
 
-    public function handle(?string $orderBy, bool $descending, ?string $search, int $perPage): Result
+    public function handle(PaginationList $dto): Result
     {
-        if (!empty($orderBy) && !in_array($orderBy, $this->availableOrders)) {
-            throw new InvalidArgumentException('Argument $orderBy has illegal value');
+        if (!empty($dto->getOrderBy()) && !in_array($dto->getOrderBy(), $this->availableOrders)) {
+            throw new InvalidArgumentException('`OrderBy` has illegal value');
         }
 
-        if ($orderBy !== null) {
-            if (!empty($search)) {
+        if ($dto->getOrderBy() !== null) {
+            if (!empty($dto->getSearch())) {
                 $paginator = $this->repository->findPaginatedWithOrderAndSearch(
-                    $orderBy,
-                    $descending,
-                    $search,
-                    $perPage
+                    $dto->getOrderBy(),
+                    $dto->isDescending(),
+                    $dto->getSearch(),
+                    $dto->getPage(),
+                    $dto->getPerPage()
                 );
             } else {
                 $paginator = $this->repository->findPaginatedWithOrder(
-                    $orderBy,
-                    $descending,
-                    $perPage
+                    $dto->getOrderBy(),
+                    $dto->isDescending(),
+                    $dto->getPage(),
+                    $dto->getPerPage()
                 );
             }
         } else {
-            if (!empty($search)) {
-                $paginator = $this->repository->findPaginateWithSearch($search, $perPage);
+            if (!empty($dto->getSearch())) {
+                $paginator = $this->repository->findPaginateWithSearch(
+                    $dto->getSearch(),
+                    $dto->getPage(),
+                    $dto->getPerPage()
+                );
             } else {
-                $paginator = $this->repository->findPaginated($perPage);
+                $paginator = $this->repository->findPaginated($dto->getPage(), $dto->getPerPage());
             }
         }
 

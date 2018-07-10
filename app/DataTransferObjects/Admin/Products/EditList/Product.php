@@ -39,7 +39,8 @@ class Product implements \JsonSerializable
                 'image' => Image::assetPathOrDefault($this->product->getItem()->getImage()),
                 'type' => __("common.item.type.{$this->product->getItem()->getType()}"),
                 'enchanted' => $this->product->getItem()->getEnchantmentItems()->count() !== 0
-            ]
+            ],
+            'hidden' => $this->product->isHidden()
         ];
     }
 }

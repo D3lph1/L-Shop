@@ -3,18 +3,10 @@ declare(strict_types = 1);
 
 namespace App\Services\Game\Permissions\Predicates;
 
-use App\Entity\Server;
-use App\Services\Game\Permissions\Player;
-
-class FilterPermissionsPredicate
+class PermissionPredicate
 {
     /**
-     * @var Player
-     */
-    private $player;
-
-    /**
-     * @var string|Regex
+     * @var string|Regex|null
      */
     private $permission;
 
@@ -24,7 +16,7 @@ class FilterPermissionsPredicate
     private $allowed;
 
     /**
-     * @var Server|null
+     * @var mixed
      */
     private $server;
 
@@ -39,26 +31,19 @@ class FilterPermissionsPredicate
     private $world;
 
     /**
+     * @var bool
+     */
+    private $anyWorld = true;
+
+    /**
      * @var string|null
      */
     private $contexts;
 
     /**
-     * AllowedPredicate constructor.
-     *
-     * @param Player       $player
-     * @param string|Regex $permission
+     * @var bool
      */
-    public function __construct(Player $player, $permission)
-    {
-        $this->player = $player;
-        $this->permission = $permission;
-    }
-
-    public function getPlayer(): Player
-    {
-        return $this->player;
-    }
+    private $anyContexts = true;
 
     /**
      * @return Regex|string
@@ -68,31 +53,38 @@ class FilterPermissionsPredicate
         return $this->permission;
     }
 
+    public function setPermission($permission): PermissionPredicate
+    {
+        $this->permission = $permission;
+
+        return $this;
+    }
+
     public function needAllowed(): ?bool
     {
         return $this->allowed;
     }
 
-    public function setAllowed(?bool $allowed): FilterPermissionsPredicate
+    public function setAllowed(?bool $allowed): PermissionPredicate
     {
         $this->allowed = $allowed;
 
         return $this;
     }
 
-    public function getServer(): ?Server
+    public function getServer()
     {
         return $this->server;
     }
 
-    public function setServer(?Server $server): FilterPermissionsPredicate
+    public function setServer($server): PermissionPredicate
     {
         $this->server = $server;
 
         return $this;
     }
 
-    public function setAnyServer(bool $val): FilterPermissionsPredicate
+    public function setAnyServer(bool $val): PermissionPredicate
     {
         $this->anyServer = $val;
 
@@ -109,11 +101,23 @@ class FilterPermissionsPredicate
         return $this->world;
     }
 
-    public function setWorld(?string $world): FilterPermissionsPredicate
+    public function setWorld(?string $world): PermissionPredicate
     {
         $this->world = $world;
 
         return $this;
+    }
+
+    public function setAnyWorld(bool $val): PermissionPredicate
+    {
+        $this->anyWorld = $val;
+
+        return $this;
+    }
+
+    public function needAnyWorld(): bool
+    {
+        return $this->anyWorld;
     }
 
     public function getContexts(): ?string
@@ -121,10 +125,22 @@ class FilterPermissionsPredicate
         return $this->contexts;
     }
 
-    public function setContexts(?string $contexts): FilterPermissionsPredicate
+    public function setContexts(?string $contexts): PermissionPredicate
     {
         $this->contexts = $contexts;
 
         return $this;
+    }
+
+    public function setAnyContexts(bool $val): PermissionPredicate
+    {
+        $this->anyContexts = $val;
+
+        return $this;
+    }
+
+    public function needAnyContexts(): bool
+    {
+        return $this->anyContexts;
     }
 }

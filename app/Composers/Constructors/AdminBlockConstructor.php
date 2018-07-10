@@ -68,7 +68,7 @@ class AdminBlockConstructor
                 'icon' => 'storage',
                 'subItems' => [
                     [
-                        'link' => '',
+                        'link' => 'admin.servers.add',
                         'title' => __('content.layout.shop.sidebar.admin.servers.sub_items.add'),
                         'permissions' => [Permissions::ADMIN_SERVERS_CRUD_ACCESS]
                     ],
@@ -116,7 +116,7 @@ class AdminBlockConstructor
                 'icon' => 'library_books',
                 'subItems' => [
                     [
-                        'link' => '',
+                        'link' => 'admin.news.add',
                         'title' => __('content.layout.shop.sidebar.admin.news.sub_items.add'),
                         'permissions' => [Permissions::ADMIN_NEWS_CRUD_ACCESS]
                     ],
@@ -151,6 +151,11 @@ class AdminBlockConstructor
                         'link' => 'admin.users.list',
                         'title' => __('content.layout.shop.sidebar.admin.users.sub_items.edit'),
                         'permissions' => [Permissions::ADMIN_USERS_CRUD_ACCESS]
+                    ],
+                    [
+                        'link' => 'admin.users.roles',
+                        'title' => __('content.layout.shop.sidebar.admin.users.sub_items.roles'),
+                        'permissions' => [Permissions::ADMIN_ROLES_CRUD_ACCESS]
                     ]
                 ]
             ],

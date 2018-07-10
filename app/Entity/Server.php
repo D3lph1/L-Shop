@@ -108,7 +108,7 @@ class Server
     /**
      * Categories that belong to this server.
      *
-     * @ORM\OneToMany(targetEntity="App\Entity\Category", mappedBy="server")
+     * @ORM\OneToMany(targetEntity="App\Entity\Category", mappedBy="server", cascade={"persist"})
      */
     private $categories;
 
@@ -162,11 +162,11 @@ class Server
     }
 
     /**
-     * @param string $ip
+     * @param string|null $ip
      *
      * @return $this
      */
-    public function setIp(string $ip)
+    public function setIp(?string $ip): Server
     {
         $this->ip = $ip;
 
@@ -174,19 +174,19 @@ class Server
     }
 
     /**
-     * @return int
+     * @return int|null
      */
-    public function getPort(): int
+    public function getPort(): ?int
     {
         return $this->port;
     }
 
     /**
-     * @param int $port
+     * @param int|null $port
      *
      * @return Server
      */
-    public function setPort(int $port): Server
+    public function setPort(?int $port): Server
     {
         $this->port = $port;
 
@@ -202,11 +202,11 @@ class Server
     }
 
     /**
-     * @param string $password
+     * @param string|null $password
      *
      * @return Server
      */
-    public function setPassword(string $password): Server
+    public function setPassword(?string $password): Server
     {
         $this->password = $password;
 
@@ -218,7 +218,7 @@ class Server
      *
      * @return $this
      */
-    public function setDistributor(string $distributor)
+    public function setDistributor(string $distributor): Server
     {
         $this->distributor = $distributor;
 

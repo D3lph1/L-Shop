@@ -15,7 +15,6 @@
         <v-data-table
                 :headers="headers"
                 :items="items"
-                :search="search"
                 :pagination.sync="pagination"
                 :total-items="totalItems"
                 :loading="loading"
@@ -110,6 +109,9 @@
                     });
                 },
                 deep: true
+            },
+            search() {
+                this.retrieveFromApi();
             }
         },
         methods: {

@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend\Shop;
 
 use App\DataTransferObjects\Frontend\Shop\Cart\Purchase;
 use App\DataTransferObjects\Frontend\Shop\Server;
+use App\Exceptions\ForbiddenException;
 use App\Exceptions\Product\ProductNotFoundException;
 use App\Exceptions\Server\ServerNotFoundException;
 use App\Handlers\Frontend\Shop\Cart\PurchaseHandler;
@@ -17,7 +18,6 @@ use App\Http\Middleware\Captcha as CaptchaMiddleware;
 use App\Http\Requests\Frontend\Shop\Cart\PurchaseRequest;
 use App\Http\Requests\Frontend\Shop\Cart\PutRequest;
 use App\Http\Requests\Frontend\Shop\Cart\RemoveRequest;
-use App\Services\Cart\Cart;
 use App\Services\Notification\Notifications\Error;
 use App\Services\Notification\Notifications\Info;
 use App\Services\Notification\Notifications\Success;
@@ -62,11 +62,16 @@ class CartController extends Controller
             $server = new Server($server);
         }
 
-        return new JsonResponse(Status::SUCCESS, [
-            'cart' => $handler->handle((int)$request->route('server')),
-            'captchaKey' => $settings->get('system.security.captcha.enabled')->getValue(DataType::BOOL) ? $captcha->key() : null,
-            'currentServer' => $server
-        ]);
+        try {
+            return new JsonResponse(Status::SUCCESS, [
+                'cart' => $handler->handle((int)$request->route('server')),
+                'captchaKey' => $settings->get('system.security.captcha.enabled')->getValue(DataType::BOOL) ? $captcha->key() : null,
+                'currentServer' => $server
+            ]);
+        } catch (ForbiddenException $e) {
+            return (new JsonResponse('server_disabled'))
+                ->setHttpStatus(Response::HTTP_FORBIDDEN);
+        }
     }
 
     /**
@@ -74,19 +79,27 @@ class CartController extends Controller
      *
      * @param PutRequest  $request
      * @param PutHandler  $handler
-     * @param Cart        $cart
-     * @param Persistence $persistence
      *
      * @return JsonResponse
      */
-    public function put(PutRequest $request, PutHandler $handler, Cart $cart, Persistence $persistence): JsonResponse
+    public function put(PutRequest $request, PutHandler $handler): JsonResponse
     {
-        $handler->handle($request->get('product'));
+        try {
+            $amount = $handler->handle($request->get('product'));
 
-        return (new JsonResponse(Status::SUCCESS, [
-            'amount' => $persistence->retrieve() ? count($cart->retrieveServer($persistence->retrieve())) : null
-        ]))
-            ->addNotification(new Success(__('msg.frontend.shop.catalog.put_in_cart')));
+            return (new JsonResponse(Status::SUCCESS, [
+                'amount' => $amount
+            ]))
+                ->addNotification(new Success(__('msg.frontend.shop.catalog.put_in_cart')));
+        } catch (ProductNotFoundException $e) {
+            return (new JsonResponse('product_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
+                ->addNotification(new Error(__('msg.frontend.shop.catalog.product_not_found')));
+        } catch (ForbiddenException $e) {
+            return (new JsonResponse('server_disabled'))
+                ->setHttpStatus(Response::HTTP_FORBIDDEN)
+                ->addNotification(new Warning(__('msg.forbidden')));
+        }
     }
 
     /**
@@ -107,7 +120,11 @@ class CartController extends Controller
         } catch (ProductNotFoundException $e) {
             return (new JsonResponse('product_does_not_exist'))
                 ->setHttpStatus(Response::HTTP_NOT_FOUND)
-                ->addNotification(new Warning(__('msg.frontend.shop.cart.remove.fail')));
+                ->addNotification(new Error(__('msg.frontend.shop.cart.remove.fail')));
+        } catch (ForbiddenException $e) {
+            return (new JsonResponse('server_disabled'))
+                ->setHttpStatus(Response::HTTP_FORBIDDEN)
+                ->addNotification(new Warning(__('msg.forbidden')));
         }
     }
 
@@ -146,6 +163,10 @@ class CartController extends Controller
             return (new JsonResponse('server_not_found'))
                 ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.frontend.shop.cart.purchase.server_not_found')));
+        } catch (ForbiddenException $e) {
+            return (new JsonResponse('server_disabled'))
+                ->setHttpStatus(Response::HTTP_FORBIDDEN)
+                ->addNotification(new Warning(__('msg.forbidden')));
         }
     }
 }

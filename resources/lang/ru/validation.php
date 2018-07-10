@@ -72,7 +72,7 @@ return [
     'required'             => 'Поле ":attribute" обязательно для заполнения',
     'required_if'          => 'Поле ":attribute" обязательно для заполнения, так как ":other" находится в значении ":value".',
     'required_unless'      => 'Поле ":attribute" обязательно для заполнения, так как ":other" не находится в значении ":values".',
-    'required_with'        => 'The :attribute field is required when :values is present.',
+    'required_with'        => 'Поле ":attribute" обязательно для заполнения так как ":values" представлено.',
     'required_with_all'    => 'The :attribute field is required when :values is present.',
     'required_without'     => 'The :attribute field is required when :values is not present.',
     'required_without_all' => 'The :attribute field is required when none of :values are present.',

@@ -37,6 +37,7 @@ $router->post('/catalog/purchase', 'Frontend\Shop\CatalogController@purchase');
 $router->get('/payment/{purchase}', 'Frontend\Shop\PaymentMethodsController@render')
     ->where('purchase', '[0-9]+');
 
+$router->get('/replenishment', 'Frontend\Shop\ReplenishmentController@render');
 $router->post('/replenishment', 'Frontend\Shop\ReplenishmentController@handle');
 
 $router->get('/monitoring', 'Frontend\MonitoringController@monitor');
@@ -80,10 +81,16 @@ $router->post('/admin/control/security', 'Admin\Control\SecurityController@save'
 $router->get('/admin/control/optimization', 'Admin\Control\OptimizationController@render');
 $router->post('/admin/control/optimization', 'Admin\Control\OptimizationController@save');
 
+$router->get('/admin/servers/add', 'Admin\Servers\AddController@render');
+$router->post('/admin/servers/add', 'Admin\Servers\AddController@add');
+$router->get('/admin/servers/edit/{server}', 'Admin\Servers\EditController@render');
+$router->post('/admin/servers/edit/{server}', 'Admin\Servers\EditController@edit');
+
 $router->post('/admin/servers/enable/{server}', 'Admin\Servers\SwitchController@enable')
     ->where('server', '[0-9]+');
 $router->post('/admin/servers/disable/{server}', 'Admin\Servers\SwitchController@disable')
     ->where('server', '[0-9]+');
+
 
 $router->get('/admin/products/add', 'Admin\Products\AddController@render');
 $router->post('/admin/products/add', 'Admin\Products\AddController@add');
@@ -105,6 +112,11 @@ $router->post('/admin/items/edit/{item}', 'Admin\Items\EditController@edit')
 $router->delete('/admin/items', 'Admin\Items\ListController@delete');
 $router->post('/admin/items/list', 'Admin\Items\ListController@pagination');
 
+$router->get('/admin/news/add', 'Admin\News\AddController@render');
+$router->post('/admin/news/add', 'Admin\News\AddController@add');
+$router->get('/admin/news/edit/{news}', 'Admin\News\EditController@render');
+$router->post('/admin/news/edit/{news}', 'Admin\News\EditController@edit');
+$router->delete('/admin/news/{news}', 'Admin\News\EditController@delete');
 $router->post('/admin/news/list', 'Admin\News\ListController@pagination');
 
 $router->post('/admin/pages/add', 'Admin\Pages\AddController@add');
@@ -138,6 +150,13 @@ $router->post('/admin/users/edit/{user}', 'Admin\Users\EditController@edit')
     ->where('user', '[0-9]+');
 $router->post('/admin/users/list', 'Admin\Users\ListController@pagination');
 $router->delete('/admin/users', 'Admin\Users\ListController@delete');
+$router->post('/admin/users/permissions', 'Admin\Users\PermissionsController@pagination');
+$router->post('/admin/users/permissions/create', 'Admin\Users\PermissionsController@create');
+$router->patch('/admin/users/permissions/{permission}', 'Admin\Users\PermissionsController@update')
+    ->where('permission', '[0-9]+');
+$router->delete('/admin/users/permissions/{permission}', 'Admin\Users\PermissionsController@delete')
+    ->where('permission', '[0-9]+');
+$router->post('/admin/users/roles', 'Admin\Users\RolesController@pagination');
 
 $router->get('/admin/other/debug', 'Admin\Other\DebugController@render');
 $router->post('/admin/other/debug/send', 'Admin\Other\DebugController@sendEmail');

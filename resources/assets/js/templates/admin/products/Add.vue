@@ -96,7 +96,15 @@
                     ></v-switch>
                 </v-card-text>
                 <v-card-actions>
-                    <v-btn flat color="orange" :disabled="finishDisabled" @click="perform">{{ $t('content.admin.products.add.finish') }}</v-btn>
+                    <v-btn
+                            flat
+                            color="orange"
+                            :disabled="finishDisabled"
+                            :loading="finishLoading"
+                            @click="perform"
+                    >
+                        {{ $t('content.admin.products.add.finish') }}
+                    </v-btn>
                 </v-card-actions>
             </v-card>
         </v-flex>
@@ -122,7 +130,8 @@
                 amount: 0,
                 price: 0,
                 sortPriority: 0,
-                hidden: false
+                hidden: false,
+                finishLoading: false
             }
         },
         beforeRouteEnter (to, from, next) {
@@ -162,6 +171,8 @@
                 return true;
             },
             perform() {
+                this.finishLoading = true;
+
                 this.$axios.post('/spa/admin/products/add', {
                     item: this.item.id,
                     category: this.category.id,
@@ -172,8 +183,10 @@
                     hidden: this.hidden
                 })
                     .then(response => {
-                        if (response.data.status) {
+                        if (response.data.status === 'success') {
                             this.$router.push({name: 'admin.products.list'});
+                        } else {
+                            this.finishLoading = false;
                         }
                     });
             },

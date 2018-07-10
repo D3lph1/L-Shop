@@ -5,7 +5,7 @@ namespace App\Services\User;
 
 use App\Entity\Role;
 use App\Entity\User;
-use App\Exceptions\Role\RoleNotFoundException;
+use App\Exceptions\Role\PermissionNotFoundException;
 use App\Repository\Role\RoleRepository;
 use App\Services\Database\GarbageCollection\DoctrineGarbageCollector;
 use Illuminate\Contracts\Config\Repository;
@@ -41,7 +41,7 @@ class RolesInitializer
             /** @var Role $role */
             $role = $this->roleRepository->findByName($roleName);
             if ($role === null) {
-                throw RoleNotFoundException::byName($roleName);
+                throw PermissionNotFoundException::byName($roleName);
             }
 
             $user->getRoles()->add($role);

@@ -26,6 +26,9 @@ class SettingsController extends Controller
         $this->middleware(permission_middleware(Permissions::PROFILE_SETTINGS_ACCESS));
     }
 
+    /**
+     * @return JsonResponse
+     */
     public function render(): JsonResponse
     {
         return new JsonResponse(Status::SUCCESS);

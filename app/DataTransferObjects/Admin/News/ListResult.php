@@ -3,9 +3,10 @@ declare(strict_types = 1);
 
 namespace App\DataTransferObjects\Admin\News;
 
+use App\Services\Response\JsonRespondent;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
-class ListResult
+class ListResult implements JsonRespondent
 {
     /**
      * @var LengthAwarePaginator
@@ -26,18 +27,13 @@ class ListResult
     }
 
     /**
-     * @return LengthAwarePaginator
+     * @inheritDoc
      */
-    public function getPaginator(): LengthAwarePaginator
+    public function response(): array
     {
-        return $this->paginator;
-    }
-
-    /**
-     * @return News[]
-     */
-    public function getNews(): array
-    {
-        return $this->news;
+        return [
+            'paginator' => $this->paginator,
+            'news' => $this->news
+        ];
     }
 }

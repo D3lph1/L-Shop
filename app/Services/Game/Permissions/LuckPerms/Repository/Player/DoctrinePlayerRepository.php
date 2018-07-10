@@ -6,6 +6,7 @@ namespace App\Services\Game\Permissions\LuckPerms\Repository\Player;
 use App\Services\Game\Permissions\LuckPerms\Entity\Player;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Ramsey\Uuid\UuidInterface;
 
 class DoctrinePlayerRepository implements PlayerRepository
 {
@@ -49,5 +50,11 @@ class DoctrinePlayerRepository implements PlayerRepository
     {
         /** @noinspection PhpIncompatibleReturnTypeInspection */
         return $this->er->findOneBy(['username' => $username]);
+    }
+
+    public function findByUuid(UuidInterface $uuid): ?Player
+    {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        return $this->er->findOneBy(['uuid' => $uuid->toString()]);
     }
 }

@@ -15,7 +15,6 @@
         <v-data-table
                 :headers="headers"
                 :items="items"
-                :search="search"
                 :pagination.sync="pagination"
                 :total-items="totalItems"
                 :loading="loading"
@@ -31,12 +30,13 @@
             <template slot="items" slot-scope="props">
                 <td class="text-xs-center">{{ props.item.id }}</td>
                 <td class="text-xs-center"><img :src="props.item.item.image" height="30" :alt="props.item.item.name"></td>
+                <td class="text-xs-center">{{ props.item.item.name }}</td>
                 <td class="text-xs-center">
-                    {{ props.item.item.name }}
                     <v-enchanted class="cp" v-if="props.item.item.enchanted"></v-enchanted>
+                    <v-hidden class="cp" v-if="props.item.hidden"></v-hidden>
                 </td>
                 <td class="text-xs-center">{{ props.item.item.type }}</td>
-                <td class="text-xs-center">{{ props.item.price }}</td>
+                <td class="text-xs-center">{{ props.item.price }} <span v-html="$store.state.shop.currency.html"></span></td>
                 <td class="text-xs-center">{{ props.item.stack }}</td>
                 <td class="text-xs-center">{{ props.item.server.name }}</td>
                 <td class="text-xs-center">{{ props.item.category.name }}</td>
@@ -84,6 +84,12 @@
                         align: 'center',
                         sortable: true,
                         value: 'item.name'
+                    },
+                    {
+                        text: $t('common.note'),
+                        align: 'center',
+                        sortable: false,
+                        value: 'note'
                     },
                     {
                         text: $t('content.admin.products.list.table.headers.type'),
@@ -148,6 +154,9 @@
                     });
                 },
                 deep: true
+            },
+            search() {
+                this.retrieveFromApi();
             }
         },
         methods: {

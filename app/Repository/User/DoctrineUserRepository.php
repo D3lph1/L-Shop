@@ -10,11 +10,11 @@ use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\Internal\Hydration\IterableResult;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
-use LaravelDoctrine\ORM\Pagination\PaginatesFromRequest;
+use LaravelDoctrine\ORM\Pagination\PaginatesFromParams;
 
 class DoctrineUserRepository implements UserRepository
 {
-    use PaginatesFromRequest, ClearsCache;
+    use PaginatesFromParams, ClearsCache;
 
     /**
      * @var EntityManagerInterface
@@ -114,50 +114,50 @@ class DoctrineUserRepository implements UserRepository
             ->getOneOrNullResult();
     }
 
-    public function findPaginated(int $perPage): LengthAwarePaginator
+    public function findPaginated(int $page, int $perPage): LengthAwarePaginator
     {
-        return $this->paginateAll($perPage);
+        return $this->paginateAll($page, $perPage);
     }
 
-    public function findPaginatedWithOrder(string $orderBy, bool $descending, int $perPage): LengthAwarePaginator
+    public function findPaginatedWithOrder(string $orderBy, bool $descending, int $page, int $perPage): LengthAwarePaginator
     {
         return $this->paginate(
-            $this->createQueryBuilder('u')
-                ->orderBy("u.{$orderBy}", $descending ? 'DESC' : 'ASC')
+            $this->createQueryBuilder('user')
+                ->orderBy("user.{$orderBy}", $descending ? 'DESC' : 'ASC')
                 ->getQuery(),
             $perPage,
-            'page',
+            $page,
             false
         );
     }
 
-    public function findPaginateWithSearch(string $search, int $perPage): LengthAwarePaginator
+    public function findPaginateWithSearch(string $search, int $page, int $perPage): LengthAwarePaginator
     {
         return $this->paginate(
-            $this->createQueryBuilder('u')
-                ->where('u.id LIKE :search')
-                ->orWhere('u.username LIKE :search')
-                ->orWhere('u.email LIKE :search')
+            $this->createQueryBuilder('user')
+                ->where('user.id LIKE :search')
+                ->orWhere('user.username LIKE :search')
+                ->orWhere('user.email LIKE :search')
                 ->setParameter('search', "%{$search}%")
                 ->getQuery(),
             $perPage,
-            'page',
+            $page,
             false
         );
     }
 
-    public function findPaginatedWithOrderAndSearch(string $orderBy, bool $descending, string $search, int $perPage): LengthAwarePaginator
+    public function findPaginatedWithOrderAndSearch(string $orderBy, bool $descending, string $search, int $page, int $perPage): LengthAwarePaginator
     {
         return $this->paginate(
-            $this->createQueryBuilder('u')
-                ->orderBy("u.{$orderBy}", $descending ? 'DESC' : 'ASC')
-                ->where('u.id LIKE :search')
-                ->orWhere('u.username LIKE :search')
-                ->orWhere('u.email LIKE :search')
+            $this->createQueryBuilder('user')
+                ->orderBy("user.{$orderBy}", $descending ? 'DESC' : 'ASC')
+                ->where('user.id LIKE :search')
+                ->orWhere('user.username LIKE :search')
+                ->orWhere('user.email LIKE :search')
                 ->setParameter('search', "%{$search}%")
                 ->getQuery(),
             $perPage,
-            'page',
+            $page,
             false
         );
     }
@@ -166,7 +166,7 @@ class DoctrineUserRepository implements UserRepository
     {
         return $this
             ->er
-            ->createQueryBuilder('u')
+            ->createQueryBuilder('user')
             ->select()
             ->getQuery()
             ->iterate();
@@ -174,8 +174,8 @@ class DoctrineUserRepository implements UserRepository
 
     public function retrieveCreatedForYear(): array
     {
-        return $this->createQueryBuilder('u')
-            ->select('YEAR(u.createdAt) as year, MONTH(u.createdAt) as month, COUNT(u.id) as amount')
+        return $this->createQueryBuilder('user')
+            ->select('YEAR(user.createdAt) as year, MONTH(user.createdAt) as month, COUNT(user.id) as amount')
             ->groupBy('year, month')
             ->orderBy('year', 'desc')
             ->getQuery()
@@ -184,10 +184,10 @@ class DoctrineUserRepository implements UserRepository
 
     public function retrieveCreatedForMonth(int $year, int $month): array
     {
-        return $this->createQueryBuilder('u')
-            ->select('DAY(u.createdAt) as day, COUNT(u.id) as amount')
-            ->where('YEAR(u.createdAt) = :year')
-            ->andWhere('MONTH(u.createdAt) = :month')
+        return $this->createQueryBuilder('user')
+            ->select('DAY(user.createdAt) as day, COUNT(user.id) as amount')
+            ->where('YEAR(user.createdAt) = :year')
+            ->andWhere('MONTH(user.createdAt) = :month')
             ->groupBy('day')
             ->setParameter('year', $year)
             ->setParameter('month', $month)
@@ -197,8 +197,8 @@ class DoctrineUserRepository implements UserRepository
 
     public function retrieveCreatedAmount(): int
     {
-        return (int)$this->createQueryBuilder('u')
-            ->select('COUNT(u.id) as amount')
+        return (int)$this->createQueryBuilder('user')
+            ->select('COUNT(user.id) as amount')
             ->getQuery()
             ->getSingleScalarResult();
     }

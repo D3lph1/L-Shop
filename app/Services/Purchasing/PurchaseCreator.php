@@ -9,7 +9,6 @@ use App\Entity\PurchaseItem;
 use App\Entity\User;
 use App\Events\Purchase\PurchaseCreatedEvent;
 use App\Exceptions\NotImplementedException;
-use App\Exceptions\Product\HiddenException;
 use App\Exceptions\Purchase\InvalidAmountException;
 use App\Repository\Purchase\PurchaseRepository;
 use App\Services\Item\Type;
@@ -62,19 +61,12 @@ class PurchaseCreator
      * Through all the elements and validates them and also increments the cost.
      *
      * @param DTO[] $dto
-     *
-     * @throws HiddenException
      */
     private function through(array $dto)
     {
         foreach ($dto as $each) {
             $product = $each->getProduct();
             $item = $product->getItem();
-
-            // If the product is hidden, it is not available for sale.
-            if ($product->isHidden()) {
-                throw new HiddenException($product);
-            }
 
             if ($item->getType() === Type::PERMGROUP) {
                 if (Stack::isForever($product) === true) {

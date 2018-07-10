@@ -142,8 +142,7 @@
 
                 switch (listItem.action) {
                     case 'edit':
-                        // TODO: Change route! This value only for test.
-                        this.$router.push({name: 'admin.control.basic'});
+                        this.$router.push({name: 'admin.servers.edit', params: {server: this.menu.clicked.id}});
                         break;
                     case 'switch':
                         const self = this;

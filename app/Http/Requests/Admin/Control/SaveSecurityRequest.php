@@ -26,8 +26,8 @@ class SaveSecurityRequest extends FormRequest
     {
         return [
             'captcha_enabled' => 'required|boolean',
-            'recaptcha_public_key' => 'required|string|size:40',
-            'recaptcha_secret_key' => 'required|string|size:40',
+            'recaptcha_public_key' => 'nullable|required_if:captcha_enabled,true|string|size:40',
+            'recaptcha_secret_key' => 'nullable|required_if:captcha_enabled,true|string|size:40',
             'reset_password_enabled' => 'required|boolean',
             'change_password_enabled' => 'required|boolean'
         ];

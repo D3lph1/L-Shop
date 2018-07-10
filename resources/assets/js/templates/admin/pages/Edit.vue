@@ -13,15 +13,13 @@
                             prepend-icon="text_format"
                             :label="$t('content.admin.pages.add.title_input')"
                     ></v-text-field>
-                    <v-text-field
-                            multi-line
+                    <quill-editor
                             v-model="content"
-                            prepend-icon="view_headline"
-                            :label="$t('content.admin.pages.add.content')"
-                    ></v-text-field>
+                    ></quill-editor>
                     <v-text-field
                             v-model="url"
                             prepend-icon="link"
+                            class="mt-3"
                             :label="$t('content.admin.pages.add.url')"
                             :disabled="autoUrl"
                     ></v-text-field>
@@ -46,10 +44,10 @@
     export default {
         data() {
             return {
-                title: null,
-                content: null,
+                title: '',
+                content: '',
                 autoUrl: false,
-                url: null,
+                url: '',
                 finishLoading: false
             }
         },
@@ -73,9 +71,7 @@
         },
         computed: {
             finishDisabled() {
-                return this.title === null || this.title === '' ||
-                    this.content === null || this.content === '' ||
-                    this.url === null || this.url === '';
+                return this.title === '' || this.content === '' || this.url === '';
             }
         },
         methods: {
@@ -104,6 +100,15 @@
                 this.content = data.page.content;
                 this.url = data.page.url;
             }
+        },
+        components: {
+            quillEditor: () => import(/* webpackChunkName: "tools/editor" */ 'vue-quill-editor').then(({ quillEditor }) => quillEditor)
         }
     }
 </script>
+
+<style lang="less">
+    div.ql-editor {
+        height: 500px;
+    }
+</style>

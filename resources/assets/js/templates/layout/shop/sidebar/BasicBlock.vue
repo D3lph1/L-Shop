@@ -1,61 +1,51 @@
 <template>
-    <div>
-        <v-toolbar flat v-if="$store.getters.isAuth">
-            <v-toolbar-title id="drawer-username">
-                <v-icon>person_outline</v-icon>
-                <span>{{ $store.state.auth.user.username }}</span>
-            </v-toolbar-title>
-        </v-toolbar>
+    <v-list class="pt-0 pb-0" subheader>
+        <v-subheader>{{ $t('content.layout.shop.sidebar.basic.title') }}</v-subheader>
 
-        <v-list class="pt-0 pb-0" subheader>
-            <v-divider></v-divider>
-            <v-subheader>Магазин</v-subheader>
-
-            <v-list-tile ripple :to="toCatalog()">
-                <v-list-tile-action>
-                    <v-icon>view_module</v-icon>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                    <v-list-tile-title>{{ $t('content.layout.shop.sidebar.basic.catalog') }}</v-list-tile-title>
-                </v-list-tile-content>
-            </v-list-tile>
-            <v-list-tile ripple :to="toCart()">
-                <v-list-tile-action>
-                    <v-badge color="secondary" v-model="cartBadge" overlap right>
-                        <span slot="badge">{{ cartAmount }}</span>
-                        <v-icon>shopping_cart</v-icon>
-                    </v-badge>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                    <v-list-tile-title>{{ $t('content.layout.shop.sidebar.basic.cart') }}</v-list-tile-title>
-                </v-list-tile-content>
-            </v-list-tile>
-            <v-list-tile @click="$router.push({name: 'frontend.auth.servers'})">
-                <v-list-tile-action>
-                    <v-icon>keyboard_backspace</v-icon>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                    <v-list-tile-title>{{ $t('content.layout.shop.sidebar.basic.servers') }}</v-list-tile-title>
-                </v-list-tile-content>
-            </v-list-tile>
-            <v-list-tile v-if="$store.getters.isAuth" @click="logout">
-                <v-list-tile-action>
-                    <v-icon>exit_to_app</v-icon>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                    <v-list-tile-title>{{ $t('content.frontend.auth.login.logout') }}</v-list-tile-title>
-                </v-list-tile-content>
-            </v-list-tile>
-            <v-list-tile v-if="accessModeAny && !$store.getters.isAuth" @click="$router.push({name: 'frontend.auth.login' })">
-                <v-list-tile-action>
-                    <v-icon>vpn_key</v-icon>
-                </v-list-tile-action>
-                <v-list-tile-content>
-                    <v-list-tile-title>{{ $t('content.frontend.auth.login.login') }}</v-list-tile-title>
-                </v-list-tile-content>
-            </v-list-tile>
-        </v-list>
-    </div>
+        <v-list-tile ripple :to="toCatalog()">
+            <v-list-tile-action>
+                <v-icon>view_module</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+                <v-list-tile-title>{{ $t('content.layout.shop.sidebar.basic.catalog') }}</v-list-tile-title>
+            </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile ripple :to="toCart()">
+            <v-list-tile-action>
+                <v-badge color="secondary" v-model="cartBadge" overlap right>
+                    <span slot="badge">{{ cartAmount }}</span>
+                    <v-icon>shopping_cart</v-icon>
+                </v-badge>
+            </v-list-tile-action>
+            <v-list-tile-content>
+                <v-list-tile-title>{{ $t('content.layout.shop.sidebar.basic.cart') }}</v-list-tile-title>
+            </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile @click="$router.push({name: 'frontend.auth.servers'})">
+            <v-list-tile-action>
+                <v-icon>keyboard_backspace</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+                <v-list-tile-title>{{ $t('content.layout.shop.sidebar.basic.servers') }}</v-list-tile-title>
+            </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile v-if="$store.getters.isAuth" @click="logout">
+            <v-list-tile-action>
+                <v-icon>exit_to_app</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+                <v-list-tile-title>{{ $t('content.frontend.auth.login.logout') }}</v-list-tile-title>
+            </v-list-tile-content>
+        </v-list-tile>
+        <v-list-tile v-if="accessModeAny && !$store.getters.isAuth" @click="$router.push({name: 'frontend.auth.login' })">
+            <v-list-tile-action>
+                <v-icon>vpn_key</v-icon>
+            </v-list-tile-action>
+            <v-list-tile-content>
+                <v-list-tile-title>{{ $t('content.frontend.auth.login.login') }}</v-list-tile-title>
+            </v-list-tile-content>
+        </v-list-tile>
+    </v-list>
 </template>
 
 <script>
@@ -105,16 +95,3 @@
         }
     }
 </script>
-
-<style lang="less" scoped>
-    #drawer-username {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        margin: 0;
-        span {
-            margin-left: 10px;
-        }
-    }
-</style>

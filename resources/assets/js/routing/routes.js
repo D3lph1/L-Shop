@@ -13,13 +13,16 @@ const Shop = () => import(/* webpackChunkName: "frontend" */ '../templates/layou
 const Catalog = () => import(/* webpackChunkName: "frontend" */ '../templates/frontend/shop/catalog/Catalog.vue');
 const Cart = () => import(/* webpackChunkName: "frontend" */ '../templates/frontend/shop/cart/Cart.vue');
 const Payment = () => import(/* webpackChunkName: "frontend" */ '../templates/frontend/shop/Payment.vue');
+const Replenishment = () => import(/* webpackChunkName: "frontend" */ '../templates/frontend/shop/Replenishment.vue');
 const Character = () => import(/* webpackChunkName: "frontend" */ '../templates/frontend/profile/Character.vue');
 const ProfileSettings = () => import(/* webpackChunkName: "frontend" */ '../templates/frontend/profile/Settings.vue');
 const ProfilePurchases = () => import(/* webpackChunkName: "frontend" */ '../templates/frontend/profile/Purchases.vue');
 const ProfileCart = () => import(/* webpackChunkName: "frontend" */ '../templates/frontend/profile/Cart.vue');
 const News = () => import(/* webpackChunkName: "frontend" */ '../templates/frontend/news/News.vue');
 const Page = () => import(/* webpackChunkName: "frontend" */ '../templates/frontend/Page.vue');
+const Error403 = () => import(/* webpackChunkName: "frontend" */ '../templates/errors/403.vue');
 const Error404 = () => import(/* webpackChunkName: "frontend" */ '../templates/errors/404.vue');
+const Error500 = () => import(/* webpackChunkName: "frontend" */ '../templates/errors/500.vue');
 const Error503 = () => import(/* webpackChunkName: "frontend" */ '../templates/errors/503.vue');
 
 const BasicSettings = () => import(/* webpackChunkName: "admin" */ '../templates/admin/control/Basic.vue');
@@ -27,18 +30,23 @@ const PaymentsSettings = () => import(/* webpackChunkName: "admin" */ '../templa
 const ApiSettings = () => import(/* webpackChunkName: "admin" */ '../templates/admin/control/Api.vue');
 const Security = () => import(/* webpackChunkName: "admin" */ '../templates/admin/control/Security.vue');
 const Optimization = () => import(/* webpackChunkName: "admin" */ '../templates/admin/control/Optimization.vue');
+const ServersAdd = () => import(/* webpackChunkName: "admin" */ '../templates/admin/servers/Add.vue');
+const ServersEdit = () => import(/* webpackChunkName: "admin" */ '../templates/admin/servers/Edit.vue');
 const ProductsAdd = () => import(/* webpackChunkName: "admin" */ '../templates/admin/products/Add.vue');
 const ProductsEdit = () => import(/* webpackChunkName: "admin" */ '../templates/admin/products/Edit.vue');
 const ProductsList = () => import(/* webpackChunkName: "admin" */ '../templates/admin/products/List.vue');
 const ItemsAdd = () => import(/* webpackChunkName: "admin" */ '../templates/admin/items/Add.vue');
 const ItemsEdit = () => import(/* webpackChunkName: "admin" */ '../templates/admin/items/Edit.vue');
 const ItemsList = () => import(/* webpackChunkName: "admin" */ '../templates/admin/items/List.vue');
+const NewsAdd = () => import(/* webpackChunkName: "admin" */ '../templates/admin/news/Add.vue');
+const NewsEdit = () => import(/* webpackChunkName: "admin" */ '../templates/admin/news/Edit.vue');
 const NewsList = () => import(/* webpackChunkName: "admin" */ '../templates/admin/news/List.vue');
 const PagesAdd = () => import(/* webpackChunkName: "admin" */ '../templates/admin/pages/Add.vue');
 const PagesEdit = () => import(/* webpackChunkName: "admin" */ '../templates/admin/pages/Edit.vue');
 const PagesList = () => import(/* webpackChunkName: "admin" */ '../templates/admin/pages/List.vue');
 const UsersList = () => import(/* webpackChunkName: "admin" */ '../templates/admin/users/List.vue');
 const UsersEdit = () => import(/* webpackChunkName: "admin" */ '../templates/admin/users/Edit.vue');
+const Roles = () => import(/* webpackChunkName: "admin" */ '../templates/admin/users/Roles.vue');
 const Rcon = () => import(/* webpackChunkName: "admin" */ '../templates/admin/other/Rcon.vue');
 const Debug = () => import(/* webpackChunkName: "admin" */ '../templates/admin/other/Debug.vue');
 const StatisticShow = () => import(/* webpackChunkName: "admin" */ '../templates/admin/statistic/Show.vue');
@@ -154,6 +162,22 @@ export default [
                 },
                 meta: {
                     title: $t('content.frontend.shop.payment.title')
+                }
+            },
+        ]
+    },
+    {
+        path: '/replenishment',
+        component: Shop,
+        children: [
+            {
+                path: 'replenishment',
+                name: 'frontend.shop.replenishment',
+                components: {
+                    content: Replenishment
+                },
+                meta: {
+                    title: $t('content.frontend.shop.replenishment.title')
                 }
             },
         ]
@@ -285,6 +309,26 @@ export default [
                 }
             },
             {
+                path: 'servers/add',
+                name: 'admin.servers.add',
+                components: {
+                    content: ServersAdd
+                },
+                meta: {
+                    title: $t('content.admin.servers.add.title')
+                }
+            },
+            {
+                path: 'servers/edit/:server',
+                name: 'admin.servers.edit',
+                components: {
+                    content: ServersEdit
+                },
+                meta: {
+                    title: $t('content.admin.servers.edit.title')
+                }
+            },
+            {
                 path: 'products/add',
                 name: 'admin.products.add',
                 components: {
@@ -342,6 +386,26 @@ export default [
                 },
                 meta: {
                     title: $t('content.admin.items.edit.title')
+                }
+            },
+            {
+                path: 'news/add',
+                name: 'admin.news.add',
+                components: {
+                    content: NewsAdd
+                },
+                meta: {
+                    title: $t('content.admin.news.add.title')
+                }
+            },
+            {
+                path: 'news/edit/:news',
+                name: 'admin.news.edit',
+                components: {
+                    content: NewsEdit
+                },
+                meta: {
+                    title: $t('content.admin.news.edit.title')
                 }
             },
             {
@@ -405,6 +469,16 @@ export default [
                 }
             },
             {
+                path: 'users/roles',
+                name: 'admin.users.roles',
+                components: {
+                    content: Roles
+                },
+                meta: {
+                    title: $t('content.admin.users.roles.title')
+                }
+            },
+            {
                 path: 'other/rcon',
                 name: 'admin.other.rcon',
                 components: {
@@ -458,18 +532,42 @@ export default [
     },
     // Errors...
     {
+        path: '/forbidden',
+        name: 'error.403',
+        component: Error403,
+        meta: {
+            title: $t('content.errors.403.title')
+        }
+    },
+    {
         path: '/not-found',
         name: 'error.404',
-        component: Error404
+        component: Error404,
+        meta: {
+            title: $t('content.errors.404.title')
+        }
+    },
+    {
+        path: '/internal-error',
+        name: 'error.500',
+        component: Error500,
+        meta: {
+            title: $t('content.errors.500.title')
+        }
     },
     {
         path: '/service-unavailable',
         name: 'error.503',
-        component: Error503
+        component: Error503,
+        meta: {
+            title: $t('content.errors.503.title')
+        }
     },
     {
         path: '*',
-        name: 'error.404',
-        component: Error404
+        component: Error404,
+        meta: {
+            title: $t('content.errors.404.title')
+        }
     },
 ];

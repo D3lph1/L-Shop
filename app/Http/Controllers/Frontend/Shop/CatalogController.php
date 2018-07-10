@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Frontend\Shop;
 
 use App\DataTransferObjects\Frontend\Shop\Server;
 use App\Exceptions\Category\CategoryNotFoundException as CategoryDoesNotExistException;
+use App\Exceptions\ForbiddenException;
 use App\Exceptions\Product\ProductNotFoundException;
 use App\Exceptions\Server\ServerNotFoundException as ServerDoesNotExistException;
 use App\Handlers\Frontend\Shop\Catalog\PurchaseHandler;
@@ -18,10 +19,12 @@ use App\Services\Auth\Permissions;
 use App\Services\Cart\Cart;
 use App\Services\Notification\Notifications\Error;
 use App\Services\Notification\Notifications\Success;
+use App\Services\Notification\Notifications\Warning;
 use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use App\Services\Security\Captcha\Captcha;
 use App\Services\Server\Persistence\Persistence;
+use App\Services\Server\ServerAccess;
 use App\Services\Settings\Settings;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -62,7 +65,11 @@ class CatalogController extends Controller
         Persistence $persistence)
     {
         try {
-            $dto = $handler->handle((int)$request->route('server'), (int)$request->route('category'));
+            $dto = $handler->handle(
+                (int)($request->get('page') ?? 1),
+                (int)$request->route('server'),
+                (int)$request->route('category')
+            );
         } catch (ServerDoesNotExistException $e) {
             return (new JsonResponse('server_not_found'))
                 ->setHttpStatus(Response::HTTP_NOT_FOUND);
@@ -74,6 +81,12 @@ class CatalogController extends Controller
         $server = $persistence->retrieve();
         if ($server !== null) {
             $server = new Server($server);
+
+            // If the server is disabled and the user does not have permission to access the disabled servers.
+            if (!ServerAccess::isUserHasAccessTo($auth->getUser(), $server->getEntity())) {
+                return (new JsonResponse(Status::FORBIDDEN))
+                    ->setHttpStatus(Response::HTTP_FORBIDDEN);
+            }
         }
 
         $productsCrudAccess = $auth->check() ? $auth->getUser()->hasPermission(Permissions::ADMIN_PRODUCTS_CRUD_ACCESS) : false;
@@ -129,6 +142,10 @@ class CatalogController extends Controller
             return (new JsonResponse('product_not_found'))
                 ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.frontend.shop.catalog.product_not_found')));
+        } catch (ForbiddenException $e) {
+            return (new JsonResponse('server_disabled'))
+                ->setHttpStatus(Response::HTTP_FORBIDDEN)
+                ->addNotification(new Warning(__('msg.forbidden')));
         }
     }
 }

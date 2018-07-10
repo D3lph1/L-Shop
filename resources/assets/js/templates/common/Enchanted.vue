@@ -4,9 +4,3 @@
         <span>{{ $t('content.frontend.shop.catalog.item.enchanted') }}</span>
     </v-tooltip>
 </template>
-
-<script>
-    export default {
-        //
-    }
-</script>

@@ -24,6 +24,15 @@ class DoctrineGroupPermissionRepository implements GroupPermissionRepository
         $this->er = $er;
     }
 
+    public function findByPermission(string $permission): array
+    {
+        return $this->er->createQueryBuilder('gp')
+            ->where('gp.permission = :permission')
+            ->setParameter('permission', $permission)
+            ->getQuery()
+            ->getResult();
+    }
+
     public function findAll(): array
     {
         return $this->er->findAll();

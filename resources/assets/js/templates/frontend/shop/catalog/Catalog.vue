@@ -33,6 +33,7 @@
                                 :products-crud-access="productsCrudAccess"
                                 :items-crud-access="itemsCrudAccess"
                                 :enchantments="product.item.enchantments"
+                                :hidden="product.hidden"
                                 @open-purchase-dialog="openPurchaseDialog(product.id)"
                                 @about-dialog-opening="openAboutDialog"
                                 v-if="!loading"
@@ -41,7 +42,6 @@
 
                     <div class="text-xs-center" v-if="paginator.last_page > 1 && !loading">
                         <v-pagination
-                                class="mt-5"
                                 :length="paginator.last_page"
                                 v-model="page"
                                 :total-visible="7"
@@ -50,13 +50,13 @@
                     </div>
                 </v-tab-item>
 
+                <v-alert v-if="products.length === 0" type="info" outline :value="true" class="mb-3">
+                    <div class="text-xs-center">{{ $t('content.frontend.shop.catalog.empty_category') }}</div>
+                </v-alert>
+
                 <div class="text-xs-center">
                     <v-progress-circular indeterminate color="primary" v-if="loading"></v-progress-circular>
                 </div>
-
-                <v-alert v-if="products.length === 0" type="info" outline :value="true">
-                    <div class="text-xs-center">{{ $t('content.frontend.shop.catalog.empty_category') }}</div>
-                </v-alert>
             </v-tabs-items>
         </div>
         <v-alert v-else type="info" outline :value="true">

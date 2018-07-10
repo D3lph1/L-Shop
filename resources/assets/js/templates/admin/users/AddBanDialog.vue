@@ -170,7 +170,7 @@
             },
             dialogData(val) {
                 if (!val) {
-                    this.$emit('close', this.models);
+                    this.$emit('close');
                 }
             }
         },

@@ -18,6 +18,14 @@ class Server implements \JsonSerializable
     }
 
     /**
+     * @return Entity
+     */
+    public function getEntity(): Entity
+    {
+        return $this->entity;
+    }
+
+    /**
      * {@inheritdoc}
      */
     public function jsonSerialize(): array

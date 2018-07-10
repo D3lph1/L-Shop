@@ -64,7 +64,7 @@ class Checkout
         string $validationPassword,
         string $algorithm = 'sha512',
         bool $testMode = false,
-        string $culture = self::CULTURE_RU)
+        string $culture = self::CULTURE_EN)
     {
         $this->login = $login;
         $this->paymentPassword = $paymentPassword;
@@ -101,7 +101,7 @@ class Checkout
         ]);
         $customParams = $payment->getCustomParams();
         if ($customParams) {
-            // sort customParams alphabetically
+            // Sort customParams alphabetically.
             ksort($customParams);
             $signature .= ':' . http_build_query($customParams);
         }
@@ -109,6 +109,7 @@ class Checkout
         $data['SignatureValue'] = hash($this->algorithm, $signature);
         $data = http_build_query($data, '', '&');
         $custom = http_build_query($customParams, '', '&');
+
         return self::URL . $data . ($custom ? '&' . $custom : '');
     }
 

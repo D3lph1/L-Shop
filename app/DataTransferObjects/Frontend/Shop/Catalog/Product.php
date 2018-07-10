@@ -33,7 +33,8 @@ class Product implements \JsonSerializable
             'item' => new Item($this->entity->getItem()),
             'price' => $this->entity->getPrice(),
             'stack' => $this->entity->getStack(),
-            'inCart' => $this->inCart
+            'inCart' => $this->inCart,
+            'hidden' => $this->entity->isHidden()
         ];
     }
 }

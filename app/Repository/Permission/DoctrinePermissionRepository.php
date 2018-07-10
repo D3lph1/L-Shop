@@ -8,10 +8,12 @@ use App\Services\Caching\CachingOptions;
 use App\Services\Caching\ClearsCache;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use LaravelDoctrine\ORM\Pagination\PaginatesFromParams;
 
 class DoctrinePermissionRepository implements PermissionRepository
 {
-    use ClearsCache;
+    use PaginatesFromParams, ClearsCache;
 
     /**
      * @var EntityManagerInterface
@@ -49,6 +51,12 @@ class DoctrinePermissionRepository implements PermissionRepository
         $this->em->flush();
     }
 
+    public function remove(Permission $permission): void
+    {
+        $this->em->remove($permission);
+        $this->em->flush();
+    }
+
     public function deleteAll(): bool
     {
         $this->clearResultCache();
@@ -57,6 +65,12 @@ class DoctrinePermissionRepository implements PermissionRepository
             ->delete()
             ->getQuery()
             ->getResult();
+    }
+
+    public function find(int $id): ?Permission
+    {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        return $this->er->find($id);
     }
 
     public function findByName(string $name): ?Permission
@@ -98,6 +112,59 @@ class DoctrinePermissionRepository implements PermissionRepository
             ->getQuery()
             ->useResultCache($this->cachingOptions->isEnabled(), $this->cachingOptions->getLifetime())
             ->getResult();
+    }
+
+    public function findPaginated(int $page, int $perPage): LengthAwarePaginator
+    {
+        return $this->paginateAll($perPage, $page);
+    }
+
+    public function findPaginatedWithOrder(string $orderBy, bool $descending, int $page, int $perPage): LengthAwarePaginator
+    {
+        return $this->paginate(
+            $this->createQueryBuilder('permission')
+                ->orderBy($orderBy, $descending ? 'DESC' : 'ASC')
+                ->getQuery(),
+            $perPage,
+            $page,
+            false
+        );
+    }
+
+    public function findPaginateWithSearch(string $search,int $page, int $perPage): LengthAwarePaginator
+    {
+        return $this->paginate(
+            $this->createQueryBuilder('permission')
+                ->where('permission.name LIKE :search')
+                ->setParameter('search', "%{$search}%")
+                ->getQuery(),
+            $perPage,
+            $page,
+            false
+        );
+    }
+
+    public function findPaginatedWithOrderAndSearch(string $orderBy, bool $descending, string $search, int $page, int $perPage): LengthAwarePaginator
+    {
+        return $this->paginate(
+            $this->createQueryBuilder('permission')
+                ->orderBy($orderBy, $descending ? 'DESC' : 'ASC')
+                ->where('permission.id LIKE :search')
+                ->orWhere('permission.name LIKE :search')
+                ->setParameter('search', "%{$search}%")
+                ->getQuery(),
+            $perPage,
+            $page,
+            false
+        );
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function createQueryBuilder($alias, $indexBy = null)
+    {
+        return $this->er->createQueryBuilder($alias, $indexBy);
     }
 
     protected function getEntityManager(): EntityManagerInterface
