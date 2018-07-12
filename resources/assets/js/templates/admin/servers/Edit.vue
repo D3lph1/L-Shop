@@ -148,7 +148,7 @@
 
                 this.ip = data.server.ip;
                 this.port = data.server.port;
-                this.password = data.server.ip;
+                this.password = data.server.password;
                 this.monitoringEnabled = data.server.monitoringEnabled;
                 this.serverEnabled = data.server.serverEnabled;
                 this.distributor = data.server.distributor;

@@ -62,7 +62,7 @@ class DistributionHandler
         }
 
         // If the class does not implement the interface, then it can not be passed out of this context.
-        if (!($distribution instanceof Attempting)) {
+        if (!($distributor instanceof Attempting)) {
             throw new NotAttemptedException($distributorClass);
         }
 

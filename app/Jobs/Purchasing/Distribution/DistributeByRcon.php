@@ -8,8 +8,8 @@ use App\Exceptions\Distributor\DistributionException;
 use App\Repository\Distribution\DistributionRepository;
 use App\Services\Purchasing\Distributors\RconDistribution\Connections;
 use App\Services\Purchasing\Distributors\RconDistribution\ExecutableCommands;
+use D3lph1\MinecraftRconManager\Connection;
 use D3lph1\MinecraftRconManager\Exceptions\RuntimeException;
-use D3lph1\MinecraftRconManager\Rcon;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Queue\InteractsWithQueue;
@@ -87,7 +87,7 @@ class DistributeByRcon implements ShouldQueue
         $this->sendExtraCommands($this->commands->getExtraAfterCommands(), $connection, $logger);
     }
 
-    private function retrieveConnection(Connections $connections, Distribution $distribution, LoggerInterface $logger): Rcon
+    private function retrieveConnection(Connections $connections, Distribution $distribution, LoggerInterface $logger): Connection
     {
         try {
             return $connections->connect(
@@ -100,7 +100,7 @@ class DistributeByRcon implements ShouldQueue
         }
     }
 
-    private function sendCommands(Rcon $connection, LoggerInterface $logger)
+    private function sendCommands(Connection $connection, LoggerInterface $logger)
     {
         $step = 1;
         $total = count($this->commands->getMainCommands());
@@ -130,7 +130,7 @@ class DistributeByRcon implements ShouldQueue
         }
     }
 
-    private function sendExtraCommands(array $commands, Rcon $connection, LoggerInterface $logger)
+    private function sendExtraCommands(array $commands, Connection $connection, LoggerInterface $logger)
     {
         try {
             // Execute extra commands one by one.

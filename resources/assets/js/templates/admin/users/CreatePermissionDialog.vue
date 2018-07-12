@@ -30,7 +30,7 @@
                             :loading="createLoading"
                             @click="create"
                     >
-                        {{ $t('content.admin.users.roles.create_permission_dialog.create') }}
+                        {{ $t('common.create') }}
                     </v-btn>
                 </v-card-actions>
             </v-card>

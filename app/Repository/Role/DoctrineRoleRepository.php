@@ -8,10 +8,12 @@ use App\Services\Caching\CachingOptions;
 use App\Services\Caching\ClearsCache;
 use Doctrine\ORM\EntityManagerInterface;
 use Doctrine\ORM\EntityRepository;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
+use LaravelDoctrine\ORM\Pagination\PaginatesFromParams;
 
 class DoctrineRoleRepository implements RoleRepository
 {
-    use ClearsCache;
+    use PaginatesFromParams, ClearsCache;
 
     /**
      * @var EntityManagerInterface
@@ -49,6 +51,12 @@ class DoctrineRoleRepository implements RoleRepository
         $this->em->flush();
     }
 
+    public function remove(Role $role): void
+    {
+        $this->em->remove($role);
+        $this->em->flush();
+    }
+
     public function deleteAll(): bool
     {
         $this->clearResultCache();
@@ -57,6 +65,12 @@ class DoctrineRoleRepository implements RoleRepository
             ->delete()
             ->getQuery()
             ->getResult();
+    }
+
+    public function find(int $id): ?Role
+    {
+        /** @noinspection PhpIncompatibleReturnTypeInspection */
+        return $this->er->find($id);
     }
 
     public function findByName(string $name): ?Role
@@ -114,8 +128,61 @@ class DoctrineRoleRepository implements RoleRepository
             ->getResult();
     }
 
+    public function findPaginated(int $page, int $perPage): LengthAwarePaginator
+    {
+        return $this->paginateAll($perPage, $page);
+    }
+
+    public function findPaginatedWithOrder(string $orderBy, bool $descending, int $page, int $perPage): LengthAwarePaginator
+    {
+        return $this->paginate(
+            $this->createQueryBuilder('role')
+                ->orderBy($orderBy, $descending ? 'DESC' : 'ASC')
+                ->getQuery(),
+            $perPage,
+            $page,
+            false
+        );
+    }
+
+    public function findPaginateWithSearch(string $search,int $page, int $perPage): LengthAwarePaginator
+    {
+        return $this->paginate(
+            $this->createQueryBuilder('role')
+                ->where('role.name LIKE :search')
+                ->setParameter('search', "%{$search}%")
+                ->getQuery(),
+            $perPage,
+            $page,
+            false
+        );
+    }
+
+    public function findPaginatedWithOrderAndSearch(string $orderBy, bool $descending, string $search, int $page, int $perPage): LengthAwarePaginator
+    {
+        return $this->paginate(
+            $this->createQueryBuilder('role')
+                ->orderBy($orderBy, $descending ? 'DESC' : 'ASC')
+                ->where('role.id LIKE :search')
+                ->orWhere('role.name LIKE :search')
+                ->setParameter('search', "%{$search}%")
+                ->getQuery(),
+            $perPage,
+            $page,
+            false
+        );
+    }
+
     protected function getEntityManager(): EntityManagerInterface
     {
         return $this->em;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function createQueryBuilder($alias, $indexBy = null)
+    {
+        return $this->er->createQueryBuilder($alias, $indexBy);
     }
 }

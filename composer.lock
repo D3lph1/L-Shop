@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "content-hash": "9f796b9f9ce4042b259552df8389647a",
+    "content-hash": "ba620f03891f084fbf26fc86182de37d",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -70,16 +70,16 @@
         },
         {
             "name": "d3lph1/minecraft-rcon-manager",
-            "version": "1.2",
+            "version": "1.3",
             "source": {
                 "type": "git",
                 "url": "https://github.com/D3lph1/minecraft-rcon-manager.git",
-                "reference": "3dc807b8b79dc343fa5481dad75cfc1cdd87a392"
+                "reference": "7bb992f3c90ca7ab26c3a9ea42fabd9e6953b67b"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/D3lph1/minecraft-rcon-manager/zipball/3dc807b8b79dc343fa5481dad75cfc1cdd87a392",
-                "reference": "3dc807b8b79dc343fa5481dad75cfc1cdd87a392",
+                "url": "https://api.github.com/repos/D3lph1/minecraft-rcon-manager/zipball/7bb992f3c90ca7ab26c3a9ea42fabd9e6953b67b",
+                "reference": "7bb992f3c90ca7ab26c3a9ea42fabd9e6953b67b",
                 "shasum": ""
             },
             "require": {
@@ -111,7 +111,7 @@
                 "minecraft",
                 "rcon"
             ],
-            "time": "2017-10-26T15:46:31+00:00"
+            "time": "2018-07-12T12:39:41+00:00"
         },
         {
             "name": "dnoegel/php-xdg-base-dir",

@@ -207,7 +207,10 @@ return [
                 'successfully_deleted' => 'Право успешно удалено.'
             ],
             'roles' => [
-                'not_found' => 'Роль не найдена.'
+                'not_found' => 'Роль не найдена.',
+                'already_exists_with_name' => 'Роль с именем ":name" уже существует.',
+                'successfully_updated' => 'Роль успешно обновлена.',
+                'successfully_deleted' => 'Роль успешно удалена.'
             ]
         ],
         'statistic' => [

@@ -57,6 +57,9 @@ class ShoppingCart
 
     /**
      * @ORM\OneToOne(targetEntity="App\Entity\Distribution")
+     * @ORM\JoinColumns({
+     *     @ORM\JoinColumn(name="distribution_id", referencedColumnName="id", onDelete="CASCADE")
+     * })
      */
     private $distribution;
 

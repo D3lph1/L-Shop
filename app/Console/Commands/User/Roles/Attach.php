@@ -59,7 +59,7 @@ class Attach extends Command
 
             return 1;
         } catch (RoleAlreadyAttachedException $e) {
-            $this->error(__('commands.user.roles.attach.already_has_role', ['name' => $e->getRole()->getName()]));
+            $this->error(__('commands.user.roles.attach.already_has_role', ['name' => $e->getRole()]));
 
             return 1;
         }

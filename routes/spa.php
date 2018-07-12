@@ -114,9 +114,12 @@ $router->post('/admin/items/list', 'Admin\Items\ListController@pagination');
 
 $router->get('/admin/news/add', 'Admin\News\AddController@render');
 $router->post('/admin/news/add', 'Admin\News\AddController@add');
-$router->get('/admin/news/edit/{news}', 'Admin\News\EditController@render');
-$router->post('/admin/news/edit/{news}', 'Admin\News\EditController@edit');
-$router->delete('/admin/news/{news}', 'Admin\News\EditController@delete');
+$router->get('/admin/news/edit/{news}', 'Admin\News\EditController@render')
+    ->where('news', '[0-9]+');
+$router->post('/admin/news/edit/{news}', 'Admin\News\EditController@edit')
+    ->where('news', '[0-9]+');
+$router->delete('/admin/news/{news}', 'Admin\News\EditController@delete')
+    ->where('news', '[0-9]+');
 $router->post('/admin/news/list', 'Admin\News\ListController@pagination');
 
 $router->post('/admin/pages/add', 'Admin\Pages\AddController@add');
@@ -157,6 +160,10 @@ $router->patch('/admin/users/permissions/{permission}', 'Admin\Users\Permissions
 $router->delete('/admin/users/permissions/{permission}', 'Admin\Users\PermissionsController@delete')
     ->where('permission', '[0-9]+');
 $router->post('/admin/users/roles', 'Admin\Users\RolesController@pagination');
+$router->patch('/admin/users/roles/{role}/update_name', 'Admin\Users\RolesController@updateName')
+    ->where('role', '[0-9]+');
+$router->delete('/admin/users/roles/{role}', 'Admin\Users\RolesController@delete')
+    ->where('role', '[0-9]+');
 
 $router->get('/admin/other/debug', 'Admin\Other\DebugController@render');
 $router->post('/admin/other/debug/send', 'Admin\Other\DebugController@sendEmail');

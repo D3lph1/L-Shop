@@ -3,26 +3,30 @@ declare(strict_types = 1);
 
 namespace App\Exceptions\User;
 
-use App\Entity\Role;
 use App\Exceptions\LogicException;
 
 class RoleAlreadyAttachedException extends LogicException
 {
     /**
-     * @var Role
+     * @var mixed
      */
     private $role;
 
-    public function __construct(Role $role)
+    public function __construct(string $message, $role)
     {
+        parent::__construct($message);
         $this->role = $role;
-        parent::__construct("Role {$role} already exists", 0, null);
+    }
+
+    public static function withName(string $name): RoleAlreadyAttachedException
+    {
+        return new RoleAlreadyAttachedException("Role with name `$name` already attached", $name);
     }
 
     /**
-     * @return Role
+     * @return mixed
      */
-    public function getRole(): Role
+    public function getRole()
     {
         return $this->role;
     }

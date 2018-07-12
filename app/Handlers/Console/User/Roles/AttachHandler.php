@@ -62,7 +62,7 @@ class AttachHandler
 
         foreach ($rs as $role) {
             if ($user->hasRole($role)) {
-                throw new RoleAlreadyAttachedException($role);
+                throw RoleAlreadyAttachedException::withName($role->getName());
             }
 
             $user->getRoles()->add($role);

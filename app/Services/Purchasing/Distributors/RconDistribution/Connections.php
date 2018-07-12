@@ -4,8 +4,8 @@ declare(strict_types = 1);
 namespace App\Services\Purchasing\Distributors\RconDistribution;
 
 use App\Entity\Server;
+use D3lph1\MinecraftRconManager\Connection;
 use D3lph1\MinecraftRconManager\Connector;
-use D3lph1\MinecraftRconManager\Rcon;
 
 /**
  * Class Connections
@@ -40,9 +40,9 @@ class Connections
      *
      * @param Server $server
      *
-     * @return Rcon
+     * @return Connection
      */
-    public function connect(Server $server): Rcon
+    public function connect(Server $server): Connection
     {
         if ($this->connector->exists($server->getId())) {
             return $this->connector->get($server->getId());

@@ -535,15 +535,23 @@ return [
                 ],
                 'create_permission_dialog' => [
                     'title' => 'Создание права',
-                    'name' => 'Имя права',
-                    'create' => 'Создать',
+                    'name' => 'Имя права'
                 ],
                 'roles_table' => [
+                    'title' => 'Роли',
+                    'search' => 'Поиск по ролям',
                     'headers' => [
                         'id' => 'Идентфикиатор',
                         'name' => 'Имя',
                         'permissions' => 'Права'
-                    ]
+                    ],
+                    'update_name' => 'Обновить имя',
+                    'delete' => 'Вы уверены, что хотите удалить эту роль?',
+                    'empty' => 'Список ролей пуст'
+                ],
+                'create_role_dialog' => [
+                    'title' => 'Создание роли',
+                    'name' => 'Имя роли'
                 ]
             ]
         ],
