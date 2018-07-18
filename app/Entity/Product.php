@@ -85,6 +85,9 @@ class Product
      * The server category in which this product is sold.
      *
      * @ORM\ManyToOne(targetEntity="App\Entity\Category")
+     * @ORM\JoinColumns({
+     *      @ORM\JoinColumn(onDelete="CASCADE")
+     * })
      */
     private $category;
 

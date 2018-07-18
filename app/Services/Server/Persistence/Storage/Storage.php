@@ -8,4 +8,6 @@ interface Storage
     public function persist(int $serverId): void;
 
     public function retrieve(): ?int;
+
+    public function remove(): void;
 }

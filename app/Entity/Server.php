@@ -154,9 +154,9 @@ class Server
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getIp(): string
+    public function getIp(): ?string
     {
         return $this->ip;
     }
@@ -274,7 +274,7 @@ class Server
     }
 
     /**
-     * @return Collection
+     * @return Collection|Category[]
      */
     public function getCategories(): Collection
     {

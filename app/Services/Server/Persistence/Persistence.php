@@ -41,4 +41,9 @@ class Persistence
 
         return $server;
     }
+
+    public function destroy(): void
+    {
+        $this->storage->remove();
+    }
 }

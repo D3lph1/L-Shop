@@ -28,6 +28,12 @@ class PaymentsController extends Controller
     public function save(SavePaymentsSettingsRequest $request, Settings $settings): JsonResponse
     {
         $settings->setArray([
+            'shop' => [
+                'currency' => [
+                    'name' => $request->get('currency'),
+                    'html' => $request->get('currency_html'),
+                ]
+            ],
             'purchasing' => [
                 'min_fill_balance_sum' => (float)$request->get('min_fill_balance_sum'),
                 'services' => [

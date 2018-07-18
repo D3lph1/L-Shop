@@ -23,6 +23,8 @@ class VisitHandler
     {
         return (new VisitResult())
             ->setMinFillBalanceSum($this->settings->get('purchasing.min_fill_balance_sum')->getValue(DataType::FLOAT))
+            ->setCurrency($this->settings->get('shop.currency.name')->getValue())
+            ->setCurrencyHtml($this->settings->get('shop.currency.html')->getValue())
             ->setRobokassaEnabled($this->settings->get('purchasing.services.robokassa.enabled')->getValue(DataType::BOOL))
             ->setRobokassaLogin($this->settings->get('purchasing.services.robokassa.login')->getValue())
             ->setRobokassaPaymentPassword($this->settings->get('purchasing.services.robokassa.payment_password')->getValue())

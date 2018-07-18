@@ -13,6 +13,16 @@ class VisitResult implements JsonRespondent
     private $minFillBalanceSum;
 
     /**
+     * @var string
+     */
+    private $currency;
+
+    /**
+     * @var string
+     */
+    private $currencyHtml;
+
+    /**
      * @var bool
      */
     private $robokassaEnabled;
@@ -85,6 +95,30 @@ class VisitResult implements JsonRespondent
     public function setMinFillBalanceSum(float $minFillBalanceSum): VisitResult
     {
         $this->minFillBalanceSum = $minFillBalanceSum;
+
+        return $this;
+    }
+
+    /**
+     * @param string $currency
+     *
+     * @return VisitResult
+     */
+    public function setCurrency(string $currency): VisitResult
+    {
+        $this->currency = $currency;
+
+        return $this;
+    }
+
+    /**
+     * @param string $currencyHtml
+     *
+     * @return VisitResult
+     */
+    public function setCurrencyHtml(string $currencyHtml): VisitResult
+    {
+        $this->currencyHtml = $currencyHtml;
 
         return $this;
     }
@@ -253,6 +287,8 @@ class VisitResult implements JsonRespondent
     {
         return [
             'minFillBalanceSum' => $this->minFillBalanceSum,
+            'currency' => $this->currency,
+            'currencyHtml' => $this->currencyHtml,
             'robokassaEnabled' => $this->robokassaEnabled,
             'robokassaLogin' => $this->robokassaLogin,
             'robokassaPaymentPassword' => $this->robokassaPaymentPassword,

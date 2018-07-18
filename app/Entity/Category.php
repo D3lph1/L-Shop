@@ -38,6 +38,9 @@ class Category
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Server", inversedBy="categories", cascade={"persist"})
+     * @ORM\JoinColumns({
+     *      @ORM\JoinColumn(onDelete="CASCADE")
+     * })
      */
     private $server;
 

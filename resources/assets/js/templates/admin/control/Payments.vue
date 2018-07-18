@@ -16,6 +16,14 @@
                                 type="number"
                                 class="no-spinners"
                         ></v-text-field>
+                        <v-text-field
+                                :label="$t('content.admin.control.payments.currency')"
+                                v-model="currency"
+                        ></v-text-field>
+                        <v-text-field
+                                :label="$t('content.admin.control.payments.currency_html')"
+                                v-model="currencyHtml"
+                        ></v-text-field>
                         <v-subheader class="mt-4">{{ $t('content.admin.control.payments.aggregators_section') }}</v-subheader>
                         <v-subheader inset>{{ $t('content.admin.control.payments.robokassa.title') }}</v-subheader>
                         <v-switch
@@ -123,6 +131,8 @@
         data() {
             return {
                 minFillBalanceSum: 0,
+                currency: '',
+                currencyHtml: '',
                 robokassaEnabled: false,
                 robokassaLogin: '',
                 robokassaPaymentPassword: '',
@@ -165,6 +175,8 @@
                 this.finishLoading = true;
                 this.$axios.post('/spa/admin/control/payments', {
                     min_fill_balance_sum: this.minFillBalanceSum,
+                    currency: this.currency,
+                    currency_html: this.currencyHtml,
                     robokassa_enabled: this.robokassaEnabled,
                     robokassa_login: this.robokassaLogin,
                     robokassa_payment_password: this.robokassaPaymentPassword,
@@ -188,6 +200,8 @@
                 const data = response.data;
 
                 this.minFillBalanceSum = data.minFillBalanceSum;
+                this.currency = data.currency;
+                this.currencyHtml = data.currencyHtml;
                 this.robokassaEnabled = data.robokassaEnabled;
                 this.robokassaLogin = data.robokassaLogin;
                 this.robokassaPaymentPassword = data.robokassaPaymentPassword;

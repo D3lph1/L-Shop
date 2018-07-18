@@ -85,6 +85,8 @@ $router->get('/admin/servers/add', 'Admin\Servers\AddController@render');
 $router->post('/admin/servers/add', 'Admin\Servers\AddController@add');
 $router->get('/admin/servers/edit/{server}', 'Admin\Servers\EditController@render');
 $router->post('/admin/servers/edit/{server}', 'Admin\Servers\EditController@edit');
+$router->get('/admin/servers/list', 'Admin\Servers\ListController@render');
+$router->delete('/admin/servers/delete/{server}', 'Admin\Servers\ListController@delete');
 
 $router->post('/admin/servers/enable/{server}', 'Admin\Servers\SwitchController@enable')
     ->where('server', '[0-9]+');

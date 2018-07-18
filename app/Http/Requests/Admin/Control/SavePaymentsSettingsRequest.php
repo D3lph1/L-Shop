@@ -26,6 +26,8 @@ class SavePaymentsSettingsRequest extends FormRequest
     {
         return [
             'min_fill_balance_sum' => 'required|numeric|min:0.01',
+            'currency' => 'required|min:1',
+            'currency_html' => 'required|min:1',
             'robokassa_enabled' => 'required|boolean',
             'robokassa_login' => 'nullable|required_if:robokassa_enabled,true',
             'robokassa_payment_password' => 'nullable|required_if:robokassa_enabled,true',

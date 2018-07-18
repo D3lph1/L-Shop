@@ -28,4 +28,9 @@ class Session implements Storage
     {
         return $this->session->get($this->key);
     }
+
+    public function remove(): void
+    {
+        $this->session->remove($this->key);
+    }
 }

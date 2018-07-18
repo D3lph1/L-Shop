@@ -132,8 +132,8 @@ return [
         'block_duration' => 'Длительность блокировки',
 
         'min_sum' => 'Минимальная сумма пополнения баланса',
-        'currency' => 'Название валюты',
-        'currency_html' => 'HTML представление валюты',
+        'currency' => 'Текстовое представление валюты',
+        'currency_html' => 'Форматированное представление валюты',
 
         'robokassa_login' => 'Robkassa. Логин',
         'robokassa_password1' => 'Robkassa. Пароль №1',

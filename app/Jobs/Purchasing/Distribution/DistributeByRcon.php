@@ -105,7 +105,7 @@ class DistributeByRcon implements ShouldQueue
         $step = 1;
         $total = count($this->commands->getMainCommands());
         // Execute main commands one by one.
-        foreach ($this->commands as $command) {
+        foreach ($this->commands->getMainCommands() as $command) {
             $logger->debug("Attempting to execute command: ({$step}/{$total})\"{$command}\"", $this->context());
 
             try {

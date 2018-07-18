@@ -73,7 +73,7 @@ class AdminBlockConstructor
                         'permissions' => [Permissions::ADMIN_SERVERS_CRUD_ACCESS]
                     ],
                     [
-                        'link' => '',
+                        'link' => 'admin.servers.list',
                         'title' => __('content.layout.shop.sidebar.admin.servers.sub_items.edit'),
                         'permissions' => [Permissions::ADMIN_SERVERS_CRUD_ACCESS]
                     ],

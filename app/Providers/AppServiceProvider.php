@@ -37,6 +37,7 @@ use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
 use App\Services\Url\Signing\Signer;
 use App\Services\Url\Signing\Validator;
+use D3lph1\MinecraftRconManager\Connector;
 use D3lph1\MinecraftRconManager\DefaultConnector;
 use Doctrine\ORM\EntityManagerInterface;
 use Illuminate\Contracts\Config\Repository;
@@ -89,11 +90,13 @@ class AppServiceProvider extends ServiceProvider
             return $driver;
         });
 
+        $this->app->singleton(Connector::class, DefaultConnector::class);
+
         $this->app->singleton(RconMonitoring::class, function (Application $app) {
             $settings = $app->make(Settings::class);
 
             return new RconMonitoring(
-                new DefaultConnector(),
+                $app->make(Connector::class),
                 $settings->get('system.monitoring.rcon.command')->getValue(),
                 $settings->get('system.monitoring.rcon.timeout')->getValue(DataType::INT),
                 $app->make(RconResponseParser::class, [

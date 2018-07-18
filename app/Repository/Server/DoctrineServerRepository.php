@@ -49,6 +49,13 @@ class DoctrineServerRepository implements ServerRepository
         $this->em->flush();
     }
 
+    public function remove(Server $server): void
+    {
+        $this->clearResultCache();
+        $this->em->remove($server);
+        $this->em->flush();
+    }
+
     public function deleteAll(): bool
     {
         $this->clearResultCache();
@@ -96,6 +103,18 @@ class DoctrineServerRepository implements ServerRepository
             ->er
             ->createQueryBuilder('server')
             ->select('server')
+            ->getQuery()
+            ->useResultCache($this->cachingOptions->isEnabled(), $this->cachingOptions->getLifetime())
+            ->getResult();
+    }
+
+    public function findAllWithCategories(): array
+    {
+        return $this
+            ->er
+            ->createQueryBuilder('server')
+            ->select('server')
+            ->leftJoin('server.categories', 'categories')
             ->getQuery()
             ->useResultCache($this->cachingOptions->isEnabled(), $this->cachingOptions->getLifetime())
             ->getResult();

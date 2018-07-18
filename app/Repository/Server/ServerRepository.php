@@ -11,6 +11,8 @@ interface ServerRepository
 
     public function update(Server $server): void;
 
+    public function remove(Server $server): void;
+
     public function deleteAll(): bool;
 
     public function find(int $id): ?Server;
@@ -21,4 +23,6 @@ interface ServerRepository
     public function findWithEnabledMonitoring(): array;
 
     public function findAll(): array;
+
+    public function findAllWithCategories(): array;
 }

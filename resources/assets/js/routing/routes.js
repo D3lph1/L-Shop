@@ -32,6 +32,7 @@ const Security = () => import(/* webpackChunkName: "admin" */ '../templates/admi
 const Optimization = () => import(/* webpackChunkName: "admin" */ '../templates/admin/control/Optimization.vue');
 const ServersAdd = () => import(/* webpackChunkName: "admin" */ '../templates/admin/servers/Add.vue');
 const ServersEdit = () => import(/* webpackChunkName: "admin" */ '../templates/admin/servers/Edit.vue');
+const ServersList = () => import(/* webpackChunkName: "admin" */ '../templates/admin/servers/List.vue');
 const ProductsAdd = () => import(/* webpackChunkName: "admin" */ '../templates/admin/products/Add.vue');
 const ProductsEdit = () => import(/* webpackChunkName: "admin" */ '../templates/admin/products/Edit.vue');
 const ProductsList = () => import(/* webpackChunkName: "admin" */ '../templates/admin/products/List.vue');
@@ -326,6 +327,16 @@ export default [
                 },
                 meta: {
                     title: $t('content.admin.servers.edit.title')
+                }
+            },
+            {
+                path: 'servers/list',
+                name: 'admin.servers.list',
+                components: {
+                    content: ServersList
+                },
+                meta: {
+                    title: $t('content.admin.servers.list.title')
                 }
             },
             {
