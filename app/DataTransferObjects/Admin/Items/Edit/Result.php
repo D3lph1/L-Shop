@@ -4,8 +4,9 @@ declare(strict_types = 1);
 namespace App\DataTransferObjects\Admin\Items\Edit;
 
 use App\DataTransferObjects\Admin\Items\Add\Image;
+use App\Services\Response\JsonRespondent;
 
-class Result
+class Result implements JsonRespondent
 {
     /**
      * @var Item
@@ -30,26 +31,14 @@ class Result
     }
 
     /**
-     * @return Item
+     * @inheritDoc
      */
-    public function getItem(): Item
+    public function response(): array
     {
-        return $this->item;
-    }
-
-    /**
-     * @return Image[]
-     */
-    public function getImages(): array
-    {
-        return $this->images;
-    }
-
-    /**
-     * @return Enchantment[]
-     */
-    public function getEnchantments(): array
-    {
-        return $this->enchantments;
+        return [
+            'item' => $this->item,
+            'images' => $this->images,
+            'enchantments' => $this->enchantments
+        ];
     }
 }

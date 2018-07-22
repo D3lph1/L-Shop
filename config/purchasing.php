@@ -103,7 +103,47 @@ return [
                 | - {lifetime} Lifetime of permission group (in seconds).
                 |
                 */
-                'give_expired_permgroup' => 'pex user {player} group add {permgroup} * {lifetime}'
+                'give_expired_permgroup' => 'pex user {player} group add {permgroup} * {lifetime}',
+                /*
+                |--------------------------------------------------------------------------
+                | Command to distribute an in-game currency to player.
+                |--------------------------------------------------------------------------
+                |
+                | This command will be executed to issue the in-game currency to player. In the commands
+                | there are placeholders. They will be replaced by the corresponding values ​​in the
+                | runtime:
+                | - {player} The name of the player whose in-game balance will be refilled.
+                | - {amount} The amount of currency that will be credited to the account of the specified
+                |            player.
+                |
+                */
+                'give_currency' => 'money grant {player} {amount}',
+                /*
+                |--------------------------------------------------------------------------
+                | Command to distribute an owning of the region.
+                |--------------------------------------------------------------------------
+                |
+                | This command will be executed to empower a player to own a region. In the commands
+                | there are placeholders. They will be replaced by the corresponding values ​​in the
+                | runtime:
+                | - {region} The name of the region to which you want to be granted access.
+                | - {player} The name of the player who will be given access to the region.
+                |
+                */
+                'add_region_owner' => 'rg addowner {region} {player}',
+                /*
+                |--------------------------------------------------------------------------
+                | Command to distribute a membership in the region.
+                |--------------------------------------------------------------------------
+                |
+                | This command will be executed to give the player membership in the region. In the commands
+                | there are placeholders. They will be replaced by the corresponding values ​​in the
+                | runtime:
+                | - {region} The name of the region to which you want to be granted access.
+                | - {player} The name of the player who will be given access to the region.
+                |
+                */
+                'add_region_member' => 'rg addmember {region} {player}',
             ],
             /*
             |--------------------------------------------------------------------------
@@ -122,7 +162,7 @@ return [
             'extra' => [
                 /*
                 |--------------------------------------------------------------------------
-                | The pattern of a successful response.
+                | The list of commands performed before the main commands.
                 |--------------------------------------------------------------------------
                 |
                 | The additional commands specified in the array below will be executed before the
@@ -134,7 +174,7 @@ return [
                 'before' => [],
                 /*
                 |--------------------------------------------------------------------------
-                | The pattern of a successful response.
+                | The list of commands performed after the main commands.
                 |--------------------------------------------------------------------------
                 |
                 | The additional commands specified in the array below will be executed after the

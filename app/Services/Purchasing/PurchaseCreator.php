@@ -68,10 +68,22 @@ class PurchaseCreator
             $product = $each->getProduct();
             $item = $product->getItem();
 
-            if ($item->getType() === Type::PERMGROUP) {
-                if (Stack::isForever($product) === true) {
-                    $this->addCost($product->getPrice());
-                } else {
+            switch ($item->getType()) {
+                case Type::PERMGROUP:
+                    if (Stack::isForever($product) === true) {
+                        $this->addCost($product->getPrice());
+                    } else {
+                        $size = $this->validateAndCalculateAmount($each->getAmount(), $product->getStack());
+
+                        if ($size === null) {
+                            throw new InvalidAmountException($each->getAmount(), $product);
+                        } else {
+                            $this->addCost($product->getPrice(), $size);
+                        }
+                    }
+                    break;
+                case Type::ITEM:
+                case Type::CURRENCY:
                     $size = $this->validateAndCalculateAmount($each->getAmount(), $product->getStack());
 
                     if ($size === null) {
@@ -79,19 +91,16 @@ class PurchaseCreator
                     } else {
                         $this->addCost($product->getPrice(), $size);
                     }
-                }
-            } else if ($item->getType() === Type::ITEM) {
-                $size = $this->validateAndCalculateAmount($each->getAmount(), $product->getStack());
-
-                if ($size === null) {
-                    throw new InvalidAmountException($each->getAmount(), $product);
-                } else {
-                    $this->addCost($product->getPrice(), $size);
-                }
-            } else {
-                throw new NotImplementedException(
-                    "Feature to handle this product type {$each->getProduct()} not implemented"
-                );
+                    break;
+                case Type::REGION_OWNER:
+                case Type::REGION_MEMBER:
+                case Type::COMMAND:
+                    $this->addCost($product->getPrice(), 1);
+                    break;
+                default:
+                    throw new NotImplementedException(
+                        "Feature to handle this product type {$each->getProduct()} not implemented"
+                    );
             }
         }
     }

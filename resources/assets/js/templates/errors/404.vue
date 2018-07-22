@@ -25,6 +25,19 @@
                     height="auto"
                     id="form-footer"
             >
+                <v-tooltip bottom>
+                    <v-btn
+                            large
+                            outline
+                            icon
+                            color="secondary"
+                            slot="activator"
+                            :to="{name: 'frontend.index'}"
+                    >
+                        <v-icon>arrow_back</v-icon>
+                    </v-btn>
+                    <span>{{ $t('common.back_to_main') }}</span>
+                </v-tooltip>
             </v-footer>
         </v-card>
     </v-container>

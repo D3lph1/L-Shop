@@ -31,7 +31,7 @@ class AddRequest extends FormRequest
             'image_type' => 'in:default,upload,browse',
             'file' => 'required_if:image_type,upload|file|image|mimes:jpeg,bmp,png,gif',
             'image_name' => 'required_if:image_type,browse|string|min:3',
-            'game_id' => 'required',
+            'signature' => 'required_unless:item_type,currency',
             'extra' => 'nullable'
         ];
     }

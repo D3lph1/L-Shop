@@ -4,12 +4,17 @@ declare(strict_types = 1);
 namespace App\Http\Controllers\Admin\Users;
 
 use App\DataTransferObjects\PaginationList;
+use App\Exceptions\Permission\PermissionNotFoundException;
 use App\Exceptions\Role\RoleAlreadyExistsException;
 use App\Exceptions\Role\RoleNotFoundException;
+use App\Handlers\Admin\Users\Roles\CreateHandler;
 use App\Handlers\Admin\Users\Roles\DeleteHandler;
 use App\Handlers\Admin\Users\Roles\PaginationHandler;
+use App\Handlers\Admin\Users\Roles\RolePermissionsHandler;
 use App\Handlers\Admin\Users\Roles\UpdateNameHandler;
+use App\Handlers\Admin\Users\Roles\UpdatePermissionsHandler;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\Admin\Users\Roles\CreateUpdateRequest;
 use App\Http\Requests\Admin\Users\Roles\UpdateNameRequest;
 use App\Services\Auth\Permissions;
 use App\Services\Notification\Notifications\Error;
@@ -42,6 +47,39 @@ class RolesController extends Controller
         return new JsonResponse(Status::SUCCESS, $dto);
     }
 
+    public function create(CreateUpdateRequest $request, CreateHandler $handler): JsonResponse
+    {
+        try {
+            $handler->handle($request->get('name'), $request->get('permissions'));
+
+            return (new JsonResponse(Status::SUCCESS))
+                ->addNotification(new Success(__('msg.admin.users.roles.successfully_created')));
+        } catch (PermissionNotFoundException $e) {
+            return (new JsonResponse('permission_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
+                ->addNotification(new Error(__('msg.admin.users.roles.permission_not_found_with_name', ['name' => $e->getCause()])));
+        } catch (RoleAlreadyExistsException $e) {
+            return (new JsonResponse('role_already_exists'))
+                ->setHttpStatus(Response::HTTP_CONFLICT)
+                ->addNotification(new Error(__('msg.admin.users.roles.already_exists_with_name', ['name' => $e->getCause()])));
+        }
+    }
+
+    public function rolePermissions(Request $request, RolePermissionsHandler $handler): JsonResponse
+    {
+        try {
+            $permissions = $handler->handle((int)$request->route('role'));
+
+            return new JsonResponse(Status::SUCCESS, [
+                'permissions' => $permissions
+            ]);
+        } catch (RoleNotFoundException $e) {
+            return (new JsonResponse('role_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
+                ->addNotification(new Error(__('msg.admin.users.roles.not_found')));
+        }
+    }
+
     public function updateName(UpdateNameRequest $request, UpdateNameHandler $handler): JsonResponse
     {
         try {
@@ -57,8 +95,26 @@ class RolesController extends Controller
             return (new JsonResponse('already_exists'))
                 ->setHttpStatus(Response::HTTP_CONFLICT)
                 ->addNotification(new Error(__('msg.admin.users.roles.already_exists_with_name', [
-                    'name' => $request->get('name')
+                    'name' => $e->getCause()
                 ])));
+        }
+    }
+
+    public function updatePermissions(Request $request, UpdatePermissionsHandler $updatePermissionsHandler): JsonResponse
+    {
+        try {
+            $updatePermissionsHandler->handle((int)$request->route('role'), $request->get('permissions'));
+
+            return (new JsonResponse(Status::SUCCESS))
+                ->addNotification(new Success(__('msg.admin.users.roles.successfully_updated')));
+        } catch (RoleNotFoundException $e) {
+            return (new JsonResponse('role_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
+                ->addNotification(new Error(__('msg.admin.users.roles.not_found')));
+        } catch (PermissionNotFoundException $e) {
+            return (new JsonResponse('permission_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
+                ->addNotification(new Error(__('msg.admin.users.roles.permission_not_found_with_name', ['name' => $e->getCause()])));
         }
     }
 

@@ -9,6 +9,8 @@ use App\Handlers\Admin\Items\Add\AddHandler;
 use App\Handlers\Admin\Items\Add\RenderHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\Admin\Items\AddRequest;
+use function App\permission_middleware;
+use App\Services\Auth\Permissions;
 use App\Services\Notification\Notifications\Success;
 use App\Services\Notification\Notificator;
 use App\Services\Response\JsonResponse;
@@ -18,7 +20,7 @@ class AddController extends Controller
 {
     public function __construct()
     {
-        //$this->middleware(permission_middleware(Permissions::ADMIN_ITEMS_CRUD_ACCESS));
+        $this->middleware(permission_middleware(Permissions::ADMIN_ITEMS_CRUD_ACCESS));
     }
 
     public function render(RenderHandler $handler)
@@ -45,7 +47,7 @@ class AddController extends Controller
             ->setImageType($request->get('image_type'))
             ->setFile($request->file('file'))
             ->setImageName($request->get('image_name'))
-            ->setGameId($request->get('game_id'))
+            ->setSignature($request->get('signature'))
             ->setEnchantments($enchantments)
             ->setExtra($request->get('extra'));
 

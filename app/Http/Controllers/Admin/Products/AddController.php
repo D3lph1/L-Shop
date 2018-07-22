@@ -26,12 +26,7 @@ class AddController extends Controller
 
     public function render(RenderHandler $handler): JsonResponse
     {
-        $dto = $handler->handle();
-
-        return new JsonResponse(Status::SUCCESS, [
-            'items' => $dto->getItems(),
-            'servers' => $dto->getServers()
-        ]);
+        return new JsonResponse(Status::SUCCESS, $handler->handle());
     }
 
     public function add(AddRequest $request, AddHandler $handler): JsonResponse

@@ -181,7 +181,7 @@ class Purchase
                 sprintf('player="%s"', $this->getPlayer()) :
                 sprintf('user={%s}', $this->getUser()),
             $this->isCompleted() ? "\"{$this->getVia()}\"" : 'null',
-            $this->isCompleted() ? "\"{$this->getCompletedAt()}\"" : 'null'
+            $this->isCompleted() ? "\"{$this->getCompletedAt()->format('d/m/y H:i:s')}\"" : 'null'
         );
     }
 }

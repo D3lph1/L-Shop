@@ -150,7 +150,10 @@ class PurchaseServiceProvider extends ServiceProvider
                 ->setGiveNonEnchantedItemCommand($config->get('purchasing.distribution.rcon.commands.give_non_enchanted_item'))
                 ->setGiveEnchantedItemCommand($config->get('purchasing.distribution.rcon.commands.give_enchanted_item'))
                 ->setGiveNonExpiredPermgroupCommand($config->get('purchasing.distribution.rcon.commands.give_non_expired_permgroup'))
-                ->setGiveExpiredPermgroupCommand($config->get('purchasing.distribution.rcon.commands.give_expired_permgroup'));
+                ->setGiveExpiredPermgroupCommand($config->get('purchasing.distribution.rcon.commands.give_expired_permgroup'))
+                ->setGiveCurrencyCommand($config->get('purchasing.distribution.rcon.commands.give_currency'))
+                ->setAddRegionOwnerCommand($config->get('purchasing.distribution.rcon.commands.add_region_owner'))
+                ->setAddRegionMemberCommand($config->get('purchasing.distribution.rcon.commands.add_region_member'));
         });
 
         $this->app->singleton(ExtraCommands::class, function (Application $app) {

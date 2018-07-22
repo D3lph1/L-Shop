@@ -46,7 +46,7 @@ class Edit
     /**
      * @var string
      */
-    private $gameId;
+    private $signature;
 
     /**
      * @var EnchantmentFromFrontend[]
@@ -199,13 +199,13 @@ class Edit
     }
 
     /**
-     * @param string $gameId
+     * @param string $signature
      *
      * @return Edit
      */
-    public function setGameId(string $gameId): Edit
+    public function setSignature(string $signature): Edit
     {
-        $this->gameId = $gameId;
+        $this->signature = $signature;
 
         return $this;
     }
@@ -213,9 +213,9 @@ class Edit
     /**
      * @return string
      */
-    public function getGameId(): string
+    public function getSignature(): string
     {
-        return $this->gameId;
+        return $this->signature;
     }
 
     /**

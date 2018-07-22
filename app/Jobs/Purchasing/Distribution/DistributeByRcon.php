@@ -106,7 +106,7 @@ class DistributeByRcon implements ShouldQueue
         $total = count($this->commands->getMainCommands());
         // Execute main commands one by one.
         foreach ($this->commands->getMainCommands() as $command) {
-            $logger->debug("Attempting to execute command: ({$step}/{$total})\"{$command}\"", $this->context());
+            $logger->debug("Attempting to execute command ({$step}/{$total}): \"{$command}\"", $this->context());
 
             try {
                 // Send request...
@@ -122,7 +122,7 @@ class DistributeByRcon implements ShouldQueue
             // Check if the response matches a successful response pattern.
             if (!preg_match($this->successResponse, $response)) {
                 throw new DistributionException(
-                    "The response {$response} received from the server does not correspond to pattern {$this->successResponse}"
+                    "The response \"{$response}\" received from the server does not correspond to pattern \"{$this->successResponse}\""
                 );
             }
             $logger->debug("The response received from the server has been successfully mapped to a "

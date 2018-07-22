@@ -32,7 +32,11 @@ class Product implements \JsonSerializable
                 'image' => Image::assetPathOrDefault($this->product->getItem()->getImage()),
                 'type' => [
                     'isItem' => $this->product->getItem()->getType() === Type::ITEM,
-                    'isPermgroup' => $this->product->getItem()->getType() === Type::PERMGROUP
+                    'isPermgroup' => $this->product->getItem()->getType() === Type::PERMGROUP,
+                    'isCurrency' => $this->product->getItem()->getType() === Type::CURRENCY,
+                    'isRegionOwner' => $this->product->getItem()->getType() === Type::REGION_OWNER,
+                    'isRegionMember' => $this->product->getItem()->getType() === Type::REGION_MEMBER,
+                    'isCommand' => $this->product->getItem()->getType() === Type::COMMAND,
                 ]
             ],
             'category' => [

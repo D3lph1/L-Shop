@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Statistic;
 
+use App\Exceptions\Distributor\DistributionException;
 use App\Exceptions\Purchase\AlreadyCompletedException;
 use App\Handlers\Admin\Statistic\Purchases\CompleteHandler;
 use App\Handlers\Admin\Statistic\Purchases\PaginationHandler;
@@ -66,6 +67,10 @@ class PurchasesController extends Controller
             return (new JsonResponse('already_completed'))
                 ->setHttpStatus(Response::HTTP_CONFLICT)
                 ->addNotification(new Warning(__('msg.admin.statistic.purchases.complete.already_completed')));
+        } catch (DistributionException $e) {
+            return (new JsonResponse(Status::FAILURE))
+                ->setHttpStatus(Response::HTTP_ACCEPTED)
+                ->addNotification(new Warning(__('msg.frontend.profile.cart.distribution.failure')));
         }
     }
 }

@@ -5,6 +5,7 @@
 $router->get('js/lang.min.js', 'LangController@js')
     ->name('frontend.lang.js');
 
+// Auth
 $router->get('/login', 'Frontend\Auth\LoginController@render')
     ->name('frontend.auth.login.render');
 $router->post('/login', 'Frontend\Auth\LoginController@handle')
@@ -162,6 +163,11 @@ $router->patch('/admin/users/permissions/{permission}', 'Admin\Users\Permissions
 $router->delete('/admin/users/permissions/{permission}', 'Admin\Users\PermissionsController@delete')
     ->where('permission', '[0-9]+');
 $router->post('/admin/users/roles', 'Admin\Users\RolesController@pagination');
+$router->post('/admin/users/roles/create', 'Admin\Users\RolesController@create');
+$router->post('/admin/users/roles/{role}/permissions', 'Admin\Users\RolesController@rolePermissions')
+    ->where('role', '[0-9]+');
+$router->patch('/admin/users/roles/{role}/permissions', 'Admin\Users\RolesController@updatePermissions')
+    ->where('role', '[0-9]+');
 $router->patch('/admin/users/roles/{role}/update_name', 'Admin\Users\RolesController@updateName')
     ->where('role', '[0-9]+');
 $router->delete('/admin/users/roles/{role}', 'Admin\Users\RolesController@delete')

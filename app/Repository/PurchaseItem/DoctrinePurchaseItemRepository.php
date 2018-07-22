@@ -51,7 +51,7 @@ class DoctrinePurchaseItemRepository implements PurchaseItemRepository
             ->getResult();
     }
 
-    public function retrieveTopPurchasedProductsCompleted(): array
+    public function retrieveTopPurchasedProductsCompleted(?int $maxPositions = null): array
     {
         return $this->er->createQueryBuilder('pi')
             ->join('pi.purchase', 'purchase')
@@ -64,6 +64,7 @@ class DoctrinePurchaseItemRepository implements PurchaseItemRepository
             ->orderBy('amount', 'DESC')
             ->groupBy('product.id')
             ->getQuery()
+            ->setMaxResults($maxPositions)
             ->getResult();
     }
 

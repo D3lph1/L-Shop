@@ -33,8 +33,14 @@ class Item implements \JsonSerializable
             'id' => $this->item->getId(),
             'name' => $this->item->getName(),
             'description' => $this->item->getDescription(),
-            'isItem' => $this->item->getType() === Type::ITEM,
-            'isPermgroup' => $this->item->getType() === Type::PERMGROUP,
+            'type' => [
+                'isItem' => $this->item->getType() === Type::ITEM,
+                'isPermgroup' => $this->item->getType() === Type::PERMGROUP,
+                'isCurrency' => $this->item->getType() === Type::CURRENCY,
+                'isRegionOwner' => $this->item->getType() === Type::REGION_OWNER,
+                'isRegionMember' => $this->item->getType() === Type::REGION_MEMBER,
+                'isCommand' => $this->item->getType() === Type::COMMAND,
+            ],
             'image' => Image::assetPathOrDefault($this->item->getImage()),
             'enchantments'=> $enchantments
         ];

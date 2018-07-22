@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\DataTransferObjects\Admin\Users\Roles;
 
+use App\Entity\Permission;
 use App\Services\Response\JsonRespondent;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
@@ -18,11 +19,25 @@ class ListResult implements JsonRespondent
      */
     private $roles = [];
 
-    public function __construct(LengthAwarePaginator $paginator)
+    /**
+     * @var array
+     */
+    private $permissions;
+
+    /**
+     * ListResult constructor.
+     * @param LengthAwarePaginator $paginator
+     * @param Permission[] $permissions
+     */
+    public function __construct(LengthAwarePaginator $paginator, array $permissions)
     {
         $this->paginator = $paginator;
         foreach ($this->paginator->items() as $item) {
             $this->roles[] = new Role($item);
+        }
+
+        foreach ($permissions as $permission) {
+            $this->permissions[] = $permission->getName();
         }
     }
 
@@ -33,7 +48,8 @@ class ListResult implements JsonRespondent
     {
         return [
             'paginator' => $this->paginator,
-            'roles' => $this->roles
+            'roles' => $this->roles,
+            'permissions' => $this->permissions
         ];
     }
 }

@@ -44,7 +44,7 @@ class EditTest extends TestCase
         self::assertEquals($description, $item->getDescription());
         self::assertEquals($itemType, $item->getType());
         self::assertEquals($image, $item->getImage());
-        self::assertEquals($gameId, $item->getGameId());
+        self::assertEquals($gameId, $item->getSignature());
         self::assertNull($item->getExtra());
 
         $this->deleteFile();
@@ -82,7 +82,7 @@ class EditTest extends TestCase
         self::assertEquals($description, $item->getDescription());
         self::assertEquals($itemType, $item->getType());
         self::assertNull($item->getImage());
-        self::assertEquals($gameId, $item->getGameId());
+        self::assertEquals($gameId, $item->getSignature());
         self::assertNull($item->getExtra());
 
         $this->deleteFile();
@@ -133,7 +133,7 @@ class EditTest extends TestCase
         self::assertEquals($description, $item->getDescription());
         self::assertEquals($itemType, $item->getType());
         self::assertEquals($filename, $item->getImage());
-        self::assertEquals($gameId, $item->getGameId());
+        self::assertEquals($gameId, $item->getSignature());
         self::assertNull($item->getExtra());
 
         // Delete uploaded image.
@@ -174,7 +174,7 @@ class EditTest extends TestCase
         self::assertEquals($description, $item->getDescription());
         self::assertEquals($itemType, $item->getType());
         self::assertEquals($image, $item->getImage());
-        self::assertEquals($gameId, $item->getGameId());
+        self::assertEquals($gameId, $item->getSignature());
         self::assertNull($item->getExtra());
 
         $this->deleteFile();

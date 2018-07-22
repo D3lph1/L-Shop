@@ -14,7 +14,7 @@ use Illuminate\Http\Request;
 
 class ShowController extends Controller
 {
-    public function render(Request $request, VisitHandler $handler): JsonResponse
+    public function render(VisitHandler $handler): JsonResponse
     {
         return new JsonResponse(Status::SUCCESS, $handler->handle());
     }

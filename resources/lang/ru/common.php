@@ -13,14 +13,23 @@ return [
     'note' => 'Примечание',
     'add' => 'Добавить',
     'create' => 'Создать',
+    'update' => 'Обновить',
+    'back_to_main' => 'На главную',
     'item' => [
         'type' => [
             'item' => 'Предмет/Блок',
-            'permgroup' => 'Привилегия'
+            'permgroup' => 'Привилегия',
+            'currency' => 'Внутриигровая валюта',
+            'region_owner' => 'Владение регионом',
+            'region_member' => 'Членство в регионе',
+            'command' => 'Команда'
         ],
         'units' => [
             'item' => ':amount шт.',
             'permgroup' => ':duration дн.',
+            'currency' => ':amount ед.',
+            'region' => '-',
+            'command' => '-',
             'forever' => 'Навсегда'
         ]
     ],

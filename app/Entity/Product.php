@@ -254,7 +254,7 @@ class Product
             $this->getItem()->getId(),
             $this->getItem()->getName(),
             $this->getItem()->getType(),
-            $this->getItem()->getGameId()
+            $this->getItem()->getSignature()
         );
     }
 }

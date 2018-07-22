@@ -15,7 +15,7 @@
                             :return-object="true"
                             v-model="item"
                             :label="$t('content.admin.products.add.item')"
-                            :prepend-icon="isItem ? 'beach_access' : (isPermgroup ? 'turned_in_not' : '')"
+                            :prepend-icon="icon"
                     >
                         <template slot="item" slot-scope="data">
                             <v-list-tile-avatar :tile="true" size="35">
@@ -59,6 +59,14 @@
                             v-model="amount"
                             prepend-icon="plus_one"
                     ></v-text-field>
+                    <v-text-field
+                            type="number"
+                            class="mt-4 no-spinners"
+                            v-show="isCurrency && category && this.server.categories.length !== 0"
+                            :label="$t('content.admin.products.add.currency_stack')"
+                            v-model="amount"
+                            prepend-icon="plus_one"
+                    ></v-text-field>
                     <v-switch
                             v-show="isPermgroup && category && this.server.categories.length !== 0"
                             color="secondary"
@@ -76,9 +84,10 @@
                             prepend-icon="timelapse"
                     ></v-text-field>
                     <v-text-field
+                            v-if="category"
                             type="number"
                             class="no-spinners"
-                            :label="$t('content.admin.products.add.price')"
+                            :label="priceLabel"
                             v-model="price"
                             prepend-icon="attach_money"
                     ></v-text-field>
@@ -126,6 +135,10 @@
                 product: null,
                 isItem: false,
                 isPermgroup: false,
+                isCurrency: false,
+                isRegionOwner: false,
+                isRegionMember: false,
+                isCommand: false,
 
                 forever: false,
                 amount: 0,
@@ -146,6 +159,10 @@
                 if (val !== null) {
                     this.isItem = val.type.isItem;
                     this.isPermgroup = val.type.isPermgroup;
+                    this.isCurrency = val.type.isCurrency;
+                    this.isRegionOwner = val.type.isRegionOwner;
+                    this.isRegionMember = val.type.isRegionMember;
+                    this.isCommand = val.type.isCommand;
                 }
             },
             server(val) {
@@ -155,11 +172,58 @@
             }
         },
         computed: {
+            icon() {
+                if (this.isItem) {
+                    return 'beach_access';
+                }
+
+                if (this.isPermgroup) {
+                    return 'turned_in_not';
+                }
+
+                if (this.isCurrency) {
+                    return 'monetization_on';
+                }
+
+                if (this.isRegionOwner) {
+                    return 'supervisor_account';
+                }
+
+                if (this.isRegionMember) {
+                    return 'person';
+                }
+
+                if (this.isCommand) {
+                    return 'keyboard_arrow_right';
+                }
+            },
+            priceLabel() {
+                if (this.isItem) {
+                    return $t('content.admin.products.add.price_for_stack');
+                }
+
+                if (this.isPermgroup) {
+                    return $t('content.admin.products.add.price_for_period');
+                }
+
+                if (this.isCurrency) {
+                    return $t('content.admin.products.add.price_for_currency');
+                }
+
+                if (this.isRegionOwner || this.isRegionMember) {
+                    return $t('content.admin.products.add.price_for_region');
+                }
+
+                if (this.isCommand) {
+                    return $t('content.admin.products.add.price_for_command');
+                }
+            },
             finishDisabled() {
                 return this.item === null || this.item === '' ||
                     this.server === null || this.server === '' ||
                     this.category === null || this.category === '' ||
-                    (!this.forever && Number(this.amount) <= 0) ||
+                    (this.isPermgroup && !this.forever && Number(this.amount) <= 0) ||
+                    (this.isItem && Number(this.amount) <= 0) ||
                     Number(this.price) <= 0 ||
                     this.server === null || this.server.categories.length === 0;
             }
@@ -214,6 +278,10 @@
                 this.product = data.product;
                 this.isItem = data.product.item.type.isItem;
                 this.isPermgroup = data.product.item.type.isPermgroup;
+                this.isCurrency = data.product.item.type.isCurrency;
+                this.isRegionOwner = data.product.item.type.isRegionOwner;
+                this.isRegionMember = data.product.item.type.isRegionMember;
+                this.isCommand = data.product.item.type.isCommand;
                 this.forever = data.product.stack === 0;
                 this.amount = data.product.stack;
                 this.price = data.product.price;

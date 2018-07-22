@@ -11,7 +11,7 @@
     <title>{{ $title }}</title>
 
     <link rel="shortcut icon" href="{{ asset('favicon.ico') }}" type="image/x-icon" />
-    <link href="{{ asset('fonts.css') }}" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
     <link href="{{ asset('css/app.min.css') }}" type="text/css" rel="stylesheet">
 
     @if($captchaEnabled)

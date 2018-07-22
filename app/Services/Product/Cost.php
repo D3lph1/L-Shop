@@ -29,10 +29,15 @@ class Cost
      */
     public static function calculate(Product $product, int $amount): float
     {
-        if ($product->getItem()->getType() === Type::PERMGROUP) {
+        $type = $product->getItem()->getType();
+        if ($type === Type::PERMGROUP) {
             if (Stack::isForever($product)) {
                 return $product->getPrice();
             }
+        }
+
+        if ($type === Type::REGION_OWNER || $type === Type::REGION_MEMBER || $type === Type::COMMAND) {
+            return $product->getPrice();
         }
 
         return ($amount / $product->getStack()) * $product->getPrice();

@@ -5,9 +5,19 @@
             <v-btn flat color="primary" small icon @click="createRoleDialog = true"><v-icon>add</v-icon></v-btn>
             <create-role-dialog
                     :dialog="createRoleDialog"
+                    :permissions="permissions"
                     @created="paginationHandler"
                     @close="closeCreateRoleDialog"
             ></create-role-dialog>
+            <update-role-permissions-dialog
+                    v-if="updateRoleId !== null && updateRoleName !== null"
+                    :dialog="updateRolePermissionsDialog"
+                    :id="updateRoleId"
+                    :name="updateRoleName"
+                    :permissions="permissions"
+                    @close="closeUpdateRolePermissionsDialog"
+            >
+            </update-role-permissions-dialog>
             <v-spacer></v-spacer>
             <v-text-field
                     append-icon="search"
@@ -51,6 +61,9 @@
                     </v-edit-dialog>
                 </td>
                 <td class="text-xs-right">
+                    <v-btn icon class="mx-0" @click="openUpdateRolePermissionsDialog(props.item)">
+                        <v-icon color="secondary">menu</v-icon>
+                    </v-btn>
                     <v-btn icon class="mx-0" @click="deleteRole(props.item)">
                         <v-icon color="pink">delete</v-icon>
                     </v-btn>
@@ -65,6 +78,7 @@
 
 <script>
     import CreateRoleDialog from './CreateRoleDialog.vue'
+    import UpdateRolePermissionsDialog from './UpdateRolePermissionsDialog.vue'
 
     export default {
         data () {
@@ -72,8 +86,12 @@
                 search: '',
                 totalItems: 0,
                 items: [],
+                permissions: [],
                 loading: false,
                 createRoleDialog: false,
+                updateRolePermissionsDialog: false,
+                updateRoleId: null,
+                updateRoleName: null,
                 pagination: {
                     page: this.$route.query.roles_page ? this.$route.query.roles_page : 1,
                     rowsPerPage: this.$route.query.roles_per_page ? parseInt(this.$route.query.roles_per_page) : 25,
@@ -139,18 +157,7 @@
                 this.$axios.post(`/spa/admin/users/roles/${id}/update_name`, {
                     _method: 'PATCH',
                     name
-                })
-                    .then(response => {
-                        this.$router.push({
-                            query: {
-                                roles_page: this.$route.query.roles_page,
-                                roles_per_page: this.$route.query.roles_per_page,
-                                roles_order_by: this.$route.query.roles_order_by,
-                                roles_descending: this.$route.query.roles_descending,
-                                update: Math.random()
-                            }
-                        });
-                    });
+                });
             },
             deleteRole(role) {
                 if (confirm($t('content.admin.users.roles.roles_table.delete'))) {
@@ -168,8 +175,18 @@
                         })
                 }
             },
+            openUpdateRolePermissionsDialog(role) {
+                this.updateRoleId = role.id;
+                this.updateRoleName = role.name;
+                this.updateRolePermissionsDialog = true;
+            },
             closeCreateRoleDialog() {
                 this.createRoleDialog = false;
+            },
+            closeUpdateRolePermissionsDialog() {
+                this.updateRolePermissionsDialog = false;
+                this.updateRoleId = null;
+                this.updateRoleName = null;
             },
             paginationHandler() {
                 let query = {};
@@ -209,12 +226,14 @@
             setTable(data) {
                 this.totalItems = data.paginator.total;
                 this.items = data.roles;
+                this.permissions = data.permissions;
 
                 this.loading = false;
             }
         },
         components: {
-            'create-role-dialog': CreateRoleDialog
+            'create-role-dialog': CreateRoleDialog,
+            'update-role-permissions-dialog': UpdateRolePermissionsDialog
         }
     }
 </script>

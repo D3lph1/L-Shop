@@ -12,6 +12,8 @@ use App\Services\Cart\Storage\Session as SessionCartStorage;
 use App\Services\Cart\Storage\Storage as ClassStorage;
 use App\Services\Database\GarbageCollection\DoctrineGarbageCollector;
 use App\Services\Database\GarbageCollection\GarbageCollector;
+use App\Services\Database\Transaction\DoctrineTransactor;
+use App\Services\Database\Transaction\Transactor;
 use App\Services\Database\Transfer\Pool;
 use App\Services\Database\Transfer\Queries\Version050a\MySQLQuery;
 use App\Services\Database\Transfer\Version050ATransfer;
@@ -146,5 +148,6 @@ class AppServiceProvider extends ServiceProvider
         });
 
         $this->app->singleton(GarbageCollector::class, DoctrineGarbageCollector::class);
+        $this->app->singleton(Transactor::class, DoctrineTransactor::class);
     }
 }

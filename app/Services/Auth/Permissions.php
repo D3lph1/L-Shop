@@ -11,7 +11,7 @@ namespace App\Services\Auth;
  *  $user->hasPermission(Permissions::ADMIN_ITEMS_CRUD_ACCESS);
  * </code>
  */
-class Permissions
+final class Permissions
 {
     /**
      * Allows the user to see disabled servers in the server list and enable disable their.

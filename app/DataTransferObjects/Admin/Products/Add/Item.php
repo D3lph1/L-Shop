@@ -30,7 +30,11 @@ class Item implements \JsonSerializable
             'image' => Image::assetPathOrDefault($this->item->getImage()),
             'type' => [
                 'isItem' => $this->item->getType() === Type::ITEM,
-                'isPermgroup' => $this->item->getType() === Type::PERMGROUP
+                'isPermgroup' => $this->item->getType() === Type::PERMGROUP,
+                'isCurrency' => $this->item->getType() === Type::CURRENCY,
+                'isRegionOwner' => $this->item->getType() === Type::REGION_OWNER,
+                'isRegionMember' => $this->item->getType() === Type::REGION_MEMBER,
+                'isCommand' => $this->item->getType() === Type::COMMAND,
             ],
             'enchanted' => $this->item->getEnchantmentItems()->count() !== 0
         ];

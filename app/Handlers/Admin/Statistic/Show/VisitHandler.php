@@ -10,6 +10,8 @@ use App\Repository\User\UserRepository;
 
 class VisitHandler
 {
+    public const TOP_PURCHASED_PRODUCTS_MAX_POSITIONS = 10;
+
     /**
      * @var PurchaseRepository
      */
@@ -89,7 +91,9 @@ class VisitHandler
             ];
         }, $registeredForYear);
 
-        $topPurchasedProducts = $this->purchaseItemRepository->retrieveTopPurchasedProductsCompleted();
+        $topPurchasedProducts = $this->purchaseItemRepository->retrieveTopPurchasedProductsCompleted(
+            self::TOP_PURCHASED_PRODUCTS_MAX_POSITIONS
+        );
         foreach ($topPurchasedProducts as $key => &$each) {
             $topPurchasedProducts[$key]['amount'] = (int)$each['amount'];
         }

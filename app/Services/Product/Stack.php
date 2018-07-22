@@ -30,19 +30,7 @@ class Stack
      */
     public static function formatUnits(Product $product): string
     {
-        if ($product->getItem()->getType() === Type::ITEM) {
-            return __('common.item.units.item', ['amount' => $product->getStack()]);
-        }
-
-        if ($product->getItem()->getType() === Type::PERMGROUP) {
-            if ($product->getStack() === 0) {
-                return __('common.item.units.forever');
-            }
-
-            return __('common.item.units.permgroup', ['duration' => $product->getStack()]);
-        }
-
-        throw new UnexpectedValueException();
+        return self::formatUnitsForAmount($product, $product->getStack());
     }
 
     /**
@@ -55,19 +43,25 @@ class Stack
      */
     public static function formatUnitsForAmount(Product $product, int $amount): string
     {
-        if ($product->getItem()->getType() === Type::ITEM) {
-            return __('common.item.units.item', ['amount' => $amount]);
+        switch ($product->getItem()->getType()) {
+            case Type::ITEM:
+                return __('common.item.units.item', ['amount' => $amount]);
+            case Type::PERMGROUP:
+                if ($product->getStack() === 0) {
+                    return __('common.item.units.forever');
+                }
+
+                return __('common.item.units.permgroup', ['duration' => $amount]);
+            case Type::CURRENCY:
+                return __('common.item.units.currency', ['amount' => $amount]);
+            case Type::REGION_OWNER:
+            case Type::REGION_MEMBER:
+                return __('common.item.units.region', ['amount' => $amount]);
+            case Type::COMMAND:
+                return __('common.item.units.command', ['amount' => $amount]);
+            default:
+                throw new UnexpectedValueException("Unexpected product type: {$product}");
         }
-
-        if ($product->getItem()->getType() === Type::PERMGROUP) {
-            if ($product->getStack() === 0) {
-                return __('common.item.units.forever');
-            }
-
-            return __('common.item.units.permgroup', ['duration' => $amount]);
-        }
-
-        throw new UnexpectedValueException();
     }
 
     /**

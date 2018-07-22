@@ -40,6 +40,10 @@ class CartResult implements \JsonSerializable
                     'type' => [
                         'isItem' => $this->cartItem->getProduct()->getItem()->getType() === Type::ITEM,
                         'isPermgroup' => $this->cartItem->getProduct()->getItem()->getType() === Type::PERMGROUP,
+                        'isCurrency' => $this->cartItem->getProduct()->getItem()->getType() === Type::CURRENCY,
+                        'isRegionOwner' => $this->cartItem->getProduct()->getItem()->getType() === Type::REGION_OWNER,
+                        'isRegionMember' => $this->cartItem->getProduct()->getItem()->getType() === Type::REGION_MEMBER,
+                        'isCommand' => $this->cartItem->getProduct()->getItem()->getType() === Type::COMMAND,
                     ],
                     'image' => Image::assetPathOrDefault($this->cartItem->getProduct()->getItem()->getImage()),
                     'enchantments' => $enchantments

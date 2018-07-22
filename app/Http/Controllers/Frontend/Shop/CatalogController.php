@@ -5,11 +5,12 @@ namespace App\Http\Controllers\Frontend\Shop;
 
 use App\DataTransferObjects\Frontend\Shop\Server;
 use App\Exceptions\Category\CategoryNotFoundException as CategoryDoesNotExistException;
+use App\Exceptions\Distributor\DistributionException;
 use App\Exceptions\ForbiddenException;
 use App\Exceptions\Product\ProductNotFoundException;
 use App\Exceptions\Server\ServerNotFoundException as ServerDoesNotExistException;
 use App\Handlers\Frontend\Shop\Catalog\PurchaseHandler;
-use App\Handlers\Frontend\Shop\Catalog\VisitHandler;
+use App\Handlers\Frontend\Shop\Catalog\RenderHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\Auth as AuthMiddleware;
 use App\Http\Middleware\Captcha as CaptchaMiddleware;
@@ -46,7 +47,7 @@ class CatalogController extends Controller
      * Returns the data to render the catalog page.
      *
      * @param Request      $request
-     * @param VisitHandler $handler
+     * @param RenderHandler $handler
      * @param Settings     $settings
      * @param Cart         $cart
      * @param Captcha      $captcha
@@ -57,7 +58,7 @@ class CatalogController extends Controller
      */
     public function render(
         Request $request,
-        VisitHandler $handler,
+        RenderHandler $handler,
         Settings $settings,
         Cart $cart,
         Captcha $captcha,
@@ -142,6 +143,10 @@ class CatalogController extends Controller
             return (new JsonResponse('product_not_found'))
                 ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.frontend.shop.catalog.product_not_found')));
+        } catch (DistributionException $e) {
+            return (new JsonResponse('distribution_failed'))
+                ->setHttpStatus(Response::HTTP_ACCEPTED)
+                ->addNotification(new Warning(__('msg.frontend.shop.catalog.purchase.distribution_failed')));
         } catch (ForbiddenException $e) {
             return (new JsonResponse('server_disabled'))
                 ->setHttpStatus(Response::HTTP_FORBIDDEN)

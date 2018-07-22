@@ -9,7 +9,7 @@ interface PurchaseItemRepository
 
     public function retrieveAmountForMonthCompleted(int $year, int $month): array;
 
-    public function retrieveTopPurchasedProductsCompleted(): array;
+    public function retrieveTopPurchasedProductsCompleted(?int $maxPositions = null): array;
 
     public function retrievePurchasesAmountCompleted(): int;
 }

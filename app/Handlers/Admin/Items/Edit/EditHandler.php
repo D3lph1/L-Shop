@@ -67,7 +67,7 @@ class EditHandler
             ->setDescription($dto->getDescription())
             ->setType($dto->getItemType())
             ->setImage($image)
-            ->setGameId($dto->getGameId())
+            ->setSignature($dto->getSignature())
             ->setExtra($dto->getExtra());
 
         if ($dto->getItemType() === Type::ITEM) {

@@ -18,7 +18,7 @@
             <v-tabs-items v-model="tab">
                 <v-tab-item v-for="category in server.categories" :key="category.id">
                     <shop-grid>
-                        <catalog-item
+                        <catalog-card
                                 v-for="(product, index) in products"
                                 :key="index"
                                 :id="product.id"
@@ -28,8 +28,12 @@
                                 :stack="product.stack"
                                 :item-id="product.item.id"
                                 :in-cart="product.inCart"
-                                :is-item="product.item.isItem"
-                                :is-permgroup="product.item.isPermgroup"
+                                :is-item="product.item.type.isItem"
+                                :is-permgroup="product.item.type.isPermgroup"
+                                :is-currency="product.item.type.isCurrency"
+                                :is-region-owner="product.item.type.isRegionOwner"
+                                :is-region-member="product.item.type.isRegionMember"
+                                :is-command="product.item.type.isCommand"
                                 :products-crud-access="productsCrudAccess"
                                 :items-crud-access="itemsCrudAccess"
                                 :enchantments="product.item.enchantments"
@@ -37,7 +41,7 @@
                                 @open-purchase-dialog="openPurchaseDialog(product.id)"
                                 @about-dialog-opening="openAboutDialog"
                                 v-if="!loading"
-                        ></catalog-item>
+                        ></catalog-card>
                     </shop-grid>
 
                     <div class="text-xs-center" v-if="paginator.last_page > 1 && !loading">
@@ -70,8 +74,12 @@
                 :name="purchasableProduct.item.name"
                 :price="purchasableProduct.price"
                 :stack="purchasableProduct.stack"
-                :is-item="purchasableProduct.item.isItem"
-                :is-permgroup="purchasableProduct.item.isPermgroup"
+                :is-item="purchasableProduct.item.type.isItem"
+                :is-permgroup="purchasableProduct.item.type.isPermgroup"
+                :is-currency="purchasableProduct.item.type.isCurrency"
+                :is-region-owner="purchasableProduct.item.type.isRegionOwner"
+                :is-region-member="purchasableProduct.item.type.isRegionMember"
+                :is-command="purchasableProduct.item.type.isCommand"
                 :captcha-key="captchaKey"
                 @hide="hidePurchaseDialog"
         ></purchase-dialog>
@@ -82,8 +90,12 @@
                 :name="aboutableProduct.item.name"
                 :description="aboutableProduct.item.description"
                 :image="aboutableProduct.item.image"
-                :is-item="aboutableProduct.item.isItem"
-                :is-permgroup="aboutableProduct.item.isPermgroup"
+                :is-item="aboutableProduct.item.type.isItem"
+                :is-permgroup="aboutableProduct.item.type.isPermgroup"
+                :is-currency="aboutableProduct.item.type.isCurrency"
+                :is-region-owner="aboutableProduct.item.type.isRegionOwner"
+                :is-region-member="aboutableProduct.item.type.isRegionMember"
+                :is-command="aboutableProduct.item.type.isCommand"
                 :enchantments="aboutableProduct.item.enchantments"
                 @close="closeAboutDialog"
         ></about-dialog>
@@ -93,7 +105,7 @@
 <script>
     import loader from './../../../../core/http/loader'
     import Header from './Header.vue'
-    import Item from './Item.vue'
+    import CatalogCard from './CatalogCard.vue'
     import PurchaseDialog from './PurchaseDialog.vue'
     import AboutDialog from './AboutDialog.vue'
 
@@ -243,7 +255,7 @@
         },
         components: {
             'catalog-header': Header,
-            'catalog-item': Item,
+            'catalog-card': CatalogCard,
             'purchase-dialog': PurchaseDialog,
             'about-dialog': AboutDialog
         }

@@ -116,7 +116,7 @@
                     {
                         text: $t('common.type'),
                         align: 'center',
-                        sortable: true,
+                        sortable: false,
                         value: 'purchase.type'
                     },
                     {

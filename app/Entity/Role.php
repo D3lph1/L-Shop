@@ -82,6 +82,9 @@ class Role implements RoleInterface
         return $this;
     }
 
+    /**
+     * @return Collection|Permission[]
+     */
     public function getPermissions(): Collection
     {
         return $this->permissions;

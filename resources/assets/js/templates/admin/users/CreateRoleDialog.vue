@@ -1,19 +1,27 @@
 <template>
     <v-layout row justify-center>
-        <v-dialog persistent v-model="dialogData" max-width="500px">
+        <v-dialog persistent v-model="dialogData" max-width="800px">
             <v-card>
                 <v-card-title class="headline">
                     {{ $t('content.admin.users.roles.create_role_dialog.title') }}
                 </v-card-title>
                 <v-card-text>
                     <v-container grid-list-md>
-                        <v-layout wrap>
-                            <v-text-field
-                                    v-model="name"
-                                    :label="$t('content.admin.users.roles.create_role_dialog.name')"
-                                    @keyup.enter="create"
-                            ></v-text-field>
-                        </v-layout>
+                            <v-form id="form">
+                                <v-text-field
+                                        v-model="name"
+                                        :label="$t('content.admin.users.roles.create_role_dialog.name')"
+                                        @keyup.enter="create"
+                                ></v-text-field>
+
+                                <v-select
+                                        v-model="selected"
+                                        :label="$t('content.admin.users.roles.create_role_dialog.permissions')"
+                                        chips
+                                        tags
+                                        :items="permissions"
+                                ></v-select>
+                            </v-form>
                     </v-container>
                 </v-card-text>
 
@@ -44,12 +52,17 @@
             dialog: {
                 required: true,
                 type: Boolean
+            },
+            permissions: {
+                required: true,
+                type: Array
             }
         },
         data() {
             return {
                 dialogData: this.dialog,
                 name: '',
+                selected: [],
                 createLoading: false
             }
         },
@@ -79,8 +92,9 @@
 
                 this.createLoading = true;
 
-                this.$axios.post('/spa/admin/users/role/create', {
-                    name: this.name
+                this.$axios.post('/spa/admin/users/roles/create', {
+                    name: this.name,
+                    permissions: this.permissions
                 })
                     .then(response => {
                         this.createLoading = false;

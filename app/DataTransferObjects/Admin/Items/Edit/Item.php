@@ -30,7 +30,7 @@ class Item implements \JsonSerializable
             'type' => $this->item->getType(),
             'image' => $this->item->getImage(),
             'image_url' => Image::assetPathOrDefault($this->item->getImage()),
-            'game_id' => $this->item->getGameId(),
+            'signature' => $this->item->getSignature(),
             'extra' => $this->item->getExtra()
         ];
     }

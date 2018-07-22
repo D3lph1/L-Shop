@@ -1,71 +1,73 @@
 <template>
-    <v-layout row wrap>
-        <v-flex xs12 md6 class="text-xs-center">
-            <p class="headline">{{ $t('content.admin.statistic.show.profit_for_year') }}</p>
-            <chart-for-year
-                    :sets="profitForYear"
-                    color="#64B5F6"
-                    decrement-color-step="50"
-                    @point-click="profitMonthChanged"
-            ></chart-for-year>
-        </v-flex>
-        <v-flex xs12 md6 class="text-xs-center">
-            <p class="headline">{{ $t('content.admin.statistic.show.profit_for_month') }}</p>
-            <chart-for-month
-                    :sets="profitForMonth"
-            ></chart-for-month>
-        </v-flex>
+    <div>
+        <v-layout row wrap>
+            <v-flex xs12 md6 class="text-xs-center">
+                <p class="headline">{{ $t('content.admin.statistic.show.profit_for_year') }}</p>
+                <chart-for-year
+                        :sets="profitForYear"
+                        color="#64B5F6"
+                        decrement-color-step="50"
+                        @point-click="profitMonthChanged"
+                ></chart-for-year>
+            </v-flex>
+            <v-flex xs12 md6 class="text-xs-center">
+                <p class="headline">{{ $t('content.admin.statistic.show.profit_for_month') }}</p>
+                <chart-for-month
+                        :sets="profitForMonth"
+                ></chart-for-month>
+            </v-flex>
 
-        <v-flex xs12 md6 class="text-xs-center mt-4">
-            <p class="headline">{{ $t('content.admin.statistic.show.purchases_for_year') }}</p>
-            <chart-for-year
-                    :sets="purchasesForYear"
-                    color="#64B5F6"
-                    @point-click="purchasesMonthChanged"
-            ></chart-for-year>
-        </v-flex>
-        <v-flex xs12 md6 class="text-xs-center mt-4">
-            <p class="headline">{{ $t('content.admin.statistic.show.purchases_for_month') }}</p>
-            <chart-for-month
-                    :sets="purchasesForMonth"
-            ></chart-for-month>
-        </v-flex>
+            <v-flex xs12 md6 class="text-xs-center mt-4">
+                <p class="headline">{{ $t('content.admin.statistic.show.purchases_for_year') }}</p>
+                <chart-for-year
+                        :sets="purchasesForYear"
+                        color="#64B5F6"
+                        @point-click="purchasesMonthChanged"
+                ></chart-for-year>
+            </v-flex>
+            <v-flex xs12 md6 class="text-xs-center mt-4">
+                <p class="headline">{{ $t('content.admin.statistic.show.purchases_for_month') }}</p>
+                <chart-for-month
+                        :sets="purchasesForMonth"
+                ></chart-for-month>
+            </v-flex>
 
-        <v-flex xs12 md6 class="text-xs-center mt-4">
-            <p class="headline">{{ $t('content.admin.statistic.show.registered_for_year') }}</p>
-            <chart-for-year
-                    :sets="registeredForYear"
-                    color="#64B5F6"
-                    @point-click="registeredMonthChanged"
-            ></chart-for-year>
-        </v-flex>
-        <v-flex xs12 md6 class="text-xs-center mt-4">
-            <p class="headline">{{ $t('content.admin.statistic.show.registered_for_month') }}</p>
-            <chart-for-month
-                    :sets="registeredForMonth"
-            ></chart-for-month>
-        </v-flex>
-        <v-flex xs12 class="text-xs-center mt-5">
-            <p class="headline">{{ $t('content.admin.statistic.show.top_purchased_products') }}</p>
-            <chart-top-products
-                    :labels="topPurchasedProductsLabels"
-                    :dataset="topPurchasedProductsDataset"
-            ></chart-top-products>
-        </v-flex>
-        <v-flex cs12 class="text-xs-center mt-5">
-            <p class="headline">{{ $t('content.admin.statistic.show.table.title') }}</p>
-            <v-data-table
-                    :headers="tableHeaders"
-                    :items="tableItems"
-                    hide-actions
-            >
-                <template slot="items" slot-scope="props">
-                    <td class="text-xs-left">{{ props.item.name }}</td>
-                    <td class="text-xs-left" v-html="props.item.value"></td>
-                </template>
-            </v-data-table>
-        </v-flex>
-    </v-layout>
+            <v-flex xs12 md6 class="text-xs-center mt-4">
+                <p class="headline">{{ $t('content.admin.statistic.show.registered_for_year') }}</p>
+                <chart-for-year
+                        :sets="registeredForYear"
+                        color="#64B5F6"
+                        @point-click="registeredMonthChanged"
+                ></chart-for-year>
+            </v-flex>
+            <v-flex xs12 md6 class="text-xs-center mt-4">
+                <p class="headline">{{ $t('content.admin.statistic.show.registered_for_month') }}</p>
+                <chart-for-month
+                        :sets="registeredForMonth"
+                ></chart-for-month>
+            </v-flex>
+            <v-flex xs12 class="text-xs-center mt-5">
+                <p class="headline">{{ $t('content.admin.statistic.show.top_purchased_products') }}</p>
+                <chart-top-products
+                        :labels="topPurchasedProductsLabels"
+                        :dataset="topPurchasedProductsDataset"
+                ></chart-top-products>
+            </v-flex>
+            <v-flex class="text-xs-center mt-5">
+                <p class="headline">{{ $t('content.admin.statistic.show.table.title') }}</p>
+            </v-flex>
+        </v-layout>
+        <v-data-table
+                :headers="tableHeaders"
+                :items="tableItems"
+                hide-actions
+        >
+            <template slot="items" slot-scope="props">
+                <td class="text-xs-left">{{ props.item.name }}</td>
+                <td class="text-xs-left" v-html="props.item.value"></td>
+            </template>
+        </v-data-table>
+    </div>
 </template>
 
 <script>

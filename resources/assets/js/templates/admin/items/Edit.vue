@@ -78,10 +78,16 @@
                     </div>
 
                     <v-text-field
-                            v-if="item.type !== null"
-                            :label="$t(`content.admin.items.add.${item.type}.id`)"
+                            v-if="item.type === 'item' || item.type === 'permgroup' || item.type === 'region_owner' || item.type === 'region_member'"
+                            :label="$t(`content.admin.items.add.${item.type}_id`)"
                             prepend-icon="fingerprint"
-                            v-model="item.game_id"
+                            v-model="item.signature"
+                    ></v-text-field>
+                    <v-text-field
+                            v-if="item.type === 'command'"
+                            :label="$t(`content.admin.items.add.command`)"
+                            prepend-icon="keyboard_arrow_right"
+                            v-model="item.signature"
                     ></v-text-field>
                     <div class="text-xs-center" v-if="item.type === 'item'">
                         <v-btn color="purple" dark @click.native.stop="enchantment = true">{{ $t('content.admin.items.add.enchantment.title') }}</v-btn>
@@ -92,13 +98,14 @@
                             @close="closeEnchantmentDialog"
                     ></enchantment>
                     <v-text-field
+                            v-if="item.type === 'item' || item.type === 'permgroup'"
                             :label="$t('content.admin.items.add.extra')"
                             prepend-icon="list"
                             v-model="item.extra"
                     ></v-text-field>
                 </v-card-text>
                 <v-card-actions>
-                    <v-btn flat color="orange" :disabled="finishDisabled" @click="perform">{{ $t('content.admin.items.edit.finish') }}</v-btn>
+                    <v-btn flat color="orange" :disabled="finishDisabled" :loading="finishLoading" @click="perform">{{ $t('content.admin.items.edit.finish') }}</v-btn>
                 </v-card-actions>
             </v-card>
         </v-flex>
@@ -123,15 +130,35 @@
                         text: $t('common.item.type.permgroup'),
                         value: 'permgroup',
                         icon: 'turned_in_not'
+                    },
+                    {
+                        text: $t('common.item.type.currency'),
+                        value: 'currency',
+                        icon: 'monetization_on'
+                    },
+                    {
+                        text: $t('common.item.type.region_owner'),
+                        value: 'region_owner',
+                        icon: 'supervisor_account'
+                    },
+                    {
+                        text: $t('common.item.type.region_member'),
+                        value: 'region_member',
+                        icon: 'person'
+                    },
+                    {
+                        text: $t('common.item.type.command'),
+                        value: 'command',
+                        icon: 'keyboard_arrow_right'
                     }
                 ],
                 item: {
-                    name: null,
+                    name: '',
                     description: null,
                     image: null,
                     type: null,
                     extra: null,
-                    game_id: null
+                    signature: ''
                 },
                 image: null,
                 images: [],
@@ -141,7 +168,8 @@
                 imageBrowser: null,
                 enchantment: false,
                 enchantments: [],
-                readyEnchantments: []
+                readyEnchantments: [],
+                finishLoading: false
             }
         },
         beforeRouteEnter (to, from, next) {
@@ -152,8 +180,7 @@
         },
         computed: {
             finishDisabled() {
-                return this.item.name === null || this.item.name === '' ||
-                    this.item.game_id === null || this.item.game_id === '';
+                return this.item.name === '' || (this.item.type !== 'currency' && this.item.signature === '');
             }
         },
         methods: {
@@ -189,13 +216,14 @@
                 this.enchantment = false;
             },
             perform() {
+                this.finishLoading = true;
                 const data = this.image !== null ? this.image : new FormData();
                 data.append('name', this.item.name);
                 data.append('description', this.item.description !== null ? this.item.description : '');
                 data.append('item_type', this.item.type);
                 data.append('image_type', this.imageType);
                 data.append('image_name', this.imageBrowser);
-                data.append('game_id', this.item.game_id);
+                data.append('signature', this.item.signature);
                 data.append('enchantments', JSON.stringify(this.readyEnchantments));
                 data.append('extra', this.item.extra !== null ? this.item.extra : '');
 
@@ -203,7 +231,12 @@
                     .then((response) => {
                         if (response.data.status === 'success') {
                             this.$router.push({name: 'admin.items.list'});
+                        } else {
+                            this.finishLoading = false;
                         }
+                    })
+                    .catch(err => {
+                        this.finishLoading = false;
                     });
             },
             setData(response) {

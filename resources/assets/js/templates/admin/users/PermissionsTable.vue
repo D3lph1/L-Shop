@@ -139,18 +139,7 @@
                 this.$axios.post(`/spa/admin/users/permissions/${id}`, {
                     _method: 'PATCH',
                     name
-                })
-                    .then(response => {
-                        this.$router.push({
-                            query: {
-                                permissions_page: this.$route.query.permissions_page,
-                                permissions_per_page: this.$route.query.permissions_per_page,
-                                permissions_order_by: this.$route.query.permissions_order_by,
-                                permissions_descending: this.$route.query.permissions_descending,
-                                update: Math.random()
-                            }
-                        });
-                    });
+                });
             },
             deletePermission(permission) {
                 if (confirm($t('content.admin.users.roles.permissions_table.delete'))) {

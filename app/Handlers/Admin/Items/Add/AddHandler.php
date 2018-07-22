@@ -55,7 +55,7 @@ class AddHandler
     {
         $image = $this->imageName($dto->getImageType(), $dto->getFile() ?: $dto->getImageName());
 
-        $item = (new Item($dto->getName(), $dto->getItemType(), $dto->getGameId()))
+        $item = (new Item($dto->getName(), $dto->getItemType(), $dto->getSignature()))
             ->setDescription($dto->getDescription())
             ->setType($dto->getItemType())
             ->setImage($image)

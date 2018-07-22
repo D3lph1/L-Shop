@@ -16,18 +16,31 @@ class SignatureAndAmountPipe
     {
         $purchaseItem = $entity->getDistribution()->getPurchaseItem();
         $product = $purchaseItem->getProduct();
-        if ($entity->getType() === ShoppingCart::TYPE_ITEM) {
-            $entity
-                ->setSignature($this->buildItemSignature($product))
-                ->setAmount($purchaseItem->getAmount());
-        } elseif ($entity->getType() === ShoppingCart::TYPE_PERMGROUP) {
-            if (Stack::isForever($product)) {
-                $entity->setSignature($product->getItem()->getGameId());
+
+        switch ($entity->getType()) {
+            case ShoppingCart::TYPE_ITEM:
+                $entity
+                    ->setSignature($this->buildItemSignature($product))
+                    ->setAmount($purchaseItem->getAmount());
+                break;
+            case ShoppingCart::TYPE_PERMGROUP:
+                if (Stack::isForever($product)) {
+                    $entity->setSignature($product->getItem()->getSignature());
+                    $entity->setAmount(1);
+                } else {
+                    $entity->setSignature($this->buildExpiredPermgroupSignature($purchaseItem));
+                    $entity->setAmount(1);
+                }
+                break;
+            case ShoppingCart::TYPE_REGION_OWNER:
+            case ShoppingCart::TYPE_REGION_MEMBER:
+                $entity->setSignature($product->getItem()->getSignature());
                 $entity->setAmount(1);
-            } else {
-                $entity->setSignature($this->buildExpiredPermgroupSignature($purchaseItem));
-                $entity->setAmount(1);
-            }
+                break;
+            case ShoppingCart::TYPE_CURRENCY:
+                $entity->setSignature(null);
+                $entity->setAmount($purchaseItem->getAmount());
+                break;
         }
 
         return $next($entity);
@@ -38,7 +51,7 @@ class SignatureAndAmountPipe
         /** @var EnchantmentItem[] $enchantmentItems */
         $enchantmentItems = $product->getItem()->getEnchantmentItems();
         if (count($enchantmentItems) === 0) {
-            return $product->getItem()->getGameId();
+            return $product->getItem()->getSignature();
         }
 
         $encoded = 0;
@@ -49,13 +62,13 @@ class SignatureAndAmountPipe
         // Convert number to 32 notation.
         $encoded = base_convert($encoded, 10, 32);
 
-        return "{$product->getItem()->getGameId()}-{$encoded}";
+        return "{$product->getItem()->getSignature()}-{$encoded}";
     }
 
     private function buildExpiredPermgroupSignature(PurchaseItem $purchaseItem): string
     {
         $lifetime = DateTimeUtil::daysToSeconds($purchaseItem->getAmount());
 
-        return "{$purchaseItem->getProduct()->getItem()->getGameId()}?lifetime={$lifetime}";
+        return "{$purchaseItem->getProduct()->getItem()->getSignature()}?lifetime={$lifetime}";
     }
 }

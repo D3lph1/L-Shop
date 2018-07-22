@@ -6,7 +6,7 @@
             </v-card-title>
             <v-divider></v-divider>
             <v-card-text>
-                <div class="flex-wrapper" v-if="!(isPermgroup && stack === 0)">
+                <div class="flex-wrapper" v-if="!((isPermgroup && stack === 0) || isRegionMember || isRegionOwner || isCommand)">
                     <v-text-field
                             class="pt-1"
                             :prefix="amountLabel()"
@@ -105,6 +105,22 @@
                 required: true,
                 type: Boolean
             },
+            isCurrency: {
+                required: true,
+                type: Boolean
+            },
+            isRegionOwner: {
+                required: true,
+                type: Boolean
+            },
+            isRegionMember: {
+                required: true,
+                type: Boolean
+            },
+            isCommand: {
+                required: true,
+                type: Boolean
+            },
             captchaKey: {
                 required: false
             }
@@ -180,6 +196,9 @@
                                 this.$router.push({name: 'frontend.shop.payment', params: {purchase: data.purchaseId}});
                             }
                             this.$emit('hide');
+                        } else if (data.status === 'distribution_failed') {
+                            this.$emit('hide');
+                            this.$store.commit('setBalance', Number((this.$store.state.auth.user.balance - this.cost).toFixed(10)));
                         }
                     })
                     .catch(err => {

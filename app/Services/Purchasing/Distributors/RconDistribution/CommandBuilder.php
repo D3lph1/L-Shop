@@ -59,37 +59,63 @@ class CommandBuilder
         $executableCommands->setExtraAfterCommands($after);
         $commands = [];
 
-        if ($item->getType() === Type::ITEM) {
-            if ($purchaseItem->getAmount() <= $product->getStack()) {
-                // If the quantity of items in the purchase is less than or equal to the commodity rate,
-                //then only 1 request is required.
-                $commands[] = $this->processItem($purchaseItem, $purchaseItem->getAmount());
-            } else {
-                // But if the goods are more than 1 stack, then you need to execute several requests to
-                // issue all the items. This is due to the fact that Minecraft does not allow giving
-                // the player more than 1 stack of items for 1 rcon command.
-                $count = (int)($purchaseItem->getAmount() / $product->getStack());
-                for ($i = 0; $i < $count; $i++) {
-                    $commands[] = $this->processItem($purchaseItem, $product->getStack());
+        switch ($item->getType()) {
+            case Type::ITEM:
+                if ($purchaseItem->getAmount() <= $product->getStack()) {
+                    // If the quantity of items in the purchase is less than or equal to the commodity rate,
+                    //then only 1 request is required.
+                    $commands[] = $this->processItem($purchaseItem, $purchaseItem->getAmount());
+                } else {
+                    // But if the goods are more than 1 stack, then you need to execute several requests to
+                    // issue all the items. This is due to the fact that Minecraft does not allow giving
+                    // the player more than 1 stack of items for 1 rcon command.
+                    $count = (int)($purchaseItem->getAmount() / $product->getStack());
+                    for ($i = 0; $i < $count; $i++) {
+                        $commands[] = $this->processItem($purchaseItem, $product->getStack());
+                    }
                 }
-            }
-        } elseif ($item->getType() === Type::PERMGROUP) {
-            if (Stack::isForever($product)) {
-                $commands[] = $this->replace($this->commands->getGiveNonExpiredPermgroupCommand(), [
+                break;
+            case Type::PERMGROUP:
+                if (Stack::isForever($product)) {
+                    $commands[] = $this->replace($this->commands->getGiveNonExpiredPermgroupCommand(), [
+                        'player' => $player,
+                        'permgroup' => $item->getSignature()
+                    ]);
+                } else {
+                    $commands[] = $this->replace($this->commands->getGiveNonExpiredPermgroupCommand(), [
+                        'player' => $player,
+                        'permgroup' => $item->getSignature(),
+                        'lifetime' => DateTimeUtil::daysToSeconds($purchaseItem->getAmount())
+                    ]);
+                }
+                break;
+            case Type::CURRENCY:
+                $commands[] = $this->replace($this->commands->getGiveCurrencyCommand(), [
                     'player' => $player,
-                    'permgroup' => $item->getGameId()
+                    'amount' => $purchaseItem->getAmount()
                 ]);
-            } else {
-                $commands[] = $this->replace($this->commands->getGiveNonExpiredPermgroupCommand(), [
+                break;
+            case Type::REGION_OWNER:
+                $commands[] = $this->replace($this->commands->getAddRegionOwnerCommand(), [
                     'player' => $player,
-                    'permgroup' => $item->getGameId(),
-                    'lifetime' => DateTimeUtil::daysToSeconds(($purchaseItem->getAmount()))
+                    'region' => $item->getSignature()
                 ]);
-            }
-        } else {
-            throw new NotImplementedException(
-                "Feature to handle this item type {$product->getItem()} not implemented"
-            );
+                break;
+            case Type::REGION_MEMBER:
+                $commands[] = $this->replace($this->commands->getAddRegionMemberCommand(), [
+                    'player' => $player,
+                    'region' => $item->getSignature()
+                ]);
+                break;
+            case Type::COMMAND:
+                $commands[] = $this->replace($item->getSignature(), [
+                    'player' => $player
+                ]);
+                break;
+            default:
+                throw new NotImplementedException(
+                    "Feature to handle this item type {$product->getItem()} not implemented"
+                );
         }
 
         return $executableCommands->setMainCommands($commands);
@@ -125,14 +151,14 @@ class CommandBuilder
 
             return $this->replace($this->commands->getGiveEnchantedItemCommand(), [
                 'player' => $player,
-                'item' => $item->getGameId(),
+                'item' => $item->getSignature(),
                 'amount' => $amount,
                 'nbt' => $this->encode($nbt)
             ]);
         } else {
             return $this->replace($this->commands->getGiveEnchantedItemCommand(), [
                 'player' => $player,
-                'item' => $item->getGameId(),
+                'item' => $item->getSignature(),
                 'amount' => $amount,
                 // If extra is empty, create an empty NBT object. If not, add them to the team.
                 'nbt' => $item->getExtra() !== null ? $this->encode($item->getExtra()) : '{}'
@@ -161,7 +187,7 @@ class CommandBuilder
      *  $subject = "Hello, {player1}, {player2}";
      *  $result = $this->replace($subject, [
      *      'player1' => 'D3lph1',
-     *      'player1' => 'admin'
+     *      'player2' => 'admin'
      *  ]);
      *  // Result contains: "Hello, D3lph1, admin"
      * </code>

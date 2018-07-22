@@ -26,6 +26,18 @@
                                 <span v-else-if="isPermgroup">
                                     {{ $t('common.item.type.permgroup') }}
                                 </span>
+                                <span v-else-if="isCurrency">
+                                    {{ $t('common.item.type.currency') }}
+                                </span>
+                                <span v-else-if="isRegionOwner">
+                                    {{ $t('common.item.type.region_owner') }}
+                                </span>
+                                <span v-else-if="isRegionMember">
+                                    {{ $t('common.item.type.region_member') }}
+                                </span>
+                                <span v-else-if="isCommand">
+                                    {{ $t('common.item.type.command') }}
+                                </span>
                             </v-flex>
                         </v-layout>
 
@@ -75,6 +87,22 @@
                 type: Boolean
             },
             isPermgroup: {
+                required: true,
+                type: Boolean
+            },
+            isCurrency: {
+                required: true,
+                type: Boolean
+            },
+            isRegionOwner: {
+                required: true,
+                type: Boolean
+            },
+            isRegionMember: {
+                required: true,
+                type: Boolean
+            },
+            isCommand: {
                 required: true,
                 type: Boolean
             },

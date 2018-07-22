@@ -114,8 +114,8 @@
                     {
                         text: $t('common.type'),
                         align: 'center',
-                        sortable: true,
-                        value: 'purchase.purchase.type'
+                        sortable: false,
+                        value: 'purchase.type'
                     },
                     {
                         text: $t('content.frontend.profile.purchases.table.headers.created_at'),

@@ -21,14 +21,14 @@ class AddTest extends TestCase
         $name = 'example item';
         $description = 'description of the example item';
         $itemType = Type::ITEM;
-        $gameId = '112';
+        $signature = '112';
 
         $response = $this->post(route('admin.items.add'), [
             'name' => $name,
             'description' => $description,
             'item_type' => $itemType,
             'image_type' => 'default',
-            'game_id' => $gameId,
+            'signature' => $signature,
             'enchantments' => json_encode([])
         ]);
 
@@ -42,7 +42,7 @@ class AddTest extends TestCase
         self::assertEquals($description, $item->getDescription());
         self::assertEquals($itemType, $item->getType());
         self::assertNull($item->getImage());
-        self::assertEquals($gameId, $item->getGameId());
+        self::assertEquals($signature, $item->getSignature());
         self::assertNull($item->getExtra());
 
         $this->rollback();
@@ -63,14 +63,14 @@ class AddTest extends TestCase
 
         $name = 'Coal ore';
         $itemType = Type::ITEM;
-        $gameId = '16';
+        $signature = '16';
 
         $response = $this->post(route('admin.items.add'), [
             'name' => $name,
             'item_type' => $itemType,
             'image_type' => 'upload',
             'file' => $file,
-            'game_id' => $gameId,
+            'signature' => $signature,
             'enchantments' => json_encode([])
         ]);
 
@@ -88,7 +88,7 @@ class AddTest extends TestCase
         self::assertNull($item->getDescription());
         self::assertEquals($itemType, $item->getType());
         self::assertEquals($filename, $item->getImage());
-        self::assertEquals($gameId, $item->getGameId());
+        self::assertEquals($signature, $item->getSignature());
         self::assertNull($item->getExtra());
 
         // Delete uploaded image.
@@ -112,7 +112,7 @@ class AddTest extends TestCase
         $name = 'Coal ore';
         $description = '';
         $itemType = Type::ITEM;
-        $gameId = '16';
+        $signature = '16';
         $extra = 'lorem ipsum';
 
         $response = $this->post(route('admin.items.add'), [
@@ -121,7 +121,7 @@ class AddTest extends TestCase
             'item_type' => $itemType,
             'image_type' => 'browse',
             'image_name' => $filename,
-            'game_id' => $gameId,
+            'signature' => $signature,
             'extra' => $extra,
             'enchantments' => json_encode([])
         ]);
@@ -135,7 +135,7 @@ class AddTest extends TestCase
         self::assertEquals($description, $item->getDescription());
         self::assertEquals($itemType, $item->getType());
         self::assertEquals($filename, $item->getImage());
-        self::assertEquals($gameId, $item->getGameId());
+        self::assertEquals($signature, $item->getSignature());
         self::assertEquals($extra, $item->getExtra());
 
         // Delete copied file.
@@ -150,14 +150,14 @@ class AddTest extends TestCase
         $this->authAdmin();
         $name = 'example permgroup';
         $itemType = Type::PERMGROUP;
-        $gameId = '112';
+        $signature = '112';
         $extra = 'Pol, a bene abactus.';
 
         $response = $this->post(route('admin.items.add'), [
             'name' => $name,
             'item_type' => $itemType,
             'image_type' => 'default',
-            'game_id' => $gameId,
+            'signature' => $signature,
             'extra' => $extra,
             'enchantments' => json_encode([])
         ]);
@@ -172,7 +172,7 @@ class AddTest extends TestCase
         self::assertNull($item->getDescription());
         self::assertEquals($itemType, $item->getType());
         self::assertNull($item->getImage());
-        self::assertEquals($gameId, $item->getGameId());
+        self::assertEquals($signature, $item->getSignature());
         self::assertEquals($extra, $item->getExtra());
 
         $this->rollback();

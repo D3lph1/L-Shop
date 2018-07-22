@@ -3,7 +3,9 @@ declare(strict_types = 1);
 
 namespace App\DataTransferObjects\Admin\Products\Add;
 
-class Result
+use App\Services\Response\JsonRespondent;
+
+class Result implements JsonRespondent
 {
     /**
      * @var Item[]
@@ -22,18 +24,13 @@ class Result
     }
 
     /**
-     * @return Item[]
+     * @inheritDoc
      */
-    public function getItems(): array
+    public function response(): array
     {
-        return $this->items;
-    }
-
-    /**
-     * @return Server[]
-     */
-    public function getServers(): array
-    {
-        return $this->servers;
+        return [
+            'items' => $this->items,
+            'servers' => $this->servers
+        ];
     }
 }

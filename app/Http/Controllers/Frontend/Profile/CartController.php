@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Frontend\Profile;
 
+use App\Exceptions\Distributor\DistributionException;
 use App\Exceptions\Distributor\DistributionNotFoundException;
 use App\Handlers\Frontend\Profile\Cart\DistributionHandler;
 use App\Handlers\Frontend\Profile\Cart\PaginationHandler;
@@ -66,6 +67,10 @@ class CartController extends Controller
             return (new JsonResponse('distribution_not_found'))
                 ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Warning(__('msg.frontend.profile.cart.distribution.not_found')));
+        } catch (DistributionException $e) {
+            return (new JsonResponse(Status::FAILURE))
+                ->setHttpStatus(Response::HTTP_ACCEPTED)
+                ->addNotification(new Warning(__('msg.frontend.profile.cart.distribution.failure')));
         }
     }
 }

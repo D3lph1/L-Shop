@@ -6,6 +6,7 @@ namespace App\Handlers\Admin\Users\Roles;
 use App\DataTransferObjects\Admin\Users\Roles\ListResult;
 use App\DataTransferObjects\PaginationList;
 use App\Exceptions\InvalidArgumentException;
+use App\Repository\Permission\PermissionRepository;
 use App\Repository\Role\RoleRepository;
 
 class PaginationHandler
@@ -15,11 +16,17 @@ class PaginationHandler
     /**
      * @var RoleRepository
      */
-    private $repository;
+    private $roleRepository;
 
-    public function __construct(RoleRepository $repository)
+    /**
+     * @var PermissionRepository
+     */
+    private $permissionRepository;
+
+    public function __construct(RoleRepository $roleRepository, PermissionRepository $permissionRepository)
     {
-        $this->repository = $repository;
+        $this->roleRepository = $roleRepository;
+        $this->permissionRepository = $permissionRepository;
     }
 
     public function handle(PaginationList $dto)
@@ -30,7 +37,7 @@ class PaginationHandler
 
         if ($dto->getOrderBy() !== null) {
             if (!empty($dto->getSearch())) {
-                $paginator = $this->repository->findPaginatedWithOrderAndSearch(
+                $paginator = $this->roleRepository->findPaginatedWithOrderAndSearch(
                     $dto->getOrderBy(),
                     $dto->isDescending(),
                     $dto->getSearch(),
@@ -38,7 +45,7 @@ class PaginationHandler
                     $dto->getPerPage()
                 );
             } else {
-                $paginator = $this->repository->findPaginatedWithOrder(
+                $paginator = $this->roleRepository->findPaginatedWithOrder(
                     $dto->getOrderBy(),
                     $dto->isDescending(),
                     $dto->getPage(),
@@ -47,16 +54,18 @@ class PaginationHandler
             }
         } else {
             if (!empty($search)) {
-                $paginator = $this->repository->findPaginateWithSearch(
+                $paginator = $this->roleRepository->findPaginateWithSearch(
                     $dto->getSearch(),
                     $dto->getPage(),
                     $dto->getPerPage()
                 );
             } else {
-                $paginator = $this->repository->findPaginated($dto->getPage(), $dto->getPerPage());
+                $paginator = $this->roleRepository->findPaginated($dto->getPage(), $dto->getPerPage());
             }
         }
 
-        return new ListResult($paginator);
+        $permissions = $this->permissionRepository->findAll();
+
+        return new ListResult($paginator, $permissions);
     }
 }

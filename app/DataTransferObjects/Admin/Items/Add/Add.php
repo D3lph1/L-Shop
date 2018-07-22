@@ -40,7 +40,7 @@ class Add
     /**
      * @var string
      */
-    private $gameId;
+    private $signature;
 
     /**
      * @var EnchantmentFromFrontend[]
@@ -173,13 +173,13 @@ class Add
     }
 
     /**
-     * @param string $gameId
+     * @param string $signature
      *
      * @return Add
      */
-    public function setGameId(string $gameId): Add
+    public function setSignature(string $signature): Add
     {
-        $this->gameId = $gameId;
+        $this->signature = $signature;
 
         return $this;
     }
@@ -187,9 +187,9 @@ class Add
     /**
      * @return string
      */
-    public function getGameId(): string
+    public function getSignature(): string
     {
-        return $this->gameId;
+        return $this->signature;
     }
 
     /**

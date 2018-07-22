@@ -12,8 +12,9 @@ use App\Exceptions\Distributor\DistributorNotFoundException;
 use App\Exceptions\Purchase\AlreadyCompletedException;
 use App\Repository\Distribution\DistributionRepository;
 use App\Repository\Purchase\PurchaseRepository;
+use App\Services\Database\Transaction\Transactor as DatabaseTransactor;
 use App\Services\Purchasing\Distributors\Pool;
-use App\Services\User\Balance\Transactor;
+use App\Services\User\Balance\Transactor as BalanceTransactor;
 use Illuminate\Contracts\Events\Dispatcher;
 
 class PurchaseCompleter
@@ -34,9 +35,14 @@ class PurchaseCompleter
     private $distributionRepository;
 
     /**
-     * @var Transactor
+     * @var DatabaseTransactor
      */
-    private $transactor;
+    private $databaseTransactor;
+
+    /**
+     * @var BalanceTransactor
+     */
+    private $balanceTransactor;
 
     /**
      * @var Dispatcher
@@ -47,13 +53,15 @@ class PurchaseCompleter
         PurchaseRepository $purchaseRepository,
         Pool $distributors,
         DistributionRepository $distributionRepository,
-        Transactor $transactor,
+        DatabaseTransactor $databaseTransactor,
+        BalanceTransactor $balanceTransactor,
         Dispatcher $eventDispatcher)
     {
         $this->purchaseRepository = $purchaseRepository;
         $this->distributors = $distributors;
         $this->distributionRepository = $distributionRepository;
-        $this->transactor = $transactor;
+        $this->databaseTransactor = $databaseTransactor;
+        $this->balanceTransactor = $balanceTransactor;
         $this->eventDispatcher = $eventDispatcher;
     }
 
@@ -74,6 +82,7 @@ class PurchaseCompleter
             throw new AlreadyCompletedException($purchase);
         }
 
+        $this->databaseTransactor->begin();
         $purchase->setCompletedAt(new \DateTimeImmutable());
         $purchase->setVia($via);
         $this->purchaseRepository->update($purchase);
@@ -104,9 +113,10 @@ class PurchaseCompleter
             }
         } else {
             // If this purchase is replenishment.
-            $this->transactor->add($purchase->getUser(), $purchase->getCost());
+            $this->balanceTransactor->add($purchase->getUser(), $purchase->getCost());
         }
 
+        $this->databaseTransactor->commit();
         $this->eventDispatcher->dispatch(new PurchaseCompletedEvent($purchase));
     }
 }

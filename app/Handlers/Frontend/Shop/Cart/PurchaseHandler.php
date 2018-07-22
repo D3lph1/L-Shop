@@ -6,6 +6,7 @@ namespace App\Handlers\Frontend\Shop\Cart;
 use App\DataTransferObjects\Frontend\Shop\Cart\Purchase as PurchaseDTO;
 use App\DataTransferObjects\Frontend\Shop\Catalog\Purchase as ResultDTO;
 use App\DataTransferObjects\Frontend\Shop\Purchase;
+use App\Exceptions\Distributor\DistributionException;
 use App\Exceptions\ForbiddenException;
 use App\Exceptions\LogicException;
 use App\Exceptions\Server\ServerNotFoundException;
@@ -90,7 +91,15 @@ class PurchaseHandler
             }
         }
 
-        $result = $this->processor->process($DTOs, $dto->getUsername(), $dto->getIp());
+        try {
+            $result = $this->processor->process($DTOs, $dto->getUsername(), $dto->getIp());
+        } catch (DistributionException $e) {
+            // Remove all data in cart for this server if an distribution exception is thrown.
+            // The cart can be cleaned because the purchase has already been made, although not distributed.
+            $this->cart->removeServer($server);
+
+            throw $e;
+        }
 
         // Remove all data in cart for this server.
         $this->cart->removeServer($server);

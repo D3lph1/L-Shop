@@ -76,7 +76,9 @@ class Item
 
     /**
      * Represents an in-game type of an item. Available Values: common item / block
-     * ({@see \App\Services\Item\Type::ITEM}), permission group ({@see \App\Services\Item\Type::PERMGROUP})
+     * ({@see \App\Services\Item\Type::ITEM}), permission group ({@see \App\Services\Item\Type::PERMGROUP}),
+     * in-game currency ({@see \App\Services\Item\Type::CURRENCY}), region owner (({@see \App\Services\Item\Type::REGION_OWNER})),
+     * region member ({@see \App\Services\Item\Type::REGION_MEMBER}) and executable command ({@see \App\Services\Item\Type::COMMAND}).
      *
      * @see \App\Services\Item\Type
      *
@@ -93,13 +95,22 @@ class Item
     private $image;
 
     /**
-     * In-game item identifier is used to issue purchased goods to the user in the game. It can
-     * contain, as data in the form ID, ID:DATA, material id or any other data that uniquely
-     * identifies the item.
+     * For {@see \App\Entity\Item::type} = {@see \App\Services\Item\Type::ITEM} this field must be an in-game item
+     * identifier is used to issue purchased products to the user in the game. It can contain, as data in the form
+     * ID, ID:DATA, material id or any other data that uniquely identifies the item.
      *
-     * @ORM\Column(name="game_id", type="string", length=255, nullable=false)
+     * For {@see \App\Entity\Item::type} = {@see \App\Services\Item\Type::PERMGROUP} this field must be contains
+     * in-game permission group identifier.
+     *
+     * For {@see \App\Entity\Item::type} = {@see \App\Services\Item\Type::REGION_OWNER} || {@see \App\Services\Item\Type::REGION_MEMBER}
+     * this field must contains in-game region identifier.
+     *
+     * For {@see \App\Entity\Item::type} = {@see \App\Services\Item\Type::CURRENCY} this field
+     * must be a nullable.
+     *
+     * @ORM\Column(name="game_id", type="string", length=255, nullable=true)
      */
-    private $gameId;
+    private $signature;
 
     /**
      * Additional information that is used by means of issuing items in the game.
@@ -131,13 +142,13 @@ class Item
      *
      * @param string $name
      * @param string $type
-     * @param string $gameId
+     * @param string $signature
      */
-    public function __construct(string $name, string $type, string $gameId)
+    public function __construct(string $name, string $type, string $signature)
     {
         $this->setName($name);
         $this->setType($type);
-        $this->setGameId($gameId);
+        $this->setSignature($signature);
         $this->products = new ArrayCollection();
         $this->enchantmentItems = new ArrayCollection();
     }
@@ -231,21 +242,21 @@ class Item
     }
 
     /**
-     * @return string
+     * @return string|null
      */
-    public function getGameId(): string
+    public function getSignature(): ?string
     {
-        return $this->gameId;
+        return $this->signature;
     }
 
     /**
-     * @param string $gameId
+     * @param string|null $signature
      *
      * @return Item
      */
-    public function setGameId(string $gameId): Item
+    public function setSignature(?string $signature): Item
     {
-        $this->gameId = $gameId;
+        $this->signature = $signature;
 
         return $this;
     }
@@ -289,19 +300,19 @@ class Item
     /**
      * Creates string representation of object.
      * <p>For example:</p>
-     * <p>App\Entity\Item(id=1, name="Diamond", type="item", game_id="264")</p>
+     * <p>App\Entity\Item(id=1, name="Diamond", type="item", signature="264")</p>
      *
      * @return string
      */
     public function __toString(): string
     {
         return sprintf(
-            '%s(id=%d, name="%s", type="%s", game_id="%s")',
+            '%s(id=%d, name="%s", type="%s", signature="%s")',
             self::class,
             $this->getId(),
             $this->getName(),
             $this->getType(),
-            $this->getGameId()
+            $this->getSignature()
         );
     }
 }

@@ -29,13 +29,7 @@ class EditController extends Controller
     public function render(Request $request, RenderHandler $handler): JsonResponse
     {
         try {
-            $item = $handler->handle((int)$request->route('item'));
-
-            return new JsonResponse(Status::SUCCESS, [
-                'item' => $item->getItem(),
-                'images' => $item->getImages(),
-                'enchantments' => $item->getEnchantments()
-            ]);
+            return new JsonResponse(Status::SUCCESS, $handler->handle((int)$request->route('item')));
         } catch (ItemNotFoundException $e) {
             return (new JsonResponse('item_not_found'))
                 ->setHttpStatus(Response::HTTP_NOT_FOUND);
@@ -57,7 +51,7 @@ class EditController extends Controller
             ->setImageType($request->get('image_type'))
             ->setFile($request->file('file'))
             ->setImageName($request->get('image_name'))
-            ->setGameId($request->get('game_id'))
+            ->setSignature($request->get('signature'))
             ->setEnchantments($enchantments)
             ->setExtra($request->get('extra'));
 

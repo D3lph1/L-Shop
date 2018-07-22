@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace App\Handlers\Admin\Statistic\Purchases;
 
 use App\Entity\Purchase;
+use App\Exceptions\Distributor\DistributionException;
 use App\Exceptions\Purchase\AlreadyCompletedException;
 use App\Exceptions\Purchase\PurchaseNotFoundException;
 use App\Repository\Purchase\PurchaseRepository;
@@ -35,6 +36,7 @@ class CompleteHandler
      *
      * @throws PurchaseNotFoundException If the purchase with the received identifier is not found.
      * @throws AlreadyCompletedException If this purchase is already completed.
+     * @throws DistributionException If an error occurred while issuing products to the player.
      */
     public function handle(int $purchaseId): Purchase
     {

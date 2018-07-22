@@ -26,6 +26,21 @@ class Commands
     private $giveExpiredPermgroupCommand;
 
     /**
+     * @var string
+     */
+    private $giveCurrencyCommand;
+
+    /**
+     * @var string
+     */
+    private $addRegionOwnerCommand;
+
+    /**
+     * @var string
+     */
+    private $addRegionMemberCommand;
+
+    /**
      * @return string
      */
     public function getGiveNonEnchantedItemCommand(): string
@@ -102,6 +117,60 @@ class Commands
     {
         $this->giveExpiredPermgroupCommand = $giveExpiredPermgroupCommand;
 
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getGiveCurrencyCommand(): string
+    {
+        return $this->giveCurrencyCommand;
+    }
+
+    /**
+     * @param string $giveCurrencyCommand
+     * @return Commands
+     */
+    public function setGiveCurrencyCommand(string $giveCurrencyCommand): Commands
+    {
+        $this->giveCurrencyCommand = $giveCurrencyCommand;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAddRegionOwnerCommand(): string
+    {
+        return $this->addRegionOwnerCommand;
+    }
+
+    /**
+     * @param string $addRegionOwnerCommand
+     * @return Commands
+     */
+    public function setAddRegionOwnerCommand(string $addRegionOwnerCommand): Commands
+    {
+        $this->addRegionOwnerCommand = $addRegionOwnerCommand;
+        return $this;
+    }
+
+    /**
+     * @return string
+     */
+    public function getAddRegionMemberCommand(): string
+    {
+        return $this->addRegionMemberCommand;
+    }
+
+    /**
+     * @param string $addRegionMemberCommand
+     * @return Commands
+     */
+    public function setAddRegionMemberCommand(string $addRegionMemberCommand): Commands
+    {
+        $this->addRegionMemberCommand = $addRegionMemberCommand;
         return $this;
     }
 }

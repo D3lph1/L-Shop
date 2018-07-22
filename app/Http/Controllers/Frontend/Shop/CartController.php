@@ -5,13 +5,14 @@ namespace App\Http\Controllers\Frontend\Shop;
 
 use App\DataTransferObjects\Frontend\Shop\Cart\Purchase;
 use App\DataTransferObjects\Frontend\Shop\Server;
+use App\Exceptions\Distributor\DistributionException;
 use App\Exceptions\ForbiddenException;
 use App\Exceptions\Product\ProductNotFoundException;
 use App\Exceptions\Server\ServerNotFoundException;
 use App\Handlers\Frontend\Shop\Cart\PurchaseHandler;
 use App\Handlers\Frontend\Shop\Cart\PutHandler;
 use App\Handlers\Frontend\Shop\Cart\RemoveHandler;
-use App\Handlers\Frontend\Shop\Cart\VisitHandler;
+use App\Handlers\Frontend\Shop\Cart\RenderHandler;
 use App\Http\Controllers\Controller;
 use App\Http\Middleware\Auth as AuthMiddleware;
 use App\Http\Middleware\Captcha as CaptchaMiddleware;
@@ -48,14 +49,14 @@ class CartController extends Controller
      * Returns the data to render the cart page.
      *
      * @param Request      $request
-     * @param VisitHandler $handler
+     * @param RenderHandler $handler
      * @param Captcha      $captcha
      * @param Persistence  $persistence
      * @param Settings     $settings
      *
      * @return JsonResponse
      */
-    public function render(Request $request, VisitHandler $handler, Captcha $captcha, Persistence $persistence, Settings $settings): JsonResponse
+    public function render(Request $request, RenderHandler $handler, Captcha $captcha, Persistence $persistence, Settings $settings): JsonResponse
     {
         $server = $persistence->retrieve();
         if ($server !== null) {
@@ -163,6 +164,10 @@ class CartController extends Controller
             return (new JsonResponse('server_not_found'))
                 ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.frontend.shop.cart.purchase.server_not_found')));
+        } catch (DistributionException $e) {
+            return (new JsonResponse('distribution_failed'))
+                ->setHttpStatus(Response::HTTP_ACCEPTED)
+                ->addNotification(new Warning(__('msg.frontend.shop.catalog.purchase.distribution_failed')));
         } catch (ForbiddenException $e) {
             return (new JsonResponse('server_disabled'))
                 ->setHttpStatus(Response::HTTP_FORBIDDEN)

@@ -17,6 +17,12 @@ class ShoppingCart
 
     public const TYPE_PERMGROUP = 'permgroup';
 
+    public const TYPE_CURRENCY = 'money';
+
+    public const TYPE_REGION_OWNER = 'rgown';
+
+    public const TYPE_REGION_MEMBER = 'rgmem';
+
     /**
      * @ORM\Id
      * @ORM\Column(name="id", type="integer")
@@ -41,7 +47,7 @@ class ShoppingCart
     private $type;
 
     /**
-     * @ORM\Column(name="item", type="string", nullable=false)
+     * @ORM\Column(name="item", type="string", nullable=true)
      */
     private $signature;
 
@@ -112,12 +118,12 @@ class ShoppingCart
         return $this;
     }
 
-    public function getSignature(): string
+    public function getSignature(): ?string
     {
         return $this->signature;
     }
 
-    public function setSignature(string $signature): ShoppingCart
+    public function setSignature(?string $signature): ShoppingCart
     {
         $this->signature = $signature;
 

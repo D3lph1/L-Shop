@@ -23,7 +23,7 @@
             <v-divider class="mb-3"></v-divider>
 
             <shop-grid>
-                <cart-item
+                <cart-card
                         v-for="item in items"
                         :key="item.product.id"
                         :id="item.product.id"
@@ -33,11 +33,15 @@
                         :stack="item.product.stack"
                         :is-item="item.product.item.type.isItem"
                         :is-permgroup="item.product.item.type.isPermgroup"
+                        :is-currency="item.product.item.type.isCurrency"
+                        :is-region-owner="item.product.item.type.isRegionOwner"
+                        :is-region-member="item.product.item.type.isRegionMember"
+                        :is-command="item.product.item.type.isCommand"
                         :enchantments="item.product.item.enchantments"
                         @remove="remove"
                         @recount="recount"
                         @resum="resum"
-                ></cart-item>
+                ></cart-card>
             </shop-grid>
             <purchase-dialog
                     v-if="reCaptchaKey || !$store.getters.isAuth"
@@ -56,7 +60,7 @@
 
 <script>
     import loader from './../../../../core/http/loader'
-    import CartItem from './Item.vue'
+    import CartCard from './CartCard.vue'
     import PurchaseDialog from './PurchaseDialog.vue'
 
     export default {
@@ -119,6 +123,9 @@
                             } else {
                                 this.$router.push({name: 'frontend.shop.payment', params: {purchase: data.purchaseId}});
                             }
+                        } else if (data.status === 'distribution_failed') {
+                            this.clear();
+                            this.$store.commit('setBalance', Number((this.$store.state.auth.user.balance - this.total).toFixed(10)));
                         }
                         this.loadingPurchaseBtn = false;
                     })
@@ -135,7 +142,7 @@
             }
         },
         components: {
-            'cart-item': CartItem,
+            'cart-card': CartCard,
             'purchase-dialog': PurchaseDialog
         }
     }
