@@ -9,7 +9,7 @@ use App\Exceptions\Item\ItemNotFoundException;
 use App\Handlers\Admin\Products\Add\AddHandler;
 use App\Handlers\Admin\Products\Add\RenderHandler;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Products\AddRequest;
+use App\Http\Requests\Admin\Products\AddEditRequest;
 use App\Services\Auth\Permissions;
 use App\Services\Notification\Notifications\Success;
 use App\Services\Response\JsonResponse;
@@ -29,7 +29,7 @@ class AddController extends Controller
         return new JsonResponse(Status::SUCCESS, $handler->handle());
     }
 
-    public function add(AddRequest $request, AddHandler $handler): JsonResponse
+    public function add(AddEditRequest $request, AddHandler $handler): JsonResponse
     {
         $dto = (new Add())
             ->setItem((int)$request->get('item'))

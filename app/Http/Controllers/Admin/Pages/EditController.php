@@ -8,7 +8,7 @@ use App\Exceptions\Page\PageNotFoundException;
 use App\Handlers\Admin\Pages\Edit\EditHandler;
 use App\Handlers\Admin\Pages\Edit\RenderHandler;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Pages\EditRequest;
+use App\Http\Requests\Admin\Pages\AddEditRequest;
 use App\Services\Auth\Permissions;
 use App\Services\Notification\Notifications\Error;
 use App\Services\Notification\Notifications\Success;
@@ -34,7 +34,7 @@ class EditController extends Controller
         ]);
     }
 
-    public function edit(EditRequest $request, EditHandler $handler): JsonResponse
+    public function edit(AddEditRequest $request, EditHandler $handler): JsonResponse
     {
         $dto = (new Edit())
             ->setId((int)$request->route('page'))

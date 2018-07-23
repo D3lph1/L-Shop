@@ -28,4 +28,14 @@ class UpdateNameRequest extends FormRequest
             'name' => 'required|min:1|max:32'
         ];
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function attributes(): array
+    {
+        return [
+            'name' => __('content.admin.users.roles.create_role_dialog.name')
+        ];
+    }
 }

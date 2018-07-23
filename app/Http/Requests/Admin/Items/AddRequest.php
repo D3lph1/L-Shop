@@ -35,4 +35,17 @@ class AddRequest extends FormRequest
             'extra' => 'nullable'
         ];
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function attributes(): array
+    {
+        return [
+            'name' => __('content.admin.items.add.name'),
+            'description' => __('content.admin.items.add.description'),
+            'item_type' => __('common.type'),
+            'extra' => __('content.admin.items.add.extra')
+        ];
+    }
 }

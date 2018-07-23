@@ -29,4 +29,15 @@ class CreateUpdateRequest extends FormRequest
             'permissions' => 'required|array'
         ];
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function attributes(): array
+    {
+        return [
+            'name' => __('content.admin.users.roles.create_role_dialog.name'),
+            'permissions' => __('content.admin.users.roles.create_role_dialog.permissions'),
+        ];
+    }
 }

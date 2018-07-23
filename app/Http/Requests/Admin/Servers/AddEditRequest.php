@@ -36,4 +36,22 @@ class AddEditRequest extends FormRequest
             'distributor' => 'required'
         ];
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function attributes(): array
+    {
+        return [
+            'name' => __('content.admin.servers.add.name'),
+            'categories' => __('content.admin.servers.add.categories'),
+            'categories.*.name' => __('content.admin.servers.add.category_name'),
+            'ip' => __('content.admin.servers.add.ip'),
+            'port' => __('content.admin.servers.add.port'),
+            'password' => __('content.admin.servers.add.password'),
+            'monitoring_enabled' => __('content.admin.servers.add.monitoring_enabled'),
+            'server_enabled' => __('content.admin.servers.add.server_enabled'),
+            'distributor' => __('content.admin.servers.add.distributor')
+        ];
+    }
 }

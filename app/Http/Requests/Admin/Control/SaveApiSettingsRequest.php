@@ -45,4 +45,22 @@ class SaveApiSettingsRequest extends FormRequest
             'sashok724sV3_launcher_IPs.*' => 'ip'
         ];
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function attributes(): array
+    {
+        return [
+            'enabled' => __('content.admin.control.api.enabled'),
+            'key' => __('content.admin.control.api.key'),
+            'delimiter' => __('content.admin.control.api.delimiter'),
+            'algorithm' => __('content.admin.control.api.algorithm'),
+            'auth_enabled' => __('content.admin.control.api.auth_enabled'),
+            'register_enabled' => __('content.admin.control.api.register_enabled'),
+            'sashok724sV3_launcher_enabled' => __('content.admin.control.api.sashok724s_launcher.enabled'),
+            'sashok724sV3_launcher_format' => __('content.admin.control.api.sashok724s_launcher.format'),
+            'sashok724sV3_launcher_IPs' => __('content.admin.control.api.sashok724s_launcher.ips')
+        ];
+    }
 }

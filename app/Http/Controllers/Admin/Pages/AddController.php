@@ -7,7 +7,7 @@ use App\DataTransferObjects\Admin\Pages\Add;
 use App\Exceptions\Page\AlreadyExistException;
 use App\Handlers\Admin\Pages\AddHandler;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Pages\AddRequest;
+use App\Http\Requests\Admin\Pages\AddEditRequest;
 use App\Services\Auth\Permissions;
 use App\Services\Notification\Notifications\Success;
 use App\Services\Notification\Notifications\Warning;
@@ -23,7 +23,7 @@ class AddController extends Controller
         $this->middleware(permission_middleware(Permissions::ADMIN_PAGES_CRUD_ACCESS));
     }
 
-    public function add(AddRequest $request, AddHandler $handler): JsonResponse
+    public function add(AddEditRequest $request, AddHandler $handler): JsonResponse
     {
         $dto = (new Add())
             ->setTitle($request->get('title'))

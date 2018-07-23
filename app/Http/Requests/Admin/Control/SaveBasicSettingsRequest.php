@@ -67,4 +67,41 @@ class SaveBasicSettingsRequest extends FormRequest
             'maintenance_mode' => 'required|boolean'
         ];
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function attributes(): array
+    {
+        return [
+            'name' => __('content.admin.control.basic.name'),
+            'description' => __('content.admin.control.basic.description'),
+            'keywords' => __('content.admin.control.basic.keywords'),
+            'access_mode' => __('content.admin.control.basic.access_mode.title'),
+            'register_enabled' => __('content.admin.control.basic.enable_register'),
+            'send_activation_enabled' => __('content.admin.control.basic.enable_send_activations'),
+            'custom_redirect_url' => __('content.admin.control.basic.custom_url_after_register'),
+
+            'skin_enabled' => __('content.admin.control.basic.skin_enabled'),
+            'skin_max_file_size' => __('content.admin.control.basic.max_skin_file_size'),
+            'skin_list' => __('content.admin.control.basic.skin_sizes'),
+            'skin_hd_enabled' => __('content.admin.control.basic.hd_skin_enabled'),
+            'skin_hd_list' => __('content.admin.control.basic.skin_sizes_hd'),
+            'cloak_enabled' => __('content.admin.control.basic.cloak_enabled'),
+            'cloak_list' => __('content.admin.control.basic.cloak_sizes'),
+            'cloak_max_file_size' => __('content.admin.control.basic.max_cloak_file_size'),
+            'cloak_hd_enabled' => __('content.admin.control.basic.hd_cloak_enabled'),
+            'cloak_hd_list' => __('content.admin.control.basic.cloak_sizes_hd'),
+
+            'catalog_per_page' => __('content.admin.control.basic.catalog_per_page'),
+            'sort_products_by' => __('content.admin.control.basic.sort_products.title'),
+            'news_enabled' => __('content.admin.control.basic.news_enabled'),
+            'news_per_portion' => __('content.admin.control.basic.news_per_portion'),
+            'monitoring_enabled' => __('content.admin.control.basic.monitoring_enabled'),
+            'monitoring_rcon_timeout' => __('content.admin.control.basic.monitoring_rcon_timeout'),
+            'monitoring_rcon_command' => __('content.admin.control.basic.monitoring_rcon_command'),
+            'monitoring_rcon_response_pattern' => __('content.admin.control.basic.monitoring_rcon_response_pattern'),
+            'maintenance_mode' => __('content.admin.control.basic.maintenance_mode_enabled')
+        ];
+    }
 }

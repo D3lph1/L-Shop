@@ -7,7 +7,7 @@ use Doctrine\ORM\EntityManagerInterface;
 
 trait ClearsCache
 {
-    public function clearResultCache(): void
+    protected function clearResultCache(): void
     {
         $cache = $this->getEntityManager()->getConfiguration()->getResultCacheImpl();
         if ($cache !== null && method_exists($cache, 'deleteAll')) {
@@ -15,7 +15,7 @@ trait ClearsCache
         }
     }
 
-    public function deleteResultCache(string $key): bool
+    protected function deleteResultCache(string $key): bool
     {
         $cache = $this->getEntityManager()->getConfiguration()->getResultCacheImpl();
         if ($cache !== null) {

@@ -98,6 +98,11 @@ return [
         ]
     ],
     'admin' => [
+        'control' => [
+            'optimization' => [
+                'reset_app_cache_successfully' => 'Кэш приложения успешно сброшен.'
+            ]
+        ],
         'servers' => [
             'switch' => [
                 'server_not_found' => 'Не удалось переключить: сервер не найден.',

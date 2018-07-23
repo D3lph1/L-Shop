@@ -32,4 +32,18 @@ class SaveSecurityRequest extends FormRequest
             'change_password_enabled' => 'required|boolean'
         ];
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function attributes(): array
+    {
+        return [
+            'captcha_enabled' => __('content.admin.control.security.recaptcha.enabled'),
+            'recaptcha_public_key' => __('content.admin.control.security.recaptcha.public_key'),
+            'recaptcha_secret_key' => __('content.admin.control.security.recaptcha.secret_key'),
+            'reset_password_enabled' => __('content.admin.control.security.reset_password_enabled'),
+            'change_password_enabled' => __('content.admin.control.security.change_password_enabled')
+        ];
+    }
 }

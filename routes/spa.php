@@ -80,6 +80,7 @@ $router->post('/admin/control/api', 'Admin\Control\ApiController@save');
 $router->get('/admin/control/security', 'Admin\Control\SecurityController@render');
 $router->post('/admin/control/security', 'Admin\Control\SecurityController@save');
 $router->get('/admin/control/optimization', 'Admin\Control\OptimizationController@render');
+$router->post('/admin/control/optimization/reset_app_cache', 'Admin\Control\OptimizationController@resetAppCache');
 $router->post('/admin/control/optimization', 'Admin\Control\OptimizationController@save');
 
 $router->get('/admin/servers/add', 'Admin\Servers\AddController@render');

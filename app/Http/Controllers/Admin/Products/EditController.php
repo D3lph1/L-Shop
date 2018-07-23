@@ -10,7 +10,7 @@ use App\Exceptions\Product\ProductNotFoundException;
 use App\Handlers\Admin\Products\Edit\EditHandler;
 use App\Handlers\Admin\Products\Edit\RenderHandler;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Products\EditRequest;
+use App\Http\Requests\Admin\Products\AddEditRequest;
 use App\Services\Auth\Permissions;
 use App\Services\Notification\Notifications\Error;
 use App\Services\Notification\Notifications\Success;
@@ -38,7 +38,7 @@ class EditController extends Controller
         ]);
     }
 
-    public function edit(EditRequest $request, EditHandler $handler): JsonResponse
+    public function edit(AddEditRequest $request, EditHandler $handler): JsonResponse
     {
         $dto = (new Edit())
             ->setProduct((int)$request->route('product'))

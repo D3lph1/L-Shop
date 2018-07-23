@@ -11,10 +11,16 @@
                     <v-subheader>{{ $t('content.admin.control.optimization.caching_section') }}</v-subheader>
                     <v-text-field
                             :label="$t('content.admin.control.optimization.monitoring_ttl')"
+                            prepend-icon="access_time"
                             v-model="monitoringTtl"
                             type="number"
                             class="no-spinners"
                     ></v-text-field>
+                    <v-layout>
+                        <v-flex xs12 class="text-xs-center">
+                            <v-btn color="red" dark :loading="resetAppCacheLoading" @click="resetAppCache">{{ $t('content.admin.control.optimization.reset_app_cache') }}</v-btn>
+                        </v-flex>
+                    </v-layout>
                 </v-card-text>
                 <v-card-actions>
                     <v-btn flat color="orange" :disabled="finishDisabled" :loading="finishLoading" @click="perform">{{ $t('common.save') }}</v-btn>
@@ -33,6 +39,7 @@
                 monitoringTtl: 0,
 
                 finishDisabled: false,
+                resetAppCacheLoading: false,
                 finishLoading: false,
             }
         },
@@ -43,6 +50,13 @@
             loader.beforeRouteUpdate('/spa/admin/control/optimization', to, from, next, this);
         },
         methods: {
+            resetAppCache() {
+                this.resetAppCacheLoading = true;
+                this.$axios.post(`/spa/admin/control/optimization/reset_app_cache`)
+                    .finally(response => {
+                        this.resetAppCacheLoading = false;
+                    });
+            },
             perform() {
                 this.finishLoading = true;
                 this.$axios.post('/spa/admin/control/optimization', {

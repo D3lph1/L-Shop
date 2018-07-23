@@ -46,4 +46,14 @@ class PurchaseRequest extends FormRequest
             'amount' => 'required|integer|min:0'
         ];
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function attributes(): array
+    {
+        return [
+            'amount' => __('content.frontend.shop.catalog.purchase.amount')
+        ];
+    }
 }

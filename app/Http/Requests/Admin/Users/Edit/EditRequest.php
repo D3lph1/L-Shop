@@ -53,4 +53,17 @@ class EditRequest extends FormRequest
             'permissions' => 'array'
         ];
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function attributes(): array
+    {
+        return [
+            'password' => __('content.admin.users.edit.main.new_password'),
+            'balance' => __('content.admin.users.edit.main.balance'),
+            'roles' => __('content.admin.users.edit.main.roles'),
+            'permissions' => __('content.admin.users.edit.main.permissions')
+        ];
+    }
 }

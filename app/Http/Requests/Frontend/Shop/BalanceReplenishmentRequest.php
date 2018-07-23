@@ -44,4 +44,14 @@ class BalanceReplenishmentRequest extends FormRequest
                 ->build()
         ];
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function attributes(): array
+    {
+        return [
+            'sum' => __('content.frontend.shop.replenishment.sum')
+        ];
+    }
 }

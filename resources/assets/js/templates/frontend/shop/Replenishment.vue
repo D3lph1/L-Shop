@@ -59,6 +59,9 @@
                         } else {
                             this.loading = false;
                         }
+                    })
+                    .catch(err => {
+                        this.loading = false;
                     });
             },
             setReCaptchaResponse(response) {

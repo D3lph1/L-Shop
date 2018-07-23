@@ -28,4 +28,14 @@ class CreateUpdateRequest extends FormRequest
             'name' => 'required|min:1|max:64'
         ];
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function attributes(): array
+    {
+        return [
+            'name' => __('content.admin.users.roles.create_permission_dialog.name')
+        ];
+    }
 }

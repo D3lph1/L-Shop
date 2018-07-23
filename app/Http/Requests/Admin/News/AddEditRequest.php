@@ -29,4 +29,15 @@ class AddEditRequest extends FormRequest
             'content' => 'required|min:2'
         ];
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function attributes(): array
+    {
+        return [
+            'title' => __('content.admin.news.add.title_input'),
+            'content' => __('content.admin.news.add.content')
+        ];
+    }
 }

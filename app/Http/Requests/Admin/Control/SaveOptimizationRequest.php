@@ -28,4 +28,14 @@ class SaveOptimizationRequest extends FormRequest
             'monitoring_ttl' => 'required|integer|min:1'
         ];
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function attributes(): array
+    {
+        return [
+            'monitoring_ttl' => __('content.admin.control.optimization.monitoring_ttl')
+        ];
+    }
 }

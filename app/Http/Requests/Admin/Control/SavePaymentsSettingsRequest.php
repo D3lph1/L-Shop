@@ -44,4 +44,31 @@ class SavePaymentsSettingsRequest extends FormRequest
             'interkassa_test' => 'required|boolean',
         ];
     }
+
+    /**
+     * @inheritDoc
+     */
+    public function attributes(): array
+    {
+        return [
+            'min_fill_balance_sum' => __('content.admin.control.payments.min_fill_balance_sum'),
+            'currency' => __('content.admin.control.payments.currency'),
+            'currency_html' => __('content.admin.control.payments.currency_html'),
+
+            'robokassa_enabled' => __('content.admin.control.payments.robokassa.enabled'),
+            'robokassa_login' => __('content.admin.control.payments.robokassa.login'),
+            'robokassa_payment_password' => __('content.admin.control.payments.robokassa.payment_password'),
+            'robokassa_validation_password' => __('content.admin.control.payments.robokassa.validation_password'),
+            'robokassa_algorithm' => __('content.admin.control.payments.robokassa.algorithm'),
+            'robokassa_test' => __('content.admin.control.payments.robokassa.test'),
+
+            'interkassa_enabled' => __('content.admin.control.payments.interkassa.enabled'),
+            'interkassa_checkout_id' => __('content.admin.control.payments.interkassa.checkout_id'),
+            'interkassa_key' => __('content.admin.control.payments.interkassa.key'),
+            'interkassa_test_key' => __('content.admin.control.payments.interkassa.test_key'),
+            'interkassa_currency' => __('content.admin.control.payments.interkassa.currency'),
+            'interkassa_algorithm' => __('content.admin.control.payments.interkassa.algorithm'),
+            'interkassa_test' => __('content.admin.control.payments.interkassa.test'),
+        ];
+    }
 }
