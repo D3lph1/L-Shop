@@ -103,6 +103,18 @@
                             prepend-icon="list"
                             v-model="item.extra"
                     ></v-text-field>
+                    <v-layout align-center v-if="item.type === 'command'">
+                        <v-checkbox
+                                color="secondary"
+                                v-model="patternEnabled"
+                                hide-details class="shrink mr-2"
+                        ></v-checkbox>
+                        <v-text-field
+                                :label="$t('content.admin.items.add.pattern')"
+                                v-model="pattern"
+                                :disabled="!patternEnabled"
+                        ></v-text-field>
+                    </v-layout>
                 </v-card-text>
                 <v-card-actions>
                     <v-btn flat color="orange" :disabled="finishDisabled" :loading="finishLoading" @click="perform">{{ $t('content.admin.items.edit.finish') }}</v-btn>
@@ -169,6 +181,8 @@
                 enchantment: false,
                 enchantments: [],
                 readyEnchantments: [],
+                patternEnabled: true,
+                pattern: '',
                 finishLoading: false
             }
         },
@@ -180,7 +194,8 @@
         },
         computed: {
             finishDisabled() {
-                return this.item.name === '' || (this.item.type !== 'currency' && this.item.signature === '');
+                return this.item.name === '' || (this.item.type !== 'currency' && this.item.signature === '') ||
+                    (this.item.type === 'command' && this.patternEnabled && this.pattern === '');
             }
         },
         methods: {
@@ -223,9 +238,13 @@
                 data.append('item_type', this.item.type);
                 data.append('image_type', this.imageType);
                 data.append('image_name', this.imageBrowser);
-                data.append('signature', this.item.signature);
+                data.append('signature',  this.item.signature !== null ? this.item.signature : '');
                 data.append('enchantments', JSON.stringify(this.readyEnchantments));
-                data.append('extra', this.item.extra !== null ? this.item.extra : '');
+                if (this.item.type === 'command') {
+                    data.append('extra', this.patternEnabled ? this.pattern : '');
+                } else {
+                    data.append('extra', this.item.extra !== null ? this.item.extra : '');
+                }
 
                 this.$axios.post(`/spa/admin/items/edit/${this.$route.params.item}`, data)
                     .then((response) => {
@@ -243,6 +262,14 @@
                 const data = response.data;
 
                 this.item = data.item;
+                if (this.item.type === 'command') {
+                    if (this.item.extra !== null) {
+                        this.patternEnabled = true;
+                        this.pattern = this.item.extra;
+                    } else {
+                        this.patternEnabled = false;
+                    }
+                }
                 this.images = data.images;
                 this.imageType = data.item.image === null ? 'default' : 'current';
                 this.enchantments = data.enchantments;

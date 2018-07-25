@@ -8,6 +8,7 @@ use App\Exceptions\Category\CategoryNotFoundException as CategoryDoesNotExistExc
 use App\Exceptions\Distributor\DistributionException;
 use App\Exceptions\ForbiddenException;
 use App\Exceptions\Product\ProductNotFoundException;
+use App\Exceptions\Purchase\InvalidAmountException;
 use App\Exceptions\Server\ServerNotFoundException as ServerDoesNotExistException;
 use App\Handlers\Frontend\Shop\Catalog\PurchaseHandler;
 use App\Handlers\Frontend\Shop\Catalog\RenderHandler;
@@ -143,6 +144,10 @@ class CatalogController extends Controller
             return (new JsonResponse('product_not_found'))
                 ->setHttpStatus(Response::HTTP_NOT_FOUND)
                 ->addNotification(new Error(__('msg.frontend.shop.catalog.product_not_found')));
+        } catch (InvalidAmountException $e) {
+            return (new JsonResponse('invalid_amount'))
+                ->setHttpStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+                ->addNotification(new Warning(__('msg.frontend.shop.catalog.purchase.invalid_amount')));
         } catch (DistributionException $e) {
             return (new JsonResponse('distribution_failed'))
                 ->setHttpStatus(Response::HTTP_ACCEPTED)

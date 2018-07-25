@@ -96,6 +96,18 @@
                             prepend-icon="list"
                             v-model="extra"
                     ></v-text-field>
+                    <v-layout align-center v-if="type === 'command'">
+                        <v-checkbox
+                                color="secondary"
+                                v-model="patternEnabled"
+                                hide-details class="shrink mr-2"
+                        ></v-checkbox>
+                        <v-text-field
+                                :label="$t('content.admin.items.add.pattern')"
+                                v-model="pattern"
+                                :disabled="!patternEnabled"
+                        ></v-text-field>
+                    </v-layout>
                 </v-card-text>
                 <v-card-actions>
                     <v-btn flat color="orange" :disabled="finishDisabled" :loading="finishLoading" @click="perform">{{ $t('content.admin.items.add.finish') }}</v-btn>
@@ -156,6 +168,8 @@
                 images: [],
                 signature: '',
                 extra: null,
+                patternEnabled: true,
+                pattern: '',
                 enchantment: false,
                 enchantments: [],
                 readyEnchantments: [],
@@ -170,7 +184,8 @@
         },
         computed: {
             finishDisabled() {
-                return this.name === '' || (this.type !== 'currency' && this.signature === '');
+                return this.name === '' || (this.type !== 'currency' && this.signature === '') ||
+                    (this.type === 'command' && this.patternEnabled && this.pattern === '');
             }
         },
         methods: {
@@ -209,13 +224,17 @@
                 this.finishLoading = true;
                 const data = this.image !== null ? this.image : new FormData();
                 data.append('name', this.name);
-                data.append('description', this.description !== null ? this.item.description : '');
+                data.append('description', this.description !== null ? this.description : '');
                 data.append('item_type', this.type);
                 data.append('image_type', this.imageType);
                 data.append('image_name', this.imageBrowser);
-                data.append('signature', this.signature !== null ? this.item.description : '');
+                data.append('signature', this.signature !== null ? this.signature : '');
                 data.append('enchantments', JSON.stringify(this.readyEnchantments));
-                data.append('extra', this.extra !== null ? this.extra : '');
+                if (this.type === 'command') {
+                    data.append('extra', this.patternEnabled ? this.pattern : '');
+                } else {
+                    data.append('extra', this.extra !== null ? this.extra : '');
+                }
 
                 this.$axios.post('/spa/admin/items/add', data)
                     .then((response) => {

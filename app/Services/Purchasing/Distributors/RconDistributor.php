@@ -22,22 +22,15 @@ class RconDistributor implements Distributor, Attempting
     private $commandBuilder;
 
     /**
-     * @var string
-     */
-    private $successResponse;
-
-    /**
      * @var Dispatcher
      */
     private $dispatcher;
 
     public function __construct(
         CommandBuilder $commandBuilder,
-        string $successResponse,
         Dispatcher $dispatcher)
     {
         $this->commandBuilder = $commandBuilder;
-        $this->successResponse = $successResponse;
         $this->dispatcher = $dispatcher;
     }
 
@@ -49,8 +42,7 @@ class RconDistributor implements Distributor, Attempting
         $commands = $this->commandBuilder->build($distribution->getPurchaseItem());
         $this->dispatcher->dispatch(new DistributeByRcon(
             $distribution,
-            $commands,
-            $this->successResponse
+            $commands
         ));
     }
 }

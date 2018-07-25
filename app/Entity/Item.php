@@ -108,7 +108,7 @@ class Item
      * For {@see \App\Entity\Item::type} = {@see \App\Services\Item\Type::CURRENCY} this field
      * must be a nullable.
      *
-     * @ORM\Column(name="game_id", type="string", length=255, nullable=true)
+     * @ORM\Column(name="signature", type="string", length=255, nullable=true)
      */
     private $signature;
 
@@ -144,7 +144,7 @@ class Item
      * @param string $type
      * @param string $signature
      */
-    public function __construct(string $name, string $type, string $signature)
+    public function __construct(string $name, string $type, ?string $signature)
     {
         $this->setName($name);
         $this->setType($type);

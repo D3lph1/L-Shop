@@ -1,5 +1,5 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\DataTransferObjects\Admin\Items\Add;
 
@@ -38,7 +38,7 @@ class Add
     private $imageName;
 
     /**
-     * @var string
+     * @var null|string
      */
     private $signature;
 
@@ -177,7 +177,7 @@ class Add
      *
      * @return Add
      */
-    public function setSignature(string $signature): Add
+    public function setSignature(?string $signature): Add
     {
         $this->signature = $signature;
 
@@ -185,9 +185,9 @@ class Add
     }
 
     /**
-     * @return string
+     * @return null|string
      */
-    public function getSignature(): string
+    public function getSignature(): ?string
     {
         return $this->signature;
     }

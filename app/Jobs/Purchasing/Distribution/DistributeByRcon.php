@@ -38,29 +38,19 @@ class DistributeByRcon implements ShouldQueue
     private $commands;
 
     /**
-     * The regular expression (pattern) of a successful answer.
-     *
-     * @var string
-     */
-    private $successResponse;
-
-    /**
      * Create a new job instance.
      *
      * @param Distribution       $distribution
      * @param ExecutableCommands $commands
-     * @param string             $successResponse
      */
     public function __construct(
         Distribution $distribution,
-        ExecutableCommands $commands,
-        string $successResponse)
+        ExecutableCommands $commands)
     {
         // Only the distribution identifier is saved, so that you do not have problems with the
         // serialization of the entity.
         $this->distributionId = $distribution->getId();
         $this->commands = $commands;
-        $this->successResponse = $successResponse;
     }
 
     /**
@@ -106,11 +96,11 @@ class DistributeByRcon implements ShouldQueue
         $total = count($this->commands->getMainCommands());
         // Execute main commands one by one.
         foreach ($this->commands->getMainCommands() as $command) {
-            $logger->debug("Attempting to execute command ({$step}/{$total}): \"{$command}\"", $this->context());
+            $logger->debug("Attempting to execute command ({$step}/{$total}): \"{$command->getCommand()}\"", $this->context());
 
             try {
                 // Send request...
-                $response = $connection->send($command);
+                $response = $connection->send($command->getCommand());
 
                 $logger->debug("Received response: \"{$response}\"");
             } catch (RuntimeException $e) {
@@ -119,14 +109,18 @@ class DistributeByRcon implements ShouldQueue
                 throw new DistributionException('', 0, $e);
             }
 
-            // Check if the response matches a successful response pattern.
-            if (!preg_match($this->successResponse, $response)) {
-                throw new DistributionException(
-                    "The response \"{$response}\" received from the server does not correspond to pattern \"{$this->successResponse}\""
-                );
+            if ($command->getResponsePattern() !== null) {
+                // Check if the response matches a successful response pattern.
+                if (!preg_match($command->getResponsePattern(), $response)) {
+                    $msg = "The response \"{$response}\" received from the server does not correspond to pattern \"{$command->getResponsePattern()}\"";
+                    $logger->warning($msg, $this->context());
+                    throw new DistributionException($msg);
+                }
+                $logger->debug("The response \"$response\" received from the server has been successfully mapped to a "
+                    . "successful response pattern \"{$command->getResponsePattern()}\".", $this->context());
+            } else {
+                $logger->debug("A response mapping is not used for this query", $this->context());
             }
-            $logger->debug("The response received from the server has been successfully mapped to a "
-                . "successful response pattern.", $this->context());
         }
     }
 

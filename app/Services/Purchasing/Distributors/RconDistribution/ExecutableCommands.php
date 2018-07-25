@@ -11,7 +11,7 @@ class ExecutableCommands
     private $extraAfterCommands = [];
 
     /**
-     * @var string[]
+     * @var MainCommand[]
      */
     private $mainCommands = [];
 
@@ -41,7 +41,7 @@ class ExecutableCommands
     }
 
     /**
-     * @return string[]
+     * @return MainCommand[]
      */
     public function getMainCommands(): array
     {
@@ -49,7 +49,7 @@ class ExecutableCommands
     }
 
     /**
-     * @param string[] $mainCommands
+     * @param MainCommand[] $mainCommands
      *
      * @return ExecutableCommands
      */

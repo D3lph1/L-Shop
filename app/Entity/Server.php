@@ -96,14 +96,14 @@ class Server
      *
      * @ORM\Column(name="enabled", type="boolean", nullable=false)
      */
-    private $enabled;
+    private $enabled = true;
 
     /**
      * Do I need to monitor online statistics on this server?
      *
      * @ORM\Column(name="monitoring_enabled", type="boolean", nullable=false)
      */
-    private $monitoringEnabled;
+    private $monitoringEnabled = false;
 
     /**
      * Categories that belong to this server.

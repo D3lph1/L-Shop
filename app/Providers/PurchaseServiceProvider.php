@@ -9,8 +9,8 @@ use App\Services\Purchasing\Distributors\Pool as DistributorsPool;
 use App\Services\Purchasing\Distributors\RconDistribution\CommandBuilder;
 use App\Services\Purchasing\Distributors\RconDistribution\Commands;
 use App\Services\Purchasing\Distributors\RconDistribution\Connections;
+use App\Services\Purchasing\Distributors\RconDistribution\DefaultCommandBuilder;
 use App\Services\Purchasing\Distributors\RconDistribution\ExtraCommands;
-use App\Services\Purchasing\Distributors\RconDistributor;
 use App\Services\Purchasing\Payers\InterkassaPayer;
 use App\Services\Purchasing\Payers\Payer;
 use App\Services\Purchasing\Payers\Pool;
@@ -20,7 +20,6 @@ use App\Services\Purchasing\Payments\Robokassa\Checkout as RobokassaCheckout;
 use App\Services\Settings\DataType;
 use App\Services\Settings\Settings;
 use D3lph1\MinecraftRconManager\Connector;
-use Illuminate\Contracts\Bus\Dispatcher;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
 use Illuminate\Support\ServiceProvider;
@@ -153,7 +152,15 @@ class PurchaseServiceProvider extends ServiceProvider
                 ->setGiveExpiredPermgroupCommand($config->get('purchasing.distribution.rcon.commands.give_expired_permgroup'))
                 ->setGiveCurrencyCommand($config->get('purchasing.distribution.rcon.commands.give_currency'))
                 ->setAddRegionOwnerCommand($config->get('purchasing.distribution.rcon.commands.add_region_owner'))
-                ->setAddRegionMemberCommand($config->get('purchasing.distribution.rcon.commands.add_region_member'));
+                ->setAddRegionMemberCommand($config->get('purchasing.distribution.rcon.commands.add_region_member'))
+
+                ->setGiveNonEnchantedItemResponse($config->get('purchasing.distribution.rcon.success_response_patterns.give_non_enchanted_item'))
+                ->setGiveEnchantedItemResponse($config->get('purchasing.distribution.rcon.success_response_patterns.give_enchanted_item'))
+                ->setGiveNonExpiredPermgroupResponse($config->get('purchasing.distribution.rcon.success_response_patterns.give_non_expired_permgroup'))
+                ->setGiveExpiredPermgroupResponse($config->get('purchasing.distribution.rcon.success_response_patterns.give_expired_permgroup'))
+                ->setGiveCurrencyResponse($config->get('purchasing.distribution.rcon.success_response_patterns.give_currency'))
+                ->setAddRegionOwnerResponse($config->get('purchasing.distribution.rcon.success_response_patterns.add_region_owner'))
+                ->setAddRegionMemberResponse($config->get('purchasing.distribution.rcon.success_response_patterns.add_region_member'));
         });
 
         $this->app->singleton(ExtraCommands::class, function (Application $app) {
@@ -173,14 +180,6 @@ class PurchaseServiceProvider extends ServiceProvider
             );
         });
 
-        $this->app->singleton(RconDistributor::class, function (Application $app) {
-            $config = $app->make(Repository::class);
-
-            return new RconDistributor(
-                $app->make(CommandBuilder::class),
-                $config->get('purchasing.distribution.rcon.success_response'),
-                $app->make(Dispatcher::class)
-            );
-        });
+        $this->app->singleton(CommandBuilder::class, DefaultCommandBuilder::class);
     }
 }

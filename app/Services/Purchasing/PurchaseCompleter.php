@@ -12,7 +12,6 @@ use App\Exceptions\Distributor\DistributorNotFoundException;
 use App\Exceptions\Purchase\AlreadyCompletedException;
 use App\Repository\Distribution\DistributionRepository;
 use App\Repository\Purchase\PurchaseRepository;
-use App\Services\Database\Transaction\Transactor as DatabaseTransactor;
 use App\Services\Purchasing\Distributors\Pool;
 use App\Services\User\Balance\Transactor as BalanceTransactor;
 use Illuminate\Contracts\Events\Dispatcher;
@@ -35,11 +34,6 @@ class PurchaseCompleter
     private $distributionRepository;
 
     /**
-     * @var DatabaseTransactor
-     */
-    private $databaseTransactor;
-
-    /**
      * @var BalanceTransactor
      */
     private $balanceTransactor;
@@ -53,14 +47,12 @@ class PurchaseCompleter
         PurchaseRepository $purchaseRepository,
         Pool $distributors,
         DistributionRepository $distributionRepository,
-        DatabaseTransactor $databaseTransactor,
         BalanceTransactor $balanceTransactor,
         Dispatcher $eventDispatcher)
     {
         $this->purchaseRepository = $purchaseRepository;
         $this->distributors = $distributors;
         $this->distributionRepository = $distributionRepository;
-        $this->databaseTransactor = $databaseTransactor;
         $this->balanceTransactor = $balanceTransactor;
         $this->eventDispatcher = $eventDispatcher;
     }
@@ -82,7 +74,6 @@ class PurchaseCompleter
             throw new AlreadyCompletedException($purchase);
         }
 
-        $this->databaseTransactor->begin();
         $purchase->setCompletedAt(new \DateTimeImmutable());
         $purchase->setVia($via);
         $this->purchaseRepository->update($purchase);
@@ -116,7 +107,6 @@ class PurchaseCompleter
             $this->balanceTransactor->add($purchase->getUser(), $purchase->getCost());
         }
 
-        $this->databaseTransactor->commit();
         $this->eventDispatcher->dispatch(new PurchaseCompletedEvent($purchase));
     }
 }

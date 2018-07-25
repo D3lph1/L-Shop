@@ -147,18 +147,25 @@ return [
             ],
             /*
             |--------------------------------------------------------------------------
-            | The pattern of a successful response.
+            | The patterns of a successful response.
             |--------------------------------------------------------------------------
             |
             | When executing the distribution commands, the system will check the response that came
             | from the server. If it matches this regular expression, then the output will be
             | considered successful. Otherwise, the process will be forced to abort.
             |
-            | Note: To test several possible results, use the | character.
-            | For example: #(one)|(two)#ui
+            | If the value of the element is null, no mapping is performed.
             |
             */
-            'success_response' => '#Given \[.+\] \* \d+ to .*#ui',
+            'success_response_patterns' => [
+                'give_non_enchanted_item' => '#.*#ui',
+                'give_enchanted_item' => '#.*#ui',
+                'give_non_expired_permgroup' => '#.*#ui',
+                'give_expired_permgroup' => '#.*#ui',
+                'give_currency' => '#.*#ui',
+                'add_region_owner' => '#.*#ui',
+                'add_region_member' => '#.*#ui'
+            ],
             'extra' => [
                 /*
                 |--------------------------------------------------------------------------

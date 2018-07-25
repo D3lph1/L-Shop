@@ -3,6 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Http\Requests\Admin\Items;
 
+use App\Services\Item\Type;
 use Illuminate\Foundation\Http\FormRequest;
 
 class EditRequest extends FormRequest
@@ -45,7 +46,7 @@ class EditRequest extends FormRequest
             'name' => __('content.admin.items.add.name'),
             'description' => __('content.admin.items.add.description'),
             'item_type' => __('common.type'),
-            'extra' => __('content.admin.items.add.extra')
+            'extra' => $this->get('item_type') === Type::COMMAND ? __('content.admin.items.add.pattern') : __('content.admin.items.add.extra')
         ];
     }
 }
