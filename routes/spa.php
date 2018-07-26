@@ -177,6 +177,7 @@ $router->delete('/admin/users/roles/{role}', 'Admin\Users\RolesController@delete
 $router->get('/admin/other/debug', 'Admin\Other\DebugController@render');
 $router->post('/admin/other/debug/send', 'Admin\Other\DebugController@sendEmail');
 $router->get('/admin/other/rcon', 'Admin\Other\RconController@render');
+$router->post('/admin/other/rcon', 'Admin\Other\RconController@send');
 
 $router->get('/admin/statistic/show', 'Admin\Statistic\ShowController@render');
 $router->post('/admin/statistic/show/profit/month', 'Admin\Statistic\ShowController@profitForMonth');

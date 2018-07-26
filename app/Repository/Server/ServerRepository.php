@@ -22,6 +22,9 @@ interface ServerRepository
      */
     public function findWithEnabledMonitoring(): array;
 
+    /**
+     * @return Server[]
+     */
     public function findAll(): array;
 
     public function findAllWithCategories(): array;
