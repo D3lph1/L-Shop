@@ -581,6 +581,7 @@ return [
         'other' => [
             'rcon' => [
                 'title' => 'RCON - консоль',
+                'choose_server' => 'Выберите сервер',
                 'input' => 'Введите команду',
                 'connection_failed' => 'Не удалось подключиться к серверу: :message'
             ],

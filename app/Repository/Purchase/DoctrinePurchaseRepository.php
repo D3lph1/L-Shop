@@ -93,33 +93,33 @@ class DoctrinePurchaseRepository implements PurchaseRepository
         );
     }
 
-    public function retrieveTotalProfitForYearCompleted(): array
+    public function retrieveTotalProfitForYearCompleted(array $exceptVia): array
     {
         return $this->em->createQuery(
             sprintf(
                 'SELECT YEAR(p.completedAt) as year, MONTH(p.completedAt) as month, SUM(p.cost) as total
                         FROM %s p
-                        WHERE ((SELECT COUNT(pi.id) FROM %s pi WHERE pi.purchase = p.id) = 0
-                          OR p.player IS NOT NULL
-                        )
-                        AND p.completedAt IS NOT NULL
+                        WHERE p.completedAt IS NOT NULL
+                        AND p.via IS NOT NULL
+                        AND p.via NOT IN (:via)
                         GROUP BY year, month
                         ORDER BY year DESC',
-                Purchase::class,
-                PurchaseItem::class
+                Purchase::class
             )
-        )->getResult();
+        )
+            ->setParameter('via', $exceptVia)
+            ->getResult();
     }
 
-    public function retrieveTotalProfitForMonthCompleted(int $year, int $month): array
+    public function retrieveTotalProfitForMonthCompleted(int $year, int $month, array $exceptVia): array
     {
         return $this->em->createQuery(
             sprintf(
                 'SELECT DAY(p.completedAt) as day, SUM(p.cost) as total
                         FROM %s p
-                        WHERE ((SELECT COUNT(pi.id) FROM %s pi WHERE pi.purchase = p.id) = 0
-                          OR p.player IS NOT NULL
-                        )
+                        WHERE p.completedAt IS NOT NULL
+                        AND p.via IS NOT NULL
+                        AND p.via NOT IN (:via)
                         AND YEAR(p.completedAt) = :year
                         AND MONTH(p.completedAt) = :month
                         AND p.completedAt IS NOT NULL
@@ -129,25 +129,27 @@ class DoctrinePurchaseRepository implements PurchaseRepository
                 PurchaseItem::class
             )
         )
+            ->setParameter('via', $exceptVia)
             ->setParameter('year', $year)
             ->setParameter('month', $month)
             ->getResult();
     }
 
-    public function retrieveTotalProfitCompleted(): float
+    public function retrieveTotalProfitCompleted(array $exceptVia): float
     {
         return (float)$this->em->createQuery(
             sprintf(
                 'SELECT SUM(p.cost) as total
                         FROM %s p
-                        WHERE ((SELECT COUNT(pi.id) FROM %s pi WHERE pi.purchase = p.id) = 0
-                          OR p.player IS NOT NULL
-                        )
-                        AND p.completedAt IS NOT NULL',
+                        WHERE p.completedAt IS NOT NULL
+                        AND p.via IS NOT NULL
+                        AND p.via NOT IN (:via)',
                 Purchase::class,
                 PurchaseItem::class
             )
-        )->getSingleScalarResult();
+        )
+            ->setParameter('via', $exceptVia)
+            ->getSingleScalarResult();
     }
 
     public function retrieveFillBalanceAmountCompleted(): int

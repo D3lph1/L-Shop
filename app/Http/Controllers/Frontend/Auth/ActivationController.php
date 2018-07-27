@@ -23,6 +23,7 @@ use Illuminate\Contracts\Config\Repository;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use Illuminate\Routing\Redirector;
 
 /**
  * Class ActivationController
@@ -83,14 +84,22 @@ class ActivationController extends Controller
      * Processes the complete activation request. This action will be processed when the user
      * clicks on the link to activate the account from the email.
      *
-     * @param Request                   $request
+     * @param Request $request
      * @param CompleteActivationHandler $handler
-     * @param Notificator               $notificator
-     * @param Repository                $config
+     * @param Notificator $notificator
+     * @param Repository $config
+     * @param Settings $settings
+     * @param Redirector $redirector
      *
      * @return RedirectResponse
      */
-    public function complete(Request $request, CompleteActivationHandler $handler, Notificator $notificator, Repository $config): RedirectResponse
+    public function complete(
+        Request $request,
+        CompleteActivationHandler $handler,
+        Notificator $notificator,
+        Repository $config,
+        Settings $settings,
+        Redirector $redirector): RedirectResponse
     {
         if ($handler->handle($request->route('code'))) {
             $notificator->notify(new Success(__('msg.frontend.auth.activation.success')));
@@ -98,6 +107,10 @@ class ActivationController extends Controller
             $notificator->notify(new Error(__('msg.frontend.auth.activation.fail')));
         }
 
-        return redirect()->to($config->get('app.url'));
+        if ($settings->get('auth.register.custom_redirect.enabled')->getValue(DataType::BOOL)) {
+            return $redirector->to($settings->get('auth.register.custom_redirect.url')->getValue());
+        }
+
+        return $redirector->to($config->get('app.url'));
     }
 }

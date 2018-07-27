@@ -8,7 +8,7 @@
                         single-line
                         v-model="server"
                         :items="servers"
-                        label="Choose server"
+                        :label="$t('content.admin.other.rcon.choose_server')"
                         item-value="id"
                         item-text="name"
                 ></v-select>

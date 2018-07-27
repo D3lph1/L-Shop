@@ -8,10 +8,12 @@
             <v-card-text>
                 <div class="flex-wrapper" v-if="!((isPermgroup && stack === 0) || isRegionMember || isRegionOwner || isCommand)">
                     <v-text-field
-                            class="pt-1"
+                            type="number"
+                            class="pt-1 no-spinners"
                             :prefix="amountLabel()"
                             prepend-icon="drag_indicator"
                             v-model="amount"
+                            @blur="recount"
                     ></v-text-field>
                     <v-btn class="my-0" color="red" icon flat @click="decrement" :disabled="amount <= stack">
                         <v-icon>remove</v-icon>

@@ -47,7 +47,7 @@
             <aside-news v-if="newsAllowed" :news="news"></aside-news>
         </v-navigation-drawer>
         <v-footer color="primary" fixed class="white--text" inset app height="40">
-            <settings></settings>
+            <!-- <settings></settings> -->
             <v-spacer></v-spacer>
             <span>2017-2018 &copy; L-Shop</span>
             <v-btn :href="github" target="_blank" small outline color="white">GitHub</v-btn>

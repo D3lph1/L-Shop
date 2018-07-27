@@ -5,17 +5,13 @@ namespace App\Handlers;
 
 use App\Services\Caching\CachingRepository;
 use App\Services\Utils\EnvironmentUtil;
-use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Translation\Translator;
 
 class LangHandler
 {
-    private const CACHE_KEY = 'localization';
+    private const CACHE_KEY = 'localization.';
 
-    /**
-     * @var Repository
-     */
-    private $config;
+    private const CACHE_TTL = 86400;
 
     /**
      * @var Translator
@@ -27,9 +23,8 @@ class LangHandler
      */
     private $cachingRepository;
 
-    public function __construct(Repository $config, Translator $translator, CachingRepository $cachingRepository)
+    public function __construct(Translator $translator, CachingRepository $cachingRepository)
     {
-        $this->config = $config;
         $this->translator = $translator;
         $this->cachingRepository = $cachingRepository;
     }
@@ -38,8 +33,9 @@ class LangHandler
     {
         $data = $this->build();
         if (EnvironmentUtil::inProduction()) {
-            return $this->cachingRepository->get(self::CACHE_KEY, function () use ($data) {
-                $this->cachingRepository->set(self::CACHE_KEY, $data);
+            $key = self::CACHE_KEY . $this->translator->getLocale();
+            return $this->cachingRepository->get($key, function () use ($data, $key) {
+                $this->cachingRepository->set($key, $data, self::CACHE_TTL);
 
                 return $data;
             });
@@ -50,7 +46,7 @@ class LangHandler
 
     private function build(): array
     {
-        $locale = $this->config->get('app.locale');
+        $locale = $this->translator->getLocale();
 
         $files = glob(resource_path("lang/{$locale}/*.php"));
         $data = [];

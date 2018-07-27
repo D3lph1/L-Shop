@@ -23,11 +23,11 @@ interface PurchaseRepository
 
     public function findPaginatedWithOrderByUser(User $user, int $page, string $orderBy, bool $descending, int $perPage): LengthAwarePaginator;
 
-    public function retrieveTotalProfitForYearCompleted(): array;
+    public function retrieveTotalProfitForYearCompleted(array $exceptVia): array;
 
-    public function retrieveTotalProfitForMonthCompleted(int $year, int $month): array;
+    public function retrieveTotalProfitForMonthCompleted(int $year, int $month, array $exceptVia): array;
 
-    public function retrieveTotalProfitCompleted(): float;
+    public function retrieveTotalProfitCompleted(array $exceptVia): float;
 
     public function retrieveFillBalanceAmountCompleted(): int;
 

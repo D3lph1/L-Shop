@@ -165,7 +165,11 @@
                         let status = data.status;
                         this.resetCaptcha();
                         if (status === 'success') {
-                            this.$router.push({name: data.redirect});
+                            if (typeof data.redirectUrl !== 'undefined') {
+                                window.location.href = data.redirectUrl;
+                            } else {
+                                this.$router.push({name: data.redirect});
+                            }
                         }
                         this.loadingBtn = false;
                     })

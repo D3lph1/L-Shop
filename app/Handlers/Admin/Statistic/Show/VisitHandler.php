@@ -7,6 +7,7 @@ use App\DataTransferObjects\Admin\Statistic\Show\VisitResult;
 use App\Repository\Purchase\PurchaseRepository;
 use App\Repository\PurchaseItem\PurchaseItemRepository;
 use App\Repository\User\UserRepository;
+use App\Services\Purchasing\ViaContext;
 
 class VisitHandler
 {
@@ -61,7 +62,7 @@ class VisitHandler
 
     public function handle(): VisitResult
     {
-        $profitForYear = $this->purchaseRepository->retrieveTotalProfitForYearCompleted();
+        $profitForYear = $this->purchaseRepository->retrieveTotalProfitForYearCompleted([ViaContext::BY_ADMIN]);
         // Cast values to expected types.
         $profitForYear = array_map(function ($each) {
             return [
@@ -110,7 +111,7 @@ class VisitHandler
             ->setRegisteredForYear($registeredForYear)
             ->setRegisteredForMonth($this->registeredForMonthHandler->handle($year, $month))
             ->setTopPurchasedProducts($topPurchasedProducts)
-            ->setTotalProfit($this->purchaseRepository->retrieveTotalProfitCompleted())
+            ->setTotalProfit($this->purchaseRepository->retrieveTotalProfitCompleted([ViaContext::BY_ADMIN]))
             ->setTotalPurchasesAmount($this->purchaseItemRepository->retrievePurchasesAmountCompleted())
             ->setFillBalanceAmount($this->purchaseRepository->retrieveFillBalanceAmountCompleted())
             ->setRegisteredUserAmount($this->userRepository->retrieveCreatedAmount())

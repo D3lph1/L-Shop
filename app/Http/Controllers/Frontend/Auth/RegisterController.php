@@ -75,7 +75,7 @@ class RegisterController extends Controller
                 if ($dto->isActivated()) {
                     if ($settings->get('auth.register.custom_redirect.enabled')->getValue(DataType::BOOL)) {
                         // Redirect user on custom url after success registration.
-                        $data = ['redirect_url' => $settings->get('auth.register.custom_redirect.url')->getValue()];
+                        $data = ['redirectUrl' => $settings->get('auth.register.custom_redirect.url')->getValue()];
                     } else {
                         $data = ['redirect' => 'frontend.auth.servers'];
                     }
