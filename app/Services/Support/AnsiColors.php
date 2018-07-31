@@ -7,7 +7,7 @@ namespace App\Services\Support;
  * Class AnsiColors
  * Represents constants with ANSI colors.
  */
-class AnsiColors
+final class AnsiColors
 {
     public const BLACK = "\033[0;30m";
 

@@ -3,16 +3,16 @@ declare(strict_types = 1);
 
 namespace Tests\Unit\Services\Settings;
 
+use App\Services\Settings\DefaultSettings;
 use App\Services\Settings\Driver;
 use App\Services\Settings\Repository\MemoryRepository;
-use App\Services\Settings\Settings;
 use Tests\TestCase;
 
 class SettingsTest extends TestCase
 {
     public function test(): void
     {
-        $settings = new Settings(new Driver(new MemoryRepository()));
+        $settings = new DefaultSettings(new Driver(new MemoryRepository()));
         $settings->set('lorem1', 'ipsum1');
         $settings->set('lorem2', 'ipsum2');
         $settings->set('lorem3', 'ipsum3');

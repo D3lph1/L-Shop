@@ -7,7 +7,6 @@ use App\Exceptions\ForbiddenException;
 use App\Exceptions\Product\ProductNotFoundException;
 use App\Repository\Product\ProductRepository;
 use App\Services\Auth\Auth;
-use App\Services\Auth\Permissions;
 use App\Services\Cart\Cart;
 use App\Services\Cart\Item;
 use App\Services\Server\ServerAccess;

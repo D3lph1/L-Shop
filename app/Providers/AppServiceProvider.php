@@ -36,6 +36,7 @@ use App\Services\Security\Captcha\ReCaptcha;
 use App\Services\Server\Persistence\Storage\Session as SessionPersistenceStorage;
 use App\Services\Server\Persistence\Storage\Storage as PersistenceStorage;
 use App\Services\Settings\DataType;
+use App\Services\Settings\DefaultSettings;
 use App\Services\Settings\Settings;
 use App\Services\Url\Signing\Signer;
 use App\Services\Url\Signing\Validator;
@@ -66,6 +67,7 @@ class AppServiceProvider extends ServiceProvider
         $this->app->singleton(PersistenceStorage::class, SessionPersistenceStorage::class);
         $this->app->singleton(ClassStorage::class, SessionCartStorage::class);
         $this->app->singleton(Formatter::class, HumanizeFormatter::class);
+        $this->app->singleton(Settings::class, DefaultSettings::class);
         $this->app->bind(SkinApplicator::class, DefaultSkinApplicator::class);
         $this->app->bind(CloakApplicator::class, DefaultCloakApplicator::class);
         $this->app->singleton(Captcha::class, function (Application $app) {

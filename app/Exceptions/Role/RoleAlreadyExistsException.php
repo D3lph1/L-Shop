@@ -4,7 +4,6 @@ declare(strict_types = 1);
 namespace App\Exceptions\Role;
 
 use App\Exceptions\LogicException;
-use Throwable;
 
 class RoleAlreadyExistsException extends LogicException
 {
@@ -13,7 +12,7 @@ class RoleAlreadyExistsException extends LogicException
      */
     private $cause;
 
-    public function __construct(string $message = "", $cause)
+    public function __construct(string $message = "", $cause = null)
     {
         parent::__construct($message, 0, null);
         $this->cause = $cause;

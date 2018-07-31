@@ -8,7 +8,6 @@ use App\Exceptions\ForbiddenException;
 use App\Exceptions\Server\ServerNotFoundException;
 use App\Repository\Server\ServerRepository;
 use App\Services\Auth\Auth;
-use App\Services\Auth\Permissions;
 use App\Services\Cart\Cart;
 use App\Services\Server\Persistence\Persistence;
 use App\Services\Server\ServerAccess;

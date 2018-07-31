@@ -3,7 +3,6 @@ declare(strict_types = 1);
 
 namespace App\Services\Game\Permissions;
 
-use App\Entity\User;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 

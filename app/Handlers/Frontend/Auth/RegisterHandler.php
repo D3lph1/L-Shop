@@ -30,7 +30,7 @@ class RegisterHandler
     public function handle(string $username, string $email, string $password): RegisterResult
     {
         $sendActivation = $this->settings->get('auth.register.send_activation')->getValue(DataType::BOOL);
-        $user = $this->auth->register(new User($username, $email, $password), !$sendActivation, false, false);
+        $user = $this->auth->register(new User($username, $email, $password), !$sendActivation);
         $dto = new RegisterResult($user, !$sendActivation);
 
         return $dto;

@@ -41,7 +41,11 @@ class RegisterHandler
     public function handle(string $username, string $email, string $password, bool $sendActivation, bool $authenticate): RegisterResult
     {
         if ($this->settings->get('api.register_enabled')->getValue(DataType::BOOL)) {
-            $user = $this->auth->register(new User($username, $email, $password), !$sendActivation, $authenticate, true);
+            $user = $this->auth->register(new User($username, $email, $password), !$sendActivation);
+
+            if ($authenticate) {
+                $this->auth->authenticateQuick($user, true);
+            }
 
             $dto = new RegisterResult($user, !$sendActivation);
 

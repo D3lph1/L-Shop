@@ -3,9 +3,6 @@ declare(strict_types = 1);
 
 namespace App\Services\Settings;
 
-use Illuminate\Contracts\Support\Arrayable;
-use Illuminate\Contracts\Support\Jsonable;
-
 /**
  * Class Settings
  * Works with the application's configurable settings.
@@ -15,36 +12,8 @@ use Illuminate\Contracts\Support\Jsonable;
  * That is, these changes are not saved between requests. In order to save the settings to
  * a permanent store, you must save them in the {@see Settings::save()} method.</p>
  */
-class Settings
+interface Settings
 {
-    /**
-     * @var Driver
-     */
-    private $driver;
-
-    /**
-     * @var Store
-     */
-    private $store;
-
-    /**
-     * @var Setting[]
-     */
-    private $originalData;
-
-    public function __construct(Driver $driver)
-    {
-        $this->driver = $driver;
-        $this->originalData = $driver->read();
-
-        $new = [];
-        foreach ($this->originalData as $originalDatum) {
-            $new[] = clone $originalDatum;
-        }
-        // Create store with array with cloned elements.
-        $this->store = new Store($new);
-    }
-
     /**
      * Gets the setting with the specified key. If it does not exist, it returns the default value.
      *
@@ -53,14 +22,7 @@ class Settings
      *
      * @return Setting|mixed
      */
-    public function get(string $key, $default = null)
-    {
-        if ($this->exists($key)) {
-            return $this->store->get($key);
-        }
-
-        return $default;
-    }
+    public function get(string $key, $default = null);
 
     /**
      * Deletes the setting with the specified key.
@@ -69,10 +31,7 @@ class Settings
      *
      * @return bool
      */
-    public function forget(string $key): bool
-    {
-        return $this->store->remove($key);
-    }
+    public function forget(string $key): bool;
 
     /**
      * Adds the setting, converting it before saving it into a data type that is convenient for
@@ -81,56 +40,18 @@ class Settings
      * @param string $key
      * @param        $value
      */
-    public function set(string $key, $value): void
-    {
-        if ($value instanceof \JsonSerializable) {
-            $value = json_encode($value);
-        }
-        if ($value instanceof Jsonable) {
-            $value = $value->toJson();
-        }
-        if ($value instanceof Arrayable) {
-            $value = $value->toArray();
-        }
-        if ($value instanceof \Serializable || is_object($value)) {
-            $value = serialize($value);
-        }
-        if (is_array($value)) {
-            $value = json_encode($value);
-        }
-        if (is_bool($value)) {
-            $value = (int)$value;
-        }
-
-        $this->store->set($key, $value);
-    }
+    public function set(string $key, $value): void;
 
     /**
      * One-time set all the settings from the array. The array has the format: settings_key => setting_value.
      *
      * @param array $data
      */
-    public function setArray(array $data): void
-    {
-        $data = array_dot($data);
-        foreach ($data as $key => $value) {
-            $this->set($key, $value);
-        }
-    }
+    public function setArray(array $data): void;
 
-    public function exists(string $key): bool
-    {
-        return $this->store->exists($key);
-    }
+    public function exists(string $key): bool;
 
-    public function flush(): void
-    {
-        $this->store->flush();
-    }
+    public function flush(): void;
 
-    public function save(): void
-    {
-        $this->driver->write($this->originalData, $this->store->all());
-        $this->originalData = $this->store->all();
-    }
+    public function save(): void;
 }

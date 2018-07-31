@@ -7,7 +7,7 @@ namespace App\Services\Purchasing;
  * Class ViaContext
  * Defines the constants of the purchase completion context.
  */
-class ViaContext
+final class ViaContext
 {
     /**
      * Purchase was completed immediately after the creation. For example, because the
