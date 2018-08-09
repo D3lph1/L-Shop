@@ -62,7 +62,7 @@ class DoctrinePurchaseItemRepository implements PurchaseItemRepository
             ->select('item.name as name, product.price as price, c.name as category, s.name as server, COUNT(product.id) as amount')
             ->where('purchase.completedAt IS NOT NULL')
             ->orderBy('amount', 'DESC')
-            ->groupBy('product.id')
+            ->groupBy('product.id', 'name', 'price', 'category', 'server')
             ->getQuery()
             ->setMaxResults($maxPositions)
             ->getResult();

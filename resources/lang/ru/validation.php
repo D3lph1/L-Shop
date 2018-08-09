@@ -69,6 +69,7 @@ return [
     'numeric'              => 'Поле ":attribute" должно содержать числовое значение.',
     'present'              => 'The :attribute field must be present.',
     'regex'                => 'Поле ":attribute" содержит недопустимые символы.',
+    'not_regex'            => 'Поле ":attribute" содержит недопустимые символы.',
     'required'             => 'Поле ":attribute" обязательно для заполнения',
     'required_if'          => 'Поле ":attribute" обязательно для заполнения, так как ":other" находится в значении ":value".',
     'required_unless'      => 'Поле ":attribute" обязательно для заполнения, так как ":other" не находится в значении ":values".',

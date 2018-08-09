@@ -13,7 +13,9 @@ return [
     | collisions when executing them.
     |
     */
+
     'default' => [
+
         /*
         |--------------------------------------------------------------------------
         | Migration Repository Table
@@ -24,7 +26,9 @@ return [
         | the migrations on disk haven't actually been run in the database.
         |
         */
+
         'table'     => 'migrations',
+
         /*
         |--------------------------------------------------------------------------
         | Migration Directory
@@ -34,7 +38,9 @@ return [
         | manager. Use different directories for each entity manager.
         |
         */
+
         'directory' => database_path('migrations'),
+
         /*
         |--------------------------------------------------------------------------
         | Migration Namespace
@@ -44,7 +50,9 @@ return [
         | the entity manager name (connection name).
         |
         */
+
         'namespace' => 'Database\\Migrations',
+
         /*
         |--------------------------------------------------------------------------
         | Migration Repository Table
@@ -55,6 +63,7 @@ return [
         | filter all tables.
         |
         */
+
         'schema'    => [
             'filter' => '/^(?!password_resets|failed_jobs).*$/'
         ]

@@ -65,11 +65,42 @@ return [
             | Recommend use: "alpha_strict", "alpha_dash_strict", "alpha_num_strict"
             | or define custom in .
             |
-            * @see \App\Providers\ValidationServiceProvider::boot()
+            | @see \App\Providers\ValidationServiceProvider::boot()
             |
             */
 
-            'rule' => 'alpha_dash_strict'
+            'rule' => 'alpha_dash_strict',
+
+            /**
+            |--------------------------------------------------------------------------
+            | Disallowed username pattern
+            |--------------------------------------------------------------------------
+            |
+            | Deny registration of users whose names coincide with this pattern.
+            |
+            | Set the option value to null so that you do not use the pattern at all.
+            |
+             */
+
+            'disallowed' => '#.*admin.*|.*moder.*#ui'
+        ],
+
+        'email' => [
+
+            /**
+            |--------------------------------------------------------------------------
+            | Disallowed email pattern
+            |--------------------------------------------------------------------------
+            |
+            | Deny registration of users whose emails coincide with this pattern.
+            | Here you can specify the addresses of "temp mail" services, in order
+            | to prevent the registration of "dead" accounts.
+            |
+            | Set the option value to null so that you do not use the pattern at all.
+            |
+             */
+
+            'disallowed' => '#.+@nwytg\.net|.+@zep-hyr\.com|.+@zippiex\.com#ui'
         ],
 
         'password' => [

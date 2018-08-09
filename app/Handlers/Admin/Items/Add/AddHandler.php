@@ -6,6 +6,7 @@ namespace App\Handlers\Admin\Items\Add;
 use App\DataTransferObjects\Admin\Items\Add\Add;
 use App\Entity\EnchantmentItem;
 use App\Entity\Item;
+use App\Events\Item\ItemCreatedEvent;
 use App\Exceptions\Enchantment\EnchantmentNotFoundException;
 use App\Exceptions\InvalidArgumentTypeException;
 use App\Exceptions\UnexpectedValueException;
@@ -14,6 +15,7 @@ use App\Repository\Item\ItemRepository;
 use App\Services\Item\Image\Hashing\Hasher;
 use App\Services\Item\Image\Image;
 use App\Services\Item\Type;
+use Illuminate\Contracts\Events\Dispatcher;
 use Illuminate\Http\UploadedFile;
 
 class AddHandler
@@ -39,11 +41,21 @@ class AddHandler
      */
     private $imageHasher;
 
-    public function __construct(ItemRepository $repository, EnchantmentRepository $enchantmentRepository, Hasher $imageHasher)
+    /**
+     * @var Dispatcher
+     */
+    private $eventDispatcher;
+
+    public function __construct(
+        ItemRepository $repository,
+        EnchantmentRepository $enchantmentRepository,
+        Hasher $imageHasher,
+        Dispatcher $eventDispatcher)
     {
         $this->repository = $repository;
         $this->enchantmentRepository = $enchantmentRepository;
         $this->imageHasher = $imageHasher;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -75,6 +87,7 @@ class AddHandler
         }
 
         $this->repository->create($item);
+        $this->eventDispatcher->dispatch(new ItemCreatedEvent($item));
     }
 
     /**

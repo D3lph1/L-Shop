@@ -1,6 +1,7 @@
 <?php
 
 return [
+
     /*
     |--------------------------------------------------------------------------
     | Registered application payers.
@@ -10,6 +11,7 @@ return [
     | in the mandatory order must implement the interface App\Services\Purchasing\Payers\Payer.
     |
     */
+
     'payers' => [
         // Builtin payers...
         \App\Services\Purchasing\Payers\RobokassaPayer::class,
@@ -18,6 +20,7 @@ return [
         // Custom payers...
     ],
     'distribution' => [
+
         /*
         |--------------------------------------------------------------------------
         | Registered application distributors.
@@ -27,6 +30,7 @@ return [
         | in the mandatory order must implement the interface App\Services\Purchasing\Distributors\Distributor.
         |
         */
+
         'distributors' => [
             // Builtin distributors...
             \App\Services\Purchasing\Distributors\ShoppingCartDistributor::class,
@@ -35,6 +39,7 @@ return [
             // Custom distributors...
         ],
         'rcon' => [
+
             /*
             |--------------------------------------------------------------------------
             | Connection timeout.
@@ -44,8 +49,10 @@ return [
             | the minecraft server, if the connection has not been established.
             |
             */
+
             'timeout' => 1,
             'commands' => [
+
                 /*
                 |--------------------------------------------------------------------------
                 | Command to distribute a non enchanted item.
@@ -61,7 +68,9 @@ return [
                 | item.
                 |
                 */
+
                 'give_non_enchanted_item' => 'give {player} {item} {amount} 0 {nbt}',
+
                 /*
                 |--------------------------------------------------------------------------
                 | Command to distribute an enchanted item.
@@ -76,7 +85,9 @@ return [
                 | be prescribed here. In addition, the information from the Extra field of the item.
                 |
                 */
+
                 'give_enchanted_item' => 'give {player} {item} {amount} 0 {nbt}',
+
                 /*
                 |--------------------------------------------------------------------------
                 | Command to distribute a permanent permission group.
@@ -89,7 +100,9 @@ return [
                 | - {permgroup} In-game identifier of the distributed permission group.
                 |
                 */
+
                 'give_non_expired_permgroup' => 'pex user {player} group add {permgroup} *',
+
                 /*
                 |--------------------------------------------------------------------------
                 | Command to distribute a permanent permission group.
@@ -103,7 +116,9 @@ return [
                 | - {lifetime} Lifetime of permission group (in seconds).
                 |
                 */
+
                 'give_expired_permgroup' => 'pex user {player} group add {permgroup} * {lifetime}',
+
                 /*
                 |--------------------------------------------------------------------------
                 | Command to distribute an in-game currency to player.
@@ -117,7 +132,9 @@ return [
                 |            player.
                 |
                 */
+
                 'give_currency' => 'money grant {player} {amount}',
+
                 /*
                 |--------------------------------------------------------------------------
                 | Command to distribute an owning of the region.
@@ -130,7 +147,9 @@ return [
                 | - {player} The name of the player who will be given access to the region.
                 |
                 */
+
                 'add_region_owner' => 'rg addowner {region} {player}',
+
                 /*
                 |--------------------------------------------------------------------------
                 | Command to distribute a membership in the region.
@@ -143,8 +162,10 @@ return [
                 | - {player} The name of the player who will be given access to the region.
                 |
                 */
+
                 'add_region_member' => 'rg addmember {region} {player}',
             ],
+
             /*
             |--------------------------------------------------------------------------
             | The patterns of a successful response.
@@ -157,6 +178,7 @@ return [
             | If the value of the element is null, no mapping is performed.
             |
             */
+
             'success_response_patterns' => [
                 'give_non_enchanted_item' => '#.*#ui',
                 'give_enchanted_item' => '#.*#ui',
@@ -167,6 +189,7 @@ return [
                 'add_region_member' => '#.*#ui'
             ],
             'extra' => [
+
                 /*
                 |--------------------------------------------------------------------------
                 | The list of commands performed before the main commands.
@@ -178,7 +201,9 @@ return [
                 | - {player} The name of the player who purchased the products.
                 |
                 */
+
                 'before' => [],
+
                 /*
                 |--------------------------------------------------------------------------
                 | The list of commands performed after the main commands.
@@ -194,6 +219,7 @@ return [
                 |
                 |
                 */
+
                 'after' => [
                     // After the successful distributing of products, the player will be notified of this.
                     'tell {player} Purchased items was distributed.'

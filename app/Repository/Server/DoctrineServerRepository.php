@@ -88,8 +88,9 @@ class DoctrineServerRepository implements ServerRepository
     {
         return $this->er->createQueryBuilder('server')
             ->select('server')
-            ->where('server.monitoringEnabled = 1')
+            ->where('server.monitoringEnabled = :val')
             ->getQuery()
+            ->setParameter('val', true)
             ->useResultCache($this->cachingOptions->isEnabled(), $this->cachingOptions->getLifetime())
             ->getResult();
     }

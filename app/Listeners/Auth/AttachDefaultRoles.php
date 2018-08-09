@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Listeners\Auth;
 
-use App\Events\Auth\RegistrationSuccessEvent;
+use App\Events\Auth\RegistrationSuccessfulEvent;
 use App\Services\User\RolesInitializer;
 
 class AttachDefaultRoles
@@ -26,9 +26,9 @@ class AttachDefaultRoles
     /**
      * Handle the event.
      *
-     * @param  RegistrationSuccessEvent  $event
+     * @param  RegistrationSuccessfulEvent $event
      */
-    public function handle(RegistrationSuccessEvent $event): void
+    public function handle(RegistrationSuccessfulEvent $event): void
     {
         $this->rolesInitializer->attachDefaultRoles($event->getUser());
     }

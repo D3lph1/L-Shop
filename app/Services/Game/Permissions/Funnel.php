@@ -48,6 +48,19 @@ class Funnel
         return $result;
     }
 
+    public function filterPermissions(Collection $permissions, PermissionPredicate $predicate): Collection
+    {
+        $this->processed = [];
+        $result = new ArrayCollection();
+        foreach ($permissions as $permission) {
+            if ($this->filter($permission, $predicate)) {
+                $result->add($permission);
+            }
+        }
+
+        return $result;
+    }
+
     private function filter(Permission $each, PermissionPredicate $predicate): bool
     {
         if ($predicate->getPermission() !== null && (

@@ -44,6 +44,16 @@ class RulesBuilder
      */
     public function build(): string
     {
+        return implode('|', $this->buildAsArray());
+    }
+
+    /**
+     * Convert builder state to arrayed rule representation.
+     *
+     * @return array
+     */
+    public function buildAsArray(): array
+    {
         $result = [];
         foreach ($this->rules as $rule) {
             if (count($rule->getValues()) === 0) {
@@ -54,6 +64,6 @@ class RulesBuilder
             }
         }
 
-        return implode('|', $result);
+        return $result;
     }
 }

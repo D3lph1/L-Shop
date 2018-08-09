@@ -7,7 +7,7 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity
- * @ORM\Table(name="reminders", indexes={@ORM\Index(name="code_idx", columns={"code"})})
+ * @ORM\Table(name="reminders", indexes={@ORM\Index(name="code__idx", columns={"code"})})
  * @ORM\HasLifecycleCallbacks
  */
 class Reminder

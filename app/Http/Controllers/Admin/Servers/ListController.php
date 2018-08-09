@@ -4,6 +4,7 @@ declare(strict_types = 1);
 namespace App\Http\Controllers\Admin\Servers;
 
 use App\Exceptions\Server\ServerNotFoundException;
+use App\Handlers\Admin\Servers\DeleteHandler;
 use App\Handlers\Admin\Servers\ListHandler;
 use App\Http\Controllers\Controller;
 use App\Services\Auth\Permissions;

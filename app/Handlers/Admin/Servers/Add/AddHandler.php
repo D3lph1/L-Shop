@@ -6,9 +6,11 @@ namespace App\Handlers\Admin\Servers\Add;
 use App\DataTransferObjects\Admin\Servers\Add\Add;
 use App\Entity\Category;
 use App\Entity\Server;
+use App\Events\Server\ServerCreatedEvent;
 use App\Exceptions\Distributor\DistributorNotFoundException;
 use App\Repository\Server\ServerRepository;
 use Illuminate\Contracts\Config\Repository;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class AddHandler
 {
@@ -22,10 +24,16 @@ class AddHandler
      */
     private $config;
 
-    public function __construct(ServerRepository $repository, Repository $config)
+    /**
+     * @var Dispatcher
+     */
+    private $eventDispatcher;
+
+    public function __construct(ServerRepository $repository, Repository $config, Dispatcher $eventDispatcher)
     {
         $this->repository = $repository;
         $this->config = $config;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -51,5 +59,6 @@ class AddHandler
         }
 
         $this->repository->create($server);
+        $this->eventDispatcher->dispatch(new ServerCreatedEvent($server));
     }
 }

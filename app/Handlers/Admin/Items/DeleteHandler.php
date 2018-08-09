@@ -3,8 +3,10 @@ declare(strict_types = 1);
 
 namespace App\Handlers\Admin\Items;
 
+use App\Events\Item\ItemWillBeDeletedEvent;
 use App\Exceptions\Item\ItemNotFoundException;
 use App\Repository\Item\ItemRepository;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class DeleteHandler
 {
@@ -13,9 +15,15 @@ class DeleteHandler
      */
     private $repository;
 
-    public function __construct(ItemRepository $repository)
+    /**
+     * @var Dispatcher
+     */
+    private $eventDispatcher;
+
+    public function __construct(ItemRepository $repository, Dispatcher $eventDispatcher)
     {
         $this->repository = $repository;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -30,6 +38,7 @@ class DeleteHandler
             throw ItemNotFoundException::byId($itemId);
         }
 
+        $this->eventDispatcher->dispatch(new ItemWillBeDeletedEvent($item));
         $this->repository->remove($item);
     }
 }

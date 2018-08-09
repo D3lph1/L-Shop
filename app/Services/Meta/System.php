@@ -3,6 +3,8 @@ declare(strict_types = 1);
 
 namespace App\Services\Meta;
 
+use App\Services\Meta\AdditionalVersion\Beta;
+
 /**
  * This class contains metadata about L-Shop system.
  * It is not intended for editing. Please do not change it.
@@ -22,7 +24,7 @@ final class System
     public static function version(): Version
     {
         if (self::$version === null) {
-            self::$version = new Version(1, 0, 0);
+            self::$version = new Version(1, 0, 0, new Beta(1));
         }
 
         return self::$version;

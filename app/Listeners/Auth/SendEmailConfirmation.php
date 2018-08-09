@@ -3,7 +3,7 @@ declare(strict_types = 1);
 
 namespace App\Listeners\Auth;
 
-use App\Events\Auth\RegistrationSuccessEvent;
+use App\Events\Auth\RegistrationSuccessfulEvent;
 use App\Mail\Auth\Confirmation;
 use App\Services\Auth\Activator;
 use App\Services\Auth\Checkpoint\Pool;
@@ -28,7 +28,7 @@ class SendEmailConfirmation
         $this->mailer = $mailer;
     }
 
-    public function handle(RegistrationSuccessEvent $event): void
+    public function handle(RegistrationSuccessfulEvent $event): void
     {
         if ($event->isNeedActivate()) {
             $this->activator->activate($event->getUser());

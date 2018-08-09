@@ -61,7 +61,7 @@ class DefaultCommandBuilder implements CommandBuilder
             case Type::ITEM:
                 if ($purchaseItem->getAmount() <= $product->getStack()) {
                     // If the quantity of items in the purchase is less than or equal to the commodity rate,
-                    //then only 1 request is required.
+                    // then only 1 request is required.
                     $commands[] = $this->processItem($purchaseItem, $purchaseItem->getAmount());
                 } else {
                     // But if the goods are more than 1 stack, then you need to execute several requests to

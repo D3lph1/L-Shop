@@ -4,7 +4,7 @@ declare(strict_types = 1);
 namespace App\Providers;
 
 use App\Events\Auth\PasswordReminderCreatedEvent;
-use App\Events\Auth\RegistrationSuccessEvent;
+use App\Events\Auth\RegistrationSuccessfulEvent;
 use App\Events\Purchase\PurchaseCompletedEvent;
 use App\Events\Purchase\PurchaseCreatedEvent;
 use App\Listeners\Auth\AttachDefaultRoles;
@@ -20,7 +20,7 @@ class EventServiceProvider extends ServiceProvider
      * @var array
      */
     protected $listen = [
-        RegistrationSuccessEvent::class => [
+        RegistrationSuccessfulEvent::class => [
             SendEmailConfirmation::class,
             AttachDefaultRoles::class,
         ],

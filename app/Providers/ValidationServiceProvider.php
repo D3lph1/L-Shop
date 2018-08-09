@@ -17,20 +17,20 @@ class ValidationServiceProvider extends ServiceProvider
      */
     public function boot(Factory $factory): void
     {
-        $factory->extend('alpha_strict', function ($attribute, $value, $parameters, $validator) {
+        $factory->extend('alpha_strict', function ($attribute, $value) {
             return preg_match('/^[a-zA-Z]+$/', $value);
         });
 
-        $factory->extend('alpha_dash_strict', function ($attribute, $value, $parameters, $validator) {
+        $factory->extend('alpha_dash_strict', function ($attribute, $value) {
             return preg_match('/^[a-zA-Z0-9_-]+$/', $value);
         });
 
-        $factory->extend('alpha_num_strict', function ($attribute, $value, $parameters, $validator) {
+        $factory->extend('alpha_num_strict', function ($attribute, $value) {
             return preg_match('/^[a-zA-Z0-9]+$/', $value);
         });
 
         // Checks the input string so that it is a regular regular expression.
-        $factory->extend('valid_regex', function ($attribute, $value, $parameters, $validator) {
+        $factory->extend('valid_regex', function ($attribute, $value) {
             try {
                 preg_match($value, '');
             } catch (\ErrorException $e) {
@@ -38,6 +38,10 @@ class ValidationServiceProvider extends ServiceProvider
             }
 
             return true;
+        });
+
+        $factory->extend('not_regex', function ($attribute, $value, $parameters) {
+            return preg_match($parameters[0], $value) === 0;
         });
     }
 

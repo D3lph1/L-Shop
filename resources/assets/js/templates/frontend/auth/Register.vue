@@ -21,14 +21,14 @@
                 <v-text-field
                         v-model="username"
                         :label="$t('validation.attributes.username')"
-                        required
                         prepend-icon="person_outline"
+                        @keyup.enter="perform"
                 ></v-text-field>
                 <v-text-field
                         v-model="email"
                         :label="$t('validation.attributes.email')"
-                        required
                         prepend-icon="mail_outline"
+                        @keyup.enter="perform"
                 ></v-text-field>
                 <v-text-field
                         v-model="password"
@@ -36,8 +36,8 @@
                         :append-icon-cb="() => (visible = !visible)"
                         :append-icon="visible ? 'visibility' : 'visibility_off'"
                         :type="visible ? 'text' : 'password'"
-                        required
                         prepend-icon="lock_outline"
+                        @keyup.enter="perform"
                 ></v-text-field>
                 <v-text-field
                         v-model="passwordConfirmation"
@@ -45,8 +45,8 @@
                         :append-icon-cb="() => (visibleConfirm = !visibleConfirm)"
                         :append-icon="visibleConfirm ? 'visibility' : 'visibility_off'"
                         :type="visibleConfirm ? 'text' : 'password'"
-                        required
                         prepend-icon="lock_outline"
+                        @keyup.enter="perform"
                 ></v-text-field>
                 <vue-recaptcha
                         v-if="reCaptchaKey"

@@ -5,11 +5,13 @@ namespace App\Handlers\Admin\Products\Add;
 
 use App\DataTransferObjects\Admin\Products\Add\Add;
 use App\Entity\Product;
+use App\Events\Product\ProductCreatedEvent;
 use App\Exceptions\Category\CategoryNotFoundException;
 use App\Exceptions\Item\ItemNotFoundException;
 use App\Repository\Category\CategoryRepository;
 use App\Repository\Item\ItemRepository;
 use App\Repository\Product\ProductRepository;
+use Illuminate\Contracts\Events\Dispatcher;
 
 class AddHandler
 {
@@ -28,14 +30,21 @@ class AddHandler
      */
     private $categoryRepository;
 
+    /**
+     * @var Dispatcher
+     */
+    private $eventDispatcher;
+
     public function __construct(
         ProductRepository $repository,
         ItemRepository $itemRepository,
-        CategoryRepository $categoryRepository)
+        CategoryRepository $categoryRepository,
+        Dispatcher $eventDispatcher)
     {
         $this->productRepository = $repository;
         $this->itemRepository = $itemRepository;
         $this->categoryRepository = $categoryRepository;
+        $this->eventDispatcher = $eventDispatcher;
     }
 
     /**
@@ -60,5 +69,6 @@ class AddHandler
             ->setSortPriority($dto->getSortPriority())
             ->setHidden($dto->isHidden());
         $this->productRepository->create($product);
+        $this->eventDispatcher->dispatch(new ProductCreatedEvent($product));
     }
 }

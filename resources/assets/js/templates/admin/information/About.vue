@@ -26,7 +26,7 @@
                         <img height="70" :src="images.laravel" alt="Laravel logo">
                         <div class="logo-text"><h1 class="title grey--text text--darken-3">Laravel</h1></div>
                     </div>
-                    <span>{{ $t('content.admin.information.about.version', {version: '5.5.40'}) }}</span>
+                    <span>{{ $t('content.admin.information.about.version', {version: '5.5.41'}) }}</span>
                 </v-tooltip>
             </v-flex>
             <v-flex xs6 sm4 md4 lg4>
@@ -44,7 +44,7 @@
                         <img height="70" :src="images.doctrine" alt="Doctrine logo">
                         <div class="logo-text"><h1 class="title grey--text text--darken-3">Doctrine ORM</h1></div>
                     </div>
-                    <span>{{ $t('content.admin.information.about.version', {version: '2.6.1'}) }}</span>
+                    <span>{{ $t('content.admin.information.about.version', {version: '2.6.2'}) }}</span>
                 </v-tooltip>
             </v-flex>
             <v-flex xs6 sm4 md4 lg4>

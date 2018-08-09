@@ -6,7 +6,7 @@ namespace App\Services\Auth;
 use App\Entity\User;
 use App\Events\Auth\RegistrationBeginEvent;
 use App\Events\Auth\RegistrationFailedEvent;
-use App\Events\Auth\RegistrationSuccessEvent;
+use App\Events\Auth\RegistrationSuccessfulEvent;
 use App\Services\Auth\Checkpoint\Pool;
 use App\Services\Auth\Session\Session;
 use App\Services\Auth\Session\SessionPersistence;
@@ -100,7 +100,7 @@ class DefaultAuth implements Auth
 
             throw $e;
         }
-        $this->eventDispatcher->dispatch(new RegistrationSuccessEvent($user, $activate));
+        $this->eventDispatcher->dispatch(new RegistrationSuccessfulEvent($user, $activate));
 
         return $user;
     }
