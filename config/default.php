@@ -98,7 +98,7 @@ return [
         'min_fill_balance_sum' => 3,
         'services' => [
             'robokassa' => [
-                'enabled' => true,
+                'enabled' => false,
                 'login' => '',
                 'payment_password' => '',
                 'validation_password' => '',
@@ -107,7 +107,7 @@ return [
                 'culture' => \App\Services\Purchasing\Payments\Robokassa\Checkout::CULTURE_RU
             ],
             'interkassa' => [
-                'enabled' => true,
+                'enabled' => false,
                 'checkout_id' => '',
                 'key' => '',
                 'test_key' => '',

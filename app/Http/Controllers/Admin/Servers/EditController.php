@@ -11,8 +11,7 @@ use App\Exceptions\Server\ServerNotFoundException;
 use App\Handlers\Admin\Servers\Edit\EditHandler;
 use App\Handlers\Admin\Servers\Edit\RenderHandler;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Servers\AddEditRequest;
-use function App\permission_middleware;
+use App\Http\Requests\Admin\Servers\EditRequest;
 use App\Services\Auth\Permissions;
 use App\Services\Notification\Notifications\Error;
 use App\Services\Notification\Notifications\Success;
@@ -20,6 +19,7 @@ use App\Services\Response\JsonResponse;
 use App\Services\Response\Status;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
+use function App\permission_middleware;
 
 class EditController extends Controller
 {
@@ -38,7 +38,7 @@ class EditController extends Controller
         }
     }
 
-    public function edit(AddEditRequest $request, EditHandler $handler): JsonResponse
+    public function edit(EditRequest $request, EditHandler $handler): JsonResponse
     {
         $categories = [];
         foreach ($request->get('categories') as $category) {

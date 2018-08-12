@@ -1,4 +1,5 @@
 <?php
+declare(strict_types = 1);
 
 namespace App\Http\Middleware;
 
@@ -12,8 +13,9 @@ class VerifyCsrfToken extends Middleware
      * @var array
      */
     protected $except = [
-        '/payment/result/*',
-        '/payment/wait',
-        '/payment/error'
+        '*/payment/result/*',
+        '*/payment/wait',
+        '*/payment/success',
+        '*/payment/fail'
     ];
 }

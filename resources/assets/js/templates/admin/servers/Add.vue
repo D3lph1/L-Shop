@@ -130,7 +130,7 @@
                     .then(response => {
                         this.finishLoading = false;
                         if (response.data.status === 'success') {
-                            //
+                            this.$router.push({name: 'admin.servers.list'});
                         }
                     });
             },

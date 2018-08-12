@@ -56,7 +56,8 @@ return [
             ],
             'payment' => [
                 'wait' => 'The payment is processed. Please wait.',
-                'error' => 'Payment failed.',
+                'success' => 'The payment was successful.',
+                'fail' => 'Payment failed.',
             ]
         ],
         'profile' => [

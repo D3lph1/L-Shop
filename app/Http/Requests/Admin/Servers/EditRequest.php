@@ -5,7 +5,7 @@ namespace App\Http\Requests\Admin\Servers;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class AddEditRequest extends FormRequest
+class EditRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.

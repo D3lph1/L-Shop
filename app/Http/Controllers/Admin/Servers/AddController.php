@@ -8,7 +8,7 @@ use App\Exceptions\Distributor\DistributorNotFoundException;
 use App\Handlers\Admin\Servers\Add\AddHandler;
 use App\Handlers\Admin\Servers\Add\RenderHandler;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\Servers\AddEditRequest;
+use App\Http\Requests\Admin\Servers\AddRequest;
 use function App\permission_middleware;
 use App\Services\Auth\Permissions;
 use App\Services\Notification\Notifications\Success;
@@ -28,7 +28,7 @@ class AddController extends Controller
         return new JsonResponse(Status::SUCCESS, $handler->handle());
     }
 
-    public function add(AddEditRequest $request, AddHandler $handler): JsonResponse
+    public function add(AddRequest $request, AddHandler $handler): JsonResponse
     {
         try {
             $handler->handle(

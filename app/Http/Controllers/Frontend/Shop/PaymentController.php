@@ -10,6 +10,7 @@ use App\Exceptions\Purchase\PurchaseNotFoundException;
 use App\Handlers\Frontend\Shop\Payment\ResultHandler;
 use App\Http\Controllers\Controller;
 use App\Services\Notification\Notifications\Info;
+use App\Services\Notification\Notifications\Success;
 use App\Services\Notification\Notificator;
 use Illuminate\Contracts\Config\Repository;
 use Illuminate\Http\RedirectResponse;
@@ -35,14 +36,21 @@ class PaymentController extends Controller
         }
     }
 
-    public function wait(Repository $config, Notificator $notificator)
+    public function wait(Repository $config, Notificator $notificator): RedirectResponse
     {
         $notificator->notify(new Info(__('msg.frontend.shop.payment.wait')));
 
         return new RedirectResponse($config->get('app.url'));
     }
 
-    public function error(Repository $config, Notificator $notificator)
+    public function success(Repository $config, Notificator $notificator): RedirectResponse
+    {
+        $notificator->notify(new Success(__('msg.frontend.shop.payment.success')));
+
+        return new RedirectResponse($config->get('app.url'));
+    }
+
+    public function fail(Repository $config, Notificator $notificator): RedirectResponse
     {
         $notificator->notify(new Info(__('msg.frontend.shop.payment.error')));
 

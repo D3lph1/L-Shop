@@ -6,8 +6,10 @@ $router->any('/payment/result/{payer}', 'Frontend\Shop\PaymentController@result'
     ->name('frontend.payment.result');
 $router->any('/payment/wait', 'Frontend\Shop\PaymentController@wait')
     ->name('frontend.payment.wait');
-$router->any('/payment/error', 'Frontend\Shop\PaymentController@error')
-    ->name('frontend.payment.error');
+$router->any('/payment/success', 'Frontend\Shop\PaymentController@success')
+    ->name('frontend.payment.success');
+$router->any('/payment/fail', 'Frontend\Shop\PaymentController@fail')
+    ->name('frontend.payment.fail');
 
 $router->any('/skin/front/{username}', 'Frontend\Character\SkinController@front')
     ->name('api.skin.front');
