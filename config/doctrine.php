@@ -36,7 +36,7 @@ return [
             'proxies' => [
                 'namespace' => false,
                 'path' => storage_path('proxies'),
-                'auto_generate' => env('DOCTRINE_PROXY_AUTOGENERATE', true)
+                'auto_generate' => env('DOCTRINE_PROXY_AUTOGENERATE', \App\Services\Utils\EnvironmentUtil::inDevelopment())
             ],
 
             /*

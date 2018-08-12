@@ -146,11 +146,7 @@ return [
         Illuminate\Cache\CacheServiceProvider::class,
         Illuminate\Foundation\Providers\ConsoleSupportServiceProvider::class,
         Illuminate\Cookie\CookieServiceProvider::class,
-        // If application in production environment, disable DB provider. This provider is
-        // only needed for the seeding.
-        // AppServiceProvider is only needed here for the possibility of using a ternary
-        // operator. It is registered in any case below.
-        App\Services\Utils\EnvironmentUtil::inProduction() ? App\Providers\AppServiceProvider::class : Illuminate\Database\DatabaseServiceProvider::class,
+        Illuminate\Database\DatabaseServiceProvider::class,
         Illuminate\Encryption\EncryptionServiceProvider::class,
         Illuminate\Filesystem\FilesystemServiceProvider::class,
         Illuminate\Foundation\Providers\FoundationServiceProvider::class,
