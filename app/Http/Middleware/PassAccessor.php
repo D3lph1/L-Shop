@@ -7,6 +7,7 @@ use App\Exceptions\UnexpectedValueException;
 use App\Services\Security\Accessors\Accessor;
 use Closure;
 use Illuminate\Contracts\Container\Container;
+use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class PassAccessor
@@ -43,6 +44,6 @@ class PassAccessor
             return $next($request);
         }
 
-        throw new HttpException(403);
+        throw new HttpException(Response::HTTP_FORBIDDEN);
     }
 }

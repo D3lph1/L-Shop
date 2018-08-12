@@ -5,6 +5,7 @@ namespace App\Http\Middleware;
 
 use App\Services\Auth\Auth;
 use Closure;
+use Illuminate\Http\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class NeedPermission
@@ -31,13 +32,13 @@ class NeedPermission
     public function handle($request, Closure $next, string $permission)
     {
         if (!$this->auth->check()) {
-            throw new HttpException(403);
+            throw new HttpException(Response::HTTP_FORBIDDEN);
         }
 
         if ($this->auth->getUser()->hasPermission($permission)) {
             return $next($request);
         }
 
-        throw new HttpException(403);
+        throw new HttpException(Response::HTTP_FORBIDDEN);
     }
 }

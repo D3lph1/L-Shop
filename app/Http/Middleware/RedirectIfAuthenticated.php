@@ -7,12 +7,6 @@ use App\Services\Auth\Auth;
 use App\Services\Response\JsonResponse;
 use Closure;
 
-/**
- * Class RedirectIfAuthenticated
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Http\Middleware
- */
 class RedirectIfAuthenticated
 {
     /**
@@ -35,7 +29,7 @@ class RedirectIfAuthenticated
     public function handle($request, Closure $next)
     {
         if ($this->auth->check()) {
-            return response()->json(new JsonResponse('guest'));
+            return new \Illuminate\Http\JsonResponse((new JsonResponse('guest'))->jsonSerialize());
         }
 
         return $next($request);
