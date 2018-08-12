@@ -44,10 +44,10 @@
 
 ## Скриншоты
 
-![Login](https://i101.fastpic.ru/big/2018/0812/05/_a88088ade0f38bb84eac6639f3049105.png)
-![Catalog](https://i101.fastpic.ru/big/2018/0812/b8/_754f61648da2f00ec0538ce5dd5780b8.png)
-![Character](https://i101.fastpic.ru/big/2018/0812/b3/_881330ed8efdfecdcd1c2ea6f3e6fdb3.png)
-![Item](https://i101.fastpic.ru/big/2018/0812/66/_a3fa98bab37b50782539400806e8d766.png)
-![Products](https://i101.fastpic.ru/big/2018/0812/7f/_4e73eb66c30f21c19d8e5b6a01cee87f.png)
-![Purchase](https://i101.fastpic.ru/big/2018/0812/53/_2e186eea45f74d91b656e6fa1922c453.png)
-![Statistic](https://i101.fastpic.ru/big/2018/0812/a5/_64c3fa236213c764ae7b6601f1eea1a5.png)
+![Login](http://i101.fastpic.ru/big/2018/0812/05/_a88088ade0f38bb84eac6639f3049105.png?noht=1)
+![Catalog](http://i101.fastpic.ru/big/2018/0812/b8/_754f61648da2f00ec0538ce5dd5780b8.png?noht=1)
+![Character](http://i101.fastpic.ru/big/2018/0812/b3/_881330ed8efdfecdcd1c2ea6f3e6fdb3.png?noht=1)
+![Item](http://i101.fastpic.ru/big/2018/0812/66/_a3fa98bab37b50782539400806e8d766.png?noht=1)
+![Products](http://i101.fastpic.ru/big/2018/0812/7f/_4e73eb66c30f21c19d8e5b6a01cee87f.png?noht=1)
+![Purchase](http://i101.fastpic.ru/big/2018/0812/53/_2e186eea45f74d91b656e6fa1922c453.png?noht=1)
+![Statistic](http://i101.fastpic.ru/big/2018/0812/a5/_64c3fa236213c764ae7b6601f1eea1a5.png?noht=1)
