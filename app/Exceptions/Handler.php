@@ -1,15 +1,7 @@
 <?php
-declare(strict_types = 1);
 
 namespace App\Exceptions;
 
-use App\Exceptions\Payment\InvalidRequestDataException;
-use App\Exceptions\User\BannedException;
-use App\Exceptions\User\EmailAlreadyExistsException;
-use App\Exceptions\User\NotFoundException;
-use App\Exceptions\User\RemindCodeNotFound;
-use App\Exceptions\User\UsernameAlreadyExistsException;
-use App\Services\Message;
 use Exception;
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
 use Symfony\Component\HttpFoundation\Response;
@@ -17,23 +9,12 @@ use Symfony\Component\HttpFoundation\Response;
 class Handler extends ExceptionHandler
 {
     /**
-     * A list of the exception types that should not be reported.
+     * A list of the exception types that are not reported.
      *
      * @var array
      */
     protected $dontReport = [
-        \Illuminate\Auth\AuthenticationException::class,
-        \Illuminate\Auth\Access\AuthorizationException::class,
-        \Symfony\Component\HttpKernel\Exception\HttpException::class,
-        \Illuminate\Database\Eloquent\ModelNotFoundException::class,
-        \Illuminate\Session\TokenMismatchException::class,
-        \Illuminate\Validation\ValidationException::class,
-        UsernameAlreadyExistsException::class,
-        EmailAlreadyExistsException::class,
-        InvalidRequestDataException::class,
-        NotFoundException::class,
-        RemindCodeNotFound::class,
-        BannedException::class
+        //
     ];
 
     /**
@@ -51,8 +32,10 @@ class Handler extends ExceptionHandler
      *
      * This is a great spot to send exceptions to Sentry, Bugsnag, etc.
      *
-     * @param  \Exception  $exception
+     * @param  \Exception $exception
+     *
      * @return void
+     * @throws Exception
      */
     public function report(Exception $exception)
     {
@@ -64,28 +47,11 @@ class Handler extends ExceptionHandler
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Exception  $exception
+     *
      * @return Response
      */
-    public function render($request, Exception $exception)
+    public function render($request, Exception $exception): Response
     {
-        if ($exception instanceof BannedException) {
-            return $this->ban($exception);
-        }
-
         return parent::render($request, $exception);
-    }
-
-    /**
-     * @param BannedException $e
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    protected function ban(BannedException $e)
-    {
-        $until = $e->getUntil();
-        $reason = $e->getReason();
-        $this->container->make(Message::class)->danger(build_ban_message($until, $reason));
-
-        return redirect()->route('index');
     }
 }

@@ -3,36 +3,55 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Products;
 
-use App\Http\Controllers\Admin\ListParent;
-use App\TransactionScripts\Products;
+use App\DataTransferObjects\PaginationList;
+use App\Exceptions\Product\ProductNotFoundException;
+use App\Handlers\Admin\Products\DeleteHandler;
+use App\Handlers\Admin\Products\ListHandler;
+use App\Http\Controllers\Controller;
+use App\Services\Auth\Permissions;
+use App\Services\Notification\Notifications\Error;
+use App\Services\Notification\Notifications\Info;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Http\Response;
+use function App\permission_middleware;
 
-/**
- * Class ListController
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Http\Controllers\Admin\Products
- */
-class ListController extends ListParent
+class ListController extends Controller
 {
-    /**
-     * Render the page with products list.
-     */
-    public function render(Request $request, Products $script): View
+    public function __construct()
     {
-        $orderBy = $request->get('orderBy');
-        $orderType = $request->get('orderType');
-        $filter = $request->get('filter');
+        $this->middleware(permission_middleware(Permissions::ADMIN_PRODUCTS_CRUD_ACCESS));
+    }
 
-        $products = $script->informationForList($orderBy, $orderType, $filter);
+    public function pagination(Request $request, ListHandler $handler): JsonResponse
+    {
+        $dto = $handler->handle(
+            (new PaginationList())
+                ->setOrderBy($request->get('order_by') ?? 'product.id')
+                ->setDescending((bool)$request->get('descending'))
+                ->setSearch($request->get('search'))
+                ->setPage((int)($request->get('page') ?? 1))
+                ->setPerPage((int)($request->get('per_page') ?? 25))
+        );
 
-        $data = [
-            'currentServer' => $request->get('currentServer'),
-            'filters' => $this->filtersAvailable,
-            'products' => $products
-        ];
+        return new JsonResponse(Status::SUCCESS, [
+            'paginator' => $dto->getPaginator(),
+            'products' => $dto->getProducts()
+        ]);
+    }
 
-        return view('admin.products.list', $data);
+    public function delete(Request $request, DeleteHandler $handler): JsonResponse
+    {
+        try {
+            $handler->handle((int)$request->get('product'));
+
+            return (new JsonResponse(Status::SUCCESS))
+                ->addNotification(new Info(__('msg.admin.products.delete.success')));
+        } catch (ProductNotFoundException $e) {
+            return (new JsonResponse('product_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
+                ->addNotification(new Error(__('msg.admin.products.delete.not_found')));
+        }
     }
 }

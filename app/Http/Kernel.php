@@ -3,9 +3,6 @@ declare(strict_types = 1);
 
 namespace App\Http;
 
-use App\Http\Middleware\Captcha;
-use App\Http\Middleware\CheckForMaintenanceMode;
-use App\Http\Middleware\Servers;
 use Illuminate\Foundation\Http\Kernel as HttpKernel;
 
 class Kernel extends HttpKernel
@@ -21,6 +18,8 @@ class Kernel extends HttpKernel
         \Illuminate\Foundation\Http\Middleware\ValidatePostSize::class,
         \App\Http\Middleware\TrimStrings::class,
         \Illuminate\Foundation\Http\Middleware\ConvertEmptyStringsToNull::class,
+        \App\Http\Middleware\TrustProxies::class,
+        \App\Http\Middleware\AddToResponse::class
     ];
 
     /**
@@ -31,20 +30,30 @@ class Kernel extends HttpKernel
     protected $middlewareGroups = [
         'web' => [
             \App\Http\Middleware\EncryptCookies::class,
-            CheckForMaintenanceMode::class,
             \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
             \Illuminate\Session\Middleware\StartSession::class,
-            // \Illuminate\Session\Middleware\AuthenticateSession::class,
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
-            \Illuminate\Routing\Middleware\SubstituteBindings::class
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\CheckForMaintenanceMode::class
         ],
 
-        /**
+        'spa' => [
+            \App\Http\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \App\Http\Middleware\VerifyCsrfToken::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\CheckForMaintenanceMode::class
+        ],
+
         'api' => [
-            'throttle:60,1',
-            'bindings',
-        ],*/
+            \App\Http\Middleware\EncryptCookies::class,
+            \Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse::class,
+            \Illuminate\Session\Middleware\StartSession::class,
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+            \App\Http\Middleware\CheckForMaintenanceMode::class
+        ]
     ];
 
     /**
@@ -56,9 +65,12 @@ class Kernel extends HttpKernel
      */
     protected $routeMiddleware = [
         'auth' => \App\Http\Middleware\Auth::class,
-        'auth.basic' => \Illuminate\Auth\Middleware\AuthenticateWithBasicAuth::class,
+        'bindings' => \Illuminate\Routing\Middleware\SubstituteBindings::class,
         'guest' => \App\Http\Middleware\RedirectIfAuthenticated::class,
-        'servers' => Servers::class,
-        'captcha' => Captcha::class
+        'accessor' => \App\Http\Middleware\PassAccessor::class,
+        'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
+        'captcha' => \App\Http\Middleware\Captcha::class,
+        'permission' => \App\Http\Middleware\NeedPermission::class,
+        'signed' => \App\Http\Middleware\ValidateSignature::class
     ];
 }

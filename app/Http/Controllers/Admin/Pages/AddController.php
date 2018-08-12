@@ -3,59 +3,42 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Pages;
 
-use App\DataTransferObjects\Page as DTO;
-use App\Exceptions\Page\UrlAlreadyExistsException;
+use App\DataTransferObjects\Admin\Pages\Add;
+use App\Exceptions\Page\AlreadyExistException;
+use App\Handlers\Admin\Pages\AddHandler;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\SaveAddedPageRequest;
-use App\Models\Page\PageInterface;
-use App\Traits\ContainerTrait;
-use App\TransactionScripts\Pages;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
+use App\Http\Requests\Admin\Pages\AddEditRequest;
+use App\Services\Auth\Permissions;
+use App\Services\Notification\Notifications\Success;
+use App\Services\Notification\Notifications\Warning;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
+use Illuminate\Http\Response;
+use function App\permission_middleware;
 
-/**
- * Class AddController
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Http\Controllers\Admin\Pages
- */
 class AddController extends Controller
 {
-    use ContainerTrait;
-
-    /**
-     * Render add static page.
-     */
-    public function render(Request $request): View
+    public function __construct()
     {
-        return view('admin.pages.add', [
-            'currentServer' => $request->get('currentServer')
-        ]);
+        $this->middleware(permission_middleware(Permissions::ADMIN_PAGES_CRUD_ACCESS));
     }
 
-    /**
-     * Save new static page.
-     */
-    public function save(SaveAddedPageRequest $request, Pages $script): RedirectResponse
+    public function add(AddEditRequest $request, AddHandler $handler): JsonResponse
     {
-        $entity = $this->make(PageInterface::class)
-            ->setTitle($request->get('page_title'))
-            ->setContent($request->get('page_content'))
-            ->setUrl($request->get('page_url'));
+        $dto = (new Add())
+            ->setTitle($request->get('title'))
+            ->setContent($request->get('content'))
+            ->setUrl($request->get('url'));
 
         try {
-            if ($script->create($entity)) {
-                $this->msg->success(__('messages.admin.pages.add.success'));
-            } else {
-                $this->msg->danger(__('messages.admin.pages.add.fail'));
-            }
-        } catch (UrlAlreadyExistsException $e) {
-            $this->msg->warning(__('messages.admin.pages.url_already_exists'));
+            $handler->handle($dto);
 
-            return back();
+            return (new JsonResponse(Status::SUCCESS))
+                ->addNotification(new Success(__('msg.admin.pages.add.success')));
+        } catch (AlreadyExistException $e) {
+            return (new JsonResponse('page_already_exists'))
+                ->setHttpStatus(Response::HTTP_CONFLICT)
+                ->addNotification(new Warning(__('msg.admin.pages.add.already_exists')));
         }
-
-        return response()->redirectToRoute('admin.pages.list', ['server' => $request->get('currentServer')->getId()]);
     }
 }

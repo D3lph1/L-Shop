@@ -1,194 +1,74 @@
 <?php
-declare(strict_types=1);
+declare(strict_types = 1);
+
+namespace App;
 
 /**
- * File with declaration (helpers) functions.
+ * Generates a line for specifying an intermediary, which requires the user to have a given permission.
+ * <p>For example you may use it for register middleware in controller constructor:</p>
+ * <code>
+ *  $this->middleware(permission_middleware('my_permission'));
+ * </code>
+ * <p>Or:</p>
+ * <code>
+ *  $this->middleware(permission_middleware(\App\Services\Auth\Permissions::ALLOW_SET_HD_SKINS));
+ * </code>
  *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- */
-
-use App\Models\Server\ServerInterface;
-use Carbon\Carbon;
-use Illuminate\Http\JsonResponse;
-
-/**
- * Get the setting value
- */
-function s_get(string $key, $default = null, bool $lower = false)
-{
-    if ($lower) {
-        return mb_strtolower(\Setting::get($key, $default));
-    }
-
-    return \Setting::get($key, $default);
-}
-
-/**
- * Set the option value.
+ * @param string $permission
  *
- * @param string|array $option Option name or array `option` => `value`
- * @param mixed        $value  Option value
+ * @return string
  */
-function s_set($option, $value = null): void
+function permission_middleware(string $permission): string
 {
-    \Setting::set($option, $value);
+    return "permission:{$permission}";
 }
 
 /**
- * Save the settings.
+ * Generates a string to specify the intermediary that is used to indicate the type of access to any page.
+ * <p>For example you may use it for register middleware in controller constructor:</p>
+ * <code>
+ *  $this->middleware(auth_middleware(\App\Services\Auth\AccessMode::GUEST));
+ * </code>
+ *
+ * @param string $mode
+ *
+ * @return string
  */
-function s_save(): void
+function auth_middleware(string $mode): string
 {
-    \Setting::save();
+    return "auth:{$mode}";
 }
 
 /**
- * Checking whether a user is logged in at the moment.
+ * Generates a string to specify the intermediary that is used to resolve access to page by accessor class.
+ * <p>For example you may use it for register middleware in controller constructor:</p>
+ * <code>
+ *  $this->middleware(accessor_middleware(\App\Services\Security\Accessors\MyAccessor::class));
+ * </code>
+ *
+ * @see \App\Services\Security\Accessors\Accessor
+ *
+ * @param string $accessorClass
+ *
+ * @return string
  */
-function is_auth(): bool
+function accessor_middleware(string $accessorClass): string
 {
-    return (bool)\Sentinel::check();
+    return "accessor:{$accessorClass}";
 }
 
 /**
- * Checks user for administrator rights.
+ * Generates a string to specify the intermediary that is used to signature validation parameters.
+ * <p>For example you may use it for register middleware in controller constructor:</p>
+ * <code>
+ *  $this->middleware(signed_middleware(['first', 'second]));
+ * </code>
+ *
+ * @param array $parameters
+ *
+ * @return string
  */
-function is_admin(): bool
+function signed_middleware(array $parameters = []): string
 {
-    if (is_auth()) {
-        /** @var \App\Models\User\UserInterface $user */
-        $user = \Sentinel::getUser();
-
-        return $user->getPermissionsManager()->hasAccess(['user.admin']);
-    }
-
-    return false;
-}
-
-/**
- * Checks shopping mode.
- */
-function access_mode_auth(): bool
-{
-    return s_get('shop.access_mode', 'auth', true) === \App\Services\Auth\AccessMode::AUTH;
-}
-
-/**
- * Checks shopping mode.
- */
-function access_mode_guest(): bool
-{
-    return s_get('shop.access_mode', 'auth', true) === \App\Services\Auth\AccessMode::GUEST;
-}
-
-/**
- * Checks shopping mode.
- */
-function access_mode_any(): bool
-{
-    return s_get('shop.access_mode', 'auth', true) === \App\Services\Auth\AccessMode::ANY;
-}
-
-/**
- * Checks for the specific rights the shop.
- */
-function is_enable(string $action): bool
-{
-    return (bool)s_get($action);
-}
-
-/**
- * Return path to images folder.
- */
-function img_path(string $url): string
-{
-    return public_path("img/$url");
-}
-
-/**
- * Return filled json response object.
- */
-function json_response(string $status, array $data = []): JsonResponse
-{
-    $response = [
-        'status' => $status
-    ];
-
-    if (count($data) > 0) {
-        return response()->json(array_merge($response, $data));
-    }
-
-    return response()->json($response);
-}
-
-function humanize_month(string $month): string
-{
-    return strtr($month, __('content.months'));
-}
-
-function short_string(string $string, int $length): string
-{
-    if (mb_strlen($string) < $length) {
-        return $string;
-    }
-
-    return mb_substr($string, 0, $length) . '...';
-}
-
-function build_ban_message(?Carbon $until = null, ?string $reason = null): string
-{
-    if (is_null($until) and is_null($reason)) {
-        return __('messages.admin.users.edit.block.successful.permanently.without_reason');
-    }
-
-    if (is_null($until) and !is_null($reason)) {
-        return __('messages.admin.users.edit.block.successful.permanently.with_reason',
-            compact('reason'));
-    }
-
-    if (!is_null($until) and is_null($reason)) {
-        return __('messages.admin.users.edit.block.successful.temporarily.without_reason',
-            compact('until'));
-    }
-
-    if (!is_null($until) and !is_null($reason)) {
-        return __('messages.admin.users.edit.block.successful.temporarily.with_reason',
-            compact('until', 'reason'));
-    }
-
-    // Unreachable, return statement for IDE.
-    return '';
-}
-
-function username(): ?string
-{
-    if (!is_auth()) {
-        return null;
-    }
-
-    return \Sentinel::getUser()->getUsername();
-}
-
-function cloak_exists(string $username): bool
-{
-    return file_exists(config('l-shop.profile.cloaks.path') . '/' . $username . '.png');
-}
-
-function get_server_by_id(iterable $servers, int $id): ?ServerInterface
-{
-    /** @var ServerInterface[] $servers */
-    foreach ($servers as $server) {
-        if ($server->getId() === $id) {
-            return $server;
-        }
-    }
-
-    return null;
-}
-
-function trim_nullable(array $arr): array
-{
-    return array_filter($arr, function ($val) {
-        return $val !== null;
-    });
+    return 'signed' . (count($parameters) !== 0 ? ':' . implode(',', $parameters) : '');
 }

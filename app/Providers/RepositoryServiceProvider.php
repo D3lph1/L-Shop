@@ -3,114 +3,258 @@ declare(strict_types = 1);
 
 namespace App\Providers;
 
-use App\Models\Ban\BanInterface;
-use App\Models\Ban\EloquentBan;
-use App\Models\Cart\CartInterface;
-use App\Models\Cart\EloquentCart;
-use App\Models\Category\CategoryInterface;
-use App\Models\Category\EloquentCategory;
-use App\Models\Item\EloquentItem;
-use App\Models\Item\ItemInterface;
-use App\Models\News\EloquentNews;
-use App\Models\News\NewsInterface;
-use App\Models\Page\EloquentPage;
-use App\Models\Page\PageInterface;
-use App\Models\Payment\EloquentPayment;
-use App\Models\Payment\PaymentInterface;
-use App\Models\Product\EloquentProduct;
-use App\Models\Product\ProductInterface;
-use App\Models\Role\EloquentRole;
-use App\Models\Server\EloquentServer;
-use App\Models\Server\ServerInterface;
-use App\Models\User\EloquentUser;
-use App\Models\User\UserInterface;
-use App\Repositories\Activation\ActivationRepositoryInterface;
-use App\Repositories\Activation\EloquentActivationRepository;
-use App\Repositories\Ban\BanRepositoryInterface;
-use App\Repositories\Ban\EloquentBanRepository;
-use App\Repositories\Cart\CartRepositoryInterface;
-use App\Repositories\Cart\EloquentCartRepository;
-use App\Repositories\Category\CategoryRepositoryInterface;
-use App\Repositories\Category\EloquentCategoryRepository;
-use App\Repositories\Item\EloquentItemRepository;
-use App\Repositories\Item\ItemRepositoryInterface;
-use App\Repositories\News\EloquentNewsRepository;
-use App\Repositories\News\NewsRepositoryInterface;
-use App\Repositories\Page\EloquentPageRepository;
-use App\Repositories\Page\PageRepositoryInterface;
-use App\Repositories\Payment\EloquentPaymentRepository;
-use App\Repositories\Payment\PaymentRepositoryInterface;
-use App\Repositories\Persistence\EloquentPersistenceRepository;
-use App\Repositories\Persistence\PersistenceRepositoryInterface;
-use App\Repositories\Product\EloquentProductRepository;
-use App\Repositories\Product\ProductRepositoryInterface;
-use App\Repositories\Reminder\EloquentReminderRepository;
-use App\Repositories\Reminder\ReminderRepositoryInterface;
-use App\Repositories\Role\EloquentRoleRepository;
-use App\Repositories\Role\RoleRepositoryInterface;
-use App\Repositories\Server\EloquentServerRepository;
-use App\Repositories\Server\ServerRepositoryInterface;
-use App\Repositories\User\EloquentUserRepository;
-use App\Repositories\User\UserRepositoryInterface;
-use Illuminate\Contracts\Container\Container;
+use App\Entity\Activation;
+use App\Entity\BalanceTransaction;
+use App\Entity\Ban;
+use App\Entity\Category;
+use App\Entity\Distribution;
+use App\Entity\Enchantment;
+use App\Entity\Item;
+use App\Entity\News;
+use App\Entity\Page;
+use App\Entity\Permission;
+use App\Entity\Persistence;
+use App\Entity\Product;
+use App\Entity\Purchase;
+use App\Entity\PurchaseItem;
+use App\Entity\Reminder;
+use App\Entity\Role;
+use App\Entity\Server;
+use App\Entity\ShoppingCart;
+use App\Entity\Throttle;
+use App\Entity\User;
+use App\Repository\Activation\ActivationRepository;
+use App\Repository\Activation\DoctrineActivationRepository;
+use App\Repository\BalanceTransaction\BalanceTransactionRepository;
+use App\Repository\BalanceTransaction\DoctrineBalanceTransactionRepository;
+use App\Repository\Ban\BanRepository;
+use App\Repository\Ban\DoctrineBanRepository;
+use App\Repository\Category\CategoryRepository;
+use App\Repository\Category\DoctrineCategoryRepository;
+use App\Repository\Distribution\DistributionRepository;
+use App\Repository\Distribution\DoctrineDistributionRepository;
+use App\Repository\Enchantment\DoctrineEnchantmentRepository;
+use App\Repository\Enchantment\EnchantmentRepository;
+use App\Repository\Item\DoctrineItemRepository;
+use App\Repository\Item\ItemRepository;
+use App\Repository\News\DoctrineNewsRepository;
+use App\Repository\News\NewsRepository;
+use App\Repository\Page\DoctrinePageRepository;
+use App\Repository\Page\PageRepository;
+use App\Repository\Permission\DoctrinePermissionRepository;
+use App\Repository\Permission\PermissionRepository;
+use App\Repository\Persistence\DoctrinePersistenceRepository;
+use App\Repository\Persistence\PersistenceRepository;
+use App\Repository\Product\DoctrineProductRepository;
+use App\Repository\Product\ProductRepository;
+use App\Repository\Purchase\DoctrinePurchaseRepository;
+use App\Repository\Purchase\PurchaseRepository;
+use App\Repository\PurchaseItem\DoctrinePurchaseItemRepository;
+use App\Repository\PurchaseItem\PurchaseItemRepository;
+use App\Repository\Reminder\DoctrineReminderRepository;
+use App\Repository\Reminder\ReminderRepository;
+use App\Repository\Role\DoctrineRoleRepository;
+use App\Repository\Role\RoleRepository;
+use App\Repository\Server\DoctrineServerRepository;
+use App\Repository\Server\ServerRepository;
+use App\Repository\ShoppingCart\DoctrineShoppingCartRepository;
+use App\Repository\ShoppingCart\ShoppingCartRepository;
+use App\Repository\Throttle\DoctrineThrottleRepository;
+use App\Repository\Throttle\ThrottleRepository;
+use App\Repository\User\DoctrineUserRepository;
+use App\Repository\User\UserRepository;
+use App\Services\Caching\CachingOptions;
+use App\Services\Game\Permissions\LuckPerms\Entity\Group;
+use App\Services\Game\Permissions\LuckPerms\Entity\GroupPermission;
+use App\Services\Game\Permissions\LuckPerms\Entity\Player;
+use App\Services\Game\Permissions\LuckPerms\Entity\PlayerPermission;
+use App\Services\Game\Permissions\LuckPerms\Repository\Group\DoctrineGroupRepository;
+use App\Services\Game\Permissions\LuckPerms\Repository\Group\GroupRepository;
+use App\Services\Game\Permissions\LuckPerms\Repository\GroupPermission\DoctrineGroupPermissionRepository;
+use App\Services\Game\Permissions\LuckPerms\Repository\GroupPermission\GroupPermissionRepository;
+use App\Services\Game\Permissions\LuckPerms\Repository\Player\DoctrinePlayerRepository;
+use App\Services\Game\Permissions\LuckPerms\Repository\Player\PlayerRepository;
+use App\Services\Game\Permissions\LuckPerms\Repository\PlayerPermission\DoctrinePlayerPermissionRepository;
+use App\Services\Game\Permissions\LuckPerms\Repository\PlayerPermission\PlayerPermissionRepository;
+use App\Services\Settings\Repository\Doctrine\DoctrineRepository;
+use App\Services\Settings\Repository\Repository;
+use App\Services\Settings\Setting;
+use Doctrine\ORM\EntityManagerInterface;
+use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Illuminate\Support\ServiceProvider;
 
-/**
- * Class RepositoryServiceProvider
- *
- * @author  D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Providers
- */
 class RepositoryServiceProvider extends ServiceProvider
 {
-    /**
-     * Bootstrap the application services.
-     *
-     * @return void
-     */
-    public function boot()
+    public function boot(): void
     {
-        //
+        $config = $this->app->make(\Illuminate\Contracts\Config\Repository::class);
+
+        $repositories = [
+            UserRepository::class => [
+                'concrete' => DoctrineUserRepository::class,
+                'entity' => User::class,
+                'caching' => [
+                    'enabled' => $config->get('cache.options.users.enabled'),
+                    'lifetime' => $config->get('cache.options.users.lifetime')
+                ]
+            ],
+            RoleRepository::class => [
+                'concrete' => DoctrineRoleRepository::class,
+                'entity' => Role::class,
+                'caching' => [
+                    'enabled' => $config->get('cache.options.roles.enabled'),
+                    'lifetime' => $config->get('cache.options.roles.lifetime')
+                ]
+            ],
+            PermissionRepository::class => [
+                'concrete' => DoctrinePermissionRepository::class,
+                'entity' => Permission::class,
+                'caching' => [
+                    'enabled' => $config->get('cache.options.permissions.enabled'),
+                    'lifetime' => $config->get('cache.options.permissions.lifetime')
+                ]
+            ],
+            PersistenceRepository::class => [
+                'concrete' => DoctrinePersistenceRepository::class,
+                'entity' => Persistence::class
+            ],
+            ActivationRepository::class => [
+                'concrete' => DoctrineActivationRepository::class,
+                'entity' => Activation::class
+            ],
+            BanRepository::class => [
+                'concrete' => DoctrineBanRepository::class,
+                'entity' => Ban::class
+            ],
+            ReminderRepository::class => [
+                'concrete' => DoctrineReminderRepository::class,
+                'entity' => Reminder::class
+            ],
+            ThrottleRepository::class => [
+                'concrete' => DoctrineThrottleRepository::class,
+                'entity' => Throttle::class
+            ],
+            ServerRepository::class => [
+                'concrete' => DoctrineServerRepository::class,
+                'entity' => Server::class,
+                'caching' => [
+                    'enabled' => $config->get('cache.options.servers.enabled'),
+                    'lifetime' => $config->get('cache.options.servers.lifetime')
+                ]
+            ],
+            CategoryRepository::class => [
+                'concrete' => DoctrineCategoryRepository::class,
+                'entity' => Category::class,
+                'caching' => [
+                    'enabled' => $config->get('cache.options.categories.enabled'),
+                    'lifetime' => $config->get('cache.options.categories.lifetime')
+                ]
+            ],
+            ItemRepository::class => [
+                'concrete' => DoctrineItemRepository::class,
+                'entity' => Item::class,
+                'caching' => [
+                    'enabled' => $config->get('cache.options.items.enabled'),
+                    'lifetime' => $config->get('cache.options.items.lifetime')
+                ]
+            ],
+            ProductRepository::class => [
+                'concrete' => DoctrineProductRepository::class,
+                'entity' => Product::class,
+                'caching' => [
+                    'enabled' => $config->get('cache.options.products.enabled'),
+                    'lifetime' => $config->get('cache.options.products.lifetime')
+                ]
+            ],
+            NewsRepository::class => [
+                'concrete' => DoctrineNewsRepository::class,
+                'entity' => News::class
+            ],
+            PageRepository::class => [
+                'concrete' => DoctrinePageRepository::class,
+                'entity' => Page::class,
+                'caching' => [
+                    'enabled' => $config->get('cache.options.pages.enabled'),
+                    'lifetime' => $config->get('cache.options.pages.lifetime')
+                ]
+            ],
+            EnchantmentRepository::class => [
+                'concrete' => DoctrineEnchantmentRepository::class,
+                'entity' => Enchantment::class
+            ],
+            PurchaseRepository::class => [
+                'concrete' => DoctrinePurchaseRepository::class,
+                'entity' => Purchase::class
+            ],
+            PurchaseItemRepository::class => [
+                'concrete' => DoctrinePurchaseItemRepository::class,
+                'entity' => PurchaseItem::class
+            ],
+            BalanceTransactionRepository::class => [
+                'concrete' => DoctrineBalanceTransactionRepository::class,
+                'entity' => BalanceTransaction::class
+            ],
+            DistributionRepository::class => [
+                'concrete' => DoctrineDistributionRepository::class,
+                'entity' => Distribution::class
+            ],
+            ShoppingCartRepository::class => [
+                'concrete' => DoctrineShoppingCartRepository::class,
+                'entity' => ShoppingCart::class
+            ],
+            Repository::class => [
+                'concrete' => DoctrineRepository::class,
+                'entity' => Setting::class,
+                'caching' => [
+                    'enabled' => $config->get('cache.options.settings.enabled'),
+                    'lifetime' => $config->get('cache.options.settings.lifetime')
+                ]
+            ],
+            GroupRepository::class => [
+                'concrete' => DoctrineGroupRepository::class,
+                'entity' => Group::class
+            ],
+            PlayerRepository::class => [
+                'concrete' => DoctrinePlayerRepository::class,
+                'entity' => Player::class
+            ],
+            GroupPermissionRepository::class => [
+                'concrete' => DoctrineGroupPermissionRepository::class,
+                'entity' => GroupPermission::class
+            ],
+            PlayerPermissionRepository::class => [
+                'concrete' => DoctrinePlayerPermissionRepository::class,
+                'entity' => PlayerPermission::class
+            ],
+        ];
+
+        foreach ($repositories as $key => $value) {
+            $this->app->when($value['concrete'])
+                ->needs(EntityRepository::class)
+                ->give(function () use ($value) {
+                    return $this->buildEntityRepository($value['entity']);
+                });
+            if (isset($value['caching'])) {
+                $enabled = $value['caching']['enabled'];
+                $lifetime = $value['caching']['lifetime'];
+
+                $this->app->when($value['concrete'])
+                    ->needs(CachingOptions::class)
+                    ->give(function () use ($enabled, $lifetime) {
+                        return (new CachingOptions($enabled))
+                            ->setLifetime($lifetime);
+                    });
+            }
+            $this->app->singleton($key, $value['concrete']);
+        }
     }
 
-    /**
-     * Register the application services.
-     *
-     * @return void
-     */
-    public function register()
+    private function buildEntityRepository(string $entity)
     {
-        $this->app->bind(UserInterface::class, EloquentUser::class);
-        $this->app->bind(BanInterface::class, EloquentBan::class);
-        $this->app->bind(CartInterface::class, EloquentCart::class);
-        $this->app->bind(ServerInterface::class, EloquentServer::class);
-        $this->app->bind(CategoryInterface::class, EloquentCategory::class);
-        $this->app->bind(ItemInterface::class, EloquentItem::class);
-        $this->app->bind(NewsInterface::class, EloquentNews::class);
-        $this->app->bind(PageInterface::class, EloquentPage::class);
-        $this->app->bind(PaymentInterface::class, EloquentPayment::class);
-        $this->app->bind(ProductInterface::class, EloquentProduct::class);
-
-        $this->app->singleton(BanRepositoryInterface::class, EloquentBanRepository::class);
-        $this->app->singleton(PageRepositoryInterface::class, EloquentPageRepository::class);
-        $this->app->singleton(NewsRepositoryInterface::class, EloquentNewsRepository::class);
-        $this->app->singleton(ServerRepositoryInterface::class, EloquentServerRepository::class);
-        $this->app->singleton(CategoryRepositoryInterface::class, EloquentCategoryRepository::class);
-        $this->app->singleton(CartRepositoryInterface::class, EloquentCartRepository::class);
-        $this->app->singleton(ItemRepositoryInterface::class, EloquentItemRepository::class);
-        $this->app->singleton(UserRepositoryInterface::class, function ($app) {
-            /** @var Container $app */
-            return $app->make(EloquentUserRepository::class, ['model' => EloquentUser::class]);
-        });
-        $this->app->alias(UserRepositoryInterface::class, \Cartalyst\Sentinel\Users\UserRepositoryInterface::class);
-        $this->app->singleton(PaymentRepositoryInterface::class, EloquentPaymentRepository::class);
-        $this->app->singleton(ProductRepositoryInterface::class, EloquentProductRepository::class);
-        $this->app->singleton(RoleRepositoryInterface::class, function ($app) {
-            /** @var Container $app */
-            return $app->make(EloquentRoleRepository::class, ['model' => EloquentRole::class]);
-        });
-        $this->app->singleton(ActivationRepositoryInterface::class, EloquentActivationRepository::class);
-        $this->app->singleton(PersistenceRepositoryInterface::class, EloquentPersistenceRepository::class);
-        $this->app->singleton(ReminderRepositoryInterface::class, EloquentReminderRepository::class);
+        return new EntityRepository(
+            $this->app->make(EntityManagerInterface::class),
+            new ClassMetadata($entity)
+        );
     }
 }

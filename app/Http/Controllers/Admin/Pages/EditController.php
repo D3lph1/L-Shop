@@ -3,105 +3,53 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Pages;
 
-use App\DataTransferObjects\Page as DTO;
-use App\Exceptions\Page\NotFoundException;
-use App\Exceptions\Page\UrlAlreadyExistsException;
+use App\DataTransferObjects\Admin\Pages\Edit\Edit;
+use App\Exceptions\Page\PageNotFoundException;
+use App\Handlers\Admin\Pages\Edit\EditHandler;
+use App\Handlers\Admin\Pages\Edit\RenderHandler;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\SaveEditedPageRequest;
-use App\TransactionScripts\Pages;
-use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\Admin\Pages\AddEditRequest;
+use App\Services\Auth\Permissions;
+use App\Services\Notification\Notifications\Error;
+use App\Services\Notification\Notifications\Success;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Http\Response;
+use function App\permission_middleware;
 
-/**
- * Class EditController
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Http\Controllers\Admin\Pages
- */
 class EditController extends Controller
 {
-    /**
-     * @var Pages
-     */
-    private $pages;
-
-    /**
-     * EditController constructor.
-     *
-     * @param Pages $page
-     */
-    public function __construct(Pages $page)
+    public function __construct()
     {
-        $this->pages = $page;
-        parent::__construct();
+        $this->middleware(permission_middleware(Permissions::ADMIN_PAGES_CRUD_ACCESS));
     }
 
-    /**
-     * Render the edit static page request.
-     */
-    public function render(Request $request): View
+    public function render(Request $request, RenderHandler $handler): JsonResponse
     {
-        $id = (int)$request->route('id');
+        $page = $handler->handle((int)$request->route('page'));
 
-        try {
-            return view('admin.pages.edit', [
-                'currentServer' => $request->get('currentServer'),
-                'id' => $id,
-                'page' => $this->pages->informationForEdit($id)
-            ]);
-        } catch (NotFoundException $e) {
-            $this->app->abort(404);
-        }
-
-        // Unreachable statement. For IDE.
-        return null;
+        return new JsonResponse(Status::SUCCESS, [
+            'page' => $page
+        ]);
     }
 
-    /**
-     * Handle save edited static page request.
-     */
-    public function save(SaveEditedPageRequest $request): RedirectResponse
+    public function edit(AddEditRequest $request, EditHandler $handler): JsonResponse
     {
-        $page = (new DTO())
-            ->setId((int)$request->route('id'))
-            ->setTitle($request->get('page_title'))
-            ->setContent($request->get('page_content'))
-            ->setUrl($request->get('page_url'));
-
+        $dto = (new Edit())
+            ->setId((int)$request->route('page'))
+            ->setTitle($request->get('title'))
+            ->setContent($request->get('content'))
+            ->setUrl($request->get('url'));
         try {
-            if ($this->pages->update($page)) {
-                $this->msg->success(__('messages.admin.pages.edit.success'));
+            $handler->handle($dto);
 
-                return response()->redirectToRoute('admin.pages.list', ['server' => $request->get('currentServer')->getId()]);
-            } else {
-                $this->msg->danger(__('messages.admin.pages.edit.fail'));
-            }
-        } catch (UrlAlreadyExistsException $e) {
-            $this->msg->warning(__('messages.admin.pages.url_already_exists'));
+            return (new JsonResponse(Status::SUCCESS))
+                ->addNotification(new Success(__('msg.admin.pages.edit.success')));
+        } catch (PageNotFoundException $e) {
+            return (new JsonResponse('page_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
+                ->addNotification(new Error(__('msg.admin.pages.edit.not_found')));
         }
-
-        return back();
-    }
-
-    /**
-     * Delete given static page.
-     */
-    public function delete(Request $request): RedirectResponse
-    {
-        $id = (int)$request->route('id');
-        try {
-            if ($this->pages->delete($id)) {
-                $this->msg->info(__('messages.admin.pages.delete.success'));
-
-                return response()->redirectToRoute('admin.pages.list', ['server' => $request->get('currentServer')->getId()]);
-            } else {
-                $this->msg->danger(__('messages.admin.pages.delete.fail'));
-            }
-        } catch (NotFoundException $e) {
-            $this->msg->danger(__('messages.admin.pages.not_found'));
-        }
-
-        return back();
     }
 }

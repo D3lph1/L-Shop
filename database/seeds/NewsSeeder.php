@@ -1,21 +1,25 @@
 <?php
+declare(strict_types = 1);
 
+use App\Entity\News;
+use App\Repository\News\NewsRepository;
+use App\Repository\User\UserRepository;
+use Faker\Generator;
 use Illuminate\Database\Seeder;
 
-/**
- * Class NewsSeeder
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- */
 class NewsSeeder extends Seeder
 {
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
+    public function run(NewsRepository $newsRepository, UserRepository $userRepository, Generator $faker): void
     {
-        factory(\App\Models\News\EloquentNews::class, 10)->create();
+        $newsRepository->deleteAll();
+
+        for ($i = 0; $i < 30; $i++) {
+            $news = new News(
+                __('seeding.news.title', ['number' => mt_rand(1, 1000)]),
+                $faker->text(1024),
+                $userRepository->findByUsername('admin')
+            );
+            $newsRepository->create($news);
+        }
     }
 }

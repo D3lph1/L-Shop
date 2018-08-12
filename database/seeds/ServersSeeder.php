@@ -1,131 +1,51 @@
 <?php
 declare(strict_types = 1);
 
-use App\DataTransferObjects\Server;
-use App\Models\Category\CategoryInterface;
-use App\Models\Server\ServerInterface;
-use App\Repositories\Category\CategoryRepositoryInterface;
-use App\Repositories\Server\ServerRepositoryInterface;
+use App\Entity\Category;
+use App\Entity\Server;
+use App\Repository\Category\CategoryRepository;
+use App\Repository\Product\ProductRepository;
+use App\Repository\Server\ServerRepository;
+use App\Services\Purchasing\Distributors\ShoppingCartDistributor;
 use Illuminate\Database\Seeder;
 
-/**
- * Class ServersSeeder
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- */
 class ServersSeeder extends Seeder
 {
-    use \App\Traits\ContainerTrait;
-
-    /**
-     * @var ServerRepositoryInterface
-     */
-    private $serverRepository;
-
-    /**
-     * @var CategoryRepositoryInterface
-     */
-    private $categoryRepository;
-
-    /**
-     * ServersSeeder constructor.
-     *
-     * @param ServerRepositoryInterface   $serverRepository
-     * @param CategoryRepositoryInterface $categoryRepository
-     */
-    public function __construct(ServerRepositoryInterface $serverRepository, CategoryRepositoryInterface $categoryRepository)
+    public function run(
+        ServerRepository $serverRepository,
+        CategoryRepository $categoryRepository,
+        ProductRepository $productRepository): void
     {
-        $this->serverRepository = $serverRepository;
-        $this->categoryRepository = $categoryRepository;
-    }
+        $productRepository->deleteAll();
+        $categoryRepository->deleteAll();
+        $serverRepository->deleteAll();
 
-    /**
-     * Run the database seeds.
-     *
-     * @return void
-     */
-    public function run()
-    {
-        $this->createMmoServer();
-        $this->createHiTechPvPServer();
-        $this->createHiTechPvEServer();
-    }
+        $serverMMO = (new Server('MMO', ShoppingCartDistributor::class))
+            ->setIp('127.0.0.1')
+            ->setPort(25575)
+            ->setPassword('123456')
+            ->setEnabled(true)
+            ->setMonitoringEnabled(true);
+        $categoryRepository->create(new Category(__('seeding.categories.1'), $serverMMO));
+        $categoryRepository->create(new Category(__('seeding.categories.2'), $serverMMO));
+        $categoryRepository->create(new Category(__('seeding.categories.3'), $serverMMO));
 
-    private function createMmoServer()
-    {
-        /** @var ServerInterface $server */
-        $server = $this->serverRepository->create(
-            $this->make(ServerInterface::class)
-                ->setId(1)
-                ->setName('MMO')
+        $serverHiTechPvP = (new Server('Hi-Tech (PvP)', ShoppingCartDistributor::class))
+            ->setEnabled(true)
+            ->setMonitoringEnabled(false);
+        $categoryRepository->create(new Category(__('seeding.categories.4'), $serverHiTechPvP));
+        $categoryRepository->create(new Category(__('seeding.categories.5'), $serverHiTechPvP));
+
+        $serverRepository->create(
+            (new Server('Hi-Tech (PvE)', ShoppingCartDistributor::class))
                 ->setEnabled(true)
-                ->setIp('127.0.0.1')
-                ->setPort(25575)
-                ->setPassword('123456')
                 ->setMonitoringEnabled(false)
         );
 
-        $this->categoryRepository->create(
-            $this->make(CategoryInterface::class)
-                ->setId(1)
-                ->setName(__('seeding.categories.1'))
-                ->setServerId($server->getId())
-        );
-        $this->categoryRepository->create(
-            $this->make(CategoryInterface::class)
-                ->setId(2)
-                ->setName(__('seeding.categories.2'))
-                ->setServerId($server->getId())
-        );
-        $this->categoryRepository->create(
-            $this->make(CategoryInterface::class)
-                ->setId(5)
-                ->setName(__('seeding.categories.5'))
-                ->setServerId($server->getId())
-        );
-    }
-
-    private function createHiTechPvPServer()
-    {
-        /** @var ServerInterface $server */
-        $server = $this->serverRepository->create(
-            $this->make(ServerInterface::class)
-                ->setId(2)
-                ->setName('Hi-Tech (PvP)')
-                ->setEnabled(true)
-                ->setIp('127.0.0.1')
-                ->setPort(25564)
-                ->setPassword('123456')
+        $serverRepository->create(
+            (new Server('RPG', ShoppingCartDistributor::class))
+                ->setEnabled(false)
                 ->setMonitoringEnabled(false)
-        );
-
-        $this->categoryRepository->create(
-            $this->make(CategoryInterface::class)
-                ->setId(3)
-                ->setName(__('seeding.categories.3'))
-                ->setServerId($server->getId())
-        );
-    }
-
-    private function createHiTechPvEServer()
-    {
-        /** @var ServerInterface $server */
-        $server = $this->serverRepository->create(
-            $this->make(ServerInterface::class)
-                ->setId(3)
-                ->setName('Hi-Tech (PvE)')
-                ->setEnabled(true)
-                ->setIp(null)
-                ->setPort(null)
-                ->setPassword(null)
-                ->setMonitoringEnabled(false)
-        );
-
-        $this->categoryRepository->create(
-            $this->make(CategoryInterface::class)
-                ->setId(4)
-                ->setName(__('seeding.categories.4'))
-                ->setServerId($server->getId())
         );
     }
 }

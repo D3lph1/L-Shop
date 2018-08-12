@@ -1,782 +1,792 @@
 <?php
 
 return [
-    'admin' => [
-        'save' => 'Save changes',
-
-        'control' => [
-            'main_settings' => [
-                'title' => 'Main settings',
-                'shop' => [
-                    'title' => 'Shop',
-                    'edit_info' => 'Edit the basic information about the shop.',
-                    'name' => 'Shop name',
-                    'name_popover' => 'The name of the shop will be displayed on the main page and also in the page titles.',
-                    'description' => 'Shop description',
-                    'description_popover' => 'The description of the shop is used mainly by search engines to index the resource.',
-                    'keywords' => 'Keywords',
-                    'keywords_popover' => 'Keywords are used mainly by search engines for indexing a resource. They must be separated by commas without spaces.',
-
-                    'sort_attr' => 'Sort products by',
-                    'sort_attr_name' => 'The name of the item (A -> Z)',
-                    'sort_attr_name_desc' => 'The name of the item (Z -> A)',
-                    'sort_attr_sort_priority' => 'Priority of products sorting (1 -> N)',
-                    'sort_attr_sort_priority_desc' => 'Priority of products sorting (N -> 1)',
-
-                ],
-                'access_mode' => [
-                    'title' => 'Access mode',
-                    'description' => 'This setting controls how users can access the store.<br>
-                        <strong> Only guests </strong>: Authorization in the store is disabled, users will purchase products without signing in.<br>
-                        <strong> Authorized users only </strong>: Authorization in the store is mandatory, the products can be purchasedOnly users logged into your account. <br>
-                        <strong> Both guests and authorized users </strong>: Users can make purchases both by logging in to the account, and without entering it.',
-                    'guest' => 'Only guests',
-                    'auth' => 'Only authorized users',
-                    'all' => 'Both guests and authorized users',
-                ],
-                'register' => [
-                    'title' => 'Signup',
-                    'enable' => 'Allow new user registration',
-                    'send_mail' => 'Enable sending emails to users for account verification',
-                    'send_mail_popover' => 'If this option is enabled, after the registration, the user will be sent an email to the email address specified by the user. This is necessary in order to confirm the validity of the e-mail address.',
-                    'redirect' => 'Redirect user to custom URL after registration',
-                    'redirect_popover' => 'If the option is enabled, after registration, the user will be redirected to the URL that is specified in the field below.',
-                    'url' => 'Custom URL',
-                ],
-                'skins' => [
-                    'title' => 'Skins and cloaks',
-                    'enable' => 'Allow users to set skins',
-                    'enable_popover' => 'Players will be able to install <strong> skins </strong> for their characters. If you disabled the ability to install HD skins, then the skin size should be equal to <strong> 64x32 </strong> pixel.',
-                    'hd' => 'Allow users to set HD skins',
-                    'hd_popover' => 'Players will be able to install <strong> HD skins </strong> for their characters. The maximum image size is <strong> 1024x512 </strong>.',
-                    'size' => 'Maximum size of the skin file',
-                    'size_popover' => 'The size should be specified in <strong> kilobytes</strong>.',
-                ],
-                'cloaks' => [
-                    'enable' => 'Allow users to set cloaks',
-                    'enable_popover' => 'Players will be able to install <strong> cloaks </strong> for their characters. If you disabled the ability to install HD raincoats, then the image size should be equal to <strong> 22x17 </strong> pixel.',
-                    'hd' => 'Allow users to set HD cloaks',
-                    'hd_popover' => 'Players will be able to install <strong> HD cloaks </strong> for their characters. The maximum image size is <strong> 1024x512 </strong>.',
-                    'size' => 'Maximum size of the cloak file',
-                    'size_popover' => 'The size should be specified in <strong> kilobytes</strong>.',
-                ],
-                'news' => [
-                    'title' => 'News',
-                    'enable' => 'Enable news feed',
-                    'first_portion' => 'Number of news items on the screen at boot time',
-                    'load_portion' => 'Number of downloads at a time'
-                ],
-                'pagination' => [
-                    'title' => 'Pagination',
-                    'shop_products_per_page' => 'Number of products per shop page',
-                    'profile_payments_per_page' => 'Number of items on the payment history page in the user profile',
-                    'profile_in_game_cart_per_page' => 'Number of items on the page of the in-game shopping cart in the user\'s profile',
-                ],
-                'cart' => [
-                    'title' => 'Cart',
-                    'capacity' => 'Maximum capacity of the basket'
-                ],
-                'monitoring' => [
-                    'title' => 'Monitoring',
-                    'enable' => 'Enable server monitoring',
-                    'timeout' => 'Connection timeout',
-                    'timeout_popover' => 'The time after which the connection to the server socket will be automatically disconnected. (If there is no connection). Specify in seconds.',
-                    'pattern' => 'Response format',
-                    'pattern_popover' => 'Here you need to enter a regular expression that will parse the response string. It must necessarily include a capture-group ?&lt;now&gt; (To mark the current online) and ?&lt;total&gt; (For marking the total number of slots on the server). Note that, before comparing with the regular expression, the response string from the server is cleared of special characters.',
-                ],
-                'maintenance' => [
-                    'title' => 'Maintenance mode',
-                    'description' => 'Enable / disable maintenance mode. This mode closes the access to the site.
-                        Access will only be open to administrators. An authorization page will also be available
-                        (You can change the list of available routes in the <code> except </code> property
-                        Intermediary <code>App\Http\Middleware\CheckForMaintenanceMode </code>).
-                        At the same time, anyone who entered the site will be shown a message. Edit it you
-                        You can in the <code>resources/view/errors/503.blade.php</code> file.',
-                    'enable' => 'Enable maintenance mode'
+    'frontend' => [
+        'auth' => [
+            'login' => [
+                'title' => 'Login',
+                'maintenance' => 'Login for administration only',
+                'login' => 'Login',
+                'purchase_without_auth' => 'Purchase without authorization',
+                'forgot_password' => 'Forgot password?',
+                'logout' => 'Logout'
+            ],
+            'register' => [
+                'title' => 'Signup',
+                'btn' => 'Signup'
+            ],
+            'activation' => [
+                'sent' => [
+                    'title' => 'Waiting for activation',
+                    'short_title' => 'Waiting',
+                    'description' => 'A email was sent to the mailbox you specified to confirm registration.
+                              <p><p>If the email does not come, you can send it again.</p></p>',
+                    'repeat' => 'Отправить повторно'
                 ]
             ],
-            'payments' => [
-                'title' => 'Payments',
-                'common' => [
-                    'title' => 'Common',
-                    'min_sum' => 'Minimum balance recharge amount',
-                    'currency' => 'Currency',
-                    'currency_name' => 'Currency name',
-                    'currency_html' => 'HTML representation of currency',
+            'password' => [
+                'forgot' => [
+                    'title' => 'Password reset',
+                    'description' => 'We will send a link to your email for password recovery.',
+                    'continue' => 'Continue'
                 ],
-                'aggregators' => [
-                    'title' => 'Payment aggregators',
-                    'robokassa' => [
-                        'title' => 'Robokassa',
-                        'enabled' => 'Enable Robokassa',
-                        'change_data' => 'Changing the personal data of the Robokassa service',
-                        'login' => 'Login',
-                        'password1' => 'Password №1',
-                        'password2' => 'Password №2',
-                        'algo' => 'Algorithm for calculating the checksum',
-                        'is_test' => 'Test mode',
+                'reset' => [
+                    'title' => 'Reset password',
+                    'btn' => 'reset'
+                ]
+            ],
+            'servers' => [
+                'title' => 'Select a server'
+            ]
+        ],
+        'shop' => [
+            'layout' => [
+                'server_not_selected' => 'Not selected'
+            ],
+            'catalog' => [
+                'title' => 'Catalog',
+                'categories_does_not_exists' => 'No categories',
+                'empty_category' => 'Category is empty',
+                'item' => [
+                    'enchanted' => 'This item has been enchanted',
+                    'hidden' => 'This product is hidden from the catalog',
+                    'put_in_cart' => 'Put in cart',
+                    'already_in_cart' => 'Already in the cart',
+                    'about' => 'Product information',
+                    'go_to_product' => 'Go to product',
+                    'go_to_item' => 'Go to item',
+                    'quick_purchase' => 'Quick purchase',
+                    'stack_item' => 'for :stack',
+                    'stack_permgroup' => 'for :stack day.',
+                    'stack_permgroup_forever' => 'forever',
+                    'stack_currency' => 'for :stack',
+                    'stack_region_owner' => '',
+                    'stack_region_member' => '',
+                    'stack_command' => '',
+                ],
+                'purchase' => [
+                    'title' => 'Quick purchase (:product)',
+                    'username_description' => 'This user will be issued the purchased products',
+                    'amount' => 'Amount:',
+                    'duration' => 'Duration:',
+                    'cost' => 'Total: :cost :currency',
+                    'not_enough' => 'There is not enough money on your account. After clicking the "purchase" button you
+                        will be automatically redirected to the payment method selection page.',
+                    'not_auth' => 'After clicking the "purchase" button you
+                        will be automatically redirected to the payment method selection page.',
+                    'purchase' => 'Purchase'
+                ],
+                'about' => [
+                    'title' => 'Product information (:product)',
+                    'description' => [
+                        'empty' => 'Product description is absent',
+                        'title' => 'Product description:'
                     ],
-                    'interkassa' => [
-                        'title' => 'Interkassa',
-                        'enabled' => 'Enable Interkassa',
-                        'change_data' => 'Changing the personal data of the Interkassa service',
-                        'login' => 'Checkout identifier',
-                        'key' => 'Key',
-                        'currency' => 'Currency',
-                        'test_key' => 'Test key',
-                        'algo' => 'Algorithm for calculating the checksum',
-                        'is_test' => 'Test mode',
+                    'type' => 'Type:',
+                    'enchantments' => 'Enchanted:'
+                ]
+            ],
+            'cart' => [
+                'title' => 'Cart',
+                'empty' => 'Cart is empty',
+                'total' => 'Total: :sum :currency',
+                'purchase' => 'Purchase',
+                'purchase_dialog' => [
+                    'title' => 'Purchase formalities'
+                ],
+                'item' => [
+                    'remove' => 'Remove',
+                    'cost' => 'Cost: :cost :currency',
+                    'forever' => 'This product is purchased forever'
+                ]
+            ],
+            'payment' => [
+                'title' => 'Payment for purchase',
+                'title_content' => 'Payment of purchase. Select a payment method:',
+                'methods_not_available' => 'There are no payment methods available.'
+            ],
+            'replenishment' => [
+                'title' => 'Balance replenishment',
+                'sum' => 'Sum of replenishment',
+                'btn' => 'Continue'
+            ]
+        ],
+        'profile' => [
+            'character' => [
+                'title' => 'Character',
+                'upload' => 'Upload',
+                'skin' => [
+                    'image_resolutions' => 'You can upload images of skins with the following permissions: :resolutions.',
+                    'file_size' => 'Maximum size of the skin file: :size КБ.'
+                ],
+                'cloak' => [
+                    'not_set' => 'Cloak not installed',
+                    'image_resolutions' => 'You can upload images of cloaks with the following permissions: :resolutions.',
+                    'file_size' => 'Maximum size of the cloak file: :size КБ.'
+                ]
+            ],
+            'settings' => [
+                'title' => 'Settings',
+                'password_change' => [
+                    'title' => 'Change password',
+                    'new' => 'New password',
+                    'new_confirmation' => 'Confirm new password'
+                ],
+                'login_reset' => [
+                    'title' => 'Reset of login sessions',
+                    'description' => 'After clicking on the button below, all login sessions (including the current one) will be reset. This can be useful in case you want to log out of your account on devices that you do not have access to.',
+                    'reset' => 'Reset'
+                ]
+            ],
+            'purchases' => [
+                'title' => 'Purchase history',
+                'table' => [
+                    'headers' => [
+                        'id' => 'ID',
+                        'cost' => 'Cost',
+                        'created_at' => 'Created at',
+                        'completed_at' => 'Completed at',
+                        'via' => 'Via'
                     ],
+                    'type' => [
+                        'products' => 'Product purchasing',
+                        'refill' => 'Balance replenishment'
+                    ],
+                    'empty' => 'Purchases list is empty',
+                    'details' => 'Details',
+                    'pay' => 'Pay',
+                    'complete' => 'Complete'
+                ],
+                'details' => [
+                    'title' => 'Products list',
+                    'table' => [
+                        'headers' => [
+                            'name' => 'Name',
+                            'image' => 'Image',
+                            'stack' => 'For sale by',
+                            'amount' => 'Products purchased',
+                            'cost' => 'Cost'
+                        ]
+                    ]
+                ],
+                'via' => [
+                    'by_admin' => 'Completed by administrator'
+                ]
+            ],
+            'cart' => [
+                'title' => 'In-game cart',
+                'any_server' => 'Any',
+                'table' => [
+                    'headers' => [
+                        'name' => 'Name',
+                        'amount' => 'Amount/duration'
+                    ],
+                    'empty' => 'The list of items is empty'
+                ]
+            ]
+        ],
+        'news' => [
+            //
+        ]
+    ],
+    'admin' => [
+        'control' => [
+            'basic' => [
+                'basic_section' => 'General information about the store',
+                'title' => 'Basic settings',
+                'name' => 'Shop name',
+                'description' => 'Shop description',
+                'keywords' => 'Shop keywords',
+                'users_section' => 'Users',
+                'access_mode' => [
+                    'title' => 'Access mode',
+                    'guest' => 'Guests only',
+                    'auth' => 'Authorized users only',
+                    'any' => 'Both guests and authorized users',
+                ],
+                'enable_register' => 'Allow new users to register',
+                'enable_send_activations' => 'Enable sending emails to users for account verification',
+                'custom_url_after_register' => 'Redirect user to custom URL after registration',
+                'skin_cloak_section' => 'Skins and cloaks',
+                'skin_enabled' => 'Allow users to set skins',
+                'hd_skin_enabled' => 'Allow users to set HD skins',
+                'cloak_enabled' => 'Allow users to set cloaks',
+                'hd_cloak_enabled' => 'Allow users to set HD cloaks',
+                'max_skin_file_size' => 'Maximum size of the skin file (KB)',
+                'max_cloak_file_size' => 'Maximum size of the raincoat file (KB)',
+                'skin_sizes' => 'Acceptable image size of the skin',
+                'skin_sizes_hd' => 'The acceptable dimensions of the HD skin image',
+                'cloak_sizes' => 'Acceptable image sizes of a cloak',
+                'cloak_sizes_hd' => 'The dimensions of the HD cloak image',
+
+                'catalog_section' => 'Catalog',
+                'catalog_per_page' => 'Number of products per page of the catalog',
+                'sort_products' => [
+                    'title' => 'Sort products in catalog',
+                    'by_name' => 'By the name of the item (A -> Z)',
+                    'by_name_desc' => 'By the name of the item (Z -> A)',
+                    'by_priority' => 'By the sort priority of the item (1 -> N)',
+                    'by_priority_desc' => 'By the sort priority of the item (N -> 1)',
+                ],
+
+                'news_section' => 'News',
+                'news_enabled' => 'Enable news feed',
+                'news_per_portion' => 'Number of downloads at a time',
+
+                'monitoring_section' => 'Server monitoring',
+                'monitoring_enabled' => 'Enable server monitoring',
+                'monitoring_rcon_timeout' => 'RCON Connection Timeout (sec.)',
+                'monitoring_rcon_command' => 'Player list obtaining command',
+                'monitoring_rcon_response_pattern' => 'The regular expression of parsing the server response',
+
+                'service_section' => 'Service',
+                'maintenance_mode_enabled' => 'Enable maintenance mode'
+            ],
+            'payments' => [
+                'title' => 'Payment settings',
+                'basic_section' => 'Common',
+                'min_fill_balance_sum' => 'Minimum balance replenishment sum',
+                'currency' => 'Currency text representation',
+                'currency_html' => 'Formatted currency representation',
+                'aggregators_section' => 'Payment aggregators',
+                'robokassa' => [
+                    'title' => 'Robokassa',
+                    'enabled' => 'Use Robokassa',
+                    'login' => 'Login',
+                    'payment_password' => 'Password #1',
+                    'validation_password' => 'Password #2',
+                    'algorithm' => 'Algorithm for calculating the checksum',
+                    'test' => 'Test mode'
+                ],
+                'interkassa' => [
+                    'title' => 'Interkassa',
+                    'enabled' => 'Use Interkassa',
+                    'key' => 'Key',
+                    'checkout_id' => 'Checkout ID',
+                    'test_key' => 'Test key',
+                    'currency' => 'Currency',
+                    'algorithm' => 'Algorithm for calculating the checksum',
+                    'test' => 'Test mode'
                 ]
             ],
             'api' => [
                 'title' => 'API',
-                'api_enable_alert' => 'Be sure to enable the API before using it.',
-                'api_doc_alert' => 'Detailed API documentation can be found',
-                'api_doc_alert_btn' => 'here',
-                'enable_api' => [
-                    'title' => 'Enable API',
-                    'enable' => 'Enable',
-                ],
-                'key' => [
-                    'title' => 'Access key',
-                    'description' => 'With this key, all interactions of your resource with the l-shop API will take place. The key length can not be less than 32 characters.',
-                    'secret_key' => 'The secret key',
-                    'alert' => 'Never tell anyone this key! Otherwise, the security of the application will be at risk.',
-                ],
-                'algo' => [
-                    'title' => 'Hash algorithm',
-                    'description' => 'Using this algorithm, the checksum of the string will be calculated. This is necessary to perform a secure API request.',
-                    'alert' => 'We <strong> do not recommend </strong> to use the <strong>md5</strong> algorithm, due to its low resiliency.'
-                ],
-                'separator' => [
-                    'title' => 'Delimiter of arguments',
-                    'description' => 'This symbol will separate the parameters in the string from which the checksum will be calculated.',
-                    'input' => 'Separator',
-                ],
-                'auth' => [
-                    'title' => 'API - authorization',
-                    'enable' => 'Enable',
-                    'remember' => 'Remember Authenticated Users'
-                ],
-                'register' => [
-                    'title' => 'API - registration',
-                    'enable' => 'Enable',
-                ],
-                'sashok' => [
-                    'title' => 'Integration with Sashok724\'s launcher',
-                    'enable' => 'Enable',
-                    'success_response' => [
-                        'title' => 'Successful service response format',
-                        'description' => 'This line will be "displayed" to the launcher if the entered data is successfully verified.
-                            The {username} token will be replaced with the username. For example, if the answer format is OK: {username}, if successful
-                            Verification of user data D3lph1, the server will receive the response: OK: D3lph1.',
-                        'format' => 'Format'
-                    ],
-                    'fail_response' => [
-                        'input' => 'Message when the user enters the data incorrectly'
-                    ],
-                    'whitelist' => [
-                        'description' => 'Below you can enter a list of ip-addresses that can connect to the L-Shop and check user data for authorization in the launcher.
-                            We recommend that you specify here your ip launcher. Leave the field blank so that you do not use blocking of foreign addresses (Not recommended).',
-                        'input' => 'List of allowed IP addresses (Separator - comma, for example: 127.0.0.1, 192.168.0.1).'
-                    ]
+                'basic' => 'Basic',
+                'enabled' => 'Enable API',
+                'key' => 'Secret key',
+                'delimiter' => 'Arguments delimiter',
+                'algorithm' => 'Algorithm for calculating the checksum',
+                'functions' => 'Functions',
+                'auth' => 'Authorization',
+                'auth_enabled' => 'Enable API authentication',
+                'register_enabled' => 'Enable user registration API',
+                'sashok724s_launcher' => [
+                    'title' => 'Integration with Sashok724\'s Launcher',
+                    'enabled' => 'Enable integration',
+                    'format' => 'Successful service response format',
+                    'ips' => 'List of allowed IP addresses'
                 ]
             ],
             'security' => [
                 'title' => 'Security',
-                'debug_mode_alert' => '<p> <strong>Warning:</strong> You have debug mode enabled. Visitors to your site can see the debugging
-                    Information, and also, errors. Without fail, disable this mode in the "production", setting the value
-                    Of the <code> APP_DEBUG </code>element in the <code>.env</code> file to <code> false </code>. </p>
-                    To get it this way: <code>APP_DEBUG=false</code>',
-                'generator' => [
-                    'title' => 'Key generator',
-                    'description_app_key' => 'This tool helps to create an application key',
-                    'description_app_key_instruction' => '<p> Set this key to the value of the <code> APP_KEY </code> element in the <code> .env </code> </p> file
-                        It should look like this: <code>APP_KEY={{ $key }}</code>',
-                    'description_app_key_notify' => '<strong>Warning:</strong> After changing the application key, all users (including you) will be disconnected.',
-                    'description_app_auth_key' => 'And this is the key of the session:',
-                    'description_app_auth_key_instruction' => '<p> Set this key to the value of the <code> APP_AUTH_KEY </code> element in the <code> .env </code> </p> file
-                        It should look like this: <code>APP_AUTH_KEY={{ $key }}</code>',
-                    'description_app_auth_key_notify' => 'Never tell these keys to anyone! Otherwise, the security of the application will be at risk.',
-                ],
                 'recaptcha' => [
                     'title' => 'reCAPTCHA',
-                    'description' => 'Change the reCAPTCHA service keys.',
+                    'enabled' => 'Enable reCAPTCHA form protection',
                     'public_key' => 'Public key',
-                    'secret_key' => 'The secret key',
-                    'check' => 'Check',
-
-                    'modal' => [
-                        'title' => 'Checking ReCAPTCHA',
-                        'btn' => 'Ok',
-                    ]
+                    'secret_key' => 'Secret key'
                 ],
-                'user' => [
-                    'title' => 'User',
-                    'allow_change_password' => 'Allow the user to change the password from their account',
-                    'allow_reset_password' => 'Allow the user to reset the password',
-                ]
+                'user_section' => 'User',
+                'reset_password_enabled' => 'Allow the user to reset the password',
+                'change_password_enabled' => 'Allow the user to change the password from their account',
             ],
             'optimization' => [
                 'title' => 'Optimization',
-                'caching' => [
-                    'title' => 'Caching',
-                    'statistic_ttl' => 'The lifetime of the statistics cache (minutes)',
-                    'statistic_ttl_popover' => 'After this time, the store statistics cache will be deleted and then updated.',
-                    'pages_ttl' => 'Cache lifetime of static pages (minutes)',
-                    'pages_ttl_popover' => 'After this time, the cache of static pages will be deleted and then updated.',
-                    'news_ttl' => 'The lifetime of the news cache (minutes)',
-                    'news_ttl_popover' => 'After this time, the news cache will be deleted and then updated.',
-                    'monitoring_ttl' => 'Server monitoring cache time (minutes)',
-                    'monitoring_ttl_popover' => 'After this time, the server monitoring cache will be deleted and then updated.',
-
-                    'routes_cache' => [
-                        'title' => 'Update route cache',
-                        'description' => 'Description of the routes by which the system determines what action to associate with a particular url
-                            Scattered in files and presented in a human-readable format. Updating the route cache
-                            Allows you to generate a file in which the routes will be stored in a "convenient" way for the system and,
-                            Most, speed up the execution of requests.',
-                    ],
-                    'config_cache' => [
-                        'title' => 'Update configuration cache',
-                        'description' => 'To increase the speed of work, Laravel caches the settings. After clicking on the button below, the cache will be deleted,
-                            And then generated again. This function can be useful if you have changed the values of any
-                            Settings in the configuration files.',
-                    ],
-                    'templates_cache' => [
-                        'title' => 'Clear template cache',
-                        'description' => 'The framework on which the L-Shop is based, for the convenience of development, uses the Blade template engine.
-                            Blade caches views in order to increase the speed of work. You may need to clear
-                            This cache. It will be recreated after updating each page of the site.',
-                    ],
-                    'app_cache' => [
-                        'title' => 'Clear application cache',
-                        'description' => 'To achieve the best performance, L-Shop caches many data to "get" them from
-                            Cache, and not "drag" from the database. The button below will help clear all this information. It will be recreated
-                            Automatically when required.',
-                    ]
-                ],
+                'caching_section' => 'Caching',
+                'monitoring_ttl' => 'Server monitoring cache time (minutes)',
+                'reset_app_cache' => 'Reset application cache'
             ]
         ],
         'servers' => [
             'add' => [
-                'title' => 'Add Server',
+                'title' => 'Add server',
                 'name' => 'Server name',
-                'categories' => [
-                    'title' => 'Categories',
-                    'name' => 'Category name',
-                    'add' => 'Add category'
-                ],
+                'categories' => 'Categories',
+                'category_name' => 'Category name',
+                'connecting' => 'Connection',
                 'ip' => 'Server IP address',
-                'port' => 'RCON server port',
+                'port' => 'RCON port',
                 'password' => 'RCON password',
-                'monitoring' => 'Enable server monitoring',
-                'enable' => 'Enable server',
-                'save' => 'Save'
+                'monitoring_enabled' => 'Enable server monitoring',
+                'server_enabled' => 'Enable server',
+                'distribution' => 'Products distribution',
+                'distributor' => 'Distributor class name',
+                'finish' => 'Finish'
             ],
             'edit' => [
-                'title' => 'Edit :name server',
-                'new_category_name' => 'Name of the new category',
-                'add' => 'Add new category',
-                'remove' => 'Delete server'
+                'title' => 'Edit server',
+                'finish' => 'Finish editing'
             ],
             'list' => [
-                'title' => 'Edit servers',
-                'create' => 'Create server',
-                'edit' => 'Edit',
-                'enable' => 'Enable',
-                'disable' => 'Disable',
+                'title' => 'Servers list',
+                'categories' => 'Categories',
+                'server_id' => 'Server ID',
+                'go_to_server' => 'Go to server',
+                'delete' => 'Are you sure you want to delete the server ":name"? This will destroy all the data associated with this server (categories, products).'
             ]
         ],
         'products' => [
             'add' => [
                 'title' => 'Add product',
-                'attach_item' => 'Assign item/privilege',
-                'products_in_stack' => 'Quantity of products in 1 stack',
-                'perm_duration' => 'Duration of the privilege (in days). 0 - forever',
-                'products_price' => 'Price per stack of products',
-                'perm_price' => 'The price of one privilege period',
-                'sort_priority' => 'Sort priority',
-                'sort_priority_popover' => 'Sort priority is a fractional or integer, positive or negative number. By this value, goods will be sorted in the directory (This mode can be enabled/disabled in <strong> Administration > Basic Settings </strong>).',
-                'attach_server_category' => 'Assign to server/category',
-                'save' => 'Save'
+                'item' => 'Item',
+                'server' => 'Server to which the product will be attached',
+                'category' => 'Category to which the product will be attached',
+                'no_categories' => 'There are no categories on the selected server.',
+                'item_stack' => 'Amount of products in 1 stack',
+                'currency_stack' => 'The number of in-game currency in 1 stack',
+                'permgroup_stack' => 'Permission group duration',
+                'forever' => 'Permission group is acquired forever',
+                'price_for_stack' => 'The price of one stack of products',
+                'price_for_period' => 'The price of one period of permission group',
+                'price_for_currency' => 'Price of a stack of in-game currency',
+                'price_for_region' => 'Price of a one region',
+                'price_for_command' => 'Price of a one command',
+                'sort_priority' => 'Product sort priority in a catalog',
+                'hide' => 'Hide product from catalog',
+                'finish' => 'Finish adding product'
             ],
             'edit' => [
                 'title' => 'Edit product',
-                'remove' => 'Delete product'
+                'finish' => 'Finish editing a product'
             ],
             'list' => [
-                'title' => 'Edit products',
-                'add' => 'Add products',
-                'sort' => [
-                    'title' => 'Sort',
-                    'without' => 'Without sorting',
-                    'id' => 'By identifier',
-                    'id_desc' => 'By identifier, descend',
-                    'name' => 'By name',
-                    'name_desc' => 'By name, descend'
-                ],
-                'filter' => [
-                    'title' => 'Filer',
-                    'without' => 'Without filtering'
-                ],
+                'title' => 'Products list',
+                'search' => 'Search by products',
                 'table' => [
-                    'id' => 'ID',
-                    'image' => 'Image of the item',
-                    'name' => 'Item name',
-                    'price' => 'Price (per stack)',
-                    'count' => 'Count/Duration',
-                    'server' => 'Server',
-                    'category' => 'Category',
-                    'edit' => 'Edit'
+                    'headers' => [
+                        'id' => 'ID',
+                        'price' => 'Price',
+                        'stack' => 'Amount/Duration',
+                        'image' => 'Image',
+                        'item' => 'Item name',
+                        'type' => 'Item type'
+                    ],
+                    'empty' => 'The list of items is empty'
                 ],
-                'empty' => 'The list of products is empty...'
+                'delete' => 'Are you sure you want to delete this item?'
             ]
         ],
         'items' => [
             'add' => [
                 'title' => 'Add item',
-                'item_name' => 'Item name',
-                'perm_name' => 'Privilege name',
-                'type' => [
-                    'title' => 'Type',
-                    'item' => 'Item/Block',
-                    'perm' => 'Privilege',
-                ],
+                'name' => 'Item name',
+                'description' => 'Item description',
+                'item_id' => 'In-game item identifier',
+                'permgroup_id' => 'In-game permission group identifier',
+                'region_owner_id' => 'In-game region identifier',
+                'region_member_id' => 'In-game region identifier',
+                'command' => 'Executable command',
                 'image' => [
-                    'title' => 'Image type',
-                    'default' => 'Default image',
-                    'load' => 'Upload image',
-                    'select' => 'Select an image',
-                    'not_selected' => 'No image selected'
+                    'default' => 'Default',
+                    'upload' => 'Upload',
+                    'browse' => 'Browse'
                 ],
-                'item_id' => 'In-game ID or ID:DATA of item',
-                'perm_id' => 'In-game privilege identifier',
-                'extra' => 'Extra'
+                'browser' => [
+                    'title' => 'Images of objects in the server file system',
+                    'select' => 'Select an image',
+                    'name' => 'File name'
+                ],
+                'enchantment' => [
+                    'title' => 'Enchanting table',
+                    'description' => 'Select the intensity of the desired enchants and close the dialog box. Remember, most spells can only be combined with certain enchants.'
+                ],
+                'extra' => 'Extra',
+                'pattern' => 'Response pattern',
+                'finish' => 'Complete creation'
             ],
             'edit' => [
                 'title' => 'Edit item',
+                'finish' => 'Finish editing',
                 'image' => [
                     'current' => 'Current'
-                ],
-                'remove' => 'Delete item'
+                ]
             ],
             'list' => [
-                'title' => 'Edit items',
-                'add' => 'Add item',
+                'title' => 'Items list',
+                'search' => 'Search by items',
                 'table' => [
-                    'id' => 'ID',
-                    'image' => 'Image',
-                    'name' => 'Name',
-                    'type' => 'Type',
-                    'extra' => 'Extra',
-                    'edit' => 'Edit',
+                    'headers' => [
+                        'id' => 'ID',
+                        'name' => 'Name'
+                    ],
+                    'loading' => 'Item information is loading...',
+                    'empty' => 'The list of items is empty'
                 ],
-                'empty' => 'The list of items is empty ...'
-            ]
+                'delete' => 'Are you sure that you want to delete this ":name"?'
+            ],
         ],
         'news' => [
             'add' => [
                 'title' => 'Add news',
-                'name' => 'News title',
-                'placeholder' => 'Let\'s do something amazing...',
-                'publish' => 'Publish',
+                'title_input' => 'News title',
+                'content' => 'Let\'s do something amazing...',
+                'finish' => 'Finish'
             ],
             'edit' => [
                 'title' => 'Edit news',
-                'remove' => 'Delete news'
+                'finish' => 'Finish editing'
             ],
             'list' => [
-                'title' => 'Edit news',
-                'add' => 'Add news',
+                'title' => 'News list',
+                'search' => 'Search news',
                 'table' => [
-                    'id' => 'ID',
-                    'name' => 'Title',
-                    'author' => 'Author',
-                    'published_at' => 'Date of publication',
-                    'updated_at' => 'Last edited date',
-                    'edit' => 'Edit'
+                    'headers' => [
+                        'id' => 'ID',
+                        'title' => 'Title',
+                        'username' => 'Author',
+                        'created_at' => 'Date and time of creation'
+                    ],
+                    'loading' => 'News information is loading...',
+                    'empty' => 'News list is empty'
                 ],
-                'empty' => 'No news yet...'
-            ]
+                'delete' => 'Are you sure you want to delete the news?'
+            ],
         ],
         'pages' => [
             'add' => [
                 'title' => 'Add static page',
-                'name' => 'Page title',
-                'placeholder' => 'Let\'s do something amazing...',
-                'generate' => 'Generate automatically',
-                'address' => 'page address',
-                'access' => 'You can access the page by clicking on the link: <strong>:url</strong>',
-                'save' => 'Save this page',
+                'title_input' => 'Static page title',
+                'content' => 'Let\'s do something amazing...',
+                'url' => 'Page URL',
+                'url_auto' => 'Generate URL automatically',
+                'finish' => 'Finish'
             ],
             'edit' => [
-                'title' => 'Edit static page',
-                'remove' => 'Delete page'
+                'title' => 'Edit static page'
             ],
             'list' => [
-                'title' => 'Edit static pages',
-                'add' => 'Add static page',
+                'title' => 'List of static pages',
+                'search' => 'Search static pages',
                 'table' => [
-                    'id' => 'ID',
-                    'name' => 'Title',
-                    'url' => 'URL',
-                    'created_at' => 'Date added',
-                    'updated_at' => 'Last edited date',
-                    'edit' => 'Edit'
+                    'headers' => [
+                        'id' => 'ID',
+                        'title' => 'Title',
+                        'url' => 'URL'
+                    ],
+                    'loading' => 'Information about static pages is loaded...',
+                    'empty' => 'The list of static pages is empty'
                 ],
-                'empty' => 'No static pages yet ...'
-            ]
+                'delete' => 'Are you sure you want to delete the static page?'
+            ],
         ],
         'users' => [
             'edit' => [
-                'title' => 'Edit user :username',
-                'unblock' => 'Unlock',
-                'username' => 'Username',
-                'email' => 'Email',
-                'balance' => 'Balance',
-                'password' => 'New password',
-                'other' => [
-                    'title' => 'Other',
-                    'in_game_cart' => 'View in-game shopping cart',
-                    'sessions' => 'Reset all login - sessions of this user',
-                    'block' => 'Block user'
+                'main' => [
+                    'title' => 'Edit user',
+                    'new_password' => 'New password',
+                    'balance' => 'Balance',
+                    'roles' => 'User roles',
+                    'permissions' => 'User permissions',
+                    'finish' => 'Finish editing',
                 ],
-                'remove' => 'Delete user',
-                'cart_modal' => [
-                    'title' => 'View in-game shopping cart',
-                    'btn' => 'Ok',
-                    'table' => [
-                        'image' => 'Image',
-                        'item' => 'Item',
-                        'count' => 'Count/Duration',
-                        'server' => 'Server'
+                'actions' => [
+                    'title' => 'User action',
+                    'activated_at' => 'User activated at :datetime.',
+                    'banned' => 'The user is banned',
+                    'show_bans_history' => 'View ban history',
+                    'bans_history' => [
+                        'title' => ':username ban history',
+                        'created_at' => 'Date of blocking',
+                        'until' => 'Date of blocking expired',
+                        'reason' => 'Reason',
+                        'delete' => 'Are you sure you want to delete the ban?',
+                        'caption' => 'non-expired bans'
                     ],
-                    'empty' => 'Your cart is empty'
-                ],
-                'block_modal' => [
-                    'title' => 'Block user',
-                    'btn' => 'Block',
-                    'cancel' => 'Cancel',
-                    'duration' => 'Duration of blocking',
-                    'duration_popover' => 'The length of the user\'s blocking in days is indicated here. In order to block the user permanently, enter zero (0).',
-                    'reason' => 'Reason for blocking',
-                    'reason_popover' => 'The reason for the blocking is indicated, so that you and the user himself knew about what his account was blocked for. This field is optional.',
+                    'show_ban_dialog' => 'Ban user',
+                    'show_add_ban_dialog' => 'Add ban to user',
+                    'add_ban' => [
+                        'forever' => 'Ban permanently',
+                        'duration' => 'Duration',
+                        'concrete' => 'Concrete',
+                        'in_days' => 'In days',
+                        'days' => 'Duration of blocking in days',
+                        'date' => 'Date of blocking expired',
+                        'time' => 'Time of blocking expired',
+                        'datetime' => 'Date and time of blocking expired',
+                        'reason' => 'Reason',
+                        'finish' => 'Block'
+                    ],
+                    'purchase_history' => [
+                        'title' => 'Purchase history'
+                    ],
+                    'cart' => [
+                        'title' => 'In-game cart'
+                    ]
                 ]
             ],
             'list' => [
-                'title' => 'Edit Users',
-                'search' => [
-                    'placeholder' => 'Search Users',
-                    'lets_typing' => 'Start typing ...',
-                    'nothing' => 'Nothing found',
-                    'wait' => 'Search...',
-                    'popover' => 'Enter here login, mail, balance, in order to search by users. Also, you can search for users using spets. regulations.
-                        So, the query <strong>&gt;520</strong> will select all users whose balance is greater than 520. <strong>&lt;100 </strong> - less than 100. <strong> = 0 </strong> - Those with whom There is no money on the balance sheet.'
-                ],
+                'title' => 'List of users',
+                'search' => 'Search by users',
                 'table' => [
-                    'id' => 'ID',
-                    'username' => 'Username',
-                    'email' => 'Email',
-                    'balance' => 'Balance',
-                    'admin' => 'Admin',
-                    'edit' => 'Edit',
-                    'status' => 'Account status',
-                    'blocked' => 'Blocked',
-                    'blocked_popover_title' => 'Lock information',
-                    'activated' => 'Confirmed',
-                    'activated_popover_title' => 'Confirmation Information',
-                    'activate' => 'Confirm',
-                    'activated_info' => 'Account of this user confirmed at :date.'
+                    'headers' => [
+                        'id' => 'ID',
+                        'balance' => 'Balance',
+                        'states' => 'States'
+                    ],
+                    'activated' => 'This user account has been activated',
+                    'banned' => 'This user is blocked',
+                    'loading' => 'User information is loaded...',
+                    'empty' => 'User list is empty'
+                ],
+                'delete' => 'Are you sure you want to delete the user?'
+            ],
+            'roles' => [
+                'title' => 'Permissions and roles',
+                'permissions_table' => [
+                    'title' => 'Permissions',
+                    'search' => 'Search by permissions',
+                    'headers' => [
+                        'id' => 'ID',
+                        'name' => 'Name'
+                    ],
+                    'update_name' => 'Update name',
+                    'delete' => 'Are you sure you want to delete this permission?',
+                    'empty' => 'The list of permissions is empty'
+                ],
+                'create_permission_dialog' => [
+                    'title' => 'Creating a permission',
+                    'name' => 'Permission name'
+                ],
+                'roles_table' => [
+                    'title' => 'Roles',
+                    'search' => 'Search by roles',
+                    'headers' => [
+                        'id' => 'ID',
+                        'name' => 'Name',
+                        'permissions' => 'Permissions'
+                    ],
+                    'update_name' => 'Update name',
+                    'delete' => 'Are you sure you want to delete this role?',
+                    'empty' => 'The list of roles is empty'
+                ],
+                'create_role_dialog' => [
+                    'title' => 'Creating a role',
+                    'name' => 'Role name',
+                    'permissions' => 'Role permissions'
+                ],
+                'update_role_dialog' => [
+                    'title' => 'Updating the permissions of the ":name" role'
                 ]
             ]
         ],
         'other' => [
             'rcon' => [
-                'title' => 'RCON console',
-                'select_server' => 'First, select the server.',
-                'enter_cmd' => 'Enter the command',
-                'exec' => 'Execute',
-                'options' => 'Options',
-                'hide_sent' => 'Hide sent items',
-                'colorize' => 'Colorize the answer',
-                'colorize_popover' => 'The Minecraft server sends color messages using its own formatting. If this option is enabled, the system will convert the special. Characters in HTML markup, understandable to the browser.',
+                'title' => 'RCON - console',
+                'choose_server' => 'Choose server',
+                'input' => 'Input command',
+                'connection_failed' => 'Could not connect to the server: :message'
             ],
             'debug' => [
-                'title' => 'Debugging',
-                'mail' => [
-                    'title' => 'Email',
-                    'description' => 'The test letter will help to check how the function of sending email messages works.',
-                    'address' => 'E-mail address to which the letter will be sent',
-                    'send' => 'Send',
-                    'fail' => 'An error occurred while sending the message:',
-                    'fail_log' => 'Full information about it, as well as the stack traces were written to the log.',
+                'title' => 'Debug',
+                'email' => [
+                    'title' => 'Test email',
+                    'description' => 'A test mail will help you verify how the email function works.',
+                    'address' => 'Email address to which the letter will be sent',
+                    'success' => 'The dispatch has been carried out. Check your email.',
+                    'failure' => 'The following error occurred while sending the message:',
+                    'invalid_address' => 'Invalid email'
                 ]
-            ],
-            'statistics' => [
-                'show' => [
-                    'title' => 'View statistics',
-                    'orders_per_year' => 'Dynamics of committed orders for this year:',
-                    'profit_per_year' => 'The dynamics of profit for this year:',
-                    'orders_per_month' => 'Dynamics of committed orders for',
-                    'profit_per_month' => 'The dynamics of profit for',
-                    'profit' => 'Total profit: :profit :currency',
-                    'clear_cache' => 'Clear cache statistics'
-                ],
-                'payments' => [
-                    'title' => 'Customer purchase and payment history',
-                    'table' => [
-                        'user' => 'User',
+            ]
+        ],
+        'statistic' => [
+            'show' => [
+                'title' => 'View statistics',
+                'profit_for_year' => 'The dynamics of profit for several years',
+                'profit_for_month' => 'Dynamics of profit for the month',
+                'purchases_for_year' => 'Dynamics of fulfillment of orders for several years',
+                'purchases_for_month' => 'Dynamics of fulfillment of orders for a month',
+                'registered_for_year' => 'Dynamics of user registration for several years',
+                'registered_for_month' => 'Dynamics of user registration for the month',
+                'top_purchased_products' => 'Most buy',
+                'table' => [
+                    'title' => 'General indicators of the project',
+                    'headers' => [
+                        'name' => 'Indicator name',
+                        'value' => 'Indicator value',
+                    ],
+                    'items' => [
+                        'profit' => 'Total profit',
+                        'amount_purchases' => 'Orders successfully completed',
+                        'amount_fill_balance' => 'Number of balance replenishment',
+                        'users_registered' => 'Registered users'
                     ]
                 ]
             ],
-            'info' => [
-                'about' => [
-                    'title' => 'About L-Shop',
-                    'description' => '<strong>L - Shop</strong> is an open source project, an entire system designed to help administrators of Minecraft gaming servers simplify the process of selling virtual goods.',
-                    'lshop_version' => 'L-Shop system version',
-                    'laravel_version' => 'The version of the Laravel framework',
-                    'github' => 'GitHub repository',
-                    'rubukkit' => 'Topic on RuBukkit.org',
-                    'developers' => 'Developers',
-                    'd3lph1_description' => '<strong>Software code</strong>. You can contact me for technical support.',
-                    'whiled0s_description' => '<strong>Design and layout</strong>. You can apply to me in order to order the development of a unique design for your site, including for a app based on the L-Shop system.',
-                ],
-                'docs' => [
-                    'title' => 'Documentation',
-                    'main' => 'Basic information on using the system',
-                    'api' => 'API L - Shop Documentation',
-                    'sashok' => 'Sashok724\'s Launcher integration guide',
-                    'cli' => 'CLI L - Shop Documentation',
-                    'read' => 'Read'
+            'purchases' => [
+                'title' => 'User purchases history'
+            ]
+        ],
+        'information' => [
+            'about' => [
+                'title' => 'About L-Shop',
+                'description' => '<strong>L - Shop</strong> - this is an open source project, an entire e-commerce system,
+                The goal is to help administrators of Minecraft gaming servers simplify the process of selling virtual goods.',
+                'version' => 'Version :version',
+                'lshop_version' => 'L-Shop version: :version',
+                'developers_title' => 'Developers',
+                'developers' => [
+                    'D3lph1' => [
+                        'name' => 'Bogdan',
+                        'description' => [
+                            'plain' => 'Software code: backend and frontend. You can contact me for technical support, as well as for ordering the development of various software.',
+                            'html' => '<span class="text--primary">Software code: backend and frontend.</span> You can contact me for technical support, as well as for ordering the development of various software.'
+                        ]
+                    ],
+                    'WhileD0S' => [
+                        'name' => 'Michael',
+                        'description' => [
+                            'plain' => 'Design, layout, frontend. You can contact me in order to order the development of a unique design for your site, including, for a site based on the L-Shop system.',
+                            'html' => '<span class="text--primary">Design, layout, frontend.</span> You can contact me in order to order the development of a unique design for your site, including, for a site based on the L-Shop system.'
+                        ]
+                    ]
                 ]
             ]
         ]
     ],
-    'shop' => [
-        'server_name' => 'Server: ',
-        'catalog' => [
-            'title' => 'Catalog',
-            'category_empty' => 'Category is empty',
-            'item' => [
-                'forever' => 'Forever',
-                'for' => 'for',
-                'items' => '',
-                'duration' => 'day(s)',
-                'already_in_cart' => 'Already in the cart',
-                'put_in_cart' => 'Put in cart',
-                'fast_buy' => 'Fast buy',
+    'layout' => [
+        'shop' => [
+            'server' => 'Server:',
+            'sidebar' => [
+                'balance' => [
+                    'title' => 'Balance',
+                    'replenishment' => 'Replenishment'
+                ],
+                'basic' => [
+                    'title' => 'Store',
+                    'catalog' => 'Catalog',
+                    'cart' => 'Cart',
+                    'servers' => 'To servers'
+                ],
+                'profile' => [
+                    'title' => 'Profile',
+                    'character' => 'Character',
+                    'settings' => 'Settings',
+                    'information' => [
+                        'title' => 'Information',
+                        'sub_items' => [
+                            'purchases' => 'Purchase history',
+                            'cart' => 'In-game cart'
+                        ]
+                    ]
+                ],
+                'admin' => [
+                    'title' => 'Administration',
+                    'control' => [
+                        'title' => 'Control',
+                        'sub_items' => [
+                            'main_settings' => 'Basic settings',
+                            'payments' => 'Payments',
+                            'api' => 'API',
+                            'security' => 'Security',
+                            'optimization' => 'Optimization'
+                        ]
+                    ],
+                    'servers' => [
+                        'title' => 'Servers',
+                        'sub_items' => [
+                            'add' => 'Add',
+                            'edit' => 'Edit'
+                        ]
+                    ],
+                    'products' => [
+                        'title' => 'Products',
+                        'sub_items' => [
+                            'add' => 'Add',
+                            'edit' => 'Edit'
+                        ]
+                    ],
+                    'items' => [
+                        'title' => 'Items',
+                        'sub_items' => [
+                            'add' => 'Add',
+                            'edit' => 'Edit'
+                        ]
+                    ],
+                    'news' => [
+                        'title' => 'News',
+                        'sub_items' => [
+                            'add' => 'Add',
+                            'edit' => 'Edit'
+                        ]
+                    ],
+                    'pages' => [
+                        'title' => 'Static pages',
+                        'sub_items' => [
+                            'add' => 'Add',
+                            'edit' => 'Edit'
+                        ]
+                    ],
+                    'users' => [
+                        'title' => 'Users',
+                        'sub_items' => [
+                            'edit' => 'Edit',
+                            'roles' => 'Permissions and roles'
+                        ]
+                    ],
+                    'other' => [
+                        'title' => 'Other',
+                        'sub_items' => [
+                            'rcon' => 'RCON - console',
+                            'debug' => 'Debug',
+                        ]
+                    ],
+                    'statistic' => [
+                        'title' => 'Statistic',
+                        'sub_items' => [
+                            'show' => 'View statistics',
+                            'payments' => 'Purchase history'
+                        ]
+                    ],
+                    'info' => [
+                        'title' => 'Information',
+                        'sub_items' => [
+                            'docs' => 'Documentation',
+                            'about' => 'About L-Shop',
+                        ]
+                    ]
+                ]
             ],
-            'fast_buy_modal' => [
-                'title' => 'Fast buy',
-                'next_btn' => 'Continue',
-                'cancel_btn' => 'Cancel',
-                'username' => 'Username',
-                'auth' => 'Your account will be charged the amount of :span :currency
-                    If funds are not enough, you will be automatically redirected to the payment page.',
-                'guest' => 'You will be redirected to the payment method selection page. Order amount: :span :currency',
-            ]
-        ],
-        'cart' => [
-            'title' => 'Cart',
-            'username' => 'Username',
-            'total' => 'Total:',
-            'pay' => 'Form and pay',
-            'empty' => 'Your cart is empty',
-            'item' => [
-                'remove' => 'Remove',
-                'count' => 'Count',
-                'duration' => 'duration (day(s))',
-                'forever' => 'This product is purchased forever.',
-                'total' => 'To pay:'
+            'settings' => [
+                'title' => 'Local settings'
+            ],
+            'monitoring' => [
+                'title' => 'Server monitoring',
+                'disabled' => 'Disabled',
+                'failed' => 'Failed'
             ]
         ],
         'news' => [
-            'read_more' => 'Read more ...',
-            'empty' => 'No news'
+            'title' => 'News',
+            'empty' => 'No news',
+            'read' => 'Read more',
+            'load' => 'Load more'
         ]
     ],
-    'profile' => [
-        'fillupbalance' => [
-            'title' => 'Fill up balance',
-            'sum' => 'Sum',
-            'pay' => 'Pay'
-        ],
-        'settings' => [
-            'title' => 'Settings',
-            'security' => [
-                'title' => 'Security',
-                'change_password' => 'Change password',
-                'password' => 'New password',
-                'password_confirmation' => 'Confirm password',
-            ],
-            'sessions' => [
-                'title' => 'Reset of login sessions',
-                'description' => 'After clicking on the button below, all login sessions (including the current one) will be reset. This may be
-                    Useful when you want to log out of the account on devices that you do not have access to.',
-                'reset' => 'Reset'
-            ]
-        ],
-        'character' => [
-            'title' => 'Character',
-            'select_file' => 'Select a file',
-            'update' => 'Update',
-            'max_file_size' => 'The maximum file size is <strong>:size</strong> KB.',
-            'skin' => [
-                'max_image_size' => 'Image size is <strong>64x32</strong>.',
-                'max_image_size_hd' => 'The maximum image size is <strong>1024x512</strong>.',
-            ],
-            'clock' => [
-                'not_set' => 'Cloak not set',
-                'max_image_size' => 'Image size is <strong>22x17</strong>.',
-                'max_image_size_hd' => 'The maximum image size is <strong>1024x512</strong>.',
-            ]
-        ],
-        'payments' => [
-            'title' => 'Purchase and payment history',
-            'table' => [
-                'id' => 'ID',
-                'type' => 'Type',
-                'products' => 'Products',
-                'sum' => 'Sum',
-                'status' => 'Status',
-                'created_at' => 'Created at',
-                'completed_at' => 'Completed at',
-                'service' => 'Service',
-                'actions' => 'Actions',
-                'shopping' => 'Shopping',
-                'fillupbalance' => 'Fill up balance',
-                'more' => 'Show more ...',
-                'completed' => 'Completed',
-                'not_completed' => 'Not completed',
-                'completed_by_admin' => 'Completed by administrator',
-                'complete' => 'Complete',
-                'pay' => 'Pay now',
-                'empty' => 'Payment history is empty',
-                'details_modal' => [
-                    'title' => 'Information about payment products',
-                    'btn' => 'Ok',
-                    'table' => [
-                        'image' => 'Image',
-                        'name' => 'Name',
-                        'count' => 'Count / Duration',
-                    ]
-                ]
-            ]
-        ],
-        'cart' => [
-            'title' => 'In-game shopping cart',
-            'description' => 'On this page you can see all the products that you have purchased, but not yet taken in the game.',
-            'any' => 'Any',
-            'table' => [
-                'image' => 'Image',
-                'item' => 'Item',
-                'count' => 'Count/Duration'
-            ],
-            'empty' => 'Your cart is empty'
-        ]
-    ],
-
-    'monitoring' => [
-        'title' => 'Server monitoring',
-        'cancel' => 'Cancel',
-        'server_disabled' => 'Server is disabled',
-        'error' => 'Unable to receive information from server.'
-    ],
-
-    'payments' => [
-        'methods' => [
-            'title' => 'Select a Payment Method',
-            'nothing' => 'There are no payment methods available'
-        ]
-    ],
-
-    'auth' => [
-        'signin' => [
-            'title' => 'Signin',
-            'only_for_admins' => 'Signin only for admins',
-            'btn' => 'Signin',
-            'forgot' => 'I forgot password',
-            'signup' => 'Signup',
-            'guest' => 'Purchase without authorization',
-        ],
-        'signup' => [
-            'title' => 'Signup',
-            'btn' => 'Signup',
-            'signin' => 'Signin',
-        ],
-        'servers' => [
-            'title' => 'Select server',
-            'signin' => 'Signin'
-        ],
-        'forgot' => [
-            'title' => 'Password recovery',
-            'btn' => 'Continue'
-        ],
-        'reset_password' => [
-            'title' => 'Password reset',
-            'password' => 'New password',
-            'password_confirmation' => 'Repeat new password',
-            'btn' => 'Reset',
-        ],
-        'activate_wait' => [
-            'title' => 'Activation',
-            'description' => 'A letter with confirmation of registration was sent to the mailbox you specified during registration.
-                Check the mail and follow the link in the email.<br>
-                If the letter does not come, you can send it out.',
-            'repeat' => 'Resend'
-        ]
-    ],
-
     'errors' => [
         '403' => [
-            'title' => '403 | Forbidden',
-            'content' => 'Forbidden',
-            'btn' => 'To index page',
+            'title' => 'forbidden',
+            'description' => 'Access to the requested page is forbidden.'
         ],
         '404' => [
-            'title' => '404 | Not found',
-            'content' => 'The page you requested could not be found.',
-            'btn' => 'To index page',
+            'title' => 'Not found',
+            'description' => 'The page you requested is not found.',
         ],
         '500' => [
-            'title' => '500 | Internal server error',
-            'content' => 'Whoops, looks like something went wrong.'
+            'title' => 'Internal server error',
+            'description' => 'Internal server error.'
         ],
         '503' => [
-            'title' => '503 | Service is temporarily unavailable',
-            'content' => 'Service is temporarily unavailable'
+            'title' => 'Temporarily unavailable',
+            'description' => 'The service is temporarily unavailable, technical work is being carried out. Come back later.'
         ]
-    ],
-
-    'all' => [
-        'save' => 'Save',
-        'update' => 'Update',
-        'clear' => 'Clear',
-        'copy' => 'Copy',
-        'select' => 'Select',
-        'yes' => 'Yes',
-        'no' => 'No',
-        'server' => 'Server',
-        'username' => 'Username',
-        'email' => 'Email',
-        'password' => 'Password',
-        'password_confirmation' => 'Confirm password',
-        'logout' => 'Logout'
-    ],
-    'months' => [
-        1 => 'January',
-        2 => 'February',
-        3 => 'March',
-        4 => 'April',
-        5 => 'May',
-        6 => 'June',
-        7 => 'July',
-        8 => 'August',
-        9 => 'September',
-        10 => 'October',
-        11 => 'November',
-        12 => 'December',
     ]
 ];

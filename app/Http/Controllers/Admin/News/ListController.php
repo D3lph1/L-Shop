@@ -3,29 +3,33 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\News;
 
+use App\DataTransferObjects\PaginationList;
+use App\Handlers\Admin\News\ListHandler;
 use App\Http\Controllers\Controller;
-use App\TransactionScripts\Shop\News;
+use App\Services\Auth\Permissions;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use function App\permission_middleware;
 
-/**
- * Class ListController
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Http\Controllers\Admin\News
- */
 class ListController extends Controller
 {
-    /**
-     * Render page with news list.
-     */
-    public function render(Request $request, News $news): View
+    public function __construct()
     {
-        $news = $news->adminList();
+        $this->middleware(permission_middleware(Permissions::ADMIN_NEWS_CRUD_ACCESS));
+    }
 
-        return view('admin.news.list', [
-            'currentServer' => $request->get('currentServer'),
-            'news' => $news
-        ]);
+    public function pagination(Request $request, ListHandler $handler): JsonResponse
+    {
+        $dto = $handler->handle(
+            (new PaginationList())
+                ->setOrderBy($request->get('order_by'))
+                ->setDescending((bool)$request->get('descending'))
+                ->setSearch($request->get('search'))
+                ->setPage((int)$request->get('page'))
+                ->setPerPage((int)$request->get('per_page'))
+        );
+
+        return new JsonResponse(Status::SUCCESS, $dto);
     }
 }

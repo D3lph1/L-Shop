@@ -1,0 +1,130 @@
+#full {
+  display: flex;
+  min-height: 100vh;
+  width: 100%;
+  #enter-card {
+    #form-header {
+      display: flex;
+      margin: 0 -15px;
+      padding: 10px;
+      justify-content: center;
+      color: #ffffff;
+      h1 {
+        font-size: 30px;
+        font-weight: normal;
+        margin-left: 10px;
+        line-height: normal;
+        text-align: center;
+      }
+    }
+    #form {
+      padding: 10px 20px;
+    }
+    #form-footer {
+      display: flex;
+      justify-content: space-around;
+      padding: 5px 10px;
+    }
+  }
+}
+
+.drawer {
+  -ms-overflow-style: none;
+  &::-webkit-scrollbar {
+    width: 0;
+  }
+}
+
+.recaptcha-in-dialog {
+  width: 304px;
+  margin: 0 auto;
+  @media (max-width: 382px) {
+    transform: scale(0.79);
+    -webkit-transform: scale(0.79);
+    transform-origin: 0 0;
+    -webkit-transform-origin: 0 0;
+    width: 272px;
+  }
+}
+
+.fade-out-leave-active {
+  visibility: hidden;
+  opacity: 0;
+  transition: visibility 0s .15s, opacity .15s linear;
+}
+
+.no-spinners {
+  -moz-appearance: textfield;
+  input {
+    -moz-appearance: textfield;
+  }
+  input::-webkit-outer-spin-button,
+  input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+  }
+}
+
+.no-spinners::-webkit-outer-spin-button,
+.no-spinners::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.fw400 {
+  font-weight: 400;
+}
+
+.centered {
+  input {
+    text-align: center !important;
+  }
+}
+
+.br0 {
+  border-radius: 0 !important;
+}
+
+.cp {
+  cursor: pointer;
+}
+
+#logo-block {
+  padding: 1rem;
+  display: -webkit-flex;
+  display: -ms-flex;
+  display: flex;
+  margin-bottom: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+  .c-logo {
+    max-width: 200px;
+    margin: 0 1rem;
+  }
+  .logo-text {
+    justify-content: center;
+    align-self: center;
+    margin: 0 1rem;
+  }
+}
+
+.add-image-block {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  .preview {
+    height: 150px;
+    width: 150px;
+  }
+}
+
+.ql-align-left {
+  text-align: left !important;
+}
+
+.ql-align-center {
+  text-align: center !important;
+}
+
+.ql-align-right {
+  text-align: right !important;
+}

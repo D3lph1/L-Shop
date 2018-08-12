@@ -1,29 +1,53 @@
 <?php
+/** @noinspection PhpStrictTypeCheckingInspection */
 declare(strict_types = 1);
 
 namespace App\Providers;
 
-use App\Models\Server\ServerInterface;
-use App\Services\Activator;
-use App\Services\Cart;
-use App\Services\Message;
-use App\Services\Monitoring\MonitoringInterface;
-use App\Services\Monitoring\RconMonitoring;
-use App\Services\ReCaptcha;
-use App\Services\SashokLauncher;
+use App\Exceptions\UnexpectedValueException;
+use App\Repository\Server\ServerRepository;
+use App\Services\Caching\CachingRepository;
+use App\Services\Caching\IlluminateCachingRepository;
+use App\Services\Cart\Storage\Session as SessionCartStorage;
+use App\Services\Cart\Storage\Storage as ClassStorage;
+use App\Services\Database\GarbageCollection\DoctrineGarbageCollector;
+use App\Services\Database\GarbageCollection\GarbageCollector;
+use App\Services\Database\Transaction\DoctrineTransactor;
+use App\Services\Database\Transaction\Transactor;
+use App\Services\Database\Transfer\Pool;
+use App\Services\Database\Transfer\Queries\Version050a\MySQLQuery;
+use App\Services\Database\Transfer\Version050ATransfer;
+use App\Services\DateTime\Formatting\Formatter;
+use App\Services\DateTime\Formatting\HumanizeFormatter;
+use App\Services\Item\Image\Hashing\Hasher;
+use App\Services\Item\Image\Hashing\MD5Hasher;
+use App\Services\Media\Character\Cloak\Applicators\Applicator as CloakApplicator;
+use App\Services\Media\Character\Cloak\Applicators\DefaultApplicator as DefaultCloakApplicator;
+use App\Services\Media\Character\Skin\Applicators\Applicator as SkinApplicator;
+use App\Services\Media\Character\Skin\Applicators\DefaultApplicator as DefaultSkinApplicator;
+use App\Services\Monitoring\Drivers\Driver as MonitoringDriver;
+use App\Services\Monitoring\Drivers\RconDriver as RconMonitoring;
+use App\Services\Monitoring\Drivers\RconResponseParser;
+use App\Services\Monitoring\Monitoring;
+use App\Services\Notification\Drivers\Driver;
+use App\Services\Notification\Drivers\Session;
+use App\Services\Security\Captcha\Captcha;
+use App\Services\Security\Captcha\ReCaptcha;
+use App\Services\Server\Persistence\Storage\Session as SessionPersistenceStorage;
+use App\Services\Server\Persistence\Storage\Storage as PersistenceStorage;
+use App\Services\Settings\DataType;
+use App\Services\Settings\DefaultSettings;
+use App\Services\Settings\Settings;
+use App\Services\Url\Signing\Signer;
+use App\Services\Url\Signing\Validator;
 use D3lph1\MinecraftRconManager\Connector;
-use D3lph1\MinecraftRconManager\Rcon;
+use D3lph1\MinecraftRconManager\DefaultConnector;
+use Doctrine\ORM\EntityManagerInterface;
+use Illuminate\Contracts\Config\Repository;
 use Illuminate\Contracts\Foundation\Application;
-use Illuminate\Support\Facades\Schema;
-use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\ServiceProvider;
+use Psr\Log\LoggerInterface;
 
-/**
- * Class AppServiceProvider
- *
- * @author  D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Providers
- */
 class AppServiceProvider extends ServiceProvider
 {
     /**
@@ -31,9 +55,7 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Schema::defaultStringLength(191);
-
-        $this->registerValidators();
+        //
     }
 
     /**
@@ -41,82 +63,93 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        $this->app->alias(Message::class, 'message');
+        $this->app->singleton(Driver::class, Session::class);
+        $this->app->singleton(PersistenceStorage::class, SessionPersistenceStorage::class);
+        $this->app->singleton(ClassStorage::class, SessionCartStorage::class);
+        $this->app->singleton(Formatter::class, HumanizeFormatter::class);
+        $this->app->singleton(Settings::class, DefaultSettings::class);
+        $this->app->bind(SkinApplicator::class, DefaultSkinApplicator::class);
+        $this->app->bind(CloakApplicator::class, DefaultCloakApplicator::class);
+        $this->app->singleton(Captcha::class, function (Application $app) {
+            $settings = $app->make(Settings::class);
 
-        $this->app->alias(Cart::class, 'cart');
-
-        $this->app->bind('recaptcha', function () {
             return new ReCaptcha(
-                s_get('recaptcha.public_key'),
-                s_get('recaptcha.secret_key')
+                $settings->get('system.security.captcha.recaptcha.public_key')->getValue(),
+                $settings->get('system.security.captcha.recaptcha.secret_key')->getValue()
+            );
+        });
+        $this->app->singleton(Hasher::class, MD5Hasher::class);
+
+        $this->app->singleton(CachingRepository::class, IlluminateCachingRepository::class);
+
+        $this->app->singleton(MonitoringDriver::class, function (Application $app) {
+            $driverClass = $app->make(Repository::class)->get('monitoring.driver');
+            $driver = $app->make($driverClass);
+            if (!($driver instanceof MonitoringDriver)) {
+                throw new UnexpectedValueException(
+                    'Monitoring driver must be implements ' . MonitoringDriver::class . ' interface'
+                );
+            }
+
+            return $driver;
+        });
+
+        $this->app->singleton(Connector::class, DefaultConnector::class);
+
+        $this->app->singleton(RconMonitoring::class, function (Application $app) {
+            $settings = $app->make(Settings::class);
+
+            return new RconMonitoring(
+                $app->make(Connector::class),
+                $settings->get('system.monitoring.rcon.command')->getValue(),
+                $settings->get('system.monitoring.rcon.timeout')->getValue(DataType::INT),
+                $app->make(RconResponseParser::class, [
+                    'pattern' => $settings->get('system.monitoring.rcon.pattern')->getValue()
+                ])
             );
         });
 
-        $this->app->alias(Activator::class, 'activator');
-        $this->app->alias(SashokLauncher::class, 'launcher.sashok');
-
-        $this->app->singleton(Rcon::class, function () {
-            return $this->getRconConnector((float)config('l-shop.rcon.timeout'));
+        $this->app->singleton(Monitoring::class, function (Application $app) {
+            return new Monitoring(
+                $app->make(ServerRepository::class),
+                $app->make(MonitoringDriver::class),
+                $app->make(CachingRepository::class),
+                $app->make(LoggerInterface::class),
+                $app->make(Settings::class)->get('system.monitoring.rcon.ttl')->getValue(DataType::FLOAT)
+            );
         });
 
-        $this->app->alias(Rcon::class, Connector::class);
-        $this->app->alias(Rcon::class, 'rcon');
+        $this->app->singleton(Signer::class, function (Application $app) {
+            $settings = $app->make(Settings::class);
 
-        $this->app->singleton('monitoring.rcon', function () {
-            return $this->getRconConnector((float)s_get('monitoring.rcon.timeout'));
+            return new Signer(
+                $settings->get('api.algorithm')->getValue(),
+                $settings->get('api.key')->getValue(),
+                $settings->get('api.separator')->getValue()
+            );
         });
 
-        $this->app->singleton(MonitoringInterface::class, function (Application $app) {
-            return new RconMonitoring($app->make('monitoring.rcon'));
-        });
-        $this->app->alias(MonitoringInterface::class, 'monitoring');
-    }
+        $this->app->singleton(Validator::class, function (Application $app) {
+            $settings = $app->make(Settings::class);
 
-    private function getRconConnector(float $timeout): Connector
-    {
-        // To successfully carry out the migration procedure.
-        if (!Schema::hasTable('servers')) {
-            return new Connector();
-        }
-
-        $servers = $this->app->make('request')->get('servers');
-        $connector = new Connector();
-
-        if (!$servers) {
-            return $connector;
-        }
-
-        /** @var ServerInterface $server */
-        foreach ($servers as $server) {
-            $connector->add($server->getId(), $server->getIp(), $server->getPort(), $server->getPassword(), $timeout);
-        }
-
-        return $connector;
-    }
-
-    private function registerValidators()
-    {
-        Validator::extend('alpha_strict', function ($attribute, $value, $parameters, $validator) {
-            return preg_match('/^[a-zA-Z]+$/', $value);
+            return new Validator(
+                $settings->get('api.algorithm')->getValue(),
+                $settings->get('api.key')->getValue(),
+                $settings->get('api.separator')->getValue()
+            );
         });
 
-        Validator::extend('alpha_dash_strict', function ($attribute, $value, $parameters, $validator) {
-            return preg_match('/^[a-zA-Z0-9_-]+$/', $value);
+        $this->app->singleton(Pool::class, function (Application $app) {
+            $pool = new Pool();
+            $pool->put(Version050ATransfer::VERSION, new Version050ATransfer(
+                $app->make(EntityManagerInterface::class),
+                $app->make(MySQLQuery::class)
+            ));
+
+            return $pool;
         });
 
-        Validator::extend('alpha_num_strict', function ($attribute, $value, $parameters, $validator) {
-            return preg_match('/^[a-zA-Z0-9]+$/', $value);
-        });
-
-        // Checks the input string so that it is a regular regular expression.
-        Validator::extend('valid_regex', function ($attribute, $value, $parameters, $validator) {
-            try {
-                preg_match($value, '');
-            } catch (\ErrorException $e) {
-                return false;
-            }
-
-            return true;
-        });
+        $this->app->singleton(GarbageCollector::class, DoctrineGarbageCollector::class);
+        $this->app->singleton(Transactor::class, DoctrineTransactor::class);
     }
 }

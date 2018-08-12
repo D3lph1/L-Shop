@@ -3,85 +3,69 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Products;
 
-use App\DataTransferObjects\Product;
-use App\Exceptions\Product\NotFoundException;
+use App\DataTransferObjects\Admin\Products\Edit\Edit;
+use App\Exceptions\Category\CategoryNotFoundException;
+use App\Exceptions\Item\ItemNotFoundException;
+use App\Exceptions\Product\ProductNotFoundException;
+use App\Handlers\Admin\Products\Edit\EditHandler;
+use App\Handlers\Admin\Products\Edit\RenderHandler;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\SaveEditedProductRequest;
-use App\TransactionScripts\Products;
-use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\Admin\Products\AddEditRequest;
+use App\Services\Auth\Permissions;
+use App\Services\Notification\Notifications\Error;
+use App\Services\Notification\Notifications\Success;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Http\Response;
+use function App\permission_middleware;
 
-/**
- * Class EditController
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Http\Controllers\Admin\Products
- */
 class EditController extends Controller
 {
-    /**
-     * Render the edit given product page.
-     */
-    public function render(Request $request, Products $script): View
+    public function __construct()
     {
-        $dto = null;
+        $this->middleware(permission_middleware(Permissions::ADMIN_PRODUCTS_CRUD_ACCESS));
+    }
 
-        try {
-            $dto = $script->informationForEdit((int)$request->route('product'));
-        } catch (NotFoundException $e) {
-            $this->app->abort(404);
-        }
+    public function render(Request $request, RenderHandler $handler): JsonResponse
+    {
+        $dto = $handler->handle((int)$request->route('product'));
 
-        $data = [
-            'currentServer' => $request->get('currentServer'),
+        return new JsonResponse(Status::SUCCESS, [
             'product' => $dto->getProduct(),
             'items' => $dto->getItems(),
-            'categories' => $dto->getCategories(),
-            'category' => $dto->getCategory()
-        ];
-
-        return view('admin.products.edit', $data);
+            'servers' => $dto->getServers()
+        ]);
     }
 
-    /**
-     * Save edited product.
-     */
-    public function save(SaveEditedProductRequest $request, Products $script): RedirectResponse
+    public function edit(AddEditRequest $request, EditHandler $handler): JsonResponse
     {
-        $dto = (new Product())
+        $dto = (new Edit())
+            ->setProduct((int)$request->route('product'))
+            ->setItem((int)$request->get('item'))
+            ->setCategory((int)$request->get('category'))
             ->setPrice((float)$request->get('price'))
-            ->setStack((float)$request->get('stack'))
-            ->setItemId((int)$request->get('item'))
-            ->setServerId((int)$request->get('server'))
-            ->setCategoryId((int)$request->get('category'))
-            ->setSortPriority((float)$request->get('sort_priority'));
+            ->setStack($request->get('forever') ? 0 : (int)$request->get('stack'))
+            ->setSortPriority((float)$request->get('sort_priority'))
+            ->setHidden((bool)$request->get('hidden'));
 
-        $result = $script->edit((int)$request->route('product'), $dto);
+        try {
+            $handler->handle($dto);
 
-        if ($result) {
-            $this->msg->success(__('messages.admin.products.edit.success'));
-        } else {
-            $this->msg->danger(__('messages.admin.products.edit.fail'));
+            return (new JsonResponse(Status::SUCCESS))
+                ->addNotification(new Success(__('msg.admin.products.edit.success')));
+        }  catch (ProductNotFoundException $e) {
+            return (new JsonResponse('product_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
+                ->addNotification(new Error(__('msg.admin.products.edit.product_not_found')));
+        } catch (ItemNotFoundException $e) {
+            return (new JsonResponse('item_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
+                ->addNotification(new Error(__('msg.admin.products.edit.item_not_found')));
+        } catch (CategoryNotFoundException $e) {
+            return (new JsonResponse('category_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
+                ->addNotification(new Error(__('msg.admin.products.edit.category_not_found')));
         }
-
-        return response()->redirectToRoute('admin.products.list', ['server' => $request->get('currentServer')->getId()]);
-    }
-
-    /**
-     * Remove product.
-     */
-    public function remove(Request $request, Products $script): RedirectResponse
-    {
-        $productId = (int)$request->route('product');
-        $result = $script->delete($productId);
-
-        if ($result) {
-            $this->msg->info(__('messages.admin.products.remove.success'));
-        } else {
-            $this->msg->danger(__('messages.admin.products.remove.fail'));
-        }
-
-        return response()->redirectToRoute('admin.products.list', ['server' => $request->get('currentServer')->getId()]);
     }
 }

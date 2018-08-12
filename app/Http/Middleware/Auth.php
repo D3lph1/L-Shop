@@ -1,123 +1,129 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Http\Middleware;
 
-use App\Services\Message;
-use Closure;
-use Illuminate\Contracts\Container\Container;
+use App\Exceptions\InvalidArgumentException;
+use App\Services\Auth\AccessMode;
+use App\Services\Auth\Auth as AuthService;
+use App\Services\Notification\Notification;
+use App\Services\Notification\Notifications\Warning;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
+use App\Services\Settings\Settings;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use Illuminate\Routing\Router;
 
-/**
- * Class Auth
- *
- * @author  D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Http\Middleware
- */
 class Auth
 {
-    /**
-     * @var Container
-     */
-    protected $container;
+    public const GUEST = 'guest';
 
-    /**
-     * List of except routes
-     *
-     * @var array
-     */
+    public const AUTH = 'auth';
+
+    public const ANY = 'any';
+
     protected $except = [
-        'signin.post',
-        'api.signin',
-        'signin'
+        'frontend.auth.login.render',
+        'frontend.auth.login.handle'
     ];
 
     /**
-     * Auth constructor.
-     *
-     * @param Container $container
+     * @var AuthService
      */
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
-    }
+    private $auth;
 
     /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request $request
-     * @param  \Closure                 $next
-     *
-     * @return mixed
+     * @var Settings
      */
-    public function handle(Request $request, Closure $next, $mode)
-    {
-        switch ($mode) {
-            case 'guest':
-                if (access_mode_guest()) {
-                    foreach ($this->except as $except) {
-                        if ($except == \Route::currentRouteName()) {
-                            $request->merge(['onlyForAdmins' => true]);
+    private $settings;
 
-                            return $next($request);
+    /**
+     * @var Router
+     */
+    private $router;
+
+    public function __construct(AuthService $auth, Settings $settings, Router $router)
+    {
+        $this->auth = $auth;
+        $this->settings = $settings;
+        $this->router = $router;
+    }
+
+    public function handle(Request $request, \Closure $next, ?string $mode = null)
+    {
+        if ($mode === null) {
+            if ($this->auth->check()) {
+                return $next($request);
+            }
+
+            return $this->response('frontend.auth.login', new Warning(__('msg.only_for_auth')));
+        }
+
+        switch ($mode) {
+            case self::GUEST:
+                if ($this->auth->check()) {
+                    return $this->response('frontend.auth.servers', new Warning(__('msg.only_for_guests')));
+                }
+
+                if ($this->settings->get('auth.access_mode')->getValue() === AccessMode::GUEST) {
+                    $f = false;
+                    foreach ($this->except as $except) {
+                        if ($except === $this->router->currentRouteName()) {
+                            $f = true;
+                            break;
                         }
                     }
 
-                    return $this->response($request, 'servers', 'not allowed', 'Запрещено');
-                }
-
-                if (is_auth()) {
-                    return $this->response($request, 'servers', 'only guests', 'Только для гостей');
-                }
-
-                return $next($request);
-
-            case 'soft':
-                if (access_mode_auth() and !is_auth()) {
-                    return $this->response($request, 'signin', 'not auth');
+                    if (!$f) {
+                        return $this->response('frontend.auth.servers', new Warning(__('msg.forbidden')));
+                    }
                 }
 
                 return $next($request);
 
-            case 'hard':
-                if (!is_auth()) {
-                    return $this->response($request, 'signin', 'not auth');
+            case self::AUTH:
+                if (!$this->auth->check()) {
+                    return $this->response('frontend.auth.login', new Warning(__('msg.only_for_auth')));
                 }
 
                 return $next($request);
 
-            case 'admin':
-                if (!is_admin()) {
-                    $this->container->make('app')->abort(403);
+            case self::ANY:
+                if ($this->settings->get('auth.access_mode')->getValue() === AccessMode::AUTH && !$this->auth->check()) {
+                    return $this->response('frontend.auth.login', new Warning(__('msg.only_for_auth')));
                 }
 
                 return $next($request);
+
+            default:
+                throw new InvalidArgumentException(
+                    sprintf(
+                        '$mode must be has next values: "%s", "%s", "%s", "%s". %s given',
+                        self::GUEST,
+                        self::ANY,
+                        self::AUTH,
+                        $mode
+                    )
+                );
         }
-
-        throw new \InvalidArgumentException(
-            'mode(auth) must be has next values: "guest", "soft", "hard", "admin". ' . $mode . ' given'
-        );
     }
 
     /**
      * Construct response.
      *
-     * @param Request $request
-     * @param string  $redirect
-     * @param string  $jsonResponse
-     * @param null|string  $message
+     * @param string       $redirect
+     * @param Notification $notification
      *
-     * @return \Illuminate\Http\JsonResponse|\Illuminate\Http\RedirectResponse
+     * @return Response
      */
-    private function response($request, $redirect, $jsonResponse, $message = null)
+    private function response(string $redirect, ?Notification $notification = null)
     {
-        if ($request->ajax()) {
-            return json_response($jsonResponse);
-        }
-        if (!is_null($message)) {
-            $this->container->make(Message::class)->warning($message);
+        $response = (new JsonResponse(Status::FORBIDDEN))->setEarlyRedirect($redirect);
+        if (!is_null($notification)) {
+            $response->addNotification($notification);
         }
 
-        return response()->redirectToRoute($redirect);
+        return new Response($response, 403);
     }
 }

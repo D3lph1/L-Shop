@@ -3,55 +3,51 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Servers;
 
-use App\DataTransferObjects\Category;
-use App\DataTransferObjects\Server;
+use App\DataTransferObjects\Admin\Servers\Add\Add;
+use App\Exceptions\Distributor\DistributorNotFoundException;
+use App\Handlers\Admin\Servers\Add\AddHandler;
+use App\Handlers\Admin\Servers\Add\RenderHandler;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\SaveAddedServerRequest;
-use App\TransactionScripts\Servers;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
+use App\Http\Requests\Admin\Servers\AddRequest;
+use function App\permission_middleware;
+use App\Services\Auth\Permissions;
+use App\Services\Notification\Notifications\Success;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
+use Illuminate\Http\Response;
 
-/**
- * Class AddController
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Http\Controllers\Admin\Server
- */
 class AddController extends Controller
 {
-    /**
-     * Render the add new server page
-     */
-    public function render(Request $request): View
+    public function __construct()
     {
-        return view('admin.servers.add', [
-            'currentServer' => $request->get('currentServer')
-        ]);
+        $this->middleware(permission_middleware(Permissions::ADMIN_SERVERS_CRUD_ACCESS));
     }
 
-    public function save(SaveAddedServerRequest $request, Servers $script): RedirectResponse
+    public function render(RenderHandler $handler): JsonResponse
     {
-        $categories = [];
-        foreach ($request->get('categories') as $category) {
-            $categories[] = (new Category())->setName($category);
+        return new JsonResponse(Status::SUCCESS, $handler->handle());
+    }
+
+    public function add(AddRequest $request, AddHandler $handler): JsonResponse
+    {
+        try {
+            $handler->handle(
+                (new Add($request->get('name'), $request->get('distributor')))
+                    ->setCategories($request->get('categories'))
+                    ->setIp($request->get('ip'))
+                    ->setPort($request->get('port') !== null ? (int)$request->get('port') : null)
+                    ->setPassword($request->get('password'))
+                    ->setMonitoringEnabled((bool)$request->get('monitoring_enabled'))
+                    ->setServerEnabled((bool)$request->get('server_enabled'))
+                    ->setDistributor($request->get('distributor'))
+            );
+
+            return (new JsonResponse(Status::SUCCESS))
+                ->addNotification(new Success(__('msg.admin.servers.add.success')));
+        } catch (DistributorNotFoundException $e) {
+            return (new JsonResponse('distributor_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
+                ->addNotification(new Success(__('msg.admin.servers.add.distributor_not_found')));
         }
-
-        $dto = (new Server())
-            ->setName($request->get('server_name'))
-            ->setCategories($categories)
-            ->setIp($request->get('server_ip'))
-            ->setPort((int)$request->get('server_port'))
-            ->setPassword($request->get('server_password'))
-            ->setMonitoringEnabled((bool)$request->get('server_monitoring_enabled'))
-            ->setEnabled((bool)$request->get('enabled'));
-
-        $script->createServer($dto);
-
-        $this->msg->success(__('messages.admin.servers.add.success', ['name' => $request->get('server_name')]));
-
-        return response()->redirectToRoute('admin.servers.list', [
-            'server' => $request->get('currentServer')->getId()
-        ]);
     }
 }

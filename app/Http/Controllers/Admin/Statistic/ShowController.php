@@ -3,64 +3,46 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Statistic;
 
+use App\Handlers\Admin\Statistic\Show\ProfitForMonthHandler;
+use App\Handlers\Admin\Statistic\Show\PurchasesForMonthHandler;
+use App\Handlers\Admin\Statistic\Show\RegisteredForMonthHandler;
+use App\Handlers\Admin\Statistic\Show\VisitHandler;
 use App\Http\Controllers\Controller;
-use App\TransactionScripts\Statistic;
-use Illuminate\Http\RedirectResponse;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
 
-/**
- * Class ShowController
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Http\Controllers\Admin\Statistic
- */
 class ShowController extends Controller
 {
-    /**
-     * @var Statistic
-     */
-    private $script;
-
-    /**
-     * ShowController constructor.
-     *
-     * @param Statistic $statistic
-     */
-    public function __construct(Statistic $script)
+    public function render(VisitHandler $handler): JsonResponse
     {
-        parent::__construct();
-        $this->script = $script;
+        return new JsonResponse(Status::SUCCESS, $handler->handle());
     }
 
-    /**
-     * Render the "show L-Shop statistic" page.
-     */
-    public function render(Request $request): View
+    public function profitForMonth(Request $request, ProfitForMonthHandler $handler): JsonResponse
     {
-        $dto = $this->script->statistic($request->get('month'));
+        $result = $handler->handle((int)$request->get('year'), (int)$request->get('month'));
 
-        $data = [
-            'currentServer' => $request->get('currentServer'),
-            'payments' => $dto->getCompletedForYear(),
-            'months' => __('content.months'),
-            'currentMonth' => $dto->getCurrentMonth(),
-            'currentMonthWord' => $dto->getCurrentMonthHumanized(),
-            'profit' => $dto->getProfit(),
-            'currency' => s_get('shop.currency_html')
-        ];
-
-        return view('admin.statistic.show', $data);
+        return new JsonResponse(Status::SUCCESS, [
+            'profitForMonth' => $result
+        ]);
     }
 
-    /**
-     * Flush all statistic cache.
-     */
-    public function flushCache(): RedirectResponse
+    public function purchasesForMonth(Request $request, PurchasesForMonthHandler $handler): JsonResponse
     {
-        $this->script->flushCache();
-        $this->msg->info(__('messages.admin.statistics.show.clear_cache_success'));
+        $result = $handler->handle((int)$request->get('year'), (int)$request->get('month'));
 
-        return back();
+        return new JsonResponse(Status::SUCCESS, [
+            'purchasesForMonth' => $result
+        ]);
+    }
+
+    public function registeredForMonth(Request $request, RegisteredForMonthHandler $handler): JsonResponse
+    {
+        $result = $handler->handle((int)$request->get('year'), (int)$request->get('month'));
+
+        return new JsonResponse(Status::SUCCESS, [
+            'registeredForMonth' => $result
+        ]);
     }
 }

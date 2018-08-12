@@ -3,22 +3,17 @@ declare(strict_types = 1);
 
 namespace App\Console;
 
-use App\Console\Commands\Payment\Complete;
-use App\Console\Commands\Server\Rcon;
-use App\Console\Commands\User\Activate;
-use App\Console\Commands\User\Block;
-use App\Console\Commands\User\Create;
-use App\Console\Commands\User\Remove;
-use App\Console\Commands\User\Unblock;
+use App\Console\Commands\DB\Transfer;
+use App\Console\Commands\Purchase\Complete as CompletePurchase;
+use App\Console\Commands\Rcon;
+use App\Console\Commands\User\Create as CreateUser;
+use App\Console\Commands\User\Delete as DeleteUser;
+use App\Console\Commands\User\Roles\Attach as UserAttachRoles;
+use App\Console\Commands\User\Roles\Detach as UserDetachRoles;
+use App\Console\Commands\User\Roles\RolesList as UserRolesList;
 use Illuminate\Console\Scheduling\Schedule;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 
-/**
- * Class Kernel
- *
- * @author  D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Console
- */
 class Kernel extends ConsoleKernel
 {
     /**
@@ -27,29 +22,37 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        Create::class,
-        Remove::class,
-        Activate::class,
-        Block::class,
-        Unblock::class,
-        Complete::class,
+        Transfer::class,
+        CreateUser::class,
+        DeleteUser::class,
+        UserAttachRoles::class,
+        UserDetachRoles::class,
+        UserRolesList::class,
+        CompletePurchase::class,
         Rcon::class
     ];
 
     /**
      * Define the application's command schedule.
+     *
+     * @param  \Illuminate\Console\Scheduling\Schedule  $schedule
+     * @return void
      */
-    protected function schedule(Schedule $schedule): void
+    protected function schedule(Schedule $schedule)
     {
         // $schedule->command('inspire')
         //          ->hourly();
     }
 
     /**
-     * Register the Closure based commands for the application.
+     * Register the commands for the application.
+     *
+     * @return void
      */
-    protected function commands(): void
+    protected function commands()
     {
+        $this->load(__DIR__.'/Commands');
+
         require base_path('routes/console.php');
     }
 }

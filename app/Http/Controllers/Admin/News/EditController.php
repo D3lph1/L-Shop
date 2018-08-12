@@ -3,82 +3,71 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\News;
 
-use App\DataTransferObjects\News as DTO;
-use App\Exceptions\News\DisabledException;
-use App\Exceptions\News\NotFoundExceptions;
+use App\DataTransferObjects\Admin\News\EditNews;
+use App\Exceptions\News\NewsNotFoundException;
+use App\Handlers\Admin\News\DeleteHandler;
+use App\Handlers\Admin\News\Edit\EditHandler;
+use App\Handlers\Admin\News\Edit\RenderHandler;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\SaveEditedNewsRequest;
-use App\Traits\ContainerTrait;
-use App\TransactionScripts\Shop\News;
-use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\Admin\News\AddEditRequest;
+use function App\permission_middleware;
+use App\Services\Auth\Permissions;
+use App\Services\Notification\Notifications\Error;
+use App\Services\Notification\Notifications\Info;
+use App\Services\Notification\Notifications\Success;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Http\Response;
 
-/**
- * Class EditController
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Http\Controllers\Admin\News
- */
 class EditController extends Controller
 {
-    use ContainerTrait;
-
-    /**
-     * Render the edit news page.
-     */
-    public function render(Request $request, News $news): View
+    public function __construct()
     {
-        $concrete = null;
+        $this->middleware(permission_middleware(Permissions::ADMIN_NEWS_CRUD_ACCESS));
+    }
+
+    public function render(Request $request, RenderHandler $handler): JsonResponse
+    {
+        try {
+            return new JsonResponse(Status::SUCCESS, $handler->handle((int)$request->route('news')));
+        } catch (NewsNotFoundException $e) {
+            return (new JsonResponse('not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND);
+        }
+    }
+
+    public function edit(AddEditRequest $request, EditHandler $handler): JsonResponse
+    {
+        $dto = new EditNews(
+            (int)$request->route('news'),
+            $request->get('title'),
+            $request->get('content')
+        );
 
         try {
-            $concrete = $news->find((int)$request->route('id'));
-        } catch (DisabledException $exception) {
-            $this->msg->warning(__('messages.shop.catalog.news.disabled'));
+            $handler->handle($dto);
 
-            return back();
-        } catch (NotFoundExceptions $e) {
-            $this->app->abort(404);
+            return (new JsonResponse(Status::SUCCESS))
+                ->addNotification(new Success(__('msg.admin.news.edit.success')));
+        } catch (NewsNotFoundException $e) {
+            return (new JsonResponse('not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
+                ->addNotification(new Error(__('msg.admin.news.edit.not_found', ['id' => $dto->getId()])));
         }
-
-        return view('admin.news.edit', [
-            'currentServer' => $request->get('currentServer'),
-            'news' => $concrete
-        ]);
     }
 
-    /**
-     * Handle the edit news request.
-     */
-    public function save(SaveEditedNewsRequest $request, News $news): RedirectResponse
+    public function delete(Request $request, DeleteHandler $handler): JsonResponse
     {
-        $dto = (new DTO())
-            ->setId((int)$request->route('id'))
-            ->setTitle($request->get('news_title'))
-            ->setContent($request->get('news_content'));
+        try {
+            $handler->handle((int)$request->route('news'));
 
-        if ($news->update($dto)) {
-            $this->msg->success(__('messages.admin.news.edit.success'));
-
-            return response()->redirectToRoute('admin.news.list', ['server' => $request->get('currentServer')->getId()]);
+            return (new JsonResponse(Status::SUCCESS))
+                ->addNotification(new Info(__('msg.admin.news.list.delete.success')));
+        } catch (NewsNotFoundException $e) {
+            return (new JsonResponse('not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
+                ->addNotification(new Error(__('msg.admin.news.list.delete.not_found')));
         }
-        $this->msg->danger(__('messages.admin.news.edit.fail'));
-
-        return back();
-    }
-
-    /**
-     * Remove given news.
-     */
-    public function remove(Request $request, News $news): RedirectResponse
-    {
-        $id = (int)$request->route('id');
-        if ($news->delete($id)) {
-            $this->msg->info(__('messages.admin.news.remove.success'));
-        } else {
-            $this->msg->danger(__('messages.admin.news.remove.fail'));
-        }
-
-        return response()->redirectToRoute('admin.news.list', ['server' => $request->get('currentServer')->getId()]);
     }
 }

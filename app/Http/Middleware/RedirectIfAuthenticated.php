@@ -3,8 +3,9 @@ declare(strict_types = 1);
 
 namespace App\Http\Middleware;
 
+use App\Services\Auth\Auth;
+use App\Services\Response\JsonResponse;
 use Closure;
-use Illuminate\Support\Facades\Auth;
 
 /**
  * Class RedirectIfAuthenticated
@@ -15,22 +16,26 @@ use Illuminate\Support\Facades\Auth;
 class RedirectIfAuthenticated
 {
     /**
+     * @var Auth
+     */
+    private $auth;
+
+    public function __construct(Auth $auth)
+    {
+        $this->auth = $auth;
+    }
+
+    /**
      * Handle an incoming request.
      *
      * @param  \Illuminate\Http\Request  $request
      * @param  \Closure  $next
-     * @param  string|null  $guard
      * @return mixed
      */
-    public function handle($request, Closure $next, $guard = null)
+    public function handle($request, Closure $next)
     {
-
-        if (is_auth()) {
-            if ($request->isMethod('get')) {
-                return redirect()->route('servers');
-            }
-
-            return response()->json(['status' => 'allready_auth']);
+        if ($this->auth->check()) {
+            return response()->json(new JsonResponse('guest'));
         }
 
         return $next($request);

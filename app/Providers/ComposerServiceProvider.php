@@ -20,19 +20,7 @@ class ComposerServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        view()->composer([
-            'layouts.shop',
-            'shop.catalog',
-            'shop.cart',
-            'payment.fillupbalance',
-            'profile.payments'
-        ],
-            ShopLayoutComposer::class);
-
-        view()->composer([
-            'layouts.global'
-        ],
-            GlobalLayoutComposer::class);
+        view()->composer(['app'], GlobalLayoutComposer::class);
     }
 
     /**

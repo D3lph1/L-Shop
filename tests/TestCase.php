@@ -1,39 +1,28 @@
 <?php
+declare(strict_types = 1);
 
 namespace Tests;
 
-use App\Traits\ContainerTrait;
-use Cartalyst\Sentinel\Throttling\ThrottleRepositoryInterface;
+use App\Services\Auth\Auth;
+use Doctrine\ORM\EntityManagerInterface;
 use Illuminate\Foundation\Testing\TestCase as BaseTestCase;
 
-/**
- * Class TestCase
- *
- * @author  D3lph1 <d3lph1.contact@gmail.com>
- * @package Tests
- */
 abstract class TestCase extends BaseTestCase
 {
     use CreatesApplication;
 
-    use ContainerTrait;
-
-    public function setUp()
+    protected function transaction(): void
     {
-        parent::setUp();
+        $this->app->make(EntityManagerInterface::class)->beginTransaction();
     }
 
-    protected function authenticateUser()
+    protected function rollback(): void
     {
-        if (!\Sentinel::authenticate(['username' => 'user', 'password' => 'user'])) {
-            throw new \RuntimeException('Can not authorize user');
-        }
+        $this->app->make(EntityManagerInterface::class)->rollback();
     }
 
-    protected function authenticateAdmin()
+    protected function authAdmin(): void
     {
-        if (!\Sentinel::authenticate(['username' => 'admin', 'password' => 'admin'])) {
-            throw new \RuntimeException('Can not authorize admin');
-        }
+        $this->app->make(Auth::class)->authenticate('admin', 'admin');
     }
 }

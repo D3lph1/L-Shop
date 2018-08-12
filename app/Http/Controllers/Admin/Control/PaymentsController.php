@@ -3,176 +3,63 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Control;
 
-use App\Http\Requests\Admin\SavePaymentsRequest;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use App\Handlers\Admin\Control\Payments\VisitHandler;
 use App\Http\Controllers\Controller;
-use Illuminate\View\View;
+use App\Http\Requests\Admin\Control\SavePaymentsSettingsRequest;
+use App\Services\Auth\Permissions;
+use App\Services\Notification\Notifications\Success;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
+use App\Services\Settings\Settings;
+use function App\permission_middleware;
 
-/**
- * Class PaymentsController
- *
- * @author  D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Http\Controllers\Admin\Control
- */
 class PaymentsController extends Controller
 {
-    /**
-     * Available hash algos for robokassa.
-     *
-     * @var array
-     */
-    private $robokassaAlgos = [
-        'md5',
-        'ripemd160',
-        'sha1',
-        'sha256',
-        'sha384',
-        'sha512'
-    ];
-
-    private $interkassaAlgos = [
-        'md5',
-        'sha256'
-    ];
-
-    /**
-     * Render payments settings page.
-     */
-    public function render(Request $request): View
+    public function __construct()
     {
-        $data = [
-            'currentServer' => $request->get('currentServer'),
-            'minSum' => s_get('payment.fillupbalance.minsum'),
-            'currency' => s_get('shop.currency'),
-            'currencyHtml' => s_get('shop.currency_html'),
-
-            'robokassaEnable' => s_get('payment.method.robokassa.enabled'),
-            'robokassaLogin' => s_get('payment.method.robokassa.login'),
-            'robokassaPassword1' => s_get('payment.method.robokassa.password1'),
-            'robokassaPassword2' => s_get('payment.method.robokassa.password2'),
-            'robokassaAlgo' => s_get('payment.method.robokassa.algo'),
-            'robokassaIsTest' => (bool)s_get('payment.method.robokassa.test'),
-            'robokassaAlgos' => $this->robokassaAlgos,
-
-            'interkassaEnable' => s_get('payment.method.interkassa.enabled'),
-            'interkassaLogin' => s_get('payment.method.interkassa.checkout_id'),
-            'interkassaKey' => s_get('payment.method.interkassa.key'),
-            'interkassaTestKey' => s_get('payment.method.interkassa.test_key'),
-            'interkassaAlgo' => s_get('payment.method.interkassa.algo'),
-            'interkassaIsTest' => (bool)s_get('payment.method.interkassa.test'),
-            'interkassaCurrency' => s_get('payment.method.interkassa.currency'),
-
-            'interkassaAlgos' => $this->interkassaAlgos,
-        ];
-
-        return view('admin.control.payments', $data);
+        $this->middleware(permission_middleware(Permissions::ADMIN_CONTROL_PAYMENTS_ACCESS));
     }
 
-    /**
-     * Handle the save payments settings request.
-     */
-    public function save(SavePaymentsRequest $request): RedirectResponse
+    public function render(VisitHandler $handler): JsonResponse
     {
-        $this->all($request);
-
-        try {
-            $this->robokassa($request);
-        } catch (\UnexpectedValueException $e) {
-            $this->msg->danger(__('messages.admin.control.payments.robokassa.unknowns_algo'));
-
-            return back();
-        }
-
-        try {
-            $this->interkassa($request);
-        } catch (\UnexpectedValueException $e) {
-            $this->msg->danger(__('messages.admin.control.payments.interkassa.unknowns_algo'));
-
-            return back();
-        }
-
-        $this->msg->success(__('messages.admin.changes_saved'));
-
-        return back();
+        return new JsonResponse(Status::SUCCESS, $handler->handle());
     }
 
-    /**
-     * Save all settings.
-     */
-    private function all(Request $request)
+    public function save(SavePaymentsSettingsRequest $request, Settings $settings): JsonResponse
     {
-        s_set('payment.fillupbalance.minsum', $request->get('min_sum'));
-        s_save();
-    }
-
-    /**
-     * Save settings for robokassa.
-     */
-    private function robokassa(Request $request)
-    {
-        $enabled = (bool)$request->get('robokassa_enabled');
-        $login = (string)$request->get('robokassa_login');
-        $password1 = (string)$request->get('robokassa_password1');
-        $password2 = (string)$request->get('robokassa_password2');
-        $algo = (string)$request->get('robokassa_algo');
-        $isTest = (bool)$request->get('robokassa_test');
-
-        if (!$this->checkAlgo($algo, 'robokassa')) {
-            throw New \UnexpectedValueException();
-        }
-
-        s_set([
-            'payment.method.robokassa.enabled' => (bool)$enabled,
-            'payment.method.robokassa.login' => $login,
-            'payment.method.robokassa.password1' => $password1,
-            'payment.method.robokassa.password2' => $password2,
-            'payment.method.robokassa.algo' => $algo,
-            'payment.method.robokassa.test' => $isTest,
+        $settings->setArray([
+            'shop' => [
+                'currency' => [
+                    'name' => $request->get('currency'),
+                    'html' => $request->get('currency_html'),
+                ]
+            ],
+            'purchasing' => [
+                'min_fill_balance_sum' => (float)$request->get('min_fill_balance_sum'),
+                'services' => [
+                    'robokassa' => [
+                        'enabled' => (bool)$request->get('robokassa_enabled'),
+                        'login' => $request->get('robokassa_login'),
+                        'payment_password' => $request->get('robokassa_payment_password'),
+                        'validation_password' => $request->get('robokassa_validation_password'),
+                        'algorithm' => $request->get('robokassa_algorithm'),
+                        'test' => (bool)$request->get('robokassa_test'),
+                    ],
+                    'interkassa' => [
+                        'enabled' => (bool)$request->get('interkassa_enabled'),
+                        'checkout_id' => $request->get('interkassa_checkout_id'),
+                        'key' => $request->get('interkassa_key'),
+                        'test_key' => $request->get('interkassa_test_key'),
+                        'currency' => $request->get('interkassa_currency'),
+                        'algorithm' => $request->get('interkassa_algorithm'),
+                        'test' => (bool)$request->get('interkassa_test')
+                    ]
+                ]
+            ]
         ]);
-        s_save();
-    }
+        $settings->save();
 
-    /**
-     * Save settings for interkassa.
-     */
-    private function interkassa(Request $request)
-    {
-        $enabled = (bool)$request->get('interkassa_enabled');
-        $login = (string)$request->get('interkassa_checkout_id');
-        $key = (string)$request->get('interkassa_key');
-        $testKey = (string)$request->get('interkassa_test_key');
-        $currency = (string)$request->get('interkassa_currency');
-        $algo = (string)$request->get('interkassa_algo');
-        $isTest = (bool)$request->get('interkassa_test');
-
-        if (!$this->checkAlgo($algo, 'interkassa')) {
-            throw New \UnexpectedValueException();
-        }
-
-        s_set([
-            'payment.method.interkassa.enabled' => (bool)$enabled,
-            'payment.method.interkassa.checkout_id' => $login,
-            'payment.method.interkassa.key' => $key,
-            'payment.method.interkassa.test_key' => $testKey,
-            'payment.method.interkassa.currency' => (string)$currency,
-            'payment.method.interkassa.algo' => $algo,
-            'payment.method.interkassa.test' => $isTest,
-        ]);
-        s_save();
-    }
-
-    /**
-     * Check algo on correct name.
-     */
-    public function checkAlgo(string $algo, string $service): bool
-    {
-        $prop = $service . 'Algos';
-
-        if (in_array($algo, $this->$prop)) {
-            return true;
-        }
-
-        return false;
+        return (new JsonResponse(Status::SUCCESS))
+            ->addNotification(new Success(__('common.changed')));
     }
 }

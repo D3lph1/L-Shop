@@ -3,104 +3,66 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Items;
 
-use App\DataTransferObjects\Item;
-use App\Exceptions\Item\NotFoundException;
+use App\DataTransferObjects\Admin\Items\Add\EnchantmentFromFrontend;
+use App\DataTransferObjects\Admin\Items\Edit\Edit;
+use App\Exceptions\Item\ItemNotFoundException;
+use App\Handlers\Admin\Items\Edit\EditHandler;
+use App\Handlers\Admin\Items\Edit\RenderHandler;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\SaveEditedItemRequest;
-use App\TransactionScripts\Items;
+use App\Http\Requests\Admin\Items\EditRequest;
+use App\Services\Auth\Permissions;
+use App\Services\Notification\Notifications\Error;
+use App\Services\Notification\Notifications\Success;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
+use function App\permission_middleware;
 
-/**
- * Class EditController
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Http\Controllers\Admin\Items
- */
 class EditController extends Controller
 {
-    /**
-     * @var Items
-     */
-    private $script;
-
-    /**
-     * @param Items $script
-     */
-    public function __construct(Items $script)
+    public function __construct()
     {
-        $this->script = $script;
-        parent::__construct();
+        $this->middleware(permission_middleware(Permissions::ADMIN_ITEMS_CRUD_ACCESS));
     }
 
-    /**
-     * Render the edit item page.
-     *
-     * @param Request        $request
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function render(Request $request)
+    public function render(Request $request, RenderHandler $handler): JsonResponse
     {
-        $item = null;
-
         try {
-            $item = $this->script->find((int)$request->route('item'));
-        } catch (NotFoundException $e) {
-            $this->app->abort(404);
+            return new JsonResponse(Status::SUCCESS, $handler->handle((int)$request->route('item')));
+        } catch (ItemNotFoundException $e) {
+            return (new JsonResponse('item_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND);
+        }
+    }
+
+    public function edit(EditRequest $request, EditHandler $handler): JsonResponse
+    {
+        $enchantments = [];
+        foreach (json_decode($request->get('enchantments'), true) as $item) {
+            $enchantments[] = new EnchantmentFromFrontend($item['id'], $item['level']);
         }
 
-        return view('admin.items.edit', [
-            'currentServer' => $request->get('currentServer'),
-            'item' => $item
-        ]);
-    }
-
-    /**
-     * Handle the save edited item request.
-     *
-     * @param SaveEditedItemRequest $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function save(SaveEditedItemRequest $request)
-    {
-        $dto = (new Item())
+        $dto = (new Edit())
+            ->setId((int)$request->route('item'))
             ->setName($request->get('name'))
-            ->setDescription('')
-            ->setImageMode($request->get('image_mode'))
-            ->setImage($request->file('image'))
-            ->setType($request->get('item_type'))
-            ->setItem($request->get('item'))
+            ->setDescription($request->get('description'))
+            ->setItemType($request->get('item_type'))
+            ->setImageType($request->get('image_type'))
+            ->setFile($request->file('file'))
+            ->setImageName($request->get('image_name'))
+            ->setSignature($request->get('signature'))
+            ->setEnchantments($enchantments)
             ->setExtra($request->get('extra'));
 
-        $result = $this->script->update((int)$request->route('item'), $dto);
+        try {
+            $handler->handle($dto);
 
-        if ($result) {
-            $this->msg->success(__('messages.admin.items.edit.success'));
-        } else {
-            $this->msg->danger(__('messages.admin.items.edit.fail'));
+            return (new JsonResponse(Status::SUCCESS))
+                ->addNotification(new Success(__('msg.admin.items.edit.success')));
+        } catch (ItemNotFoundException $e) {
+            return (new JsonResponse('not_found'))
+                ->addNotification(new Error(__('msg.admin.items.edit.not_found')));
         }
-
-        return response()->redirectToRoute('admin.items.list', ['server' => $request->get('currentServer')->getId()]);
-    }
-
-    /**
-     * Remove item request.
-     *
-     * @param Request $request
-     *
-     * @return \Illuminate\Http\RedirectResponse
-     */
-    public function remove(Request $request)
-    {
-        $result = $this->script->delete((int)$request->route('item'));
-
-        if ($result) {
-            $this->msg->info(__('messages.admin.items.remove.success'));
-        } else {
-            $this->msg->danger(__('messages.admin.items.remove.fail'));
-        }
-
-        return response()->redirectToRoute('admin.items.list', ['server' => $request->get('currentServer')->getId()]);
     }
 }

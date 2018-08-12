@@ -3,197 +3,228 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Users;
 
-use App\DataTransferObjects\Admin\User\Edited;
-use App\Exceptions\User\AttemptToBanYourselfException;
-use App\Exceptions\User\AttemptToDeleteYourselfException;
-use App\Exceptions\User\EmailAlreadyExistsException;
-use App\Exceptions\User\NotFoundException;
-use App\Exceptions\User\UsernameAlreadyExistsException;
+use App\DataTransferObjects\Admin\Users\Edit\AddBan;
+use App\DataTransferObjects\Admin\Users\Edit\Edit;
+use App\DataTransferObjects\Admin\Users\Edit\PaginationList;
+use App\Exceptions\Ban\BanNotFoundException;
+use App\Exceptions\InvalidArgumentException;
+use App\Exceptions\Media\Character\InvalidRatioException;
+use App\Exceptions\User\UserNotFoundException;
+use App\Handlers\Admin\Users\Edit\AddBanHandler;
+use App\Handlers\Admin\Users\Edit\CartHandler;
+use App\Handlers\Admin\Users\Edit\DeleteBanHandler;
+use App\Handlers\Admin\Users\Edit\DeleteCloakHandler;
+use App\Handlers\Admin\Users\Edit\DeleteSkinHandler;
+use App\Handlers\Admin\Users\Edit\EditHandler;
+use App\Handlers\Admin\Users\Edit\PurchasesHandler;
+use App\Handlers\Admin\Users\Edit\RenderHandler;
+use App\Handlers\Admin\Users\Edit\UploadCloakHandler;
+use App\Handlers\Admin\Users\Edit\UploadSkinHandler;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\BlockUserRequest;
-use App\Http\Requests\Admin\SaveEditedUserRequest;
-use App\Services\Ban;
-use App\TransactionScripts\Users;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
+use App\Http\Requests\Admin\Users\Edit\AddBanRequest;
+use App\Http\Requests\Admin\Users\Edit\EditRequest;
+use App\Http\Requests\Admin\Users\Edit\UploadSkinCloakRequest;
+use App\Services\Auth\Exceptions\EmailAlreadyExistsException;
+use App\Services\Auth\Exceptions\UsernameAlreadyExistsException;
+use App\Services\Auth\Permissions;
+use App\Services\Notification\Notifications\Error;
+use App\Services\Notification\Notifications\Info;
+use App\Services\Notification\Notifications\Success;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Http\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
+use function App\permission_middleware;
 
-/**
- * Class EditController
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Http\Controllers\Admin\Users
- */
 class EditController extends Controller
 {
-    /**
-     * @var Users
-     */
-    private $script;
-
-    public function __construct(Users $script)
+    public function __construct()
     {
-        parent::__construct();
-        $this->script = $script;
+        $this->middleware(permission_middleware(Permissions::ADMIN_USERS_CRUD_ACCESS));
+        $this->middleware(permission_middleware(Permissions::ADMIN_PURCHASES_ACCESS))->only('purchases');
+        $this->middleware(permission_middleware(Permissions::ADMIN_GAME_CART_ACCESS))->only('cart');
     }
 
-    /**
-     * Render the edit given user page.
-     */
-    public function render(Request $request, Ban $ban): View
+    public function render(Request $request, RenderHandler $handler): JsonResponse
     {
-        $dto = null;
-
         try {
-            $dto = $this->script->informationForEdit((int)$request->route('edit'));
-        } catch (NotFoundException $e) {
-            $this->app->abort(404);
+            return new JsonResponse(Status::SUCCESS, $handler->handle((int)$request->route('user')));
+        } catch (UserNotFoundException $e) {
+            throw new NotFoundHttpException();
         }
-
-        return view('admin.users.edit', [
-            'currentServer' => $request->get('currentServer'),
-            'servers' => $request->get('servers'),
-            'user' => $dto->getUser(),
-            'ban' => $ban,
-            'isBanned' => $ban->isBanned($dto->getUser()),
-            'cart' => $dto->getUserCartContent()
-        ]);
     }
 
-    /**
-     * Handle the save editable user request.
-     */
-    public function save(SaveEditedUserRequest $request): RedirectResponse
+    public function edit(EditRequest $request, EditHandler $handler): JsonResponse
     {
-        $dto = (new Edited())
-            ->setId((int)$request->route('edit'))
+        $dto = (new Edit())
+            ->setUserId((int)$request->route('user'))
             ->setUsername($request->get('username'))
             ->setEmail($request->get('email'))
             ->setPassword($request->get('password'))
             ->setBalance((float)$request->get('balance'))
-            ->setAdmin((bool)$request->get('admin'));
+            ->setRoles($request->get('roles'))
+            ->setPermissions($request->get('permissions'));
 
         try {
-            if ($this->script->edit($dto)) {
-                $this->msg->success(__('messages.admin.users.edit.save.success'));
-            } else {
-                $this->msg->danger(__('messages.admin.users.edit.save.fail'));
-            }
+            $handler->handle($dto);
+
+            return (new JsonResponse(Status::SUCCESS))
+                ->addNotification(new Success(__('msg.admin.users.edit.success')));
+        } catch (UserNotFoundException $e) {
+            return (new JsonResponse('user_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
+                ->addNotification(new Error(__('msg.admin.users.edit.user_not_found')));
         } catch (UsernameAlreadyExistsException $e) {
-            $this->msg->danger(__('messages.admin.users.edit.save.not_found'));
-
-            return response()->redirectToRoute('admin.users.list', ['server' => $request->get('currentServer')->getId()]);
+            return (new JsonResponse('username_already_exists'))
+                ->setHttpStatus(Response::HTTP_CONFLICT)
+                ->addNotification(new Error(__('msg.admin.users.edit.username_already_exists')));
         } catch (EmailAlreadyExistsException $e) {
-            $this->msg->danger(__('messages.admin.users.edit.save.username_already_exists', compact('username')));
-
-            return back();
+            return (new JsonResponse('email_already_exists'))
+                ->setHttpStatus(Response::HTTP_CONFLICT)
+                ->addNotification(new Error(__('msg.admin.users.edit.email_already_exists')));
         }
-
-        return response()->redirectToRoute('admin.users.list', ['server' => $request->get('currentServer')->getId()]);
     }
 
-    /**
-     * Remove given user request.
-     */
-    public function remove(Request $request): RedirectResponse
+    public function uploadSkin(UploadSkinCloakRequest $request, UploadSkinHandler $handler): JsonResponse
     {
         try {
-            if ($this->script->delete((int)$request->route('user'))) {
-                $this->msg->info(__('messages.admin.users.edit.remove.success'));
+            $handler->handle((int)$request->route('user'), $request->file('file'));
+
+            return (new JsonResponse(Status::SUCCESS))
+                ->addNotification(new Success(__('msg.frontend.profile.skin.success')));
+        } catch (UserNotFoundException $e) {
+            return (new JsonResponse('user_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
+                ->addNotification(new Error(__('msg.user_not_found')));
+        } catch (InvalidRatioException $e) {
+            return (new JsonResponse('invalid_ratio'))
+                ->setHttpStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+                ->addNotification(new Error(__('msg.frontend.profile.skin.invalid_ratio')));
+        }
+    }
+
+    public function uploadCloak(UploadSkinCloakRequest $request, UploadCloakHandler $handler): JsonResponse
+    {
+        try {
+            $handler->handle((int)$request->route('user'), $request->file('file'));
+
+            return (new JsonResponse(Status::SUCCESS))
+                ->addNotification(new Success(__('msg.frontend.profile.cloak.success')));
+        } catch (UserNotFoundException $e) {
+            return (new JsonResponse('user_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
+                ->addNotification(new Error(__('msg.user_not_found')));
+        } catch (InvalidRatioException $e) {
+            return (new JsonResponse('invalid_ratio'))
+                ->setHttpStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+                ->addNotification(new Error(__('msg.frontend.profile.cloak.invalid_ratio')));
+        }
+    }
+
+    public function deleteSkin(Request $request, DeleteSkinHandler $handler): JsonResponse
+    {
+        try {
+            if ($handler->handle((int)$request->route('user'))) {
+                return (new JsonResponse(Status::SUCCESS))
+                    ->addNotification(new Info(__('msg.frontend.profile.skin.delete.success')));
             }
-        } catch (NotFoundException $e) {
-            $this->msg->danger(__('messages.admin.users.edit.remove.not_found'));
-        } catch (AttemptToDeleteYourselfException $e) {
-            $this->msg->warning(__('messages.admin.users.edit.remove.self'));
 
-            return back();
+            return (new JsonResponse(Status::FAILURE))
+                ->setHttpStatus(Response::HTTP_INTERNAL_SERVER_ERROR)
+                ->addNotification(new Error(__('msg.frontend.profile.skin.delete.fail')));
+        } catch (UserNotFoundException $e) {
+            return (new JsonResponse('user_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
+                ->addNotification(new Error(__('msg.user_not_found')));
         }
-
-        return response()->redirectToRoute('admin.users.list', ['server' => $request->get('currentServer')->getId()]);
     }
 
-    /**
-     * Destroy all login-sessions for given user.
-     */
-    public function destroySessions(Request $request): RedirectResponse
+    public function deleteCloak(Request $request, DeleteCloakHandler $handler): JsonResponse
     {
         try {
-            if ($this->script->destroySessions((int)$request->route('user'))) {
-                $this->msg->info(__('messages.admin.users.edit.sessions.success'));
-            } else {
-                $this->msg->danger(__('messages.admin.users.edit.sessions.fail'));
+            if ($handler->handle((int)$request->route('user'))) {
+                return (new JsonResponse(Status::SUCCESS))
+                    ->addNotification(new Info(__('msg.frontend.profile.cloak.delete.success')));
             }
-        } catch (NotFoundException $e) {
-            $this->msg->danger(__('messages.admin.users.edit.remove.not_found'));
-        }
 
-        return back();
+            return (new JsonResponse(Status::FAILURE))
+                ->addNotification(new Error(__('msg.frontend.profile.cloak.delete.fail')));
+        } catch (UserNotFoundException $e) {
+            return (new JsonResponse('user_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
+                ->addNotification(new Error(__('msg.user_not_found')));
+        }
     }
 
-    /**
-     * Block this user.
-     */
-    public function block(BlockUserRequest $request): JsonResponse
+    public function addBan(AddBanRequest $request, AddBanHandler $handler): JsonResponse
     {
-        $duration = (int)$request->get('block_duration');
+        $dto = (new AddBan())
+            ->setUserId((int)$request->route('user'))
+            ->setMode($request->get('mode'))
+            ->setForever((bool)$request->get('forever'))
+            ->setDateTime($request->get('date_time'))
+            ->setDays((int)$request->get('days'))
+            ->setReason($request->get('reason'));
 
         try {
-            $result = $this->script->block(
-                (int)$request->route('user'),
-                $duration,
-                $request->get('reason')
-            );
-        } catch (NotFoundException $e) {
-            return json_response('user_not_found', [
-                'message' => [
-                    'type' => 'danger',
-                    'text' => __('messages.admin.users.edit.block.not_found')
-                ]
-            ]);
-        } catch (AttemptToBanYourselfException $e) {
-            return json_response('cannot_block_yourself', [
-                'message' => [
-                    'type' => 'warning',
-                    'text' => __('messages.admin.users.edit.block.cannot_block_yourself'),
-                ]
-            ]);
-        }
+            $ban = $handler->handle($dto);
 
-        if ($result) {
-            return json_response('success', [
-                'message' => [
-                    'type' => 'info',
-                    'text' => build_ban_message($duration === 0 ? null : $result->getUntil(), $result->getReason())
-                ]
-            ]);
+            return (new JsonResponse(Status::SUCCESS, [
+                'ban' => $ban
+            ]))
+                ->addNotification(new Info(__('msg.admin.users.edit.ban.add.success')));
+        } catch (UserNotFoundException $e) {
+            return (new JsonResponse('user_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
+                ->addNotification(new Error(__('msg.admin.users.edit.ban.add.user_not_found')));
+        } catch (InvalidArgumentException $e) {
+            return (new JsonResponse('date_time_empty'))
+                ->setHttpStatus(Response::HTTP_UNPROCESSABLE_ENTITY)
+                ->addNotification(new Error(__('validation.required', [
+                    'attribute' => __('content.admin.users.edit.actions.add_ban.DateTime')
+                ])));
         }
-
-        return json_response('fail', [
-            'message' => [
-                'type' => 'danger',
-                'text' => __('messages.admin.users.edit.block.fail')
-            ]
-        ]);
     }
 
-    /**
-     * Unblock this user.
-     */
-    public function unblock(Request $request): RedirectResponse
+    public function deleteBan(Request $request, DeleteBanHandler $handler): JsonResponse
     {
         try {
-            if ($this->script->pardon((int)$request->route('user'))) {
-                $this->msg->info(__('messages.admin.users.edit.unblock.success'));
-            } else {
-                $this->msg->danger(__('messages.admin.users.edit.unblock.fail'));
-            }
-        } catch (NotFoundException $e) {
-            $this->msg->danger(__('messages.admin.users.edit.unblock.not_found'));
+            $handler->handle((int)$request->route('ban'));
 
-            return response()->redirectToRoute('admin.users.list', ['server' => $request->get('currentServer')->getId()]);
+            return (new JsonResponse(Status::SUCCESS))
+                ->addNotification(new Info(__('msg.admin.users.edit.ban.delete.success')));
+        } catch (BanNotFoundException $e) {
+            return (new JsonResponse('ban_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
+                ->addNotification(new Error(__('msg.admin.users.edit.ban.delete.not_found')));
         }
+    }
 
-        return back();
+    public function purchases(Request $request, PurchasesHandler $handler): JsonResponse
+    {
+        $dto = new PaginationList();
+        $dto
+            ->setUserId((int)$request->route('user'))
+            ->setPage((int)$request->get('page'))
+            ->setPerPage((int)$request->get('per_page'))
+            ->setOrderBy($request->get('order_by'))
+            ->setDescending((bool)$request->get('descending'));
+
+
+        return new JsonResponse(Status::SUCCESS, $handler->handle($dto));
+    }
+
+    public function cart(Request $request, CartHandler $handler): JsonResponse
+    {
+        $dto = new PaginationList();
+        $dto
+            ->setUserId((int)$request->route('user'))
+            ->setPage((int)$request->get('page'))
+            ->setPerPage((int)$request->get('per_page'))
+            ->setOrderBy($request->get('order_by'))
+            ->setDescending((bool)$request->get('descending'));
+
+        return new JsonResponse(Status::SUCCESS, $handler->handle($dto));
     }
 }

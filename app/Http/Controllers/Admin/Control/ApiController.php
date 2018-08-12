@@ -3,85 +3,44 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Control;
 
-use App\Http\Requests\Admin\SaveApiRequest;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use App\DataTransferObjects\Admin\Control\Api\Save;
+use App\Handlers\Admin\Control\Api\SaveHandler;
+use App\Handlers\Admin\Control\Api\VisitHandler;
 use App\Http\Controllers\Controller;
-use Illuminate\View\View;
+use App\Http\Requests\Admin\Control\SaveApiSettingsRequest;
+use App\Services\Auth\Permissions;
+use App\Services\Notification\Notifications\Success;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
+use function App\permission_middleware;
 
-/**
- * Class ApiController
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Http\Controllers\Admin\Control
- */
 class ApiController extends Controller
 {
-    /**
-     * Render API settings page.
-     */
-    public function render(Request $request): View
+    public function __construct()
     {
-        $data = [
-            'currentServer' => $request->get('currentServer'),
-            'enabled' => (bool)s_get('api.enabled'),
-            'key' => s_get('api.key'),
-            'separator' => s_get('api.separator'),
-            'salt' => (bool)s_get('api.salt'),
-            'algos' => config('l-shop.api.available_algos'),
-            'algo' => s_get('api.algo'),
-            'signinEnabeld' => (bool)s_get('api.signin.enabled'),
-            'signupEnabled' => (bool)s_get('api.signup.enabled'),
-            'signinRemember' => (bool)s_get('api.signin.remember_user'),
-            'sashokAuthEnabled' => (bool)s_get('api.launcher.sashok.auth.enabled'),
-            'sashokAuthFormat' => s_get('api.launcher.sashok.auth.format'),
-            'sashokAuthErrorMessage' => s_get('api.launcher.sashok.auth.error_message'),
-            'sashokAuthWhiteList' => implode(', ', json_decode(s_get('api.launcher.sashok.auth.ips_white_list')))
-        ];
-
-        return view('admin.control.api', $data);
+        $this->middleware(permission_middleware(Permissions::ADMIN_CONTROL_API_ACCESS));
     }
 
-    /**
-     * Save API settings.
-     */
-    public function save(SaveApiRequest $request): RedirectResponse
+    public function render(VisitHandler $handler): JsonResponse
     {
-        $whiteList = $this->convertSashokLauncherAuthWhiteList((string)$request->get('sashok_launcher_auth_white_list'));
-
-        s_set([
-            'api.enabled' => (bool)$request->get('enabled'),
-            'api.key' => $request->get('key'),
-            'api.algo' => $request->get('algo'),
-            'api.separator' => $request->get('separator'),
-            'api.salt' => (bool)$request->get('salt'),
-            'api.signin.enabled' => (bool)$request->get('signin_enabled'),
-            'api.signup.enabled' => (bool)$request->get('signup_enabled'),
-            'api.signin.remember_user' => (bool)$request->get('signin_remember'),
-            'api.launcher.sashok.auth.enabled' => (bool)$request->get('sashok_launcher_auth_enabled'),
-            'api.launcher.sashok.auth.format' => $request->get('sashok_launcher_auth_format'),
-            'api.launcher.sashok.auth.error_message' => $request->get('sashok_launcher_auth_error_message'),
-            'api.launcher.sashok.auth.ips_white_list' => $whiteList,
-        ]);
-        s_save();
-
-        $this->msg->success(__('messages.admin.changes_saved'));
-
-        return back();
+        return new JsonResponse(Status::SUCCESS, $handler->handle());
     }
 
-    /**
-     * Convert given whitelist string in needed format.
-     */
-    private function convertSashokLauncherAuthWhiteList(string $whiteList): string
+    public function save(SaveApiSettingsRequest $request, SaveHandler $handler): JsonResponse
     {
-        $whiteList = preg_replace('/(\s+)/ui', '', $whiteList);
-        $whiteList = explode(',', $whiteList);
+        $dto = (new Save())
+            ->setApiEnabled((bool)$request->get('enabled'))
+            ->setKey($request->get('key'))
+            ->setDelimiter($request->get('delimiter'))
+            ->setAlgorithm($request->get('algorithm'))
+            ->setApiAuthEnabled((bool)$request->get('auth_enabled'))
+            ->setApiRegisterEnabled((bool)$request->get('register_enabled'))
+            ->setSashok724sV3LauncherEnabled((bool)$request->get('sashok724sV3_launcher_enabled'))
+            ->setSashok724sV3LauncherFormat($request->get('sashok724sV3_launcher_format'))
+            ->setSashok724sV3LauncherIPs($request->get('sashok724sV3_launcher_IPs'));
+        $handler->handle($dto);
 
-        if (count($whiteList) === 0 or $whiteList[0] === '') {
-            return '[]';
-        }else {
-            return json_encode($whiteList);
-        }
+        return (new JsonResponse(Status::SUCCESS))
+            ->addNotification(new Success(__('common.changed')));
     }
 }

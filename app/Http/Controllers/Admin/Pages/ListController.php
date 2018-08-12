@@ -3,28 +3,55 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Pages;
 
+use App\DataTransferObjects\PaginationList;
+use App\Exceptions\Page\PageNotFoundException;
+use App\Handlers\Admin\Pages\DeleteHandler;
+use App\Handlers\Admin\Pages\ListHandler;
 use App\Http\Controllers\Controller;
-use App\Services\Page;
-use App\TransactionScripts\Pages;
+use App\Services\Auth\Permissions;
+use App\Services\Notification\Notifications\Error;
+use App\Services\Notification\Notifications\Info;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Http\Response;
+use function App\permission_middleware;
 
-/**
- * Class ListController
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Http\Controllers\Admin\Pages
- */
 class ListController extends Controller
 {
-    /**
-     * Render the static pages list page.
-     */
-    public function render(Request $request, Pages $script): View
+    public function __construct()
     {
-        return view('admin.pages.list', [
-            'currentServer' => $request->get('currentServer'),
-            'pages' => $script->informationForList()
+        $this->middleware(permission_middleware(Permissions::ADMIN_PAGES_CRUD_ACCESS));
+    }
+
+    public function pagination(Request $request, ListHandler $handler)
+    {
+        $dto = $handler->handle(
+            (new PaginationList())
+                ->setOrderBy($request->get('order_by') ?? 'id')
+                ->setDescending((bool)$request->get('descending'))
+                ->setSearch($request->get('search'))
+                ->setPage((int)($request->get('page') ?? 1))
+                ->setPerPage((int)($request->get('per_page') ?? 25))
+        );
+
+        return new JsonResponse(Status::SUCCESS, [
+            'paginator' => $dto->getPaginator(),
+            'pages' => $dto->getPages()
         ]);
+    }
+
+    public function delete(Request $request, DeleteHandler $handler): JsonResponse
+    {
+        try {
+            $handler->handle((int)$request->get('page'));
+
+            return (new JsonResponse(Status::SUCCESS))
+                ->addNotification(new Info(__('msg.admin.pages.list.delete.success')));
+        } catch (PageNotFoundException $e) {
+            return (new JsonResponse('page_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
+                ->addNotification(new Error(__('msg.admin.pages.list.delete.not_found')));
+        }
     }
 }

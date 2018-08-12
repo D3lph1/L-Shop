@@ -5,9 +5,7 @@ namespace App\Services\Support;
 
 /**
  * Class AnsiColors
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Services\Support
+ * Represents constants with ANSI colors.
  */
 final class AnsiColors
 {
@@ -48,9 +46,11 @@ final class AnsiColors
      */
     public const RESET = "\033[0m";
 
-
     public const BOLD = "\033[1m";
 
+    /**
+     * Private constructor because this class contains only constants.
+     */
     private function __construct()
     {
         //

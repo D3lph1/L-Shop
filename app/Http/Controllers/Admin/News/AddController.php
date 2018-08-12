@@ -3,52 +3,33 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\News;
 
+use App\DataTransferObjects\Admin\News\Add;
+use App\Handlers\Admin\News\AddHandler;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\SaveAddedNewsRequest;
-use App\Models\News\NewsInterface;
-use App\Traits\ContainerTrait;
-use App\TransactionScripts\Shop\News;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
+use App\Http\Requests\Admin\News\AddEditRequest;
+use function App\permission_middleware;
+use App\Services\Auth\Permissions;
+use App\Services\Notification\Notifications\Success;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 
-/**
- * Class AddController
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Http\Controllers\Admin\News
- */
 class AddController extends Controller
 {
-    use ContainerTrait;
-
-    /**
-     * Render the add news page.
-     */
-    public function render(Request $request): View
+    public function __construct()
     {
-        return view('admin.news.add', [
-            'currentServer' => $request->get('currentServer')
-        ]);
+        $this->middleware(permission_middleware(Permissions::ADMIN_NEWS_CRUD_ACCESS));
     }
 
-    /**
-     * Save the added news.
-     */
-    public function save(SaveAddedNewsRequest $request, News $news): RedirectResponse
+    public function render(): JsonResponse
     {
-        $entity = $this->make(NewsInterface::class)
-            ->setTitle($request->get('news_title'))
-            ->setContent($request->get('news_content'))
-            ->setUserId($this->sentinel->getUser()->getUserId());
+        return new JsonResponse(Status::SUCCESS);
+    }
 
-        if ($news->create($entity)) {
-            $this->msg->success(__('messages.admin.news.add.success'));
+    public function add(AddEditRequest $request, AddHandler $handler): JsonResponse
+    {
+        $handler->handle(new Add($request->get('title'), $request->get('content')));
 
-            return response()->redirectToRoute('admin.news.list', ['server' => $request->get('currentServer')->getId()]);
-        }
-        $this->msg->danger(__('messages.admin.news.add.fail'));
-
-        return back();
+        return (new JsonResponse(Status::SUCCESS))
+            ->addNotification(new Success(__('msg.admin.news.add.success')));
     }
 }

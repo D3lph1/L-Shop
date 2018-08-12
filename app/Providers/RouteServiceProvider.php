@@ -4,14 +4,8 @@ declare(strict_types = 1);
 namespace App\Providers;
 
 use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvider;
-use Illuminate\Support\Facades\Route;
+use Illuminate\Routing\Router;
 
-/**
- * Class RouteServiceProvider
- *
- * @author  D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Providers
- */
 class RouteServiceProvider extends ServiceProvider
 {
     /**
@@ -28,45 +22,60 @@ class RouteServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
-
         parent::boot();
     }
 
     /**
      * Define the routes for the application.
+     *
+     * @param Router $router
      */
-    public function map(): void
+    public function map(Router $router): void
     {
-        $this->mapApiRoutes();
-
-        $this->mapWebRoutes();
-
-        //
+        $this->mapSpaRoutes($router);
+        $this->mapApiRoutes($router);
+        $this->mapWebRoutes($router);
     }
 
     /**
      * Define the "web" routes for the application.
      *
      * These routes all receive session state, CSRF protection, etc.
+     *
+     * @param Router $router
      */
-    protected function mapWebRoutes(): void
+    protected function mapWebRoutes(Router $router): void
     {
-        Route::middleware('web')
+        $router->middleware('web')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/web.php'));
+    }
+
+    /**
+     * Define the "spa" routes for the application.
+     *
+     * @param Router $router
+     */
+    protected function mapSpaRoutes(Router $router): void
+    {
+        $router->prefix('spa')
+             ->middleware('spa')
              ->namespace($this->namespace)
-             ->group(base_path('routes/web.php'));
+             ->group(base_path('routes/spa.php'));
     }
 
     /**
      * Define the "api" routes for the application.
      *
      * These routes are typically stateless.
+     *
+     * @param Router $router
      */
-    protected function mapApiRoutes(): void
+    protected function mapApiRoutes(Router $router): void
     {
-        Route::prefix('api')
-             ->middleware('api')
-             ->namespace($this->namespace)
-             ->group(base_path('routes/api.php'));
+        $router->prefix('api')
+            ->middleware('api')
+            ->namespace($this->namespace)
+            ->group(base_path('routes/api.php'));
     }
 }

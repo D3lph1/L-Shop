@@ -51,18 +51,18 @@ return [
 
         'memcached' => [
             'driver' => 'memcached',
-            'persistent_id' => null,
+            'persistent_id' => env('MEMCACHED_PERSISTENT_ID'),
             'sasl' => [
-                'username',
-                'password'
+                env('MEMCACHED_USERNAME'),
+                env('MEMCACHED_PASSWORD'),
             ],
             'options' => [
                 // Memcached::OPT_CONNECT_TIMEOUT  => 2000,
             ],
             'servers' => [
                 [
-                    'host' => '127.0.0.1',
-                    'port' => 11211,
+                    'host' => env('MEMCACHED_HOST', '127.0.0.1'),
+                    'port' => env('MEMCACHED_PORT', 11211),
                     'weight' => 100,
                 ],
             ],
@@ -86,6 +86,59 @@ return [
     |
     */
 
-    'prefix' => 'laravel',
+    'prefix' => env(
+        'CACHE_PREFIX',
+        str_slug(env('APP_NAME', 'laravel'), '_').'_cache'
+    ),
 
+    /*
+    |--------------------------------------------------------------------------
+    | Caching application entities options
+    |--------------------------------------------------------------------------
+    |
+    | Below is the caching of application entities. This cache allows you to reduce
+    | the load on the database. You can enable or disable it, as well as adjust the
+    | lifetime of the cache (specified in seconds). Setting the lifetime to 0
+    | allows you to make a cache without expiration.
+    |
+    */
+
+    'options' => [
+        'settings' => [
+            'enabled' => true,
+            'lifetime' => 86400
+        ],
+        'servers' => [
+            'enabled' => true,
+            'lifetime' => 3600
+        ],
+        'categories' => [
+            'enabled' => true,
+            'lifetime' => 3600
+        ],
+        'items' => [
+            'enabled' => true,
+            'lifetime' => 3600
+        ],
+        'products' => [
+            'enabled' => true,
+            'lifetime' => 3600
+        ],
+        'users' => [
+            'enabled' => true,
+            'lifetime' => 600
+        ],
+        'roles' => [
+            'enabled' => true,
+            'lifetime' => 3600
+        ],
+        'permissions' => [
+            'enabled' => true,
+            'lifetime' => 3600
+        ],
+        'pages' => [
+            'enabled' => true,
+            'lifetime' => 86400
+        ],
+    ]
 ];

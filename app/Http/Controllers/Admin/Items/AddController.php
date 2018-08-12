@@ -3,57 +3,57 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Items;
 
-use App\DataTransferObjects\Item;
+use App\DataTransferObjects\Admin\Items\Add\Add;
+use App\DataTransferObjects\Admin\Items\Add\EnchantmentFromFrontend;
+use App\Handlers\Admin\Items\Add\AddHandler;
+use App\Handlers\Admin\Items\Add\RenderHandler;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\SaveAddedItemRequest;
-use App\Services\Items\ImageMode;
-use App\TransactionScripts\Items;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
+use App\Http\Requests\Admin\Items\AddRequest;
+use function App\permission_middleware;
+use App\Services\Auth\Permissions;
+use App\Services\Notification\Notifications\Success;
+use App\Services\Notification\Notificator;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 
-/**
- * Class AddController
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Http\Controllers\Admin\Items
- */
 class AddController extends Controller
 {
-    /**
-     * Render the add new item page.
-     */
-    public function render(Request $request): View
+    public function __construct()
     {
-        return view('admin.items.add', [
-            'currentServer' => $request->get('currentServer')
+        $this->middleware(permission_middleware(Permissions::ADMIN_ITEMS_CRUD_ACCESS));
+    }
+
+    public function render(RenderHandler $handler)
+    {
+        $dto = $handler->handle();
+
+        return new JsonResponse(Status::SUCCESS, [
+            'images' => $dto->getImages(),
+            'enchantments' => $dto->getEnchantments()
         ]);
     }
 
-    /**
-     * Handle the add new item request.
-     */
-    public function save(SaveAddedItemRequest $request, Items $items): RedirectResponse
+    public function add(AddRequest $request, AddHandler $handler, Notificator $notificator): JsonResponse
     {
-        $image = $request->file('image');
-
-        $dto = (new Item())
-            ->setName($request->get('name'))
-            ->setDescription('')
-            ->setType($request->get('item_type'))
-            ->setImageMode(is_null($image) ? ImageMode::DEFAULT : ImageMode::UPLOAD)
-            ->setImage($image)
-            ->setItem($request->get('item'))
-            ->setExtra($request->get('extra'));
-
-        $result = $items->create($dto);
-
-        if ($result) {
-            $this->msg->success(__('messages.admin.items.add.success'));
-        }else {
-            $this->msg->danger(__('messages.admin.items.add.fail'));
+        $enchantments = [];
+        foreach (json_decode($request->get('enchantments'), true) as $item) {
+            $enchantments[] = new EnchantmentFromFrontend($item['id'], $item['level']);
         }
 
-        return response()->redirectToRoute('admin.items.list', ['server' => $request->get('currentServer')->getId()]);
+        $dto = (new Add())
+            ->setName($request->get('name'))
+            ->setDescription($request->get('description'))
+            ->setItemType($request->get('item_type'))
+            ->setImageType($request->get('image_type'))
+            ->setFile($request->file('file'))
+            ->setImageName($request->get('image_name'))
+            ->setSignature($request->get('signature'))
+            ->setEnchantments($enchantments)
+            ->setExtra($request->get('extra'));
+
+        $handler->handle($dto);
+        $notificator->notify(new Success(__('msg.admin.items.add.success')));
+
+        return new JsonResponse(Status::SUCCESS);
     }
 }

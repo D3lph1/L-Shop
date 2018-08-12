@@ -3,53 +3,68 @@ declare(strict_types = 1);
 
 namespace App\Http\Middleware;
 
-use App\Facades\ReCaptcha;
-use App\Services\Message;
-use Closure;
-use Illuminate\Contracts\Container\Container;
+use App\Services\Notification\Notifications\Warning;
+use App\Services\Response\JsonResponse;
+use App\Services\Security\Captcha\Captcha as CaptchaInterface;
+use App\Services\Settings\DataType;
+use App\Services\Settings\Settings;
+use Illuminate\Contracts\Config\Repository;
+use Illuminate\Http\Request;
 
-/**
- * Class Captcha
- *
- * @author  D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Http\Middleware
- */
 class Captcha
 {
-    private $container;
+    public const NAME = 'captcha';
 
-    public function __construct(Container $container)
-    {
-        $this->container = $container;
-    }
+    public const REQUEST_PARAM_NAME = '_captcha';
 
     /**
-     * Handle an incoming request.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
-     * @return mixed
+     * @var CaptchaInterface
      */
-    public function handle($request, Closure $next)
+    private $captcha;
+
+    /**
+     * @var Repository
+     */
+    private $config;
+
+    /**
+     * @var Settings
+     */
+    private $settings;
+
+    public function __construct(CaptchaInterface $captcha, Repository $config, Settings $settings)
     {
-        if (config('app.debug') === true) {
+        $this->captcha = $captcha;
+        $this->config = $config;
+        $this->settings = $settings;
+    }
+
+    public function handle(Request $request, \Closure $next)
+    {
+        $env = $this->config->get('app.env');
+        if ($env === 'testing' ||
+            $env === 'dev' ||
+            !$this->settings->get('system.security.captcha.enabled')->getValue(DataType::BOOL)
+        ) {
             return $next($request);
         }
 
-        $reCaptchaResponse = $request->get('g-recaptcha-response');
-        if (!$reCaptchaResponse) {
-            $reCaptchaResponse = $request->get('captcha');
+        $code = $request->get(self::REQUEST_PARAM_NAME);
+        if (empty($code)) {
+            return $this->response();
+        }
+        if (!$this->captcha->verify($code, $request->ip())) {
+            return $this->response();
         }
 
-        if (ReCaptcha::verify($reCaptchaResponse, $request->ip())) {
-            return $next($request);
-        }
+        return $next($request);
+    }
 
-        if ($request->ajax()) {
-            return json_response('invalid captcha');
-        }
-        $this->container->make(Message::class)->danger(__('messages.captcha_required'));
-
-        return back();
+    private function response()
+    {
+        return response()->json(
+            (new JsonResponse('invalid_captcha'))
+                ->addNotification(new Warning(__('msg.captcha_required')))
+        );
     }
 }

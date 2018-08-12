@@ -1,81 +1,57 @@
 <?php
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace App\Http\Controllers\Admin\Products;
 
-use App\Exceptions\ItemNotFoundException;
+use App\DataTransferObjects\Admin\Products\Add\Add;
+use App\Exceptions\Category\CategoryNotFoundException;
+use App\Exceptions\Item\ItemNotFoundException;
+use App\Handlers\Admin\Products\Add\AddHandler;
+use App\Handlers\Admin\Products\Add\RenderHandler;
 use App\Http\Controllers\Controller;
-use App\Http\Requests\Admin\SaveAddedProductRequest;
-use App\Models\Product\ProductInterface;
-use App\Repositories\Item\ItemRepositoryInterface;
-use App\Repositories\Server\ServerRepositoryInterface;
-use App\Traits\ContainerTrait;
-use App\TransactionScripts\Products;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
-use Illuminate\View\View;
+use App\Http\Requests\Admin\Products\AddEditRequest;
+use App\Services\Auth\Permissions;
+use App\Services\Notification\Notifications\Success;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
+use Illuminate\Http\Response;
+use function App\permission_middleware;
 
-/**
- * Class AddController
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Http\Controllers\Admin\Products
- */
 class AddController extends Controller
 {
-    use ContainerTrait;
-
-    /**
-     * Render the add product page.
-     */
-    public function render(Request $request, ItemRepositoryInterface $itemRepository, ServerRepositoryInterface $serverRepository): View
+    public function __construct()
     {
-        $items = $itemRepository->all([
-            'id',
-            'name',
-            'type'
-        ]);
-
-        $servers = $serverRepository->allWithCategories(['name'], ['id', 'name']);
-
-        $data = [
-            'currentServer' => $request->get('currentServer'),
-            'items' => $items,
-            'servers' => $servers
-        ];
-
-        return view('admin.products.add', $data);
+        $this->middleware(permission_middleware(Permissions::ADMIN_PRODUCTS_CRUD_ACCESS));
     }
 
-    /**
-     * Save new product request.
-     */
-    public function save(SaveAddedProductRequest $request, Products $script): RedirectResponse
+    public function render(RenderHandler $handler): JsonResponse
     {
-        /** @var ProductInterface $entity */
-        $entity = $this->make(ProductInterface::class);
-        $entity
-            ->setPrice((float)$request->get('price'))
-            ->setStack((float)$request->get('stack'))
-            ->setItemId((int)$request->get('item'))
-            ->setServerId((int)$request->get('server'))
-            ->setCategoryId((int)$request->get('category'))
-            ->setSortPriority((float)$request->get('sort_priority'));
+        return new JsonResponse(Status::SUCCESS, $handler->handle());
+    }
 
-        $result = null;
+    public function add(AddEditRequest $request, AddHandler $handler): JsonResponse
+    {
+        $dto = (new Add())
+            ->setItem((int)$request->get('item'))
+            ->setCategory((int)$request->get('category'))
+            ->setPrice((float)$request->get('price'))
+            ->setStack($request->get('forever') ? 0 : (int)$request->get('stack'))
+            ->setSortPriority((float)$request->get('sort_priority'))
+            ->setHidden((bool)$request->get('hidden'));
 
         try {
-            $result = $script->create($entity);
+            $handler->handle($dto);
+
+            return (new JsonResponse(Status::SUCCESS))
+                ->addNotification(new Success(__('msg.admin.products.add.success')));
         } catch (ItemNotFoundException $e) {
-            $this->msg->danger(__('messages.admin.products.add.item_not_found', ['id' => $entity->getItemId()]));
+            return (new JsonResponse('item_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
+                ->addNotification(new Success(__('msg.admin.products.add.item_not_found')));
+        } catch (CategoryNotFoundException $e) {
+            return (new JsonResponse('category_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
+                ->addNotification(new Success(__('msg.admin.products.add.category_not_found')));
         }
-
-        if ($result) {
-            $this->msg->success(__('messages.admin.products.add.success'));
-        }else {
-            $this->msg->danger(__('messages.admin.products.add.fail'));
-        }
-
-        return response()->redirectToRoute('admin.products.list', ['server' => $request->get('currentServer')->getId()]);
     }
 }

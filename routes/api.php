@@ -1,16 +1,6 @@
 <?php
 
-use Illuminate\Http\Request;
-
-/*
-|--------------------------------------------------------------------------
-| API Routes
-|--------------------------------------------------------------------------
-|
-| Here is where you can register API routes for your application. These
-| routes are loaded by the RouteServiceProvider within a group which
-| is assigned the "api" middleware group. Enjoy building your API!
-|
-*/
-
-
+/** @var \Illuminate\Routing\Router $router */
+$router->any('/auth/login', 'Api\Auth\LoginController@login');
+$router->any('/auth/register', 'Api\Auth\RegisterController@register');
+$router->any('/auth/launcher/sashok724v3', 'Api\Auth\Sashok724sV3LauncherController@authenticate');

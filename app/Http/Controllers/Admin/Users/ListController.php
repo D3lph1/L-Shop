@@ -3,102 +3,52 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Users;
 
-use App\Exceptions\User\AlreadyActivatedException;
-use App\Exceptions\User\NotFoundException;
+use App\DataTransferObjects\PaginationList;
+use App\Exceptions\User\UserNotFoundException;
+use App\Handlers\Admin\Users\DeleteHandler;
+use App\Handlers\Admin\Users\ListHandler;
 use App\Http\Controllers\Controller;
-use App\Services\Ban;
-use App\TransactionScripts\Users;
-use Illuminate\Http\JsonResponse;
-use Illuminate\Http\RedirectResponse;
+use App\Services\Auth\Permissions;
+use App\Services\Notification\Notifications\Error;
+use App\Services\Notification\Notifications\Info;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 use Illuminate\Http\Request;
-use Illuminate\View\View;
+use Illuminate\Http\Response;
+use function App\permission_middleware;
 
-/**
- * Class ListController
- *
- * @author D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Http\Controllers\Admin\Users
- */
 class ListController extends Controller
 {
-    /**
-     * @var Users
-     */
-    private $script;
-
-    public function __construct(Users $script)
+    public function __construct()
     {
-        parent::__construct();
-        $this->script = $script;
+        $this->middleware(permission_middleware(Permissions::ADMIN_USERS_CRUD_ACCESS));
     }
 
-    /**
-     * Render the users list page.
-     *
-     * @param Request $request
-     * @param Ban     $ban
-     *
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
-     */
-    public function render(Request $request, Ban $ban): View
+    public function pagination(Request $request, ListHandler $handler)
     {
-        return view('admin.users.list', [
-            'currentServer' => $request->get('currentServer'),
-            'ban' => $ban,
-            'users' => $this->script->informationForList()
-        ]);
+        $dto = $handler->handle(
+            (new PaginationList())
+                ->setOrderBy($request->get('order_by') ?? 'id')
+                ->setDescending((bool)$request->get('descending'))
+                ->setSearch($request->get('search'))
+                ->setPage((int)($request->get('page') ?? 1))
+                ->setPerPage((int)($request->get('per_page') ?? 25))
+        );
+
+        return new JsonResponse(Status::SUCCESS, $dto);
     }
 
-    /**
-     * Activate given user.
-     */
-    public function complete(Request $request): RedirectResponse
+    public function delete(Request $request, DeleteHandler $handler): JsonResponse
     {
         try {
-            if ($this->script->activate((int)$request->route('user'))) {
-                $this->msg->success(__('messages.admin.users.list.activate.success'));
-            } else {
-                $this->msg->success(__('messages.admin.users.list.activate.fail'));
-            }
-        } catch (NotFoundException $e) {
-            $this->msg->success(__('messages.admin.users.edit.remove.not_found'));
-        } catch (AlreadyActivatedException $e) {
-            $this->msg->info(__('messages.admin.users.list.activate.already'));
+            $handler->handle((int)$request->get('user'));
+
+            return (new JsonResponse(Status::SUCCESS))
+                ->addNotification(new Info(__('msg.admin.users.list.delete.success')));
+        } catch (UserNotFoundException $e) {
+            return (new JsonResponse('user_not_found'))
+                ->setHttpStatus(Response::HTTP_NOT_FOUND)
+                ->addNotification(new Error(__('msg.admin.users.list.delete.user_not_found')));
         }
-
-        return back();
-    }
-
-    /**
-     * Search given user.
-     */
-    public function search(Request $request): JsonResponse
-    {
-        $query = $request->get('search');
-        if (empty($query)) {
-            return json_response('not_found');
-        }
-
-        $result = $this->script->search($query);
-
-        if (count($result) > 0) {
-            $currency = s_get('shop.currency_html');
-
-            foreach ($result as &$item) {
-                $item['url'] = route('admin.users.edit',
-                    [
-                        'server' => $request->get('currentServer')->getId(),
-                        'edit' => $item['id'],
-                    ]);
-                $item['currency'] = $currency;
-            }
-            unset($item);
-
-            return json_response('found', [
-                'data' => $result
-            ]);
-        }
-
-        return json_response('not_found');
     }
 }

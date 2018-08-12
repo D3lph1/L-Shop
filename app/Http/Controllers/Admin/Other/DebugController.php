@@ -3,58 +3,41 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Other;
 
-use App\Http\Requests\Admin\TestMailRequest;
-use App\Services\Mailer;
-use Illuminate\Http\RedirectResponse;
-use Illuminate\Http\Request;
+use App\Handlers\Admin\Other\SendTestEmailHandler;
 use App\Http\Controllers\Controller;
-use Illuminate\Session\SessionManager;
-use Illuminate\View\View;
+use App\Http\Requests\Admin\Other\SendTestEmailRequest;
+use App\Services\Auth\Permissions;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
+use Illuminate\Http\Response;
 use Psr\Log\LoggerInterface;
+use function App\permission_middleware;
 
-/**
- * Class DebugController
- *
- * @author  D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Http\Controllers\Admin\Other
- */
 class DebugController extends Controller
 {
-    /**
-     * Render debug page.
-     */
-    public function render(Request $request): View
+    public function __construct()
     {
-        $data = [
-            'currentServer' => $request->get('currentServer')
-        ];
-
-        return view('admin.other.debug', $data);
+        $this->middleware(permission_middleware(Permissions::ADMIN_OTHER_DEBUG_ACCESS));
     }
 
-    /**
-     * Send test message on given email.
-     */
-    public function testMail(TestMailRequest $request, Mailer $mailer, LoggerInterface $logger, SessionManager $session): RedirectResponse
+    public function render(): JsonResponse
     {
-        $address = $request->get('test_mail_address');
-        $error = false;
+        return new JsonResponse(Status::SUCCESS);
+    }
 
+    public function sendEmail(SendTestEmailRequest $request, SendTestEmailHandler $handler, LoggerInterface $logger): JsonResponse
+    {
         try {
-            $mailer->sendTest($address);
+            $handler->handle($request->get('email'));
+
+            return new JsonResponse(Status::SUCCESS);
         } catch (\Exception $e) {
             $logger->error($e);
-            // Write debug information in the flash session for user.
-            $session->flash('test_mail_exception', $e->getMessage());
-            $error = true;
-        }
 
-        if ($error) {
-            $this->msg->danger(__('messages.admin.other.debug.mail.fail'));
-        } else {
-            $this->msg->success(__('messages.admin.other.debug.mail.success'));
+            return (new JsonResponse(Status::FAILURE, [
+                'message' => $e->getMessage()
+            ]))
+                ->setHttpStatus(Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-
-        return back();
     }
 }

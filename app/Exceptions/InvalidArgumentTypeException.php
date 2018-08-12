@@ -3,38 +3,32 @@ declare(strict_types = 1);
 
 namespace App\Exceptions;
 
-/**
- * Class InvalidTypeArgumentException
- * An exception is thrown if the arguments passed to a function or method have an extraneous type.
- *
- * @author  D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Exceptions
- */
+use Throwable;
+
 class InvalidArgumentTypeException extends InvalidArgumentException
 {
-    /**
-     * @param string|array $expected
-     * @param mixed $given
-     */
-    public function __construct($expected, $given)
+    public function __construct($argument, $expected, $given, Throwable $previous = null)
     {
-        $expected = $this->buildExpected($expected);
-        parent::__construct(sprintf(
-            'Expected argument type(s): %s, %s given',
-            $expected,
-            '`' . gettype($given) . '`'
-        ));
-    }
-    /**
-     * @param string|array $data
-     * @return string
-     */
-    private function buildExpected($data)
-    {
-        if (is_array($data)) {
-            $content = '`' . implode('`, ', $data). '`';
-            return $content;
+        if (is_array($expected)) {
+            $expected = $this->build($expected);
         }
-        return '`' . $data . '`';
+        $given = gettype($given);
+        $message = "Argument `{$argument}` must be type of {$expected}; {$given} given.";
+
+        parent::__construct($message, 0, $previous);
+    }
+
+    private function build(array $expected): string
+    {
+        $len = count($expected);
+        $result = '';
+        for ($i = 0; $i < $len; $i++) {
+            $result .= $expected[$i];
+            if ($i !== $len - 1) {
+                $result .= ', ';
+            }
+        }
+
+        return $result;
     }
 }

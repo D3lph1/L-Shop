@@ -3,71 +3,43 @@ declare(strict_types = 1);
 
 namespace App\Http\Controllers\Admin\Other;
 
+use App\Handlers\Admin\Other\Rcon\RenderHandler;
+use App\Handlers\Admin\Other\Rcon\SendHandler;
 use App\Http\Controllers\Controller;
-use App\Services\Rcon\Colorizers\HtmlColorizer;
-use D3lph1\MinecraftRconManager\Connector;
+use App\Services\Auth\Permissions;
+use App\Services\Game\Colorizers\HtmlColorizer;
+use App\Services\Response\JsonResponse;
+use App\Services\Response\Status;
 use D3lph1\MinecraftRconManager\Exceptions\ConnectSocketException;
-use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
-use Illuminate\View\View;
+use function App\permission_middleware;
 
-/**
- * Class RconController
- *
- * @author  D3lph1 <d3lph1.contact@gmail.com>
- * @package App\Http\Controllers\Admin\Other
- */
 class RconController extends Controller
 {
-    public function render(Request $request): View
+    public function __construct()
     {
-        /** @var Collection $servers */
-        $servers = $request->get('servers');
-        $selected = (int) $request->get('selected');
-
-        $searched = $servers->filter(function ($item) use ($selected) {
-            return $item->id === $selected;
-        });
-
-        $data = [
-            'searched' => $searched,
-            'currentServer' => $request->get('currentServer'),
-            'servers' => $servers
-        ];
-
-        return view('admin.other.rcon', $data);
+        $this->middleware(permission_middleware(Permissions::ADMIN_OTHER_RCON_ACCESS));
     }
 
-    public function send(Request $request, Connector $rconConnector, HtmlColorizer $colorizer): JsonResponse
+    public function render(RenderHandler $handler): JsonResponse
     {
-        $server = (int) $request->route('send');
-        $cmd = $request->get('cmd');
+        return new JsonResponse(Status::SUCCESS, [
+            'servers' => $handler->handle()
+        ]);
+    }
 
+    public function send(Request $request, SendHandler $handler, HtmlColorizer $colorizer): JsonResponse
+    {
         try {
-            $rcon = $rconConnector->get($server);
-        } catch (ConnectSocketException $e) {
-            /** @var Collection $servers */
-            $servers = $request->get('servers');
-            $filtered = $servers->filter(function ($item) use ($server) {
-                return $item->id === $server;
-            });
-
-            return json_response('connect error', [
-                'host' => $filtered->first()->ip,
-                'port' => $filtered->first()->port
+            return new JsonResponse(Status::SUCCESS, [
+                'response' => $colorizer->colorize($handler->handle((int)$request->get('server'), $request->get('command')))
             ]);
+        } catch (ConnectSocketException $e) {
+            return (new JsonResponse('connection_failed', [
+                'response' => $colorizer->red(__('content.admin.other.rcon.connection_failed', [
+                    'message' => $e->getMessage()
+                ]))
+            ]));
         }
-        $result = $rcon->send($cmd);
-        $result = str_replace("\n", '<br>', $result);
-
-        if ($request->get('colorize')) {
-
-            $result = $colorizer->colorize($result);
-        }
-
-        $rcon->disconnect();
-
-        return json_response('success', compact('result'));
     }
 }
