@@ -178,7 +178,7 @@ SQL;
               description,
               type,
               image,
-              game_id,
+              signature,
               extra
             )
               SELECT
