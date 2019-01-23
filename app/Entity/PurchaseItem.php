@@ -20,6 +20,7 @@ class PurchaseItem
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Product")
+     * @ORM\JoinColumn(name="product_id", referencedColumnName="id", onDelete="CASCADE")
      */
     private $product;
 

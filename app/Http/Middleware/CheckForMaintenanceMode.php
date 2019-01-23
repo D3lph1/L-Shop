@@ -62,7 +62,7 @@ class CheckForMaintenanceMode extends BaseCheckForMaintenanceMode
                     break;
                 }
             }
-            app(LoggerInterface::class)->debug($this->auth->check());
+
             if (!$f && !($this->auth->check() && $this->auth->getUser()->hasPermission(Permissions::ACCESS_WHILE_MAINTENANCE))) {
                 $data = json_decode(file_get_contents($this->app->storagePath() . '/framework/down'), true);
                 throw new MaintenanceModeException($data['time'], $data['retry'], $data['message']);
