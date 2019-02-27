@@ -18,17 +18,17 @@ class Validator
     /**
      * @var string
      */
-    private $separator;
+    private $delimiter;
 
-    public function __construct(string $algorithm, string $key, ?string $separator = '')
+    public function __construct(string $algorithm, string $key, ?string $delimiter = '')
     {
         $this->algorithm = $algorithm;
         $this->key = $key;
 
-        if (empty($separator)) {
-            $separator = '';
+        if (empty($delimiter)) {
+            $delimiter = '';
         }
-        $this->separator = $separator;
+        $this->delimiter = $delimiter;
     }
 
     public function validate(Signed $signed): bool
@@ -44,9 +44,9 @@ class Validator
         // Add API key as last parameter. It is necessary to to generate signature.
         $parameters['key'] = $this->key;
 
-        // Join parameters in string. Between each parameter is the line separator.
-        // Example for ':' separator: 'param1:param2:param3:secretKey'
-        $signatureContent = implode($this->separator, $parameters);
+        // Join parameters in string. Between each parameter is the line delimiter.
+        // Example for ':' delimiter: 'param1:param2:param3:secretKey'
+        $signatureContent = implode($this->delimiter, $parameters);
         // Create hash from signature string.
         $signature = hash($this->algorithm, $signatureContent);
 

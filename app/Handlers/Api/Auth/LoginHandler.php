@@ -54,7 +54,7 @@ class LoginHandler
     {
         if (!$this->settings->get('api.login_enabled')->getValue(DataType::BOOL)) {
             throw new ForbiddenException(
-                'API authentication is disabled. To enable, set the "api.login" value to true'
+                'API authentication is disabled. To enable, set the "api.login" value to true.'
             );
         }
 

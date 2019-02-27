@@ -53,7 +53,7 @@ class RegisterHandler
         }
 
         throw new ForbiddenException(
-            'API registration is disabled. To enable, set the "api.register.enabled" value to true'
+            'API registration is disabled. To enable, set the "api.register.enabled" value to true.'
         );
     }
 }

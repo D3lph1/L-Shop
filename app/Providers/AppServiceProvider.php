@@ -125,7 +125,7 @@ class AppServiceProvider extends ServiceProvider
             return new Signer(
                 $settings->get('api.algorithm')->getValue(),
                 $settings->get('api.key')->getValue(),
-                $settings->get('api.separator')->getValue()
+                $settings->get('api.delimiter')->getValue()
             );
         });
 
@@ -135,7 +135,7 @@ class AppServiceProvider extends ServiceProvider
             return new Validator(
                 $settings->get('api.algorithm')->getValue(),
                 $settings->get('api.key')->getValue(),
-                $settings->get('api.separator')->getValue()
+                $settings->get('api.delimiter')->getValue()
             );
         });
 
