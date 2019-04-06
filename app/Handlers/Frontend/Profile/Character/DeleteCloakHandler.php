@@ -5,6 +5,7 @@ namespace App\Handlers\Frontend\Profile\Character;
 
 use App\Services\Auth\Auth;
 use App\Services\Media\Character\Cloak\Image;
+use Illuminate\Filesystem\Filesystem;
 
 class DeleteCloakHandler
 {
@@ -13,9 +14,15 @@ class DeleteCloakHandler
      */
     private $auth;
 
-    public function __construct(Auth $auth)
+    /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    public function __construct(Auth $auth, Filesystem $filesystem)
     {
         $this->auth = $auth;
+        $this->filesystem = $filesystem;
     }
 
     public function handle(): bool
@@ -25,6 +32,6 @@ class DeleteCloakHandler
             return false;
         }
 
-        return \File::delete(Image::absolutePath($username));
+        return $this->filesystem->delete(Image::absolutePath($username));
     }
 }
