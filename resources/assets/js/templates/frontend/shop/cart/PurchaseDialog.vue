@@ -7,6 +7,7 @@
                 <p class="mb-0">
                     <v-text-field
                             v-if="!$store.getters.isAuth"
+                            v-model="username"
                             class="pt-0"
                             :prefix="$t('common.username') + ':'"
                             :hint="$t('content.frontend.shop.catalog.purchase.username_description')"
@@ -66,6 +67,7 @@
         },
         data() {
             return {
+                username: '',
                 loadingPurchaseBtn: false,
                 reCaptchaResponse: null
             }
