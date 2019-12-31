@@ -1,0 +1,16 @@
+version: '2.1'
+
+services:
+    nginx:
+        image: nginx:latest
+        ports:
+            - "80:80"
+            - "443:443"
+        volumes:
+            - ./nginx/conf:/etc/nginx/conf.d:ro
+            - ./../:/var/www
+            - ./nginx/log:/var/log/nginx
+    php:
+        build: php
+        volumes:
+            - ./../:/var/www:cached

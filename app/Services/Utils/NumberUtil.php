@@ -5,7 +5,7 @@ namespace App\Services\Utils;
 
 use App\Exceptions\InvalidArgumentException;
 
-class NumberUtil
+final class NumberUtil
 {
     /**
      * Private constructor because this class contains only static methods.

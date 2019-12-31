@@ -128,19 +128,7 @@ return [
     |--------------------------------------------------------------------------
     */
 
-    'custom_datetime_functions' => [
-//      For MySQL:
-        'DATE_FORMAT' => \DoctrineExtensions\Query\Mysql\DateFormat::class,
-        'YEAR' => \DoctrineExtensions\Query\Mysql\Year::class,
-        'MONTH' => \DoctrineExtensions\Query\Mysql\Month::class,
-        'DAY' => \DoctrineExtensions\Query\Mysql\Day::class
-
-//        For PostgreSQL:
-//        'DATE_FORMAT' => \DoctrineExtensions\Query\Postgresql\DateFormat::class,
-//        'YEAR' => \App\Services\Database\Query\Postgresql\Year::class,
-//        'MONTH' => \App\Services\Database\Query\Postgresql\Month::class,
-//        'DAY' => \App\Services\Database\Query\Postgresql\Day::class
-    ],
+    'custom_datetime_functions' => \App\Services\Database\DatabaseUtil::getCustomDatetimeFunctions(),
 
     /*
     |--------------------------------------------------------------------------

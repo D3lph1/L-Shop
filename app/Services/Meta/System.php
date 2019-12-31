@@ -24,7 +24,7 @@ final class System
     public static function version(): Version
     {
         if (self::$version === null) {
-            self::$version = new Version(1, 0, 0, new Beta(2));
+            self::$version = new Version(1, 1, 0);
         }
 
         return self::$version;

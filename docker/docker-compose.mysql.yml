@@ -1,0 +1,36 @@
+version: '2.1'
+
+services:
+  nginx:
+    extends:
+      file: docker-compose.yml
+      service: nginx
+    links:
+      - php
+  php:
+    extends:
+      file: docker-compose.yml
+      service: php
+    links:
+      - redis
+      - mysql
+  mysql:
+    image: mysql:5.7
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./mysql/config:/etc/mysql/conf.d
+      - ./mysql/data:/var/lib/mysql
+    env_file:
+      - ./../.env
+    environment:
+      MYSQL_RANDOM_ROOT_PASSWORD: 1
+      MYSQL_DATABASE: lshop
+      MYSQL_USER: lshop
+      MYSQL_PASSWORD: lshop
+  redis:
+    image: redis:5.0.7
+    ports:
+      - "6379:6379"
+    volumes:
+      - ./redis/data:/var/lib/redis

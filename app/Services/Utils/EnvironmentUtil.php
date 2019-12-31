@@ -3,8 +3,12 @@ declare(strict_types = 1);
 
 namespace App\Services\Utils;
 
-class EnvironmentUtil
+final class EnvironmentUtil
 {
+    public const DB_CONNECTION_MYSQL = 'mysql';
+
+    public const DB_CONNECTION_POSTGRESQL = 'pgsql';
+
     /**
      * Private constructor because this class contains only static methods.
      */
