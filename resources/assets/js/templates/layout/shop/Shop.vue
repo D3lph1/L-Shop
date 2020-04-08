@@ -49,7 +49,7 @@
         <v-footer color="primary" fixed class="white--text" inset app height="40">
             <!-- <settings></settings> -->
             <v-spacer></v-spacer>
-            <span>2017-2018 &copy; L-Shop</span>
+            <span>2017-{{ new Date().getFullYear() }} &copy; L-Shop</span>
             <v-btn :href="github" target="_blank" small outline color="white">GitHub</v-btn>
             <v-spacer></v-spacer>
         </v-footer>
