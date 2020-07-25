@@ -7,7 +7,7 @@ use App\Entity\User;
 use App\Services\Auth\Session\Session;
 
 /**
- * Методы аудентфикации с точки зрения сервера-аудентификации
+ * Методы аудентфикации с точки зрения сервера-аудентификации. Дополнительный слой аудентификации
  * @package App\Services\Auth
  */
 interface Authenticator

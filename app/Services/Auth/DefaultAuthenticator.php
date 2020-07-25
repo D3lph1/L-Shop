@@ -23,6 +23,7 @@ class DefaultAuthenticator implements Authenticator
     private $userRepository;
 
     /**
+     * Хешер
      * @var Hasher
      */
     private $hasher;
