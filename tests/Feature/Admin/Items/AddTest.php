@@ -24,8 +24,10 @@ class AddTest extends TestCase
         //Начало транзакции БД
         $this->transaction();
 
-        //Легка аудентификация от имени админа
+        //Легкая аудентификация от имени админа
         $this->authAdmin();
+
+        //Определяем отдельно переменные
         $name = 'example item';
         $description = 'description of the example item';
         $itemType = Type::ITEM;
