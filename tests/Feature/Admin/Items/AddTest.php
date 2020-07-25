@@ -33,6 +33,7 @@ class AddTest extends TestCase
         $itemType = Type::ITEM;
         $signature = '112';
 
+        //Делаем запрос на экшен Admin\Items\AddController@add
         $response = $this->post(route('admin.items.add'), [
             'name' => $name,
             'description' => $description,
@@ -42,19 +43,27 @@ class AddTest extends TestCase
             'enchantments' => json_encode([])
         ]);
 
+        //Ответ должен быть со статусом 200
         $response->assertStatus(200);
 
+        //Создали экземпляр класса ItemRepository
         $repository = $this->app->make(ItemRepository::class);
         /** @var Item $item */
-        $item = $repository->findAll()[0];
+        $item = $repository->findAll()[0];//Получили тот элемент который вставили
+        //Проверка что не Null
         self::assertNotNull($item);
+
+        //Проверка установленных свойств на совпадение
         self::assertEquals($name, $item->getName());
         self::assertEquals($description, $item->getDescription());
         self::assertEquals($itemType, $item->getType());
         self::assertNull($item->getImage());
         self::assertEquals($signature, $item->getSignature());
+
+        //Неустановленное свойство должно быть null
         self::assertNull($item->getExtra());
 
+        //Откатываем все действия
         $this->rollback();
     }
 
