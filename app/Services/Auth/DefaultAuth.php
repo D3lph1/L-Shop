@@ -13,15 +13,19 @@ use App\Services\Auth\Session\SessionPersistence;
 use Illuminate\Events\Dispatcher;
 use Psr\Log\LoggerInterface;
 
+/**
+ * Сервис аудентификации
+ * @package App\Services\Auth
+ */
 class DefaultAuth implements Auth
 {
     /**
-     * @var Authenticator
+     * @var Аудентификатор
      */
     private $authenticator;
 
     /**
-     * @var Registrar
+     * @var Регистратор
      */
     private $registrar;
 

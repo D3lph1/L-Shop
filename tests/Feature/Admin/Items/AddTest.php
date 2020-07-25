@@ -12,11 +12,19 @@ use Illuminate\Filesystem\Filesystem;
 use Illuminate\Http\UploadedFile;
 use Tests\TestCase;
 
+/**
+ * Для тестирования возможностей проекта
+ * Class AddTest
+ * @package Tests\Feature\Admin\Items
+ */
 class AddTest extends TestCase
 {
     public function testItemWithDefaultImage(): void
     {
+        //Начало транзакции БД
         $this->transaction();
+
+        //Легка аудентификация от имени админа
         $this->authAdmin();
         $name = 'example item';
         $description = 'description of the example item';

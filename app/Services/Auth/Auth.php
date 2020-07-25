@@ -5,24 +5,28 @@ namespace App\Services\Auth;
 
 use App\Entity\User;
 
+/**
+ * Методы аудентификации с точки зрения клиента
+ * @package App\Services\Auth
+ */
 interface Auth
 {
     /**
-     * Authenticates the user by the transmitted username and password.
+     * Аудентифицируем пользователя от имени пользователя и паролем
      *
      * @param string $username
      * @param string $password
      * @param bool   $remember If true, the user session will exist even after the browser is closed.
      *
-     * @return bool User authentication result.
+     * @return bool Результат аудентификации пользователя
      */
     public function authenticate(string $username, string $password, bool $remember = false): bool;
 
     /**
-     * Authenticate user from given object.
+     * AАудентификация с данным объектом БД
      *
-     * @param User $user     A user whose login session is required to create.
-     * @param bool $remember If true, the user session will exist even after the browser is closed.
+     * @param User $user     Пользователь, который требуется для создания
+     * @param bool $remember Если да, то сессия будет сущетсовать даже когда закроется браузер
      *
      * @return mixed
      * @see Authenticator::authenticateQuick()
@@ -30,10 +34,10 @@ interface Auth
     public function authenticateQuick(User $user, bool $remember): bool;
 
     /**
-     * Registers a new user in the system.
+     * Регистрация нового пользователя в системе
      *
-     * @param User $user     Entity of new user.
-     * @param bool $activate If true, the user will be activated immediately after registration.
+     * @param User $user     Сущность пользователя
+     * @param bool $activate Если да, то пользователь будет активирован немедленно после регистрации
      *
      * @return User
      * @throws \Exception
@@ -41,23 +45,23 @@ interface Auth
     public function register(User $user, bool $activate = false): User;
 
     /**
-     * Returns the user stored in the session, otherwise - null.
+     * Возвращаем сохраненного в сессии пользователя, иначе null
      *
      * @return User|null
      */
     public function getUser(): ?User;
 
     /**
-     * Checks if the session is not empty.
+     * Проверка, что сессия не пустая
      *
      * @return bool
      */
     public function check(): bool;
 
     /**
-     * Deletes the user by destroying the session on the current device.
+     * Удаляем пользователя уничтожением сессии на конкретном устройстве
      *
-     * @param bool $anywhere If true - destroys user sessions on all devices.
+     * @param bool $anywhere Если да, уничтожаем пользователя на всех устройствах
      */
     public function logout(bool $anywhere = false): void;
 }

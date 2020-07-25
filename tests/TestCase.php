@@ -13,16 +13,19 @@ abstract class TestCase extends BaseTestCase
 
     protected function transaction(): void
     {
+        //В IOC-контейнере создаем(если есть получаем) экземпляр класса Doctrine, возвращаем объект и начинаем транзакцию к БД
         $this->app->make(EntityManagerInterface::class)->beginTransaction();
     }
 
     protected function rollback(): void
     {
+        //В IOC-контейнере создаем(если есть получаем) экземпляр класса Doctrine, возвращаем объект и откатываем транзакцию к БД
         $this->app->make(EntityManagerInterface::class)->rollback();
     }
 
     protected function authAdmin(): void
     {
+        //Производим легкую аудентификацию от имени admin
         $this->app->make(Auth::class)->authenticate('admin', 'admin');
     }
 }

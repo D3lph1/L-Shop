@@ -3,6 +3,10 @@ declare(strict_types = 1);
 
 namespace App\Services\Auth\Hashing;
 
+/**
+ * Реализация хеширования
+ * @package App\Services\Auth\Hashing
+ */
 class BcryptHasher implements Hasher
 {
     /**

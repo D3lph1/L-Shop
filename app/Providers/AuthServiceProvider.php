@@ -42,6 +42,10 @@ class AuthServiceProvider extends ServiceProvider
     public function boot(): void
     {
         $this->app->singleton(Driver::class, Cookie::class);
+
+        /**
+         * Связываем хешер с IoC контейнером. Про этом типом идентификации бует интерфейс Hasher, объект хешитрования будет браться из конфигурационного файла
+         */
         $this->app->bind(Hasher::class, function (Application $app) {
             $hasher = $app->make($app->make(Repository::class)->get('auth.hasher'));
             if (!($hasher instanceof Hasher)) {
@@ -68,7 +72,12 @@ class AuthServiceProvider extends ServiceProvider
 
             return new Pool($checkpoints);
         });
+
+        //Сервис аудентификации
         $this->app->singleton(Auth::class, DefaultAuth::class);
+
+
+
         $this->app->singleton(Authenticator::class, DefaultAuthenticator::class);
         $this->app->singleton(Registrar::class, DefaultRegistrar::class);
         $this->app->singleton(Activator::class, DefaultActivator::class);

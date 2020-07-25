@@ -6,29 +6,30 @@ namespace App\Services\Auth;
 use App\Entity\User;
 use App\Services\Auth\Session\Session;
 
+/**
+ * Методы аудентфикации с точки зрения сервера-аудентификации
+ * @package App\Services\Auth
+ */
 interface Authenticator
 {
     /**
-     * Authenticates the user by the transmitted username and password.
+     * Аудентифицирует пользователя по переданному пользователю и паролю
      *
      * @param string $username
      * @param string $password
-     * @param bool   $remember If true, the user session will exist even after the browser is closed.
+     * @param bool   $remember Если да, то сессия будет существовать когда бразуер закроется
      *
-     * @return Session Session object of the authenticated user.
+     * @return Session Объект сессии аудентфицированного пользователя
      */
     public function authenticate(string $username, string $password, bool $remember): Session;
 
     /**
-     * Produces "quick" user authentication. "Quick" authentication is characterized by
-     * the fact that it does not require data from the account (login / password),
-     * only the essence of the user is sufficient for it. Checkpoints will still
-     * be called.
+     * Простая аудентфикация по пользователю и паролю
      *
-     * @param User $user User to be authenticated.
-     * @param bool $remember If true, the user session will exist even after the browser is closed.
+     * @param User $user
+     * @param bool $remember
      *
-     * @return Session Session object of the authenticated user.
+     * @return Session
      */
     public function authenticateQuick(User $user, bool $remember): Session;
 }

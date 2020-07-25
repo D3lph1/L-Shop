@@ -5,12 +5,12 @@ namespace App\Services\Auth\Hashing;
 
 /**
  * Interface Hasher
- * Hasher is used to hash and validate user passwords.
+ * Hasher используется для хеширования паролей и проверки валидности пароля
  */
 interface Hasher
 {
     /**
-     * Creates and returns a hash of the passed password.
+     * Создает и возвращает хеш переданного пароля
      *
      * @param string $plainPassword
      *
@@ -19,12 +19,12 @@ interface Hasher
     public function make(string $plainPassword): string;
 
     /**
-     * Checks a plain password hash with an existing hash.
+     * Сравнивает простой пароль с хешем пароля
      *
      * @param string $plainPassword
      * @param string $hashedPassword
      *
-     * @return bool The result of the comparison. True - equivalents.
+     * @return bool Результат сранения. Да - совпадают
      */
     public function check(string $plainPassword, string $hashedPassword): bool;
 }

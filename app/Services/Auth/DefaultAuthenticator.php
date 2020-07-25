@@ -10,9 +10,14 @@ use App\Services\Auth\Hashing\Hasher;
 use App\Services\Auth\Session\Session;
 use App\Services\Auth\Session\SessionPersistence;
 
+/**
+ * Аудентификатор по умолчанию
+ * @package App\Services\Auth
+ */
 class DefaultAuthenticator implements Authenticator
 {
     /**
+     * Репозиторий пользователя
      * @var UserRepository
      */
     private $userRepository;

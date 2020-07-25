@@ -241,5 +241,6 @@ return [
     |
     */
 
+    //Хешер, который используется для аудентифкации
     'hasher' => \App\Services\Auth\Hashing\BcryptHasher::class
 ];
