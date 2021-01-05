@@ -10,7 +10,7 @@
     "watch": "cross-env NODE_ENV=development webpack --watch"
   },
   "dependencies": {
-    "axios": "^0.15.2",
+    "axios": "^0.21.1",
     "chart.js": "^2.7.1",
     "node-waves": "^0.7.5",
     "tether": "^1.4.3",
