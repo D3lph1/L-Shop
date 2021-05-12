@@ -11,7 +11,7 @@
   },
   "dependencies": {
     "axios": "^0.15.2",
-    "chart.js": "^2.7.1",
+    "chart.js": "^2.9.4",
     "node-waves": "^0.7.5",
     "tether": "^1.4.3",
     "vue": "^2.5.13",
