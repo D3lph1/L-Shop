@@ -43,11 +43,10 @@
 [Documentation page](https://github.com/D3lph1/L-shop/wiki).
 
 ## Screenshots
-
-![Login](https://i103.fastpic.ru/big/2018/0812/ce/_8b5ce62578b0703a22c2600c555701ce.png?noht=1)
-![Catalog](https://i103.fastpic.ru/big/2018/0812/3d/_0368559fa1534b616f34932843bce93d.png?noht=1)
-![Character](https://i103.fastpic.ru/big/2018/0812/fe/_68a65cb3a2e5c60b46fd794d289644fe.png?noht=1)
-![Item](http://i103.fastpic.ru/big/2018/0812/94/_d4f116eab5e9340427a48d4cc7e42294.png?noht=1)
-![Products](http://i103.fastpic.ru/big/2018/0812/b1/_48b0576f13951cc519c624b8475fd5b1.png?noht=1)
-![Purchase](http://i103.fastpic.ru/big/2018/0812/b1/_79316ae1b13c28d78cd70f24e982cfb1.png?noht=1)
-![Statistic](http://i103.fastpic.ru/big/2018/0812/b6/_87f30db2707cc0013eeaa768b2263ab6.png?noht=1)
+![Login](https://i.postimg.cc/wxRh8BvN/login.png)
+![Catalog](https://i.postimg.cc/FHNcLgxb/catalog.png)
+![Character](https://i.postimg.cc/xddzsfhc/character.png)
+![Item](https://i.postimg.cc/RVcKhbwV/item.png)
+![Products](https://i.postimg.cc/4NCpJT7S/products.png)
+![Purchase](https://i.postimg.cc/3x1GC4Ls/purchase.png)
+![Statistic](https://i.postimg.cc/FzScjTqp/statistic.png)
